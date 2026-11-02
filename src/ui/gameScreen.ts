@@ -15,7 +15,9 @@ import { createBoardView, type Line } from './boardView';
 import { el } from './dom';
 import { formatTime } from './format';
 import { attachInput, type Tool } from './input';
+import { createMuteButton } from './muteButton';
 import { createPicture } from './picture';
+import { playSound } from './sound';
 
 /** Renders the play screen. Returns a cleanup function. */
 export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
@@ -95,7 +97,7 @@ export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
   });
 
   const screen = el('main', { className: 'screen game' }, [
-    el('header', { className: 'topbar' }, [back, title, hearts, timer]),
+    el('header', { className: 'topbar' }, [back, title, hearts, timer, createMuteButton(true)]),
     toolbar,
     el('div', { className: 'board-wrap' }, [view.root]),
     help,
@@ -140,6 +142,7 @@ export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
     );
     solvedPanel.hidden = false;
     announce(`Solved! ${puzzle.name}. ${timeNote}.`);
+    playSound('solve');
   };
 
   const lineName = (line: Line) => `${line.kind === 'row' ? 'Row' : 'Column'} ${line.index + 1}`;
@@ -149,6 +152,8 @@ export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
     const completed = view.update(game.board);
     if (completed.length && !game.solved) {
       announce(`${completed.map(lineName).join(', ')} complete`);
+      completed.forEach(view.flashLine);
+      playSound('line');
     }
   };
 
@@ -156,7 +161,12 @@ export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
   const play = (changes: Change[]) => {
     const { applied, mistake } = game.preview(changes);
     redraw();
+    const last = applied.at(-1);
+    if (last && !mistake) {
+      playSound(last.to === Cell.Filled ? 'fill' : last.to === Cell.Marked ? 'mark' : 'erase');
+    }
     if (mistake) {
+      playSound('error');
       view.flashError(mistake.index);
       announce(
         game.failed
@@ -257,6 +267,7 @@ export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
     }
     refresh();
     view.flashHint(changes.map((c) => c.index));
+    if (!game.solved) playSound('hint');
     announce(`Hint used. ${game.hintsLeft} left.`);
   }
   view.root.addEventListener('pointerdown', (e) => {

@@ -3,6 +3,7 @@ import { puzzles } from '../puzzles/index';
 import { getSettings, updateSettings, type Mode } from '../game/settings';
 import { el } from './dom';
 import { formatTime } from './format';
+import { createMuteButton } from './muteButton';
 import { applyTheme } from './theme';
 import { createPicture } from './picture';
 
@@ -56,6 +57,7 @@ export function renderSelectScreen(app: HTMLElement): void {
     return button;
   };
   const settingsBar = el('div', { className: 'settings' }, [
+    createMuteButton(),
     toggle('◐ High contrast', getSettings().highContrast, () => {
       updateSettings({ highContrast: !getSettings().highContrast });
       applyTheme();

@@ -17,6 +17,7 @@ export interface BoardView {
   setCursor(r: number, c: number): void;
   flashError(index: number): void;
   flashHint(indexes: number[]): void;
+  flashLine(line: Line): void;
 }
 
 const STATE: Record<Cell, { className: string; label: string }> = {
@@ -41,10 +42,12 @@ function clueGroup(clues: number[], className: string, role: string, label: stri
   return { group, nums, label: fullLabel, complete: false };
 }
 
-function restartAnimation(node: HTMLElement, className: string) {
+/** Plays a one-shot animation class, removing it afterwards so it can replay. */
+function restartAnimation(node: HTMLElement, className: string, ms = 900) {
   node.classList.remove(className);
   void node.offsetWidth; // force a reflow so the animation plays again
   node.classList.add(className);
+  window.setTimeout(() => node.classList.remove(className), ms);
 }
 
 let boardCount = 0;
@@ -90,6 +93,8 @@ export function createBoardView(puzzle: Puzzle): BoardView {
     for (let c = 0; c < w; c++) {
       const cell = el('div', { className: 'cell', role: 'gridcell', id: `${idPrefix}-${r}-${c}` });
       cell.dataset.i = String(r * w + c);
+      // Stagger for the diagonal reveal wave when the puzzle is solved.
+      cell.style.setProperty('--d', `${(r + c) * 30}ms`);
       if (c % 5 === 4 && c < w - 1) cell.classList.add('guide-x');
       if (r % 5 === 4 && r < h - 1) cell.classList.add('guide-y');
       if (r === 0) cell.classList.add('edge-top');
@@ -156,6 +161,15 @@ export function createBoardView(puzzle: Puzzle): BoardView {
     },
     flashError(index) {
       restartAnimation(cells[index], 'error');
+    },
+    flashLine({ kind, index }) {
+      const group = kind === 'row' ? rowClues[index] : colClues[index];
+      restartAnimation(group.group, 'line-flash');
+      const span = kind === 'row' ? w : h;
+      for (let k = 0; k < span; k++) {
+        const i = kind === 'row' ? index * w + k : k * w + index;
+        restartAnimation(cells[i], 'line-flash');
+      }
     },
     flashHint(indexes) {
       for (const i of indexes) restartAnimation(cells[i], 'hinted');
