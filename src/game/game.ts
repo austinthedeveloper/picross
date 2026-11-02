@@ -5,6 +5,9 @@ import type { SavedBoard } from './progress';
 import type { Mode } from './settings';
 
 export const MAX_HEARTS = 3;
+export const MAX_HINTS = 3;
+
+export type HintTarget = 'cell' | 'row' | 'col';
 
 export interface PreviewResult {
   /** Changes actually made, which may differ from those requested. */
@@ -19,6 +22,7 @@ export class Game {
   history = new History();
   readonly mode: Mode;
   hearts = MAX_HEARTS;
+  hintsUsed = 0;
   solved = false;
   /** Milliseconds spent on this puzzle, excluding time after it ended. */
   elapsed = 0;
@@ -32,6 +36,7 @@ export class Game {
     this.mode = saved?.mode ?? mode;
     this.elapsed = saved?.elapsed ?? 0;
     this.hearts = saved?.hearts ?? MAX_HEARTS;
+    this.hintsUsed = saved?.hintsUsed ?? 0;
     if (saved?.cells.length === this.board.cells.length) {
       [...saved.cells].forEach((ch, i) => {
         const cell = Number(ch);
@@ -61,6 +66,7 @@ export class Game {
       elapsed: Math.round(this.elapsed),
       mode: this.mode,
       ...(this.mode === 'hearts' ? { hearts: this.hearts } : {}),
+      ...(this.hintsUsed ? { hintsUsed: this.hintsUsed } : {}),
     };
   }
 
@@ -115,6 +121,38 @@ export class Game {
     applyMove(this.board, move);
     this.history.push(move);
     this.checkSolved();
+  }
+
+  get hintsLeft(): number {
+    return MAX_HINTS - this.hintsUsed;
+  }
+
+  /**
+   * Reveals the cell, row, or column at (r, c): filled cells are filled and
+   * empty cells are marked. Costs one hint if anything changed. Returns the
+   * revealed changes (undoable as one move).
+   */
+  hint(target: HintTarget, r: number, c: number): Change[] {
+    if (this.hintsLeft <= 0 || this.over) return [];
+    const { width, height } = this.board;
+    const indexes =
+      target === 'cell'
+        ? [r * width + c]
+        : target === 'row'
+          ? Array.from({ length: width }, (_, cc) => r * width + cc)
+          : Array.from({ length: height }, (_, rr) => rr * width + c);
+    const move: Move = [];
+    for (const index of indexes) {
+      const from = this.board.cells[index];
+      const to = this.puzzle.solution.cells[index] ? Cell.Filled : Cell.Marked;
+      if (from !== to) move.push({ index, from, to });
+    }
+    if (!move.length) return [];
+    applyMove(this.board, move);
+    this.history.push(move);
+    this.hintsUsed++;
+    this.checkSolved();
+    return move;
   }
 
   /** Starts over after running out of hearts. */

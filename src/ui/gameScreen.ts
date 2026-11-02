@@ -1,5 +1,5 @@
 import { Cell } from '../engine/board';
-import { Game, MAX_HEARTS } from '../game/game';
+import { Game, MAX_HEARTS, MAX_HINTS, type HintTarget } from '../game/game';
 import {
   clearSavedBoard,
   getPuzzleStats,
@@ -48,9 +48,23 @@ export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
   redoBtn.onclick = () => (game.redo(), refresh());
   resetBtn.onclick = () => (game.reset(), refresh());
 
+  const hintSummary = el('summary', { className: 'button' });
+  const hintNote = el('p', { className: 'hint-note' });
+  const hintButton = (target: HintTarget, label: string) =>
+    el('button', { textContent: label, onclick: () => useHint(target) });
+  const hintMenu = el('details', { className: 'hint-menu' }, [
+    hintSummary,
+    el('div', { className: 'hint-pop' }, [
+      hintNote,
+      hintButton('cell', 'Reveal cell'),
+      hintButton('row', 'Reveal row'),
+      hintButton('col', 'Reveal column'),
+    ]),
+  ]);
+
   const toolbar = el('div', { className: 'toolbar' }, [
     el('div', { className: 'segmented' }, [fillBtn, markBtn]),
-    el('div', { className: 'actions' }, [undoBtn, redoBtn, resetBtn]),
+    el('div', { className: 'actions' }, [hintMenu, undoBtn, redoBtn, resetBtn]),
   ]);
 
   const solvedPanel = el('div', { className: 'solved-panel', hidden: true });
@@ -102,12 +116,15 @@ export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
         : newBest
           ? `New best: ${formatTime(game.elapsed)} (was ${formatTime(prevBest)})`
           : `Time ${formatTime(game.elapsed)} · Best ${formatTime(stats.bestTime)}`;
+    const hintsNote = game.hintsUsed
+      ? ` · ${game.hintsUsed} ${game.hintsUsed === 1 ? 'hint' : 'hints'}`
+      : '';
     const next = puzzles[puzzles.indexOf(puzzle) + 1];
     solvedPanel.replaceChildren(
       el('h2', { textContent: 'Solved!' }),
       createPicture(puzzle.solution, Math.max(4, Math.floor(120 / puzzle.width))),
       el('p', { className: 'solved-name', textContent: puzzle.name }),
-      el('p', { className: 'solved-time', textContent: timeNote }),
+      el('p', { className: 'solved-time', textContent: timeNote + hintsNote }),
       el('div', { className: 'solved-actions' }, [
         el('a', { className: 'button ghost', href: '#/', textContent: 'All puzzles' }),
         ...(next
@@ -188,6 +205,9 @@ export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
     screen.classList.toggle('is-solved', solved);
     screen.classList.toggle('is-failed', game.failed);
     toolbar.inert = game.over;
+    hintSummary.textContent = `Hint ${game.hintsLeft}/${MAX_HINTS}`;
+    hintMenu.classList.toggle('empty', game.hintsLeft === 0);
+    updateHintNote();
     failedPanel.hidden = !game.failed;
     if (solved && solvedPanel.hidden) {
       view.highlight(null, null);
@@ -215,7 +235,30 @@ export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
     cursor = { r: Math.max(0, Math.min(h - 1, r)), c: Math.max(0, Math.min(w - 1, c)) };
     view.setCursor(cursor.r, cursor.c);
     view.highlight(cursor.r, cursor.c);
+    updateHintNote();
   };
+
+  function updateHintNote() {
+    hintNote.textContent = game.hintsLeft
+      ? `Uses the highlighted cell: row ${cursor.r + 1}, column ${cursor.c + 1}.`
+      : 'No hints left for this puzzle.';
+  }
+  hintMenu.addEventListener('toggle', () => {
+    screen.classList.toggle('hinting', hintMenu.open);
+    if (hintMenu.open) view.highlight(cursor.r, cursor.c);
+  });
+
+  function useHint(target: HintTarget) {
+    hintMenu.open = false;
+    const changes = game.hint(target, cursor.r, cursor.c);
+    if (!changes.length) {
+      announce(game.hintsLeft ? 'Already correct. No hint used.' : 'No hints left.');
+      return;
+    }
+    refresh();
+    view.flashHint(changes.map((c) => c.index));
+    announce(`Hint used. ${game.hintsLeft} left.`);
+  }
   view.root.addEventListener('pointerdown', (e) => {
     const cell = (e.target as HTMLElement).closest<HTMLElement>('.cell');
     view.root.focus({ preventScroll: true });

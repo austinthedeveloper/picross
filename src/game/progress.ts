@@ -10,6 +10,7 @@ export interface SavedBoard {
   elapsed?: number;
   mode?: Mode;
   hearts?: number;
+  hintsUsed?: number;
 }
 
 export interface PuzzleStats {

@@ -109,3 +109,42 @@ describe('hearts mode', () => {
     expect(restored.hearts).toBe(2);
   });
 });
+
+describe('hints', () => {
+  const grid = parsePuzzle({ id: 'g', name: 'G', width: 3, height: 2, solution: ['#.#', '.#.'] });
+
+  it('reveals a row as fills and marks and costs one hint', () => {
+    const game = new Game(grid);
+    const changes = game.hint('row', 0, 1);
+    expect(changes).toHaveLength(3);
+    expect(game.board.cells.slice(0, 3)).toEqual([Cell.Filled, Cell.Marked, Cell.Filled]);
+    expect(game.hintsLeft).toBe(2);
+    game.undo();
+    expect(game.started).toBe(false);
+    expect(game.hintsLeft).toBe(2);
+  });
+
+  it('is free when the target is already correct', () => {
+    const game = new Game(grid);
+    game.hint('cell', 1, 1);
+    expect(game.hint('cell', 1, 1)).toEqual([]);
+    expect(game.hintsLeft).toBe(2);
+  });
+
+  it('stops at the limit and can solve the puzzle', () => {
+    const game = new Game(grid);
+    game.hint('row', 0, 0);
+    game.hint('row', 1, 0);
+    expect(game.solved).toBe(true);
+    const other = new Game(grid);
+    for (const c of [0, 1, 2]) other.hint('col', 0, c);
+    expect(other.hintsLeft).toBe(0);
+    expect(other.hint('cell', 0, 0)).toEqual([]);
+  });
+
+  it('saves hints used', () => {
+    const game = new Game(grid);
+    game.hint('cell', 0, 0);
+    expect(new Game(grid, game.serialize()).hintsUsed).toBe(1);
+  });
+});

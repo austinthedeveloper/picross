@@ -16,6 +16,7 @@ export interface BoardView {
   highlight(r: number | null, c: number | null): void;
   setCursor(r: number, c: number): void;
   flashError(index: number): void;
+  flashHint(indexes: number[]): void;
 }
 
 const STATE: Record<Cell, { className: string; label: string }> = {
@@ -38,6 +39,12 @@ function clueGroup(clues: number[], className: string, role: string, label: stri
   const fullLabel = `${label} clues: ${clues.length ? clues.join(', ') : 'none'}`;
   const group = el('div', { className, role, ariaLabel: fullLabel }, nums);
   return { group, nums, label: fullLabel, complete: false };
+}
+
+function restartAnimation(node: HTMLElement, className: string) {
+  node.classList.remove(className);
+  void node.offsetWidth; // force a reflow so the animation plays again
+  node.classList.add(className);
 }
 
 let boardCount = 0;
@@ -148,10 +155,10 @@ export function createBoardView(puzzle: Puzzle): BoardView {
       root.setAttribute('aria-activedescendant', cursor.id);
     },
     flashError(index) {
-      const cell = cells[index];
-      cell.classList.remove('error');
-      void cell.offsetWidth; // restart the animation
-      cell.classList.add('error');
+      restartAnimation(cells[index], 'error');
+    },
+    flashHint(indexes) {
+      for (const i of indexes) restartAnimation(cells[i], 'hinted');
     },
     highlight(r, c) {
       rowClues.forEach((g, i) => g.group.classList.toggle('hl', i === r));
