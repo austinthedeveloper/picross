@@ -36,3 +36,9 @@ Puzzles live in `src/puzzles/pack/*.json`:
 
 Each `solution` row is a string of `#` (filled) and `.` (empty). Clues are derived from the
 solution. Add the id to `ORDER` in `src/puzzles/index.ts` to place it in the pack.
+
+### Uniqueness check
+
+`npm run check:puzzles` line-solves every puzzle in the pack from its clues alone and fails if
+any puzzle has more than one solution or needs guessing. It also runs as part of `npm test` in
+CI.

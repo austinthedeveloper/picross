@@ -10,7 +10,8 @@
     "lint": "eslint . && prettier --check .",
     "format": "prettier --write .",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "check:puzzles": "vitest run src/puzzles/pack.test.ts"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",
