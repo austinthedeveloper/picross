@@ -18,6 +18,8 @@ import { attachInput, type Tool } from './input';
 import { createMuteButton } from './muteButton';
 import { createPicture } from './picture';
 import { playSound } from './sound';
+import { attachZoom, MAX_ZOOM, MIN_ZOOM } from './zoom';
+import { revertMove } from '../engine/history';
 
 /** Renders the play screen. Returns a cleanup function. */
 export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
@@ -85,6 +87,28 @@ export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
       }),
     ]),
   ]);
+  const boardWrap = el('div', { className: 'board-wrap' }, [view.root]);
+  const zoom = attachZoom(boardWrap, view.root);
+  const zoomOut = el('button', { textContent: '−', ariaLabel: 'Zoom out', title: 'Zoom out' });
+  const zoomLevel = el('button', { className: 'zoom-level', title: 'Fit to screen' });
+  const zoomIn = el('button', { textContent: '+', ariaLabel: 'Zoom in', title: 'Zoom in' });
+  zoomOut.onclick = () => zoom.setZoom(zoom.zoom - 0.5);
+  zoomIn.onclick = () => zoom.setZoom(zoom.zoom + 0.5);
+  zoomLevel.onclick = () => zoom.setZoom(MIN_ZOOM);
+  const renderZoom = (z: number) => {
+    zoomLevel.textContent = `${Math.round(z * 100)}%`;
+    zoomLevel.ariaLabel = `Zoom ${Math.round(z * 100)}%, fit to screen`;
+    zoomOut.disabled = z <= MIN_ZOOM;
+    zoomIn.disabled = z >= MAX_ZOOM;
+  };
+  zoom.onChange(renderZoom);
+  renderZoom(zoom.zoom);
+  const zoomBar = el('div', { className: 'zoom-bar segmented', role: 'group', ariaLabel: 'Zoom' }, [
+    zoomOut,
+    zoomLevel,
+    zoomIn,
+  ]);
+
   const live = el('div', { className: 'sr-only', ariaLive: 'polite' });
   const announce = (message: string) => {
     live.textContent = '';
@@ -99,7 +123,8 @@ export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
   const screen = el('main', { className: 'screen game' }, [
     el('header', { className: 'topbar' }, [back, title, hearts, timer, createMuteButton(true)]),
     toolbar,
-    el('div', { className: 'board-wrap' }, [view.root]),
+    boardWrap,
+    zoomBar,
     help,
     solvedPanel,
     failedPanel,
@@ -230,6 +255,10 @@ export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
     getTool: () => tool,
     enabled: () => !game.over,
     onPreview: play,
+    onCancel: (changes) => {
+      revertMove(game.board, changes);
+      redraw();
+    },
     onCommit: (changes) => {
       game.commit(changes);
       refresh();

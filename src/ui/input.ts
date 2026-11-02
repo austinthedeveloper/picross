@@ -10,6 +10,8 @@ export interface InputOptions {
   /** Applies changes; returns those applied and whether to end the stroke. */
   onPreview(changes: Change[]): { applied: Change[]; stop: boolean };
   onCommit(changes: Change[]): void;
+  /** Undoes a stroke's previewed changes, e.g. when a second finger starts a pinch. */
+  onCancel(changes: Change[]): void;
   onHover(r: number | null, c: number | null): void;
 }
 
@@ -80,6 +82,13 @@ export function attachInput(root: HTMLElement, opts: InputOptions): void {
   root.addEventListener('contextmenu', (e) => e.preventDefault());
 
   root.addEventListener('pointerdown', (e) => {
+    if (stroke && e.pointerType === 'touch' && e.pointerId !== stroke.pointerId) {
+      // A second finger means pinch/pan, not painting.
+      const changes = [...stroke.changes.values()];
+      stroke = null;
+      opts.onCancel(changes);
+      return;
+    }
     if (stroke || !opts.enabled() || (e.button !== 0 && e.button !== 2)) return;
     const pos = cellAt(e.clientX, e.clientY);
     if (!pos) return;

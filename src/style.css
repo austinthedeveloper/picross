@@ -298,23 +298,85 @@ button:disabled {
 }
 
 .board-wrap {
+  overflow: auto;
+  max-height: calc(100dvh - 200px);
+  overscroll-behavior: contain;
+}
+
+.board-wrap.zoomed {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+/* Clues stay in view while a zoomed board is panned. */
+.col-clue,
+.row-clue,
+.corner {
+  position: sticky;
+  background: var(--bg);
+  z-index: 2;
+}
+
+.col-clue,
+.corner {
+  top: 0;
+}
+
+.row-clue,
+.corner {
+  left: 0;
+}
+
+.corner {
+  z-index: 3;
+}
+
+.zoom-bar {
   display: flex;
   justify-content: center;
-  overflow-x: auto;
+  margin-top: 10px;
+}
+
+.zoom-bar button {
+  border-radius: 0;
+  min-width: 44px;
+  justify-content: center;
+}
+
+.zoom-bar button:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+.zoom-bar button:last-child {
+  border-radius: 0 8px 8px 0;
+}
+
+.zoom-bar button + button {
+  border-left: none;
+}
+
+.zoom-level {
+  font-variant-numeric: tabular-nums;
 }
 
 .board {
   /* Fit the clues and grid within the viewport. */
-  --cell: clamp(
-    16px,
-    min(
-      calc((100vw - 40px) / (var(--w) + var(--rc) * 0.7 + 0.5)),
-      calc((100dvh - 190px) / (var(--h) + var(--cc) * 0.85 + 0.5))
-    ),
-    40px
+  --cell: calc(
+    clamp(
+        16px,
+        min(
+          calc((100vw - 40px) / (var(--w) + var(--rc) * 0.7 + 0.5)),
+          calc((100dvh - 190px) / (var(--h) + var(--cc) * 0.85 + 0.5))
+        ),
+        var(--cell-max, 40px)
+      ) *
+      var(--zoom, 1)
   );
-  --clue-size: calc(var(--cell) * 0.55);
+  --clue-size: min(calc(var(--cell) * 0.55), 20px);
   display: grid;
+  width: max-content;
+  margin: 0 auto;
+  padding: 4px;
   grid-template-columns: auto repeat(var(--w), var(--cell));
   grid-template-rows: auto repeat(var(--h), var(--cell));
   user-select: none;
@@ -662,4 +724,11 @@ button:disabled {
 .is-solved .cell.cursor,
 .is-failed .cell.cursor {
   outline: none !important;
+}
+
+/* Touch: small grids get finger-sized cells; pinch or the zoom bar for large ones. */
+@media (pointer: coarse) {
+  .board {
+    --cell-max: 44px;
+  }
 }
