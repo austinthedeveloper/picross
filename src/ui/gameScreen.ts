@@ -1,0 +1,118 @@
+import { Cell } from '../engine/board';
+import { Game } from '../game/game';
+import { markPuzzleSolved } from '../game/progress';
+import type { Puzzle } from '../puzzles/format';
+import { puzzles } from '../puzzles/index';
+import { createBoardView } from './boardView';
+import { el } from './dom';
+import { attachInput, type Tool } from './input';
+import { createPicture } from './picture';
+
+/** Renders the play screen. Returns a cleanup function. */
+export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
+  const game = new Game(puzzle);
+  const view = createBoardView(puzzle);
+  let tool: Tool = Cell.Filled;
+
+  const back = el('a', { className: 'button ghost', href: '#/', textContent: '← Puzzles' });
+  const title = el('h1', { textContent: `${puzzle.width}×${puzzle.height}` });
+
+  const fillBtn = el('button', { className: 'tool', textContent: '■ Fill', title: 'Fill' });
+  const markBtn = el('button', { className: 'tool', textContent: '✕ Mark', title: 'Mark' });
+  fillBtn.setAttribute('aria-pressed', 'true');
+  markBtn.setAttribute('aria-pressed', 'false');
+  const setTool = (t: Tool) => {
+    tool = t;
+    fillBtn.setAttribute('aria-pressed', String(t === Cell.Filled));
+    markBtn.setAttribute('aria-pressed', String(t === Cell.Marked));
+  };
+  fillBtn.onclick = () => setTool(Cell.Filled);
+  markBtn.onclick = () => setTool(Cell.Marked);
+
+  const undoBtn = el('button', { textContent: 'Undo', title: 'Undo (Ctrl+Z)' });
+  const redoBtn = el('button', { textContent: 'Redo', title: 'Redo (Ctrl+Shift+Z)' });
+  const resetBtn = el('button', { textContent: 'Reset', title: 'Clear the board' });
+  undoBtn.onclick = () => (game.undo(), refresh());
+  redoBtn.onclick = () => (game.redo(), refresh());
+  resetBtn.onclick = () => (game.reset(), refresh());
+
+  const toolbar = el('div', { className: 'toolbar' }, [
+    el('div', { className: 'segmented' }, [fillBtn, markBtn]),
+    el('div', { className: 'actions' }, [undoBtn, redoBtn, resetBtn]),
+  ]);
+
+  const solvedPanel = el('div', { className: 'solved-panel', hidden: true });
+  const screen = el('main', { className: 'screen game' }, [
+    el('header', { className: 'topbar' }, [back, title]),
+    toolbar,
+    el('div', { className: 'board-wrap' }, [view.root]),
+    solvedPanel,
+  ]);
+  app.replaceChildren(screen);
+
+  const showSolved = () => {
+    markPuzzleSolved(puzzle.id);
+    title.textContent = puzzle.name;
+    const next = puzzles[puzzles.indexOf(puzzle) + 1];
+    solvedPanel.replaceChildren(
+      el('h2', { textContent: 'Solved!' }),
+      createPicture(puzzle.solution, Math.max(4, Math.floor(120 / puzzle.width))),
+      el('p', { className: 'solved-name', textContent: puzzle.name }),
+      el('div', { className: 'solved-actions' }, [
+        el('a', { className: 'button ghost', href: '#/', textContent: 'All puzzles' }),
+        ...(next
+          ? [
+              el('a', {
+                className: 'button primary',
+                href: `#/play/${next.id}`,
+                textContent: 'Next →',
+              }),
+            ]
+          : []),
+      ]),
+    );
+    solvedPanel.hidden = false;
+  };
+
+  function refresh() {
+    view.update(game.board);
+    undoBtn.disabled = !game.history.canUndo;
+    redoBtn.disabled = !game.history.canRedo;
+    const solved = game.solved;
+    screen.classList.toggle('is-solved', solved);
+    toolbar.inert = solved;
+    if (solved && solvedPanel.hidden) {
+      view.highlight(null, null);
+      showSolved();
+    }
+  }
+
+  attachInput(view.root, {
+    board: game.board,
+    getTool: () => tool,
+    enabled: () => !game.solved,
+    onPreview: (changes) => {
+      game.preview(changes);
+      view.update(game.board);
+    },
+    onCommit: (changes) => {
+      game.commit(changes);
+      refresh();
+    },
+    onHover: (r, c) => view.highlight(r, c),
+  });
+
+  const onKey = (e: KeyboardEvent) => {
+    if (game.solved || !(e.ctrlKey || e.metaKey)) return;
+    const key = e.key.toLowerCase();
+    if (key === 'z' && !e.shiftKey) game.undo();
+    else if ((key === 'z' && e.shiftKey) || key === 'y') game.redo();
+    else return;
+    e.preventDefault();
+    refresh();
+  };
+  window.addEventListener('keydown', onKey);
+
+  refresh();
+  return () => window.removeEventListener('keydown', onKey);
+}

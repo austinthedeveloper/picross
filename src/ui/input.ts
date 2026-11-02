@@ -1,0 +1,113 @@
+import { Cell, type Board } from '../engine/board';
+import type { Change } from '../engine/history';
+
+export type Tool = typeof Cell.Filled | typeof Cell.Marked;
+
+export interface InputOptions {
+  board: Board;
+  getTool(): Tool;
+  enabled(): boolean;
+  onPreview(changes: Change[]): void;
+  onCommit(changes: Change[]): void;
+  onHover(r: number | null, c: number | null): void;
+}
+
+/**
+ * Pointer input for the board: click/tap to fill, right-click (or the mark
+ * tool) to mark, and drag to paint a straight line. A stroke only changes
+ * cells in the same state as the cell it started on, so dragging from an
+ * empty cell paints empties and dragging from a filled cell erases fills.
+ */
+export function attachInput(root: HTMLElement, opts: InputOptions): void {
+  const { board } = opts;
+  const w = board.width;
+
+  let stroke: {
+    pointerId: number;
+    start: { r: number; c: number };
+    axis: 'row' | 'col' | null;
+    match: Cell;
+    target: Cell;
+    changes: Map<number, Change>;
+  } | null = null;
+
+  const cellAt = (x: number, y: number) => {
+    const hit = document.elementFromPoint(x, y);
+    const cell = hit instanceof HTMLElement ? hit.closest<HTMLElement>('.cell') : null;
+    if (!cell || !root.contains(cell)) return null;
+    const i = Number(cell.dataset.i);
+    return { r: Math.floor(i / w), c: i % w };
+  };
+
+  const paintTo = (r: number, c: number) => {
+    if (!stroke) return;
+    const { start } = stroke;
+    if (!stroke.axis) {
+      if (r === start.r && c === start.c) return;
+      stroke.axis = Math.abs(c - start.c) >= Math.abs(r - start.r) ? 'row' : 'col';
+    }
+    const fresh: Change[] = [];
+    const visit = (rr: number, cc: number) => {
+      const index = rr * w + cc;
+      if (stroke!.changes.has(index) || board.cells[index] !== stroke!.match) return;
+      const change = { index, from: board.cells[index], to: stroke!.target };
+      stroke!.changes.set(index, change);
+      fresh.push(change);
+    };
+    if (stroke.axis === 'row') {
+      const step = Math.sign(c - start.c) || 1;
+      for (let cc = start.c; cc !== c + step; cc += step) visit(start.r, cc);
+    } else {
+      const step = Math.sign(r - start.r) || 1;
+      for (let rr = start.r; rr !== r + step; rr += step) visit(rr, start.c);
+    }
+    if (fresh.length) opts.onPreview(fresh);
+  };
+
+  root.addEventListener('contextmenu', (e) => e.preventDefault());
+
+  root.addEventListener('pointerdown', (e) => {
+    if (stroke || !opts.enabled() || (e.button !== 0 && e.button !== 2)) return;
+    const pos = cellAt(e.clientX, e.clientY);
+    if (!pos) return;
+    e.preventDefault();
+    root.setPointerCapture(e.pointerId);
+    const tool = e.button === 2 ? Cell.Marked : opts.getTool();
+    const match = board.cells[pos.r * w + pos.c];
+    stroke = {
+      pointerId: e.pointerId,
+      start: pos,
+      axis: null,
+      match,
+      target: match === Cell.Empty ? tool : Cell.Empty,
+      changes: new Map(),
+    };
+    const index = pos.r * w + pos.c;
+    const change = { index, from: match, to: stroke.target };
+    stroke.changes.set(index, change);
+    opts.onPreview([change]);
+  });
+
+  root.addEventListener('pointermove', (e) => {
+    const pos = cellAt(e.clientX, e.clientY);
+    if (!stroke) {
+      if (e.pointerType === 'mouse') opts.onHover(pos?.r ?? null, pos?.c ?? null);
+      return;
+    }
+    if (e.pointerId !== stroke.pointerId || !pos) return;
+    opts.onHover(pos.r, pos.c);
+    paintTo(pos.r, pos.c);
+  });
+
+  const end = (e: PointerEvent) => {
+    if (!stroke || e.pointerId !== stroke.pointerId) return;
+    const changes = [...stroke.changes.values()];
+    stroke = null;
+    opts.onCommit(changes);
+  };
+  root.addEventListener('pointerup', end);
+  root.addEventListener('pointercancel', end);
+  root.addEventListener('pointerleave', (e) => {
+    if (!stroke && e.pointerType === 'mouse') opts.onHover(null, null);
+  });
+}
