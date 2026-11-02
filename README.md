@@ -19,3 +19,20 @@ npm run build     # type-check and build to dist/
 `.github/workflows/ci.yml` runs lint, tests, and the build on every pull request and push.
 Pushes to `main` are deployed to GitHub Pages (set **Settings → Pages → Source** to
 **GitHub Actions** once).
+
+## Puzzle format
+
+Puzzles live in `src/puzzles/pack/*.json`:
+
+```json
+{
+  "id": "heart",
+  "name": "Heart",
+  "width": 5,
+  "height": 5,
+  "solution": [".#.#.", "#####", "#####", ".###.", "..#.."]
+}
+```
+
+Each `solution` row is a string of `#` (filled) and `.` (empty). Clues are derived from the
+solution. Add the id to `ORDER` in `src/puzzles/index.ts` to place it in the pack.
