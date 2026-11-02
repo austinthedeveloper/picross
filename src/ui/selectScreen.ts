@@ -1,4 +1,4 @@
-import { isPuzzleSolved } from '../game/progress';
+import { getSavedBoard, isPuzzleSolved } from '../game/progress';
 import { puzzles } from '../puzzles/index';
 import { el } from './dom';
 import { createPicture } from './picture';
@@ -6,6 +6,7 @@ import { createPicture } from './picture';
 export function renderSelectScreen(app: HTMLElement): void {
   const cards = puzzles.map((p, i) => {
     const solved = isPuzzleSolved(p.id);
+    const status = solved ? '✓ Solved' : getSavedBoard(p.id) ? 'In progress' : 'Unsolved';
     const thumb = solved
       ? createPicture(p.solution, Math.floor(60 / Math.max(p.width, p.height)))
       : el('span', { className: 'unknown', textContent: '?' });
@@ -14,7 +15,7 @@ export function renderSelectScreen(app: HTMLElement): void {
       el('div', { className: 'card-name', textContent: solved ? p.name : `No. ${i + 1}` }),
       el('div', { className: 'card-meta' }, [
         el('span', { textContent: `${p.width}×${p.height}` }),
-        el('span', { className: 'status', textContent: solved ? '✓ Solved' : 'Unsolved' }),
+        el('span', { className: 'status', textContent: status }),
       ]),
     ]);
   });

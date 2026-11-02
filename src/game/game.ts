@@ -1,6 +1,7 @@
 import { Cell, createBoard, isSolved, type Board } from '../engine/board';
 import { applyMove, History, type Change, type Move } from '../engine/history';
 import type { Puzzle } from '../puzzles/format';
+import type { SavedBoard } from './progress';
 
 /** A puzzle being played: board state, undo history, and solved flag. */
 export class Game {
@@ -8,8 +9,27 @@ export class Game {
   readonly history = new History();
   solved = false;
 
-  constructor(readonly puzzle: Puzzle) {
+  constructor(
+    readonly puzzle: Puzzle,
+    saved?: SavedBoard,
+  ) {
     this.board = createBoard(puzzle.width, puzzle.height);
+    if (saved?.cells.length === this.board.cells.length) {
+      [...saved.cells].forEach((ch, i) => {
+        const cell = Number(ch);
+        if (cell === Cell.Filled || cell === Cell.Marked) this.board.cells[i] = cell;
+      });
+      this.checkSolved();
+    }
+  }
+
+  /** True when the player has made any marks worth saving. */
+  get started(): boolean {
+    return this.board.cells.some((c) => c !== Cell.Empty);
+  }
+
+  serialize(): SavedBoard {
+    return { cells: this.board.cells.join('') };
   }
 
   /** Sets cells without recording history, for live drag previews. */

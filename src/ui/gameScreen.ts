@@ -1,6 +1,6 @@
 import { Cell } from '../engine/board';
 import { Game } from '../game/game';
-import { markPuzzleSolved } from '../game/progress';
+import { clearSavedBoard, getSavedBoard, markPuzzleSolved, saveBoard } from '../game/progress';
 import type { Puzzle } from '../puzzles/format';
 import { puzzles } from '../puzzles/index';
 import { createBoardView } from './boardView';
@@ -10,7 +10,7 @@ import { createPicture } from './picture';
 
 /** Renders the play screen. Returns a cleanup function. */
 export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
-  const game = new Game(puzzle);
+  const game = new Game(puzzle, getSavedBoard(puzzle.id));
   const view = createBoardView(puzzle);
   let tool: Tool = Cell.Filled;
 
@@ -74,7 +74,14 @@ export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
     solvedPanel.hidden = false;
   };
 
+  const persist = () => {
+    if (game.solved) return;
+    if (game.started) saveBoard(puzzle.id, game.serialize());
+    else clearSavedBoard(puzzle.id);
+  };
+
   function refresh() {
+    persist();
     view.update(game.board);
     undoBtn.disabled = !game.history.canUndo;
     redoBtn.disabled = !game.history.canRedo;

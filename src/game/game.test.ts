@@ -40,3 +40,18 @@ describe('Game', () => {
     expect(game.history.canUndo).toBe(false);
   });
 });
+
+describe('Game save/restore', () => {
+  it('round-trips a board', () => {
+    const game = new Game(puzzle);
+    stroke(game, [{ index: 1, from: Cell.Empty, to: Cell.Marked }]);
+    const restored = new Game(puzzle, game.serialize());
+    expect(restored.board.cells).toEqual([Cell.Empty, Cell.Marked]);
+    expect(restored.started).toBe(true);
+  });
+
+  it('ignores a save of the wrong size', () => {
+    const restored = new Game(puzzle, { cells: '111' });
+    expect(restored.started).toBe(false);
+  });
+});
