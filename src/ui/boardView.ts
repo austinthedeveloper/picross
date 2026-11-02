@@ -8,6 +8,7 @@ export interface BoardView {
   cells: HTMLElement[];
   update(board: Board): void;
   highlight(r: number | null, c: number | null): void;
+  flashError(index: number): void;
 }
 
 const CELL_CLASS: Record<Cell, string> = {
@@ -80,6 +81,12 @@ export function createBoardView(puzzle: Puzzle): BoardView {
       });
       for (let r = 0; r < h; r++) dim(rowClues[r].nums, clues.rows[r], row(board, r));
       for (let c = 0; c < w; c++) dim(colClues[c].nums, clues.cols[c], column(board, c));
+    },
+    flashError(index) {
+      const cell = cells[index];
+      cell.classList.remove('error');
+      void cell.offsetWidth; // restart the animation
+      cell.classList.add('error');
     },
     highlight(r, c) {
       rowClues.forEach((g, i) => g.group.classList.toggle('hl', i === r));

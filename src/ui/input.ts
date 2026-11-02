@@ -7,7 +7,8 @@ export interface InputOptions {
   board: Board;
   getTool(): Tool;
   enabled(): boolean;
-  onPreview(changes: Change[]): void;
+  /** Applies changes; returns those applied and whether to end the stroke. */
+  onPreview(changes: Change[]): { applied: Change[]; stop: boolean };
   onCommit(changes: Change[]): void;
   onHover(r: number | null, c: number | null): void;
 }
@@ -50,9 +51,7 @@ export function attachInput(root: HTMLElement, opts: InputOptions): void {
     const visit = (rr: number, cc: number) => {
       const index = rr * w + cc;
       if (stroke!.changes.has(index) || board.cells[index] !== stroke!.match) return;
-      const change = { index, from: board.cells[index], to: stroke!.target };
-      stroke!.changes.set(index, change);
-      fresh.push(change);
+      fresh.push({ index, from: board.cells[index], to: stroke!.target });
     };
     if (stroke.axis === 'row') {
       const step = Math.sign(c - start.c) || 1;
@@ -61,7 +60,21 @@ export function attachInput(root: HTMLElement, opts: InputOptions): void {
       const step = Math.sign(r - start.r) || 1;
       for (let rr = start.r; rr !== r + step; rr += step) visit(rr, start.c);
     }
-    if (fresh.length) opts.onPreview(fresh);
+    if (fresh.length) apply(fresh);
+  };
+
+  const apply = (changes: Change[]) => {
+    if (!stroke) return;
+    const { applied, stop } = opts.onPreview(changes);
+    for (const change of applied) stroke.changes.set(change.index, change);
+    if (stop) finish();
+  };
+
+  const finish = () => {
+    if (!stroke) return;
+    const changes = [...stroke.changes.values()];
+    stroke = null;
+    opts.onCommit(changes);
   };
 
   root.addEventListener('contextmenu', (e) => e.preventDefault());
@@ -82,10 +95,7 @@ export function attachInput(root: HTMLElement, opts: InputOptions): void {
       target: match === Cell.Empty ? tool : Cell.Empty,
       changes: new Map(),
     };
-    const index = pos.r * w + pos.c;
-    const change = { index, from: match, to: stroke.target };
-    stroke.changes.set(index, change);
-    opts.onPreview([change]);
+    apply([{ index: pos.r * w + pos.c, from: match, to: stroke.target }]);
   });
 
   root.addEventListener('pointermove', (e) => {
@@ -100,10 +110,7 @@ export function attachInput(root: HTMLElement, opts: InputOptions): void {
   });
 
   const end = (e: PointerEvent) => {
-    if (!stroke || e.pointerId !== stroke.pointerId) return;
-    const changes = [...stroke.changes.values()];
-    stroke = null;
-    opts.onCommit(changes);
+    if (stroke && e.pointerId === stroke.pointerId) finish();
   };
   root.addEventListener('pointerup', end);
   root.addEventListener('pointercancel', end);

@@ -126,6 +126,30 @@ button:disabled {
   color: var(--muted);
 }
 
+.mode-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.mode-hint {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.hearts {
+  margin-left: auto;
+  color: var(--accent);
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+}
+
+.hearts:not([hidden]) + .timer {
+  margin-left: 12px;
+}
+
 .timer {
   margin-left: auto;
   font-variant-numeric: tabular-nums;
@@ -401,6 +425,25 @@ button:disabled {
 
 .solved-panel[hidden] {
   display: none;
+}
+
+.cell.error {
+  animation: error-flash 0.5s ease-out;
+}
+
+@keyframes error-flash {
+  from {
+    background: var(--accent);
+  }
+}
+
+.is-failed .clue,
+.is-failed .board {
+  opacity: 0.6;
+}
+
+.solved-panel.failed h2 {
+  color: var(--ink);
 }
 
 .solved-panel h2 {

@@ -65,3 +65,47 @@ describe('Game save/restore', () => {
     expect(restored.started).toBe(false);
   });
 });
+
+describe('hearts mode', () => {
+  const fill = (index: number) => [{ index, from: Cell.Empty, to: Cell.Filled }];
+
+  it('turns a wrong fill into a mark and costs a heart', () => {
+    const game = new Game(puzzle, undefined, 'hearts');
+    const result = game.preview(fill(1));
+    expect(result.mistake).toMatchObject({ index: 1, to: Cell.Marked });
+    expect(game.board.cells[1]).toBe(Cell.Marked);
+    expect(game.hearts).toBe(2);
+  });
+
+  it('stops applying a stroke at the first mistake', () => {
+    const wide = parsePuzzle({ id: 'w', name: 'W', width: 3, height: 1, solution: ['#..'] });
+    const game = new Game(wide, undefined, 'hearts');
+    const result = game.preview([...fill(0), ...fill(1), ...fill(2)]);
+    expect(result.applied).toHaveLength(2);
+    expect(game.board.cells).toEqual([Cell.Filled, Cell.Marked, Cell.Empty]);
+  });
+
+  it('fails at zero hearts and can retry', () => {
+    const wide = parsePuzzle({ id: 'w', name: 'W', width: 4, height: 1, solution: ['#...'] });
+    const game = new Game(wide, undefined, 'hearts');
+    for (const i of [1, 2, 3]) game.preview(fill(i));
+    expect(game.failed).toBe(true);
+    game.retry();
+    expect(game.failed).toBe(false);
+    expect(game.started).toBe(false);
+  });
+
+  it('never checks fills in relaxed mode', () => {
+    const game = new Game(puzzle);
+    expect(game.preview(fill(1)).mistake).toBeNull();
+    expect(game.board.cells[1]).toBe(Cell.Filled);
+  });
+
+  it('keeps the saved mode and hearts', () => {
+    const game = new Game(puzzle, undefined, 'hearts');
+    game.preview(fill(1));
+    const restored = new Game(puzzle, game.serialize(), 'relaxed');
+    expect(restored.mode).toBe('hearts');
+    expect(restored.hearts).toBe(2);
+  });
+});

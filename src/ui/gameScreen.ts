@@ -1,5 +1,5 @@
 import { Cell } from '../engine/board';
-import { Game } from '../game/game';
+import { Game, MAX_HEARTS } from '../game/game';
 import {
   clearSavedBoard,
   getPuzzleStats,
@@ -7,6 +7,7 @@ import {
   recordSolve,
   saveBoard,
 } from '../game/progress';
+import { getSettings } from '../game/settings';
 import type { Puzzle } from '../puzzles/format';
 import { puzzles } from '../puzzles/index';
 import { createBoardView } from './boardView';
@@ -17,12 +18,13 @@ import { createPicture } from './picture';
 
 /** Renders the play screen. Returns a cleanup function. */
 export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
-  const game = new Game(puzzle, getSavedBoard(puzzle.id));
+  const game = new Game(puzzle, getSavedBoard(puzzle.id), getSettings().mode);
   const view = createBoardView(puzzle);
   let tool: Tool = Cell.Filled;
 
   const back = el('a', { className: 'button ghost', href: '#/', textContent: '← Puzzles' });
   const title = el('h1', { textContent: `${puzzle.width}×${puzzle.height}` });
+  const hearts = el('span', { className: 'hearts', hidden: game.mode !== 'hearts' });
   const timer = el('span', { className: 'timer', role: 'timer' });
   timer.setAttribute('aria-label', 'Time');
 
@@ -51,11 +53,27 @@ export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
   ]);
 
   const solvedPanel = el('div', { className: 'solved-panel', hidden: true });
+  const failedPanel = el('div', { className: 'solved-panel failed', hidden: true }, [
+    el('h2', { textContent: 'Out of hearts' }),
+    el('p', { className: 'solved-time', textContent: 'Three wrong fills. Try again?' }),
+    el('div', { className: 'solved-actions' }, [
+      el('a', { className: 'button ghost', href: '#/', textContent: 'All puzzles' }),
+      el('button', {
+        className: 'button primary',
+        textContent: 'Retry',
+        onclick: () => {
+          game.retry();
+          refresh();
+        },
+      }),
+    ]),
+  ]);
   const screen = el('main', { className: 'screen game' }, [
-    el('header', { className: 'topbar' }, [back, title, timer]),
+    el('header', { className: 'topbar' }, [back, title, hearts, timer]),
     toolbar,
     el('div', { className: 'board-wrap' }, [view.root]),
     solvedPanel,
+    failedPanel,
   ]);
   app.replaceChildren(screen);
 
@@ -94,6 +112,11 @@ export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
 
   const persist = () => {
     if (game.solved) return;
+    if (game.failed) {
+      // A failed board can't continue; reopening starts fresh.
+      clearSavedBoard(puzzle.id);
+      return;
+    }
     if (game.started) saveBoard(puzzle.id, game.serialize());
     else clearSavedBoard(puzzle.id);
   };
@@ -120,8 +143,12 @@ export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
     undoBtn.disabled = !game.history.canUndo;
     redoBtn.disabled = !game.history.canRedo;
     const solved = game.solved;
+    hearts.textContent = '♥'.repeat(game.hearts) + '♡'.repeat(MAX_HEARTS - game.hearts);
+    hearts.setAttribute('aria-label', `${game.hearts} of ${MAX_HEARTS} hearts left`);
     screen.classList.toggle('is-solved', solved);
-    toolbar.inert = solved;
+    screen.classList.toggle('is-failed', game.failed);
+    toolbar.inert = game.over;
+    failedPanel.hidden = !game.failed;
     if (solved && solvedPanel.hidden) {
       view.highlight(null, null);
       showSolved();
@@ -131,10 +158,12 @@ export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
   attachInput(view.root, {
     board: game.board,
     getTool: () => tool,
-    enabled: () => !game.solved,
+    enabled: () => !game.over,
     onPreview: (changes) => {
-      game.preview(changes);
+      const { applied, mistake } = game.preview(changes);
       view.update(game.board);
+      if (mistake) view.flashError(mistake.index);
+      return { applied, stop: Boolean(mistake) };
     },
     onCommit: (changes) => {
       game.commit(changes);
@@ -144,7 +173,7 @@ export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
   });
 
   const onKey = (e: KeyboardEvent) => {
-    if (game.solved || !(e.ctrlKey || e.metaKey)) return;
+    if (game.over || !(e.ctrlKey || e.metaKey)) return;
     const key = e.key.toLowerCase();
     if (key === 'z' && !e.shiftKey) game.undo();
     else if ((key === 'z' && e.shiftKey) || key === 'y') game.redo();

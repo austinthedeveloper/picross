@@ -1,10 +1,15 @@
+import type { Mode } from './settings';
 import { readStore, writeStore } from './storage';
+
+const KEY = 'picross:v1';
 
 /** An in-progress board. `cells` holds one digit per cell (see `Cell`). */
 export interface SavedBoard {
   cells: string;
   /** Milliseconds played so far. */
   elapsed?: number;
+  mode?: Mode;
+  hearts?: number;
 }
 
 export interface PuzzleStats {
@@ -18,8 +23,8 @@ interface SaveData {
   totalTime: number;
 }
 
-const data: SaveData = readStore<SaveData>({ solved: {}, boards: {}, totalTime: 0 });
-const persist = () => writeStore(data);
+const data: SaveData = readStore<SaveData>(KEY, { solved: {}, boards: {}, totalTime: 0 });
+const persist = () => writeStore(KEY, data);
 
 export function isPuzzleSolved(id: string): boolean {
   return Boolean(data.solved[id]);

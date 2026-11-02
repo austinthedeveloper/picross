@@ -1,5 +1,6 @@
 import { getOverallStats, getPuzzleStats, getSavedBoard, isPuzzleSolved } from '../game/progress';
 import { puzzles } from '../puzzles/index';
+import { getSettings, updateSettings, type Mode } from '../game/settings';
 import { el } from './dom';
 import { formatTime } from './format';
 import { createPicture } from './picture';
@@ -34,9 +35,30 @@ export function renderSelectScreen(app: HTMLElement): void {
       el('strong', { textContent: value }),
       el('span', { textContent: label }),
     ]);
+  const modeButton = (mode: Mode, label: string, hint: string) => {
+    const button = el('button', { className: 'tool', textContent: label, title: hint });
+    button.setAttribute('aria-pressed', String(getSettings().mode === mode));
+    button.onclick = () => {
+      updateSettings({ mode });
+      renderSelectScreen(app);
+    };
+    return button;
+  };
+  const modeHint =
+    getSettings().mode === 'hearts'
+      ? 'Wrong fills cost a heart. Three and you start over.'
+      : 'No checking. Solve at your own pace.';
+
   app.replaceChildren(
     el('main', { className: 'screen select' }, [
       el('header', { className: 'topbar' }, [el('h1', { textContent: 'Picross' })]),
+      el('div', { className: 'mode-row' }, [
+        el('div', { className: 'segmented', role: 'group', ariaLabel: 'Mode' }, [
+          modeButton('relaxed', 'Relaxed', 'No checking'),
+          modeButton('hearts', '♥ Hearts', 'Wrong fills cost a heart'),
+        ]),
+        el('span', { className: 'mode-hint', textContent: modeHint }),
+      ]),
       el('section', { className: 'stats', ariaLabel: 'Stats' }, [
         stat(`${solvedCount}/${puzzles.length}`, 'Puzzles solved'),
         stat(String(overall.solves), 'Total solves'),
