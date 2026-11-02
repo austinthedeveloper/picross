@@ -1,10 +1,17 @@
 import { Cell } from '../engine/board';
 import { Game } from '../game/game';
-import { clearSavedBoard, getSavedBoard, markPuzzleSolved, saveBoard } from '../game/progress';
+import {
+  clearSavedBoard,
+  getPuzzleStats,
+  getSavedBoard,
+  recordSolve,
+  saveBoard,
+} from '../game/progress';
 import type { Puzzle } from '../puzzles/format';
 import { puzzles } from '../puzzles/index';
 import { createBoardView } from './boardView';
 import { el } from './dom';
+import { formatTime } from './format';
 import { attachInput, type Tool } from './input';
 import { createPicture } from './picture';
 
@@ -16,6 +23,8 @@ export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
 
   const back = el('a', { className: 'button ghost', href: '#/', textContent: '← Puzzles' });
   const title = el('h1', { textContent: `${puzzle.width}×${puzzle.height}` });
+  const timer = el('span', { className: 'timer', role: 'timer' });
+  timer.setAttribute('aria-label', 'Time');
 
   const fillBtn = el('button', { className: 'tool', textContent: '■ Fill', title: 'Fill' });
   const markBtn = el('button', { className: 'tool', textContent: '✕ Mark', title: 'Mark' });
@@ -43,7 +52,7 @@ export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
 
   const solvedPanel = el('div', { className: 'solved-panel', hidden: true });
   const screen = el('main', { className: 'screen game' }, [
-    el('header', { className: 'topbar' }, [back, title]),
+    el('header', { className: 'topbar' }, [back, title, timer]),
     toolbar,
     el('div', { className: 'board-wrap' }, [view.root]),
     solvedPanel,
@@ -51,13 +60,22 @@ export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
   app.replaceChildren(screen);
 
   const showSolved = () => {
-    markPuzzleSolved(puzzle.id);
+    const prevBest = getPuzzleStats(puzzle.id)?.bestTime;
+    const newBest = recordSolve(puzzle.id, game.elapsed);
+    const stats = getPuzzleStats(puzzle.id)!;
     title.textContent = puzzle.name;
+    const timeNote =
+      prevBest === undefined
+        ? `Time ${formatTime(game.elapsed)}`
+        : newBest
+          ? `New best: ${formatTime(game.elapsed)} (was ${formatTime(prevBest)})`
+          : `Time ${formatTime(game.elapsed)} · Best ${formatTime(stats.bestTime)}`;
     const next = puzzles[puzzles.indexOf(puzzle) + 1];
     solvedPanel.replaceChildren(
       el('h2', { textContent: 'Solved!' }),
       createPicture(puzzle.solution, Math.max(4, Math.floor(120 / puzzle.width))),
       el('p', { className: 'solved-name', textContent: puzzle.name }),
+      el('p', { className: 'solved-time', textContent: timeNote }),
       el('div', { className: 'solved-actions' }, [
         el('a', { className: 'button ghost', href: '#/', textContent: 'All puzzles' }),
         ...(next
@@ -80,7 +98,23 @@ export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
     else clearSavedBoard(puzzle.id);
   };
 
+  // The clock runs while the page is visible and the puzzle is unsolved.
+  let last = performance.now();
+  const tick = () => {
+    const now = performance.now();
+    if (document.visibilityState === 'visible') game.tick(now - last);
+    last = now;
+    timer.textContent = formatTime(game.elapsed);
+  };
+  const clock = window.setInterval(tick, 250);
+  const onHide = () => {
+    tick();
+    if (document.visibilityState === 'hidden') persist();
+  };
+  document.addEventListener('visibilitychange', onHide);
+
   function refresh() {
+    tick();
     persist();
     view.update(game.board);
     undoBtn.disabled = !game.history.canUndo;
@@ -121,5 +155,11 @@ export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
   window.addEventListener('keydown', onKey);
 
   refresh();
-  return () => window.removeEventListener('keydown', onKey);
+  return () => {
+    tick();
+    persist();
+    window.clearInterval(clock);
+    window.removeEventListener('keydown', onKey);
+    document.removeEventListener('visibilitychange', onHide);
+  };
 }

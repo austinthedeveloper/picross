@@ -22,6 +22,14 @@ describe('Game', () => {
     expect(game.solved).toBe(true);
   });
 
+  it('stops the clock once solved', () => {
+    const game = new Game(puzzle);
+    game.tick(1000);
+    stroke(game, [{ index: 0, from: Cell.Empty, to: Cell.Filled }]);
+    game.tick(1000);
+    expect(game.elapsed).toBe(1000);
+  });
+
   it('resets as one undoable move', () => {
     const game = new Game(puzzle);
     stroke(game, [
@@ -45,8 +53,10 @@ describe('Game save/restore', () => {
   it('round-trips a board', () => {
     const game = new Game(puzzle);
     stroke(game, [{ index: 1, from: Cell.Empty, to: Cell.Marked }]);
+    game.tick(1500);
     const restored = new Game(puzzle, game.serialize());
     expect(restored.board.cells).toEqual([Cell.Empty, Cell.Marked]);
+    expect(restored.elapsed).toBe(1500);
     expect(restored.started).toBe(true);
   });
 

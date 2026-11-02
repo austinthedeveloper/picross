@@ -8,12 +8,15 @@ export class Game {
   readonly board: Board;
   readonly history = new History();
   solved = false;
+  /** Milliseconds spent on this puzzle, excluding time after it was solved. */
+  elapsed = 0;
 
   constructor(
     readonly puzzle: Puzzle,
     saved?: SavedBoard,
   ) {
     this.board = createBoard(puzzle.width, puzzle.height);
+    this.elapsed = saved?.elapsed ?? 0;
     if (saved?.cells.length === this.board.cells.length) {
       [...saved.cells].forEach((ch, i) => {
         const cell = Number(ch);
@@ -29,7 +32,11 @@ export class Game {
   }
 
   serialize(): SavedBoard {
-    return { cells: this.board.cells.join('') };
+    return { cells: this.board.cells.join(''), elapsed: Math.round(this.elapsed) };
+  }
+
+  tick(ms: number): void {
+    if (!this.solved) this.elapsed += ms;
   }
 
   /** Sets cells without recording history, for live drag previews. */

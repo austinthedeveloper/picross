@@ -105,6 +105,40 @@ button:disabled {
 
 /* Select screen */
 
+.stats {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 16px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat strong {
+  font-size: 1.25rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat span {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.timer {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.solved-time {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
 .cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
