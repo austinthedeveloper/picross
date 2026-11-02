@@ -2,6 +2,9 @@ import './style.css';
 import { getPuzzle } from './puzzles/index';
 import { renderGameScreen } from './ui/gameScreen';
 import { renderSelectScreen } from './ui/selectScreen';
+import { applyTheme } from './ui/theme';
+
+applyTheme();
 
 const app = document.querySelector<HTMLDivElement>('#app')!;
 let cleanup: (() => void) | undefined;

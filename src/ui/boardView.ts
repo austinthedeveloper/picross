@@ -3,54 +3,85 @@ import { satisfiedClues } from '../engine/clues';
 import type { Puzzle } from '../puzzles/format';
 import { el } from './dom';
 
+export interface Line {
+  kind: 'row' | 'col';
+  index: number;
+}
+
 export interface BoardView {
   root: HTMLElement;
   cells: HTMLElement[];
-  update(board: Board): void;
+  /** Redraws the board. Returns lines whose clues just became fully satisfied. */
+  update(board: Board): Line[];
   highlight(r: number | null, c: number | null): void;
+  setCursor(r: number, c: number): void;
   flashError(index: number): void;
 }
 
-const CELL_CLASS: Record<Cell, string> = {
-  [Cell.Empty]: '',
-  [Cell.Filled]: 'filled',
-  [Cell.Marked]: 'marked',
+const STATE: Record<Cell, { className: string; label: string }> = {
+  [Cell.Empty]: { className: '', label: 'empty' },
+  [Cell.Filled]: { className: 'filled', label: 'filled' },
+  [Cell.Marked]: { className: 'marked', label: 'marked' },
 };
 
-function clueGroup(
-  clues: number[],
-  className: string,
-): { group: HTMLElement; nums: HTMLElement[] } {
-  const nums = (clues.length ? clues : [0]).map((n) => el('span', { textContent: String(n) }));
-  return { group: el('div', { className }, nums), nums };
+interface ClueGroup {
+  group: HTMLElement;
+  nums: HTMLElement[];
+  label: string;
+  complete: boolean;
 }
 
-/** Renders the grid with row/column clues as a CSS grid. */
+function clueGroup(clues: number[], className: string, role: string, label: string): ClueGroup {
+  const nums = (clues.length ? clues : [0]).map((n) =>
+    el('span', { textContent: String(n), ariaHidden: 'true' }),
+  );
+  const fullLabel = `${label} clues: ${clues.length ? clues.join(', ') : 'none'}`;
+  const group = el('div', { className, role, ariaLabel: fullLabel }, nums);
+  return { group, nums, label: fullLabel, complete: false };
+}
+
+let boardCount = 0;
+
+/**
+ * Renders the grid with row/column clues as a CSS grid, exposed to assistive
+ * tech as an ARIA grid: a header row of column clues, then one row per board
+ * row with its clues as the row header.
+ */
 export function createBoardView(puzzle: Puzzle): BoardView {
   const { width: w, height: h, clues } = puzzle;
-  const root = el('div', { className: 'board' });
+  const idPrefix = `board${++boardCount}`;
+  const root = el('div', {
+    className: 'board',
+    role: 'grid',
+    tabIndex: 0,
+    ariaLabel: `Puzzle board, ${w} columns by ${h} rows`,
+  });
   root.style.setProperty('--w', String(w));
   root.style.setProperty('--h', String(h));
   root.style.setProperty('--rc', String(Math.max(1, ...clues.rows.map((c) => c.length))));
   root.style.setProperty('--cc', String(Math.max(1, ...clues.cols.map((c) => c.length))));
 
-  root.append(el('div', { className: 'corner' }));
+  const header = el('div', { className: 'board-row', role: 'row' }, [
+    el('div', { className: 'corner', role: 'presentation' }),
+  ]);
+  root.append(header);
   const colClues = clues.cols.map((cl, c) => {
-    const g = clueGroup(cl, 'clue col-clue');
+    const g = clueGroup(cl, 'clue col-clue', 'columnheader', `Column ${c + 1}`);
     if (c % 5 === 4 && c < w - 1) g.group.classList.add('guide-x');
-    root.append(g.group);
+    header.append(g.group);
     return g;
   });
 
-  const rowClues: ReturnType<typeof clueGroup>[] = [];
+  const rowClues: ClueGroup[] = [];
   const cells: HTMLElement[] = [];
   for (let r = 0; r < h; r++) {
-    const g = clueGroup(clues.rows[r], 'clue row-clue');
+    const rowEl = el('div', { className: 'board-row', role: 'row' });
+    const g = clueGroup(clues.rows[r], 'clue row-clue', 'rowheader', `Row ${r + 1}`);
     if (r % 5 === 4 && r < h - 1) g.group.classList.add('guide-y');
-    root.append(g.group);
+    rowEl.append(g.group);
     rowClues.push(g);
     for (let c = 0; c < w; c++) {
-      const cell = el('div', { className: 'cell' });
+      const cell = el('div', { className: 'cell', role: 'gridcell', id: `${idPrefix}-${r}-${c}` });
       cell.dataset.i = String(r * w + c);
       if (c % 5 === 4 && c < w - 1) cell.classList.add('guide-x');
       if (r % 5 === 4 && r < h - 1) cell.classList.add('guide-y');
@@ -59,28 +90,62 @@ export function createBoardView(puzzle: Puzzle): BoardView {
       if (r === h - 1) cell.classList.add('edge-bottom');
       if (c === w - 1) cell.classList.add('edge-right');
       cells.push(cell);
-      root.append(cell);
+      rowEl.append(cell);
     }
+    root.append(rowEl);
   }
 
-  const dim = (nums: HTMLElement[], clueList: number[], line: Cell[]) => {
-    if (clueList.length === 0) {
-      nums[0].classList.toggle('done', !line.includes(Cell.Filled));
-      return;
-    }
-    satisfiedClues(line, clueList).forEach((done, i) => nums[i].classList.toggle('done', done));
+  /** Dims satisfied clue numbers; returns whether the whole line is satisfied. */
+  const dim = (g: ClueGroup, clueList: number[], line: Cell[]): boolean => {
+    const done =
+      clueList.length === 0 ? [!line.includes(Cell.Filled)] : satisfiedClues(line, clueList);
+    done.forEach((d, i) => g.nums[i].classList.toggle('done', d));
+    const complete = done.every(Boolean);
+    g.group.ariaLabel = complete ? `${g.label}, complete` : g.label;
+    return complete;
   };
+
+  let cursor: HTMLElement | null = null;
+  let first = true;
 
   return {
     root,
     cells,
     update(board) {
       board.cells.forEach((state, i) => {
-        cells[i].className = cells[i].className.replace(/\b(filled|marked)\b/g, '').trim();
-        if (CELL_CLASS[state]) cells[i].classList.add(CELL_CLASS[state]);
+        const cell = cells[i];
+        cell.classList.remove('filled', 'marked');
+        if (STATE[state].className) cell.classList.add(STATE[state].className);
+        const r = Math.floor(i / w);
+        cell.ariaLabel = `Row ${r + 1}, column ${(i % w) + 1}, ${STATE[state].label}`;
       });
-      for (let r = 0; r < h; r++) dim(rowClues[r].nums, clues.rows[r], row(board, r));
-      for (let c = 0; c < w; c++) dim(colClues[c].nums, clues.cols[c], column(board, c));
+      const completed: Line[] = [];
+      const check = (g: ClueGroup, line: Line, complete: boolean) => {
+        if (complete && !g.complete && !first) completed.push(line);
+        g.complete = complete;
+      };
+      for (let r = 0; r < h; r++) {
+        check(
+          rowClues[r],
+          { kind: 'row', index: r },
+          dim(rowClues[r], clues.rows[r], row(board, r)),
+        );
+      }
+      for (let c = 0; c < w; c++) {
+        check(
+          colClues[c],
+          { kind: 'col', index: c },
+          dim(colClues[c], clues.cols[c], column(board, c)),
+        );
+      }
+      first = false;
+      return completed;
+    },
+    setCursor(r, c) {
+      cursor?.classList.remove('cursor');
+      cursor = cells[r * w + c];
+      cursor.classList.add('cursor');
+      root.setAttribute('aria-activedescendant', cursor.id);
     },
     flashError(index) {
       const cell = cells[index];

@@ -36,8 +36,38 @@
   }
 }
 
+/* High-contrast theme: pure black and white with strong lines. */
+:root[data-contrast='high'] {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --ink: #000000;
+  --muted: #000000;
+  --line: #000000;
+  --guide: #000000;
+  --accent: #c00000;
+  --accent-ink: #ffffff;
+  --hl: #ffe14d;
+  --cell-bg: #ffffff;
+  --mark: #444444;
+  color-scheme: light;
+}
+
 * {
   box-sizing: border-box;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
 }
 
 body {
@@ -64,6 +94,18 @@ body {
   margin: 0;
   font-size: 1.5rem;
   letter-spacing: 0.02em;
+}
+
+.settings {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+}
+
+.settings button[aria-pressed='true'] {
+  background: var(--ink);
+  color: var(--bg);
+  border-color: var(--ink);
 }
 
 .count {
@@ -280,6 +322,32 @@ button:disabled {
   touch-action: none;
 }
 
+.board-row {
+  display: contents;
+}
+
+.board:focus {
+  outline: none;
+}
+
+.board:focus-visible .cell.cursor {
+  outline: 3px solid var(--accent);
+  outline-offset: -2px;
+  z-index: 1;
+}
+
+.help {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+@media (pointer: coarse) {
+  .help {
+    display: none;
+  }
+}
+
 .clue {
   display: flex;
   gap: calc(var(--cell) * 0.25);
@@ -311,6 +379,15 @@ button:disabled {
 .clue .done {
   color: var(--mark);
   opacity: 0.6;
+}
+
+:root[data-contrast='high'] .clue .done {
+  opacity: 1;
+  text-decoration: line-through;
+}
+
+:root[data-contrast='high'] .cell.marked::before {
+  inset: 15%;
 }
 
 .cell {

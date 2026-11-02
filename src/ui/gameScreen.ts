@@ -10,7 +10,8 @@ import {
 import { getSettings } from '../game/settings';
 import type { Puzzle } from '../puzzles/format';
 import { puzzles } from '../puzzles/index';
-import { createBoardView } from './boardView';
+import type { Change } from '../engine/history';
+import { createBoardView, type Line } from './boardView';
 import { el } from './dom';
 import { formatTime } from './format';
 import { attachInput, type Tool } from './input';
@@ -68,12 +69,25 @@ export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
       }),
     ]),
   ]);
+  const live = el('div', { className: 'sr-only', ariaLive: 'polite' });
+  const announce = (message: string) => {
+    live.textContent = '';
+    requestAnimationFrame(() => (live.textContent = message));
+  };
+  const help = el('p', {
+    className: 'help',
+    textContent:
+      'Arrows move · Space fill · X mark · Delete clear · Shift+arrows repeat · Ctrl+Z undo',
+  });
+
   const screen = el('main', { className: 'screen game' }, [
     el('header', { className: 'topbar' }, [back, title, hearts, timer]),
     toolbar,
     el('div', { className: 'board-wrap' }, [view.root]),
+    help,
     solvedPanel,
     failedPanel,
+    live,
   ]);
   app.replaceChildren(screen);
 
@@ -108,6 +122,32 @@ export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
       ]),
     );
     solvedPanel.hidden = false;
+    announce(`Solved! ${puzzle.name}. ${timeNote}.`);
+  };
+
+  const lineName = (line: Line) => `${line.kind === 'row' ? 'Row' : 'Column'} ${line.index + 1}`;
+
+  /** Redraws the board and reports lines that were just completed. */
+  const redraw = () => {
+    const completed = view.update(game.board);
+    if (completed.length && !game.solved) {
+      announce(`${completed.map(lineName).join(', ')} complete`);
+    }
+  };
+
+  /** Applies changes through the game; returns what happened for the input layer. */
+  const play = (changes: Change[]) => {
+    const { applied, mistake } = game.preview(changes);
+    redraw();
+    if (mistake) {
+      view.flashError(mistake.index);
+      announce(
+        game.failed
+          ? 'Wrong. Out of hearts.'
+          : `Wrong, that cell is empty. ${game.hearts} ${game.hearts === 1 ? 'heart' : 'hearts'} left.`,
+      );
+    }
+    return { applied, stop: Boolean(mistake) };
   };
 
   const persist = () => {
@@ -139,7 +179,7 @@ export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
   function refresh() {
     tick();
     persist();
-    view.update(game.board);
+    redraw();
     undoBtn.disabled = !game.history.canUndo;
     redoBtn.disabled = !game.history.canRedo;
     const solved = game.solved;
@@ -159,18 +199,74 @@ export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
     board: game.board,
     getTool: () => tool,
     enabled: () => !game.over,
-    onPreview: (changes) => {
-      const { applied, mistake } = game.preview(changes);
-      view.update(game.board);
-      if (mistake) view.flashError(mistake.index);
-      return { applied, stop: Boolean(mistake) };
-    },
+    onPreview: play,
     onCommit: (changes) => {
       game.commit(changes);
       refresh();
     },
     onHover: (r, c) => view.highlight(r, c),
   });
+
+  // Keyboard play: a cursor moves over the board and acts on one cell at a time.
+  const { width: w, height: h } = puzzle;
+  let cursor = { r: 0, c: 0 };
+  let lastAction: { match: Cell; target: Cell } | null = null;
+  const moveCursor = (r: number, c: number) => {
+    cursor = { r: Math.max(0, Math.min(h - 1, r)), c: Math.max(0, Math.min(w - 1, c)) };
+    view.setCursor(cursor.r, cursor.c);
+    view.highlight(cursor.r, cursor.c);
+  };
+  view.root.addEventListener('pointerdown', (e) => {
+    const cell = (e.target as HTMLElement).closest<HTMLElement>('.cell');
+    view.root.focus({ preventScroll: true });
+    if (cell) {
+      const i = Number(cell.dataset.i);
+      moveCursor(Math.floor(i / w), i % w);
+    }
+  });
+  view.root.addEventListener('blur', () => view.highlight(null, null));
+
+  const actOnCursor = (match: Cell, target: Cell) => {
+    const index = cursor.r * w + cursor.c;
+    if (game.board.cells[index] !== match || match === target) return;
+    const { applied } = play([{ index, from: match, to: target }]);
+    game.commit(applied);
+    refresh();
+  };
+  const toggle = (state: Cell) => {
+    const from = game.board.cells[cursor.r * w + cursor.c];
+    lastAction = { match: from, target: from === state ? Cell.Empty : state };
+    actOnCursor(lastAction.match, lastAction.target);
+  };
+
+  const ARROWS: Record<string, [number, number]> = {
+    ArrowUp: [-1, 0],
+    ArrowDown: [1, 0],
+    ArrowLeft: [0, -1],
+    ArrowRight: [0, 1],
+  };
+  view.root.addEventListener('keydown', (e) => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const arrow = ARROWS[e.key];
+    if (arrow) {
+      moveCursor(cursor.r + arrow[0], cursor.c + arrow[1]);
+      if (e.shiftKey && lastAction && !game.over) actOnCursor(lastAction.match, lastAction.target);
+    } else if (game.over) {
+      return;
+    } else if (e.key === ' ' || e.key === 'Enter' || e.key.toLowerCase() === 'f') {
+      toggle(Cell.Filled);
+    } else if (e.key.toLowerCase() === 'x' || e.key.toLowerCase() === 'm') {
+      toggle(Cell.Marked);
+    } else if (e.key === 'Delete' || e.key === 'Backspace') {
+      const from = game.board.cells[cursor.r * w + cursor.c];
+      lastAction = { match: from, target: Cell.Empty };
+      actOnCursor(from, Cell.Empty);
+    } else {
+      return;
+    }
+    e.preventDefault();
+  });
+  view.root.addEventListener('focus', () => moveCursor(cursor.r, cursor.c));
 
   const onKey = (e: KeyboardEvent) => {
     if (game.over || !(e.ctrlKey || e.metaKey)) return;

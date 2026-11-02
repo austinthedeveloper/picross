@@ -3,6 +3,7 @@ import { puzzles } from '../puzzles/index';
 import { getSettings, updateSettings, type Mode } from '../game/settings';
 import { el } from './dom';
 import { formatTime } from './format';
+import { applyTheme } from './theme';
 import { createPicture } from './picture';
 
 export function renderSelectScreen(app: HTMLElement): void {
@@ -49,9 +50,22 @@ export function renderSelectScreen(app: HTMLElement): void {
       ? 'Wrong fills cost a heart. Three and you start over.'
       : 'No checking. Solve at your own pace.';
 
+  const toggle = (label: string, pressed: boolean, onToggle: () => void) => {
+    const button = el('button', { textContent: label, onclick: onToggle });
+    button.setAttribute('aria-pressed', String(pressed));
+    return button;
+  };
+  const settingsBar = el('div', { className: 'settings' }, [
+    toggle('◐ High contrast', getSettings().highContrast, () => {
+      updateSettings({ highContrast: !getSettings().highContrast });
+      applyTheme();
+      renderSelectScreen(app);
+    }),
+  ]);
+
   app.replaceChildren(
     el('main', { className: 'screen select' }, [
-      el('header', { className: 'topbar' }, [el('h1', { textContent: 'Picross' })]),
+      el('header', { className: 'topbar' }, [el('h1', { textContent: 'Picross' }), settingsBar]),
       el('div', { className: 'mode-row' }, [
         el('div', { className: 'segmented', role: 'group', ariaLabel: 'Mode' }, [
           modeButton('relaxed', 'Relaxed', 'No checking'),
