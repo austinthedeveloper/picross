@@ -1,5 +1,6 @@
 import './style.css';
 import { getPuzzle } from './puzzles/index';
+import { renderEditorScreen } from './ui/editorScreen';
 import { renderGameScreen } from './ui/gameScreen';
 import { renderSelectScreen } from './ui/selectScreen';
 import { applyTheme } from './ui/theme';
@@ -16,6 +17,8 @@ function route() {
   const puzzle = match && getPuzzle(match[1]);
   if (puzzle) {
     cleanup = renderGameScreen(app, puzzle);
+  } else if (location.hash === '#/editor') {
+    renderEditorScreen(app);
   } else {
     renderSelectScreen(app);
   }

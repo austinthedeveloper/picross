@@ -81,6 +81,9 @@ export function renderSelectScreen(app: HTMLElement): void {
         stat(formatTime(overall.totalTime), 'Time solving'),
       ]),
       el('div', { className: 'cards' }, cards),
+      el('footer', { className: 'footer' }, [
+        el('a', { href: '#/editor', textContent: 'Make your own puzzle →' }),
+      ]),
     ]),
   );
 }

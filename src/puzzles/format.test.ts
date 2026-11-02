@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { parsePuzzle } from './format';
+import { parsePuzzle, slugify, stringifyPuzzle, toPuzzleFile } from './format';
 import { puzzles } from './index';
 
 const valid = { id: 't', name: 'T', width: 3, height: 2, solution: ['#.#', '.#.'] };
@@ -36,5 +36,20 @@ describe('starter pack', () => {
 
   it('has unique ids', () => {
     expect(new Set(puzzles.map((p) => p.id)).size).toBe(puzzles.length);
+  });
+});
+
+describe('puzzle export', () => {
+  it('builds a file that parses back to the same grid', () => {
+    const cells = [true, false, true, false, true, false];
+    const file = toPuzzleFile('t', 'T', 3, 2, cells);
+    expect(file.solution).toEqual(['#.#', '.#.']);
+    const json = stringifyPuzzle(file);
+    expect(json).toContain('"#.#",\n');
+    expect(parsePuzzle(JSON.parse(json)).solution.cells).toEqual(cells);
+  });
+
+  it('slugifies names', () => {
+    expect(slugify('  Music Note! ')).toBe('music-note');
   });
 });

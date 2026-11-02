@@ -37,6 +37,11 @@ Puzzles live in `src/puzzles/pack/*.json`:
 Each `solution` row is a string of `#` (filled) and `.` (empty). Clues are derived from the
 solution. Add the id to `ORDER` in `src/puzzles/index.ts` to place it in the pack.
 
+### Puzzle editor
+
+Open `#/editor` (or "Make your own puzzle" on the puzzle list) to draw a picture, see its clues,
+check that it has one solution reachable without guessing, and copy or download the JSON.
+
 ### Uniqueness check
 
 `npm run check:puzzles` line-solves every puzzle in the pack from its clues alone and fails if

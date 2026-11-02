@@ -60,3 +60,36 @@ export function parsePuzzle(data: unknown): Puzzle {
     clues: deriveClues(grid),
   };
 }
+
+/** Builds a puzzle file from a drawn grid. */
+export function toPuzzleFile(
+  id: string,
+  name: string,
+  width: number,
+  height: number,
+  cells: readonly boolean[],
+): PuzzleFile {
+  const solution: string[] = [];
+  for (let r = 0; r < height; r++) {
+    solution.push(
+      cells
+        .slice(r * width, (r + 1) * width)
+        .map((filled) => (filled ? '#' : '.'))
+        .join(''),
+    );
+  }
+  return { id, name, width, height, solution };
+}
+
+/** Pack-style JSON: one solution row per line. */
+export function stringifyPuzzle(file: PuzzleFile): string {
+  return JSON.stringify(file, null, 2) + '\n';
+}
+
+/** Turns a name into a puzzle id, e.g. "Music Note!" → "music-note". */
+export function slugify(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}

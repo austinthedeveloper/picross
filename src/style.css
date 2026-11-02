@@ -732,3 +732,100 @@ button:disabled {
     --cell-max: 44px;
   }
 }
+
+/* Editor */
+
+.footer {
+  margin-top: 24px;
+  text-align: center;
+}
+
+.footer a {
+  color: var(--muted);
+}
+
+.editor-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.field input {
+  font: inherit;
+  font-size: 0.95rem;
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--ink);
+  width: 160px;
+}
+
+.field input[type='number'] {
+  width: 72px;
+}
+
+.editor-status {
+  text-align: center;
+  font-weight: 600;
+}
+
+.editor-status.ok {
+  color: #2e8b57;
+}
+
+.editor-status.warn {
+  color: var(--accent);
+}
+
+.cell.unknown:not(.filled) {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--cell-bg) 0 3px,
+    color-mix(in srgb, var(--accent) 30%, var(--cell-bg)) 3px 6px
+  );
+}
+
+.cell.unknown.filled {
+  box-shadow: inset 0 0 0 3px var(--accent);
+}
+
+.editor-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.editor-message {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.editor-json {
+  width: 100%;
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 0.8rem;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+}
+
+/* A drawing always satisfies its own clues, so don't dim them in the editor. */
+.editor-grid .clue .done {
+  color: var(--ink);
+  opacity: 1;
+  text-decoration: none;
+}
