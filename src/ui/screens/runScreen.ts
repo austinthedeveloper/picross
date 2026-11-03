@@ -1,9 +1,16 @@
 import { addGadget, completeEncounter, startRun, withBoard, type RunState } from '../../game/run';
-import { currentStep, startDialogue } from '../../game/dialogue';
-import { getCurrentRun, hasSeenScene, markSceneSeen, saveCurrentRun } from '../../game/runSave';
+import { advance, currentStep, startDialogue } from '../../game/dialogue';
+import {
+  getCurrentRun,
+  getJobStats,
+  hasSeenScene,
+  markSceneSeen,
+  recordRunResult,
+  saveCurrentRun,
+} from '../../game/runSave';
 import { getSettings, updateSettings, type Mode } from '../../game/settings';
 import { getGadget } from '../../puzzles/gadgets';
-import { DEFAULT_RUN_ID, getRun, type Encounter, type RunDef } from '../../puzzles/runs';
+import { getRun, runs, type Encounter, type RunDef } from '../../puzzles/runs';
 import { getScene } from '../../puzzles/scenes';
 import { el } from '../dom';
 import { formatTime } from '../format';
@@ -55,37 +62,46 @@ function playIntro(app: HTMLElement, def: RunDef) {
   });
 }
 
-function newRunButton(app: HTMLElement, label: string): HTMLButtonElement {
+function newRunButton(app: HTMLElement, def: RunDef, label: string): HTMLButtonElement {
   return el('button', {
     className: 'button primary',
     textContent: label,
     onclick: () => {
-      const def = getRun(DEFAULT_RUN_ID)!;
       saveCurrentRun(startRun(def.id, def.hp, getSettings().mode, def.gadgets));
-      // The intro plays automatically once; after that it's on the start screen.
+      // The intro plays automatically once; after that it's on the jobs board.
       if (def.intro && !hasSeenScene(def.intro)) playIntro(app, def);
       else renderRunScreen(app);
     },
   });
 }
 
-/** The run's one-line sign-off for a win or a loss, from its outro scene. */
-function signOff(def: RunDef, won: boolean): HTMLElement | null {
+/** The run's sign-off for a win or a loss: the lines its outro scene plays for that flag. */
+function signOff(def: RunDef, won: boolean): HTMLElement[] {
   const scene = def.outro ? getScene(def.outro) : undefined;
-  if (!scene) return null;
-  const step = currentStep(scene, startDialogue(scene, { won }));
-  if (step.kind !== 'line') return null;
-  return el('figure', { className: 'sign-off' }, [
-    el('span', {
-      className: 'sign-off-portrait',
-      ariaHidden: 'true',
-      textContent: step.speaker?.portrait ?? '',
-    }),
-    el('figcaption', {}, [
-      ...(step.speaker ? [el('strong', { textContent: step.speaker.name })] : []),
-      el('span', { textContent: step.text }),
-    ]),
-  ]);
+  if (!scene) return [];
+  const lines: HTMLElement[] = [];
+  let state = startDialogue(scene, { won });
+  for (
+    let step = currentStep(scene, state);
+    step.kind === 'line';
+    step = currentStep(scene, state)
+  ) {
+    lines.push(
+      el('figure', { className: 'sign-off' }, [
+        el('span', {
+          className: 'sign-off-portrait',
+          ariaHidden: 'true',
+          textContent: step.speaker?.portrait ?? '',
+        }),
+        el('figcaption', {}, [
+          ...(step.speaker ? [el('strong', { textContent: step.speaker.name })] : []),
+          el('span', { textContent: step.text }),
+        ]),
+      ]),
+    );
+    state = advance(scene, state);
+  }
+  return lines;
 }
 
 const MODE_NOTES: Record<Mode, string> = {
@@ -118,13 +134,13 @@ function modePicker(app: HTMLElement): HTMLElement {
 }
 
 /**
- * The run hub at #/run: a start panel when there's no run, the path map while
+ * The run hub at #/run: the jobs board when there's no run, the path map while
  * one is active, and a results screen once it's won or lost.
  */
 export function renderRunScreen(app: HTMLElement): () => void {
   const run = loadRun();
   const body = !run
-    ? startPanel(app)
+    ? jobsBoard(app)
     : run.state.status === 'active'
       ? pathMap(app, run.state, run.def)
       : results(app, run.state, run.def);
@@ -132,35 +148,60 @@ export function renderRunScreen(app: HTMLElement): () => void {
   return () => stopScene?.();
 }
 
-function startPanel(app: HTMLElement): Node[] {
-  const def = getRun(DEFAULT_RUN_ID)!;
-  return [
-    el('header', { className: 'topbar' }, [backToPuzzles(), el('h1', { textContent: 'Runs' })]),
-    el('section', { className: 'run-card' }, [
-      el('h2', { textContent: def.name }),
+/** A job you can start: everything without `requires`, plus jobs whose requirement you've won. */
+const unlocked = (def: RunDef) => !def.requires || (getJobStats(def.requires)?.wins ?? 0) > 0;
+
+function bestResult(def: RunDef): string {
+  const stats = getJobStats(def.id);
+  if (!stats?.plays) return 'Not played yet';
+  if (!stats.wins) return `${stats.plays} ${stats.plays === 1 ? 'try' : 'tries'}, not cleared yet`;
+  return `Cleared ${stats.wins}× · best ${stats.bestHp}/${def.hp} HP left`;
+}
+
+/** The jobs board (#47): every job, its length and boss, your best result, and Start. */
+function jobsBoard(app: HTMLElement): Node[] {
+  const card = (def: RunDef) => {
+    const open = unlocked(def);
+    const boss = def.encounters.find((e) => e.boss);
+    return el('section', { className: `run-card job${open ? '' : ' locked'}` }, [
+      el('h2', { textContent: open ? def.name : `🔒 ${def.name}` }),
+      ...(def.blurb ? [el('p', { className: 'job-blurb', textContent: def.blurb })] : []),
       el('p', {
         className: 'run-meta',
-        textContent: `${def.encounters.length} encounters · ${def.hp} HP`,
+        textContent: `${def.encounters.length} encounters · ${def.hp} HP${boss ? ` · Boss: ${boss.name}` : ''}`,
       }),
       el(
         'ol',
         { className: 'run-preview' },
         def.encounters.map((e) => el('li', { textContent: `${nodeIcon(e)} ${e.name}` })),
       ),
-      modePicker(app),
-      el('div', { className: 'end-actions' }, [
-        newRunButton(app, 'Start run'),
-        ...(def.intro && hasSeenScene(def.intro)
-          ? [
-              el('button', {
-                className: 'button ghost',
-                textContent: '▶ Watch the intro',
-                onclick: () => playIntro(app, def),
-              }),
-            ]
-          : []),
-      ]),
-    ]),
+      el('p', {
+        className: `job-best${getJobStats(def.id)?.wins ? '' : ' none'}`,
+        textContent: bestResult(def),
+      }),
+      open
+        ? el('div', { className: 'end-actions' }, [
+            newRunButton(app, def, 'Start'),
+            ...(def.intro && hasSeenScene(def.intro)
+              ? [
+                  el('button', {
+                    className: 'button ghost',
+                    textContent: '▶ Watch the intro',
+                    onclick: () => playIntro(app, def),
+                  }),
+                ]
+              : []),
+          ])
+        : el('p', {
+            className: 'run-meta',
+            textContent: `Win ${getRun(def.requires!)?.name ?? def.requires} to unlock.`,
+          }),
+    ]);
+  };
+  return [
+    el('header', { className: 'topbar' }, [backToPuzzles(), el('h1', { textContent: 'Jobs' })]),
+    modePicker(app),
+    el('div', { className: 'jobs' }, runs.map(card)),
   ];
 }
 
@@ -260,7 +301,8 @@ function inventory(state: RunState): HTMLElement {
   ]);
 }
 
-function results(app: HTMLElement, state: RunState, def: RunDef): Node[] {
+function results(app: HTMLElement, finished: RunState, def: RunDef): Node[] {
+  const state = recordRunResult(finished);
   const won = state.status === 'won';
   const cleared = Math.min(state.node, def.encounters.length);
   return [
@@ -271,11 +313,18 @@ function results(app: HTMLElement, state: RunState, def: RunDef): Node[] {
         className: 'run-meta',
         textContent: `${cleared}/${def.encounters.length} encounters cleared · ${state.hp}/${state.maxHp} HP left`,
       }),
-      signOff(def, won) ?? '',
+      ...signOff(def, won),
       modePicker(app),
       el('div', { className: 'end-actions' }, [
-        el('a', { className: 'button ghost', href: '#/', textContent: 'Puzzles' }),
-        newRunButton(app, 'New run'),
+        el('button', {
+          className: 'button ghost',
+          textContent: 'Jobs board',
+          onclick: () => {
+            saveCurrentRun(null);
+            renderRunScreen(app);
+          },
+        }),
+        newRunButton(app, def, 'Run it again'),
       ]),
     ]),
   ];
@@ -343,18 +392,18 @@ export function renderRunEncounter(app: HTMLElement): (() => void) | undefined {
 /** One line for the puzzle list: start or continue a run. */
 export function runBanner(): HTMLElement {
   const run = loadRun();
-  const def = run?.def ?? getRun(DEFAULT_RUN_ID)!;
   const active = run?.state.status === 'active';
+  const open = runs.filter(unlocked).length;
   return el('a', { className: 'run-banner', href: '#/run' }, [
     el('span', {
       className: 'run-banner-title',
-      textContent: active ? 'Continue run' : 'Start a run',
+      textContent: active ? 'Continue run' : 'Pick a job',
     }),
     el('span', {
       className: 'run-banner-meta',
       textContent: active
-        ? `${def.name} · encounter ${run!.state.node + 1} of ${def.encounters.length} · HP ${run!.state.hp}/${run!.state.maxHp}`
-        : `${def.name} · ${def.encounters.length} encounters`,
+        ? `${run!.def.name} · encounter ${run!.state.node + 1} of ${run!.def.encounters.length} · HP ${run!.state.hp}/${run!.state.maxHp}`
+        : `${open} of ${runs.length} jobs open`,
     }),
     el('span', { className: 'run-banner-go', ariaHidden: 'true', textContent: '→' }),
   ]);

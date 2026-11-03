@@ -1,6 +1,12 @@
 {
   "id": "night-shift",
   "name": "The Night Shift",
-  "hp": 12,
-  "encounters": ["mimic", "clockwork-owl", "armored-beetle"]
+  "hp": 14,
+  "encounters": ["mimic", "clockwork-owl", "dusty-exhibit", "armored-beetle"],
+  "order": 2,
+  "requires": "first-job",
+  "gadgets": ["bomb"],
+  "blurb": "The museum's exhibits come alive after closing. Double rates.",
+  "intro": "night-shift-intro",
+  "outro": "night-shift-outro"
 }

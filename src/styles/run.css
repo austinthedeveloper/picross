@@ -695,3 +695,31 @@
     opacity: 0;
   }
 }
+
+/* Jobs board (#47) */
+.jobs {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.job-blurb {
+  margin: 0;
+}
+
+.job-best {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.run-card.job.locked {
+  opacity: 0.6;
+}
+
+.job-best.none,
+.run-card.job.locked .job-best {
+  color: var(--muted);
+}

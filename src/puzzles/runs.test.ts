@@ -2,15 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { parsePuzzle } from './format';
 import { solve } from '../engine/solver';
 import { CHIP_DAMAGE } from '../game/battle';
-import {
-  allFog,
-  allScramble,
-  DEFAULT_RUN_ID,
-  getRun,
-  parseEncounter,
-  parseRun,
-  runs,
-} from './runs';
+import { allFog, allScramble, getRun, parseEncounter, parseRun, runs } from './runs';
 
 const puzzle = parsePuzzle({ id: 'p', name: 'P', width: 2, height: 1, solution: ['#.'] });
 const find = (id: string) => (id === 'p' ? puzzle : undefined);
@@ -77,9 +69,12 @@ describe('parseRun', () => {
 });
 
 describe('bundled runs', () => {
-  it('has a playable default run', () => {
-    const run = getRun(DEFAULT_RUN_ID);
-    expect(run?.encounters.length).toBeGreaterThan(0);
+  it('starts with an open job, and every locked job unlocks from a real one', () => {
+    expect(runs[0].requires).toBeUndefined();
+    for (const run of runs) {
+      expect(run.encounters.length).toBeGreaterThan(0);
+      if (run.requires) expect(getRun(run.requires)).toBeDefined();
+    }
   });
 });
 

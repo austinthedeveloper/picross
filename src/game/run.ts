@@ -21,6 +21,8 @@ export interface RunState {
   board?: SavedBoard;
   /** The current fight's progress, if the current encounter is a fight. */
   battle?: BattleState;
+  /** Set once the finished run's result is saved to the job stats (#47). */
+  recorded?: boolean;
 }
 
 export function startRun(

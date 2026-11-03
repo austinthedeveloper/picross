@@ -216,6 +216,20 @@ changes only through pure functions: `startRun`, `withBoard`, `damage`, and
 `completeEncounter`. Every change is saved immediately, so closing the tab at any point
 resumes on the map, or mid-puzzle with the board restored.
 
+## Jobs board
+
+"Pick a job" on the puzzle list opens the jobs board at `#/run` (#47). It lists every run
+in `order`, each with its blurb, length, boss, and your best result. A run with `requires`
+stays locked until you've won that job once. Results are saved per job in `runSave.ts`
+(plays, wins, best HP left), once per finished run: `recordRunResult` marks the run
+`recorded`, so a reload doesn't count it twice. The results screen shows every line the
+job's outro plays for a win or a loss, which gives room for a tease after the sign-off,
+and offers **Run it again** or **Jobs board**.
+
+Jobs so far: **First Job** (#21) and **The Night Shift** (#46). The Night Shift unlocks after
+First Job. It's Mimic → Clockwork Owl → Dusty Exhibit (a dig that yields a patch kit) →
+Armored Beetle → the Curator, with Curator Ambrose joining Rook and Dee in its scenes.
+
 ## Fights
 
 A fight encounter has an `enemy` (`name`, `sprite`, `hp`, `attack`). The rules live in

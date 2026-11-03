@@ -1,0 +1,38 @@
+{
+  "id": "night-shift-outro",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "🧑‍💼"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "👩‍🔬"
+    },
+    "curator": {
+      "name": "Curator Ambrose",
+      "portrait": "🧐"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "who": "dee",
+          "text": "Exhibits back on their stands, curator back in his case. Lovely night, boss.",
+          "if": "won"
+        },
+        {
+          "who": "rook",
+          "text": "Also, I may have booked us a job at the aquarium. It's fine. Probably.",
+          "if": "won"
+        },
+        {
+          "who": "rook",
+          "text": "The good news is the beetle didn't eat us. The bad news is we're locked in.",
+          "if": "!won"
+        }
+      ]
+    }
+  }
+}
