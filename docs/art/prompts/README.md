@@ -29,6 +29,9 @@ puzzle pictures are 1-bit pixel art, so the characters are pixel art too, in the
 with the risograph-sticker feel of the mood board.
 
 - **Pixel art on a strict grid.** Sprites on 32×32, portraits on 48×48, glyphs on 16×16.
+  Exception, decided after round 1: the cast portraits came back on a ~96×96 grid and
+  were accepted that way (see `../incoming/cast-round1-review.md`). Any further cast
+  candidate should match the round-1 picks at 96×96. Everything else stays as listed.
   Shown large with crisp hard-edged pixels. No anti-aliasing, blur, or smoothing.
 - **Flat color.** No gradients, glossy highlights, 3D, photo, or painterly texture.
 - **The palette only.** Graphite `#23262f` for outlines and detail, paper `#f6f3ec` for
