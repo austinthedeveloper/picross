@@ -392,3 +392,70 @@
     transform: scale(1.08);
   }
 }
+
+/* Power tips (#79): a one-line card the first time you meet a power, and the ⓘ list. */
+.tip-slot {
+  margin-top: 10px;
+}
+
+.tip-slot[hidden] {
+  display: none;
+}
+
+.tip-card {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 2px solid var(--accent);
+  background: var(--bg);
+}
+
+.tip-card.powers {
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  border-color: var(--line);
+}
+
+.tip-icon {
+  font-size: 1.3rem;
+}
+
+.tip-text {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.35;
+}
+
+.power-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.power-list li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px;
+  align-items: start;
+}
+
+.tip-ok {
+  white-space: nowrap;
+}
+
+.powers-info {
+  border: none;
+  background: none;
+  padding: 0 2px;
+  font: inherit;
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--muted);
+  cursor: pointer;
+}

@@ -203,6 +203,10 @@ Rules belong in `Game` (`src/game/game.ts`) so they're testable without a browse
 Hints (`Game.hint` and `ui/components/hintMenu.ts`) are a good model for a feature with
 its own menu, cost, and announcement.
 
+If it's a new enemy power, add it to `Power` and the power lists in `puzzles/enemies.ts`,
+then give it an icon, name and one-line tip in `ui/powers.ts`. The suite fails until every
+power has a tip.
+
 ## Add a color or change the theme
 
 Start from [Art direction](art-direction.md): it says which color is for what and the

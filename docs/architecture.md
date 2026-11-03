@@ -43,7 +43,7 @@ src/
     endless.ts             Endless mode: seeded encounter order, scaling, the run as a RunDef (#68)
     daily.ts               The daily puzzle: date keys and the day's puzzle and turn (#69)
     murals.ts              Loads murals/*.json and splits each picture into tile puzzles (#24)
-    enemies.ts             Validates an enemy: fog, scramble, armor, forged clues, charge, ink, phases
+    enemies.ts             Validates an enemy; lists its powers (startingPowers, phasePowers, enemyPowers)
     gadgets.ts             Gadget catalog: name, icon, description, effect
     scenes.ts              Loads and validates scenes/*.json (dialogue, #22)
     encounters/*.json      Encounters: name, kind (fight/dig), puzzle, enemy, boss, scene
@@ -90,6 +90,7 @@ src/
           callOut.ts       Forged clues: the 🔍 Call out button and accusations
           ink.ts           Ink splashes from phases (#67)
           charge.ts        The ⚡ charge meter and its zaps (#67)
+          tips.ts          Power tips: a card the first time you meet a power, and the ⓘ list (#79)
           gadgets.ts       The gadget tray
           hits.ts          Mistakes, shields, knockouts
           finisher.ts      The solved picture flying at the enemy
@@ -518,6 +519,20 @@ wipes it all. Ink only hides your marks, never clues, so it doesn't affect solva
 - **Old Tess:** a 20×20 octopus boss. Her phases bring ink at 92%, a double splash at 85%, the eel's charge at 75%, and a final double splash at 60% (attack 4).
 
 Keeper Bo joins Rook and Dee in its scenes.
+
+## Power tips
+
+Each enemy power (fog, scramble, armor, fakes, charge, ink, swap) gets a one-line
+explanation in `ui/powers.ts` (#79). `puzzles/enemies.ts` works out which powers an
+enemy has: `startingPowers` for the start, `phasePowers` for what a phase brings in,
+and `enemyPowers` for all of them.
+
+`run/fight/tips.ts` queues a tip card in the battle bar the first time you meet each
+power. That happens when the fight opens, or when the phase that brings the power
+begins (`createPhases` reports it). "Got it" saves the power as seen (`seenTips` in
+`picross:run`), so each tip appears once ever. The ⓘ after the enemy's name swaps the
+card for a list of all the enemy's powers. The tests check that every power any enemy
+has comes with a tip, so a new power needs an entry in `POWERS`.
 
 ## Digs
 

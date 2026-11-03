@@ -60,3 +60,14 @@ describe('endless stats', () => {
     expect((await load()).getJobStats('endless')).toEqual({ plays: 2, wins: 0, bestDepth: 6 });
   });
 });
+
+describe('power tips', () => {
+  it('remember which tips you have dismissed', async () => {
+    const save = await load();
+    expect(save.hasSeenTip('fog')).toBe(false);
+    save.markTipSeen('fog');
+    save.markTipSeen('fog');
+    expect((await load()).hasSeenTip('fog')).toBe(true);
+    expect((await load()).hasSeenTip('ink')).toBe(false);
+  });
+});

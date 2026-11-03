@@ -156,3 +156,33 @@ export function allUnreadable(enemy: Enemy): LineSet {
 export function allScramble(enemy: Enemy): LineSet {
   return unionLines([enemy.scramble, ...(enemy.phases ?? []).map((p) => p.scramble)]);
 }
+
+/** An enemy power (#79): what the tip cards and the ⓘ list explain. */
+export type Power = 'fog' | 'scramble' | 'armor' | 'fakes' | 'charge' | 'ink' | 'swap';
+
+/** Powers an enemy has before any phase starts. */
+export function startingPowers(enemy: Enemy): Power[] {
+  const powers: Power[] = [];
+  if (enemy.fog) powers.push('fog');
+  if (enemy.scramble) powers.push('scramble');
+  if (enemy.armor) powers.push('armor');
+  if (enemy.fakes) powers.push('fakes');
+  if (enemy.charge) powers.push('charge');
+  return powers;
+}
+
+/** Powers a phase brings in when it starts. */
+export function phasePowers(phase: Phase): Power[] {
+  const powers: Power[] = [];
+  if (phase.fog) powers.push('fog');
+  if (phase.scramble) powers.push('scramble');
+  if (phase.charge) powers.push('charge');
+  if (phase.ink) powers.push('ink');
+  if (phase.swap) powers.push('swap');
+  return powers;
+}
+
+/** Every power an enemy has, from the start or any phase, each once. */
+export function enemyPowers(enemy: Enemy): Power[] {
+  return [...new Set([...startingPowers(enemy), ...(enemy.phases ?? []).flatMap(phasePowers)])];
+}

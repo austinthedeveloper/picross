@@ -17,6 +17,8 @@ interface RunSave {
   current: RunState | null;
   /** Scene ids already played, so intros only play automatically once. */
   seenScenes: string[];
+  /** Enemy powers whose tip card you've dismissed (#79). Missing in older saves. */
+  seenTips?: string[];
   jobs: Record<string, JobStats>;
 }
 
@@ -39,6 +41,15 @@ export function hasSeenScene(id: string): boolean {
 
 export function markSceneSeen(id: string): void {
   if (!data.seenScenes.includes(id)) data.seenScenes.push(id);
+  writeStore(KEY, data);
+}
+
+export function hasSeenTip(power: string): boolean {
+  return (data.seenTips ?? []).includes(power);
+}
+
+export function markTipSeen(power: string): void {
+  data.seenTips = [...new Set([...(data.seenTips ?? []), power])];
   writeStore(KEY, data);
 }
 
