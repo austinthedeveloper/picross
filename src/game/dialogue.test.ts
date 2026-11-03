@@ -85,9 +85,9 @@ describe('dialogue', () => {
     expect(choose(scene, texts().state, 2).ended).toBe(true);
   });
 
-  it('plays the demo scene to the end either way', async () => {
+  it('plays the first-job intro to the end either way', async () => {
     const { getScene } = await import('../puzzles/scenes');
-    const demo = getScene('demo')!;
+    const demo = getScene('first-job-intro')!;
     for (const pick of [0, 1]) {
       let state = startDialogue(demo);
       while (currentStep(demo, state).kind === 'line') state = advance(demo, state);
@@ -95,5 +95,19 @@ describe('dialogue', () => {
       while (currentStep(demo, state).kind === 'line') state = advance(demo, state);
       expect(state.ended).toBe(true);
     }
+  });
+});
+
+describe('first-job sign-off', () => {
+  it('has one line for a win and a different one for a loss', async () => {
+    const { getScene } = await import('../puzzles/scenes');
+    const outro = getScene('first-job-outro')!;
+    const lineFor = (won: boolean) => {
+      const step = currentStep(outro, startDialogue(outro, { won }));
+      expect(advance(outro, startDialogue(outro, { won })).ended).toBe(true); // just one line
+      return step.kind === 'line' ? step.text : '';
+    };
+    expect(lineFor(true)).toMatch(/Nice work/);
+    expect(lineFor(false)).toMatch(/alive/);
   });
 });

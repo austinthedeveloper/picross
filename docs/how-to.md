@@ -75,9 +75,11 @@ starter-pack test expects 5×5 to 15×15 and at most 15 puzzles, so update
      }
    }
    ```
-2. Preview it at http://localhost:5173/#/scene/<id>. `src/puzzles/scenes/demo.json` shows
-   branching and conditions.
-3. Run `npm test`. Bad references fail at load.
+2. Preview it at http://localhost:5173/#/scene/<id>. `first-job-intro.json` shows a branch,
+   and `first-job-outro.json` shows win/loss conditions.
+3. To play it with a run, set `"intro": "<id>"` (before the first run) or `"outro": "<id>"`
+   (one-line sign-off; use `"if": "won"` / `"!won"`) in the run's JSON.
+4. Run `npm test`. Bad references fail at load.
 
 Keep lines short (phone screens), and each scene under a minute to read.
 

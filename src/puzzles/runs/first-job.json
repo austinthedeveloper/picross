@@ -3,5 +3,7 @@
   "name": "First Job",
   "hp": 10,
   "encounters": ["goblin", "dig-site", "fog-bat"],
-  "gadgets": ["patch-kit"]
+  "gadgets": ["patch-kit"],
+  "intro": "first-job-intro",
+  "outro": "first-job-outro"
 }
