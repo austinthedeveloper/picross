@@ -5,7 +5,9 @@ test.describe('free play', () => {
   test('a fresh visit: sound off, big puzzles first, fish is 10×10', async ({ page }) => {
     await page.goto('/#/');
     await expect(page.locator('.mute')).toHaveText(/Sound off/);
-    await expect(page.locator('.size-heading').first()).toHaveText(/20×20/);
+    await expect(page.locator('.size-section:not(.murals) .size-heading').first()).toHaveText(
+      /20×20/,
+    );
     await page.goto('/#/play/fish');
     await expect(page.locator('.cell')).toHaveCount(100);
   });

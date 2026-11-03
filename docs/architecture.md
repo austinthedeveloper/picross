@@ -42,6 +42,7 @@ src/
     chapters.ts            Loads chapters/*.json: jobs grouped into story chapters (#23)
     endless.ts             Endless mode: seeded encounter order, scaling, the run as a RunDef (#68)
     daily.ts               The daily puzzle: date keys and the day's puzzle and turn (#69)
+    murals.ts              Loads murals/*.json and splits each picture into tile puzzles (#24)
     enemies.ts             Validates an enemy: fog, scramble, armor, forged clues, charge, ink, phases
     gadgets.ts             Gadget catalog: name, icon, description, effect
     scenes.ts              Loads and validates scenes/*.json (dialogue, #22)
@@ -70,6 +71,7 @@ src/
       gameScreen.ts        Play screen; PlaySession and its hooks  (#/play/<id>)
       freePlaySession.ts   Free-play PlaySession: saves, best times, "Next"
       daily.ts             The daily puzzle: its card on the list and its PlaySession (#/daily)
+      mural.ts             Murals: the list section, a mural's tiles, playing a tile (#/mural/…)
       sceneScreen.ts       Plays a scene full screen               (#/scene/<id>)
       editorScreen.ts      Puzzle authoring tool                   (#/editor)
       run/                 Runs                                    (#/run, #/run/play)
@@ -188,15 +190,17 @@ saved board, and failing in Hearts mode discards it.
 
 `main.ts` routes on the URL hash. Hash routing works on GitHub Pages without server config.
 
-| Hash           | Screen                                                      |
-| -------------- | ----------------------------------------------------------- |
-| `#/`           | `renderSelectScreen` (also the fallback for unknown hashes) |
-| `#/play/<id>`  | `renderGameScreen` for a pack puzzle                        |
-| `#/editor`     | `renderEditorScreen`                                        |
-| `#/run`        | `renderRunScreen`: start panel, path map, or results        |
-| `#/scene/<id>` | `renderSceneScreen`: preview a scene (Replay at the end)    |
-| `#/run/play`   | `renderRunEncounter`: the current encounter's puzzle        |
-| `#/daily`      | `renderDailyScreen`: today's daily puzzle (#69)             |
+| Hash               | Screen                                                              |
+| ------------------ | ------------------------------------------------------------------- |
+| `#/`               | `renderSelectScreen` (also the fallback for unknown hashes)         |
+| `#/play/<id>`      | `renderGameScreen` for a pack puzzle                                |
+| `#/editor`         | `renderEditorScreen`                                                |
+| `#/run`            | `renderRunScreen`: start panel, path map, or results                |
+| `#/scene/<id>`     | `renderSceneScreen`: preview a scene (Replay at the end)            |
+| `#/run/play`       | `renderRunEncounter`: the current encounter's puzzle                |
+| `#/daily`          | `renderDailyScreen`: today's daily puzzle (#69)                     |
+| `#/mural/<id>`     | `renderMuralScreen`: a mural's tiles, or the finished picture (#24) |
+| `#/mural/<id>/<n>` | `renderMuralTile`: tile n of a mural                                |
 
 Each screen replaces `#app`'s children. A screen that adds global listeners or timers
 returns a cleanup function, which the router calls before rendering the next screen. The
@@ -261,6 +265,23 @@ for everyone on the same local date.
 - **Saves:** the daily keeps its own save (`picross:daily`), apart from free-play stats.
   It holds today's board, the streak, the best streak and the solve count. A streak
   counts while the last solve was today or yesterday, and shows 0 once a day is missed.
+
+## Murals (meta-pictures)
+
+A mural (#24, `puzzles/murals/*.json`) is one big picture, 30×30 or 45×30 so far, split
+into tiles that are each their own puzzle. `parseMural` checks that the picture divides
+into `tile`-sized squares and builds a puzzle per tile, row by row, with ids like
+`whale-3`. The tests check that every tile is uniquely solvable on its own.
+
+Tiles use the free-play save (`progress.ts`) under their own ids, so they save and keep
+best times like pack puzzles. The "Puzzles solved" stat counts pack puzzles only. The
+murals section on the puzzle list shows each mural's tiles filling in. A mural's name
+stays hidden ("Mural No. 1") until every tile is solved; then its screen shows the whole
+picture. After a tile, the end panel offers the next unsolved one.
+
+To make a mural, draw the picture, then fix each tile until it's unique. A tile can be
+uniquely solvable even when the whole picture isn't, and the other way round. Flipping a
+cell or two inside a tile is usually enough. Keep tiles from being empty.
 
 ## Runs
 

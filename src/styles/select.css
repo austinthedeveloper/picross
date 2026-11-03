@@ -165,3 +165,57 @@
 .daily-card.solved {
   border-color: var(--line);
 }
+
+/* Murals (#24): a big picture in tiles. */
+.mural-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.mural-card .mural-grid {
+  margin-bottom: 8px;
+}
+
+.mural-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--across), var(--tile));
+  grid-auto-rows: var(--tile);
+  gap: 2px;
+  justify-content: center;
+}
+
+.mural-tile {
+  display: grid;
+  place-items: center;
+  border-radius: 4px;
+  background: var(--cell-bg);
+  border: 1px dashed var(--line);
+  color: var(--mark);
+  text-decoration: none;
+  overflow: hidden;
+}
+
+.mural-tile.solved {
+  border: none;
+  background: transparent;
+}
+
+.mural-unknown {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.mural-card .mural-unknown {
+  font-size: 0.75rem;
+}
+
+.mural .mural-grid,
+.mural-done {
+  margin-top: 16px;
+}
+
+.mural-done {
+  display: grid;
+  place-items: center;
+}

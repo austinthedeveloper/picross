@@ -20,6 +20,13 @@ string per row, `#` filled and `.` empty). `parsePuzzle` validates it at startup
 puzzles from 5×5 to 20×20, with at least half of them 15×15 or larger. The puzzle list
 groups puzzles by size, biggest first, so a new size gets its own section automatically.
 
+## Add a mural
+
+Add `src/puzzles/murals/<id>.json` with `id`, `name`, `order`, `tile` (usually 15) and
+`solution` rows whose width and height are multiples of `tile`. It shows up in the murals
+section. `npm test` checks each tile is uniquely solvable on its own. If one isn't, flip
+a cell or two inside that tile.
+
 ## Add an encounter or a run
 
 1. Add the encounter's puzzle. Run-only puzzles go in `src/puzzles/run/`, so they stay off
