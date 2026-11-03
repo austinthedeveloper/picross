@@ -1,0 +1,69 @@
+import { startRun, type RunState } from '../../../game/run';
+import { getCurrentRun, hasSeenScene, saveCurrentRun } from '../../../game/runSave';
+import { getSettings, updateSettings, type Mode } from '../../../game/settings';
+import { getRun, type Encounter, type RunDef } from '../../../puzzles/runs';
+import { el } from '../../dom';
+
+/** What the run screens share: where to draw, how to redraw, and how to play a job's intro. */
+export interface Hub {
+  app: HTMLElement;
+  rerender(): void;
+  playIntro(def: RunDef): void;
+}
+
+const KIND_ICON: Record<Encounter['kind'], string> = { fight: '⚔️', dig: '⛏️' };
+const KIND_LABEL: Record<Encounter['kind'], string> = { fight: 'Fight', dig: 'Dig' };
+export const nodeIcon = (e: Encounter) => (e.boss ? '👑' : KIND_ICON[e.kind]);
+export const nodeLabel = (e: Encounter) => (e.boss ? 'Boss' : KIND_LABEL[e.kind]);
+
+/** The saved run with its definition, or null if there's none (or its run was removed). */
+export function loadRun(): { state: RunState; def: RunDef } | null {
+  const state = getCurrentRun();
+  const def = state && getRun(state.runId);
+  return state && def ? { state, def } : null;
+}
+
+export const backToPuzzles = () =>
+  el('a', { className: 'button ghost', href: '#/', textContent: '← Puzzles' });
+
+export function newRunButton(hub: Hub, def: RunDef, label: string): HTMLButtonElement {
+  return el('button', {
+    className: 'button primary',
+    textContent: label,
+    onclick: () => {
+      saveCurrentRun(startRun(def.id, def.hp, getSettings().mode, def.gadgets));
+      // The intro plays automatically once; after that it's on the jobs board.
+      if (def.intro && !hasSeenScene(def.intro)) hub.playIntro(def);
+      else hub.rerender();
+    },
+  });
+}
+
+const MODE_NOTES: Record<Mode, string> = {
+  relaxed: 'Enemies can’t hurt you. Lines and the finished picture still deal damage.',
+  hearts: 'Each wrong fill lets the enemy hit you. Run out of HP and the run is over.',
+};
+
+/** Relaxed vs. hits-on choice for the next run (shares the puzzle list's mode setting). */
+export function modePicker(hub: Hub): HTMLElement {
+  const mode = getSettings().mode;
+  const option = (value: Mode, label: string) => {
+    const button = el('button', {
+      className: 'toggle',
+      textContent: label,
+      onclick: () => {
+        updateSettings({ mode: value });
+        hub.rerender();
+      },
+    });
+    button.setAttribute('aria-pressed', String(mode === value));
+    return button;
+  };
+  return el('div', { className: 'run-mode' }, [
+    el('div', { className: 'segmented', role: 'group', ariaLabel: 'Run mode' }, [
+      option('relaxed', 'Relaxed'),
+      option('hearts', '♥ Hits on'),
+    ]),
+    el('p', { className: 'run-meta', textContent: MODE_NOTES[mode] }),
+  ]);
+}

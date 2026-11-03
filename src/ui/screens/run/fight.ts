@@ -3,27 +3,28 @@ import {
   advancePhase,
   chip,
   clearFog,
+  clearScramble,
   currentForm,
   finish,
-  lineKey,
   startBattle,
   useGadget,
   type BattleState,
   type Enemy,
-} from '../../game/battle';
-import { damage, removeGadget, withBattle, type RunState } from '../../game/run';
-import { getCurrentRun, saveCurrentRun } from '../../game/runSave';
-import type { Puzzle } from '../../puzzles/format';
-import { getGadget, type Gadget } from '../../puzzles/gadgets';
-import type { BoardView } from '../board/boardView';
-import { createPicture } from '../board/picture';
-import { createBattleBar } from '../components/battleBar';
-import { el } from '../dom';
-import { playSound } from '../sound';
-import type { PlaySession } from './gameScreen';
-
-const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const wait = (ms: number) => new Promise((resolve) => window.setTimeout(resolve, ms));
+} from '../../../game/battle';
+import { damage, removeGadget, withBattle, type RunState } from '../../../game/run';
+import { getCurrentRun, saveCurrentRun } from '../../../game/runSave';
+import type { Puzzle } from '../../../puzzles/format';
+import { getGadget, type Gadget } from '../../../puzzles/gadgets';
+import type { BoardView } from '../../board/boardView';
+import { createPicture } from '../../board/picture';
+import { createBattleBar } from '../../components/battleBar';
+import { el } from '../../dom';
+import { lineName } from '../../format';
+import { pause, reducedMotion } from '../../motion';
+import { playSound } from '../../sound';
+import { keyToLine, lineCount, lineKey, type LineSet } from '../../../engine/lines';
+import { pickSwapRows } from '../../../engine/swap';
+import type { BoardControls, PlaySession } from '../gameScreen';
 
 /**
  * Fight rules on top of a run encounter (#27): completed lines chip the
@@ -47,6 +48,24 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
   let finished = false;
   let defeatedAs = enemy.name;
   let view: BoardView | null = null;
+  let controls: BoardControls | null = null;
+  // Row swaps wait until no stroke is in progress, so a drag never paints into moved rows.
+  let strokes = 0;
+  let pendingSwaps = 0;
+
+  /** The Mimic (#48): swaps two of your unfinished rows, then resyncs the screen. */
+  const runSwaps = () => {
+    if (strokes > 0 || !controls) return;
+    for (; pendingSwaps > 0; pendingSwaps--) {
+      const rows = pickSwapRows(controls.game.board, puzzle.solution);
+      if (!rows) continue;
+      controls.game.swapRows(...rows);
+      controls.refresh();
+      view?.flashSwap(...rows);
+      playSound('phase');
+      bar.say(`${form().name} swapped rows ${rows[0] + 1} and ${rows[1] + 1}! Undo can't help.`);
+    }
+  };
 
   /** Why a gadget can't be used right now, or null if it can. */
   const blocker = (gadget: Gadget): string | null => {
@@ -83,12 +102,17 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
 
   /**
    * Starts any phases the enemy's HP has fallen into: new form, harder hits,
-   * and fog over lines not yet completed. Returns a message to announce.
+   * fog over lines not yet completed, and row swaps. Returns a message to announce.
    */
   const checkPhase = (state: BattleState): { state: BattleState; message: string } => {
     const { state: next, entered } = advancePhase(enemy, state);
     if (!entered.length) return { state, message: '' };
+    const before = currentForm(enemy, state).name;
     const { name, sprite } = currentForm(enemy, next);
+    if (entered.some((p) => p.swap)) {
+      pendingSwaps += entered.filter((p) => p.swap).length;
+      window.setTimeout(runSwaps, 0); // outside the redraw that triggered the phase
+    }
     const taunt = entered
       .map((p) => p.taunt)
       .filter(Boolean)
@@ -96,11 +120,14 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
     bar.setForm(name, sprite);
     bar.phaseBanner(name, taunt);
     if (next.fog) view?.setFog(next.fog);
+    if (next.scramble) view?.setScramble(next.scramble);
     playSound('phase');
-    const fogged = (next.fog?.rows.length ?? 0) - (state.fog?.rows.length ?? 0);
+    const count = (set?: LineSet) => (set ? lineCount(set) : 0);
+    const fogged = count(next.fog) - count(state.fog);
+    const scrambled = count(next.scramble) - count(state.scramble);
     return {
       state: next,
-      message: `${enemy.name} becomes ${name}! ${taunt}${fogged > 0 ? ` ${fogged} rows go dark.` : ''}`,
+      message: `${name !== before ? `${before} becomes ${name}! ` : ''}${taunt}${fogged > 0 ? ` ${fogged} lines go dark.` : ''}${scrambled > 0 ? ` ${scrambled} clues scramble.` : ''}`,
     };
   };
 
@@ -133,28 +160,51 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
   > = {
     header: bar.root,
 
-    onBoard(boardView) {
+    onBoard(boardView, boardControls) {
       view = boardView;
-      const fog = battle().fog;
+      controls = boardControls;
+      view.root.addEventListener('pointerdown', () => strokes++);
+      const lift = () => {
+        strokes = Math.max(0, strokes - 1);
+        if (!strokes && pendingSwaps) window.setTimeout(runSwaps, 0);
+      };
+      view.root.addEventListener('pointerup', lift);
+      view.root.addEventListener('pointercancel', lift);
+      const { fog, scramble, armor } = battle();
       if (fog) view.setFog(fog);
+      if (scramble) view.setScramble(scramble);
+      if (armor) {
+        view.setWeakPoints(armor);
+        bar.setArmor(lineCount(armor));
+      }
     },
 
     onLinesComplete(lines) {
       const messages: string[] = [];
       const fogged = clearFog(battle(), lines);
+      const unscrambled = clearScramble(fogged.state, lines);
       const chipped = chip(
-        fogged.state,
+        unscrambled.state,
         lines.map((l) => lineKey(l.kind, l.index)),
       );
       const dealt = chipped.dealt;
+      if (chipped.cracked.length || chipped.broke) {
+        const armor = chipped.state.armor ?? { rows: [], cols: [] };
+        view?.setWeakPoints(armor, chipped.cracked.map(keyToLine));
+        bar.setArmor(lineCount(armor));
+        if (chipped.broke) bar.armorBreaks();
+      }
       const phased = checkPhase(chipped.state);
       const state = phased.state;
       if (fogged.revealed.length && state.fog) {
         view?.setFog(state.fog, fogged.revealed);
-        const names = fogged.revealed.map(
-          (l) => `${l.kind === 'row' ? 'row' : 'column'} ${l.index + 1}`,
-        );
+        const names = fogged.revealed.map((l) => lineName(l));
         messages.push(`You solved through the fog: ${names.join(', ')} revealed.`);
+      }
+      if (unscrambled.revealed.length && state.scramble) {
+        view?.setScramble(state.scramble, unscrambled.revealed);
+        const names = unscrambled.revealed.map((l) => lineName(l));
+        messages.push(`Gears click back into place: ${names.join(', ')} in order.`);
       }
       if (state !== battle()) saveCurrentRun(withBattle(current(), state));
       if (dealt) {
@@ -163,6 +213,11 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
         playSound('strike');
         renderGadgets(); // a bomb can't help once the enemy is down to 1 HP
         messages.unshift(`${enemy.name} takes ${dealt} damage, ${state.enemyHp} HP left.`);
+      }
+      if (chipped.cracked.length) messages.push('Weak point! Triple damage.');
+      if (chipped.broke) messages.push(`${form().name}'s armor breaks! Its hits soften.`);
+      else if (!dealt && lines.length && form().armored) {
+        messages.push('The armor shrugs it off. Find the 🎯 weak points.');
       }
       if (phased.message) messages.push(phased.message);
       return messages.join(' ') || undefined;
@@ -223,7 +278,7 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
       playSound('finisher');
       bar.hitEnemy(finisher);
       bar.defeat();
-      if (!reducedMotion()) await wait(600);
+      await pause(600);
     },
   };
 

@@ -1,13 +1,11 @@
 import { Cell, column, row, type Board } from '../../engine/board';
 import { satisfiedClues } from '../../engine/clues';
-import { isFogged, noFog, type Fog } from '../../engine/fog';
+import { hasLine, noLines, type Line, type LineSet } from '../../engine/lines';
 import type { Puzzle } from '../../puzzles/format';
 import { el } from '../dom';
+import { playOnce } from '../motion';
 
-export interface Line {
-  kind: 'row' | 'col';
-  index: number;
-}
+export type { Line };
 
 export interface BoardView {
   root: HTMLElement;
@@ -19,8 +17,17 @@ export interface BoardView {
   flashError(index: number): void;
   flashHint(indexes: number[]): void;
   flashLine(line: Line): void;
+  /** Flashes two rows the Mimic just swapped. */
+  flashSwap(a: number, b: number): void;
   /** Hides fogged clues behind "?" (#30). Lines in `lifted` animate as the fog clears. */
-  setFog(fog: Fog, lifted?: Line[]): void;
+  setFog(fog: LineSet, lifted?: Line[]): void;
+  /**
+   * Shows scrambled clues in ascending order with a ⚙ (#49), so you know the runs but
+   * not their order. Lines in `restored` animate back into order.
+   */
+  setScramble(scramble: LineSet, restored?: Line[]): void;
+  /** Marks weak-point clues with 🎯 (#50). Lines in `cracked` flash as they crack. */
+  setWeakPoints(weak: LineSet, cracked?: Line[]): void;
 }
 
 const STATE: Record<Cell, { className: string; label: string }> = {
@@ -43,14 +50,6 @@ function clueGroup(clues: number[], className: string, role: string, label: stri
   const fullLabel = `${label} clues: ${clues.length ? clues.join(', ') : 'none'}`;
   const group = el('div', { className, role, ariaLabel: fullLabel }, nums);
   return { group, nums, label: fullLabel, complete: false };
-}
-
-/** Plays a one-shot animation class, removing it afterwards so it can replay. */
-function restartAnimation(node: HTMLElement, className: string, ms = 900) {
-  node.classList.remove(className);
-  void node.offsetWidth; // force a reflow so the animation plays again
-  node.classList.add(className);
-  window.setTimeout(() => node.classList.remove(className), ms);
 }
 
 let boardCount = 0;
@@ -110,17 +109,46 @@ export function createBoardView(puzzle: Puzzle): BoardView {
     root.append(rowEl);
   }
 
-  let fog: Fog = noFog();
+  let fog: LineSet = noLines();
+  let scramble: LineSet = noLines();
   const fogLabel = (g: ClueGroup) => g.label.replace(/clues: .*/, 'clues hidden by fog');
+  const scrambleLabel = (g: ClueGroup, runs: number[]) =>
+    g.label.replace(
+      /clues: .*/,
+      `clues in unknown order: ${[...runs].sort((a, b) => a - b).join(', ')}`,
+    );
 
-  /** Dims satisfied clue numbers; returns whether the whole line is satisfied. */
-  const dim = (g: ClueGroup, clueList: number[], line: Cell[], fogged: boolean): boolean => {
+  /**
+   * Dims satisfied clue numbers; returns whether the whole line is satisfied.
+   * Scrambled clues only dim as a whole: dimming one number would give away its place.
+   */
+  const dim = (
+    g: ClueGroup,
+    clueList: number[],
+    line: Cell[],
+    fogged: boolean,
+    scrambled: boolean,
+  ): boolean => {
     const done =
       clueList.length === 0 ? [!line.includes(Cell.Filled)] : satisfiedClues(line, clueList);
-    done.forEach((d, i) => g.nums[i].classList.toggle('done', d));
     const complete = done.every(Boolean);
-    g.group.ariaLabel = fogged ? fogLabel(g) : complete ? `${g.label}, complete` : g.label;
+    done.forEach((d, i) => g.nums[i].classList.toggle('done', scrambled ? complete : d));
+    g.group.ariaLabel = fogged
+      ? fogLabel(g)
+      : scrambled
+        ? scrambleLabel(g, clueList)
+        : complete
+          ? `${g.label}, complete`
+          : g.label;
     return complete;
+  };
+
+  /** Shows a clue group's numbers sorted (scrambled) or in their real order. */
+  const showOrder = (g: ClueGroup, runs: number[], scrambled: boolean) => {
+    if (!runs.length) return;
+    const shown = scrambled ? [...runs].sort((a, b) => a - b) : runs;
+    shown.forEach((n, i) => (g.nums[i].textContent = String(n)));
+    g.group.classList.toggle('scrambled', scrambled);
   };
 
   let cursor: HTMLElement | null = null;
@@ -146,14 +174,26 @@ export function createBoardView(puzzle: Puzzle): BoardView {
         check(
           rowClues[r],
           { kind: 'row', index: r },
-          dim(rowClues[r], clues.rows[r], row(board, r), isFogged(fog, 'row', r)),
+          dim(
+            rowClues[r],
+            clues.rows[r],
+            row(board, r),
+            hasLine(fog, 'row', r),
+            hasLine(scramble, 'row', r),
+          ),
         );
       }
       for (let c = 0; c < w; c++) {
         check(
           colClues[c],
           { kind: 'col', index: c },
-          dim(colClues[c], clues.cols[c], column(board, c), isFogged(fog, 'col', c)),
+          dim(
+            colClues[c],
+            clues.cols[c],
+            column(board, c),
+            hasLine(fog, 'col', c),
+            hasLine(scramble, 'col', c),
+          ),
         );
       }
       first = false;
@@ -166,15 +206,36 @@ export function createBoardView(puzzle: Puzzle): BoardView {
       root.setAttribute('aria-activedescendant', cursor.id);
     },
     flashError(index) {
-      restartAnimation(cells[index], 'error');
+      playOnce(cells[index], 'error');
     },
     flashLine({ kind, index }) {
       const group = kind === 'row' ? rowClues[index] : colClues[index];
-      restartAnimation(group.group, 'line-flash');
+      playOnce(group.group, 'line-flash');
       const span = kind === 'row' ? w : h;
       for (let k = 0; k < span; k++) {
         const i = kind === 'row' ? index * w + k : k * w + index;
-        restartAnimation(cells[i], 'line-flash');
+        playOnce(cells[i], 'line-flash');
+      }
+    },
+    setWeakPoints(weak, cracked = []) {
+      rowClues.forEach((g, r) => g.group.classList.toggle('weak-point', hasLine(weak, 'row', r)));
+      colClues.forEach((g, c) => g.group.classList.toggle('weak-point', hasLine(weak, 'col', c)));
+      for (const { kind, index } of cracked) {
+        playOnce((kind === 'row' ? rowClues : colClues)[index].group, 'cracked');
+      }
+    },
+    setScramble(next, restored = []) {
+      scramble = next;
+      rowClues.forEach((g, r) => {
+        showOrder(g, clues.rows[r], hasLine(scramble, 'row', r));
+        if (hasLine(scramble, 'row', r)) g.group.ariaLabel = scrambleLabel(g, clues.rows[r]);
+      });
+      colClues.forEach((g, c) => {
+        showOrder(g, clues.cols[c], hasLine(scramble, 'col', c));
+        if (hasLine(scramble, 'col', c)) g.group.ariaLabel = scrambleLabel(g, clues.cols[c]);
+      });
+      for (const { kind, index } of restored) {
+        playOnce((kind === 'row' ? rowClues : colClues)[index].group, 'unscramble');
       }
     },
     setFog(next, lifted = []) {
@@ -183,14 +244,20 @@ export function createBoardView(puzzle: Puzzle): BoardView {
         g.group.classList.toggle('fogged', fogged);
         if (fogged) g.group.ariaLabel = fogLabel(g);
       };
-      rowClues.forEach((g, r) => apply(g, isFogged(fog, 'row', r)));
-      colClues.forEach((g, c) => apply(g, isFogged(fog, 'col', c)));
+      rowClues.forEach((g, r) => apply(g, hasLine(fog, 'row', r)));
+      colClues.forEach((g, c) => apply(g, hasLine(fog, 'col', c)));
       for (const { kind, index } of lifted) {
-        restartAnimation((kind === 'row' ? rowClues : colClues)[index].group, 'unfog');
+        playOnce((kind === 'row' ? rowClues : colClues)[index].group, 'unfog');
+      }
+    },
+    flashSwap(a, b) {
+      for (const r of [a, b]) {
+        playOnce(rowClues[r].group, 'swapped');
+        for (let c = 0; c < w; c++) playOnce(cells[r * w + c], 'swapped');
       }
     },
     flashHint(indexes) {
-      for (const i of indexes) restartAnimation(cells[i], 'hinted');
+      for (const i of indexes) playOnce(cells[i], 'hinted');
     },
     highlight(r, c) {
       rowClues.forEach((g, i) => g.group.classList.toggle('hl', i === r));

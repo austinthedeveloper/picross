@@ -21,69 +21,87 @@ index.html                 Page shell; loads src/main.ts
 public/favicon.svg
 src/
   main.ts                  Entry point: imports styles, applies theme, hash router
-  engine/
+  engine/                  Pure puzzle logic, no DOM
     board.ts               Cell states (Empty/Filled/Marked), Grid/Board/Solution, isSolved
     clues.ts               Clue derivation and per-clue "satisfied" check (clue dimming)
     history.ts             Change/Move types and the undo/redo History
-    solver.ts              Line solver: uniqueness / no-guess check (CI and the editor), fog-aware
-    fog.ts                 Fogged clues and the rule for lifting them (#30)
-  puzzles/
+    lines.ts               LineSet: sets of rows/columns (fog, scrambles, weak points)
+    solver.ts              Line solver: uniqueness/no-guess check; fog and scramble aware
+    swap.ts                Which two rows the Mimic swaps (#48)
+  puzzles/                 Content and its validation
     format.ts              Puzzle file format, parse/validate, export helpers
-    index.ts               Loads pack/*.json and sets play order (ORDER)
-    pack/*.json            The free-play puzzles (shown on the puzzle list)
-    run/*.json             Run-only puzzles (e.g. the goblin's sword); not on the list
-    pack.test.ts           Runs the solver over every pack puzzle
-    runs.ts                Loads encounters/*.json and runs/*.json (roguelite runs)
-    gadgets.ts             Gadget catalog: name, icon, description, effect (damage/shield)
-    encounters/*.json      Encounters: name, kind (fight/dig), puzzle, blurb, enemy (fights)
-    runs/*.json            Runs: starting HP and an ordered list of encounter ids
+    index.ts               Loads pack/*.json (free play, in ORDER) and run/*.json
+    pack/*.json            Free-play puzzles (5×5 to 20×20)
+    run/*.json             Run-only puzzles (the sword, wrench, owl, pocket watch, ...)
+    pack.test.ts           Uniqueness check over every puzzle
+    runs.ts                Loads encounters/*.json and runs/*.json (jobs)
+    enemies.ts             Validates an enemy: fog, scramble, armor, phases
+    gadgets.ts             Gadget catalog: name, icon, description, effect
     scenes.ts              Loads and validates scenes/*.json (dialogue, #22)
+    encounters/*.json      Encounters: name, kind (fight/dig), puzzle, enemy, boss, scene
+    runs/*.json            Jobs: HP, encounters, gadgets, intro/outro, order, requires
     scenes/*.json          Scenes: cast, nodes of lines, choices, and conditions
-  game/
-    game.ts                Game: board + history + mode/hearts + hints + clock
-    progress.ts            Saved boards, solve stats, totals (localStorage)
-    settings.ts            Mode, mute, high contrast (localStorage)
-    run.ts                 RunState and its pure transitions (start, damage, clear encounter)
+  game/                    Game state and saves, no DOM
+    game.ts                Game: board, history, mode/hearts, hints, clock, row swaps
+    battle.ts              Enemy and BattleState: chip, finisher, gadgets, phases, armor
+    run.ts                 RunState and its pure transitions
     dialogue.ts            Scene runner: current line or choices, advance, choose, flags
-    battle.ts              Enemy and BattleState: chip damage, finisher, gadget effects, shields
-    runSave.ts             Saves the current run (localStorage)
+    progress.ts            Free-play saves, solve stats, totals (localStorage)
+    runSave.ts             Current run, seen scenes, job stats (localStorage)
+    settings.ts            Mode, mute, high contrast (localStorage)
     storage.ts             Safe localStorage JSON read/write
   ui/
     dom.ts                 el(): create an element with props and children
-    format.ts              formatTime()
+    format.ts              formatTime(), plural(), lineName()
+    motion.ts              reducedMotion(), wait(), pause(), playOnce() for animations
     sound.ts               WebAudio-synthesized sound effects
     theme.ts               Applies the high-contrast theme
     screens/
       selectScreen.ts      Puzzle list, mode, settings, stats       (#/)
-      gameScreen.ts        Play screen; wires everything together  (#/play/<id>)
+      gameScreen.ts        Play screen; PlaySession and its hooks  (#/play/<id>)
       freePlaySession.ts   Free-play PlaySession: saves, best times, "Next"
-      runScreen.ts         Run hub, path map, results; run encounters (#/run, #/run/play)
-      sceneScreen.ts       Plays a scene full screen; #/scene/<id> previews one
-      fightHooks.ts        Fight rules wired into a run encounter's PlaySession
-      digHooks.ts          Dig encounters: dirt board, header, the reveal on solve
+      sceneScreen.ts       Plays a scene full screen               (#/scene/<id>)
       editorScreen.ts      Puzzle authoring tool                   (#/editor)
+      run/                 Runs                                    (#/run, #/run/play)
+        index.ts           Run hub router and the puzzle-list banner
+        shared.ts          Hub type, loadRun, mode picker, start buttons
+        jobsBoard.ts       Jobs board (#47)
+        pathMap.ts         Path map, HP, gadget inventory
+        results.ts         Results and sign-off
+        encounter.ts       Plays the current encounter (a PlaySession)
+        fight.ts           Fight hooks: damage, mistakes, gadgets, phases, fog, scramble,
+                           armor, swaps, the finisher
+        dig.ts             Dig hooks: dirt board, header, the reveal
     board/
-      boardView.ts         Renders clues + cells (ARIA grid), clue dimming, flashes
+      boardView.ts         Clues + cells (ARIA grid), dimming, fog/scramble/weak points
       input.ts             Pointer input: click, right-click, drag strokes, touch
       keyboard.ts          Keyboard cursor and actions on a board
       zoom.ts              Pinch/wheel zoom and two-finger pan
       picture.ts           Pixel-art canvas of a solution
     components/
-      hintMenu.ts          "Hint n/3" dropdown
-      zoomBar.ts           − / level / + zoom buttons
-      endPanels.ts         Solved, out-of-hearts, and generic end panels
-      battleBar.ts         Enemy and player HP above the board; hit and defeat effects
-      muteButton.ts        Sound toggle
+      battleBar.ts         Enemy/player HP, gadgets, armor, phase banner, hit effects
       dialogue.ts          Scene player: portrait, typed text box, choices, Skip
+      endPanels.ts         Solved, out-of-hearts, and generic end panels
+      hintMenu.ts          "Hint n/3" dropdown
+      muteButton.ts        Sound toggle
+      zoomBar.ts           − / level / + zoom buttons
   styles/
     tokens.css             Color tokens for light, dark, and high-contrast themes
     base.css               Page layout, buttons, toggles, segmented controls
-    board.css              Board, clues, cells, cursor, cell animations
-    game.css               Play screen: toolbar, hint menu, zoom bar, solved/failed states
+    board.css              Board, clues, cells, cursor, fog/scramble/weak-point clues
+    game.css               Play screen: toolbar, hint menu, zoom bar, end states
     select.css             Puzzle list
     editor.css             Editor
-    run.css                Run banner, path map, results
-.github/workflows/ci.yml   Lint, test, build; deploy main to GitHub Pages
+    run.css                Run banner, jobs board, path map, results
+    fight.css              Battle bar, gadgets, phase banner, armor
+    dig.css                The dig's dirt board and reveal
+    dialogue.css           Scene player
+scripts/
+  deploy-azure.sh          Upload a build to the Azure static website
+  setup-azure-deploy.sh    One-time Azure + GitHub OIDC setup for the release pipeline
+.github/workflows/
+  ci.yml                   Lint, test, build; deploy main to GitHub Pages
+  deploy-azure.yml         Deploy a published release to Azure
 .claude/launch.json        Dev server config for Claude Code's preview
 ```
 
@@ -200,9 +218,9 @@ working. Shared button styles live in `base.css`: `.button`, `.ghost`, `.primary
   clues)
 
 `freePlaySession(puzzle)` is the default. It saves to `progress.ts` and records best
-times. A run encounter (`runScreen.ts`) saves the board into the run state and clears the
-encounter instead, so run solves never touch free-play stats. Fights (`fightHooks.ts`)
-and digs (`digHooks.ts`) plug in through the optional hooks, so the game screen has no
+times. A run encounter (`screens/run/encounter.ts`) saves the board into the run state and clears the
+encounter instead, so run solves never touch free-play stats. Fights (`run/fight.ts`)
+and digs (`run/dig.ts`) plug in through the optional hooks, so the game screen has no
 special cases for encounter types.
 
 ## Runs
@@ -214,6 +232,20 @@ HP, gadgets, status (`active`, `won`, or `lost`), and the current encounter's bo
 changes only through pure functions: `startRun`, `withBoard`, `damage`, and
 `completeEncounter`. Every change is saved immediately, so closing the tab at any point
 resumes on the map, or mid-puzzle with the board restored.
+
+## Jobs board
+
+"Pick a job" on the puzzle list opens the jobs board at `#/run` (#47). It lists every run
+in `order`, each with its blurb, length, boss, and your best result. A run with `requires`
+stays locked until you've won that job once. Results are saved per job in `runSave.ts`
+(plays, wins, best HP left), once per finished run: `recordRunResult` marks the run
+`recorded`, so a reload doesn't count it twice. The results screen shows every line the
+job's outro plays for a win or a loss, which gives room for a tease after the sign-off,
+and offers **Run it again** or **Jobs board**.
+
+Jobs so far: **First Job** (#21) and **The Night Shift** (#46). The Night Shift unlocks after
+First Job. It's Mimic → Clockwork Owl → Dusty Exhibit (a dig that yields a patch kit) →
+Armored Beetle → the Curator, with Curator Ambrose joining Rook and Dee in its scenes.
 
 ## Fights
 
@@ -239,8 +271,8 @@ up) is saved in `RunState.battle`, so a reload resumes mid-fight.
 
 An enemy can list `fog: { rows }` or `fog: { cols }`: clues hidden behind a cloudy "?" when
 the fight starts. A fogged clue stays hidden until you complete that line yourself, working
-it out from the crossing lines, and then it's revealed as the reward (`liftFog` in
-`engine/fog.ts`). Fog covers one direction per fight, and validation enforces this: a
+it out from the crossing lines, and then it's revealed as the reward (`removeLine` in
+`engine/lines.ts`). Fog covers one direction per fight, and validation enforces this: a
 fogged row and a fogged column would hide the cell where they cross from both of its
 lines, so neither could ever be finished. `solve(width, height, clues, fog)` plays it out
 the same way, and a test requires every fogged fight to come out `unique`. The fog bat
@@ -267,11 +299,74 @@ Blackout, hits for 4, and fogs 2 more from the same pool. That's up to 8 of 15 r
 Line damage is 1 per line and columns mostly finish late in a solve, so keep phase
 thresholds high if you want them to land mid-fight.
 
+### Scrambled clues (the Clockwork Owl)
+
+An enemy can list `scramble: { rows, cols }`, and phases can add more from a `scramble` pool
+with `scrambleCount`. A scrambled clue shows its runs in ascending order with a ⚙ and a
+dashed outline, so you know which runs the line has but not their order. Its numbers
+dim only when the whole line is done, since dimming one would give away its place. Like
+fog, it clears when you complete the line. Unlike fog, rows and columns can both be
+scrambled, because a scrambled clue still says something about every cell. Validation
+rejects lines whose runs have only one order (for example `2 2`).
+
+The solver handles scrambled lines with `solveLineAnyOrder`, which tries every distinct
+order (`runOrders`) and keeps only what they all agree on.
+`solve(w, h, clues, { fog, scramble })` combines the two, and the fight test checks every
+enemy with all of its fog and scramble applied from the start. The solver finds even
+heavily scrambled puzzles easy, much easier than people do, so tune how many lines get
+scrambled by feel, using the fog bat as the reference.
+
+The Owl (`encounters/clockwork-owl.json`) is a 15×15 owl. Rows 6, 8, 10, and 12 and
+columns 4, 7, and 10 start scrambled. At 85% HP it winds up, hits for 3, and scrambles 3
+more.
+
+### Armor (the Armored Beetle)
+
+An enemy can have `armor: { weakPoints: { rows, cols }, attack }`. While any weak point is
+unsolved, ordinary lines deal no damage (they still count as struck, so they never chip
+later), and the enemy hits for the armored `attack`. Weak-point clues are marked 🎯.
+Completing one deals `WEAK_POINT_DAMAGE` (3) and cracks the armor, and after the last one
+it breaks and normal rules return (`chip` in `game/battle.ts`). Since the finisher always
+wins, armor matters through mistakes: in Hits-on runs, cracking it early softens the
+beetle's hits (4 → 2). The Beetle is a 15×15 beetle with weak points at rows 9 and 12 and
+column 3.
+
+### Row swaps (the Mimic)
+
+A phase can set `"swap": true`. When it starts, the Mimic swaps the contents of two of your
+rows: your fills and X's move, but the solution doesn't, so solvability never changes.
+`pickSwapRows` (`engine/swap.ts`) picks the pair whose swap turns the most of your correct
+marks wrong. That way it always costs you something, never swaps a pair back (which would
+help you), and never touches a finished row. `Game.swapRows` applies it and starts the undo
+history over, since older moves would point at the wrong cells. Swaps wait until no stroke
+is in progress. The fight reaches the game through the `controls` that `onBoard` receives
+(`{ game, refresh }`). Swapped rows flash, the swap is announced, and clue feedback shows
+what's now wrong. Erasing moved fills is never a mistake.
+
+The Night Shift run (`runs/night-shift.json`, #46) starts with the Mimic, a 15×15 chest
+with teeth that swaps at 90%, 80%, and 70% HP and turns Hungry (attack 3) on the last.
+It isn't reachable from the game until the jobs board (#47) lands.
+
+### The Curator (Night Shift boss)
+
+A 20×20 pocket watch with 60 HP (40 lines, so the finisher stays big). It combines every
+board disruption so far:
+
+- **Start:** rows 4 and 10 fogged.
+- **92% HP:** Clockwork Curator, hits for 3, fogs rows 8 and 20.
+- **85% HP:** scrambles 3 of columns 9, 10, 12, and 15.
+- **78% HP:** Overwound Curator, hits for 4, and swaps two of your rows.
+
+The thin outlines leave the watch less room than the solid wrench: 4 fogged rows plus 4
+scrambled columns was the most the solver could still finish. Its 20×20 size and the swap
+carry the rest of the difficulty. A reveal scene (`curator-reveal`) plays before the
+fight.
+
 ## Digs
 
 A dig encounter (`kind: "dig"`) has no enemy and never checks fills, even in a Hits-on
-run, so there's no HP pressure. `digHooks.ts` sets the `dig` theme, which turns empty
-cells into dirt and filled cells into metal (`styles/run.css`, with `--dirt`, `--dug`,
+run, so there's no HP pressure. `run/dig.ts` sets the `dig` theme, which turns empty
+cells into dirt and filled cells into metal (`styles/dig.css`, with `--dirt`, `--dug`,
 and `--metal` tokens for each theme). It also adds a header with a "?" for the buried
 find. On solve, the dirt brushes away in a diagonal wave, the part gleams, and the
 puzzle's gadget pops into the header before the solved panel appears. The dig in First
@@ -288,7 +383,7 @@ patch kit). The catalog in `puzzles/gadgets.ts` describes each gadget's effect a
 - `{ kind: 'shield', hits }` blocks that many enemy hits (`absorbHit` in `battle.ts`).
 
 Held gadgets are listed on the run map and shown as buttons in the fight's battle bar
-(`fightHooks.ts`). Using one removes it from the run. Buttons are disabled with a reason
+(`run/fight.ts`). Using one removes it from the run. Buttons are disabled with a reason
 when a gadget can't help: a shield in a Relaxed run, or damage when the enemy is already
 at 1 HP. Gadgets act on the fight, never on the grid.
 

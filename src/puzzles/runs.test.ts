@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { parsePuzzle } from './format';
 import { solve } from '../engine/solver';
 import { CHIP_DAMAGE } from '../game/battle';
-import { allFog, DEFAULT_RUN_ID, getRun, parseEncounter, parseRun, runs } from './runs';
+import { allFog, allScramble } from './enemies';
+import { getRun, parseEncounter, parseRun, runs } from './runs';
 
 const puzzle = parsePuzzle({ id: 'p', name: 'P', width: 2, height: 1, solution: ['#.'] });
 const find = (id: string) => (id === 'p' ? puzzle : undefined);
@@ -38,6 +39,10 @@ describe('parseEncounter', () => {
     [{ ...encounter, enemy: { ...enemy, phases: [{ at: 1.5 }] } }, /between 0 and 1/],
     [{ ...encounter, enemy: { ...enemy, phases: [{ at: 0.3 }, { at: 0.6 }] } }, /decreasing/],
     [{ ...encounter, scene: 'nope' }, /unknown scene "nope"/],
+    [{ ...encounter, enemy: { ...enemy, phases: [{ at: 0.5, swap: 'yes' }] } }, /swap must be/],
+    [{ ...encounter, enemy: { ...enemy, armor: { weakPoints: {}, attack: 3 } } }, /weak points/],
+    // the test puzzle is 2x1 '#.': row 1's runs are just "1", so its order is already known
+    [{ ...encounter, enemy: { ...enemy, scramble: { rows: [0] } } }, /only one order/],
   ])('rejects bad input %#', (input, error) => {
     expect(() => parseEncounter(input, find)).toThrow(error);
   });
@@ -65,9 +70,12 @@ describe('parseRun', () => {
 });
 
 describe('bundled runs', () => {
-  it('has a playable default run', () => {
-    const run = getRun(DEFAULT_RUN_ID);
-    expect(run?.encounters.length).toBeGreaterThan(0);
+  it('starts with an open job, and every locked job unlocks from a real one', () => {
+    expect(runs[0].requires).toBeUndefined();
+    for (const run of runs) {
+      expect(run.encounters.length).toBeGreaterThan(0);
+      if (run.requires) expect(getRun(run.requires)).toBeDefined();
+    }
   });
 });
 
@@ -81,15 +89,20 @@ describe('bundled fights', () => {
     expect(maxChip).toBeLessThanOrEqual((e.enemy!.hp * 2) / 3);
   });
 
-  // Fogged clues can't be read until you solve their lines, so the puzzle must be
-  // solvable without guessing even with every fog the enemy can bring (starting and
-  // from every phase) applied from the very start.
-  const fogged = fights.filter((e) => {
-    const fog = allFog(e.enemy!);
-    return fog.rows.length + fog.cols.length > 0;
-  });
-  it.each(fogged.map((e) => [e.id, e] as const))('%s is solvable through all its fog', (_, e) => {
-    const { width, height, clues } = e.puzzle;
-    expect(solve(width, height, clues, allFog(e.enemy!)).status).toBe('unique');
-  });
+  // Fogged and scrambled clues can't be read normally until you solve their lines,
+  // so the puzzle must be solvable without guessing even with everything the enemy
+  // can bring (starting and from every phase) applied from the very start.
+  const size = (f: { rows: number[]; cols: number[] }) => f.rows.length + f.cols.length;
+  const tricky = fights.filter((e) => size(allFog(e.enemy!)) + size(allScramble(e.enemy!)) > 0);
+  it.each(tricky.map((e) => [e.id, e] as const))(
+    '%s is solvable through everything it does',
+    (_, e) => {
+      const { width, height, clues } = e.puzzle;
+      const result = solve(width, height, clues, {
+        fog: allFog(e.enemy!),
+        scramble: allScramble(e.enemy!),
+      });
+      expect(result.status).toBe('unique');
+    },
+  );
 });

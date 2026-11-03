@@ -1,6 +1,6 @@
 import { getPuzzle } from './index';
-import type { Fog } from '../engine/fog';
-import type { Enemy, Phase } from '../game/battle';
+import type { Enemy } from '../game/battle';
+import { parseEnemy } from './enemies';
 import type { Puzzle } from './format';
 import { getGadget } from './gadgets';
 import { getScene } from './scenes';
@@ -28,79 +28,9 @@ export interface Encounter extends Omit<EncounterFile, 'puzzle'> {
   puzzle: Puzzle;
 }
 
-function parseEnemy(data: unknown, puzzle: Puzzle, fail: (msg: string) => never): Enemy {
-  const enemy = data as Partial<Enemy> | undefined;
-  if (!enemy || typeof enemy !== 'object') return fail('fights need an enemy');
-  if (typeof enemy.name !== 'string' || !enemy.name) fail('enemy needs a name');
-  if (!Number.isInteger(enemy.hp) || enemy.hp! < 1) fail('enemy hp must be a positive integer');
-  if (!Number.isInteger(enemy.attack) || enemy.attack! < 0) {
-    fail('enemy attack must be a whole number');
-  }
-  const parsed: Enemy = {
-    name: enemy.name!,
-    sprite: typeof enemy.sprite === 'string' ? enemy.sprite : '👾',
-    hp: enemy.hp!,
-    attack: enemy.attack!,
-  };
-  const parseFog = (data: unknown): Fog => {
-    const { rows = [], cols = [] } = (data ?? {}) as Partial<Fog>;
-    const inRange = (list: unknown, size: number) =>
-      Array.isArray(list) && list.every((i) => Number.isInteger(i) && i >= 0 && i < size);
-    if (!inRange(rows, puzzle.height) || !inRange(cols, puzzle.width)) {
-      fail('fog rows and cols must be line indexes within the puzzle');
-    }
-    return { rows: [...rows], cols: [...cols] };
-  };
-  if (enemy.fog !== undefined) parsed.fog = parseFog(enemy.fog);
-
-  if (enemy.phases !== undefined) {
-    if (!Array.isArray(enemy.phases)) fail('phases must be a list');
-    parsed.phases = enemy.phases!.map((data, i): Phase => {
-      const phase = (data ?? {}) as Partial<Phase>;
-      const at = phase.at;
-      if (typeof at !== 'number' || !(at > 0 && at < 1))
-        fail(`phase ${i + 1} needs "at" between 0 and 1`);
-      if (i > 0 && at! >= enemy.phases![i - 1].at) fail('phases must trigger at decreasing HP');
-      if (phase.attack !== undefined && (!Number.isInteger(phase.attack) || phase.attack < 0)) {
-        fail(`phase ${i + 1} attack must be a whole number`);
-      }
-      if (
-        phase.fogCount !== undefined &&
-        (!Number.isInteger(phase.fogCount) || phase.fogCount < 1)
-      ) {
-        fail(`phase ${i + 1} fogCount must be a positive whole number`);
-      }
-      return {
-        at: at!,
-        ...(phase.name ? { name: phase.name } : {}),
-        ...(phase.sprite ? { sprite: phase.sprite } : {}),
-        ...(phase.attack !== undefined ? { attack: phase.attack } : {}),
-        ...(phase.taunt ? { taunt: phase.taunt } : {}),
-        ...(phase.fog !== undefined ? { fog: parseFog(phase.fog) } : {}),
-        ...(phase.fogCount !== undefined ? { fogCount: phase.fogCount } : {}),
-      };
-    });
-  }
-
-  // The cell where a fogged row and column cross could never be worked out, so all
-  // of an enemy's fog (starting and from every phase) must be in one direction.
-  const all = allFog(parsed);
-  if (all.rows.length && all.cols.length) fail('fog can cover rows or columns, not both');
-  return parsed;
-}
-
 function checkScene(id: unknown, fail: (msg: string) => never): string {
   if (typeof id !== 'string' || !getScene(id)) return fail(`unknown scene "${String(id)}"`);
   return id;
-}
-
-/** Every line an enemy can ever fog: its starting fog plus every phase's. */
-export function allFog(enemy: Enemy): Fog {
-  const fogs = [enemy.fog, ...(enemy.phases ?? []).map((p) => p.fog)].filter((f): f is Fog =>
-    Boolean(f),
-  );
-  const union = (key: 'rows' | 'cols') => [...new Set(fogs.flatMap((f) => f[key]))];
-  return { rows: union('rows'), cols: union('cols') };
 }
 
 /** A run: an ordered path of encounters. */
@@ -114,8 +44,14 @@ export interface RunFile {
   gadgets?: string[];
   /** Scene played before the first run (#31). */
   intro?: string;
-  /** Scene whose line (picked by the `won` flag) signs off the results screen. */
+  /** Scene whose lines (picked by the `won` flag) sign off the results screen. */
   outro?: string;
+  /** One line for the jobs board (#47). */
+  blurb?: string;
+  /** Position on the jobs board (lowest first). */
+  order?: number;
+  /** A job you must win once before this one unlocks. */
+  requires?: string;
 }
 
 export interface RunDef extends Omit<RunFile, 'encounters' | 'gadgets'> {
@@ -180,6 +116,9 @@ export function parseRun(
     gadgets,
     ...(file.intro ? { intro: file.intro } : {}),
     ...(file.outro ? { outro: file.outro } : {}),
+    ...(file.blurb ? { blurb: file.blurb } : {}),
+    ...(file.order !== undefined ? { order: file.order } : {}),
+    ...(file.requires ? { requires: file.requires } : {}),
   };
 }
 
@@ -200,11 +139,17 @@ for (const mod of Object.values(runFiles)) {
   runsById.set(run.id, run);
 }
 
-/** The run the "Start a run" button begins. */
-export const DEFAULT_RUN_ID = 'first-job';
-
 export function getRun(id: string): RunDef | undefined {
   return runsById.get(id);
 }
 
-export const runs: RunDef[] = [...runsById.values()];
+for (const run of runsById.values()) {
+  if (run.requires && !runsById.has(run.requires)) {
+    throw new Error(`Invalid run "${run.id}": requires unknown job "${run.requires}"`);
+  }
+}
+
+/** Every job, in jobs-board order. */
+export const runs: RunDef[] = [...runsById.values()].sort(
+  (a, b) => (a.order ?? 99) - (b.order ?? 99) || a.name.localeCompare(b.name),
+);

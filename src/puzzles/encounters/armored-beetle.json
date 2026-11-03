@@ -1,0 +1,20 @@
+{
+  "id": "armored-beetle",
+  "name": "Armored Beetle",
+  "kind": "fight",
+  "puzzle": "beetle",
+  "blurb": "A museum beetle the size of a hatchback. Look for the cracks.",
+  "enemy": {
+    "name": "Armored Beetle",
+    "sprite": "🪲",
+    "hp": 45,
+    "attack": 2,
+    "armor": {
+      "weakPoints": {
+        "rows": [8, 11],
+        "cols": [2]
+      },
+      "attack": 4
+    }
+  }
+}

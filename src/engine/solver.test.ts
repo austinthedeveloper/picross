@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { deriveClues } from './clues';
-import { checkSolution, solve, solveLine, Unknown as U } from './solver';
+import {
+  checkSolution,
+  runOrders,
+  solve,
+  solveLine,
+  solveLineAnyOrder,
+  Unknown as U,
+} from './solver';
 
 describe('solveLine', () => {
   it('fills the overlap of a long run', () => {
@@ -53,18 +60,44 @@ describe('solve with fog', () => {
   const clues = deriveClues(g);
 
   it('solves fogged rows from the columns', () => {
-    expect(solve(5, 5, clues, { rows: [1], cols: [] }).status).toBe('unique');
+    expect(solve(5, 5, clues, { fog: { rows: [1], cols: [] } }).status).toBe('unique');
   });
 
   it('gets stuck when the columns can’t pin a fogged row down', () => {
-    expect(solve(5, 5, clues, { rows: [2], cols: [] }).status).toBe('ambiguous');
+    expect(solve(5, 5, clues, { fog: { rows: [2], cols: [] } }).status).toBe('ambiguous');
   });
 
   it('gets stuck when fog hides too much to ever complete a line', () => {
     const all = [0, 1, 2, 3, 4];
-    expect(solve(5, 5, clues, { rows: all, cols: all })).toMatchObject({
+    expect(solve(5, 5, clues, { fog: { rows: all, cols: all } })).toMatchObject({
       status: 'ambiguous',
       unknown: 25,
     });
+  });
+});
+
+describe('scrambled clues', () => {
+  it('lists each distinct order once', () => {
+    expect(runOrders([1, 2, 1])).toEqual([
+      [1, 2, 1],
+      [1, 1, 2],
+      [2, 1, 1],
+    ]);
+    expect(runOrders([3])).toEqual([[3]]);
+  });
+
+  it('only forces what every order agrees on', () => {
+    // 1 and 3 in a 5-wide line: "1 3" is #.### and "3 1" is ###.#
+    expect(solveLineAnyOrder([U, U, U, U, U], [1, 3])).toEqual([1, U, 1, U, 1]);
+    // With the first cell empty, neither order fits in the 4 cells left.
+    expect(solveLineAnyOrder([0, U, U, U, U], [1, 3])).toBeNull();
+  });
+
+  it('solves a puzzle with scrambled lines from the crossings', () => {
+    // Rows 1 and 2 have mixed runs ("2 1" and "1 3"), so their order can be scrambled.
+    const rows = ['##.#.', '#.###', '#####', '.###.', '..#..'];
+    const g = grid(rows);
+    const clues = deriveClues(g);
+    expect(solve(5, 5, clues, { scramble: { rows: [0, 1], cols: [] } }).status).toBe('unique');
   });
 });

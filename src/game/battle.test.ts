@@ -1,12 +1,14 @@
 import { describe, expect, it } from 'vitest';
+import { lineKey } from '../engine/lines';
 import {
   absorbHit,
   advancePhase,
+  WEAK_POINT_DAMAGE,
   chip,
   clearFog,
+  clearScramble,
   currentForm,
   finish,
-  lineKey,
   startBattle,
   useGadget,
 } from './battle';
@@ -98,7 +100,7 @@ describe('phases', () => {
   it('waits until HP falls to the threshold', () => {
     const { state, entered } = advancePhase(boss, { ...startBattle(boss), enemyHp: 6 });
     expect(entered).toEqual([]);
-    expect(currentForm(boss, state)).toEqual({ name: 'Gremlin', sprite: 'G', attack: 2 });
+    expect(currentForm(boss, state)).toMatchObject({ name: 'Gremlin', sprite: 'G', attack: 2 });
   });
 
   it('starts the phase: new form, harder hits, fog on lines not yet completed', () => {
@@ -107,7 +109,7 @@ describe('phases', () => {
     expect(entered).toHaveLength(1);
     expect(state.phase).toBe(1);
     expect(state.fog).toEqual({ rows: [1, 4], cols: [] });
-    expect(currentForm(boss, state)).toEqual({
+    expect(currentForm(boss, state)).toMatchObject({
       name: 'Overcharged Gremlin',
       sprite: 'O',
       attack: 3,
@@ -128,5 +130,56 @@ describe('phases', () => {
   it('keeps phase and fog through chip damage', () => {
     const { state } = advancePhase(boss, { ...startBattle(boss), enemyHp: 5 });
     expect(chip(state, ['c0']).state).toMatchObject({ phase: 1, fog: { rows: [1, 2, 4] } });
+  });
+});
+
+describe('scramble', () => {
+  const owl = { ...goblin, scramble: { rows: [0, 2], cols: [1] } };
+
+  it('starts with the enemy’s scramble and unscrambles completed lines', () => {
+    const start = startBattle(owl);
+    expect(start.scramble).toEqual({ rows: [0, 2], cols: [1] });
+    const { state, revealed } = clearScramble(start, [
+      { kind: 'row', index: 2 },
+      { kind: 'col', index: 0 },
+    ]);
+    expect(state.scramble).toEqual({ rows: [0], cols: [1] });
+    expect(revealed).toEqual([{ kind: 'row', index: 2 }]);
+  });
+
+  it('phases can scramble more lines from a pool', () => {
+    const boss = {
+      ...goblin,
+      hp: 10,
+      phases: [{ at: 0.5, scramble: { rows: [3, 4, 5], cols: [] }, scrambleCount: 2 }],
+    };
+    const { state } = advancePhase(boss, { ...startBattle(boss), enemyHp: 5, struck: ['r3'] });
+    expect(state.scramble).toEqual({ rows: [4, 5], cols: [] });
+  });
+});
+
+describe('armor', () => {
+  const beetle = {
+    ...goblin,
+    hp: 20,
+    attack: 2,
+    armor: { weakPoints: { rows: [1], cols: [2] }, attack: 4 },
+  };
+
+  it('blocks ordinary lines and hits harder while up', () => {
+    const start = startBattle(beetle);
+    expect(currentForm(beetle, start)).toMatchObject({ attack: 4, armored: true });
+    const { state, dealt } = chip(start, ['r0', 'c0']);
+    expect(dealt).toBe(0);
+    expect(state.struck).toEqual(['r0', 'c0']); // those lines never chip later
+  });
+
+  it('weak points deal triple damage, crack the armor, and break it', () => {
+    let result = chip(startBattle(beetle), ['r1']);
+    expect(result).toMatchObject({ dealt: WEAK_POINT_DAMAGE, cracked: ['r1'], broke: false });
+    result = chip(result.state, ['c2', 'r4']);
+    expect(result).toMatchObject({ dealt: WEAK_POINT_DAMAGE, cracked: ['c2'], broke: true });
+    expect(currentForm(beetle, result.state)).toMatchObject({ attack: 2, armored: false });
+    expect(chip(result.state, ['r5']).dealt).toBe(1); // normal rules after
   });
 });

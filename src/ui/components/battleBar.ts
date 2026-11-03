@@ -1,5 +1,6 @@
 import type { Enemy } from '../../game/battle';
 import { el } from '../dom';
+import { playOnce } from '../motion';
 
 export interface BattleBar {
   root: HTMLElement;
@@ -21,6 +22,10 @@ export interface BattleBar {
   setGadgets(buttons: HTMLElement[]): void;
   /** Announces a message to screen readers. */
   say(message: string): void;
+  /** Shows the enemy's armor and how many weak points are left (#50); 0 hides it. */
+  setArmor(weakPoints: number): void;
+  /** The armor shatters. */
+  armorBreaks(): void;
   /** Changes the enemy's name and sprite (boss phases, #42). */
   setForm(name: string, icon: string): void;
   /** A banner across the bar when a boss changes phase. */
@@ -46,14 +51,6 @@ function meter(label: string, className: string) {
   };
 }
 
-/** Replays a one-shot animation class on an element. */
-function replay(node: HTMLElement, className: string, ms = 700) {
-  node.classList.remove(className);
-  void node.offsetWidth;
-  node.classList.add(className);
-  window.setTimeout(() => node.classList.remove(className), ms);
-}
-
 function floatNumber(host: HTMLElement, text: string, className: string) {
   const number = el('span', { className: `float-number ${className}`, textContent: text });
   number.setAttribute('aria-hidden', 'true');
@@ -68,11 +65,15 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
   const enemyMeter = meter(`${enemy.name} HP`, 'enemy-hp');
   const playerMeter = meter('Your HP', 'player-hp');
   const enemyName = el('span', { className: 'battle-name', textContent: enemy.name });
+  const armor = el('span', { className: 'armor', hidden: true });
   const banner = el('div', { className: 'phase-banner', hidden: true });
   banner.setAttribute('aria-hidden', 'true');
   const enemySide = el('div', { className: 'battle-side enemy' }, [
     sprite,
-    el('div', { className: 'battle-info' }, [enemyName, enemyMeter.root]),
+    el('div', { className: 'battle-info' }, [
+      el('span', { className: 'battle-name-row' }, [enemyName, armor]),
+      enemyMeter.root,
+    ]),
   ]);
   const shield = el('span', { className: 'shield', hidden: true });
   const playerSide = el('div', { className: 'battle-side player' }, [
@@ -97,12 +98,12 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
     setEnemyHp: (hp) => enemyMeter.set(hp, enemy.hp),
     setPlayerHp: (hp, max) => playerMeter.set(hp, max),
     hitEnemy(amount) {
-      replay(sprite, 'flinch');
+      playOnce(sprite, 'flinch', 700);
       floatNumber(enemySide, `−${amount}`, 'to-enemy');
     },
     hitPlayer(amount) {
-      replay(sprite, 'lunge');
-      replay(playerSide, 'hurt');
+      playOnce(sprite, 'lunge', 700);
+      playOnce(playerSide, 'hurt', 700);
       floatNumber(playerSide, `−${amount}`, 'to-player');
     },
     defeat() {
@@ -114,13 +115,24 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
       shield.ariaLabel = `Shield blocks ${hits} ${hits === 1 ? 'hit' : 'hits'}`;
     },
     block() {
-      replay(sprite, 'lunge');
-      replay(shield, 'blocked');
+      playOnce(sprite, 'lunge', 700);
+      playOnce(shield, 'blocked', 700);
       floatNumber(playerSide, 'Blocked!', 'to-player');
     },
     setGadgets(buttons) {
       tray.replaceChildren(...buttons);
       tray.hidden = buttons.length === 0;
+    },
+    setArmor(weakPoints) {
+      armor.hidden = weakPoints <= 0;
+      armor.textContent = `🛡 ${weakPoints}🎯`;
+      armor.title = `Armored: ${weakPoints} weak point${weakPoints === 1 ? '' : 's'} left`;
+    },
+    armorBreaks() {
+      playOnce(armor, 'shatter', 600);
+      playOnce(sprite, 'flinch', 700);
+      floatNumber(enemySide, 'Armor broken!', 'to-enemy');
+      window.setTimeout(() => (armor.hidden = true), 600);
     },
     setForm(name, icon) {
       enemyName.textContent = name;
@@ -132,8 +144,8 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
         ...(taunt ? [el('span', { textContent: taunt })] : []),
       );
       banner.hidden = false;
-      replay(root, 'phase-shift', 1200);
-      replay(sprite, 'flinch');
+      playOnce(root, 'phase-shift', 1200);
+      playOnce(sprite, 'flinch', 700);
       window.setTimeout(() => (banner.hidden = true), 2200);
     },
     say(message) {

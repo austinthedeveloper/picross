@@ -161,3 +161,14 @@ describe('battle mode', () => {
     expect(game.failed).toBe(false);
   });
 });
+
+describe('swapRows', () => {
+  it('swaps two rows and starts the undo history over', () => {
+    const tall = parsePuzzle({ id: 't2', name: 'T', width: 2, height: 2, solution: ['#.', '.#'] });
+    const game = new Game(tall);
+    stroke(game, [{ index: 0, from: Cell.Empty, to: Cell.Filled }]);
+    game.swapRows(0, 1);
+    expect(game.board.cells).toEqual([Cell.Empty, Cell.Empty, Cell.Filled, Cell.Empty]);
+    expect(game.history.canUndo).toBe(false);
+  });
+});

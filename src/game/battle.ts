@@ -1,4 +1,13 @@
-import { liftFog, type Fog } from '../engine/fog';
+import {
+  copyLines,
+  lineCount,
+  lineKey,
+  lineKeys,
+  linesRemoved,
+  removeLine,
+  type Line,
+  type LineSet,
+} from '../engine/lines';
 import type { GadgetEffect } from '../puzzles/gadgets';
 
 /** An enemy in a fight encounter (#27). */
@@ -10,9 +19,24 @@ export interface Enemy {
   /** Run HP lost each time the player fills a wrong cell. */
   attack: number;
   /** Clues hidden at the start of the fight (#30). */
-  fog?: Fog;
+  fog?: LineSet;
+  /** Clues shown with their runs in unknown order at the start (#49). */
+  scramble?: LineSet;
   /** Boss phases (#42), in the order they trigger. */
   phases?: Phase[];
+  /** Armor (#50): blocks line damage until its weak points are solved. */
+  armor?: Armor;
+}
+
+/**
+ * While any weak point is left, ordinary lines deal no damage and the enemy
+ * hits for `attack`. Each weak-point line you complete deals triple damage and
+ * cracks the armor; after the last one it breaks and normal rules return.
+ */
+export interface Armor {
+  weakPoints: LineSet;
+  /** The enemy's attack while armored. */
+  attack: number;
 }
 
 /** A change partway through a fight, e.g. a boss turning Overcharged at half HP. */
@@ -27,11 +51,17 @@ export interface Phase {
    * Lines this phase can fog, in priority order. Lines you've already completed
    * or that are already fogged are skipped.
    */
-  fog?: Fog;
-  /** Fog at most this many of those lines (default: all of them). */
+  fog?: LineSet;
+  /** LineSet at most this many of those lines (default: all of them). */
   fogCount?: number;
+  /** Lines this phase can scramble, in priority order (#49). */
+  scramble?: LineSet;
+  /** Scramble at most this many of those lines (default: all of them). */
+  scrambleCount?: number;
   /** One line shown in the phase banner. */
   taunt?: string;
+  /** Swaps two of your unfinished rows when the phase starts (the Mimic, #48). */
+  swap?: boolean;
 }
 
 /** A fight in progress. Saved with the run so a reload resumes it. */
@@ -42,19 +72,28 @@ export interface BattleState {
   /** Enemy hits still blocked by a patch kit (#28). */
   shield?: number;
   /** Clues still fogged (#30). */
-  fog?: Fog;
+  fog?: LineSet;
   /** How many of the enemy's phases have started (#42). */
   phase?: number;
+  /** Clues still scrambled (#49). */
+  scramble?: LineSet;
+  /** Weak points not yet solved (#50); armor is up while any are left. */
+  armor?: LineSet;
 }
+
+/** Damage per weak-point line while armor is up. */
+export const WEAK_POINT_DAMAGE = 3;
+
+const armorUp = (state: BattleState) => Boolean(state.armor && lineCount(state.armor));
 
 /** Damage per newly completed row or column. */
 export const CHIP_DAMAGE = 1;
 
-export const lineKey = (kind: 'row' | 'col', index: number) => `${kind[0]}${index}`;
-
 export function startBattle(enemy: Enemy): BattleState {
   const state: BattleState = { enemyHp: enemy.hp, struck: [] };
-  if (enemy.fog) state.fog = { rows: [...enemy.fog.rows], cols: [...enemy.fog.cols] };
+  if (enemy.fog) state.fog = copyLines(enemy.fog);
+  if (enemy.armor) state.armor = copyLines(enemy.armor.weakPoints);
+  if (enemy.scramble) state.scramble = copyLines(enemy.scramble);
   return state;
 }
 
@@ -66,7 +105,8 @@ export function currentForm(enemy: Enemy, state: BattleState) {
     sprite = phase.sprite ?? sprite;
     attack = phase.attack ?? attack;
   }
-  return { name, sprite, attack };
+  if (enemy.armor && armorUp(state)) attack = enemy.armor.attack;
+  return { name, sprite, attack, armored: armorUp(state) };
 }
 
 /**
@@ -85,60 +125,92 @@ export function advancePhase(
     if (next.enemyHp > phase.at * enemy.hp) break;
     entered.push(phase);
     next = { ...next, phase: (next.phase ?? 0) + 1 };
-    if (phase.fog) {
-      const fog = next.fog ?? { rows: [], cols: [] };
-      let budget = phase.fogCount ?? Infinity;
-      const add = (kind: 'row' | 'col', list: number[], have: number[]) => {
-        const open = list.filter(
-          (i) => !have.includes(i) && !next.struck.includes(lineKey(kind, i)),
-        );
-        const picked = open.slice(0, budget);
-        budget -= picked.length;
-        return picked;
-      };
-      next = {
-        ...next,
-        fog: {
-          rows: [...fog.rows, ...add('row', phase.fog.rows, fog.rows)],
-          cols: [...fog.cols, ...add('col', phase.fog.cols, fog.cols)],
-        },
-      };
-    }
+    next = addFromPool(next, 'fog', phase.fog, phase.fogCount);
+    next = addFromPool(next, 'scramble', phase.scramble, phase.scrambleCount);
   }
   return { state: next, entered };
 }
 
-/** Lifts fog from newly completed lines (see `liftFog`). Returns the lines revealed. */
-export function clearFog(
+/**
+ * Adds up to `count` lines from a phase's pool to the battle's fog or
+ * scramble, skipping lines you've completed and lines already affected.
+ */
+function addFromPool(
   state: BattleState,
-  lines: { kind: 'row' | 'col'; index: number }[],
-): { state: BattleState; revealed: { kind: 'row' | 'col'; index: number }[] } {
-  if (!state.fog) return { state, revealed: [] };
-  let fog = state.fog;
-  for (const { kind, index } of lines) fog = liftFog(fog, kind, index);
-  const revealed = [
-    ...state.fog.rows
-      .filter((i) => !fog.rows.includes(i))
-      .map((index) => ({ kind: 'row' as const, index })),
-    ...state.fog.cols
-      .filter((i) => !fog.cols.includes(i))
-      .map((index) => ({ kind: 'col' as const, index })),
-  ];
-  return { state: { ...state, fog }, revealed };
+  key: 'fog' | 'scramble',
+  pool: LineSet | undefined,
+  count = Infinity,
+): BattleState {
+  if (!pool) return state;
+  const have = state[key] ?? { rows: [], cols: [] };
+  let budget = count;
+  const pick = (kind: 'row' | 'col', list: number[], already: number[]) => {
+    const open = list.filter(
+      (i) => !already.includes(i) && !state.struck.includes(lineKey(kind, i)),
+    );
+    const picked = open.slice(0, budget);
+    budget -= picked.length;
+    return picked;
+  };
+  return {
+    ...state,
+    [key]: {
+      rows: [...have.rows, ...pick('row', pool.rows, have.rows)],
+      cols: [...have.cols, ...pick('col', pool.cols, have.cols)],
+    },
+  };
 }
+
+/** Clears fog or scramble from newly completed lines. Returns the lines cleared. */
+function liftLines(
+  state: BattleState,
+  key: 'fog' | 'scramble',
+  lines: Line[],
+): { state: BattleState; revealed: Line[] } {
+  const before = state[key];
+  if (!before) return { state, revealed: [] };
+  let after = before;
+  for (const { kind, index } of lines) after = removeLine(after, kind, index);
+  const revealed = linesRemoved(before, after);
+  return { state: { ...state, [key]: after }, revealed };
+}
+
+/** Lifts fog from newly completed lines. Returns the lines revealed. */
+export const clearFog = (state: BattleState, lines: Line[]) => liftLines(state, 'fog', lines);
+
+/** Unscrambles newly completed lines (#49). Returns the lines put back in order. */
+export const clearScramble = (state: BattleState, lines: Line[]) =>
+  liftLines(state, 'scramble', lines);
 
 /**
  * Deals chip damage for completed lines that haven't struck yet. Chip damage
  * never drops the enemy below 1 HP: only the finished picture defeats it.
  */
-export function chip(state: BattleState, keys: string[]): { state: BattleState; dealt: number } {
+export function chip(
+  state: BattleState,
+  keys: string[],
+): { state: BattleState; dealt: number; cracked: string[]; broke: boolean } {
   const fresh = [...new Set(keys)].filter((k) => !state.struck.includes(k));
-  if (!fresh.length) return { state, dealt: 0 };
-  const enemyHp = Math.max(1, state.enemyHp - fresh.length * CHIP_DAMAGE);
-  return {
-    state: { ...state, enemyHp, struck: [...state.struck, ...fresh] },
-    dealt: state.enemyHp - enemyHp,
-  };
+  if (!fresh.length) return { state, dealt: 0, cracked: [], broke: false };
+  let damage = fresh.length * CHIP_DAMAGE;
+  let next: BattleState = { ...state, struck: [...state.struck, ...fresh] };
+  let cracked: string[] = [];
+  let broke = false;
+  if (armorUp(state)) {
+    // Armor: only weak points hurt (triple), and each one solved cracks it.
+    const weak = lineKeys(state.armor!);
+    cracked = fresh.filter((k) => weak.includes(k));
+    damage = cracked.length * WEAK_POINT_DAMAGE;
+    const left = (kind: 'r' | 'c', list: number[]) =>
+      list.filter((i) => !cracked.includes(`${kind}${i}`));
+    next = {
+      ...next,
+      armor: { rows: left('r', state.armor!.rows), cols: left('c', state.armor!.cols) },
+    };
+    broke = !armorUp(next);
+  }
+  const enemyHp = Math.max(1, state.enemyHp - damage);
+  return { state: { ...next, enemyHp }, dealt: state.enemyHp - enemyHp, cracked, broke };
 }
 
 /** The finisher: the solved picture deals whatever HP the enemy has left. */

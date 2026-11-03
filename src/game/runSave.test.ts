@@ -27,3 +27,19 @@ describe('seen scenes', () => {
     expect((await load()).hasSeenScene('intro')).toBe(true);
   });
 });
+
+describe('job stats', () => {
+  it('records each finished run once', async () => {
+    const save = await load();
+    const won = { ...startRun('job', 10), hp: 7, status: 'won' as const };
+    save.recordRunResult(save.recordRunResult(won)); // second call is a no-op
+    save.recordRunResult({ ...startRun('job', 10), hp: 0, status: 'lost' });
+    expect((await load()).getJobStats('job')).toEqual({ plays: 2, wins: 1, bestHp: 7 });
+  });
+
+  it('ignores runs still in progress', async () => {
+    const save = await load();
+    save.recordRunResult(startRun('job', 10));
+    expect(save.getJobStats('job')).toBeUndefined();
+  });
+});
