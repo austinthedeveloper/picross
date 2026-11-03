@@ -7,17 +7,20 @@
   "blurb": "The gallery's paintings look... slightly off.",
   "enemy": {
     "name": "The Forger",
-    "sprite": "\ud83c\udfa8",
+    "sprite": "🎨",
     "hp": 45,
     "attack": 2,
     "fakes": {
       "rows": [3, 7, 13]
     },
+    "suspects": {
+      "rows": [2, 3, 6, 7, 13]
+    },
     "phases": [
       {
         "at": 0.5,
         "name": "Master Forger",
-        "sprite": "\ud83d\uddbc\ufe0f",
+        "sprite": "🖼️",
         "attack": 3,
         "taunt": "Every clue's a masterpiece. Some are even real."
       }

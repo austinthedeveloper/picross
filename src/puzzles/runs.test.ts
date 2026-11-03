@@ -44,6 +44,7 @@ describe('parseEncounter', () => {
     // the test puzzle is 2x1 '#.': row 1's runs are just "1", so its order is already known
     [{ ...encounter, enemy: { ...enemy, scramble: { rows: [0] } } }, /only one order/],
     [{ ...encounter, enemy: { ...enemy, fakes: {} } }, /at least one line/],
+    [{ ...encounter, enemy: { ...enemy, suspects: { rows: [0] } } }, /only make sense with fakes/],
     [{ ...encounter, enemy: { ...enemy, charge: 1 } }, /charge must be at least 3 seconds/],
     [{ ...encounter, kind: 'rest', enemy: undefined }, /rest stops need/],
     [{ ...encounter, kind: 'rest', rest: { seconds: 60, heal: 1 } }, /heal must be more than 1/],

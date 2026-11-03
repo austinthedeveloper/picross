@@ -31,6 +31,11 @@ export interface Enemy {
   /** Lines whose clues are forged (#64) until you call them out. */
   fakes?: LineSet;
   /**
+   * Lines marked 🎭 as maybe forged: every fake plus some honest ones, so you know
+   * which clues not to trust, but not which ones lie.
+   */
+  suspects?: LineSet;
+  /**
    * Seconds for the charge meter to fill (the Electric Eel, #67). Completing a
    * line drains it; if it fills, the enemy zaps you.
    */
@@ -96,6 +101,8 @@ export interface BattleState {
   armor?: LineSet;
   /** Forged clues not yet called out (#64). */
   fakes?: LineSet;
+  /** Lines still marked 🎭: cleared when an honest one is solved or a fake is called out. */
+  suspects?: LineSet;
   /** Board cells covered in ink (#67); completing a line through them washes it off. */
   ink?: number[];
   /** Lines the Mimic wiped (#78), highlighted until you complete them again. */
@@ -116,6 +123,7 @@ export function startBattle(enemy: Enemy): BattleState {
   if (enemy.armor) state.armor = copyLines(enemy.armor.weakPoints);
   if (enemy.scramble) state.scramble = copyLines(enemy.scramble);
   if (enemy.fakes) state.fakes = copyLines(enemy.fakes);
+  if (enemy.suspects) state.suspects = copyLines(enemy.suspects);
   return state;
 }
 
@@ -187,7 +195,7 @@ function addFromPool(
 /** Clears fog, scramble, or a wipe mark from newly completed lines. Returns the lines cleared. */
 function liftLines(
   state: BattleState,
-  key: 'fog' | 'scramble' | 'wiped',
+  key: 'fog' | 'scramble' | 'wiped' | 'suspects',
   lines: Line[],
 ): { state: BattleState; revealed: Line[] } {
   const before = state[key];
@@ -225,6 +233,10 @@ export function markWiped(state: BattleState, kind: Line['kind'], lines: number[
 
 /** Clears the wipe mark from lines you've refilled (#78). Returns the lines cleared. */
 export const clearWiped = (state: BattleState, lines: Line[]) => liftLines(state, 'wiped', lines);
+
+/** Clears the 🎭 from suspects you've solved: they were honest. Returns those lines. */
+export const clearSuspects = (state: BattleState, lines: Line[]) =>
+  liftLines(state, 'suspects', lines);
 
 /** Unscrambles newly completed lines (#49). Returns the lines put back in order. */
 export const clearScramble = (state: BattleState, lines: Line[]) =>
@@ -268,20 +280,30 @@ export const CALL_OUT_DAMAGE = 5;
 export const FALSE_ACCUSATION_HEAL = 3;
 
 /**
- * You accuse a clue of being forged (#64). A forged one is unmasked and deals
- * call-out damage (never below 1 HP, like chip damage). An honest one costs
- * you: the caller lets the enemy hit, or in a Relaxed run it heals.
+ * You accuse a 🎭 suspect clue of being forged (#64). A forged one is unmasked
+ * and deals call-out damage (never below 1 HP, like chip damage). An honest one
+ * costs you: the caller lets the enemy hit, or in a Relaxed run it heals.
  */
 export function callOut(
   state: BattleState,
   line: Line,
 ): { state: BattleState; caught: boolean; dealt: number } {
   if (!state.fakes || !hasLine(state.fakes, line.kind, line.index)) {
+    // An honest suspect: you paid for the answer, so its 🎭 comes off.
+    if (state.suspects && hasLine(state.suspects, line.kind, line.index)) {
+      const suspects = removeLine(state.suspects, line.kind, line.index);
+      return { state: { ...state, suspects }, caught: false, dealt: 0 };
+    }
     return { state, caught: false, dealt: 0 };
   }
   const enemyHp = Math.max(1, state.enemyHp - CALL_OUT_DAMAGE);
   const fakes = removeLine(state.fakes, line.kind, line.index);
-  return { state: { ...state, fakes, enemyHp }, caught: true, dealt: state.enemyHp - enemyHp };
+  const suspects = state.suspects && removeLine(state.suspects, line.kind, line.index);
+  return {
+    state: { ...state, fakes, ...(suspects && { suspects }), enemyHp },
+    caught: true,
+    dealt: state.enemyHp - enemyHp,
+  };
 }
 
 /** An honest clue accused in a Relaxed run: the enemy recovers a little. */

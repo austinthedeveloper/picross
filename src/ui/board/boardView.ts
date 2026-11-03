@@ -43,6 +43,8 @@ export interface BoardView {
    * animate as their real clue comes back.
    */
   setFakes(fakes: ReadonlyMap<string, number[]>, unmasked?: Line[]): void;
+  /** Marks the clues that might be forged with 🎭 (#64). */
+  setSuspects(suspects: LineSet): void;
   /** While set, tapping a clue (or Enter on it) picks its line instead of doing nothing. */
   pickClue(onPick: ((line: Line) => void) | null): void;
   /**
@@ -307,6 +309,10 @@ export function createBoardView(puzzle: Puzzle): BoardView {
       for (const { kind, index } of unmasked) {
         playOnce((kind === 'row' ? rowClues : colClues)[index].group, 'unmasked');
       }
+    },
+    setSuspects(suspects) {
+      rowClues.forEach((g, r) => g.group.classList.toggle('suspect', hasLine(suspects, 'row', r)));
+      colClues.forEach((g, c) => g.group.classList.toggle('suspect', hasLine(suspects, 'col', c)));
     },
     setWiped(wiped) {
       rowClues.forEach((g, r) => g.group.classList.toggle('wiped', hasLine(wiped, 'row', r)));

@@ -344,8 +344,15 @@
   }
 }
 
-/* Calling out a forged clue (#64): clues become the thing you tap. */
-.board.picking-clue .clue {
+/* Suspects (#64): clues that might be forged. */
+.row-clue.suspect::before,
+.col-clue.suspect::before {
+  content: '🎭';
+  font-size: 0.8em;
+}
+
+/* Calling out a forged clue (#64): the 🎭 clues become the thing you tap. */
+.board.picking-clue .clue.suspect {
   cursor: pointer;
   outline: 2px dashed color-mix(in srgb, var(--accent) 70%, transparent);
   outline-offset: -2px;

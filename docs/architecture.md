@@ -449,29 +449,25 @@ with teeth that swaps at 85%, 70%, and 55% HP and turns Hungry (attack 3) on the
 
 ### Forged clues (the Forger)
 
-An enemy can have `fakes: { rows, cols }`: those lines show a forged clue instead of the
-real one, and the battle bar shows how many are left (🎭). `fakeClue` (`engine/fakes.ts`)
-makes each forgery: it still fits the line, so it can't be ruled out at a glance. It
-tries, in order, merging two neighboring runs, splitting a long run, lengthening a run,
-then shortening one. A faked line only counts as complete when its _fake_ is satisfied,
-and the fight ignores that, so a line you've filled correctly that won't light up is the
-tell.
+An enemy can have `fakes: { rows, cols }` and `suspects: { rows, cols }`.
 
-**🔍 Call out** (`run/fight/callOut.ts`) sits in the gadget tray. Tap it, then a clue
-(`BoardView.pickClue`; clues take Enter too). A forgery is unmasked: the real clue comes
-back (`BoardView.setFakes`), and `callOut` deals `CALL_OUT_DAMAGE` (5, never below 1 HP).
-If you'd already filled the line, it completes right then and chips too. Accusing an honest
-clue lets the enemy hit you in Hits-on runs; in Relaxed runs it heals
-`FALSE_ACCUSATION_HEAL` (3) instead, so guessing is never free. A forged line can't also
-be fogged or scrambled.
+- **Fakes** show a forged clue instead of the real one. `fakeClue` (`engine/fakes.ts`) makes each forgery so it still fits the line, so it can't be ruled out at a glance. It tries, in order: merging two neighboring runs, splitting a long run, lengthening a run, then shortening one.
+- **Suspects** are marked 🎭. They hold every fake plus at least one honest line, so you know which clues not to trust, but not which ones lie. The battle bar counts the fakes left (🎭 3). The first version had no suspects, and playtesting showed the only way to find a fake was to trust it and get hit.
 
-Solvability: the test suite solves each enemy's puzzle with its forged lines treated as
-fog (`allUnreadable`). If that's unique, then no grid satisfies the forgery and all the
-other clues, so every forgery contradicts the real picture and can be caught by logic.
+**How you find them.** Solve the suspects from the lines crossing them:
 
-The Forger (`encounters/forger.json`) is the third Night Shift node: a 15×15 palette
-with rows 4, 8, and 14 forged. It turns Master Forger (attack 3) at half HP, and its scene
-(`forger-intro`) teaches the call-out.
+- **An honest suspect** shows its real clue, so it completes normally. `clearSuspects` takes its 🎭 off, with the message "Row 3 checks out: honest."
+- **A fake** only counts as complete when its _fake_ is satisfied, and the fight ignores that, so it stays dark.
+
+**Calling out.** **🔍 Call out** (`run/fight/callOut.ts`) sits in the gadget tray. Tap it, then a 🎭 clue (`BoardView.pickClue`; clues take Enter too). Tapping a clue that isn't a suspect just says so.
+
+- **A forgery is unmasked:** the real clue comes back, and `callOut` deals `CALL_OUT_DAMAGE` (5, never below 1 HP). If you'd already filled the line, it completes then and chips too.
+- **Accusing an honest suspect** settles it (its 🎭 comes off), but it lets the enemy hit you in Hits-on runs, or heals it `FALSE_ACCUSATION_HEAL` (3) in Relaxed runs.
+- A suspect can't also be fogged or scrambled.
+
+**Solvability.** The test suite solves each enemy's puzzle with every suspect treated as fog (`allUnreadable`). If that's unique, every suspect can be settled from its crossing lines, and every forgery contradicts the real picture.
+
+**The Forger** (`encounters/forger.json`) is the third Night Shift node: a 15×15 palette. Rows 4, 8 and 14 are forged, and rows 3 and 7 are honest suspects (only two decoy pairs keep the palette solvable). It turns Master Forger (attack 3) at half HP. Its scene (`forger-intro`) and its power tip teach the rule.
 
 ### The Curator (Night Shift boss)
 

@@ -146,7 +146,7 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
     setFakes(count) {
       fakes.hidden = count <= 0;
       fakes.textContent = `🎭 ${count}`;
-      fakes.title = `${count} forged clue${count === 1 ? '' : 's'} left to call out`;
+      fakes.title = `${count} of the 🎭 clues ${count === 1 ? 'is' : 'are'} forged`;
       fakes.ariaLabel = fakes.title;
     },
     setTip(content) {

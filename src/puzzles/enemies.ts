@@ -134,6 +134,24 @@ export function parseEnemy(data: unknown, puzzle: Puzzle, fail: (msg: string) =>
       fail((e as Error).message);
     }
     parsed.fakes = fakes;
+    // You're told which lines might be forged, never which ones are: the suspects
+    // hold every fake and at least one honest line.
+    const suspects = parseFog(enemy.suspects);
+    for (const key of lineKeys(fakes)) {
+      if (!lineKeys(suspects).includes(key))
+        fail(`suspects must include every fake (missing ${key})`);
+    }
+    if (lineKeys(suspects).length <= lineKeys(fakes).length) {
+      fail('suspects need at least one honest line besides the fakes');
+    }
+    for (const key of lineKeys(suspects)) {
+      const [kind, index] = [key[0] === 'r' ? 'row' : 'col', Number(key.slice(1))] as const;
+      if (hasLine(covered, kind, index))
+        fail(`${kind} ${index + 1} can't be both a suspect and fogged or scrambled`);
+    }
+    parsed.suspects = suspects;
+  } else if (enemy.suspects !== undefined) {
+    fail('suspects only make sense with fakes');
   }
   return parsed;
 }
@@ -144,12 +162,13 @@ export function allFog(enemy: Enemy): LineSet {
 }
 
 /**
- * Every line whose clue you can't trust from the start: all its fog, plus its
- * forged clues (#64). The puzzle must be solvable without any of them, which
- * also proves each forgery contradicts the real picture.
+ * Every line whose clue you can't trust from the start: all its fog, plus every
+ * 🎭 suspect (#64), since you don't know which of those lie. The puzzle must be
+ * solvable without any of them, so each suspect can be settled by logic, and
+ * each forgery contradicts the real picture.
  */
 export function allUnreadable(enemy: Enemy): LineSet {
-  return unionLines([allFog(enemy), enemy.fakes]);
+  return unionLines([allFog(enemy), enemy.suspects]);
 }
 
 /** Every line an enemy can ever scramble: its starting scramble plus every phase's. */
