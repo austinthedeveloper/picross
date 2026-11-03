@@ -1,0 +1,17 @@
+{
+  "id": "fog-bat",
+  "name": "Fog bat",
+  "kind": "fight",
+  "puzzle": "bat",
+  "blurb": "A bat that breathes fog over your clues. Gross, and also a problem.",
+  "enemy": {
+    "name": "Fog bat",
+    "sprite": "🦇",
+    "hp": 30,
+    "attack": 2,
+    "fog": {
+      "rows": [2, 5, 7],
+      "cols": [3, 6]
+    }
+  }
+}

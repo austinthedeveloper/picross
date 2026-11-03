@@ -1,0 +1,29 @@
+{
+  "id": "first-job-outro",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "🧑‍💼"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "👩‍🔬"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "who": "dee",
+          "text": "Generator's humming, goblin's sulking, and Rook invoiced a bat. Nice work, boss.",
+          "if": "won"
+        },
+        {
+          "who": "rook",
+          "text": "Okay, we didn't get paid. But we're alive, which is basically a tip.",
+          "if": "!won"
+        }
+      ]
+    }
+  }
+}

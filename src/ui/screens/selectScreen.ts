@@ -7,6 +7,7 @@ import { createMuteButton } from '../components/muteButton';
 import { el } from '../dom';
 import { formatTime } from '../format';
 import { applyTheme } from '../theme';
+import { runBanner } from './runScreen';
 
 const MODE_HINTS: Record<Mode, string> = {
   relaxed: 'No checking. Solve at your own pace.',
@@ -68,6 +69,7 @@ export function renderSelectScreen(app: HTMLElement): void {
           }),
         ]),
       ]),
+      runBanner(),
       el('div', { className: 'mode-row' }, [
         el('div', { className: 'segmented', role: 'group', ariaLabel: 'Mode' }, [
           modeButton('relaxed', 'Relaxed', 'No checking'),

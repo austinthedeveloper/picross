@@ -1,0 +1,129 @@
+/* Scenes (#22): portrait stage, typed text box, and choices. Phone-first. */
+
+.scene-screen {
+  max-width: 560px;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.dialogue {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: calc(100dvh - 32px);
+  justify-content: flex-end;
+}
+
+.dialogue .skip {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.stage,
+.text-box {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.stage {
+  flex: 1;
+  display: grid;
+  place-items: end center;
+  cursor: pointer;
+}
+
+.portrait {
+  display: grid;
+  place-items: center;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 3px solid var(--ink);
+  font-size: 5rem;
+  line-height: 1;
+  animation: portrait-in 0.25s ease-out;
+}
+
+.narration .portrait {
+  visibility: hidden;
+}
+
+@keyframes portrait-in {
+  from {
+    transform: translateY(8px) scale(0.95);
+    opacity: 0;
+  }
+}
+
+.text-box {
+  position: relative;
+  min-height: 120px;
+  padding: 14px 16px 20px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  cursor: pointer;
+  user-select: none;
+}
+
+.narration .text-box {
+  border-style: dashed;
+  font-style: italic;
+}
+
+.speaker {
+  margin: 0 0 4px;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.speaker:empty {
+  display: none;
+}
+
+.line-text {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.45;
+}
+
+.more {
+  position: absolute;
+  right: 14px;
+  bottom: 6px;
+  font-size: 0.7rem;
+  color: var(--muted);
+  opacity: 0;
+}
+
+.text-box.ready .more {
+  opacity: 1;
+  animation: bob 0.9s ease-in-out infinite;
+}
+
+@keyframes bob {
+  50% {
+    transform: translateY(3px);
+  }
+}
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.choices:empty {
+  display: none;
+}
+
+.choice {
+  justify-content: flex-start;
+  padding: 12px 14px;
+  font-size: 1rem;
+  border: 2px solid var(--ink);
+}

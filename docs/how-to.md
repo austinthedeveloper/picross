@@ -20,6 +20,69 @@ string per row, `#` filled and `.` empty). `parsePuzzle` validates it at startup
 starter-pack test expects 5×5 to 15×15 and at most 15 puzzles, so update
 `src/puzzles/format.test.ts` if the pack grows past that.
 
+## Add an encounter or a run
+
+1. Add the encounter's puzzle. Run-only puzzles go in `src/puzzles/run/`, so they stay off
+   the puzzle list but still get the uniqueness check. You can also reuse a pack puzzle.
+2. Add `src/puzzles/encounters/<id>.json`:
+   ```json
+   { "id": "goblin", "name": "Goblin", "kind": "fight", "puzzle": "sword", "blurb": "..." }
+   ```
+   `kind` is `fight` or `dig`, and `blurb` is optional. Fights also need an enemy:
+   ```json
+   "enemy": { "name": "Goblin", "sprite": "👺", "hp": 30, "attack": 2 }
+   ```
+   Keep `hp` at least 1.5 × (width + height) so the finisher stays the big hit. A test
+   enforces this. `attack` is the run HP lost per wrong fill in Hits-on runs.
+   To fog clues, add `"fog": { "rows": [2, 5], "cols": [3] }` to the enemy (0-based line
+   indexes). The test suite checks that the puzzle is still solvable without guessing as
+   the fog lifts. If it fails, try fogging lines that cross filled cells of easy lines.
+3. Reference the encounter id from a run in `src/puzzles/runs/<id>.json`:
+   ```json
+   { "id": "first-job", "name": "First Job", "hp": 10, "encounters": ["goblin", "..."] }
+   ```
+4. Run `npm test`. Loading fails with a clear error if a run names an unknown encounter
+   or an encounter names an unknown puzzle.
+
+"Start a run" always begins `DEFAULT_RUN_ID` in `src/puzzles/runs.ts`.
+
+## Add a gadget
+
+1. Add an entry to the catalog in `src/puzzles/gadgets.ts` with an id, name, icon (an
+   emoji until there's art), one-line description, and effect.
+2. If the effect is a new kind, add it to the `GadgetEffect` union, handle it in
+   `useGadget` in `src/game/battle.ts` (with a test in `battle.test.ts`), and give it
+   feedback in `use()` in `src/ui/screens/fightHooks.ts`.
+3. Hand it out: set `"gadget": "<id>"` on the puzzle JSON whose picture becomes it, or
+   list it in a run's `"gadgets"` to start with it. Unknown ids fail at load.
+
+## Write a scene
+
+1. Add `src/puzzles/scenes/<id>.json`:
+   ```json
+   {
+     "id": "intro",
+     "cast": { "pip": { "name": "Pip", "portrait": "🧑‍🔧" } },
+     "nodes": {
+       "start": {
+         "lines": [
+           { "text": "Narration has no speaker." },
+           { "who": "pip", "text": "Only shown after a win.", "if": "won" }
+         ],
+         "choices": [{ "text": "Let's go", "next": "after", "set": { "eager": true } }]
+       },
+       "after": { "lines": [{ "who": "pip", "text": "That's the spirit." }] }
+     }
+   }
+   ```
+2. Preview it at http://localhost:5173/#/scene/<id>. `first-job-intro.json` shows a branch,
+   and `first-job-outro.json` shows win/loss conditions.
+3. To play it with a run, set `"intro": "<id>"` (before the first run) or `"outro": "<id>"`
+   (one-line sign-off; use `"if": "won"` / `"!won"`) in the run's JSON.
+4. Run `npm test`. Bad references fail at load.
+
+Keep lines short (phone screens), and each scene under a minute to read.
+
 ## Add a screen
 
 1. Create `src/ui/screens/<name>Screen.ts` exporting

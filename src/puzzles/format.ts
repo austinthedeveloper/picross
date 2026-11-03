@@ -1,5 +1,6 @@
 import type { Solution } from '../engine/board';
 import { deriveClues, type Clues } from '../engine/clues';
+import { getGadget } from './gadgets';
 
 /**
  * Puzzle file format. `solution` has one string per row, `#` for a filled
@@ -11,6 +12,8 @@ export interface PuzzleFile {
   width: number;
   height: number;
   solution: string[];
+  /** Gadget this picture becomes when solved in a run (#28). */
+  gadget?: string;
 }
 
 export interface Puzzle {
@@ -20,6 +23,8 @@ export interface Puzzle {
   height: number;
   solution: Solution;
   clues: Clues;
+  /** Gadget id this picture becomes when solved in a run. */
+  gadget?: string;
 }
 
 export function parsePuzzle(data: unknown): Puzzle {
@@ -49,6 +54,9 @@ export function parsePuzzle(data: unknown): Puzzle {
     }
   });
   if (!cells.includes(true)) fail('solution is empty');
+  if (file.gadget !== undefined && !getGadget(file.gadget)) {
+    fail(`unknown gadget "${file.gadget}"`);
+  }
 
   const grid: Solution = { width: width!, height: height!, cells };
   return {
@@ -58,6 +66,7 @@ export function parsePuzzle(data: unknown): Puzzle {
     height: height!,
     solution: grid,
     clues: deriveClues(grid),
+    ...(file.gadget ? { gadget: file.gadget } : {}),
   };
 }
 

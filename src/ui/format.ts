@@ -6,3 +6,6 @@ export function formatTime(ms: number): string {
   const s = String(total % 60).padStart(2, '0');
   return h ? `${h}:${String(m).padStart(2, '0')}:${s}` : `${m}:${s}`;
 }
+
+/** "1 hint", "3 hints". */
+export const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;

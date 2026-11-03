@@ -1,8 +1,11 @@
 import { parsePuzzle, type Puzzle } from './format';
 
-const files = import.meta.glob<{ default: unknown }>('./pack/*.json', { eager: true });
+type JsonModules = Record<string, { default: unknown }>;
+const packFiles: JsonModules = import.meta.glob('./pack/*.json', { eager: true });
+/** Puzzles used only by run encounters; they don't appear on the puzzle list. */
+const runFiles: JsonModules = import.meta.glob('./run/*.json', { eager: true });
 
-/** Starter pack in play order. */
+/** Free-play pack in play order. */
 const ORDER = [
   'heart',
   'arrow',
@@ -19,15 +22,24 @@ const ORDER = [
 ];
 
 const byId = new Map<string, Puzzle>();
-for (const mod of Object.values(files)) {
-  const puzzle = parsePuzzle(mod.default);
-  byId.set(puzzle.id, puzzle);
-}
+const load = (files: JsonModules) =>
+  Object.values(files).map((mod) => {
+    const puzzle = parsePuzzle(mod.default);
+    if (byId.has(puzzle.id)) throw new Error(`Duplicate puzzle id "${puzzle.id}"`);
+    byId.set(puzzle.id, puzzle);
+    return puzzle;
+  });
+const pack = load(packFiles);
+load(runFiles);
 
+/** The free-play puzzle list, in play order. */
 export const puzzles: Puzzle[] = [
-  ...ORDER.flatMap((id) => byId.get(id) ?? []),
-  ...[...byId.values()].filter((p) => !ORDER.includes(p.id)),
+  ...ORDER.flatMap((id) => pack.find((p) => p.id === id) ?? []),
+  ...pack.filter((p) => !ORDER.includes(p.id)),
 ];
+
+/** Every puzzle, including run-only ones. */
+export const allPuzzles: Puzzle[] = [...byId.values()];
 
 export function getPuzzle(id: string): Puzzle | undefined {
   return byId.get(id);

@@ -1,0 +1,75 @@
+import type { BattleState } from './battle';
+import type { SavedBoard } from './progress';
+import type { Mode } from './settings';
+
+/**
+ * Where a player is in a run. Pure data, so it can be saved as-is. Change it
+ * only through the functions below, which return a new state.
+ */
+export interface RunState {
+  runId: string;
+  /** Index of the next encounter to play (equals the run length once won). */
+  node: number;
+  hp: number;
+  maxHp: number;
+  /** Gadget ids held for the rest of the run (#28). */
+  gadgets: string[];
+  status: 'active' | 'won' | 'lost';
+  /** Chosen at the start: in relaxed runs enemies never hit (older saves lack it). */
+  mode?: Mode;
+  /** The current encounter's board, so a reload mid-puzzle resumes it. */
+  board?: SavedBoard;
+  /** The current fight's progress, if the current encounter is a fight. */
+  battle?: BattleState;
+}
+
+export function startRun(
+  runId: string,
+  hp: number,
+  mode: Mode = 'relaxed',
+  gadgets: string[] = [],
+): RunState {
+  return { runId, node: 0, hp, maxHp: hp, gadgets: [...gadgets], status: 'active', mode };
+}
+
+export function addGadget(state: RunState, id: string): RunState {
+  return { ...state, gadgets: [...state.gadgets, id] };
+}
+
+/** Removes one of a held gadget (after it's used). */
+export function removeGadget(state: RunState, id: string): RunState {
+  const i = state.gadgets.indexOf(id);
+  if (i < 0) return state;
+  return { ...state, gadgets: [...state.gadgets.slice(0, i), ...state.gadgets.slice(i + 1)] };
+}
+
+/** Saves (or clears) the current fight's progress. */
+export function withBattle(state: RunState, battle: BattleState | null): RunState {
+  const next = { ...state };
+  if (battle) next.battle = battle;
+  else delete next.battle;
+  return next;
+}
+
+/** Saves (or clears) the in-progress board for the current encounter. */
+export function withBoard(state: RunState, board: SavedBoard | null): RunState {
+  const next = { ...state };
+  if (board) next.board = board;
+  else delete next.board;
+  return next;
+}
+
+/** Applies damage; the run is lost at 0 HP. */
+export function damage(state: RunState, amount: number): RunState {
+  if (state.status !== 'active' || amount <= 0) return state;
+  const hp = Math.max(0, state.hp - amount);
+  return { ...state, hp, status: hp === 0 ? 'lost' : 'active' };
+}
+
+/** Clears the current encounter and moves on; the run is won after the last one. */
+export function completeEncounter(state: RunState, length: number): RunState {
+  if (state.status !== 'active') return state;
+  const node = state.node + 1;
+  const cleared = withBattle(withBoard(state, null), null);
+  return { ...cleared, node, status: node >= length ? 'won' : 'active' };
+}
