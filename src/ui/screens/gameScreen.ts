@@ -37,6 +37,8 @@ export interface PlaySession {
 
   /** Extra UI shown between the toolbar and the board. */
   header?: HTMLElement;
+  /** Restyles the screen: adds a `theme-<name>` class (e.g. the dig's dirt board). */
+  theme?: string;
   /** Lines that just became complete. May return a message to announce instead. */
   onLinesComplete?(lines: Line[]): string | void;
   /** A wrong fill was caught (hearts and battle modes). May return a message to announce. */
@@ -143,6 +145,7 @@ export function renderGameScreen(
     endedPanel,
     live,
   ]);
+  if (session.theme) screen.classList.add(`theme-${session.theme}`);
   app.replaceChildren(screen);
 
   /** Lets the session record the solve, then shows the picture and its next steps. */

@@ -460,3 +460,96 @@
   border: 1px solid var(--line);
   font-size: 0.9rem;
 }
+
+/* Dig encounters (#29): a dirt board that's brushed away on solve. */
+
+.dig {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  font-size: 0.85rem;
+}
+
+.dig-icon {
+  font-size: 1.6rem;
+}
+
+.dig-status {
+  flex: 1;
+  color: var(--muted);
+}
+
+.dig-find {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px dashed var(--dirt-line);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.dig-find.found {
+  border-style: solid;
+  border-color: var(--accent);
+  animation: found 0.6s cubic-bezier(0.2, 1.6, 0.4, 1);
+}
+
+@keyframes found {
+  from {
+    transform: scale(0.2) rotate(-30deg);
+  }
+}
+
+.theme-dig .cell:not(.filled) {
+  background:
+    radial-gradient(circle at 30% 35%, var(--dirt-speck) 0 1.5px, transparent 2px),
+    radial-gradient(circle at 72% 68%, var(--dirt-speck) 0 1px, transparent 1.5px), var(--dirt);
+  border-color: var(--dirt-line);
+  --mark: var(--dug);
+}
+
+.theme-dig .cell.filled {
+  background: var(--metal);
+}
+
+@media (hover: hover) {
+  .theme-dig .cell:not(.filled):hover {
+    background: var(--dirt-speck);
+  }
+}
+
+/* The reveal: dirt brushes away cell by cell, and the part gleams. */
+/* Only once excavated: during play, fills must show instantly. */
+.theme-dig .board.excavated .cell {
+  transition: background 0.5s ease var(--d);
+}
+
+.theme-dig .board.excavated .cell:not(.filled) {
+  background: var(--dug);
+}
+
+.theme-dig .board.excavated .cell.filled::after {
+  --flash: linear-gradient(115deg, transparent 30%, rgb(255 255 255 / 0.8) 50%, transparent 70%);
+  background: var(--flash);
+  background-size: 300% 100%;
+  animation: gleam 0.9s ease-out var(--d);
+}
+
+@keyframes gleam {
+  from {
+    opacity: 1;
+    background-position: 100% 0;
+  }
+  to {
+    opacity: 0;
+    background-position: 0 0;
+  }
+}
