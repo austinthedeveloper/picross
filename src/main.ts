@@ -4,9 +4,11 @@ import './styles/board.css';
 import './styles/game.css';
 import './styles/select.css';
 import './styles/editor.css';
+import './styles/run.css';
 import { getPuzzle } from './puzzles/index';
 import { renderEditorScreen } from './ui/screens/editorScreen';
 import { renderGameScreen } from './ui/screens/gameScreen';
+import { renderRunEncounter, renderRunScreen } from './ui/screens/runScreen';
 import { renderSelectScreen } from './ui/screens/selectScreen';
 import { applyTheme } from './ui/theme';
 
@@ -22,6 +24,10 @@ function route() {
   const puzzle = match && getPuzzle(match[1]);
   if (puzzle) {
     cleanup = renderGameScreen(app, puzzle);
+  } else if (location.hash === '#/run') {
+    renderRunScreen(app);
+  } else if (location.hash === '#/run/play') {
+    cleanup = renderRunEncounter(app);
   } else if (location.hash === '#/editor') {
     renderEditorScreen(app);
   } else {

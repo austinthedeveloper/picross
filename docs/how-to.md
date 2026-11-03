@@ -20,6 +20,23 @@ string per row, `#` filled and `.` empty). `parsePuzzle` validates it at startup
 starter-pack test expects 5×5 to 15×15 and at most 15 puzzles, so update
 `src/puzzles/format.test.ts` if the pack grows past that.
 
+## Add an encounter or a run
+
+1. Make sure the encounter's puzzle exists in `src/puzzles/pack/` (see above).
+2. Add `src/puzzles/encounters/<id>.json`:
+   ```json
+   { "id": "goblin", "name": "Goblin", "kind": "fight", "puzzle": "sword", "blurb": "..." }
+   ```
+   `kind` is `fight` or `dig`, and `blurb` is optional.
+3. Reference the encounter id from a run in `src/puzzles/runs/<id>.json`:
+   ```json
+   { "id": "first-job", "name": "First Job", "hp": 10, "encounters": ["goblin", "..."] }
+   ```
+4. Run `npm test`. Loading fails with a clear error if a run names an unknown encounter
+   or an encounter names an unknown puzzle.
+
+"Start a run" always begins `DEFAULT_RUN_ID` in `src/puzzles/runs.ts`.
+
 ## Add a screen
 
 1. Create `src/ui/screens/<name>Screen.ts` exporting

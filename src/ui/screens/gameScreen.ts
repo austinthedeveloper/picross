@@ -1,41 +1,55 @@
 import { Cell } from '../../engine/board';
 import { revertMove, type Change } from '../../engine/history';
 import { Game, MAX_HEARTS, type HintTarget } from '../../game/game';
-import {
-  clearSavedBoard,
-  getPuzzleStats,
-  getSavedBoard,
-  recordSolve,
-  saveBoard,
-} from '../../game/progress';
-import { getSettings } from '../../game/settings';
+import type { SavedBoard } from '../../game/progress';
+import type { Mode } from '../../game/settings';
 import type { Puzzle } from '../../puzzles/format';
-import { puzzles } from '../../puzzles/index';
 import { createBoardView, type Line } from '../board/boardView';
 import { attachInput, type Tool } from '../board/input';
 import { attachKeyboard } from '../board/keyboard';
 import { attachZoom } from '../board/zoom';
 import { createFailedPanel, solvedPanelContent } from '../components/endPanels';
+import { freePlaySession } from './freePlaySession';
 import { createHintMenu } from '../components/hintMenu';
 import { createMuteButton } from '../components/muteButton';
 import { createZoomBar } from '../components/zoomBar';
 import { el } from '../dom';
-import { formatTime } from '../format';
+import { formatTime, plural } from '../format';
 import { playSound } from '../sound';
 
-const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
+/**
+ * Where a puzzle is being played from. Free play saves to the puzzle list's
+ * progress; a run encounter saves into the run. The screen itself only knows
+ * this interface.
+ */
+export interface PlaySession {
+  /** Where the back button goes. */
+  back: { href: string; label: string };
+  /** Heading before the puzzle is solved (after, it shows the puzzle's name). */
+  title: string;
+  mode: Mode;
+  saved?: SavedBoard;
+  /** Saves the in-progress board, or clears it with null. */
+  save(board: SavedBoard | null): void;
+  /** Called once when solved. Returns the solved panel's note and buttons. */
+  complete(game: Game): { note: string; actions: HTMLElement[] };
+}
 
 /**
  * Renders the play screen for one puzzle. All board changes (mouse, touch,
  * keyboard, hints) go through `Game`; `refresh` then redraws, saves, and
  * reacts to solving or failing. Returns a cleanup function for the router.
  */
-export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
-  const game = new Game(puzzle, getSavedBoard(puzzle.id), getSettings().mode);
+export function renderGameScreen(
+  app: HTMLElement,
+  puzzle: Puzzle,
+  session: PlaySession = freePlaySession(puzzle),
+): () => void {
+  const game = new Game(puzzle, session.saved, session.mode);
   const view = createBoardView(puzzle);
 
   // Top bar
-  const title = el('h1', { textContent: `${puzzle.width}×${puzzle.height}` });
+  const title = el('h1', { textContent: session.title });
   const hearts = el('span', { className: 'hearts', hidden: game.mode !== 'hearts' });
   const timer = el('span', { className: 'timer', role: 'timer', ariaLabel: 'Time' });
 
@@ -83,7 +97,11 @@ export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
 
   const screen = el('main', { className: 'screen game' }, [
     el('header', { className: 'topbar' }, [
-      el('a', { className: 'button ghost', href: '#/', textContent: '← Puzzles' }),
+      el('a', {
+        className: 'button ghost',
+        href: session.back.href,
+        textContent: session.back.label,
+      }),
       title,
       hearts,
       timer,
@@ -103,22 +121,11 @@ export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
   ]);
   app.replaceChildren(screen);
 
-  /** Records the solve and shows the picture, time, and a link to the next puzzle. */
+  /** Lets the session record the solve, then shows the picture and its next steps. */
   const showSolved = () => {
-    const prevBest = getPuzzleStats(puzzle.id)?.bestTime;
-    const newBest = recordSolve(puzzle.id, game.elapsed);
-    const time = formatTime(game.elapsed);
-    let note =
-      prevBest === undefined
-        ? `Time ${time}`
-        : newBest
-          ? `New best: ${time} (was ${formatTime(prevBest)})`
-          : `Time ${time} · Best ${formatTime(prevBest)}`;
-    if (game.hintsUsed) note += ` · ${plural(game.hintsUsed, 'hint')}`;
-
+    const { note, actions } = session.complete(game);
     title.textContent = puzzle.name;
-    const next = puzzles[puzzles.indexOf(puzzle) + 1];
-    solvedPanel.replaceChildren(...solvedPanelContent(puzzle, note, next));
+    solvedPanel.replaceChildren(...solvedPanelContent(puzzle, note, actions));
     solvedPanel.hidden = false;
     view.highlight(null, null);
     announce(`Solved! ${puzzle.name}. ${note}.`);
@@ -157,10 +164,9 @@ export function renderGameScreen(app: HTMLElement, puzzle: Puzzle): () => void {
   };
 
   const persist = () => {
-    if (game.solved) return; // recordSolve already cleared the save
+    if (game.solved) return; // session.complete clears the save
     // A failed board can't continue, so reopening it starts fresh.
-    if (game.started && !game.failed) saveBoard(puzzle.id, game.serialize());
-    else clearSavedBoard(puzzle.id);
+    session.save(game.started && !game.failed ? game.serialize() : null);
   };
 
   // The clock runs while the page is visible and the puzzle is in play.

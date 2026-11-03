@@ -31,10 +31,15 @@ src/
     index.ts               Loads pack/*.json and sets play order (ORDER)
     pack/*.json            The built-in puzzles
     pack.test.ts           Runs the solver over every pack puzzle
+    runs.ts                Loads encounters/*.json and runs/*.json (roguelite runs)
+    encounters/*.json      Encounters: name, kind (fight/dig), which puzzle, blurb
+    runs/*.json            Runs: starting HP and an ordered list of encounter ids
   game/
     game.ts                Game: board + history + mode/hearts + hints + clock
     progress.ts            Saved boards, solve stats, totals (localStorage)
     settings.ts            Mode, mute, high contrast (localStorage)
+    run.ts                 RunState and its pure transitions (start, damage, clear encounter)
+    runSave.ts             Saves the current run (localStorage)
     storage.ts             Safe localStorage JSON read/write
   ui/
     dom.ts                 el(): create an element with props and children
@@ -44,6 +49,8 @@ src/
     screens/
       selectScreen.ts      Puzzle list, mode, settings, stats       (#/)
       gameScreen.ts        Play screen; wires everything together  (#/play/<id>)
+      freePlaySession.ts   Free-play PlaySession: saves, best times, "Next"
+      runScreen.ts         Run hub, path map, results; run encounters (#/run, #/run/play)
       editorScreen.ts      Puzzle authoring tool                   (#/editor)
     board/
       boardView.ts         Renders clues + cells (ARIA grid), clue dimming, flashes
@@ -63,6 +70,7 @@ src/
     game.css               Play screen: toolbar, hint menu, zoom bar, solved/failed states
     select.css             Puzzle list
     editor.css             Editor
+    run.css                Run banner, path map, results
 .github/workflows/ci.yml   Lint, test, build; deploy main to GitHub Pages
 .claude/launch.json        Dev server config for Claude Code's preview
 ```
@@ -112,6 +120,7 @@ All saved data lives in `localStorage`, read once at startup and written on chan
 | Key                | Module                       | Contents                                                 |
 | ------------------ | ---------------------------- | -------------------------------------------------------- |
 | `picross:v1`       | `game/progress.ts`           | In-progress boards, per-puzzle stats, total solving time |
+| `picross:run`      | `game/runSave.ts`            | The current run, including the current encounter's board |
 | `picross:settings` | `game/settings.ts`           | `mode`, `muted`, `highContrast`                          |
 | `picross:editor`   | `ui/screens/editorScreen.ts` | The editor's current drawing                             |
 
@@ -132,6 +141,8 @@ saved board, and failing in Hearts mode discards it.
 | `#/`          | `renderSelectScreen` (also the fallback for unknown hashes) |
 | `#/play/<id>` | `renderGameScreen` for a pack puzzle                        |
 | `#/editor`    | `renderEditorScreen`                                        |
+| `#/run`       | `renderRunScreen`: start panel, path map, or results        |
+| `#/run/play`  | `renderRunEncounter`: the current encounter's puzzle        |
 
 Each screen replaces `#app`'s children. A screen that adds global listeners or timers
 returns a cleanup function, which the router calls before rendering the next screen. The
@@ -157,6 +168,33 @@ dark mode (`prefers-color-scheme`) and for high contrast (`:root[data-contrast='
 set by `ui/theme.ts`). Use tokens rather than hard-coded colors so all three themes keep
 working. Shared button styles live in `base.css`: `.button`, `.ghost`, `.primary`, a
 `.toggle` that shows `aria-pressed`, and `.segmented` button groups.
+
+## Play sessions: free play vs. runs
+
+`renderGameScreen(app, puzzle, session)` doesn't know where a puzzle came from. A
+`PlaySession` (defined in `gameScreen.ts`) supplies:
+
+- the back link and the title shown before the puzzle is solved
+- the mistake mode
+- the saved board, and `save(board | null)` to save or clear it
+- `complete(game)`, which records the solve and returns the solved panel's note and
+  buttons
+
+`freePlaySession(puzzle)` is the default. It saves to `progress.ts` and records best
+times. A run encounter (`runScreen.ts`) saves the board into the run state and clears the
+encounter instead, so run solves never touch free-play stats. Future encounter types
+(fights in #27, digs in #29) add their behavior through the session and run state
+rather than through special cases in the game screen.
+
+## Runs
+
+A run (`puzzles/runs/*.json`) is a starting HP plus an ordered list of encounter ids. An
+encounter (`puzzles/encounters/*.json`) names a pack puzzle, a kind (`fight` or `dig`),
+and a line of flavor text. `RunState` (`game/run.ts`) tracks the current node, HP, max
+HP, gadgets, status (`active`, `won`, or `lost`), and the current encounter's board. It
+changes only through pure functions: `startRun`, `withBoard`, `damage`, and
+`completeEncounter`. Every change is saved immediately, so closing the tab at any point
+resumes on the map, or mid-puzzle with the board restored.
 
 ## The solver
 
