@@ -13,7 +13,8 @@ import { createHintMenu } from '../components/hintMenu';
 import { createMuteButton } from '../components/muteButton';
 import { createZoomBar } from '../components/zoomBar';
 import { el } from '../dom';
-import { formatTime, plural } from '../format';
+import { formatTime, lineName, plural } from '../format';
+import { pause } from '../motion';
 import { playSound } from '../sound';
 
 /**
@@ -21,8 +22,6 @@ import { playSound } from '../sound';
  * progress; a run encounter saves into the run. The screen itself only knows
  * this interface.
  */
-const wait = (ms: number) => new Promise((resolve) => window.setTimeout(resolve, ms));
-
 export interface PlaySession {
   /** Where the back button goes. */
   back: { href: string; label: string };
@@ -170,7 +169,7 @@ export function renderGameScreen(
     view.highlight(null, null);
     if (session.celebrate) await session.celebrate(view.root);
     // Let the solve wave play on the board, then show only the result.
-    else if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) await wait(900);
+    else await pause(900);
     solvedPanel.replaceChildren(...solvedPanelContent(puzzle, note, actions));
     solvedPanel.hidden = false;
     showEnd(true);
@@ -186,13 +185,11 @@ export function renderGameScreen(
     if (end && changed) window.scrollTo({ top: 0 });
   };
 
-  const lineName = (line: Line) => `${line.kind === 'row' ? 'Row' : 'Column'} ${line.index + 1}`;
-
   /** Redraws the board and celebrates lines that were just completed. */
   const redraw = () => {
     const completed = view.update(game.board);
     if (completed.length && !game.solved) {
-      const names = `${completed.map(lineName).join(', ')} complete`;
+      const names = `${completed.map((l) => lineName(l, true)).join(', ')} complete`;
       const extra = session.onLinesComplete?.(completed);
       announce(extra ? `${names}. ${extra}` : names);
       completed.forEach(view.flashLine);

@@ -3,6 +3,7 @@ import { satisfiedClues } from '../../engine/clues';
 import { hasLine, noLines, type Line, type LineSet } from '../../engine/lines';
 import type { Puzzle } from '../../puzzles/format';
 import { el } from '../dom';
+import { playOnce } from '../motion';
 
 export type { Line };
 
@@ -49,14 +50,6 @@ function clueGroup(clues: number[], className: string, role: string, label: stri
   const fullLabel = `${label} clues: ${clues.length ? clues.join(', ') : 'none'}`;
   const group = el('div', { className, role, ariaLabel: fullLabel }, nums);
   return { group, nums, label: fullLabel, complete: false };
-}
-
-/** Plays a one-shot animation class, removing it afterwards so it can replay. */
-function restartAnimation(node: HTMLElement, className: string, ms = 900) {
-  node.classList.remove(className);
-  void node.offsetWidth; // force a reflow so the animation plays again
-  node.classList.add(className);
-  window.setTimeout(() => node.classList.remove(className), ms);
 }
 
 let boardCount = 0;
@@ -213,22 +206,22 @@ export function createBoardView(puzzle: Puzzle): BoardView {
       root.setAttribute('aria-activedescendant', cursor.id);
     },
     flashError(index) {
-      restartAnimation(cells[index], 'error');
+      playOnce(cells[index], 'error');
     },
     flashLine({ kind, index }) {
       const group = kind === 'row' ? rowClues[index] : colClues[index];
-      restartAnimation(group.group, 'line-flash');
+      playOnce(group.group, 'line-flash');
       const span = kind === 'row' ? w : h;
       for (let k = 0; k < span; k++) {
         const i = kind === 'row' ? index * w + k : k * w + index;
-        restartAnimation(cells[i], 'line-flash');
+        playOnce(cells[i], 'line-flash');
       }
     },
     setWeakPoints(weak, cracked = []) {
       rowClues.forEach((g, r) => g.group.classList.toggle('weak-point', hasLine(weak, 'row', r)));
       colClues.forEach((g, c) => g.group.classList.toggle('weak-point', hasLine(weak, 'col', c)));
       for (const { kind, index } of cracked) {
-        restartAnimation((kind === 'row' ? rowClues : colClues)[index].group, 'cracked');
+        playOnce((kind === 'row' ? rowClues : colClues)[index].group, 'cracked');
       }
     },
     setScramble(next, restored = []) {
@@ -242,7 +235,7 @@ export function createBoardView(puzzle: Puzzle): BoardView {
         if (hasLine(scramble, 'col', c)) g.group.ariaLabel = scrambleLabel(g, clues.cols[c]);
       });
       for (const { kind, index } of restored) {
-        restartAnimation((kind === 'row' ? rowClues : colClues)[index].group, 'unscramble');
+        playOnce((kind === 'row' ? rowClues : colClues)[index].group, 'unscramble');
       }
     },
     setFog(next, lifted = []) {
@@ -254,17 +247,17 @@ export function createBoardView(puzzle: Puzzle): BoardView {
       rowClues.forEach((g, r) => apply(g, hasLine(fog, 'row', r)));
       colClues.forEach((g, c) => apply(g, hasLine(fog, 'col', c)));
       for (const { kind, index } of lifted) {
-        restartAnimation((kind === 'row' ? rowClues : colClues)[index].group, 'unfog');
+        playOnce((kind === 'row' ? rowClues : colClues)[index].group, 'unfog');
       }
     },
     flashSwap(a, b) {
       for (const r of [a, b]) {
-        restartAnimation(rowClues[r].group, 'swapped');
-        for (let c = 0; c < w; c++) restartAnimation(cells[r * w + c], 'swapped');
+        playOnce(rowClues[r].group, 'swapped');
+        for (let c = 0; c < w; c++) playOnce(cells[r * w + c], 'swapped');
       }
     },
     flashHint(indexes) {
-      for (const i of indexes) restartAnimation(cells[i], 'hinted');
+      for (const i of indexes) playOnce(cells[i], 'hinted');
     },
     highlight(r, c) {
       rowClues.forEach((g, i) => g.group.classList.toggle('hl', i === r));

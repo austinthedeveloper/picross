@@ -19,13 +19,12 @@ import type { BoardView } from '../board/boardView';
 import { createPicture } from '../board/picture';
 import { createBattleBar } from '../components/battleBar';
 import { el } from '../dom';
+import { lineName } from '../format';
+import { pause, reducedMotion } from '../motion';
 import { playSound } from '../sound';
 import { keyToLine, lineCount, lineKey, type LineSet } from '../../engine/lines';
 import { pickSwapRows } from '../../engine/swap';
 import type { BoardControls, PlaySession } from './gameScreen';
-
-const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const wait = (ms: number) => new Promise((resolve) => window.setTimeout(resolve, ms));
 
 /**
  * Fight rules on top of a run encounter (#27): completed lines chip the
@@ -199,16 +198,12 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
       const state = phased.state;
       if (fogged.revealed.length && state.fog) {
         view?.setFog(state.fog, fogged.revealed);
-        const names = fogged.revealed.map(
-          (l) => `${l.kind === 'row' ? 'row' : 'column'} ${l.index + 1}`,
-        );
+        const names = fogged.revealed.map((l) => lineName(l));
         messages.push(`You solved through the fog: ${names.join(', ')} revealed.`);
       }
       if (unscrambled.revealed.length && state.scramble) {
         view?.setScramble(state.scramble, unscrambled.revealed);
-        const names = unscrambled.revealed.map(
-          (l) => `${l.kind === 'row' ? 'row' : 'column'} ${l.index + 1}`,
-        );
+        const names = unscrambled.revealed.map((l) => lineName(l));
         messages.push(`Gears click back into place: ${names.join(', ')} in order.`);
       }
       if (state !== battle()) saveCurrentRun(withBattle(current(), state));
@@ -283,7 +278,7 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
       playSound('finisher');
       bar.hitEnemy(finisher);
       bar.defeat();
-      if (!reducedMotion()) await wait(600);
+      await pause(600);
     },
   };
 

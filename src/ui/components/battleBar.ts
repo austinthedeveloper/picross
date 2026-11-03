@@ -1,5 +1,6 @@
 import type { Enemy } from '../../game/battle';
 import { el } from '../dom';
+import { playOnce } from '../motion';
 
 export interface BattleBar {
   root: HTMLElement;
@@ -50,14 +51,6 @@ function meter(label: string, className: string) {
   };
 }
 
-/** Replays a one-shot animation class on an element. */
-function replay(node: HTMLElement, className: string, ms = 700) {
-  node.classList.remove(className);
-  void node.offsetWidth;
-  node.classList.add(className);
-  window.setTimeout(() => node.classList.remove(className), ms);
-}
-
 function floatNumber(host: HTMLElement, text: string, className: string) {
   const number = el('span', { className: `float-number ${className}`, textContent: text });
   number.setAttribute('aria-hidden', 'true');
@@ -105,12 +98,12 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
     setEnemyHp: (hp) => enemyMeter.set(hp, enemy.hp),
     setPlayerHp: (hp, max) => playerMeter.set(hp, max),
     hitEnemy(amount) {
-      replay(sprite, 'flinch');
+      playOnce(sprite, 'flinch', 700);
       floatNumber(enemySide, `−${amount}`, 'to-enemy');
     },
     hitPlayer(amount) {
-      replay(sprite, 'lunge');
-      replay(playerSide, 'hurt');
+      playOnce(sprite, 'lunge', 700);
+      playOnce(playerSide, 'hurt', 700);
       floatNumber(playerSide, `−${amount}`, 'to-player');
     },
     defeat() {
@@ -122,8 +115,8 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
       shield.ariaLabel = `Shield blocks ${hits} ${hits === 1 ? 'hit' : 'hits'}`;
     },
     block() {
-      replay(sprite, 'lunge');
-      replay(shield, 'blocked');
+      playOnce(sprite, 'lunge', 700);
+      playOnce(shield, 'blocked', 700);
       floatNumber(playerSide, 'Blocked!', 'to-player');
     },
     setGadgets(buttons) {
@@ -136,8 +129,8 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
       armor.title = `Armored: ${weakPoints} weak point${weakPoints === 1 ? '' : 's'} left`;
     },
     armorBreaks() {
-      replay(armor, 'shatter', 600);
-      replay(sprite, 'flinch');
+      playOnce(armor, 'shatter', 600);
+      playOnce(sprite, 'flinch', 700);
       floatNumber(enemySide, 'Armor broken!', 'to-enemy');
       window.setTimeout(() => (armor.hidden = true), 600);
     },
@@ -151,8 +144,8 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
         ...(taunt ? [el('span', { textContent: taunt })] : []),
       );
       banner.hidden = false;
-      replay(root, 'phase-shift', 1200);
-      replay(sprite, 'flinch');
+      playOnce(root, 'phase-shift', 1200);
+      playOnce(sprite, 'flinch', 700);
       window.setTimeout(() => (banner.hidden = true), 2200);
     },
     say(message) {
