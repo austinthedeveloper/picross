@@ -30,13 +30,18 @@ describe('parsePuzzle', () => {
 });
 
 describe('starter pack', () => {
-  it('has 10 to 15 puzzles from 5x5 to 15x15', () => {
+  it('has square puzzles from 5x5 to 20x20', () => {
     expect(puzzles.length).toBeGreaterThanOrEqual(10);
-    expect(puzzles.length).toBeLessThanOrEqual(15);
     for (const p of puzzles) {
-      expect(Math.min(p.width, p.height)).toBeGreaterThanOrEqual(5);
-      expect(Math.max(p.width, p.height)).toBeLessThanOrEqual(15);
+      expect(p.width).toBe(p.height);
+      expect(p.width).toBeGreaterThanOrEqual(5);
+      expect(p.width).toBeLessThanOrEqual(20);
     }
+  });
+
+  it('is mostly big puzzles: at least half are 15x15 or larger', () => {
+    const big = puzzles.filter((p) => p.width >= 15).length;
+    expect(big * 2).toBeGreaterThanOrEqual(puzzles.length);
   });
 
   it('has unique ids', () => {

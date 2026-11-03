@@ -40,6 +40,24 @@
   color: var(--muted);
 }
 
+.size-section + .size-section {
+  margin-top: 24px;
+}
+
+.size-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0 0 10px;
+  font-size: 1.1rem;
+}
+
+.size-count {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+
 .cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
