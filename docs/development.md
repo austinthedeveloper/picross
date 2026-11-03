@@ -67,6 +67,8 @@ HTML report (`playwright-report`) when something fails. To debug a failure, run
 | `night-shift.spec.ts` | The whole Night Shift from the jobs board to the Curator                                                                                  |
 | `deep-end.spec.ts`    | The whole Deep End from the chapter 3 opening to Old Tess                                                                                 |
 | `endless.spec.ts`     | Endless mode: unlocking, healing after a fight, the map moving on, best depth                                                             |
+| `daily.spec.ts`       | The daily puzzle and its streak across days (fixed clock; solved from the clues on screen)                                                |
+| `murals.spec.ts`      | A mural filling in tile by tile, the last tile, and the finished picture                                                                  |
 | `editor-zoom.spec.ts` | Editor uniqueness check and export, pinch zoom                                                                                            |
 
 `e2e/helpers.ts` has the building blocks:

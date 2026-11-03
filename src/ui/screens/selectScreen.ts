@@ -7,6 +7,8 @@ import { createMuteButton } from '../components/muteButton';
 import { el } from '../dom';
 import { formatTime } from '../format';
 import { applyTheme } from '../theme';
+import { dailyCard } from './daily';
+import { muralSection } from './mural';
 import { runBanner } from './run';
 
 const MODE_HINTS: Record<Mode, string> = {
@@ -89,6 +91,7 @@ export function renderSelectScreen(app: HTMLElement): void {
           }),
         ]),
       ]),
+      dailyCard(),
       runBanner(),
       el('div', { className: 'mode-row' }, [
         el('div', { className: 'segmented', role: 'group', ariaLabel: 'Mode' }, [
@@ -98,10 +101,15 @@ export function renderSelectScreen(app: HTMLElement): void {
         el('span', { className: 'mode-hint', textContent: MODE_HINTS[settings.mode] }),
       ]),
       el('section', { className: 'stats', ariaLabel: 'Stats' }, [
-        stat(`${overall.solved}/${puzzles.length}`, 'Puzzles solved'),
+        // Mural tiles share the save, so count pack puzzles only.
+        stat(
+          `${puzzles.filter((p) => getPuzzleStats(p.id)).length}/${puzzles.length}`,
+          'Puzzles solved',
+        ),
         stat(String(overall.solves), 'Total solves'),
         stat(formatTime(overall.totalTime), 'Time solving'),
       ]),
+      muralSection(),
       ...sizeSections(),
       el('footer', { className: 'footer' }, [
         el('a', { href: '#/editor', textContent: 'Make your own puzzle →' }),
