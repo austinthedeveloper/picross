@@ -1,7 +1,8 @@
 # Picross
 
 A nonogram (picross) puzzle game for the browser, built with Vite and TypeScript and no UI
-framework. Play it at **https://austinthedeveloper.github.io/picross/**.
+framework. Play the latest release at **https://picross.z13.web.core.windows.net/**, or
+the current `main` at https://austinthedeveloper.github.io/picross/.
 
 Fill cells so each row and column matches its clue numbers, and a pixel picture appears.
 
