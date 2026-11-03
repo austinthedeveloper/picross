@@ -4,11 +4,12 @@ import { getSettings, updateSettings, type Mode } from '../../../game/settings';
 import { getRun, type Encounter, type RunDef } from '../../../puzzles/runs';
 import { el } from '../../dom';
 
-/** What the run screens share: where to draw, how to redraw, and how to play a job's intro. */
+/** What the run screens share: where to draw, how to redraw, and how to play a scene. */
 export interface Hub {
   app: HTMLElement;
   rerender(): void;
-  playIntro(def: RunDef): void;
+  /** Plays a scene full screen, marks it seen, then comes back to the hub. */
+  playScene(id: string): void;
 }
 
 const KIND_ICON: Record<Encounter['kind'], string> = { fight: '⚔️', dig: '⛏️' };
@@ -33,7 +34,7 @@ export function newRunButton(hub: Hub, def: RunDef, label: string): HTMLButtonEl
     onclick: () => {
       saveCurrentRun(startRun(def.id, def.hp, getSettings().mode, def.gadgets));
       // The intro plays automatically once; after that it's on the jobs board.
-      if (def.intro && !hasSeenScene(def.intro)) hub.playIntro(def);
+      if (def.intro && !hasSeenScene(def.intro)) hub.playScene(def.intro);
       else hub.rerender();
     },
   });

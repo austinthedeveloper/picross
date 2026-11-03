@@ -10,6 +10,7 @@ test('the whole Night Shift, from the jobs board to the Curator', async ({ page,
     },
   });
   await page.goto('/#/run');
+  await skipScene(page); // chapter 2's opening
   await press(page, 'Hits on');
   await page.locator('.job').nth(1).locator('text=Start').tap();
   await skipScene(page);

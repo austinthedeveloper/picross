@@ -67,7 +67,28 @@ groups puzzles by size, biggest first, so a new size gets its own section automa
    pool that stays solvable, try sets with the solver; the test suite checks the starting
    fog plus every pool together.
 
-"Start a run" always begins `DEFAULT_RUN_ID` in `src/puzzles/runs.ts`.
+A new job also needs a chapter: add its id to a chapter's `jobs` in
+`src/puzzles/chapters/`, or start a new chapter (below). Load fails if a job is in no
+chapter or in two.
+
+## Add a chapter
+
+Chapters (#23) group jobs on the jobs board. Add `src/puzzles/chapters/<id>.json`:
+
+```json
+{
+  "id": "after-hours",
+  "title": "After Hours",
+  "order": 2,
+  "blurb": "Word gets around.",
+  "jobs": ["night-shift"],
+  "opening": "after-hours-opening"
+}
+```
+
+`order` sets the chapter number. A chapter opens when its first job unlocks, so give
+that job `requires` from the chapter before. `opening` is an optional scene that plays
+the first time the chapter opens and can be replayed from the board.
 
 ## Add a gadget
 

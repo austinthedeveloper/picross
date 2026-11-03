@@ -1,0 +1,24 @@
+{
+  "id": "after-hours-opening",
+  "cast": {
+    "rook": { "name": "Rook", "portrait": "🧑‍💼" },
+    "dee": { "name": "Dee", "portrait": "👩‍🔬" }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        { "text": "Chapter 2: After Hours. The office, a week after the gremlin." },
+        { "who": "dee", "text": "Mrs. Pell told her book club. Her book club told everyone." },
+        { "who": "rook", "text": "Is that a good thing?" },
+        {
+          "who": "dee",
+          "text": "We have eleven voicemails. Nine are about things that move at night."
+        },
+        {
+          "who": "rook",
+          "text": "Then we work nights. Get the flashlight. And the other flashlight."
+        }
+      ]
+    }
+  }
+}

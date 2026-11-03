@@ -36,11 +36,13 @@ src/
     run/*.json             Run-only puzzles (the sword, wrench, owl, pocket watch, ...)
     pack.test.ts           Uniqueness check over every puzzle
     runs.ts                Loads encounters/*.json and runs/*.json (jobs)
+    chapters.ts            Loads chapters/*.json: jobs grouped into story chapters (#23)
     enemies.ts             Validates an enemy: fog, scramble, armor, forged clues, phases
     gadgets.ts             Gadget catalog: name, icon, description, effect
     scenes.ts              Loads and validates scenes/*.json (dialogue, #22)
     encounters/*.json      Encounters: name, kind (fight/dig), puzzle, enemy, boss, scene
     runs/*.json            Jobs: HP, encounters, gadgets, intro/outro, order, requires
+    chapters/*.json        Chapters: title, order, blurb, jobs, opening scene
     scenes/*.json          Scenes: cast, nodes of lines, choices, and conditions
   game/                    Game state and saves, no DOM
     game.ts                Game: board, history, mode/hearts, hints, clock, wipes
@@ -66,7 +68,7 @@ src/
       run/                 Runs                                    (#/run, #/run/play)
         index.ts           Run hub router and the puzzle-list banner
         shared.ts          Hub type, loadRun, mode picker, start buttons
-        jobsBoard.ts       Jobs board (#47)
+        jobsBoard.ts       Jobs board (#47), grouped into chapters (#23)
         pathMap.ts         Path map, HP, gadget inventory
         results.ts         Results and sign-off
         encounter.ts       Plays the current encounter (a PlaySession)
@@ -252,6 +254,15 @@ stays locked until you've won that job once. Results are saved per job in `runSa
 `recorded`, so a reload doesn't count it twice. The results screen shows every line the
 job's outro plays for a win or a loss, which gives room for a tease after the sign-off,
 and offers **Run it again** or **Jobs board**.
+
+Jobs are grouped into **chapters** (#23, `puzzles/chapters/*.json`, loaded by
+`puzzles/chapters.ts`): a title, an order, a blurb, its jobs, and an optional `opening`
+scene. A chapter is open once its first job is unlocked. A locked chapter shows as a
+single card saying which job opens it. An open chapter shows its jobs and how many
+you've cleared. The first time you reach the board with a chapter open, its opening
+plays (`renderRunScreen` checks before drawing the board), and after that a **▶ Chapter
+story** button replays it. Every job must be in exactly one chapter, or loading fails.
+The chapters so far are 1 · Odd Jobs (First Job) and 2 · After Hours (The Night Shift).
 
 Jobs so far: **First Job** (#21) and **The Night Shift** (#46). The Night Shift unlocks after
 First Job. It's Mimic → Clockwork Owl → the Forger → Dusty Exhibit (a dig that yields a
