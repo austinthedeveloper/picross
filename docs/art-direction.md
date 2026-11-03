@@ -77,6 +77,8 @@ Three words: **cozy, mischievous, after-hours.**
   40px, and free.
 - **Next step:** replace them with 32×32 pixel sprites drawn in the palette (graphite
   outlines, one accent color each, two at most), so they match the puzzle pictures.
+  The prompts for every piece, and the review checklist, are in
+  [art/prompts/](art/prompts/README.md).
 - Keep each enemy's silhouette tied to its mechanic. The eel is a zigzag, the cuttlefish
   is a blob with trailing ink, the Forger carries a palette.
 
