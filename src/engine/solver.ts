@@ -81,8 +81,8 @@ export type SolveResult =
  * usually means there is more than one solution.
  *
  * With `fog`, fogged clues start hidden and the solve plays out like the
- * game: whenever a line becomes fully known it lifts fog by the same rule
- * (`liftFog`), and the revealed clues join in.
+ * game: a fogged line can only be filled in from its crossing lines, and its
+ * clue is revealed (`liftFog`) once all its cells are known.
  */
 export function solve(
   width: number,
@@ -91,9 +91,8 @@ export function solve(
   fog: Fog = noFog(),
 ): SolveResult {
   const grid: Knowledge[] = new Array<Knowledge>(width * height).fill(Unknown);
-  const at = (r: number, c: number) => grid[r * width + c];
   const rowCells = (r: number) => grid.slice(r * width, (r + 1) * width);
-  const colCells = (c: number) => Array.from({ length: height }, (_, r) => at(r, c));
+  const colCells = (c: number) => Array.from({ length: height }, (_, r) => grid[r * width + c]);
   let hidden = fog;
   const dirtyRows = new Set<number>();
   const dirtyCols = new Set<number>();
@@ -141,13 +140,13 @@ export function solve(
     for (let r = 0; r < height; r++) {
       if (!completed.has(`r${r}`) && !rowCells(r).includes(Unknown)) {
         completed.add(`r${r}`);
-        hidden = liftFog(hidden, 'row', r, (c) => at(r, c) === 1);
+        hidden = liftFog(hidden, 'row', r);
       }
     }
     for (let c = 0; c < width; c++) {
       if (!completed.has(`c${c}`) && !colCells(c).includes(Unknown)) {
         completed.add(`c${c}`);
-        hidden = liftFog(hidden, 'col', c, (r) => at(r, c) === 1);
+        hidden = liftFog(hidden, 'col', c);
       }
     }
     if (hidden.rows.length + hidden.cols.length === before) break;

@@ -1,4 +1,3 @@
-import type { Solution } from '../engine/board';
 import { liftFog, type Fog } from '../engine/fog';
 import type { GadgetEffect } from '../puzzles/gadgets';
 
@@ -36,24 +35,14 @@ export function startBattle(enemy: Enemy): BattleState {
   return state;
 }
 
-/**
- * Lifts fog for newly completed lines (see `liftFog`), using the solution to
- * tell where a completed line is filled. Returns the lines that were revealed.
- */
+/** Lifts fog from newly completed lines (see `liftFog`). Returns the lines revealed. */
 export function clearFog(
   state: BattleState,
   lines: { kind: 'row' | 'col'; index: number }[],
-  solution: Solution,
 ): { state: BattleState; revealed: { kind: 'row' | 'col'; index: number }[] } {
   if (!state.fog) return { state, revealed: [] };
   let fog = state.fog;
-  for (const { kind, index } of lines) {
-    fog = liftFog(fog, kind, index, (cross) =>
-      kind === 'row'
-        ? solution.cells[index * solution.width + cross]
-        : solution.cells[cross * solution.width + index],
-    );
-  }
+  for (const { kind, index } of lines) fog = liftFog(fog, kind, index);
   const revealed = [
     ...state.fog.rows
       .filter((i) => !fog.rows.includes(i))

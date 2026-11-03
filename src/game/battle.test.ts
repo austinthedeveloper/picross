@@ -50,18 +50,20 @@ describe('gadgets in battle', () => {
 });
 
 describe('fog', () => {
-  // 3x2: ##. / .##
-  const solution = { width: 3, height: 2, cells: [true, true, false, false, true, true] };
-  const bat = { ...goblin, fog: { rows: [1], cols: [0, 2] } };
+  const bat = { ...goblin, fog: { rows: [1, 2], cols: [] } };
 
   it('starts with the enemy’s fog', () => {
-    expect(startBattle(bat).fog).toEqual({ rows: [1], cols: [0, 2] });
+    expect(startBattle(bat).fog).toEqual({ rows: [1, 2], cols: [] });
     expect(startBattle(goblin).fog).toBeUndefined();
   });
 
-  it('lifts fog where completed lines are filled', () => {
-    const { state, revealed } = clearFog(startBattle(bat), [{ kind: 'row', index: 0 }], solution);
-    expect(state.fog).toEqual({ rows: [1], cols: [2] });
-    expect(revealed).toEqual([{ kind: 'col', index: 0 }]);
+  it('lifts fog only from completed fogged lines', () => {
+    const completed = [
+      { kind: 'col' as const, index: 0 },
+      { kind: 'row' as const, index: 2 },
+    ];
+    const { state, revealed } = clearFog(startBattle(bat), completed);
+    expect(state.fog).toEqual({ rows: [1], cols: [] });
+    expect(revealed).toEqual([{ kind: 'row', index: 2 }]);
   });
 });

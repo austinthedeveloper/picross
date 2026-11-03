@@ -27,6 +27,7 @@ describe('parseEncounter', () => {
     [{ ...encounter, enemy: undefined }, /need an enemy/],
     [{ ...encounter, enemy: { ...enemy, hp: 0 } }, /hp/],
     [{ ...encounter, enemy: { ...enemy, fog: { rows: [5] } } }, /fog rows and cols/],
+    [{ ...encounter, enemy: { ...enemy, fog: { rows: [0], cols: [0] } } }, /not both/],
   ])('rejects bad input %#', (input, error) => {
     expect(() => parseEncounter(input, find)).toThrow(error);
   });

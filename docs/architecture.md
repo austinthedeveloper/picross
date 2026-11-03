@@ -237,13 +237,14 @@ up) is saved in `RunState.battle`, so a reload resumes mid-fight.
 
 ### Fog (the fog bat)
 
-An enemy can list `fog: { rows, cols }`: clues hidden behind a cloudy "?" when the fight
-starts. Fog lifts as you play (`liftFog` in `engine/fog.ts`). Completing a line clears its
-own fog and the fog on every crossing line it meets at a filled cell. Fogging a row and a
-column hides the cell where they cross from both of its lines, so fog has to lift during
-play. The check simulates that: `solve(width, height, clues, fog)` starts with the fogged
-clues hidden and applies the same lift rule whenever a line becomes fully known. A test
-requires every fogged fight to come out `unique` that way.
+An enemy can list `fog: { rows }` or `fog: { cols }`: clues hidden behind a cloudy "?" when
+the fight starts. A fogged clue stays hidden until you complete that line yourself, working
+it out from the crossing lines, and then it's revealed as the reward (`liftFog` in
+`engine/fog.ts`). Fog covers one direction per fight, and validation enforces this: a
+fogged row and a fogged column would hide the cell where they cross from both of its
+lines, so neither could ever be finished. `solve(width, height, clues, fog)` plays it out
+the same way, and a test requires every fogged fight to come out `unique`. The fog bat
+fogs rows 4, 6, 7, and 10, including both full-width rows.
 
 ## Digs
 
