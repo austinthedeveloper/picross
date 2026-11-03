@@ -1,6 +1,13 @@
 import { Cell, column, row, type Board } from '../../engine/board';
 import { satisfiedClues } from '../../engine/clues';
-import { hasLine, noLines, type Line, type LineKind, type LineSet } from '../../engine/lines';
+import {
+  hasLine,
+  lineKey,
+  noLines,
+  type Line,
+  type LineKind,
+  type LineSet,
+} from '../../engine/lines';
 import type { Puzzle } from '../../puzzles/format';
 import { el } from '../dom';
 import { playOnce } from '../motion';
@@ -28,6 +35,14 @@ export interface BoardView {
   setScramble(scramble: LineSet, restored?: Line[]): void;
   /** Marks weak-point clues with 🎯 (#50). Lines in `cracked` flash as they crack. */
   setWeakPoints(weak: LineSet, cracked?: Line[]): void;
+  /**
+   * Shows forged clues (#64), keyed by line ("r3"), in place of the real ones. A faked
+   * line only counts as complete when its fake is satisfied. Lines in `unmasked`
+   * animate as their real clue comes back.
+   */
+  setFakes(fakes: ReadonlyMap<string, number[]>, unmasked?: Line[]): void;
+  /** While set, tapping a clue (or Enter on it) picks its line instead of doing nothing. */
+  pickClue(onPick: ((line: Line) => void) | null): void;
 }
 
 const STATE: Record<Cell, { className: string; label: string }> = {
@@ -39,17 +54,32 @@ const STATE: Record<Cell, { className: string; label: string }> = {
 interface ClueGroup {
   group: HTMLElement;
   nums: HTMLElement[];
+  /** "Row 3": the start of every label. */
+  name: string;
   label: string;
   complete: boolean;
 }
 
-function clueGroup(clues: number[], className: string, role: string, label: string): ClueGroup {
-  const nums = (clues.length ? clues : [0]).map((n) =>
+/** Fills a clue group with its numbers (one 0 for an empty line). */
+function setNumbers(g: ClueGroup, clues: number[]) {
+  g.nums = (clues.length ? clues : [0]).map((n) =>
     el('span', { textContent: String(n), ariaHidden: 'true' }),
   );
-  const fullLabel = `${label} clues: ${clues.length ? clues.join(', ') : 'none'}`;
-  const group = el('div', { className, role, ariaLabel: fullLabel }, nums);
-  return { group, nums, label: fullLabel, complete: false };
+  g.group.replaceChildren(...g.nums);
+  g.label = `${g.name} clues: ${clues.length ? clues.join(', ') : 'none'}`;
+  g.group.ariaLabel = g.label;
+}
+
+function clueGroup(clues: number[], className: string, role: string, name: string): ClueGroup {
+  const g: ClueGroup = {
+    group: el('div', { className, role }),
+    nums: [],
+    name,
+    label: '',
+    complete: false,
+  };
+  setNumbers(g, clues);
+  return g;
 }
 
 let boardCount = 0;
@@ -111,6 +141,23 @@ export function createBoardView(puzzle: Puzzle): BoardView {
 
   let fog: LineSet = noLines();
   let scramble: LineSet = noLines();
+  let fakes: ReadonlyMap<string, number[]> = new Map();
+  /** The clue a line shows: its forgery if it has one (#64), else the real one. */
+  const shown = (kind: LineKind, i: number) =>
+    fakes.get(lineKey(kind, i)) ?? (kind === 'row' ? clues.rows : clues.cols)[i];
+
+  let picker: ((line: Line) => void) | null = null;
+  const pickable = (g: ClueGroup, line: Line) => {
+    g.group.addEventListener('click', () => picker?.(line));
+    g.group.addEventListener('keydown', (e) => {
+      if (!picker || (e.key !== 'Enter' && e.key !== ' ')) return;
+      e.preventDefault();
+      e.stopPropagation();
+      picker(line);
+    });
+  };
+  rowClues.forEach((g, index) => pickable(g, { kind: 'row', index }));
+  colClues.forEach((g, index) => pickable(g, { kind: 'col', index }));
   const fogLabel = (g: ClueGroup) => g.label.replace(/clues: .*/, 'clues hidden by fog');
   const scrambleLabel = (g: ClueGroup, runs: number[]) =>
     g.label.replace(
@@ -176,7 +223,7 @@ export function createBoardView(puzzle: Puzzle): BoardView {
           { kind: 'row', index: r },
           dim(
             rowClues[r],
-            clues.rows[r],
+            shown('row', r),
             row(board, r),
             hasLine(fog, 'row', r),
             hasLine(scramble, 'row', r),
@@ -189,7 +236,7 @@ export function createBoardView(puzzle: Puzzle): BoardView {
           { kind: 'col', index: c },
           dim(
             colClues[c],
-            clues.cols[c],
+            shown('col', c),
             column(board, c),
             hasLine(fog, 'col', c),
             hasLine(scramble, 'col', c),
@@ -236,6 +283,27 @@ export function createBoardView(puzzle: Puzzle): BoardView {
       });
       for (const { kind, index } of restored) {
         playOnce((kind === 'row' ? rowClues : colClues)[index].group, 'unscramble');
+      }
+    },
+    setFakes(next, unmasked = []) {
+      const relabel = new Set([...fakes.keys(), ...next.keys()]);
+      fakes = next;
+      rowClues.forEach((g, r) => relabel.has(lineKey('row', r)) && setNumbers(g, shown('row', r)));
+      colClues.forEach((g, c) => relabel.has(lineKey('col', c)) && setNumbers(g, shown('col', c)));
+      const longest = (count: number, kind: LineKind) =>
+        Math.max(1, ...Array.from({ length: count }, (_, i) => shown(kind, i).length));
+      root.style.setProperty('--rc', String(longest(h, 'row')));
+      root.style.setProperty('--cc', String(longest(w, 'col')));
+      for (const { kind, index } of unmasked) {
+        playOnce((kind === 'row' ? rowClues : colClues)[index].group, 'unmasked');
+      }
+    },
+    pickClue(onPick) {
+      picker = onPick;
+      root.classList.toggle('picking-clue', Boolean(onPick));
+      for (const g of [...rowClues, ...colClues]) {
+        if (onPick) g.group.tabIndex = 0;
+        else g.group.removeAttribute('tabindex');
       }
     },
     setFog(next, lifted = []) {

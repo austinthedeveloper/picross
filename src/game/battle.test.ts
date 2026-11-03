@@ -3,6 +3,10 @@ import { lineKey } from '../engine/lines';
 import {
   absorbHit,
   advancePhase,
+  CALL_OUT_DAMAGE,
+  callOut,
+  FALSE_ACCUSATION_HEAL,
+  heal,
   WEAK_POINT_DAMAGE,
   chip,
   clearFog,
@@ -181,5 +185,38 @@ describe('armor', () => {
     expect(result).toMatchObject({ dealt: WEAK_POINT_DAMAGE, cracked: ['c2'], broke: true });
     expect(currentForm(beetle, result.state)).toMatchObject({ attack: 2, armored: false });
     expect(chip(result.state, ['r5']).dealt).toBe(1); // normal rules after
+  });
+});
+
+describe('forged clues', () => {
+  const forger = { ...goblin, hp: 20, fakes: { rows: [1, 3], cols: [] } };
+
+  it("starts with the enemy's forgeries", () => {
+    expect(startBattle(forger).fakes).toEqual({ rows: [1, 3], cols: [] });
+  });
+
+  it('calling out a forgery unmasks it for call-out damage', () => {
+    const { state, caught, dealt } = callOut(startBattle(forger), { kind: 'row', index: 3 });
+    expect(caught).toBe(true);
+    expect(dealt).toBe(CALL_OUT_DAMAGE);
+    expect(state.fakes).toEqual({ rows: [1], cols: [] });
+    expect(state.enemyHp).toBe(20 - CALL_OUT_DAMAGE);
+  });
+
+  it('accusing an honest clue changes nothing here', () => {
+    const before = startBattle(forger);
+    const result = callOut(before, { kind: 'col', index: 1 });
+    expect(result).toEqual({ state: before, caught: false, dealt: 0 });
+  });
+
+  it('call-out damage never drops the enemy below 1 HP', () => {
+    const low = { ...startBattle(forger), enemyHp: 2 };
+    expect(callOut(low, { kind: 'row', index: 1 }).state.enemyHp).toBe(1);
+  });
+
+  it('a false accusation in a Relaxed run heals, up to max HP', () => {
+    const hurt = { ...startBattle(forger), enemyHp: 10 };
+    expect(heal(hurt, 20)).toMatchObject({ healed: FALSE_ACCUSATION_HEAL });
+    expect(heal({ ...hurt, enemyHp: 19 }, 20).state.enemyHp).toBe(20);
   });
 });

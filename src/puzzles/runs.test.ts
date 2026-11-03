@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { parsePuzzle } from './format';
 import { solve } from '../engine/solver';
 import { CHIP_DAMAGE } from '../game/battle';
-import { allFog, allScramble } from './enemies';
+import { allScramble, allUnreadable } from './enemies';
 import { getRun, parseEncounter, parseRun, runs } from './runs';
 
 const puzzle = parsePuzzle({ id: 'p', name: 'P', width: 2, height: 1, solution: ['#.'] });
@@ -43,6 +43,11 @@ describe('parseEncounter', () => {
     [{ ...encounter, enemy: { ...enemy, armor: { weakPoints: {}, attack: 3 } } }, /weak points/],
     // the test puzzle is 2x1 '#.': row 1's runs are just "1", so its order is already known
     [{ ...encounter, enemy: { ...enemy, scramble: { rows: [0] } } }, /only one order/],
+    [{ ...encounter, enemy: { ...enemy, fakes: {} } }, /at least one line/],
+    [
+      { ...encounter, enemy: { ...enemy, fog: { rows: [0] }, fakes: { rows: [0] } } },
+      /both forged and fogged/,
+    ],
   ])('rejects bad input %#', (input, error) => {
     expect(() => parseEncounter(input, find)).toThrow(error);
   });
@@ -89,17 +94,19 @@ describe('bundled fights', () => {
     expect(maxChip).toBeLessThanOrEqual((e.enemy!.hp * 2) / 3);
   });
 
-  // Fogged and scrambled clues can't be read normally until you solve their lines,
-  // so the puzzle must be solvable without guessing even with everything the enemy
-  // can bring (starting and from every phase) applied from the very start.
+  // Fogged, forged, and scrambled clues can't be trusted until you solve their
+  // lines, so the puzzle must be solvable without guessing even with everything the
+  // enemy can bring (starting and from every phase) applied from the very start.
   const size = (f: { rows: number[]; cols: number[] }) => f.rows.length + f.cols.length;
-  const tricky = fights.filter((e) => size(allFog(e.enemy!)) + size(allScramble(e.enemy!)) > 0);
+  const tricky = fights.filter(
+    (e) => size(allUnreadable(e.enemy!)) + size(allScramble(e.enemy!)) > 0,
+  );
   it.each(tricky.map((e) => [e.id, e] as const))(
     '%s is solvable through everything it does',
     (_, e) => {
       const { width, height, clues } = e.puzzle;
       const result = solve(width, height, clues, {
-        fog: allFog(e.enemy!),
+        fog: allUnreadable(e.enemy!),
         scramble: allScramble(e.enemy!),
       });
       expect(result.status).toBe('unique');

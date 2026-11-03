@@ -1,0 +1,42 @@
+{
+  "id": "forger-intro",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "\ud83e\uddd1\u200d\ud83d\udcbc"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "\ud83d\udc69\u200d\ud83d\udd2c"
+    },
+    "forger": {
+      "name": "The Forger",
+      "portrait": "\ud83c\udfa8"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "text": "The east gallery. Every painting is still wet."
+        },
+        {
+          "who": "forger",
+          "text": "Ah, visitors! Admire my collection. Every clue on that canvas is genuine. Mostly."
+        },
+        {
+          "who": "dee",
+          "text": "Three of these clues are fakes. \ud83c\udfad See the count by its name."
+        },
+        {
+          "who": "rook",
+          "text": "So we trust the lines that add up. A line that's filled right but won't light up? That's a forgery."
+        },
+        {
+          "who": "dee",
+          "text": "Tap \ud83d\udd0d Call out, then the clue. Right, and it hurts. Wrong, and it hurts us."
+        }
+      ]
+    }
+  }
+}

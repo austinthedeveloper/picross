@@ -24,6 +24,8 @@ export interface BattleBar {
   say(message: string): void;
   /** Shows the enemy's armor and how many weak points are left (#50); 0 hides it. */
   setArmor(weakPoints: number): void;
+  /** Shows how many forged clues are left to call out (#64); hidden at 0. */
+  setFakes(count: number): void;
   /** The armor shatters. */
   armorBreaks(): void;
   /** Changes the enemy's name and sprite (boss phases, #42). */
@@ -66,12 +68,13 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
   const playerMeter = meter('Your HP', 'player-hp');
   const enemyName = el('span', { className: 'battle-name', textContent: enemy.name });
   const armor = el('span', { className: 'armor', hidden: true });
+  const fakes = el('span', { className: 'fakes', hidden: true });
   const banner = el('div', { className: 'phase-banner', hidden: true });
   banner.setAttribute('aria-hidden', 'true');
   const enemySide = el('div', { className: 'battle-side enemy' }, [
     sprite,
     el('div', { className: 'battle-info' }, [
-      el('span', { className: 'battle-name-row' }, [enemyName, armor]),
+      el('span', { className: 'battle-name-row' }, [enemyName, armor, fakes]),
       enemyMeter.root,
     ]),
   ]);
@@ -127,6 +130,12 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
       armor.hidden = weakPoints <= 0;
       armor.textContent = `🛡 ${weakPoints}🎯`;
       armor.title = `Armored: ${weakPoints} weak point${weakPoints === 1 ? '' : 's'} left`;
+    },
+    setFakes(count) {
+      fakes.hidden = count <= 0;
+      fakes.textContent = `🎭 ${count}`;
+      fakes.title = `${count} forged clue${count === 1 ? '' : 's'} left to call out`;
+      fakes.ariaLabel = fakes.title;
     },
     armorBreaks() {
       playOnce(armor, 'shatter', 600);

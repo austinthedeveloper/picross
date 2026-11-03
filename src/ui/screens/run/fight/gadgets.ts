@@ -7,8 +7,15 @@ import { playSound } from '../../../sound';
 import type { FightContext } from './context';
 import type { CheckPhase } from './phases';
 
-/** The gadget buttons on the battle bar (#28). Returns `render` to refresh them. */
-export function createGadgetTray(ctx: FightContext, checkPhase: CheckPhase) {
+/**
+ * The gadget buttons on the battle bar (#28), after any `extras` (like the
+ * call-out button, #64). Returns `render` to refresh them.
+ */
+export function createGadgetTray(
+  ctx: FightContext,
+  checkPhase: CheckPhase,
+  extras: () => HTMLElement[] = () => [],
+) {
   /** Why a gadget can't be used right now, or null if it can. */
   const blocker = (gadget: Gadget): string | null => {
     if (ctx.finished || ctx.run()?.status !== 'active') return 'The fight is over';
@@ -60,7 +67,7 @@ export function createGadgetTray(ctx: FightContext, checkPhase: CheckPhase) {
       );
       return [button];
     });
-    ctx.bar.setGadgets(buttons);
+    ctx.bar.setGadgets([...extras(), ...buttons]);
   };
 
   render();
