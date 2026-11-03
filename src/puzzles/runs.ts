@@ -51,7 +51,32 @@ function parseEnemy(data: unknown, puzzle: Puzzle, fail: (msg: string) => never)
     }
     return { rows: [...rows], cols: [...cols] };
   };
+  // A scrambled line needs at least two different run lengths, or its order is already known.
+  const parseScramble = (data: unknown): Fog => {
+    const scramble = parseFog(data);
+    for (const [kind, list] of [
+      ['row', scramble.rows],
+      ['col', scramble.cols],
+    ] as const) {
+      for (const i of list) {
+        const runs = (kind === 'row' ? puzzle.clues.rows : puzzle.clues.cols)[i];
+        if (new Set(runs).size < 2) {
+          fail(
+            `${kind} ${i + 1} can't be scrambled: its runs (${runs.join(' ') || 'none'}) have only one order`,
+          );
+        }
+      }
+    }
+    return scramble;
+  };
+  const positiveCount = (value: unknown, label: string) => {
+    if (value !== undefined && (!Number.isInteger(value) || (value as number) < 1)) {
+      fail(`${label} must be a positive whole number`);
+    }
+  };
+
   if (enemy.fog !== undefined) parsed.fog = parseFog(enemy.fog);
+  if (enemy.scramble !== undefined) parsed.scramble = parseScramble(enemy.scramble);
 
   if (enemy.phases !== undefined) {
     if (!Array.isArray(enemy.phases)) fail('phases must be a list');
@@ -64,12 +89,8 @@ function parseEnemy(data: unknown, puzzle: Puzzle, fail: (msg: string) => never)
       if (phase.attack !== undefined && (!Number.isInteger(phase.attack) || phase.attack < 0)) {
         fail(`phase ${i + 1} attack must be a whole number`);
       }
-      if (
-        phase.fogCount !== undefined &&
-        (!Number.isInteger(phase.fogCount) || phase.fogCount < 1)
-      ) {
-        fail(`phase ${i + 1} fogCount must be a positive whole number`);
-      }
+      positiveCount(phase.fogCount, `phase ${i + 1} fogCount`);
+      positiveCount(phase.scrambleCount, `phase ${i + 1} scrambleCount`);
       if (phase.swap !== undefined && typeof phase.swap !== 'boolean') {
         fail(`phase ${i + 1} swap must be true or false`);
       }
@@ -82,6 +103,8 @@ function parseEnemy(data: unknown, puzzle: Puzzle, fail: (msg: string) => never)
         ...(phase.fog !== undefined ? { fog: parseFog(phase.fog) } : {}),
         ...(phase.fogCount !== undefined ? { fogCount: phase.fogCount } : {}),
         ...(phase.swap === true ? { swap: true } : {}),
+        ...(phase.scramble !== undefined ? { scramble: parseScramble(phase.scramble) } : {}),
+        ...(phase.scrambleCount !== undefined ? { scrambleCount: phase.scrambleCount } : {}),
       };
     });
   }
@@ -100,10 +123,17 @@ function checkScene(id: unknown, fail: (msg: string) => never): string {
 
 /** Every line an enemy can ever fog: its starting fog plus every phase's. */
 export function allFog(enemy: Enemy): Fog {
-  const fogs = [enemy.fog, ...(enemy.phases ?? []).map((p) => p.fog)].filter((f): f is Fog =>
-    Boolean(f),
-  );
-  const union = (key: 'rows' | 'cols') => [...new Set(fogs.flatMap((f) => f[key]))];
+  return unionOf([enemy.fog, ...(enemy.phases ?? []).map((p) => p.fog)]);
+}
+
+/** Every line an enemy can ever scramble: its starting scramble plus every phase's. */
+export function allScramble(enemy: Enemy): Fog {
+  return unionOf([enemy.scramble, ...(enemy.phases ?? []).map((p) => p.scramble)]);
+}
+
+function unionOf(list: (Fog | undefined)[]): Fog {
+  const sets = list.filter((f): f is Fog => Boolean(f));
+  const union = (key: 'rows' | 'cols') => [...new Set(sets.flatMap((f) => f[key]))];
   return { rows: union('rows'), cols: union('cols') };
 }
 

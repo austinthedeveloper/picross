@@ -69,6 +69,38 @@ export function solveLine(
   });
 }
 
+/** Every distinct order of a line's runs, e.g. [1, 2, 1] → [1,2,1], [1,1,2], [2,1,1]. */
+export function runOrders(clues: readonly number[]): number[][] {
+  if (clues.length <= 1) return [[...clues]];
+  const seen = new Set<string>();
+  const out: number[][] = [];
+  clues.forEach((first, i) => {
+    if (seen.has(String(first))) return;
+    seen.add(String(first));
+    const rest = [...clues.slice(0, i), ...clues.slice(i + 1)];
+    for (const tail of runOrders(rest)) out.push([first, ...tail]);
+  });
+  return out;
+}
+
+/**
+ * Like `solveLine`, but the runs can come in any order (the Clockwork Owl's
+ * scrambled clues, #49): a cell is forced only if every order that fits forces
+ * it the same way. Returns null if no order fits.
+ */
+export function solveLineAnyOrder(
+  line: readonly Knowledge[],
+  clues: readonly number[],
+): Knowledge[] | null {
+  let merged: Knowledge[] | null = null;
+  for (const order of runOrders(clues)) {
+    const solved = solveLine(line, order);
+    if (!solved) continue;
+    merged = merged ? merged.map((v, i) => (v === solved[i] ? v : Unknown)) : solved;
+  }
+  return merged;
+}
+
 export type SolveResult =
   | { status: 'unique'; grid: Knowledge[] }
   | { status: 'ambiguous'; grid: Knowledge[]; unknown: number }
@@ -80,20 +112,24 @@ export type SolveResult =
  * reached without guessing. 'ambiguous' means guessing is needed, which
  * usually means there is more than one solution.
  *
- * With `fog`, fogged clues start hidden and the solve plays out like the
- * game: a fogged line can only be filled in from its crossing lines, and its
- * clue is revealed (`liftFog`) once all its cells are known.
+ * It plays out like the game. With `fog`, fogged clues start hidden: a fogged
+ * line can only be filled in from its crossing lines, and its clue is
+ * revealed (`liftFog`) once all its cells are known. With `scramble`, those
+ * lines' runs are known but not their order until the line is complete.
  */
 export function solve(
   width: number,
   height: number,
   clues: Clues,
-  fog: Fog = noFog(),
+  { fog = noFog(), scramble = noFog() }: { fog?: Fog; scramble?: Fog } = {},
 ): SolveResult {
   const grid: Knowledge[] = new Array<Knowledge>(width * height).fill(Unknown);
   const rowCells = (r: number) => grid.slice(r * width, (r + 1) * width);
   const colCells = (c: number) => Array.from({ length: height }, (_, r) => grid[r * width + c]);
   let hidden = fog;
+  let scrambled = scramble;
+  const lineSolver = (kind: 'row' | 'col', i: number) =>
+    (kind === 'row' ? scrambled.rows : scrambled.cols).includes(i) ? solveLineAnyOrder : solveLine;
   const dirtyRows = new Set<number>();
   const dirtyCols = new Set<number>();
   const reveal = (kind: 'row' | 'col', count: number) => {
@@ -112,7 +148,7 @@ export function solve(
       for (const r of dirtyRows) {
         dirtyRows.delete(r);
         const line = rowCells(r);
-        const solved = solveLine(line, clues.rows[r]);
+        const solved = lineSolver('row', r)(line, clues.rows[r]);
         if (!solved) return { status: 'contradiction' };
         solved.forEach((v, c) => {
           if (v !== line[c]) {
@@ -124,7 +160,7 @@ export function solve(
       for (const c of dirtyCols) {
         dirtyCols.delete(c);
         const line = colCells(c);
-        const solved = solveLine(line, clues.cols[c]);
+        const solved = lineSolver('col', c)(line, clues.cols[c]);
         if (!solved) return { status: 'contradiction' };
         solved.forEach((v, r) => {
           if (v !== line[r]) {
@@ -141,12 +177,14 @@ export function solve(
       if (!completed.has(`r${r}`) && !rowCells(r).includes(Unknown)) {
         completed.add(`r${r}`);
         hidden = liftFog(hidden, 'row', r);
+        scrambled = liftFog(scrambled, 'row', r);
       }
     }
     for (let c = 0; c < width; c++) {
       if (!completed.has(`c${c}`) && !colCells(c).includes(Unknown)) {
         completed.add(`c${c}`);
         hidden = liftFog(hidden, 'col', c);
+        scrambled = liftFog(scrambled, 'col', c);
       }
     }
     if (hidden.rows.length + hidden.cols.length === before) break;

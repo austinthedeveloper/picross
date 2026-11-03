@@ -3,6 +3,7 @@ import {
   advancePhase,
   chip,
   clearFog,
+  clearScramble,
   currentForm,
   finish,
   lineKey,
@@ -120,11 +121,15 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
     bar.setForm(name, sprite);
     bar.phaseBanner(name, taunt);
     if (next.fog) view?.setFog(next.fog);
+    if (next.scramble) view?.setScramble(next.scramble);
     playSound('phase');
-    const fogged = (next.fog?.rows.length ?? 0) - (state.fog?.rows.length ?? 0);
+    const count = (f?: { rows: number[]; cols: number[] }) =>
+      f ? f.rows.length + f.cols.length : 0;
+    const fogged = count(next.fog) - count(state.fog);
+    const scrambled = count(next.scramble) - count(state.scramble);
     return {
       state: next,
-      message: `${name !== before ? `${before} becomes ${name}! ` : ''}${taunt}${fogged > 0 ? ` ${fogged} rows go dark.` : ''}`,
+      message: `${name !== before ? `${before} becomes ${name}! ` : ''}${taunt}${fogged > 0 ? ` ${fogged} lines go dark.` : ''}${scrambled > 0 ? ` ${scrambled} clues scramble.` : ''}`,
     };
   };
 
@@ -167,15 +172,17 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
       };
       view.root.addEventListener('pointerup', lift);
       view.root.addEventListener('pointercancel', lift);
-      const fog = battle().fog;
+      const { fog, scramble } = battle();
       if (fog) view.setFog(fog);
+      if (scramble) view.setScramble(scramble);
     },
 
     onLinesComplete(lines) {
       const messages: string[] = [];
       const fogged = clearFog(battle(), lines);
+      const unscrambled = clearScramble(fogged.state, lines);
       const chipped = chip(
-        fogged.state,
+        unscrambled.state,
         lines.map((l) => lineKey(l.kind, l.index)),
       );
       const dealt = chipped.dealt;
@@ -187,6 +194,13 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
           (l) => `${l.kind === 'row' ? 'row' : 'column'} ${l.index + 1}`,
         );
         messages.push(`You solved through the fog: ${names.join(', ')} revealed.`);
+      }
+      if (unscrambled.revealed.length && state.scramble) {
+        view?.setScramble(state.scramble, unscrambled.revealed);
+        const names = unscrambled.revealed.map(
+          (l) => `${l.kind === 'row' ? 'row' : 'column'} ${l.index + 1}`,
+        );
+        messages.push(`Gears click back into place: ${names.join(', ')} in order.`);
       }
       if (state !== battle()) saveCurrentRun(withBattle(current(), state));
       if (dealt) {
