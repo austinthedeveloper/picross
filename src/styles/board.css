@@ -389,3 +389,15 @@
     background: color-mix(in srgb, var(--squid-ink) 60%, var(--cell-bg));
   }
 }
+
+/* Lines the Mimic wiped (#78): marked until you refill them. */
+.clue.wiped {
+  background: color-mix(in srgb, var(--mischief) 22%, transparent);
+  box-shadow: inset 0 0 0 2px var(--mischief);
+}
+
+.row-clue.wiped::before,
+.col-clue.wiped::before {
+  content: '👄';
+  font-size: 0.8em;
+}

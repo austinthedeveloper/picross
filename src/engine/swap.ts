@@ -5,7 +5,7 @@ import type { LineKind } from './lines';
 export interface Swap {
   kind: LineKind;
   lines: [number, number];
-  /** Board indexes it wipes: your marks in those lines, except in lines you've finished. */
+  /** Board indexes it wipes: every mark in those two lines. */
   cells: number[];
 }
 
@@ -18,11 +18,11 @@ const isCorrect = (cell: Cell, answer: boolean) =>
 
 /**
  * Picks the Mimic's swap. It goes for the two unfinished rows, or the two
- * unfinished columns, holding the most correct marks, so it always costs you
- * something. Cells that sit in a finished line are never wiped, so a finished
- * line stays finished. Returns null if no swap would cost anything (for example,
- * before you've marked anything). Deterministic, so a fight plays the same way
- * every time.
+ * unfinished columns, holding the most correct marks, and wipes them clean, so
+ * you always know what to redo: those two lines (#78). That can open up lines
+ * crossing them that you'd finished; refilling the two lines closes them again.
+ * Returns null if no swap would cost anything (for example, before you've marked
+ * anything). Deterministic, so a fight plays the same way every time.
  */
 export function pickSwap(board: Board, solution: Solution): Swap | null {
   const w = board.width;
@@ -34,16 +34,13 @@ export function pickSwap(board: Board, solution: Solution): Swap | null {
   );
 
   const candidates = (kind: LineKind) => {
-    const [done, crossDone, count, length] =
-      kind === 'row'
-        ? [rowsDone, colsDone, board.height, w]
-        : [colsDone, rowsDone, w, board.height];
+    const [done, count, length] =
+      kind === 'row' ? [rowsDone, board.height, w] : [colsDone, w, board.height];
     return Array.from({ length: count }, (_, i) => {
       const cells: number[] = [];
       let damage = 0;
       if (!done[i]) {
         for (let j = 0; j < length; j++) {
-          if (crossDone[j]) continue;
           const at = kind === 'row' ? i * w + j : j * w + i;
           if (board.cells[at] === Cell.Empty) continue;
           cells.push(at);

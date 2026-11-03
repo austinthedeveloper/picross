@@ -1,4 +1,6 @@
 import { pickSwap } from '../../../../engine/swap';
+import { markWiped } from '../../../../game/battle';
+import { plural } from '../../../format';
 import { playSound } from '../../../sound';
 import type { FightContext } from './context';
 
@@ -16,13 +18,17 @@ export function createSwapper(ctx: FightContext) {
       const swap = pickSwap(ctx.controls.game.board, ctx.puzzle.solution);
       if (!swap) continue;
       const [a, b] = swap.lines;
+      // Save the wipe before the redraw, so lines it re-opens don't count as new.
+      const state = markWiped(ctx.battle(), swap.kind, swap.lines);
+      ctx.saveBattle(state);
       ctx.controls.game.wipe(swap.cells);
+      ctx.view?.setWiped(state.wiped!);
       ctx.controls.refresh();
       ctx.view?.flashSwap(swap.kind, a, b);
       playSound('phase');
       const lines = swap.kind === 'row' ? 'rows' : 'columns';
       ctx.bar.say(
-        `${ctx.form().name} swapped ${lines} ${a + 1} and ${b + 1} and ate your marks! Fill them in again.`,
+        `${ctx.form().name} swapped ${lines} ${a + 1} and ${b + 1} and ate ${plural(swap.cells.length, 'mark')}! Fill them in again.`,
       );
     }
   };

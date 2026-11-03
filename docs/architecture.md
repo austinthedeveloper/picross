@@ -426,19 +426,25 @@ column 3.
 
 ### Swaps (the Mimic)
 
-A phase can set `"swap": true`. When it starts, the Mimic swaps two of your rows or two of
-your columns and wipes what was in them, so you know exactly what to redo. (It used to move
-your marks, leaving you to work out which ones were now wrong; that played badly.) The
-solution doesn't change, so solvability never does. `pickSwap` (`engine/swap.ts`) picks the
-two unfinished rows, or the two unfinished columns, holding the most correct marks, so a
-swap always costs something. Cells in a finished line are never wiped, so finished lines
-stay finished. `Game.wipe` clears the cells and starts the undo history over, since undo
-would bring the marks back. Swaps wait until no stroke is in progress. The fight reaches
-the game through the `controls` that `onBoard` receives (`{ game, refresh }`). The wiped
-lines flash and the swap is announced.
+A phase can set `"swap": true`. When it starts, the Mimic swaps two of your rows or two
+of your columns and wipes them clean (#48, #78).
+
+- **Which lines:** `pickSwap` (`engine/swap.ts`) picks the two unfinished rows, or the two
+  unfinished columns, holding the most correct marks.
+- **What goes:** every mark in them, including cells in crossing lines you'd finished. A
+  wipe used to spare those cells, which meant it often took only a few marks and went
+  unnoticed. Now each wipe takes about 15–25 cells, measured by simulation. Lines it
+  re-opens close again when you refill the two lines; they don't deal chip damage twice.
+- **Solvability:** the solution doesn't change, so solvability never does.
+- **After the wipe:** `Game.wipe` clears the cells and starts the undo history over. The
+  wiped lines are saved in `BattleState.wiped` (`markWiped`), and their clues stay boxed
+  in mischief purple with 👄 until you complete them again (`clearWiped`). The
+  announcement says how much was lost: "swapped rows 6 and 11 and ate 19 marks!"
+- **Timing:** swaps wait until no stroke is in progress. The fight reaches the game
+  through the `controls` that `onBoard` receives (`{ game, refresh }`).
 
 The Night Shift run (`runs/night-shift.json`, #46) starts with the Mimic, a 15×15 chest
-with teeth that swaps at 90%, 80%, and 70% HP and turns Hungry (attack 3) on the last.
+with teeth that swaps at 85%, 70%, and 55% HP and turns Hungry (attack 3) on the last.
 
 ### Forged clues (the Forger)
 

@@ -1,4 +1,11 @@
-import { chip, clearFog, clearInk, clearScramble, type BattleState } from '../../../../game/battle';
+import {
+  chip,
+  clearFog,
+  clearInk,
+  clearScramble,
+  clearWiped,
+  type BattleState,
+} from '../../../../game/battle';
 import { keyToLine, lineCount, lineKey, noLines, type Line } from '../../../../engine/lines';
 import type { BoardView } from '../../../board/boardView';
 import { lineName } from '../../../format';
@@ -10,6 +17,7 @@ import type { CheckPhase } from './phases';
 export function showLineEffects(ctx: FightContext, view: BoardView) {
   const { fog, scramble, armor } = ctx.battle();
   if (fog) view.setFog(fog);
+  if (ctx.battle().wiped) view.setWiped(ctx.battle().wiped!);
   if (scramble) view.setScramble(scramble);
   if (armor) {
     view.setWeakPoints(armor);
@@ -31,7 +39,8 @@ export function completeLines(
   const { bar, view } = ctx;
   const fogged = clearFog(ctx.battle(), lines);
   const washedOut = clearInk(fogged.state, lines, ctx.puzzle.width);
-  const unscrambled = clearScramble(washedOut.state, lines);
+  const refilled = clearWiped(washedOut.state, lines);
+  const unscrambled = clearScramble(refilled.state, lines);
   const chipped = chip(
     unscrambled.state,
     lines.map((l) => lineKey(l.kind, l.index)),
@@ -50,6 +59,7 @@ export function completeLines(
     view?.setFog(state.fog, fogged.revealed);
     messages.push(`You solved through the fog: ${names(fogged.revealed)} revealed.`);
   }
+  if (refilled.revealed.length) view?.setWiped(state.wiped ?? noLines());
   if (washedOut.washed.length) {
     view?.setInk(state.ink ?? [], washedOut.washed);
     messages.push('The ink washes away.');

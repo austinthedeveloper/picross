@@ -6,6 +6,8 @@ import {
   CALL_OUT_DAMAGE,
   callOut,
   clearInk,
+  clearWiped,
+  markWiped,
   FALSE_ACCUSATION_HEAL,
   heal,
   WEAK_POINT_DAMAGE,
@@ -247,5 +249,16 @@ describe('charge and ink', () => {
   it('a sponge wipes all the ink', () => {
     const state = { ...startBattle(goblin), ink: [0, 1, 5] };
     expect(useGadget(state, { kind: 'wash' }).state.ink).toEqual([]);
+  });
+});
+
+describe('wiped lines', () => {
+  it('stay marked until you complete them again', () => {
+    let state = markWiped(startBattle(goblin), 'row', [2, 5]);
+    state = markWiped(state, 'row', [5]);
+    expect(state.wiped).toEqual({ rows: [2, 5], cols: [] });
+    const { state: next, revealed } = clearWiped(state, [{ kind: 'row', index: 5 }]);
+    expect(revealed).toEqual([{ kind: 'row', index: 5 }]);
+    expect(next.wiped).toEqual({ rows: [2], cols: [] });
   });
 });
