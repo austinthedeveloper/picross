@@ -23,8 +23,24 @@ export interface RunState {
   battle?: BattleState;
 }
 
-export function startRun(runId: string, hp: number, mode: Mode = 'relaxed'): RunState {
-  return { runId, node: 0, hp, maxHp: hp, gadgets: [], status: 'active', mode };
+export function startRun(
+  runId: string,
+  hp: number,
+  mode: Mode = 'relaxed',
+  gadgets: string[] = [],
+): RunState {
+  return { runId, node: 0, hp, maxHp: hp, gadgets: [...gadgets], status: 'active', mode };
+}
+
+export function addGadget(state: RunState, id: string): RunState {
+  return { ...state, gadgets: [...state.gadgets, id] };
+}
+
+/** Removes one of a held gadget (after it's used). */
+export function removeGadget(state: RunState, id: string): RunState {
+  const i = state.gadgets.indexOf(id);
+  if (i < 0) return state;
+  return { ...state, gadgets: [...state.gadgets.slice(0, i), ...state.gadgets.slice(i + 1)] };
 }
 
 /** Saves (or clears) the current fight's progress. */

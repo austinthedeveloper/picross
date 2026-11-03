@@ -1,6 +1,7 @@
-import { completeEncounter, startRun, withBoard, type RunState } from '../../game/run';
+import { addGadget, completeEncounter, startRun, withBoard, type RunState } from '../../game/run';
 import { getCurrentRun, saveCurrentRun } from '../../game/runSave';
 import { getSettings, updateSettings, type Mode } from '../../game/settings';
+import { getGadget } from '../../puzzles/gadgets';
 import { DEFAULT_RUN_ID, getRun, type Encounter, type RunDef } from '../../puzzles/runs';
 import { el } from '../dom';
 import { formatTime } from '../format';
@@ -38,7 +39,7 @@ function newRunButton(app: HTMLElement, label: string): HTMLButtonElement {
     textContent: label,
     onclick: () => {
       const def = getRun(DEFAULT_RUN_ID)!;
-      saveCurrentRun(startRun(def.id, def.hp, getSettings().mode));
+      saveCurrentRun(startRun(def.id, def.hp, getSettings().mode, def.gadgets));
       renderRunScreen(app);
     },
   });
@@ -174,14 +175,34 @@ function pathMap(app: HTMLElement, state: RunState, def: RunDef): Node[] {
         className: 'run-mode-label',
         textContent: state.mode === 'hearts' ? '♥ Hits on' : 'Relaxed',
       }),
-      el('span', {
-        className: 'gadgets',
-        textContent: state.gadgets.length ? state.gadgets.join(', ') : 'No gadgets yet',
-      }),
     ]),
+    inventory(state),
     el('ol', { className: 'run-path', ariaLabel: 'Run map' }, nodes),
     el('div', { className: 'run-actions' }, [abandon]),
   ];
+}
+
+/** Held gadgets with what each does. They're used from the battle bar in fights. */
+function inventory(state: RunState): HTMLElement {
+  const items = state.gadgets.flatMap((id) => getGadget(id) ?? []);
+  return el('section', { className: 'inventory', ariaLabel: 'Gadgets' }, [
+    el('h2', { textContent: 'Gadgets' }),
+    items.length
+      ? el(
+          'ul',
+          {},
+          items.map((g) =>
+            el('li', {}, [
+              el('span', { className: 'gadget-icon', textContent: g.icon, ariaHidden: 'true' }),
+              el('span', {}, [el('strong', { textContent: g.name }), ` ${g.description}`]),
+            ]),
+          ),
+        )
+      : el('p', {
+          className: 'run-meta',
+          textContent: 'None yet. Solved pictures can turn into gadgets.',
+        }),
+  ]);
 }
 
 function results(app: HTMLElement, state: RunState, def: RunDef): Node[] {
@@ -229,14 +250,18 @@ export function renderRunEncounter(app: HTMLElement): (() => void) | undefined {
     },
     complete(game) {
       const finisher = fight?.land();
-      const next = completeEncounter(getCurrentRun() ?? state, length);
+      let next = completeEncounter(getCurrentRun() ?? state, length);
+      const reward = encounter.puzzle.gadget ? getGadget(encounter.puzzle.gadget) : undefined;
+      if (reward) next = addGadget(next, reward.id);
       saveCurrentRun(next);
       const last = next.status === 'won';
       const time = formatTime(game.elapsed);
+      const got = reward ? ` · You got ${reward.icon} ${reward.name}!` : '';
       return {
-        note: fight
-          ? `${encounter.enemy!.name} defeated! Finisher −${finisher} · ${time}`
-          : `${encounter.name} cleared in ${time}`,
+        note:
+          (fight
+            ? `${encounter.enemy!.name} defeated! Finisher −${finisher} · ${time}`
+            : `${encounter.name} cleared in ${time}`) + got,
         actions: [
           el('a', {
             className: 'button primary',

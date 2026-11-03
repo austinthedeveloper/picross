@@ -13,6 +13,14 @@ export interface BattleBar {
   hitPlayer(amount: number): void;
   /** The enemy keels over. */
   defeat(): void;
+  /** Shows how many hits the player's shield will block. */
+  setShield(hits: number): void;
+  /** A shield absorbs a hit. */
+  block(): void;
+  /** Replaces the gadget buttons. */
+  setGadgets(buttons: HTMLElement[]): void;
+  /** Announces a message to screen readers. */
+  say(message: string): void;
 }
 
 function meter(label: string, className: string) {
@@ -62,13 +70,20 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
       enemyMeter.root,
     ]),
   ]);
+  const shield = el('span', { className: 'shield', hidden: true });
   const playerSide = el('div', { className: 'battle-side player' }, [
     el('div', { className: 'battle-info' }, [
-      el('span', { className: 'battle-name', textContent: 'You' }),
+      el('span', { className: 'battle-name' }, [shield, 'You']),
       playerMeter.root,
     ]),
   ]);
-  const root = el('section', { className: 'battle', ariaLabel: 'Fight' }, [enemySide, playerSide]);
+  const tray = el('div', { className: 'gadget-tray', role: 'group', ariaLabel: 'Gadgets' });
+  const live = el('div', { className: 'sr-only', ariaLive: 'polite' });
+  const root = el('section', { className: 'battle', ariaLabel: 'Fight' }, [
+    el('div', { className: 'battle-row' }, [enemySide, playerSide]),
+    tray,
+    live,
+  ]);
   enemyMeter.set(enemyHp, enemy.hp);
 
   return {
@@ -87,6 +102,24 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
     },
     defeat() {
       sprite.classList.add('defeated');
+    },
+    setShield(hits) {
+      shield.hidden = hits <= 0;
+      shield.textContent = hits > 1 ? `🛡×${hits} ` : '🛡 ';
+      shield.ariaLabel = `Shield blocks ${hits} ${hits === 1 ? 'hit' : 'hits'}`;
+    },
+    block() {
+      replay(sprite, 'lunge');
+      replay(shield, 'blocked');
+      floatNumber(playerSide, 'Blocked!', 'to-player');
+    },
+    setGadgets(buttons) {
+      tray.replaceChildren(...buttons);
+      tray.hidden = buttons.length === 0;
+    },
+    say(message) {
+      live.textContent = '';
+      requestAnimationFrame(() => (live.textContent = message));
     },
   };
 }

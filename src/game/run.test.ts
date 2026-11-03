@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { completeEncounter, damage, startRun, withBattle, withBoard } from './run';
+import {
+  addGadget,
+  completeEncounter,
+  damage,
+  removeGadget,
+  startRun,
+  withBattle,
+  withBoard,
+} from './run';
 
 describe('run', () => {
   it('advances through encounters and wins after the last', () => {
@@ -9,6 +17,15 @@ describe('run', () => {
     run = completeEncounter(run, 2);
     expect(run).toMatchObject({ node: 2, status: 'won' });
     expect(completeEncounter(run, 2)).toBe(run);
+  });
+
+  it('holds gadgets, including duplicates, and uses them one at a time', () => {
+    let run = startRun('r', 3, 'relaxed', ['patch-kit']);
+    run = addGadget(addGadget(run, 'bomb'), 'bomb');
+    expect(run.gadgets).toEqual(['patch-kit', 'bomb', 'bomb']);
+    run = removeGadget(run, 'bomb');
+    expect(run.gadgets).toEqual(['patch-kit', 'bomb']);
+    expect(removeGadget(run, 'nope')).toBe(run);
   });
 
   it('remembers the mode it started in', () => {

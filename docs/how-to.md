@@ -43,6 +43,16 @@ starter-pack test expects 5×5 to 15×15 and at most 15 puzzles, so update
 
 "Start a run" always begins `DEFAULT_RUN_ID` in `src/puzzles/runs.ts`.
 
+## Add a gadget
+
+1. Add an entry to the catalog in `src/puzzles/gadgets.ts` with an id, name, icon (an
+   emoji until there's art), one-line description, and effect.
+2. If the effect is a new kind, add it to the `GadgetEffect` union, handle it in
+   `useGadget` in `src/game/battle.ts` (with a test in `battle.test.ts`), and give it
+   feedback in `use()` in `src/ui/screens/fightHooks.ts`.
+3. Hand it out: set `"gadget": "<id>"` on the puzzle JSON whose picture becomes it, or
+   list it in a run's `"gadgets"` to start with it. Unknown ids fail at load.
+
 ## Add a screen
 
 1. Create `src/ui/screens/<name>Screen.ts` exporting

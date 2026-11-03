@@ -2,5 +2,6 @@
   "id": "first-job",
   "name": "First Job",
   "hp": 10,
-  "encounters": ["goblin", "dig-site", "fog-bat"]
+  "encounters": ["goblin", "dig-site", "fog-bat"],
+  "gadgets": ["patch-kit"]
 }
