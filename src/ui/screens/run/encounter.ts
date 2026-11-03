@@ -1,6 +1,7 @@
 import { addGadget, completeEncounter, heal, withBoard } from '../../../game/run';
 import { getCurrentRun, saveCurrentRun } from '../../../game/runSave';
 import { ENDLESS_HEAL } from '../../../puzzles/endless';
+import { restHeal } from '../../../puzzles/runs';
 import { getGadget } from '../../../puzzles/gadgets';
 import { getScene } from '../../../puzzles/scenes';
 import { el } from '../../dom';
@@ -9,6 +10,7 @@ import { renderGameScreen, type PlaySession } from '../gameScreen';
 import { renderSceneScreen } from '../sceneScreen';
 import { digHooks } from './dig';
 import { fightHooks } from './fight/index';
+import { restHooks } from './rest';
 import { loadRun } from './shared';
 
 /** Plays the current encounter at #/run/play. Returns the game screen's cleanup. */
@@ -30,7 +32,11 @@ export function renderRunEncounter(app: HTMLElement): (() => void) | undefined {
       // In Hearts runs, fights check fills so the enemy can hit back. Digs never do.
       mode: fight && state.mode === 'hearts' ? 'battle' : 'relaxed',
       saved: state.board,
-      ...(fight ? fight.hooks : digHooks(encounter.puzzle)),
+      ...(fight
+        ? fight.hooks
+        : encounter.rest
+          ? restHooks(encounter.rest)
+          : digHooks(encounter.puzzle)),
       save: (board) => {
         const current = getCurrentRun();
         if (current?.status === 'active') saveCurrentRun(withBoard(current, board));
@@ -40,9 +46,11 @@ export function renderRunEncounter(app: HTMLElement): (() => void) | undefined {
         let next = completeEncounter(getCurrentRun() ?? state, length);
         const reward = encounter.puzzle.gadget ? getGadget(encounter.puzzle.gadget) : undefined;
         if (reward) next = addGadget(next, reward.id);
-        // Endless (#68): a little HP back after each fight.
+        // Endless (#68) gives a little HP back after each fight; a rest stop (#77)
+        // heals more if you beat its clock.
         const before = next.hp;
         if (def.endless && fight) next = heal(next, ENDLESS_HEAL);
+        if (encounter.rest) next = heal(next, restHeal(encounter.rest, game.elapsed));
         const healed = next.hp - before;
         saveCurrentRun(next);
         const last = next.status === 'won';
@@ -54,7 +62,11 @@ export function renderRunEncounter(app: HTMLElement): (() => void) | undefined {
           note:
             (fight
               ? `${fight.name()} defeated! Finisher −${finisher} · ${time}`
-              : `${encounter.name} cleared in ${time}`) + got,
+              : encounter.rest
+                ? `${restHeal(encounter.rest, game.elapsed) === encounter.rest.heal ? 'Rested' : 'Too slow for a full rest'} · ${time}`
+                : `${encounter.name} cleared in ${time}`) +
+            got +
+            (encounter.rest && !healed ? ' · already at full HP' : ''),
           actions: [
             el('a', {
               className: 'button primary',

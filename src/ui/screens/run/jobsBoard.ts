@@ -127,7 +127,7 @@ function endlessSection(hub: Hub): HTMLElement {
     el('p', {
       className: 'chapter-blurb',
       textContent: open
-        ? `Every enemy from the jobs you've played, in a fresh order, harder as you go. +${ENDLESS_HEAL} HP after each fight, a dig every fourth node.`
+        ? `Every enemy from the jobs you've played, in a fresh order, harder as you go. +${ENDLESS_HEAL} HP after each fight; every fourth node is a dig or a rest stop.`
         : `Clear ${getRun(ENDLESS_AFTER)?.name ?? ENDLESS_AFTER} to open Endless.`,
     }),
     ...(open

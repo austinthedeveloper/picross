@@ -2,7 +2,7 @@
   "id": "first-job",
   "name": "First Job",
   "hp": 12,
-  "encounters": ["goblin", "dig-site", "fog-bat", "gremlin"],
+  "encounters": ["goblin", "dig-site", "fog-bat", "tea-break", "gremlin"],
   "gadgets": ["patch-kit"],
   "intro": "first-job-intro",
   "outro": "first-job-outro",

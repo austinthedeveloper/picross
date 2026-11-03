@@ -21,6 +21,7 @@ test('the whole Night Shift, from the jobs board to the Curator', async ({ page,
     'forger',
     'dusty-exhibit',
     'armored-beetle',
+    'break-room',
     'curator',
   ]) {
     await page.locator('.node.current .node-body').tap();
@@ -34,6 +35,6 @@ test('the whole Night Shift, from the jobs board to the Curator', async ({ page,
   }
 
   await expect(page.locator('.results h2')).toHaveText('Job done!');
-  await expect(page.locator('.results .run-meta').first()).toContainText('6/6 encounters cleared');
+  await expect(page.locator('.results .run-meta').first()).toContainText('7/7 encounters cleared');
   await expect(page.locator('.sign-off')).toHaveCount(2);
 });

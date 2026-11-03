@@ -2,7 +2,14 @@
   "id": "deep-end",
   "name": "The Deep End",
   "hp": 16,
-  "encounters": ["electric-eel", "anglerfish", "gift-shop", "cuttlefish", "old-tess"],
+  "encounters": [
+    "electric-eel",
+    "anglerfish",
+    "gift-shop",
+    "cuttlefish",
+    "lifeguard-chair",
+    "old-tess"
+  ],
   "order": 3,
   "requires": "night-shift",
   "gadgets": ["patch-kit"],

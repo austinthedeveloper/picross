@@ -1,0 +1,11 @@
+{
+  "id": "tea-break",
+  "name": "Tea break",
+  "kind": "rest",
+  "puzzle": "thermos",
+  "blurb": "Mrs. Pell left a thermos on the steps. It's still warm.",
+  "rest": {
+    "seconds": 90,
+    "heal": 4
+  }
+}

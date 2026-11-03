@@ -46,7 +46,7 @@ test('fog bat: fog only lifts from the row you solve', async ({ page }) => {
 test('gremlin: fog waves land on unsolved rows as it turns Overcharged, then Blackout', async ({
   page,
 }) => {
-  await fight(page, 'first-job', 3);
+  await fight(page, 'first-job', 4);
   const wrench = encounterSolution('gremlin');
   await expect.poll(() => fogged(page)).toHaveLength(3);
   const forms = new Set<string>();

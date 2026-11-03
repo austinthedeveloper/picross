@@ -18,7 +18,14 @@ test('the whole Deep End, from chapter 3 opening to Old Tess', async ({ page, co
   await page.locator('.job').nth(2).locator('text=Start').tap();
   await skipScene(page);
 
-  for (const id of ['electric-eel', 'anglerfish', 'gift-shop', 'cuttlefish', 'old-tess']) {
+  for (const id of [
+    'electric-eel',
+    'anglerfish',
+    'gift-shop',
+    'cuttlefish',
+    'lifeguard-chair',
+    'old-tess',
+  ]) {
     await page.locator('.node.current .node-body').tap();
     await skipScene(page);
     if (id === 'anglerfish') await expect(page.locator('.clue.fogged')).toHaveCount(5);

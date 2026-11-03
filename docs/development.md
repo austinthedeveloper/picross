@@ -62,7 +62,7 @@ HTML report (`playwright-report`) when something fails. To debug a failure, run
 | File                  | Covers                                                                                                                                    |
 | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | `free-play.spec.ts`   | Sizes, sound off by default, solving and the end screen, drag, undo, Hearts and Retry, hints, keyboard play                               |
-| `runs.spec.ts`        | Jobs board locking, the full First Job (intro once, sign-off, stats), knockouts                                                           |
+| `runs.spec.ts`        | Jobs board and chapters, the full First Job (intro once, sign-off, stats), knockouts, rest stops in time and late                         |
 | `fights.spec.ts`      | One test per mechanic: fog, gremlin waves, Mimic swaps, Owl scramble, Forger call-outs, Beetle armor, gadgets, Eel charge, Cuttlefish ink |
 | `night-shift.spec.ts` | The whole Night Shift from the jobs board to the Curator                                                                                  |
 | `deep-end.spec.ts`    | The whole Deep End from the chapter 3 opening to Old Tess                                                                                 |

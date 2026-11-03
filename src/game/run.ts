@@ -24,7 +24,7 @@ export interface RunState {
   /** Set once the finished run's result is saved to the job stats (#47). */
   recorded?: boolean;
   /** An endless run's seed and pools (#68); its encounters are generated from them. */
-  endless?: { seed: number; fights: string[]; digs: string[] };
+  endless?: { seed: number; fights: string[]; digs: string[]; rests?: string[] };
 }
 
 export function startRun(

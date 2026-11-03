@@ -9,8 +9,8 @@ export const ENDLESS_HP = 14;
 export const ENDLESS_GADGETS = ['patch-kit'];
 /** HP you get back after each fight. */
 export const ENDLESS_HEAL = 2;
-/** Every this-many-th node is a dig, so gadgets keep coming. */
-const DIG_EVERY = 4;
+/** Every this-many-th node is a break from fighting: a dig or a rest stop, in turn. */
+const BREAK_EVERY = 4;
 /** How far ahead the map shows. */
 const LOOKAHEAD = 3;
 
@@ -19,12 +19,15 @@ export interface EndlessSetup {
   seed: number;
   fights: string[];
   digs: string[];
+  /** Rest stops (#77). Missing in runs started before they existed. */
+  rests?: string[];
 }
 
-export const isDig = (node: number) => node % DIG_EVERY === DIG_EVERY - 1;
+/** Every fourth node is a break: digs keep gadgets coming, rest stops heal (#77). */
+export const isBreak = (node: number) => node % BREAK_EVERY === BREAK_EVERY - 1;
 
 /** How many fights come before `node`. */
-export const fightsBefore = (node: number) => node - Math.floor((node + 1) / DIG_EVERY);
+export const fightsBefore = (node: number) => node - Math.floor((node + 1) / BREAK_EVERY);
 
 /** An enemy at depth: +15% HP every 3 fights, +1 attack every 4 (phases scale with HP). */
 export function scaleEnemy(enemy: Enemy, fights: number): Enemy {
@@ -54,10 +57,17 @@ function fromCycles(pool: readonly string[], index: number, seed: number): strin
 
 /** The encounter at `node` in an endless run. Story scenes are left out. */
 export function endlessEncounter(setup: EndlessSetup, node: number): Encounter {
-  const dig = isDig(node) && setup.digs.length > 0;
   const fight = fightsBefore(node);
-  const id = dig
-    ? fromCycles(setup.digs, Math.floor(node / DIG_EVERY), setup.seed + 1)
+  // Breaks alternate dig, rest, dig, rest… (or whichever kind the run has).
+  const n = Math.floor(node / BREAK_EVERY);
+  const rests = setup.rests ?? [];
+  const pool = !isBreak(node)
+    ? null
+    : (n % 2 === 1 && rests.length) || !setup.digs.length
+      ? rests
+      : setup.digs;
+  const id = pool?.length
+    ? fromCycles(pool, Math.floor(n / 2), setup.seed + (pool === rests ? 2 : 1))
     : fromCycles(setup.fights, fight, setup.seed);
   const base = getEncounter(id);
   if (!base) throw new Error(`Endless run uses unknown encounter "${id}"`);
@@ -70,13 +80,13 @@ export function endlessEncounter(setup: EndlessSetup, node: number): Encounter {
   return encounter;
 }
 
-/** The pools for a new endless run: every fight and dig from the jobs you've played. */
+/** The pools for a new endless run: every fight, dig and rest stop from the jobs you've played. */
 export function endlessSetup(jobs: readonly RunDef[], seed: number): EndlessSetup {
   const all = jobs.flatMap((j) => j.encounters);
   const ids = (kind: Encounter['kind']) => [
     ...new Set(all.filter((e) => e.kind === kind).map((e) => e.id)),
   ];
-  return { seed, fights: ids('fight'), digs: ids('dig') };
+  return { seed, fights: ids('fight'), digs: ids('dig'), rests: ids('rest') };
 }
 
 /** The endless run as a run definition: the encounters up to a few past the current one. */
