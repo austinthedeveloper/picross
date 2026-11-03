@@ -1,10 +1,12 @@
-import { unionLines, type LineSet } from '../engine/lines';
+import { fakeClues } from '../engine/fakes';
+import { hasLine, lineKeys, unionLines, type LineSet } from '../engine/lines';
 import type { Enemy, Phase } from '../game/battle';
 import type { Puzzle } from './format';
 
 /**
  * Parses and validates a fight's enemy (#27) against its puzzle: HP and
- * attack, fog (#30), scramble (#49), armor (#50), and phases (#42, #48).
+ * attack, fog (#30), scramble (#49), armor (#50), forged clues (#64), and
+ * phases (#42, #48).
  */
 export function parseEnemy(data: unknown, puzzle: Puzzle, fail: (msg: string) => never): Enemy {
   const enemy = data as Partial<Enemy> | undefined;
@@ -100,12 +102,39 @@ export function parseEnemy(data: unknown, puzzle: Puzzle, fail: (msg: string) =>
   // of an enemy's fog (starting and from every phase) must be in one direction.
   const all = allFog(parsed);
   if (all.rows.length && all.cols.length) fail('fog can cover rows or columns, not both');
+
+  // A forged clue must be readable (not fogged or scrambled) to be worth calling out.
+  if (enemy.fakes !== undefined) {
+    const fakes = parseFog(enemy.fakes);
+    if (!fakes.rows.length && !fakes.cols.length) fail('fakes needs at least one line');
+    const covered = unionLines([all, allScramble(parsed)]);
+    for (const key of lineKeys(fakes)) {
+      const [kind, index] = [key[0] === 'r' ? 'row' : 'col', Number(key.slice(1))] as const;
+      if (hasLine(covered, kind, index))
+        fail(`${kind} ${index + 1} can't be both forged and fogged or scrambled`);
+    }
+    try {
+      fakeClues(puzzle.width, puzzle.height, puzzle.clues, fakes);
+    } catch (e) {
+      fail((e as Error).message);
+    }
+    parsed.fakes = fakes;
+  }
   return parsed;
 }
 
 /** Every line an enemy can ever fog: its starting fog plus every phase's. */
 export function allFog(enemy: Enemy): LineSet {
   return unionLines([enemy.fog, ...(enemy.phases ?? []).map((p) => p.fog)]);
+}
+
+/**
+ * Every line whose clue you can't trust from the start: all its fog, plus its
+ * forged clues (#64). The puzzle must be solvable without any of them, which
+ * also proves each forgery contradicts the real picture.
+ */
+export function allUnreadable(enemy: Enemy): LineSet {
+  return unionLines([allFog(enemy), enemy.fakes]);
 }
 
 /** Every line an enemy can ever scramble: its starting scramble plus every phase's. */

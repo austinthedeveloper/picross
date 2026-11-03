@@ -304,14 +304,15 @@
   }
 }
 
-/* Armor (#50) */
+/* Armor (#50) and forged clues (#64) */
 .battle-name-row {
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-.armor {
+.armor,
+.fakes {
   white-space: nowrap;
   font-size: 0.75rem;
   font-weight: 700;
@@ -321,7 +322,8 @@
   color: var(--bg);
 }
 
-.armor[hidden] {
+.armor[hidden],
+.fakes[hidden] {
   display: none;
 }
 
@@ -334,4 +336,11 @@
     transform: scale(1.6) rotate(12deg);
     opacity: 0;
   }
+}
+
+/* Forged clues (#64): the call-out button. The 🎭 count shares the armor badge's look. */
+.gadget.call-out.active {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
 }

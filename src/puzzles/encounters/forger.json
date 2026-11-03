@@ -1,0 +1,26 @@
+{
+  "id": "forger",
+  "name": "The Forger",
+  "kind": "fight",
+  "puzzle": "palette",
+  "scene": "forger-intro",
+  "blurb": "The gallery's paintings look... slightly off.",
+  "enemy": {
+    "name": "The Forger",
+    "sprite": "\ud83c\udfa8",
+    "hp": 45,
+    "attack": 2,
+    "fakes": {
+      "rows": [3, 7, 13]
+    },
+    "phases": [
+      {
+        "at": 0.5,
+        "name": "Master Forger",
+        "sprite": "\ud83d\uddbc\ufe0f",
+        "attack": 3,
+        "taunt": "Every clue's a masterpiece. Some are even real."
+      }
+    ]
+  }
+}

@@ -14,7 +14,14 @@ test('the whole Night Shift, from the jobs board to the Curator', async ({ page,
   await page.locator('.job').nth(1).locator('text=Start').tap();
   await skipScene(page);
 
-  for (const id of ['mimic', 'clockwork-owl', 'dusty-exhibit', 'armored-beetle', 'curator']) {
+  for (const id of [
+    'mimic',
+    'clockwork-owl',
+    'forger',
+    'dusty-exhibit',
+    'armored-beetle',
+    'curator',
+  ]) {
     await page.locator('.node.current .node-body').tap();
     await skipScene(page);
     if (id === 'curator') {
@@ -26,6 +33,6 @@ test('the whole Night Shift, from the jobs board to the Curator', async ({ page,
   }
 
   await expect(page.locator('.results h2')).toHaveText('Job done!');
-  await expect(page.locator('.results .run-meta').first()).toContainText('5/5 encounters cleared');
+  await expect(page.locator('.results .run-meta').first()).toContainText('6/6 encounters cleared');
   await expect(page.locator('.sign-off')).toHaveCount(2);
 });

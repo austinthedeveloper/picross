@@ -28,6 +28,7 @@ src/
     lines.ts               LineSet: sets of rows/columns (fog, scrambles, weak points)
     solver.ts              Line solver: uniqueness/no-guess check; fog and scramble aware
     swap.ts                Which two lines the Mimic swaps and wipes (#48)
+    fakes.ts               The Forger's forged clues: a convincing wrong clue per line (#64)
   puzzles/                 Content and its validation
     format.ts              Puzzle file format, parse/validate, export helpers
     index.ts               Loads pack/*.json (free play, in ORDER) and run/*.json
@@ -35,7 +36,7 @@ src/
     run/*.json             Run-only puzzles (the sword, wrench, owl, pocket watch, ...)
     pack.test.ts           Uniqueness check over every puzzle
     runs.ts                Loads encounters/*.json and runs/*.json (jobs)
-    enemies.ts             Validates an enemy: fog, scramble, armor, phases
+    enemies.ts             Validates an enemy: fog, scramble, armor, forged clues, phases
     gadgets.ts             Gadget catalog: name, icon, description, effect
     scenes.ts              Loads and validates scenes/*.json (dialogue, #22)
     encounters/*.json      Encounters: name, kind (fight/dig), puzzle, enemy, boss, scene
@@ -43,7 +44,7 @@ src/
     scenes/*.json          Scenes: cast, nodes of lines, choices, and conditions
   game/                    Game state and saves, no DOM
     game.ts                Game: board, history, mode/hearts, hints, clock, wipes
-    battle.ts              Enemy and BattleState: chip, finisher, gadgets, phases, armor
+    battle.ts              Enemy and BattleState: chip, finisher, gadgets, phases, armor, call-outs
     run.ts                 RunState and its pure transitions
     dialogue.ts            Scene runner: current line or choices, advance, choose, flags
     progress.ts            Free-play saves, solve stats, totals (localStorage)
@@ -75,6 +76,7 @@ src/
           lines.ts         Completed lines: fog, scramble, armor, chip damage
           phases.ts        Phase changes: form, banner, more fog/scramble, swaps
           swaps.ts         The Mimic's swaps (wait for strokes to end)
+          callOut.ts       Forged clues: the 🔍 Call out button and accusations
           gadgets.ts       The gadget tray
           hits.ts          Mistakes, shields, knockouts
           finisher.ts      The solved picture flying at the enemy
@@ -86,7 +88,7 @@ src/
       zoom.ts              Pinch/wheel zoom and two-finger pan
       picture.ts           Pixel-art canvas of a solution
     components/
-      battleBar.ts         Enemy/player HP, gadgets, armor, phase banner, hit effects
+      battleBar.ts         Enemy/player HP, gadgets, armor, 🎭 forgeries, phase banner, hit effects
       dialogue.ts          Scene player: portrait, typed text box, choices, Skip
       endPanels.ts         Solved, out-of-hearts, and generic end panels
       hintMenu.ts          "Hint n/3" dropdown
@@ -100,7 +102,7 @@ src/
     select.css             Puzzle list
     editor.css             Editor
     run.css                Run banner, jobs board, path map, results
-    fight.css              Battle bar, gadgets, phase banner, armor
+    fight.css              Battle bar, gadgets, phase banner, armor, call-out
     dig.css                The dig's dirt board and reveal
     dialogue.css           Scene player
 e2e/                       Playwright browser tests (see docs/development.md)
@@ -252,8 +254,8 @@ job's outro plays for a win or a loss, which gives room for a tease after the si
 and offers **Run it again** or **Jobs board**.
 
 Jobs so far: **First Job** (#21) and **The Night Shift** (#46). The Night Shift unlocks after
-First Job. It's Mimic → Clockwork Owl → Dusty Exhibit (a dig that yields a patch kit) →
-Armored Beetle → the Curator, with Curator Ambrose joining Rook and Dee in its scenes.
+First Job. It's Mimic → Clockwork Owl → the Forger → Dusty Exhibit (a dig that yields a
+patch kit) → Armored Beetle → the Curator, with Curator Ambrose joining Rook and Dee in its scenes.
 
 ## Fights
 
@@ -354,7 +356,32 @@ lines flash and the swap is announced.
 
 The Night Shift run (`runs/night-shift.json`, #46) starts with the Mimic, a 15×15 chest
 with teeth that swaps at 90%, 80%, and 70% HP and turns Hungry (attack 3) on the last.
-It isn't reachable from the game until the jobs board (#47) lands.
+
+### Forged clues (the Forger)
+
+An enemy can have `fakes: { rows, cols }`: those lines show a forged clue instead of the
+real one, and the battle bar shows how many are left (🎭). `fakeClue` (`engine/fakes.ts`)
+makes each forgery: it still fits the line, so it can't be ruled out at a glance. It
+tries, in order, merging two neighboring runs, splitting a long run, lengthening a run,
+then shortening one. A faked line only counts as complete when its _fake_ is satisfied,
+and the fight ignores that, so a line you've filled correctly that won't light up is the
+tell.
+
+**🔍 Call out** (`run/fight/callOut.ts`) sits in the gadget tray. Tap it, then a clue
+(`BoardView.pickClue`; clues take Enter too). A forgery is unmasked: the real clue comes
+back (`BoardView.setFakes`), and `callOut` deals `CALL_OUT_DAMAGE` (5, never below 1 HP).
+If you'd already filled the line, it completes right then and chips too. Accusing an honest
+clue lets the enemy hit you in Hits-on runs; in Relaxed runs it heals
+`FALSE_ACCUSATION_HEAL` (3) instead, so guessing is never free. A forged line can't also
+be fogged or scrambled.
+
+Solvability: the test suite solves each enemy's puzzle with its forged lines treated as
+fog (`allUnreadable`). If that's unique, then no grid satisfies the forgery and all the
+other clues, so every forgery contradicts the real picture and can be caught by logic.
+
+The Forger (`encounters/forger.json`) is the third Night Shift node: a 15×15 palette
+with rows 4, 8, and 14 forged. It turns Master Forger (attack 3) at half HP, and its scene
+(`forger-intro`) teaches the call-out.
 
 ### The Curator (Night Shift boss)
 

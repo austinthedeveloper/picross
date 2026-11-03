@@ -89,10 +89,39 @@ test('clockwork owl: scrambled clues show sorted and restore when solved', async
   await solve(page, owl);
 });
 
+test('forger: forged clues, call-outs right and wrong, and a faked line that waits', async ({
+  page,
+}) => {
+  await fight(page, 'night-shift', 2);
+  const palette = encounterSolution('forger');
+  const rowClue = (r: number) => page.locator('.row-clue').nth(r);
+  await expect(page.locator('.battle .fakes')).toHaveText('🎭 3');
+  await expect(rowClue(3)).toHaveText(/^6\D*7$/); // really 3 2 7
+
+  // Accusing an honest clue lets the Forger hit you.
+  await press(page, 'Call out');
+  await rowClue(0).tap();
+  await expect.poll(() => announcements(page)).toContain('Row 1 was honest!');
+  expect(await meter(page, 'player-hp')).toBe(12);
+
+  // A forged line you fill correctly doesn't count until you call it out.
+  await fillRow(page, palette, 7);
+  expect(await meter(page, 'enemy-hp')).toBe(45);
+  await press(page, 'Call out');
+  await rowClue(7).tap();
+  await expect.poll(() => announcements(page)).toContain('Row 8 was a forgery');
+  await expect(rowClue(7)).toHaveText(/^2\D*9$/);
+  expect(await meter(page, 'enemy-hp')).toBe(39); // 5 for the call-out, 1 for the line
+  await expect(page.locator('.battle .fakes')).toHaveText('🎭 2');
+
+  await solve(page, palette);
+  await expect(page.locator('.end-panel:not([hidden]) .end-note')).toContainText('defeated');
+});
+
 test('armored beetle: armor blocks lines and hits harder until the weak points break it', async ({
   page,
 }) => {
-  await fight(page, 'night-shift', 3, { hp: 12, maxHp: 12 });
+  await fight(page, 'night-shift', 4, { hp: 12, maxHp: 12 });
   const beetle = encounterSolution('armored-beetle');
   await expect(page.locator('.clue.weak-point')).toHaveCount(3);
   await fillRow(page, beetle, 0);

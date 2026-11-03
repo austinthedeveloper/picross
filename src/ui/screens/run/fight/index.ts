@@ -1,6 +1,7 @@
 import { finish, type Enemy } from '../../../../game/battle';
 import type { Puzzle } from '../../../../puzzles/format';
 import type { PlaySession } from '../../gameScreen';
+import { createCallOut } from './callOut';
 import { createFightContext } from './context';
 import { playFinisher } from './finisher';
 import { createGadgetTray } from './gadgets';
@@ -13,14 +14,16 @@ import { createSwapper } from './swaps';
  * Fight rules on top of a run encounter (#27): completed lines chip the enemy,
  * the solved picture is the finisher, and in Hits-on runs each wrong fill lets
  * the enemy hit your run HP. Each mechanic lives in its own module: line
- * effects (fog, scramble, armor), phases, swaps, gadgets, hits, and the
- * finisher. This wires them into the play session's hooks.
+ * effects (fog, scramble, armor), phases, swaps, forged clues, gadgets, hits,
+ * and the finisher. This wires them into the play session's hooks.
  */
 export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
   const ctx = createFightContext(enemy, puzzle);
   const swapper = createSwapper(ctx);
   const checkPhase = createPhases(ctx, swapper);
-  const gadgets = createGadgetTray(ctx, checkPhase);
+  // The call-out button sits in the gadget tray, and calling out refreshes the tray.
+  const callOut = createCallOut(ctx, checkPhase, () => gadgets.render());
+  const gadgets = createGadgetTray(ctx, checkPhase, callOut.buttons);
   let finisher = 0;
   let defeatedAs = enemy.name;
 
@@ -34,9 +37,17 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
       ctx.controls = controls;
       swapper.attach(view.root);
       showLineEffects(ctx, view);
+      callOut.show();
     },
     // A bomb can't help once the enemy is down to 1 HP, so damage refreshes the gadgets.
-    onLinesComplete: (lines) => completeLines(ctx, lines, checkPhase, gadgets.render),
+    // A line showing a forgery doesn't count until the forgery is called out.
+    onLinesComplete: (lines) =>
+      completeLines(
+        ctx,
+        lines.filter((line) => !callOut.isFaked(line)),
+        checkPhase,
+        gadgets.render,
+      ),
     onMistake: () => takeHit(ctx, gadgets.render),
     ended: () => knockedOut(ctx),
     celebrate: (board) => playFinisher(ctx, board, finisher),

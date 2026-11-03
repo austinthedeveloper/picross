@@ -57,7 +57,10 @@ groups puzzles by size, biggest first, so a new size gets its own section automa
    enemy, or a `scramble` pool with `scrambleCount` to a phase. Only lines with at least
    two different run lengths can be scrambled. For armor (the Beetle), add
    `"armor": { "weakPoints": { "rows": [8], "cols": [2] }, "attack": 4 }`; pick weak points
-   that take some work, not lines solved in the first pass.
+   that take some work, not lines solved in the first pass. For forged clues (the
+   Forger), add `"fakes": { "rows": [3, 7, 13] }`. The forgeries are generated for you;
+   the suite checks the puzzle is still solvable with those lines unread. Sets of rows
+   only or columns only work best.
    Phases trigger in order at decreasing `at` values. A phase's `fog` is a pool, and it fogs
    up to `fogCount` unsolved lines from it. Line damage is 1 per line and columns mostly
    finish late, so set `at` high (0.8–0.9) for a phase to land mid-solve. To find a fog

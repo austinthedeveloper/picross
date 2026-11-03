@@ -1,5 +1,6 @@
 import {
   copyLines,
+  hasLine,
   lineCount,
   lineKey,
   lineKeys,
@@ -26,6 +27,8 @@ export interface Enemy {
   phases?: Phase[];
   /** Armor (#50): blocks line damage until its weak points are solved. */
   armor?: Armor;
+  /** Lines whose clues are forged (#64) until you call them out. */
+  fakes?: LineSet;
 }
 
 /**
@@ -79,6 +82,8 @@ export interface BattleState {
   scramble?: LineSet;
   /** Weak points not yet solved (#50); armor is up while any are left. */
   armor?: LineSet;
+  /** Forged clues not yet called out (#64). */
+  fakes?: LineSet;
 }
 
 /** Damage per weak-point line while armor is up. */
@@ -94,6 +99,7 @@ export function startBattle(enemy: Enemy): BattleState {
   if (enemy.fog) state.fog = copyLines(enemy.fog);
   if (enemy.armor) state.armor = copyLines(enemy.armor.weakPoints);
   if (enemy.scramble) state.scramble = copyLines(enemy.scramble);
+  if (enemy.fakes) state.fakes = copyLines(enemy.fakes);
   return state;
 }
 
@@ -211,6 +217,35 @@ export function chip(
   }
   const enemyHp = Math.max(1, state.enemyHp - damage);
   return { state: { ...next, enemyHp }, dealt: state.enemyHp - enemyHp, cracked, broke };
+}
+
+/** Damage for calling out a forged clue (#64). */
+export const CALL_OUT_DAMAGE = 5;
+
+/** HP the enemy touches up when you accuse an honest clue in a Relaxed run. */
+export const FALSE_ACCUSATION_HEAL = 3;
+
+/**
+ * You accuse a clue of being forged (#64). A forged one is unmasked and deals
+ * call-out damage (never below 1 HP, like chip damage). An honest one costs
+ * you: the caller lets the enemy hit, or in a Relaxed run it heals.
+ */
+export function callOut(
+  state: BattleState,
+  line: Line,
+): { state: BattleState; caught: boolean; dealt: number } {
+  if (!state.fakes || !hasLine(state.fakes, line.kind, line.index)) {
+    return { state, caught: false, dealt: 0 };
+  }
+  const enemyHp = Math.max(1, state.enemyHp - CALL_OUT_DAMAGE);
+  const fakes = removeLine(state.fakes, line.kind, line.index);
+  return { state: { ...state, fakes, enemyHp }, caught: true, dealt: state.enemyHp - enemyHp };
+}
+
+/** An honest clue accused in a Relaxed run: the enemy recovers a little. */
+export function heal(state: BattleState, maxHp: number): { state: BattleState; healed: number } {
+  const enemyHp = Math.min(maxHp, state.enemyHp + FALSE_ACCUSATION_HEAL);
+  return { state: { ...state, enemyHp }, healed: enemyHp - state.enemyHp };
 }
 
 /** The finisher: the solved picture deals whatever HP the enemy has left. */

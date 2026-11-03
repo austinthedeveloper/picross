@@ -2,7 +2,7 @@
   "id": "night-shift",
   "name": "The Night Shift",
   "hp": 14,
-  "encounters": ["mimic", "clockwork-owl", "dusty-exhibit", "armored-beetle", "curator"],
+  "encounters": ["mimic", "clockwork-owl", "forger", "dusty-exhibit", "armored-beetle", "curator"],
   "order": 2,
   "requires": "first-job",
   "gadgets": ["bomb"],
