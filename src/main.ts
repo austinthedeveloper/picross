@@ -10,6 +10,7 @@ import './styles/dig.css';
 import './styles/dialogue.css';
 import { getPuzzle } from './puzzles/index';
 import { getScene } from './puzzles/scenes';
+import { renderDailyScreen } from './ui/screens/daily';
 import { renderEditorScreen } from './ui/screens/editorScreen';
 import { renderGameScreen } from './ui/screens/gameScreen';
 import { renderRunEncounter, renderRunScreen } from './ui/screens/run';
@@ -32,6 +33,8 @@ function route() {
     cleanup = renderGameScreen(app, puzzle);
   } else if (scene && getScene(scene[1])) {
     cleanup = renderSceneScreen(app, getScene(scene[1])!);
+  } else if (location.hash === '#/daily') {
+    cleanup = renderDailyScreen(app);
   } else if (location.hash === '#/run') {
     cleanup = renderRunScreen(app);
   } else if (location.hash === '#/run/play') {

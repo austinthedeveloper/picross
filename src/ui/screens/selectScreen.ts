@@ -7,6 +7,7 @@ import { createMuteButton } from '../components/muteButton';
 import { el } from '../dom';
 import { formatTime } from '../format';
 import { applyTheme } from '../theme';
+import { dailyCard } from './daily';
 import { runBanner } from './run';
 
 const MODE_HINTS: Record<Mode, string> = {
@@ -89,6 +90,7 @@ export function renderSelectScreen(app: HTMLElement): void {
           }),
         ]),
       ]),
+      dailyCard(),
       runBanner(),
       el('div', { className: 'mode-row' }, [
         el('div', { className: 'segmented', role: 'group', ariaLabel: 'Mode' }, [

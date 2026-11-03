@@ -30,6 +30,8 @@ src/
     swap.ts                Which two lines the Mimic swaps and wipes (#48)
     fakes.ts               The Forger's forged clues: a convincing wrong clue per line (#64)
     ink.ts                 Where ink lands and how completed lines wash it off (#67)
+    random.ts              Seeded random numbers and shuffles (endless, daily)
+    transform.ts           The eight turns and flips of a grid (daily puzzle, #69)
   puzzles/                 Content and its validation
     format.ts              Puzzle file format, parse/validate, export helpers
     index.ts               Loads pack/*.json (free play, in ORDER) and run/*.json
@@ -39,6 +41,7 @@ src/
     runs.ts                Loads encounters/*.json and runs/*.json (jobs)
     chapters.ts            Loads chapters/*.json: jobs grouped into story chapters (#23)
     endless.ts             Endless mode: seeded encounter order, scaling, the run as a RunDef (#68)
+    daily.ts               The daily puzzle: date keys and the day's puzzle and turn (#69)
     enemies.ts             Validates an enemy: fog, scramble, armor, forged clues, charge, ink, phases
     gadgets.ts             Gadget catalog: name, icon, description, effect
     scenes.ts              Loads and validates scenes/*.json (dialogue, #22)
@@ -54,6 +57,7 @@ src/
     progress.ts            Free-play saves, solve stats, totals (localStorage)
     runSave.ts             Current run, seen scenes, job stats (localStorage)
     settings.ts            Mode, mute, high contrast (localStorage)
+    daily.ts               Daily streak, best, and today's board (localStorage, #69)
     storage.ts             Safe localStorage JSON read/write
   ui/
     dom.ts                 el(): create an element with props and children
@@ -65,6 +69,7 @@ src/
       selectScreen.ts      Puzzle list, mode, settings, stats       (#/)
       gameScreen.ts        Play screen; PlaySession and its hooks  (#/play/<id>)
       freePlaySession.ts   Free-play PlaySession: saves, best times, "Next"
+      daily.ts             The daily puzzle: its card on the list and its PlaySession (#/daily)
       sceneScreen.ts       Plays a scene full screen               (#/scene/<id>)
       editorScreen.ts      Puzzle authoring tool                   (#/editor)
       run/                 Runs                                    (#/run, #/run/play)
@@ -168,6 +173,7 @@ All saved data lives in `localStorage`, read once at startup and written on chan
 | `picross:v1`       | `game/progress.ts`           | In-progress boards, per-puzzle stats, total solving time             |
 | `picross:run`      | `game/runSave.ts`            | The current run (with the current encounter's board) and seen scenes |
 | `picross:settings` | `game/settings.ts`           | `mode` (also the default for new runs), `muted`, `highContrast`      |
+| `picross:daily`    | `game/daily.ts`              | Daily streak, best streak, solve count, and today's board            |
 | `picross:editor`   | `ui/screens/editorScreen.ts` | The editor's current drawing                                         |
 
 `storage.ts` falls back to defaults if storage is blocked or holds bad JSON, so the game
@@ -190,6 +196,7 @@ saved board, and failing in Hearts mode discards it.
 | `#/run`        | `renderRunScreen`: start panel, path map, or results        |
 | `#/scene/<id>` | `renderSceneScreen`: preview a scene (Replay at the end)    |
 | `#/run/play`   | `renderRunEncounter`: the current encounter's puzzle        |
+| `#/daily`      | `renderDailyScreen`: today's daily puzzle (#69)             |
 
 Each screen replaces `#app`'s children. A screen that adds global listeners or timers
 returns a cleanup function, which the router calls before rendering the next screen. The
@@ -238,6 +245,22 @@ times. A run encounter (`screens/run/encounter.ts`) saves the board into the run
 encounter instead, so run solves never touch free-play stats. Fights (`run/fight/`)
 and digs (`run/dig.ts`) plug in through the optional hooks, so the game screen has no
 special cases for encounter types.
+
+## The daily puzzle
+
+A card at the top of the puzzle list opens `#/daily` (#69): one puzzle a day, the same
+for everyone on the same local date.
+
+- **The pick:** `puzzles/daily.ts` takes every pack puzzle 15×15 or bigger in all eight
+  turns and flips (`engine/transform.ts`). That's 13 × 8 = 104 boards, shuffled with a
+  fixed seed into a cycle, so nothing repeats until the cycle runs out. Turning or
+  flipping keeps a puzzle uniquely solvable, since its clues just move or reverse. The
+  tests solve a sample of days to check.
+- **Hidden until solved:** the board is named "Daily puzzle". The end panel and the card
+  then say which pack puzzle it was and how it was turned.
+- **Saves:** the daily keeps its own save (`picross:daily`), apart from free-play stats.
+  It holds today's board, the streak, the best streak and the solve count. A streak
+  counts while the last solve was today or yesterday, and shows 0 once a day is missed.
 
 ## Runs
 

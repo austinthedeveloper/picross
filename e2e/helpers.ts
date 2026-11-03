@@ -1,6 +1,7 @@
 import { expect, type BrowserContext, type Page } from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';
+import { solve as lineSolve } from '../src/engine/solver';
 
 const PUZZLES = path.join(import.meta.dirname, '../src/puzzles');
 const read = (file: string) => JSON.parse(fs.readFileSync(path.join(PUZZLES, file), 'utf8'));
@@ -12,6 +13,29 @@ export function solution(puzzleId: string): string[] {
     if (fs.existsSync(file)) return read(`${dir}/${puzzleId}.json`).solution;
   }
   throw new Error(`No puzzle "${puzzleId}"`);
+}
+
+/**
+ * Works out a board's solution from the clues on screen, with the game's own
+ * solver: for puzzles the test can't look up (the daily one changes every day).
+ */
+export async function solutionFromClues(page: Page): Promise<string[]> {
+  const cluesOf = (selector: string) =>
+    page.$$eval(selector, (groups) =>
+      groups.map((g) =>
+        [...g.querySelectorAll('span')].map((s) => Number(s.textContent)).filter((n) => n > 0),
+      ),
+    );
+  const rows = await cluesOf('.row-clue');
+  const cols = await cluesOf('.col-clue');
+  const result = lineSolve(cols.length, rows.length, { rows, cols });
+  if (result.status !== 'unique') throw new Error(`clues on screen don't solve: ${result.status}`);
+  return rows.map((_, r) =>
+    result.grid
+      .slice(r * cols.length, (r + 1) * cols.length)
+      .map((v) => (v === 1 ? '#' : '.'))
+      .join(''),
+  );
 }
 
 /** The solution for an encounter's puzzle. */
