@@ -1,0 +1,7 @@
+{
+  "id": "goblin",
+  "name": "Goblin",
+  "kind": "fight",
+  "puzzle": "mushroom",
+  "blurb": "A goblin is guarding the workshop's back door."
+}

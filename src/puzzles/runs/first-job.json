@@ -1,0 +1,6 @@
+{
+  "id": "first-job",
+  "name": "First Job",
+  "hp": 10,
+  "encounters": ["goblin", "dig-site", "fog-bat"]
+}

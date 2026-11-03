@@ -1,0 +1,7 @@
+{
+  "id": "fog-bat",
+  "name": "Fog bat",
+  "kind": "fight",
+  "puzzle": "fish",
+  "blurb": "A bat that breathes fog. Gross, and also a problem."
+}

@@ -1,0 +1,7 @@
+{
+  "id": "dig-site",
+  "name": "Dig site",
+  "kind": "dig",
+  "puzzle": "cat",
+  "blurb": "Something mechanical is buried out here."
+}
