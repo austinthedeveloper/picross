@@ -1,3 +1,5 @@
+import type { GadgetEffect } from '../puzzles/gadgets';
+
 /** An enemy in a fight encounter (#27). */
 export interface Enemy {
   name: string;
@@ -13,6 +15,8 @@ export interface BattleState {
   enemyHp: number;
   /** Lines that have already dealt chip damage ("r3", "c0"), so each counts once. */
   struck: string[];
+  /** Enemy hits still blocked by a patch kit (#28). */
+  shield?: number;
 }
 
 /** Damage per newly completed row or column. */
@@ -41,4 +45,22 @@ export function chip(state: BattleState, keys: string[]): { state: BattleState; 
 /** The finisher: the solved picture deals whatever HP the enemy has left. */
 export function finish(state: BattleState): { state: BattleState; dealt: number } {
   return { state: { ...state, enemyHp: 0 }, dealt: state.enemyHp };
+}
+
+/** Applies a gadget's effect to the fight. Damage follows chip rules (never below 1 HP). */
+export function useGadget(
+  state: BattleState,
+  effect: GadgetEffect,
+): { state: BattleState; dealt: number } {
+  if (effect.kind === 'shield') {
+    return { state: { ...state, shield: (state.shield ?? 0) + effect.hits }, dealt: 0 };
+  }
+  const enemyHp = Math.max(1, state.enemyHp - effect.amount);
+  return { state: { ...state, enemyHp }, dealt: state.enemyHp - enemyHp };
+}
+
+/** An enemy hit lands unless a shield absorbs it. */
+export function absorbHit(state: BattleState): { state: BattleState; blocked: boolean } {
+  if (!state.shield) return { state, blocked: false };
+  return { state: { ...state, shield: state.shield - 1 }, blocked: true };
 }

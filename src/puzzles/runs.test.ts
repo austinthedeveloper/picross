@@ -37,12 +37,14 @@ describe('parseRun', () => {
   it('resolves its encounters in order', () => {
     const run = parseRun({ id: 'r', name: 'R', hp: 5, encounters: ['e', 'e'] }, findEncounter);
     expect(run.encounters).toEqual([e, e]);
+    expect(run.gadgets).toEqual([]);
   });
 
   it.each([
     [{ id: 'r', name: 'R', hp: 0, encounters: ['e'] }, /hp/],
     [{ id: 'r', name: 'R', hp: 5, encounters: [] }, /needs encounters/],
     [{ id: 'r', name: 'R', hp: 5, encounters: ['x'] }, /unknown encounter "x"/],
+    [{ id: 'r', name: 'R', hp: 5, encounters: ['e'], gadgets: ['laser'] }, /unknown gadget/],
   ])('rejects bad input %#', (input, error) => {
     expect(() => parseRun(input, findEncounter)).toThrow(error);
   });

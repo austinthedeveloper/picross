@@ -33,6 +33,7 @@ src/
     run/*.json             Run-only puzzles (e.g. the goblin's sword); not on the list
     pack.test.ts           Runs the solver over every pack puzzle
     runs.ts                Loads encounters/*.json and runs/*.json (roguelite runs)
+    gadgets.ts             Gadget catalog: name, icon, description, effect (damage/shield)
     encounters/*.json      Encounters: name, kind (fight/dig), puzzle, blurb, enemy (fights)
     runs/*.json            Runs: starting HP and an ordered list of encounter ids
   game/
@@ -40,7 +41,7 @@ src/
     progress.ts            Saved boards, solve stats, totals (localStorage)
     settings.ts            Mode, mute, high contrast (localStorage)
     run.ts                 RunState and its pure transitions (start, damage, clear encounter)
-    battle.ts              Enemy and BattleState: chip damage per line, the finisher
+    battle.ts              Enemy and BattleState: chip damage, finisher, gadget effects, shields
     runSave.ts             Saves the current run (localStorage)
     storage.ts             Safe localStorage JSON read/write
   ui/
@@ -220,8 +221,23 @@ A fight encounter has an `enemy` (`name`, `sprite`, `hp`, `attack`). The rules l
   run is lost and the screen shows "Knocked out." In a Relaxed run, fights don't check
   fills and the enemy never hits.
 
-Battle progress (enemy HP and which lines have struck) is saved in `RunState.battle`, so
-a reload resumes mid-fight.
+Battle progress (enemy HP, which lines have struck, and any active shield) is saved in
+`RunState.battle`, so a reload resumes mid-fight.
+
+## Gadgets
+
+A puzzle's JSON can name a `gadget`. Solving that puzzle in a run adds the gadget to
+`RunState.gadgets`, and runs can also list starting gadgets (First Job starts with a
+patch kit). The catalog in `puzzles/gadgets.ts` describes each gadget's effect as data:
+
+- `{ kind: 'damage', amount }` hits the enemy right away. Chip rules apply, so it can't
+  take the enemy below 1 HP and the finisher still lands the win.
+- `{ kind: 'shield', hits }` blocks that many enemy hits (`absorbHit` in `battle.ts`).
+
+Held gadgets are listed on the run map and shown as buttons in the fight's battle bar
+(`fightHooks.ts`). Using one removes it from the run. Buttons are disabled with a reason
+when a gadget can't help: a shield in a Relaxed run, or damage when the enemy is already
+at 1 HP. Gadgets act on the fight, never on the grid.
 
 ## The solver
 

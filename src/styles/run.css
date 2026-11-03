@@ -100,11 +100,6 @@
   background: var(--accent);
 }
 
-.gadgets {
-  color: var(--muted);
-  font-size: 0.85rem;
-}
-
 /* The path: nodes joined by a vertical line, the current one raised. */
 
 .run-path {
@@ -229,14 +224,20 @@
 
 .battle {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
+  flex-direction: column;
+  gap: 8px;
   margin-bottom: 12px;
   padding: 8px 12px;
   border-radius: 12px;
   background: var(--surface);
   border: 1px solid var(--line);
+}
+
+.battle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
 }
 
 .battle-side {
@@ -384,4 +385,78 @@
   z-index: 20;
   pointer-events: none;
   filter: drop-shadow(0 4px 6px rgb(0 0 0 / 0.3));
+}
+
+/* Gadgets (#28) */
+
+.gadget-tray {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--line);
+}
+
+.gadget-tray[hidden] {
+  display: none;
+}
+
+.gadget {
+  padding: 6px 10px;
+  font-size: 0.85rem;
+}
+
+.gadget-icon {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.shield {
+  display: inline-block;
+}
+
+.shield[hidden] {
+  display: none;
+}
+
+.shield.blocked {
+  animation: blocked 0.5s ease-out;
+}
+
+@keyframes blocked {
+  30% {
+    transform: scale(1.6);
+  }
+}
+
+.inventory {
+  margin-bottom: 20px;
+}
+
+.inventory h2 {
+  margin: 0 0 6px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.inventory ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.inventory li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  font-size: 0.9rem;
 }

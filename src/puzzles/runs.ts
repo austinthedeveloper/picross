@@ -1,6 +1,7 @@
 import { getPuzzle } from './index';
 import type { Enemy } from '../game/battle';
 import type { Puzzle } from './format';
+import { getGadget } from './gadgets';
 
 /** What kind of node an encounter is. Fights and digs play differently from #27 and #29 on. */
 export type EncounterKind = 'fight' | 'dig';
@@ -44,10 +45,13 @@ export interface RunFile {
   /** Player HP at the start of the run. */
   hp: number;
   encounters: string[];
+  /** Gadget ids the player starts with. */
+  gadgets?: string[];
 }
 
-export interface RunDef extends Omit<RunFile, 'encounters'> {
+export interface RunDef extends Omit<RunFile, 'encounters' | 'gadgets'> {
   encounters: Encounter[];
+  gadgets: string[];
 }
 
 const KINDS: EncounterKind[] = ['fight', 'dig'];
@@ -90,7 +94,10 @@ export function parseRun(
   const encounters = file.encounters!.map(
     (id) => findEncounter(id) ?? fail(`unknown encounter "${id}"`),
   );
-  return { id: file.id!, name: file.name!, hp: file.hp!, encounters };
+  const gadgets = file.gadgets ?? [];
+  if (!Array.isArray(gadgets)) fail('gadgets must be a list');
+  for (const g of gadgets) if (!getGadget(g)) fail(`unknown gadget "${g}"`);
+  return { id: file.id!, name: file.name!, hp: file.hp!, encounters, gadgets };
 }
 
 const encounterFiles = import.meta.glob<{ default: unknown }>('./encounters/*.json', {

@@ -5,6 +5,10 @@ import { puzzles } from './index';
 const valid = { id: 't', name: 'T', width: 3, height: 2, solution: ['#.#', '.#.'] };
 
 describe('parsePuzzle', () => {
+  it('keeps a known gadget', () => {
+    expect(parsePuzzle({ ...valid, gadget: 'bomb' }).gadget).toBe('bomb');
+  });
+
   it('parses a valid puzzle and derives clues', () => {
     const p = parsePuzzle(valid);
     expect(p.solution.cells).toEqual([true, false, true, false, true, false]);
@@ -19,6 +23,7 @@ describe('parsePuzzle', () => {
     [{ ...valid, solution: ['#.#', '.#'] }, /row 1 must be 3/],
     [{ ...valid, solution: ['#x#', '.#.'] }, /invalid character/],
     [{ ...valid, solution: ['...', '...'] }, /empty/],
+    [{ ...valid, gadget: 'laser' }, /unknown gadget "laser"/],
   ])('rejects invalid input %#', (input, error) => {
     expect(() => parsePuzzle(input)).toThrow(error);
   });
