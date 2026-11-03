@@ -74,6 +74,7 @@ test('mimic: wipes two whole lines, marks them until refilled, and refilling cos
     .poll(() => announcements(page))
     .toMatch(/swapped (rows|columns) \d+ and \d+ and ate \d+ marks/);
   await expect(page.locator('.clue.wiped')).toHaveCount(2);
+  await expect(page.locator('.tip-card')).toContainText('Swaps.'); // the phase's power, once
   await expect(page.getByRole('button', { name: 'Undo' })).toBeDisabled();
   // Refilling one wiped row clears its mark; the other stays.
   const wipedRow = await page.$$eval('.row-clue', (gs) =>
@@ -202,4 +203,20 @@ test('cuttlefish: ink hides your marks, lines wash it off, and a sponge wipes it
   await press(page, 'Use Sponge');
   await expect(inked).toHaveCount(0);
   await solve(page, cuttle);
+});
+
+test('power tips: explained once, and the ⓘ lists an enemy’s powers anytime', async ({ page }) => {
+  await fight(page, 'first-job', 2); // the fog bat
+  const tip = page.locator('.tip-card');
+  await expect(tip).toContainText('Fog. Some clues are hidden.');
+  await press(page, 'Got it');
+  await expect(tip).toBeHidden();
+  await page.reload();
+  await expect(page.locator('.battle')).toBeVisible();
+  await expect(tip).toBeHidden(); // seen: it doesn't come back
+
+  await page.getByRole('button', { name: 'What can Fog bat do?' }).tap();
+  await expect(page.locator('.tip-card.powers')).toContainText('Fog.');
+  await press(page, 'Close');
+  await expect(tip).toBeHidden();
 });

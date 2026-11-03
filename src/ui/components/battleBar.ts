@@ -26,6 +26,10 @@ export interface BattleBar {
   setArmor(weakPoints: number): void;
   /** Shows how many forged clues are left to call out (#64); hidden at 0. */
   setFakes(count: number): void;
+  /** Shows a tip card or the powers list under the HP (#79), or clears it with null. */
+  setTip(content: HTMLElement | null): void;
+  /** Puts the ⓘ powers button after the enemy's name (#79). */
+  setInfo(button: HTMLElement): void;
   /** The charge meter (#67), 0 to 1, or null to hide it. */
   setCharge(level: number | null): void;
   /** The enemy zaps you: a flash on the meter. */
@@ -79,13 +83,10 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
   ]);
   const banner = el('div', { className: 'phase-banner', hidden: true });
   banner.setAttribute('aria-hidden', 'true');
+  const nameRow = el('span', { className: 'battle-name-row' }, [enemyName, armor, fakes]);
   const enemySide = el('div', { className: 'battle-side enemy' }, [
     sprite,
-    el('div', { className: 'battle-info' }, [
-      el('span', { className: 'battle-name-row' }, [enemyName, armor, fakes]),
-      enemyMeter.root,
-      charge,
-    ]),
+    el('div', { className: 'battle-info' }, [nameRow, enemyMeter.root, charge]),
   ]);
   const shield = el('span', { className: 'shield', hidden: true });
   const playerSide = el('div', { className: 'battle-side player' }, [
@@ -95,9 +96,11 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
     ]),
   ]);
   const tray = el('div', { className: 'gadget-tray', role: 'group', ariaLabel: 'Gadgets' });
+  const tipSlot = el('div', { className: 'tip-slot', hidden: true });
   const live = el('div', { className: 'sr-only', ariaLive: 'polite' });
   const root = el('section', { className: 'battle', ariaLabel: 'Fight' }, [
     el('div', { className: 'battle-row' }, [enemySide, playerSide]),
+    tipSlot,
     tray,
     banner,
     live,
@@ -145,6 +148,13 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
       fakes.textContent = `🎭 ${count}`;
       fakes.title = `${count} forged clue${count === 1 ? '' : 's'} left to call out`;
       fakes.ariaLabel = fakes.title;
+    },
+    setTip(content) {
+      tipSlot.replaceChildren(...(content ? [content] : []));
+      tipSlot.hidden = !content;
+    },
+    setInfo(button) {
+      enemyName.after(button);
     },
     setCharge(level) {
       charge.hidden = level === null;

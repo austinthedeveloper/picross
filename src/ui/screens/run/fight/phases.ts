@@ -2,6 +2,7 @@ import { advancePhase, currentForm, type BattleState } from '../../../../game/ba
 import { lineCount, type LineSet } from '../../../../engine/lines';
 import { playSound } from '../../../sound';
 import type { FightContext } from './context';
+import { phasePowers } from '../../../../puzzles/enemies';
 import type { Inker } from './ink';
 import type { Swapper } from './swaps';
 
@@ -10,12 +11,19 @@ import type { Swapper } from './swaps';
  * fallen into. Each can change its form, attack, and charge, fog or scramble more
  * lines, swap lines, and splash ink. Returns the new state and a message to announce.
  */
-export function createPhases(ctx: FightContext, swapper: Swapper, inker: Inker) {
+export function createPhases(
+  ctx: FightContext,
+  swapper: Swapper,
+  inker: Inker,
+  /** Called with the powers new phases bring in, for their tips (#79). */
+  onPowers: (powers: ReturnType<typeof phasePowers>) => void = () => {},
+) {
   return function checkPhase(state: BattleState): { state: BattleState; message: string } {
     const { state: next, entered } = advancePhase(ctx.enemy, state);
     if (!entered.length) return { state, message: '' };
     const before = currentForm(ctx.enemy, state).name;
     const { name, sprite } = currentForm(ctx.enemy, next);
+    onPowers(entered.flatMap(phasePowers));
     const swaps = entered.filter((p) => p.swap).length;
     if (swaps) swapper.queue(swaps);
     // Ink lands after the new state is saved, so it isn't lost to the save.

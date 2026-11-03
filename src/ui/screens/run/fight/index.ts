@@ -11,6 +11,7 @@ import { createInker } from './ink';
 import { completeLines, showLineEffects } from './lines';
 import { createPhases } from './phases';
 import { createSwapper } from './swaps';
+import { createTips } from './tips';
 
 /**
  * Fight rules on top of a run encounter (#27): completed lines chip the enemy,
@@ -23,7 +24,8 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
   const ctx = createFightContext(enemy, puzzle);
   const swapper = createSwapper(ctx);
   const inker = createInker(ctx);
-  const checkPhase = createPhases(ctx, swapper, inker);
+  const tips = createTips(ctx);
+  const checkPhase = createPhases(ctx, swapper, inker, tips.phase);
   // The call-out button sits in the gadget tray, and calling out refreshes the tray.
   const callOut = createCallOut(ctx, checkPhase, () => gadgets.render());
   const gadgets = createGadgetTray(ctx, checkPhase, callOut.buttons);
@@ -44,6 +46,7 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
       callOut.show();
       inker.show();
       charge.start();
+      tips.start();
     },
     // A bomb can't help once the enemy is down to 1 HP, so damage refreshes the gadgets.
     // A line showing a forgery doesn't count until the forgery is called out.
