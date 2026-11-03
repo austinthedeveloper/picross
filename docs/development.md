@@ -119,57 +119,33 @@ working. They're small. Clear them out occasionally if you like.
 ## Branches and stacked PRs
 
 `main` is always deployable. Each story from the GitHub issues gets a `story/<issue>-<slug>`
-branch. Stories that depend on another story branch off that story's branch, so their PRs
-stack:
+branch, cut from `main` when work starts. A story that depends on another unmerged story
+branches off that story's branch, so the PRs stack. A larger feature can use an
+integration branch: sub-story PRs merge into it, and it merges into `main` as one PR.
+Delete story branches once they're in `main`.
 
-```
-main
-└── story/21-hook-slice                      #21 tinkerer roguelite: first playable run
-    ├── story/26-run-structure               #26 3-encounter run, path map, mid-run save
-    │   └── story/27-battle-encounter        #27 HP, chip damage, finisher, mistake hits
-    │       ├── story/28-gadgets             #28 solved pictures become run items
-    │       │   └── story/29-dig-encounter   #29 calm dig that yields a gadget
-    │       └── story/30-fog-bat             #30 enemy that fogs clues
-    ├── story/22-dialogue-system             #22 portraits, text box, choices
-    │   ├── story/31-crew-intro-scene        #31 crew intro and run sign-off
-    │   └── story/23-chapter-structure       #23 later: story chapters (not in the slice)
-    ├── story/24-meta-picture-puzzles        #24 later: big pictures from smaller grids
-    └── story/25-art-direction               #25 palette, font, mood board
-```
+The first roguelite slice (#21) worked this way. `story/21-hook-slice` was the integration
+branch, with #26 → #27 → #28 → #29 and #27 → #30 stacked on it, and #22 → #31 alongside.
+It merged in #40 and shipped as v0.2.0.
 
-`story/21-hook-slice` is the integration branch for the slice. #21 is an umbrella for
-sub-issues #26–#31, so their PRs stack up and merge into it. When the whole slice
-works, `story/21-hook-slice` merges into `main` as one PR.
-
-Why it's shaped this way:
-
-- **#26 → #27:** fights need the run, because mistakes cost run HP and losing a fight
-  ends the run.
-- **#27 → #28 → #29:** gadgets go into the run inventory and change the next fight. The
-  dig exists to hand over a gadget.
-- **#27 → #30:** the fog bat uses the battle rules but doesn't need gadgets, so it's a
-  sibling of #28.
-- **#22 → #31:** the crew intro is built on the dialogue system. Its win and loss
-  sign-offs hook into the run's end screen when both land in `story/21-hook-slice`.
-- **#23 and #24:** both are outside the slice (no story chapters or bosses yet). Their
-  branches are parked for later.
-- **#25:** independent. The slice works with placeholder art until it lands.
+Still open, each to branch from `main` when started: #23 (chapter structure), #24
+(meta-picture puzzles), and #25 (art direction).
 
 Working a stack:
 
-- Open each PR against its parent branch. For example, #27's PR targets
-  `story/26-run-structure`, so its diff shows only battle work.
-- When the parent changes, rebase the child onto it:
-  `git rebase story/26-run-structure` from `story/27-battle-encounter`, then
-  `git push --force-with-lease`.
-- Merge from the bottom up. After a parent merges into its base (`story/21-hook-slice` for
-  the slice), retarget the child PR to that base. GitHub does this automatically if the
+- Open each PR against its parent branch, so its diff shows only that story's work.
+- When the parent changes, merge it into the child (`git merge story/<parent>`) and push.
+  Or rebase and `git push --force-with-lease` if nobody else uses the branch.
+- Merge from the bottom up. After a parent merges into its base (`main` or the integration
+  branch), retarget the child PR to that base. GitHub does this automatically if the
   parent branch is deleted on merge. If the parent was squash-merged, run
   `git rebase --onto <base> <old-parent-tip> <child>` to drop the parent's original
   commits from the child.
 
 Put `Closes #<issue>` in the PR description or the final commit so the issue closes on
-merge.
+merge. GitHub only does this when the PR merges into `main`. PRs into an integration
+branch leave their issues open, so list those issues in the integration branch's PR to
+`main`, as #40 did.
 
 ## Conventions
 
