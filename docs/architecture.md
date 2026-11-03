@@ -330,6 +330,21 @@ The Night Shift run (`runs/night-shift.json`, #46) starts with the Mimic, a 15×
 with teeth that swaps at 90%, 80%, and 70% HP and turns Hungry (attack 3) on the last.
 It isn't reachable from the game until the jobs board (#47) lands.
 
+### The Curator (Night Shift boss)
+
+A 20×20 pocket watch with 60 HP (40 lines, so the finisher stays big). It combines every
+board disruption so far:
+
+- **Start:** rows 4 and 10 fogged.
+- **92% HP:** Clockwork Curator, hits for 3, fogs rows 8 and 20.
+- **85% HP:** scrambles 3 of columns 9, 10, 12, and 15.
+- **78% HP:** Overwound Curator, hits for 4, and swaps two of your rows.
+
+The thin outlines leave the watch less room than the solid wrench: 4 fogged rows plus 4
+scrambled columns was the most the solver could still finish. Its 20×20 size and the swap
+carry the rest of the difficulty. A reveal scene (`curator-reveal`) plays before the
+fight.
+
 ## Digs
 
 A dig encounter (`kind: "dig"`) has no enemy and never checks fills, even in a Hits-on
