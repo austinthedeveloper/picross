@@ -38,5 +38,3 @@ const byId = new Map(catalog.map((g) => [g.id, g]));
 export function getGadget(id: string): Gadget | undefined {
   return byId.get(id);
 }
-
-export const gadgetIds = () => [...byId.keys()];

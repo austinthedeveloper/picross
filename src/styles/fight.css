@@ -1,0 +1,337 @@
+/* Fights: the battle bar, gadgets, boss phases, and armor (#27, #28, #42, #50). */
+
+/* Fights: enemy and player HP above the board. */
+
+.battle {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.battle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.battle-side {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.battle-side.player {
+  text-align: right;
+}
+
+.battle-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.battle-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.enemy-sprite {
+  font-size: 2.4rem;
+  line-height: 1;
+  display: inline-block;
+  transition:
+    transform 0.4s ease-in,
+    opacity 0.4s ease-in;
+}
+
+.enemy-sprite.flinch {
+  animation: flinch 0.4s ease-out;
+}
+
+.enemy-sprite.lunge {
+  animation: lunge 0.35s ease-out;
+}
+
+.enemy-sprite.defeated {
+  transform: rotate(90deg) translateY(10px) scale(0.8);
+  opacity: 0.35;
+  filter: grayscale(1);
+}
+
+@keyframes flinch {
+  20% {
+    transform: translateX(-6px) rotate(-8deg);
+    filter: brightness(2);
+  }
+  50% {
+    transform: translateX(5px) rotate(5deg);
+  }
+}
+
+@keyframes lunge {
+  40% {
+    transform: translateX(18px) scale(1.15);
+  }
+}
+
+.meter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.player-hp {
+  flex-direction: row-reverse;
+}
+
+.meter-track {
+  width: 84px;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.meter-fill {
+  display: block;
+  height: 100%;
+  width: calc(var(--value) * 100%);
+  background: var(--accent);
+  transition: width 0.3s ease-out;
+}
+
+.player-hp .meter-fill {
+  background: var(--ok);
+  margin-left: auto;
+}
+
+.battle-side.player.hurt {
+  animation: hurt 0.5s ease-out;
+}
+
+@keyframes hurt {
+  15% {
+    transform: translateX(6px);
+    color: var(--accent);
+  }
+  35% {
+    transform: translateX(-5px);
+  }
+  55% {
+    transform: translateX(3px);
+  }
+}
+
+.float-number {
+  position: absolute;
+  top: -6px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--accent);
+  pointer-events: none;
+  animation: float-up 0.9s ease-out forwards;
+}
+
+.float-number.to-enemy {
+  left: 10px;
+}
+
+.float-number.to-player {
+  right: 0;
+}
+
+@keyframes float-up {
+  to {
+    transform: translateY(-26px);
+    opacity: 0;
+  }
+}
+
+/* The solved picture flying at the enemy (positioned by the Web Animations API). */
+.projectile {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 20;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 6px rgb(0 0 0 / 0.3));
+}
+
+/* Gadgets (#28) */
+
+.gadget-tray {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--line);
+}
+
+.gadget-tray[hidden] {
+  display: none;
+}
+
+.gadget {
+  padding: 6px 10px;
+  font-size: 0.85rem;
+}
+
+.gadget-icon {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.shield {
+  display: inline-block;
+}
+
+.shield[hidden] {
+  display: none;
+}
+
+.shield.blocked {
+  animation: blocked 0.5s ease-out;
+}
+
+@keyframes blocked {
+  30% {
+    transform: scale(1.6);
+  }
+}
+
+.inventory {
+  margin-bottom: 20px;
+}
+
+.inventory h2 {
+  margin: 0 0 6px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.inventory ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.inventory li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  font-size: 0.9rem;
+}
+
+/* Boss phase banner (#42) */
+.battle {
+  position: relative;
+}
+
+.phase-banner {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--ink) 88%, transparent);
+  color: var(--bg);
+  text-align: center;
+  pointer-events: none;
+  animation: banner 2.2s ease-in-out forwards;
+}
+
+.phase-banner[hidden] {
+  display: none;
+}
+
+.phase-banner strong {
+  font-size: 1.15rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+@keyframes banner {
+  0% {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+  12%,
+  80% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.battle.phase-shift {
+  animation: phase-shift 0.6s ease-in-out;
+}
+
+@keyframes phase-shift {
+  20%,
+  60% {
+    transform: translateX(-4px);
+  }
+  40%,
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+/* Armor (#50) */
+.battle-name-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.armor {
+  white-space: nowrap;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.armor[hidden] {
+  display: none;
+}
+
+.armor.shatter {
+  animation: shatter 0.6s ease-in forwards;
+}
+
+@keyframes shatter {
+  to {
+    transform: scale(1.6) rotate(12deg);
+    opacity: 0;
+  }
+}

@@ -1,10 +1,8 @@
-import type { Puzzle } from '../../puzzles/format';
-import { getGadget } from '../../puzzles/gadgets';
-import { el } from '../dom';
-import type { PlaySession } from './gameScreen';
-
-const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const wait = (ms: number) => new Promise((resolve) => window.setTimeout(resolve, ms));
+import type { Puzzle } from '../../../puzzles/format';
+import { getGadget } from '../../../puzzles/gadgets';
+import { el } from '../../dom';
+import { pause } from '../../motion';
+import type { PlaySession } from '../gameScreen';
 
 /**
  * A dig encounter (#29): no enemy and no HP pressure. The board is dirt, and
@@ -31,13 +29,13 @@ export function digHooks(puzzle: Puzzle): Pick<PlaySession, 'header' | 'theme' |
     // The dirt falls away, the part gleams, then the find pops into the header.
     async celebrate(board) {
       board.classList.add('excavated');
-      if (!reducedMotion()) await wait(700);
+      await pause(700);
       find.textContent = gadget?.icon ?? '✨';
       find.classList.add('found');
       status.textContent = gadget
         ? `You dug up a ${puzzle.name.toLowerCase()}. It's a ${gadget.name.toLowerCase()} now.`
         : `You dug up a ${puzzle.name.toLowerCase()}.`;
-      if (!reducedMotion()) await wait(700);
+      await pause(700);
     },
   };
 }

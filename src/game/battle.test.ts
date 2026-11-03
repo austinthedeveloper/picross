@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { lineKey } from '../engine/lines';
 import {
   absorbHit,
   advancePhase,
@@ -8,7 +9,6 @@ import {
   clearScramble,
   currentForm,
   finish,
-  lineKey,
   startBattle,
   useGadget,
 } from './battle';

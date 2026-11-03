@@ -7,7 +7,7 @@ import { createMuteButton } from '../components/muteButton';
 import { el } from '../dom';
 import { formatTime } from '../format';
 import { applyTheme } from '../theme';
-import { runBanner } from './runScreen';
+import { runBanner } from './run';
 
 const MODE_HINTS: Record<Mode, string> = {
   relaxed: 'No checking. Solve at your own pace.',

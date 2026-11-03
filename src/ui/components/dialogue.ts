@@ -8,9 +8,9 @@ import {
 } from '../../game/dialogue';
 import type { Scene } from '../../puzzles/scenes';
 import { el } from '../dom';
+import { reducedMotion } from '../motion';
 import { playSound } from '../sound';
 
-const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const CHARS_PER_SECOND = 45;
 
 export interface DialogueView {
