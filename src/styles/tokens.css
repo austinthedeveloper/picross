@@ -1,4 +1,7 @@
-/* Theme tokens. Every color in the app comes from these. */
+/*
+ * Theme tokens. Every color and font in the app comes from these. See
+ * docs/art-direction.md for the palette, what each color is for, and the type.
+ */
 
 :root {
   --bg: #f6f3ec;
@@ -19,13 +22,15 @@
   --dirt-line: #93704b;
   --dug: #e8d8bd;
   --metal: #3d4450;
+  /* Mechanics (#25): the charge meter and streaks, the Mimic's swaps, cuttlefish ink. */
+  --spark: #e0a800;
+  --spark-hot: #f07c00;
+  --mischief: #7b5cff;
+  --squid-ink: #2c2350;
+  --shadow: rgb(35 38 47 / 0.14);
+  --font-ui: 'Rubik', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   color-scheme: light;
-  font-family:
-    system-ui,
-    -apple-system,
-    'Segoe UI',
-    Roboto,
-    sans-serif;
+  font-family: var(--font-ui);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -47,6 +52,11 @@
     --dirt-line: #6d543b;
     --dug: #2e2a24;
     --metal: #b9c2cf;
+    --spark: #f2c230;
+    --spark-hot: #ff9a3c;
+    --mischief: #9d86ff;
+    --squid-ink: #4b3d8f;
+    --shadow: rgb(0 0 0 / 0.4);
     color-scheme: dark;
   }
 }
@@ -70,5 +80,11 @@
   --dirt-line: #000000;
   --dug: #ffffff;
   --metal: #000000;
+  --spark: #000000;
+  --spark-hot: #c00000;
+  --mischief: #c00000;
+  /* Gray, not black, so ink never reads as a filled cell. */
+  --squid-ink: #6b6b6b;
+  --shadow: rgb(0 0 0 / 0.35);
   color-scheme: light;
 }

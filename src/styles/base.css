@@ -9,6 +9,15 @@ body {
   background: var(--bg);
   color: var(--ink);
   min-height: 100dvh;
+  /* Numbers line up in clues, timers, and HP. */
+  font-variant-numeric: tabular-nums;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 700;
+  letter-spacing: 0.01em;
 }
 
 .sr-only {
@@ -41,7 +50,7 @@ body {
 .topbar h1 {
   margin: 0;
   font-size: clamp(1.15rem, 5.5vw, 1.5rem);
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
   line-height: 1.15;
 }
 
