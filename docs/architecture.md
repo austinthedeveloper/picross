@@ -36,7 +36,8 @@ src/
   puzzles/                 Content and its validation
     format.ts              Puzzle file format, parse/validate, export helpers
     index.ts               Loads pack/*.json (free play, in ORDER) and run/*.json
-    pack/*.json            Free-play puzzles (5×5 to 20×20)
+    pack/*.json            Free-play puzzles (5×5 to 20×20): the starter set plus themed batches
+    sheets/*.txt           The themed batches as drawings; scripts/puzzle-sheet.ts exports them
     run/*.json             Run-only puzzles (the sword, wrench, owl, pocket watch, ...)
     pack.test.ts           Uniqueness check over every puzzle
     runs.ts                Loads encounters/*.json and runs/*.json (jobs)
@@ -122,6 +123,7 @@ src/
     dialogue.css           Scene player
 e2e/                       Playwright browser tests (see docs/development.md)
 scripts/
+  puzzle-sheet.ts          Check, repair and export puzzle sheets (batches of drawings; see docs/how-to.md)
   deploy-azure.sh          Upload a build to the Azure static website
   setup-azure-deploy.sh    One-time Azure + GitHub OIDC setup for the release pipeline
 .github/workflows/
@@ -259,7 +261,7 @@ A card at the top of the puzzle list opens `#/daily` (#69): one puzzle a day, th
 for everyone on the same local date.
 
 - **The pick:** `puzzles/daily.ts` takes every pack puzzle 15×15 or bigger in all eight
-  turns and flips (`engine/transform.ts`). That's 13 × 8 = 104 boards, shuffled with a
+  turns and flips (`engine/transform.ts`). That's 213 × 8 = 1704 boards, shuffled with a
   fixed seed into a cycle, so nothing repeats until the cycle runs out. Turning or
   flipping keeps a puzzle uniquely solvable, since its clues just move or reverse. The
   tests solve a sample of days to check.

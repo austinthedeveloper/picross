@@ -44,5 +44,5 @@ test('a mural fills in tile by tile, then shows the whole picture', async ({ pag
   await expect(page.locator('.mural-done canvas')).toBeVisible();
   await page.goto('/#/');
   await expect(card).toContainText('Blue Whale');
-  await expect(page.locator('.stats')).toContainText('0/22'); // tiles aren't pack puzzles
+  await expect(page.locator('.stats')).toContainText('0/222'); // tiles aren't pack puzzles
 });
