@@ -247,3 +247,35 @@
   image-rendering: pixelated;
   display: block;
 }
+
+/* Fog (#30): a fogged clue shows a cloudy "?" until play lifts it. */
+.clue.fogged > span {
+  display: none;
+}
+
+.clue.fogged::after {
+  content: '?';
+  display: grid;
+  place-items: center;
+  min-width: calc(var(--cell) * 0.9);
+  min-height: calc(var(--cell) * 0.9);
+  border-radius: 50%;
+  color: var(--muted);
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--mark) 45%, transparent),
+    transparent 70%
+  );
+  filter: blur(0.4px);
+}
+
+.clue.unfog {
+  animation: unfog 0.8s ease-out;
+}
+
+@keyframes unfog {
+  from {
+    filter: blur(4px);
+    opacity: 0.2;
+  }
+}

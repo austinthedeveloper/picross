@@ -25,7 +25,8 @@ src/
     board.ts               Cell states (Empty/Filled/Marked), Grid/Board/Solution, isSolved
     clues.ts               Clue derivation and per-clue "satisfied" check (clue dimming)
     history.ts             Change/Move types and the undo/redo History
-    solver.ts              Line solver: uniqueness / no-guess check (CI and the editor)
+    solver.ts              Line solver: uniqueness / no-guess check (CI and the editor), fog-aware
+    fog.ts                 Fogged clues and the rule for lifting them (#30)
   puzzles/
     format.ts              Puzzle file format, parse/validate, export helpers
     index.ts               Loads pack/*.json and sets play order (ORDER)
@@ -187,6 +188,8 @@ working. Shared button styles live in `base.css`: `.button`, `.ghost`, `.primary
 - optional encounter hooks: a `header` above the board, `onLinesComplete`, `onMistake`,
   `ended()` to stop play early (e.g. knocked out), and `celebrate()` to animate before the
   solved panel appears
+- `onBoard(view)`, called once with the board view before play (fights use it to fog
+  clues)
 
 `freePlaySession(puzzle)` is the default. It saves to `progress.ts` and records best
 times. A run encounter (`runScreen.ts`) saves the board into the run state and clears the
@@ -221,8 +224,18 @@ A fight encounter has an `enemy` (`name`, `sprite`, `hp`, `attack`). The rules l
   run is lost and the screen shows "Knocked out." In a Relaxed run, fights don't check
   fills and the enemy never hits.
 
-Battle progress (enemy HP, which lines have struck, and any active shield) is saved in
-`RunState.battle`, so a reload resumes mid-fight.
+Battle progress (enemy HP, which lines have struck, any active shield, and the fog still
+up) is saved in `RunState.battle`, so a reload resumes mid-fight.
+
+### Fog (the fog bat)
+
+An enemy can list `fog: { rows, cols }`: clues hidden behind a cloudy "?" when the fight
+starts. Fog lifts as you play (`liftFog` in `engine/fog.ts`). Completing a line clears its
+own fog and the fog on every crossing line it meets at a filled cell. Fogging a row and a
+column hides the cell where they cross from both of its lines, so fog has to lift during
+play. The check simulates that: `solve(width, height, clues, fog)` starts with the fogged
+clues hidden and applies the same lift rule whenever a line becomes fully known. A test
+requires every fogged fight to come out `unique` that way.
 
 ## Gadgets
 

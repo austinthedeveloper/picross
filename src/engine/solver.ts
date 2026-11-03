@@ -1,4 +1,5 @@
 import { deriveClues, type Clues } from './clues';
+import { liftFog, noFog, type Fog } from './fog';
 
 /** Solver cell knowledge: unknown, known empty, or known filled. */
 export const Unknown = -1;
@@ -78,37 +79,80 @@ export type SolveResult =
  * anything new. 'unique' means it has exactly one solution and can be
  * reached without guessing. 'ambiguous' means guessing is needed, which
  * usually means there is more than one solution.
+ *
+ * With `fog`, fogged clues start hidden and the solve plays out like the
+ * game: whenever a line becomes fully known it lifts fog by the same rule
+ * (`liftFog`), and the revealed clues join in.
  */
-export function solve(width: number, height: number, clues: Clues): SolveResult {
+export function solve(
+  width: number,
+  height: number,
+  clues: Clues,
+  fog: Fog = noFog(),
+): SolveResult {
   const grid: Knowledge[] = new Array<Knowledge>(width * height).fill(Unknown);
-  const dirtyRows = new Set(Array.from({ length: height }, (_, r) => r));
-  const dirtyCols = new Set(Array.from({ length: width }, (_, c) => c));
+  const at = (r: number, c: number) => grid[r * width + c];
+  const rowCells = (r: number) => grid.slice(r * width, (r + 1) * width);
+  const colCells = (c: number) => Array.from({ length: height }, (_, r) => at(r, c));
+  let hidden = fog;
+  const dirtyRows = new Set<number>();
+  const dirtyCols = new Set<number>();
+  const reveal = (kind: 'row' | 'col', count: number) => {
+    for (let i = 0; i < count; i++) {
+      if (!(kind === 'row' ? hidden.rows : hidden.cols).includes(i)) {
+        (kind === 'row' ? dirtyRows : dirtyCols).add(i);
+      }
+    }
+  };
+  reveal('row', height);
+  reveal('col', width);
+  const completed = new Set<string>();
 
-  while (dirtyRows.size || dirtyCols.size) {
-    for (const r of dirtyRows) {
-      dirtyRows.delete(r);
-      const line = grid.slice(r * width, (r + 1) * width);
-      const solved = solveLine(line, clues.rows[r]);
-      if (!solved) return { status: 'contradiction' };
-      solved.forEach((v, c) => {
-        if (v !== line[c]) {
-          grid[r * width + c] = v;
-          dirtyCols.add(c);
-        }
-      });
+  for (;;) {
+    while (dirtyRows.size || dirtyCols.size) {
+      for (const r of dirtyRows) {
+        dirtyRows.delete(r);
+        const line = rowCells(r);
+        const solved = solveLine(line, clues.rows[r]);
+        if (!solved) return { status: 'contradiction' };
+        solved.forEach((v, c) => {
+          if (v !== line[c]) {
+            grid[r * width + c] = v;
+            if (!hidden.cols.includes(c)) dirtyCols.add(c);
+          }
+        });
+      }
+      for (const c of dirtyCols) {
+        dirtyCols.delete(c);
+        const line = colCells(c);
+        const solved = solveLine(line, clues.cols[c]);
+        if (!solved) return { status: 'contradiction' };
+        solved.forEach((v, r) => {
+          if (v !== line[r]) {
+            grid[r * width + c] = v;
+            if (!hidden.rows.includes(r)) dirtyRows.add(r);
+          }
+        });
+      }
     }
-    for (const c of dirtyCols) {
-      dirtyCols.delete(c);
-      const line = Array.from({ length: height }, (_, r) => grid[r * width + c]);
-      const solved = solveLine(line, clues.cols[c]);
-      if (!solved) return { status: 'contradiction' };
-      solved.forEach((v, r) => {
-        if (v !== line[r]) {
-          grid[r * width + c] = v;
-          dirtyRows.add(r);
-        }
-      });
+
+    // Lines that are now fully known count as completed and lift fog.
+    const before = hidden.rows.length + hidden.cols.length;
+    for (let r = 0; r < height; r++) {
+      if (!completed.has(`r${r}`) && !rowCells(r).includes(Unknown)) {
+        completed.add(`r${r}`);
+        hidden = liftFog(hidden, 'row', r, (c) => at(r, c) === 1);
+      }
     }
+    for (let c = 0; c < width; c++) {
+      if (!completed.has(`c${c}`) && !colCells(c).includes(Unknown)) {
+        completed.add(`c${c}`);
+        hidden = liftFog(hidden, 'col', c, (r) => at(r, c) === 1);
+      }
+    }
+    if (hidden.rows.length + hidden.cols.length === before) break;
+    reveal('row', height);
+    reveal('col', width);
   }
 
   const unknown = grid.filter((v) => v === Unknown).length;

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { absorbHit, chip, finish, lineKey, startBattle, useGadget } from './battle';
+import { absorbHit, chip, clearFog, finish, lineKey, startBattle, useGadget } from './battle';
 
 const goblin = { name: 'Goblin', sprite: '👺', hp: 5, attack: 2 };
 
@@ -11,6 +11,13 @@ describe('battle', () => {
     ({ state, dealt } = chip(state, ['r0', 'c3']));
     expect(dealt).toBe(0);
     expect(state.enemyHp).toBe(3);
+  });
+
+  it('keeps shields and fog when chipping', () => {
+    const start = { ...startBattle(goblin), shield: 1, fog: { rows: [2], cols: [] } };
+    const { state } = chip(start, ['r0']);
+    expect(state.shield).toBe(1);
+    expect(state.fog).toEqual({ rows: [2], cols: [] });
   });
 
   it('never chips the enemy below 1 HP', () => {
@@ -39,5 +46,22 @@ describe('gadgets in battle', () => {
     expect(blocked).toBe(true);
     ({ state, blocked } = absorbHit(state));
     expect(blocked).toBe(false);
+  });
+});
+
+describe('fog', () => {
+  // 3x2: ##. / .##
+  const solution = { width: 3, height: 2, cells: [true, true, false, false, true, true] };
+  const bat = { ...goblin, fog: { rows: [1], cols: [0, 2] } };
+
+  it('starts with the enemy’s fog', () => {
+    expect(startBattle(bat).fog).toEqual({ rows: [1], cols: [0, 2] });
+    expect(startBattle(goblin).fog).toBeUndefined();
+  });
+
+  it('lifts fog where completed lines are filled', () => {
+    const { state, revealed } = clearFog(startBattle(bat), [{ kind: 'row', index: 0 }], solution);
+    expect(state.fog).toEqual({ rows: [1], cols: [2] });
+    expect(revealed).toEqual([{ kind: 'col', index: 0 }]);
   });
 });

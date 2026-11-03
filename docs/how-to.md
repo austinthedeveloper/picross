@@ -34,6 +34,9 @@ starter-pack test expects 5×5 to 15×15 and at most 15 puzzles, so update
    ```
    Keep `hp` at least 1.5 × (width + height) so the finisher stays the big hit. A test
    enforces this. `attack` is the run HP lost per wrong fill in Hits-on runs.
+   To fog clues, add `"fog": { "rows": [2, 5], "cols": [3] }` to the enemy (0-based line
+   indexes). The test suite checks that the puzzle is still solvable without guessing as
+   the fog lifts. If it fails, try fogging lines that cross filled cells of easy lines.
 3. Reference the encounter id from a run in `src/puzzles/runs/<id>.json`:
    ```json
    { "id": "first-job", "name": "First Job", "hp": 10, "encounters": ["goblin", "..."] }

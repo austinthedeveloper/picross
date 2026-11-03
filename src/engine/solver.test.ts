@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { checkSolution, solveLine, Unknown as U } from './solver';
+import { deriveClues } from './clues';
+import { checkSolution, solve, solveLine, Unknown as U } from './solver';
 
 describe('solveLine', () => {
   it('fills the overlap of a long run', () => {
@@ -43,5 +44,23 @@ describe('checkSolution', () => {
     const g = grid(['#.', '.#']);
     const result = checkSolution(g.width, g.height, g.cells);
     expect(result).toMatchObject({ status: 'ambiguous', unknown: 4 });
+  });
+});
+
+describe('solve with fog', () => {
+  // Heart: .#.#. / ##### / ##### / .###. / ..#..
+  const g = grid(['.#.#.', '#####', '#####', '.###.', '..#..']);
+  const clues = deriveClues(g);
+
+  it('solves when completed lines lift the fog', () => {
+    expect(solve(5, 5, clues, { rows: [1, 3], cols: [2] }).status).toBe('unique');
+  });
+
+  it('gets stuck when fog hides too much to ever complete a line', () => {
+    const all = [0, 1, 2, 3, 4];
+    expect(solve(5, 5, clues, { rows: all, cols: all })).toMatchObject({
+      status: 'ambiguous',
+      unknown: 25,
+    });
   });
 });
