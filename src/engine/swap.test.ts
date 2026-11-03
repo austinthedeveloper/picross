@@ -43,14 +43,18 @@ describe('pickSwap', () => {
     });
   });
 
-  it('keeps marks that are part of a finished line', () => {
+  it('wipes whole lines, even cells in a finished crossing line (#78)', () => {
     const b = board([
       [F, _, _, _],
       [F, _, X, X],
       [X, X, F, _],
-      [X, _, _, _], // column 1 is done, so its cells stay
+      [X, _, _, _], // column 1 is done, but its cells in rows 2 and 3 go too
     ]);
-    expect(pickSwap(b, solution)).toEqual({ kind: 'row', lines: [1, 2], cells: [6, 7, 9, 10] });
+    expect(pickSwap(b, solution)).toEqual({
+      kind: 'row',
+      lines: [1, 2],
+      cells: [4, 6, 7, 8, 9, 10],
+    });
   });
 
   it('returns null before you have marked anything', () => {

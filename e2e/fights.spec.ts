@@ -63,15 +63,26 @@ test('gremlin: fog waves land on unsolved rows as it turns Overcharged, then Bla
   );
 });
 
-test('mimic: swaps and wipes two of your lines, and refilling costs no HP', async ({ page }) => {
+test('mimic: wipes two whole lines, marks them until refilled, and refilling costs no HP', async ({
+  page,
+}) => {
   await fight(page, 'night-shift', 0);
   const chest = encounterSolution('mimic');
   for (const c of [1, 2, 3]) await cell(page, 10 * 15 + c).tap(); // progress in row 11
-  for (let r = 0; r <= 4; r++) await fillRow(page, chest, r);
+  for (let r = 0; r <= 6; r++) await fillRow(page, chest, r); // down to 85%
   await expect
     .poll(() => announcements(page))
-    .toMatch(/swapped (rows|columns) \d+ and \d+ and ate your marks/);
+    .toMatch(/swapped (rows|columns) \d+ and \d+ and ate \d+ marks/);
+  await expect(page.locator('.clue.wiped')).toHaveCount(2);
   await expect(page.getByRole('button', { name: 'Undo' })).toBeDisabled();
+  // Refilling one wiped row clears its mark; the other stays.
+  const wipedRow = await page.$$eval('.row-clue', (gs) =>
+    gs.findIndex((g) => g.classList.contains('wiped')),
+  );
+  if (wipedRow >= 0) {
+    await fillRow(page, chest, wipedRow);
+    await expect(page.locator('.clue.wiped')).toHaveCount(1);
+  }
   const hp = await meter(page, 'player-hp');
   await solve(page, chest);
   expect(await meter(page, 'player-hp')).toBe(hp);

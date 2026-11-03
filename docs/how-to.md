@@ -60,7 +60,7 @@ a cell or two inside that tile.
        "taunt": "Lights out!", "fog": { "rows": [1, 7, 14, 4, 9] }, "fogCount": 3 }
    ]
    ```
-   A phase can also set `"swap": true` to swap and wipe two of the player's rows or columns (the Mimic). To
+   A phase can also set `"swap": true` to swap and wipe two of the player's rows or columns (the Mimic); the wiped lines stay marked until refilled. To
    scramble clue order (the Owl), add `"scramble": { "rows": [...], "cols": [...] }` to the
    enemy, or a `scramble` pool with `scrambleCount` to a phase. Only lines with at least
    two different run lengths can be scrambled. For armor (the Beetle), add

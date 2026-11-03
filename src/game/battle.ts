@@ -98,6 +98,8 @@ export interface BattleState {
   fakes?: LineSet;
   /** Board cells covered in ink (#67); completing a line through them washes it off. */
   ink?: number[];
+  /** Lines the Mimic wiped (#78), highlighted until you complete them again. */
+  wiped?: LineSet;
 }
 
 /** Damage per weak-point line while armor is up. */
@@ -182,10 +184,10 @@ function addFromPool(
   };
 }
 
-/** Clears fog or scramble from newly completed lines. Returns the lines cleared. */
+/** Clears fog, scramble, or a wipe mark from newly completed lines. Returns the lines cleared. */
 function liftLines(
   state: BattleState,
-  key: 'fog' | 'scramble',
+  key: 'fog' | 'scramble' | 'wiped',
   lines: Line[],
 ): { state: BattleState; revealed: Line[] } {
   const before = state[key];
@@ -209,6 +211,20 @@ export function clearInk(
   const { ink, washed } = washInk(state.ink, lines, width);
   return washed.length ? { state: { ...state, ink }, washed } : { state, washed };
 }
+
+/** Marks lines the Mimic just wiped (#78). */
+export function markWiped(state: BattleState, kind: Line['kind'], lines: number[]): BattleState {
+  const wiped = state.wiped ?? { rows: [], cols: [] };
+  const add = (list: number[]) => [...new Set([...list, ...lines])];
+  return {
+    ...state,
+    wiped:
+      kind === 'row' ? { ...wiped, rows: add(wiped.rows) } : { ...wiped, cols: add(wiped.cols) },
+  };
+}
+
+/** Clears the wipe mark from lines you've refilled (#78). Returns the lines cleared. */
+export const clearWiped = (state: BattleState, lines: Line[]) => liftLines(state, 'wiped', lines);
 
 /** Unscrambles newly completed lines (#49). Returns the lines put back in order. */
 export const clearScramble = (state: BattleState, lines: Line[]) =>

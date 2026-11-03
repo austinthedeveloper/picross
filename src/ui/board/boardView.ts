@@ -24,6 +24,8 @@ export interface BoardView {
   flashError(index: number): void;
   flashHint(indexes: number[]): void;
   flashLine(line: Line): void;
+  /** Highlights the clues of lines the Mimic wiped until they're refilled (#78). */
+  setWiped(wiped: LineSet): void;
   /** Flashes two lines the Mimic just swapped and wiped. */
   flashSwap(kind: LineKind, a: number, b: number): void;
   /** Hides fogged clues behind "?" (#30). Lines in `lifted` animate as the fog clears. */
@@ -305,6 +307,10 @@ export function createBoardView(puzzle: Puzzle): BoardView {
       for (const { kind, index } of unmasked) {
         playOnce((kind === 'row' ? rowClues : colClues)[index].group, 'unmasked');
       }
+    },
+    setWiped(wiped) {
+      rowClues.forEach((g, r) => g.group.classList.toggle('wiped', hasLine(wiped, 'row', r)));
+      colClues.forEach((g, c) => g.group.classList.toggle('wiped', hasLine(wiped, 'col', c)));
     },
     setInk(next, washed = []) {
       for (const i of inked) if (!next.includes(i)) cells[i].classList.remove('inked');
