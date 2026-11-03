@@ -83,28 +83,49 @@ stack:
 
 ```
 main
-└── story/21-decide-hook                 #21 pick and prototype the concept
-    ├── story/22-dialogue-system         #22 portraits, text box, choices
-    │   └── story/23-chapter-structure   #23 puzzles with story beats between them
-    ├── story/24-meta-picture-puzzles    #24 big pictures made of smaller grids
-    └── story/25-art-direction           #25 palette, font, mood board
+└── story/21-hook-slice                      #21 tinkerer roguelite: first playable run
+    ├── story/26-run-structure               #26 3-encounter run, path map, mid-run save
+    │   └── story/27-battle-encounter        #27 HP, chip damage, finisher, mistake hits
+    │       ├── story/28-gadgets             #28 solved pictures become run items
+    │       │   └── story/29-dig-encounter   #29 calm dig that yields a gadget
+    │       └── story/30-fog-bat             #30 enemy that fogs clues
+    ├── story/22-dialogue-system             #22 portraits, text box, choices
+    │   ├── story/31-crew-intro-scene        #31 crew intro and run sign-off
+    │   └── story/23-chapter-structure       #23 later: story chapters (not in the slice)
+    ├── story/24-meta-picture-puzzles        #24 later: big pictures from smaller grids
+    └── story/25-art-direction               #25 palette, font, mood board
 ```
 
-Why it's shaped this way: #21 decides the concept, which shapes everything else. Chapters
-(#23) need the dialogue system (#22) for the story beats between puzzles. Meta-pictures
-(#24) and art direction (#25) depend on the concept but not on each other or on dialogue.
+`story/21-hook-slice` is the integration branch for the slice. #21 is an umbrella for
+sub-issues #26–#31, so their PRs stack up and merge into it. When the whole slice
+works, `story/21-hook-slice` merges into `main` as one PR.
+
+Why it's shaped this way:
+
+- **#26 → #27:** fights need the run, because mistakes cost run HP and losing a fight
+  ends the run.
+- **#27 → #28 → #29:** gadgets go into the run inventory and change the next fight. The
+  dig exists to hand over a gadget.
+- **#27 → #30:** the fog bat uses the battle rules but doesn't need gadgets, so it's a
+  sibling of #28.
+- **#22 → #31:** the crew intro is built on the dialogue system. Its win and loss
+  sign-offs hook into the run's end screen when both land in `story/21-hook-slice`.
+- **#23 and #24:** both are outside the slice (no story chapters or bosses yet). Their
+  branches are parked for later.
+- **#25:** independent. The slice works with placeholder art until it lands.
 
 Working a stack:
 
-- Open each PR against its parent branch. For example, #23's PR targets
-  `story/22-dialogue-system`, so its diff shows only chapter work.
+- Open each PR against its parent branch. For example, #27's PR targets
+  `story/26-run-structure`, so its diff shows only battle work.
 - When the parent changes, rebase the child onto it:
-  `git rebase story/22-dialogue-system` from `story/23-chapter-structure`, then
+  `git rebase story/26-run-structure` from `story/27-battle-encounter`, then
   `git push --force-with-lease`.
-- Merge from the bottom up. After a parent merges into `main`, retarget the child PR to
-  `main`. GitHub does this automatically if the parent branch is deleted on merge. If the
-  parent was squash-merged, run `git rebase --onto main <old-parent-tip> <child>` to drop
-  the parent's original commits from the child.
+- Merge from the bottom up. After a parent merges into its base (`story/21-hook-slice` for
+  the slice), retarget the child PR to that base. GitHub does this automatically if the
+  parent branch is deleted on merge. If the parent was squash-merged, run
+  `git rebase --onto <base> <old-parent-tip> <child>` to drop the parent's original
+  commits from the child.
 
 Put `Closes #<issue>` in the PR description or the final commit so the issue closes on
 merge.
