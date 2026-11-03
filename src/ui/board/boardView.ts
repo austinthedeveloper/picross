@@ -1,6 +1,6 @@
 import { Cell, column, row, type Board } from '../../engine/board';
 import { satisfiedClues } from '../../engine/clues';
-import { hasLine, noLines, type Line, type LineSet } from '../../engine/lines';
+import { hasLine, noLines, type Line, type LineKind, type LineSet } from '../../engine/lines';
 import type { Puzzle } from '../../puzzles/format';
 import { el } from '../dom';
 import { playOnce } from '../motion';
@@ -17,8 +17,8 @@ export interface BoardView {
   flashError(index: number): void;
   flashHint(indexes: number[]): void;
   flashLine(line: Line): void;
-  /** Flashes two rows the Mimic just swapped. */
-  flashSwap(a: number, b: number): void;
+  /** Flashes two lines the Mimic just swapped and wiped. */
+  flashSwap(kind: LineKind, a: number, b: number): void;
   /** Hides fogged clues behind "?" (#30). Lines in `lifted` animate as the fog clears. */
   setFog(fog: LineSet, lifted?: Line[]): void;
   /**
@@ -250,10 +250,13 @@ export function createBoardView(puzzle: Puzzle): BoardView {
         playOnce((kind === 'row' ? rowClues : colClues)[index].group, 'unfog');
       }
     },
-    flashSwap(a, b) {
-      for (const r of [a, b]) {
-        playOnce(rowClues[r].group, 'swapped');
-        for (let c = 0; c < w; c++) playOnce(cells[r * w + c], 'swapped');
+    flashSwap(kind, a, b) {
+      for (const i of [a, b]) {
+        playOnce((kind === 'row' ? rowClues : colClues)[i].group, 'swapped');
+        const length = kind === 'row' ? w : h;
+        for (let j = 0; j < length; j++) {
+          playOnce(cells[kind === 'row' ? i * w + j : j * w + i], 'swapped');
+        }
       }
     },
     flashHint(indexes) {

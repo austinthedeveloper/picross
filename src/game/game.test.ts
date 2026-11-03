@@ -162,13 +162,13 @@ describe('battle mode', () => {
   });
 });
 
-describe('swapRows', () => {
-  it('swaps two rows and starts the undo history over', () => {
+describe('wipe', () => {
+  it('clears cells and starts the undo history over', () => {
     const tall = parsePuzzle({ id: 't2', name: 'T', width: 2, height: 2, solution: ['#.', '.#'] });
     const game = new Game(tall);
     stroke(game, [{ index: 0, from: Cell.Empty, to: Cell.Filled }]);
-    game.swapRows(0, 1);
-    expect(game.board.cells).toEqual([Cell.Empty, Cell.Empty, Cell.Filled, Cell.Empty]);
+    game.wipe([0]);
+    expect(game.board.cells).toEqual([Cell.Empty, Cell.Empty, Cell.Empty, Cell.Empty]);
     expect(game.history.canUndo).toBe(false);
   });
 });

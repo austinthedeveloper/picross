@@ -1,10 +1,10 @@
-import { pickSwapRows } from '../../../../engine/swap';
+import { pickSwap } from '../../../../engine/swap';
 import { playSound } from '../../../sound';
 import type { FightContext } from './context';
 
 /**
- * The Mimic's row swaps (#48). Swaps wait until no stroke is in progress, so a
- * drag never paints into rows that just moved.
+ * The Mimic's swaps (#48): two rows or columns get swapped and wiped. Swaps wait
+ * until no stroke is in progress, so a drag never paints into lines just wiped.
  */
 export function createSwapper(ctx: FightContext) {
   let strokes = 0;
@@ -13,14 +13,16 @@ export function createSwapper(ctx: FightContext) {
   const run = () => {
     if (strokes > 0 || !ctx.controls) return;
     for (; pending > 0; pending--) {
-      const rows = pickSwapRows(ctx.controls.game.board, ctx.puzzle.solution);
-      if (!rows) continue;
-      ctx.controls.game.swapRows(...rows);
+      const swap = pickSwap(ctx.controls.game.board, ctx.puzzle.solution);
+      if (!swap) continue;
+      const [a, b] = swap.lines;
+      ctx.controls.game.wipe(swap.cells);
       ctx.controls.refresh();
-      ctx.view?.flashSwap(...rows);
+      ctx.view?.flashSwap(swap.kind, a, b);
       playSound('phase');
+      const lines = swap.kind === 'row' ? 'rows' : 'columns';
       ctx.bar.say(
-        `${ctx.form().name} swapped rows ${rows[0] + 1} and ${rows[1] + 1}! Undo can't help.`,
+        `${ctx.form().name} swapped ${lines} ${a + 1} and ${b + 1} and ate your marks! Fill them in again.`,
       );
     }
   };

@@ -164,16 +164,11 @@ export class Game {
   }
 
   /**
-   * Swaps the contents of two rows (the Mimic, #48). It isn't a move you can
-   * undo, and older moves would point at the wrong cells afterwards, so the
-   * undo history starts over.
+   * Clears cells the Mimic ate (#48). It isn't a move you can undo, and older
+   * moves would bring the marks back, so the undo history starts over.
    */
-  swapRows(a: number, b: number): void {
-    const w = this.board.width;
-    for (let c = 0; c < w; c++) {
-      const [i, j] = [a * w + c, b * w + c];
-      [this.board.cells[i], this.board.cells[j]] = [this.board.cells[j], this.board.cells[i]];
-    }
+  wipe(indexes: readonly number[]): void {
+    for (const i of indexes) this.board.cells[i] = Cell.Empty;
     this.history = new History();
     this.checkSolved();
   }

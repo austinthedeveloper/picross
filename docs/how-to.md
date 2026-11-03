@@ -52,7 +52,7 @@ groups puzzles by size, biggest first, so a new size gets its own section automa
        "taunt": "Lights out!", "fog": { "rows": [1, 7, 14, 4, 9] }, "fogCount": 3 }
    ]
    ```
-   A phase can also set `"swap": true` to swap two of the player's rows (the Mimic). To
+   A phase can also set `"swap": true` to swap and wipe two of the player's rows or columns (the Mimic). To
    scramble clue order (the Owl), add `"scramble": { "rows": [...], "cols": [...] }` to the
    enemy, or a `scramble` pool with `scrambleCount` to a phase. Only lines with at least
    two different run lengths can be scrambled. For armor (the Beetle), add
