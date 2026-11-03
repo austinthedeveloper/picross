@@ -1,4 +1,5 @@
-import { finish, type Enemy } from '../../../../game/battle';
+import { debug } from '../../../../debug/hooks';
+import { finish, useGadget, type Enemy } from '../../../../game/battle';
 import type { Puzzle } from '../../../../puzzles/format';
 import type { PlaySession } from '../../gameScreen';
 import { createCallOut } from './callOut';
@@ -59,6 +60,25 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
     ended: () => knockedOut(ctx),
     celebrate: (board) => playFinisher(ctx, board, finisher),
   };
+
+  if (import.meta.env.VITE_DEBUG === '1') {
+    const damage = (amount: number) => {
+      const used = useGadget(ctx.battle(), { kind: 'damage', amount });
+      const { state, message } = checkPhase(used.state);
+      ctx.saveBattle(state);
+      ctx.bar.setEnemyHp(state.enemyHp);
+      ctx.bar.hitEnemy(used.dealt);
+      gadgets.render();
+      ctx.bar.say(`Debug: ${used.dealt} damage, ${state.enemyHp} HP left. ${message}`);
+    };
+    debug.fight = {
+      damage,
+      nextPhase() {
+        const next = enemy.phases?.[ctx.battle().phase ?? 0];
+        if (next) damage(Math.max(1, ctx.battle().enemyHp - Math.floor(next.at * enemy.hp)));
+      },
+    };
+  }
 
   return {
     hooks,

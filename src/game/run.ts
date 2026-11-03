@@ -1,3 +1,4 @@
+import { debug } from '../debug/hooks';
 import type { BattleState } from './battle';
 import type { SavedBoard } from './progress';
 import type { Mode } from './settings';
@@ -66,6 +67,7 @@ export function withBoard(state: RunState, board: SavedBoard | null): RunState {
 /** Applies damage; the run is lost at 0 HP. */
 export function damage(state: RunState, amount: number): RunState {
   if (state.status !== 'active' || amount <= 0) return state;
+  if (import.meta.env.VITE_DEBUG === '1' && debug.infiniteHealth()) return state;
   const hp = Math.max(0, state.hp - amount);
   return { ...state, hp, status: hp === 0 ? 'lost' : 'active' };
 }

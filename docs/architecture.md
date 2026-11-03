@@ -21,6 +21,7 @@ index.html                 Page shell; loads src/main.ts
 public/favicon.svg
 src/
   main.ts                  Entry point: imports styles, applies theme, hash router
+  debug/                   Dev-only tools (#65): panel and hooks; never in production builds
   engine/                  Pure puzzle logic, no DOM
     board.ts               Cell states (Empty/Filled/Marked), Grid/Board/Solution, isSolved
     clues.ts               Clue derivation and per-clue "satisfied" check (clue dimming)

@@ -1,9 +1,10 @@
 import { defineConfig } from '@playwright/test';
 
 /**
- * Browser tests against the production build, on a phone-sized touch screen
- * (the game is phone-first). Locally they use your installed Chrome; CI
- * installs Playwright's Chromium. Run with `npm run e2e`.
+ * Browser tests on a phone-sized touch screen (the game is phone-first): every
+ * spec against the production build, and `debug.spec.ts` against a dev build with
+ * the debug tools (#65). Locally they use your installed Chrome; CI installs
+ * Playwright's Chromium. Run with `npm run e2e`.
  */
 export default defineConfig({
   testDir: 'e2e',
@@ -23,10 +24,22 @@ export default defineConfig({
     channel: process.env.CI ? undefined : 'chrome',
     trace: 'retain-on-failure',
   },
-  webServer: {
-    command: 'npm run build && npx vite preview --port 4173 --strictPort',
-    url: 'http://localhost:4173/',
-    reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
-  },
+  projects: [
+    { name: 'prod', testIgnore: 'debug.spec.ts' },
+    { name: 'dev', testMatch: 'debug.spec.ts', use: { baseURL: 'http://localhost:4174/' } },
+  ],
+  webServer: [
+    {
+      command: 'npm run build && npx vite preview --port 4173 --strictPort',
+      url: 'http://localhost:4173/',
+      reuseExistingServer: !process.env.CI,
+      timeout: 120_000,
+    },
+    {
+      command: 'npm run build:dev && npx vite preview --outDir dist-dev --port 4174 --strictPort',
+      url: 'http://localhost:4174/',
+      reuseExistingServer: !process.env.CI,
+      timeout: 120_000,
+    },
+  ],
 });
