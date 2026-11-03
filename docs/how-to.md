@@ -20,6 +20,34 @@ string per row, `#` filled and `.` empty). `parsePuzzle` validates it at startup
 puzzles from 5×5 to 20×20, with at least half of them 15×15 or larger. The puzzle list
 groups puzzles by size, biggest first, so a new size gets its own section automatically.
 
+### Add many at once with a sheet
+
+For a batch, write them in one text file instead of one JSON each. The themed batches
+live in `src/puzzles/sheets/` and are the source for their JSON; edit a drawing there and
+re-export. A sheet is puzzles separated by blank lines: the name on the first line (optionally `| id=<id>`), then the
+rows of `#` and `.`:
+
+```
+Wizard Hat
+.......#.......
+......###......
+...
+```
+
+Then:
+
+```bash
+npx vite-node scripts/puzzle-sheet.ts check src/puzzles/sheets/dungeon.txt
+```
+
+prints ✓ per puzzle, or the picture with `?` on the cells the solver can't decide, and
+flags ids that already exist and pictures outside 25–70% fill. `fix` flips a few cells to
+make an ambiguous puzzle unique (look at the result; redraw by hand if it spoils the
+picture), and `export <outdir> <sheets...>` writes the JSON files. Then add the new ids to
+`ORDER` in `src/puzzles/index.ts`. Draw the silhouette first, fill 35–60% of the grid, and
+avoid checkerboards, lone pixels and sparse symmetric detail, which are what make a
+picture ambiguous.
+
 ## Add a mural
 
 Add `src/puzzles/murals/<id>.json` with `id`, `name`, `order`, `tile` (usually 15) and
