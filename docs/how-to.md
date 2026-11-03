@@ -52,6 +52,7 @@ groups puzzles by size, biggest first, so a new size gets its own section automa
        "taunt": "Lights out!", "fog": { "rows": [1, 7, 14, 4, 9] }, "fogCount": 3 }
    ]
    ```
+   A phase can also set `"swap": true` to swap two of the player's rows (the Mimic).
    Phases trigger in order at decreasing `at` values. A phase's `fog` is a pool, and it fogs
    up to `fogCount` unsolved lines from it. Line damage is 1 per line and columns mostly
    finish late, so set `at` high (0.8–0.9) for a phase to land mid-solve. To find a fog

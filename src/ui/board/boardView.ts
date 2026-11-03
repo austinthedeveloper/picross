@@ -19,6 +19,8 @@ export interface BoardView {
   flashError(index: number): void;
   flashHint(indexes: number[]): void;
   flashLine(line: Line): void;
+  /** Flashes two rows the Mimic just swapped. */
+  flashSwap(a: number, b: number): void;
   /** Hides fogged clues behind "?" (#30). Lines in `lifted` animate as the fog clears. */
   setFog(fog: Fog, lifted?: Line[]): void;
 }
@@ -187,6 +189,12 @@ export function createBoardView(puzzle: Puzzle): BoardView {
       colClues.forEach((g, c) => apply(g, isFogged(fog, 'col', c)));
       for (const { kind, index } of lifted) {
         restartAnimation((kind === 'row' ? rowClues : colClues)[index].group, 'unfog');
+      }
+    },
+    flashSwap(a, b) {
+      for (const r of [a, b]) {
+        restartAnimation(rowClues[r].group, 'swapped');
+        for (let c = 0; c < w; c++) restartAnimation(cells[r * w + c], 'swapped');
       }
     },
     flashHint(indexes) {

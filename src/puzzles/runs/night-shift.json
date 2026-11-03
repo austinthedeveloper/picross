@@ -1,0 +1,6 @@
+{
+  "id": "night-shift",
+  "name": "The Night Shift",
+  "hp": 12,
+  "encounters": ["mimic"]
+}

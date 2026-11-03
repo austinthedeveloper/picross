@@ -279,3 +279,19 @@
     opacity: 0.2;
   }
 }
+
+/* The Mimic swapped these two rows (#48). */
+.cell.swapped::after {
+  --flash: color-mix(in srgb, #7b5cff 70%, var(--accent));
+  animation: overlay-flash 1s ease-out;
+}
+
+.clue.swapped {
+  animation: swap-clue 1s ease-out;
+}
+
+@keyframes swap-clue {
+  from {
+    background: color-mix(in srgb, #7b5cff 40%, transparent);
+  }
+}

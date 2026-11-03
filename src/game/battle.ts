@@ -32,6 +32,8 @@ export interface Phase {
   fogCount?: number;
   /** One line shown in the phase banner. */
   taunt?: string;
+  /** Swaps two of your unfinished rows when the phase starts (the Mimic, #48). */
+  swap?: boolean;
 }
 
 /** A fight in progress. Saved with the run so a reload resumes it. */

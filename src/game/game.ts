@@ -163,6 +163,21 @@ export class Game {
     return move;
   }
 
+  /**
+   * Swaps the contents of two rows (the Mimic, #48). It isn't a move you can
+   * undo, and older moves would point at the wrong cells afterwards, so the
+   * undo history starts over.
+   */
+  swapRows(a: number, b: number): void {
+    const w = this.board.width;
+    for (let c = 0; c < w; c++) {
+      const [i, j] = [a * w + c, b * w + c];
+      [this.board.cells[i], this.board.cells[j]] = [this.board.cells[j], this.board.cells[i]];
+    }
+    this.history = new History();
+    this.checkSolved();
+  }
+
   /** Starts over after running out of hearts. */
   retry(): void {
     this.board.cells.fill(Cell.Empty);
