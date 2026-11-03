@@ -1,4 +1,4 @@
-import type { Mode } from './settings';
+import type { GameMode } from './game';
 import { readStore, writeStore } from './storage';
 
 const KEY = 'picross:v1';
@@ -8,7 +8,7 @@ export interface SavedBoard {
   cells: string;
   /** Milliseconds played so far. */
   elapsed?: number;
-  mode?: Mode;
+  mode?: GameMode;
   hearts?: number;
   hintsUsed?: number;
 }

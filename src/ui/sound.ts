@@ -1,6 +1,7 @@
 import { getSettings } from '../game/settings';
 
-export type Sound = 'fill' | 'mark' | 'erase' | 'error' | 'line' | 'solve' | 'hint';
+export type Sound =
+  'fill' | 'mark' | 'erase' | 'error' | 'line' | 'solve' | 'hint' | 'strike' | 'finisher';
 
 interface Note {
   freq: number;
@@ -22,6 +23,15 @@ const SOUNDS: Record<Sound, Note[]> = {
   line: [
     { freq: 660, duration: 0.07, type: 'sine', gain: 0.15 },
     { freq: 880, at: 0.06, duration: 0.1, type: 'sine', gain: 0.15 },
+  ],
+  strike: [
+    { freq: 220, duration: 0.06, type: 'square', gain: 0.1 },
+    { freq: 140, at: 0.03, duration: 0.08, type: 'triangle', gain: 0.15 },
+  ],
+  finisher: [
+    { freq: 900, duration: 0.12, type: 'sawtooth', gain: 0.06 },
+    { freq: 300, at: 0.08, duration: 0.1, type: 'sawtooth', gain: 0.06 },
+    { freq: 90, at: 0.12, duration: 0.4, type: 'square', gain: 0.14 },
   ],
   hint: [
     { freq: 740, duration: 0.08, type: 'sine', gain: 0.12 },

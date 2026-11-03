@@ -3,5 +3,11 @@
   "name": "Fog bat",
   "kind": "fight",
   "puzzle": "fish",
-  "blurb": "A bat that breathes fog. Gross, and also a problem."
+  "blurb": "A bat that breathes fog. Gross, and also a problem.",
+  "enemy": {
+    "name": "Fog bat",
+    "sprite": "🦇",
+    "hp": 30,
+    "attack": 2
+  }
 }

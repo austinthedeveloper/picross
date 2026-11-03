@@ -22,12 +22,18 @@ starter-pack test expects 5×5 to 15×15 and at most 15 puzzles, so update
 
 ## Add an encounter or a run
 
-1. Make sure the encounter's puzzle exists in `src/puzzles/pack/` (see above).
+1. Add the encounter's puzzle. Run-only puzzles go in `src/puzzles/run/`, so they stay off
+   the puzzle list but still get the uniqueness check. You can also reuse a pack puzzle.
 2. Add `src/puzzles/encounters/<id>.json`:
    ```json
    { "id": "goblin", "name": "Goblin", "kind": "fight", "puzzle": "sword", "blurb": "..." }
    ```
-   `kind` is `fight` or `dig`, and `blurb` is optional.
+   `kind` is `fight` or `dig`, and `blurb` is optional. Fights also need an enemy:
+   ```json
+   "enemy": { "name": "Goblin", "sprite": "👺", "hp": 30, "attack": 2 }
+   ```
+   Keep `hp` at least 1.5 × (width + height) so the finisher stays the big hit. A test
+   enforces this. `attack` is the run HP lost per wrong fill in Hits-on runs.
 3. Reference the encounter id from a run in `src/puzzles/runs/<id>.json`:
    ```json
    { "id": "first-job", "name": "First Job", "hp": 10, "encounters": ["goblin", "..."] }

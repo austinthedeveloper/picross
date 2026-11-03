@@ -29,16 +29,18 @@ src/
   puzzles/
     format.ts              Puzzle file format, parse/validate, export helpers
     index.ts               Loads pack/*.json and sets play order (ORDER)
-    pack/*.json            The built-in puzzles
+    pack/*.json            The free-play puzzles (shown on the puzzle list)
+    run/*.json             Run-only puzzles (e.g. the goblin's sword); not on the list
     pack.test.ts           Runs the solver over every pack puzzle
     runs.ts                Loads encounters/*.json and runs/*.json (roguelite runs)
-    encounters/*.json      Encounters: name, kind (fight/dig), which puzzle, blurb
+    encounters/*.json      Encounters: name, kind (fight/dig), puzzle, blurb, enemy (fights)
     runs/*.json            Runs: starting HP and an ordered list of encounter ids
   game/
     game.ts                Game: board + history + mode/hearts + hints + clock
     progress.ts            Saved boards, solve stats, totals (localStorage)
     settings.ts            Mode, mute, high contrast (localStorage)
     run.ts                 RunState and its pure transitions (start, damage, clear encounter)
+    battle.ts              Enemy and BattleState: chip damage per line, the finisher
     runSave.ts             Saves the current run (localStorage)
     storage.ts             Safe localStorage JSON read/write
   ui/
@@ -51,6 +53,7 @@ src/
       gameScreen.ts        Play screen; wires everything together  (#/play/<id>)
       freePlaySession.ts   Free-play PlaySession: saves, best times, "Next"
       runScreen.ts         Run hub, path map, results; run encounters (#/run, #/run/play)
+      fightHooks.ts        Fight rules wired into a run encounter's PlaySession
       editorScreen.ts      Puzzle authoring tool                   (#/editor)
     board/
       boardView.ts         Renders clues + cells (ARIA grid), clue dimming, flashes
@@ -61,7 +64,8 @@ src/
     components/
       hintMenu.ts          "Hint n/3" dropdown
       zoomBar.ts           − / level / + zoom buttons
-      endPanels.ts         Solved and out-of-hearts panels
+      endPanels.ts         Solved, out-of-hearts, and generic end panels
+      battleBar.ts         Enemy and player HP above the board; hit and defeat effects
       muteButton.ts        Sound toggle
   styles/
     tokens.css             Color tokens for light, dark, and high-contrast themes
@@ -117,12 +121,12 @@ rules stay identical across input methods.
 
 All saved data lives in `localStorage`, read once at startup and written on change:
 
-| Key                | Module                       | Contents                                                 |
-| ------------------ | ---------------------------- | -------------------------------------------------------- |
-| `picross:v1`       | `game/progress.ts`           | In-progress boards, per-puzzle stats, total solving time |
-| `picross:run`      | `game/runSave.ts`            | The current run, including the current encounter's board |
-| `picross:settings` | `game/settings.ts`           | `mode`, `muted`, `highContrast`                          |
-| `picross:editor`   | `ui/screens/editorScreen.ts` | The editor's current drawing                             |
+| Key                | Module                       | Contents                                                        |
+| ------------------ | ---------------------------- | --------------------------------------------------------------- |
+| `picross:v1`       | `game/progress.ts`           | In-progress boards, per-puzzle stats, total solving time        |
+| `picross:run`      | `game/runSave.ts`            | The current run, including the current encounter's board        |
+| `picross:settings` | `game/settings.ts`           | `mode` (also the default for new runs), `muted`, `highContrast` |
+| `picross:editor`   | `ui/screens/editorScreen.ts` | The editor's current drawing                                    |
 
 `storage.ts` falls back to defaults if storage is blocked or holds bad JSON, so the game
 still works in private browsing. To reset during development, clear the site's local
@@ -179,12 +183,15 @@ working. Shared button styles live in `base.css`: `.button`, `.ghost`, `.primary
 - the saved board, and `save(board | null)` to save or clear it
 - `complete(game)`, which records the solve and returns the solved panel's note and
   buttons
+- optional encounter hooks: a `header` above the board, `onLinesComplete`, `onMistake`,
+  `ended()` to stop play early (e.g. knocked out), and `celebrate()` to animate before the
+  solved panel appears
 
 `freePlaySession(puzzle)` is the default. It saves to `progress.ts` and records best
 times. A run encounter (`runScreen.ts`) saves the board into the run state and clears the
-encounter instead, so run solves never touch free-play stats. Future encounter types
-(fights in #27, digs in #29) add their behavior through the session and run state
-rather than through special cases in the game screen.
+encounter instead, so run solves never touch free-play stats. Fights (`fightHooks.ts`)
+plug in through the optional hooks, and digs (#29) will too, so the game screen has no
+special cases for encounter types.
 
 ## Runs
 
@@ -195,6 +202,26 @@ HP, gadgets, status (`active`, `won`, or `lost`), and the current encounter's bo
 changes only through pure functions: `startRun`, `withBoard`, `damage`, and
 `completeEncounter`. Every change is saved immediately, so closing the tab at any point
 resumes on the map, or mid-puzzle with the board restored.
+
+## Fights
+
+A fight encounter has an `enemy` (`name`, `sprite`, `hp`, `attack`). The rules live in
+`game/battle.ts`:
+
+- **Chip damage.** Each newly completed row or column deals `CHIP_DAMAGE` (1). Each line
+  counts once, even if it's broken and completed again, and chip damage never takes the
+  enemy below 1 HP.
+- **Finisher.** Solving the picture deals whatever HP is left, so it always wins the
+  fight. A test makes sure every bundled fight leaves at least a third of the enemy's HP
+  for the finisher.
+- **Mistakes.** A run remembers the mode it started in. In a Hits-on (Hearts) run, the
+  game uses `battle` mode: like Hearts, a wrong fill becomes an X and ends the stroke, but
+  instead of losing a heart, the enemy hits the player's run HP for `attack`. At 0 HP the
+  run is lost and the screen shows "Knocked out." In a Relaxed run, fights don't check
+  fills and the enemy never hits.
+
+Battle progress (enemy HP and which lines have struck) is saved in `RunState.battle`, so
+a reload resumes mid-fight.
 
 ## The solver
 

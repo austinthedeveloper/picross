@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { solve } from '../engine/solver';
-import { puzzles } from './index';
+import { allPuzzles } from './index';
 
 // Run in CI via `npm test`, or alone with `npm run check:puzzles`.
-describe('puzzle pack uniqueness', () => {
-  it.each(puzzles.map((p) => [p.id, p] as const))(
+describe('puzzle uniqueness (pack and run puzzles)', () => {
+  it.each(allPuzzles.map((p) => [p.id, p] as const))(
     '%s has one solution reachable without guessing',
     (_, p) => {
       const result = solve(p.width, p.height, p.clues);

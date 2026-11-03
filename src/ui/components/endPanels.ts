@@ -16,6 +16,15 @@ export function solvedPanelContent(puzzle: Puzzle, note: string, actions: HTMLEl
   ];
 }
 
+/** Contents of a generic end panel: a heading, a note, and buttons. */
+export function createEndPanel(title: string, note: string, actions: HTMLElement[]): Node[] {
+  return [
+    el('h2', { textContent: title }),
+    el('p', { className: 'end-note', textContent: note }),
+    el('div', { className: 'end-actions' }, actions),
+  ];
+}
+
 /** The panel shown when hearts mode runs out. */
 export function createFailedPanel(onRetry: () => void): HTMLElement {
   return el('div', { className: 'end-panel failed', hidden: true }, [
