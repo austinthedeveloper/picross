@@ -107,7 +107,7 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
 
     onLinesComplete(lines) {
       const messages: string[] = [];
-      const fogged = clearFog(battle(), lines, puzzle.solution);
+      const fogged = clearFog(battle(), lines);
       const { state, dealt } = chip(
         fogged.state,
         lines.map((l) => lineKey(l.kind, l.index)),
@@ -117,7 +117,7 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
         const names = fogged.revealed.map(
           (l) => `${l.kind === 'row' ? 'row' : 'column'} ${l.index + 1}`,
         );
-        messages.push(`The fog lifts from ${names.join(', ')}.`);
+        messages.push(`You solved through the fog: ${names.join(', ')} revealed.`);
       }
       if (state !== battle()) saveCurrentRun(withBattle(current(), state));
       if (dealt) {

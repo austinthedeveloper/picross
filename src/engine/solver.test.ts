@@ -52,8 +52,12 @@ describe('solve with fog', () => {
   const g = grid(['.#.#.', '#####', '#####', '.###.', '..#..']);
   const clues = deriveClues(g);
 
-  it('solves when completed lines lift the fog', () => {
-    expect(solve(5, 5, clues, { rows: [1, 3], cols: [2] }).status).toBe('unique');
+  it('solves fogged rows from the columns', () => {
+    expect(solve(5, 5, clues, { rows: [1], cols: [] }).status).toBe('unique');
+  });
+
+  it('gets stuck when the columns can’t pin a fogged row down', () => {
+    expect(solve(5, 5, clues, { rows: [2], cols: [] }).status).toBe('ambiguous');
   });
 
   it('gets stuck when fog hides too much to ever complete a line', () => {

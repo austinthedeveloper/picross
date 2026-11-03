@@ -1,4 +1,8 @@
-/** Clues hidden by fog (#30): row and column indexes. */
+/**
+ * Clues hidden by fog (#30): row or column indexes. Fog covers one direction
+ * only: a fogged row and a fogged column would hide the cell where they cross
+ * from both of its lines, so neither could ever be completed.
+ */
 export interface Fog {
   rows: number[];
   cols: number[];
@@ -10,22 +14,12 @@ export const isFogged = (fog: Fog, kind: 'row' | 'col', index: number) =>
   (kind === 'row' ? fog.rows : fog.cols).includes(index);
 
 /**
- * The fog left after a line is completed. Completing a line clears its own
- * fog and the fog on every crossing line it meets at a filled cell.
- * `filledAt(i)` says whether the completed line's cell `i` (the crossing with
- * line `i` of the other direction) is filled.
+ * The fog left after a line is completed. Fog only lifts from the line you
+ * complete, so a fogged line has to be solved from its crossing lines; its
+ * clue appears as the reward.
  */
-export function liftFog(
-  fog: Fog,
-  kind: 'row' | 'col',
-  index: number,
-  filledAt: (cross: number) => boolean,
-): Fog {
-  const own = kind === 'row' ? fog.rows : fog.cols;
-  const crossing = kind === 'row' ? fog.cols : fog.rows;
-  const keptOwn = own.filter((i) => i !== index);
-  const keptCrossing = crossing.filter((i) => !filledAt(i));
+export function liftFog(fog: Fog, kind: 'row' | 'col', index: number): Fog {
   return kind === 'row'
-    ? { rows: keptOwn, cols: keptCrossing }
-    : { rows: keptCrossing, cols: keptOwn };
+    ? { rows: fog.rows.filter((i) => i !== index), cols: fog.cols }
+    : { rows: fog.rows, cols: fog.cols.filter((i) => i !== index) };
 }

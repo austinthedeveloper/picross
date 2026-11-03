@@ -44,6 +44,10 @@ function parseEnemy(data: unknown, puzzle: Puzzle, fail: (msg: string) => never)
     if (!inRange(rows, puzzle.height) || !inRange(cols, puzzle.width)) {
       fail('fog rows and cols must be line indexes within the puzzle');
     }
+    if (rows.length && cols.length) {
+      // The cell where a fogged row and column cross could never be worked out.
+      fail('fog can cover rows or columns, not both');
+    }
     parsed.fog = { rows: [...rows], cols: [...cols] };
   }
   return parsed;
