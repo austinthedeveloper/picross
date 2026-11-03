@@ -23,8 +23,13 @@ export interface Phase {
   sprite?: string;
   /** Replaces the enemy's attack from now on. */
   attack?: number;
-  /** Lines fogged when the phase starts, unless you've already completed them. */
+  /**
+   * Lines this phase can fog, in priority order. Lines you've already completed
+   * or that are already fogged are skipped.
+   */
   fog?: Fog;
+  /** Fog at most this many of those lines (default: all of them). */
+  fogCount?: number;
   /** One line shown in the phase banner. */
   taunt?: string;
 }
@@ -82,8 +87,15 @@ export function advancePhase(
     next = { ...next, phase: (next.phase ?? 0) + 1 };
     if (phase.fog) {
       const fog = next.fog ?? { rows: [], cols: [] };
-      const add = (kind: 'row' | 'col', list: number[], have: number[]) =>
-        list.filter((i) => !have.includes(i) && !next.struck.includes(lineKey(kind, i)));
+      let budget = phase.fogCount ?? Infinity;
+      const add = (kind: 'row' | 'col', list: number[], have: number[]) => {
+        const open = list.filter(
+          (i) => !have.includes(i) && !next.struck.includes(lineKey(kind, i)),
+        );
+        const picked = open.slice(0, budget);
+        budget -= picked.length;
+        return picked;
+      };
       next = {
         ...next,
         fog: {

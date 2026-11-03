@@ -64,6 +64,12 @@ function parseEnemy(data: unknown, puzzle: Puzzle, fail: (msg: string) => never)
       if (phase.attack !== undefined && (!Number.isInteger(phase.attack) || phase.attack < 0)) {
         fail(`phase ${i + 1} attack must be a whole number`);
       }
+      if (
+        phase.fogCount !== undefined &&
+        (!Number.isInteger(phase.fogCount) || phase.fogCount < 1)
+      ) {
+        fail(`phase ${i + 1} fogCount must be a positive whole number`);
+      }
       return {
         at: at!,
         ...(phase.name ? { name: phase.name } : {}),
@@ -71,6 +77,7 @@ function parseEnemy(data: unknown, puzzle: Puzzle, fail: (msg: string) => never)
         ...(phase.attack !== undefined ? { attack: phase.attack } : {}),
         ...(phase.taunt ? { taunt: phase.taunt } : {}),
         ...(phase.fog !== undefined ? { fog: parseFog(phase.fog) } : {}),
+        ...(phase.fogCount !== undefined ? { fogCount: phase.fogCount } : {}),
       };
     });
   }
