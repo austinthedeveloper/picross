@@ -1,5 +1,5 @@
 import { getPuzzle } from './index';
-import type { Fog } from '../engine/fog';
+import { unionLines, type LineSet } from '../engine/lines';
 import type { Enemy, Phase } from '../game/battle';
 import type { Puzzle } from './format';
 import { getGadget } from './gadgets';
@@ -42,8 +42,8 @@ function parseEnemy(data: unknown, puzzle: Puzzle, fail: (msg: string) => never)
     hp: enemy.hp!,
     attack: enemy.attack!,
   };
-  const parseFog = (data: unknown): Fog => {
-    const { rows = [], cols = [] } = (data ?? {}) as Partial<Fog>;
+  const parseFog = (data: unknown): LineSet => {
+    const { rows = [], cols = [] } = (data ?? {}) as Partial<LineSet>;
     const inRange = (list: unknown, size: number) =>
       Array.isArray(list) && list.every((i) => Number.isInteger(i) && i >= 0 && i < size);
     if (!inRange(rows, puzzle.height) || !inRange(cols, puzzle.width)) {
@@ -52,7 +52,7 @@ function parseEnemy(data: unknown, puzzle: Puzzle, fail: (msg: string) => never)
     return { rows: [...rows], cols: [...cols] };
   };
   // A scrambled line needs at least two different run lengths, or its order is already known.
-  const parseScramble = (data: unknown): Fog => {
+  const parseScramble = (data: unknown): LineSet => {
     const scramble = parseFog(data);
     for (const [kind, list] of [
       ['row', scramble.rows],
@@ -131,19 +131,13 @@ function checkScene(id: unknown, fail: (msg: string) => never): string {
 }
 
 /** Every line an enemy can ever fog: its starting fog plus every phase's. */
-export function allFog(enemy: Enemy): Fog {
-  return unionOf([enemy.fog, ...(enemy.phases ?? []).map((p) => p.fog)]);
+export function allFog(enemy: Enemy): LineSet {
+  return unionLines([enemy.fog, ...(enemy.phases ?? []).map((p) => p.fog)]);
 }
 
 /** Every line an enemy can ever scramble: its starting scramble plus every phase's. */
-export function allScramble(enemy: Enemy): Fog {
-  return unionOf([enemy.scramble, ...(enemy.phases ?? []).map((p) => p.scramble)]);
-}
-
-function unionOf(list: (Fog | undefined)[]): Fog {
-  const sets = list.filter((f): f is Fog => Boolean(f));
-  const union = (key: 'rows' | 'cols') => [...new Set(sets.flatMap((f) => f[key]))];
-  return { rows: union('rows'), cols: union('cols') };
+export function allScramble(enemy: Enemy): LineSet {
+  return unionLines([enemy.scramble, ...(enemy.phases ?? []).map((p) => p.scramble)]);
 }
 
 /** A run: an ordered path of encounters. */

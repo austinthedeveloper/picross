@@ -1,13 +1,10 @@
 import { Cell, column, row, type Board } from '../../engine/board';
 import { satisfiedClues } from '../../engine/clues';
-import { isFogged, noFog, type Fog } from '../../engine/fog';
+import { hasLine, noLines, type Line, type LineSet } from '../../engine/lines';
 import type { Puzzle } from '../../puzzles/format';
 import { el } from '../dom';
 
-export interface Line {
-  kind: 'row' | 'col';
-  index: number;
-}
+export type { Line };
 
 export interface BoardView {
   root: HTMLElement;
@@ -22,14 +19,14 @@ export interface BoardView {
   /** Flashes two rows the Mimic just swapped. */
   flashSwap(a: number, b: number): void;
   /** Hides fogged clues behind "?" (#30). Lines in `lifted` animate as the fog clears. */
-  setFog(fog: Fog, lifted?: Line[]): void;
+  setFog(fog: LineSet, lifted?: Line[]): void;
   /**
    * Shows scrambled clues in ascending order with a ⚙ (#49), so you know the runs but
    * not their order. Lines in `restored` animate back into order.
    */
-  setScramble(scramble: Fog, restored?: Line[]): void;
+  setScramble(scramble: LineSet, restored?: Line[]): void;
   /** Marks weak-point clues with 🎯 (#50). Lines in `cracked` flash as they crack. */
-  setWeakPoints(weak: Fog, cracked?: Line[]): void;
+  setWeakPoints(weak: LineSet, cracked?: Line[]): void;
 }
 
 const STATE: Record<Cell, { className: string; label: string }> = {
@@ -119,8 +116,8 @@ export function createBoardView(puzzle: Puzzle): BoardView {
     root.append(rowEl);
   }
 
-  let fog: Fog = noFog();
-  let scramble: Fog = noFog();
+  let fog: LineSet = noLines();
+  let scramble: LineSet = noLines();
   const fogLabel = (g: ClueGroup) => g.label.replace(/clues: .*/, 'clues hidden by fog');
   const scrambleLabel = (g: ClueGroup, runs: number[]) =>
     g.label.replace(
@@ -188,8 +185,8 @@ export function createBoardView(puzzle: Puzzle): BoardView {
             rowClues[r],
             clues.rows[r],
             row(board, r),
-            isFogged(fog, 'row', r),
-            isFogged(scramble, 'row', r),
+            hasLine(fog, 'row', r),
+            hasLine(scramble, 'row', r),
           ),
         );
       }
@@ -201,8 +198,8 @@ export function createBoardView(puzzle: Puzzle): BoardView {
             colClues[c],
             clues.cols[c],
             column(board, c),
-            isFogged(fog, 'col', c),
-            isFogged(scramble, 'col', c),
+            hasLine(fog, 'col', c),
+            hasLine(scramble, 'col', c),
           ),
         );
       }
@@ -228,8 +225,8 @@ export function createBoardView(puzzle: Puzzle): BoardView {
       }
     },
     setWeakPoints(weak, cracked = []) {
-      rowClues.forEach((g, r) => g.group.classList.toggle('weak-point', isFogged(weak, 'row', r)));
-      colClues.forEach((g, c) => g.group.classList.toggle('weak-point', isFogged(weak, 'col', c)));
+      rowClues.forEach((g, r) => g.group.classList.toggle('weak-point', hasLine(weak, 'row', r)));
+      colClues.forEach((g, c) => g.group.classList.toggle('weak-point', hasLine(weak, 'col', c)));
       for (const { kind, index } of cracked) {
         restartAnimation((kind === 'row' ? rowClues : colClues)[index].group, 'cracked');
       }
@@ -237,12 +234,12 @@ export function createBoardView(puzzle: Puzzle): BoardView {
     setScramble(next, restored = []) {
       scramble = next;
       rowClues.forEach((g, r) => {
-        showOrder(g, clues.rows[r], isFogged(scramble, 'row', r));
-        if (isFogged(scramble, 'row', r)) g.group.ariaLabel = scrambleLabel(g, clues.rows[r]);
+        showOrder(g, clues.rows[r], hasLine(scramble, 'row', r));
+        if (hasLine(scramble, 'row', r)) g.group.ariaLabel = scrambleLabel(g, clues.rows[r]);
       });
       colClues.forEach((g, c) => {
-        showOrder(g, clues.cols[c], isFogged(scramble, 'col', c));
-        if (isFogged(scramble, 'col', c)) g.group.ariaLabel = scrambleLabel(g, clues.cols[c]);
+        showOrder(g, clues.cols[c], hasLine(scramble, 'col', c));
+        if (hasLine(scramble, 'col', c)) g.group.ariaLabel = scrambleLabel(g, clues.cols[c]);
       });
       for (const { kind, index } of restored) {
         restartAnimation((kind === 'row' ? rowClues : colClues)[index].group, 'unscramble');
@@ -254,8 +251,8 @@ export function createBoardView(puzzle: Puzzle): BoardView {
         g.group.classList.toggle('fogged', fogged);
         if (fogged) g.group.ariaLabel = fogLabel(g);
       };
-      rowClues.forEach((g, r) => apply(g, isFogged(fog, 'row', r)));
-      colClues.forEach((g, c) => apply(g, isFogged(fog, 'col', c)));
+      rowClues.forEach((g, r) => apply(g, hasLine(fog, 'row', r)));
+      colClues.forEach((g, c) => apply(g, hasLine(fog, 'col', c)));
       for (const { kind, index } of lifted) {
         restartAnimation((kind === 'row' ? rowClues : colClues)[index].group, 'unfog');
       }

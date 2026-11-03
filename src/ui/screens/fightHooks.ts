@@ -6,7 +6,6 @@ import {
   clearScramble,
   currentForm,
   finish,
-  lineKey,
   startBattle,
   useGadget,
   type BattleState,
@@ -21,6 +20,7 @@ import { createPicture } from '../board/picture';
 import { createBattleBar } from '../components/battleBar';
 import { el } from '../dom';
 import { playSound } from '../sound';
+import { keyToLine, lineCount, lineKey, type LineSet } from '../../engine/lines';
 import { pickSwapRows } from '../../engine/swap';
 import type { BoardControls, PlaySession } from './gameScreen';
 
@@ -123,8 +123,7 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
     if (next.fog) view?.setFog(next.fog);
     if (next.scramble) view?.setScramble(next.scramble);
     playSound('phase');
-    const count = (f?: { rows: number[]; cols: number[] }) =>
-      f ? f.rows.length + f.cols.length : 0;
+    const count = (set?: LineSet) => (set ? lineCount(set) : 0);
     const fogged = count(next.fog) - count(state.fog);
     const scrambled = count(next.scramble) - count(state.scramble);
     return {
@@ -177,7 +176,7 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
       if (scramble) view.setScramble(scramble);
       if (armor) {
         view.setWeakPoints(armor);
-        bar.setArmor(armor.rows.length + armor.cols.length);
+        bar.setArmor(lineCount(armor));
       }
     },
 
@@ -192,12 +191,8 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
       const dealt = chipped.dealt;
       if (chipped.cracked.length || chipped.broke) {
         const armor = chipped.state.armor ?? { rows: [], cols: [] };
-        const toLine = (key: string) => ({
-          kind: key[0] === 'r' ? ('row' as const) : ('col' as const),
-          index: Number(key.slice(1)),
-        });
-        view?.setWeakPoints(armor, chipped.cracked.map(toLine));
-        bar.setArmor(armor.rows.length + armor.cols.length);
+        view?.setWeakPoints(armor, chipped.cracked.map(keyToLine));
+        bar.setArmor(lineCount(armor));
         if (chipped.broke) bar.armorBreaks();
       }
       const phased = checkPhase(chipped.state);
