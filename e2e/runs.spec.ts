@@ -8,7 +8,7 @@ test.describe('jobs board', () => {
     await page.locator('.run-banner').tap();
     await expect(page.locator('.chapter-title').first()).toHaveText('Chapter 1Odd Jobs');
     await expect(page.locator('.job h3')).toHaveText(['First Job']);
-    await expect(page.locator('.chapter.locked .chapter-blurb')).toHaveText([
+    await expect(page.locator('.chapter.locked:not(.endless) .chapter-blurb')).toHaveText([
       'Clear First Job to continue the story.',
       'Clear The Night Shift to continue the story.',
     ]);

@@ -1,7 +1,8 @@
 import { startRun, type RunState } from '../../../game/run';
-import { getCurrentRun, hasSeenScene, saveCurrentRun } from '../../../game/runSave';
+import { getCurrentRun, getJobStats, hasSeenScene, saveCurrentRun } from '../../../game/runSave';
 import { getSettings, updateSettings, type Mode } from '../../../game/settings';
-import { getRun, type Encounter, type RunDef } from '../../../puzzles/runs';
+import { endlessRun, endlessSetup } from '../../../puzzles/endless';
+import { getRun, runs, type Encounter, type RunDef } from '../../../puzzles/runs';
 import { el } from '../../dom';
 
 /** What the run screens share: where to draw, how to redraw, and how to play a scene. */
@@ -20,7 +21,7 @@ export const nodeLabel = (e: Encounter) => (e.boss ? 'Boss' : KIND_LABEL[e.kind]
 /** The saved run with its definition, or null if there's none (or its run was removed). */
 export function loadRun(): { state: RunState; def: RunDef } | null {
   const state = getCurrentRun();
-  const def = state && getRun(state.runId);
+  const def = state && (state.endless ? endlessRun(state) : getRun(state.runId));
   return state && def ? { state, def } : null;
 }
 
@@ -32,7 +33,13 @@ export function newRunButton(hub: Hub, def: RunDef, label: string): HTMLButtonEl
     className: 'button primary',
     textContent: label,
     onclick: () => {
-      saveCurrentRun(startRun(def.id, def.hp, getSettings().mode, def.gadgets));
+      const run = startRun(def.id, def.hp, getSettings().mode, def.gadgets);
+      if (def.endless) {
+        // Endless draws from every job you've played, in an order set by a fresh seed.
+        const played = runs.filter((j) => (getJobStats(j.id)?.plays ?? 0) > 0);
+        run.endless = endlessSetup(played, Math.floor(Math.random() * 2 ** 31));
+      }
+      saveCurrentRun(run);
       // The intro plays automatically once; after that it's on the jobs board.
       if (def.intro && !hasSeenScene(def.intro)) hub.playScene(def.intro);
       else hub.rerender();

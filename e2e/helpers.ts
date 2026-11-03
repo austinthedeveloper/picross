@@ -42,6 +42,18 @@ export async function seed(
   }, data);
 }
 
+/** Changes the saved run data partway through a test (merged over what's saved), then reloads. */
+export async function updateSave(page: Page, run: RunSeed) {
+  await page.evaluate((d) => {
+    const saved = JSON.parse(localStorage.getItem('picross:run') ?? '{}');
+    localStorage.setItem(
+      'picross:run',
+      JSON.stringify({ current: null, seenScenes: [], jobs: {}, ...saved, ...d }),
+    );
+  }, run);
+  await page.reload();
+}
+
 /** A run in progress at `node`, for seeding straight into an encounter. */
 export const runAt = (runId: string, node: number, extra: Record<string, unknown> = {}) => ({
   runId,

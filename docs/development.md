@@ -66,6 +66,7 @@ HTML report (`playwright-report`) when something fails. To debug a failure, run
 | `fights.spec.ts`      | One test per mechanic: fog, gremlin waves, Mimic swaps, Owl scramble, Forger call-outs, Beetle armor, gadgets, Eel charge, Cuttlefish ink |
 | `night-shift.spec.ts` | The whole Night Shift from the jobs board to the Curator                                                                                  |
 | `deep-end.spec.ts`    | The whole Deep End from the chapter 3 opening to Old Tess                                                                                 |
+| `endless.spec.ts`     | Endless mode: unlocking, healing after a fight, the map moving on, best depth                                                             |
 | `editor-zoom.spec.ts` | Editor uniqueness check and export, pinch zoom                                                                                            |
 
 `e2e/helpers.ts` has the building blocks:

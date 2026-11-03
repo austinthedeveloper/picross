@@ -57,6 +57,8 @@ export interface RunFile {
 export interface RunDef extends Omit<RunFile, 'encounters' | 'gadgets'> {
   encounters: Encounter[];
   gadgets: string[];
+  /** Endless mode (#68): never won; `encounters` is only the stretch around you. */
+  endless?: boolean;
 }
 
 const KINDS: EncounterKind[] = ['fight', 'dig'];
@@ -137,6 +139,10 @@ const runsById = new Map<string, RunDef>();
 for (const mod of Object.values(runFiles)) {
   const run = parseRun(mod.default, (id) => encountersById.get(id));
   runsById.set(run.id, run);
+}
+
+export function getEncounter(id: string): Encounter | undefined {
+  return encountersById.get(id);
 }
 
 export function getRun(id: string): RunDef | undefined {

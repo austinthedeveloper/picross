@@ -38,6 +38,7 @@ src/
     pack.test.ts           Uniqueness check over every puzzle
     runs.ts                Loads encounters/*.json and runs/*.json (jobs)
     chapters.ts            Loads chapters/*.json: jobs grouped into story chapters (#23)
+    endless.ts             Endless mode: seeded encounter order, scaling, the run as a RunDef (#68)
     enemies.ts             Validates an enemy: fog, scramble, armor, forged clues, charge, ink, phases
     gadgets.ts             Gadget catalog: name, icon, description, effect
     scenes.ts              Loads and validates scenes/*.json (dialogue, #22)
@@ -271,6 +272,28 @@ The chapters so far are 1 · Odd Jobs (First Job), 2 · After Hours (The Night S
 Jobs so far: **First Job** (#21), **The Night Shift** (#46), and **The Deep End** (#67). The Night Shift unlocks after
 First Job. It's Mimic → Clockwork Owl → the Forger → Dusty Exhibit (a dig that yields a
 patch kit) → Armored Beetle → the Curator, with Curator Ambrose joining Rook and Dee in its scenes.
+
+## Endless mode
+
+Endless (#68) is a run that never ends. It opens once First Job is cleared, with a card
+below the chapters showing your best depth. Starting one saves
+`RunState.endless = { seed, fights, digs }`. The pools are every fight and dig from the
+jobs you've played, fixed at the start, so a reload plays the same order.
+`puzzles/endless.ts` turns that into encounters:
+
+- **Order:** every fourth node is a dig. Fights come in seeded shuffled cycles, each
+  enemy once before any repeats. Story scenes are dropped.
+- **Scaling:** `scaleEnemy` adds 15% HP every 3 fights and +1 attack every 4. Phase and
+  armor attacks go up too; phase thresholds are fractions, so they scale with HP.
+- **The run:** `endlessRun(state)` builds a `RunDef` with `endless: true` covering the
+  encounters up to three past the current one. `loadRun` uses it in place of
+  `getRun`, so the map, encounter and results screens work unchanged.
+  - The encounter screen completes with `length = Infinity`, so an endless run is
+    never won.
+  - It heals `ENDLESS_HEAL` (2) after each fight.
+  - The map shows the last two you cleared and what's ahead.
+- **Best depth:** `recordRunResult` keeps `bestDepth` (encounters cleared) for `endless`,
+  and the results screen says when it's a new best.
 
 ## Fights
 

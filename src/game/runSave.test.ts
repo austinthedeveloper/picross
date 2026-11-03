@@ -43,3 +43,20 @@ describe('job stats', () => {
     expect(save.getJobStats('job')).toBeUndefined();
   });
 });
+
+describe('endless stats', () => {
+  it('keeps the deepest run', async () => {
+    const save = await load();
+    const endless = { seed: 1, fights: ['a'], digs: [] };
+    const lost = (node: number) => ({
+      ...startRun('endless', 14),
+      node,
+      hp: 0,
+      status: 'lost' as const,
+      endless,
+    });
+    save.recordRunResult(lost(6));
+    save.recordRunResult(lost(3));
+    expect((await load()).getJobStats('endless')).toEqual({ plays: 2, wins: 0, bestDepth: 6 });
+  });
+});

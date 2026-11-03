@@ -17,9 +17,15 @@ function hpBar(state: RunState): HTMLElement {
   return bar;
 }
 
+/** How many cleared encounters an endless map keeps in view. */
+const ENDLESS_TRAIL = 2;
+
 /** The path map for a run in progress: HP, gadgets, and the encounters. */
 export function pathMap(hub: Hub, state: RunState, def: RunDef): Node[] {
-  const nodes = def.encounters.map((encounter, i) => {
+  // An endless run (#68) shows the last few you cleared and the next few ahead.
+  const from = def.endless ? Math.max(0, state.node - ENDLESS_TRAIL) : 0;
+  const nodes = def.encounters.slice(from).map((encounter, n) => {
+    const i = from + n;
     const status = i < state.node ? 'cleared' : i === state.node ? 'current' : 'locked';
     const content = [
       el('span', {
@@ -84,6 +90,9 @@ export function pathMap(hub: Hub, state: RunState, def: RunDef): Node[] {
         className: 'run-mode-label',
         textContent: state.mode === 'hearts' ? '♥ Hits on' : 'Relaxed',
       }),
+      ...(def.endless
+        ? [el('span', { className: 'run-depth', textContent: `Depth ${state.node + 1}` })]
+        : []),
     ]),
     inventory(state),
     el('ol', { className: 'run-path', ariaLabel: 'Run map' }, nodes),

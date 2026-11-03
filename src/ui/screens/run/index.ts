@@ -66,7 +66,11 @@ export function runBanner(): HTMLElement {
     el('span', {
       className: 'run-banner-meta',
       textContent: active
-        ? `${run!.def.name} · encounter ${run!.state.node + 1} of ${run!.def.encounters.length} · HP ${run!.state.hp}/${run!.state.maxHp}`
+        ? `${run!.def.name} · ${
+            run!.def.endless
+              ? `depth ${run!.state.node + 1}`
+              : `encounter ${run!.state.node + 1} of ${run!.def.encounters.length}`
+          } · HP ${run!.state.hp}/${run!.state.maxHp}`
         : `${open} of ${runs.length} jobs open`,
     }),
     el('span', { className: 'run-banner-go', ariaHidden: 'true', textContent: '→' }),

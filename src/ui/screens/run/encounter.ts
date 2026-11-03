@@ -1,5 +1,6 @@
-import { addGadget, completeEncounter, withBoard } from '../../../game/run';
+import { addGadget, completeEncounter, heal, withBoard } from '../../../game/run';
 import { getCurrentRun, saveCurrentRun } from '../../../game/runSave';
+import { ENDLESS_HEAL } from '../../../puzzles/endless';
 import { getGadget } from '../../../puzzles/gadgets';
 import { getScene } from '../../../puzzles/scenes';
 import { el } from '../../dom';
@@ -19,7 +20,7 @@ export function renderRunEncounter(app: HTMLElement): (() => void) | undefined {
   }
   const { def, state } = run;
   const encounter = def.encounters[state.node];
-  const length = def.encounters.length;
+  const length = def.endless ? Infinity : def.encounters.length;
 
   const play = (): (() => void) => {
     const fight = encounter.enemy ? fightHooks(encounter.enemy, encounter.puzzle) : null;
@@ -39,10 +40,16 @@ export function renderRunEncounter(app: HTMLElement): (() => void) | undefined {
         let next = completeEncounter(getCurrentRun() ?? state, length);
         const reward = encounter.puzzle.gadget ? getGadget(encounter.puzzle.gadget) : undefined;
         if (reward) next = addGadget(next, reward.id);
+        // Endless (#68): a little HP back after each fight.
+        const before = next.hp;
+        if (def.endless && fight) next = heal(next, ENDLESS_HEAL);
+        const healed = next.hp - before;
         saveCurrentRun(next);
         const last = next.status === 'won';
         const time = formatTime(game.elapsed);
-        const got = reward ? ` · You got ${reward.icon} ${reward.name}!` : '';
+        const got =
+          (reward ? ` · You got ${reward.icon} ${reward.name}!` : '') +
+          (healed ? ` · +${healed} HP` : '');
         return {
           note:
             (fight

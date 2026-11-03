@@ -9,6 +9,8 @@ export interface JobStats {
   wins: number;
   /** Most HP left at the end of a win. */
   bestHp?: number;
+  /** Endless mode (#68): the most encounters cleared in one run. */
+  bestDepth?: number;
 }
 
 interface RunSave {
@@ -51,6 +53,14 @@ export function getJobStats(id: string): JobStats | undefined {
 export function recordRunResult(run: RunState): RunState {
   if (run.status === 'active' || run.recorded) return run;
   const prev = data.jobs[run.runId] ?? { plays: 0, wins: 0 };
+  if (run.endless) {
+    data.jobs[run.runId] = {
+      ...prev,
+      plays: prev.plays + 1,
+      bestDepth: Math.max(prev.bestDepth ?? 0, run.node),
+    };
+    return save({ ...run, recorded: true });
+  }
   const won = run.status === 'won';
   data.jobs[run.runId] = {
     plays: prev.plays + 1,
@@ -59,7 +69,10 @@ export function recordRunResult(run: RunState): RunState {
       ? { bestHp: Math.max(prev.bestHp ?? 0, won ? run.hp : 0) }
       : {}),
   };
-  const recorded = { ...run, recorded: true };
+  return save({ ...run, recorded: true });
+}
+
+function save(recorded: RunState): RunState {
   data.current = recorded;
   writeStore(KEY, data);
   return recorded;
