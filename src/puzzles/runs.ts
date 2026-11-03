@@ -157,8 +157,14 @@ export interface RunFile {
   gadgets?: string[];
   /** Scene played before the first run (#31). */
   intro?: string;
-  /** Scene whose line (picked by the `won` flag) signs off the results screen. */
+  /** Scene whose lines (picked by the `won` flag) sign off the results screen. */
   outro?: string;
+  /** One line for the jobs board (#47). */
+  blurb?: string;
+  /** Position on the jobs board (lowest first). */
+  order?: number;
+  /** A job you must win once before this one unlocks. */
+  requires?: string;
 }
 
 export interface RunDef extends Omit<RunFile, 'encounters' | 'gadgets'> {
@@ -223,6 +229,9 @@ export function parseRun(
     gadgets,
     ...(file.intro ? { intro: file.intro } : {}),
     ...(file.outro ? { outro: file.outro } : {}),
+    ...(file.blurb ? { blurb: file.blurb } : {}),
+    ...(file.order !== undefined ? { order: file.order } : {}),
+    ...(file.requires ? { requires: file.requires } : {}),
   };
 }
 
@@ -243,11 +252,17 @@ for (const mod of Object.values(runFiles)) {
   runsById.set(run.id, run);
 }
 
-/** The run the "Start a run" button begins. */
-export const DEFAULT_RUN_ID = 'first-job';
-
 export function getRun(id: string): RunDef | undefined {
   return runsById.get(id);
 }
 
-export const runs: RunDef[] = [...runsById.values()];
+for (const run of runsById.values()) {
+  if (run.requires && !runsById.has(run.requires)) {
+    throw new Error(`Invalid run "${run.id}": requires unknown job "${run.requires}"`);
+  }
+}
+
+/** Every job, in jobs-board order. */
+export const runs: RunDef[] = [...runsById.values()].sort(
+  (a, b) => (a.order ?? 99) - (b.order ?? 99) || a.name.localeCompare(b.name),
+);
