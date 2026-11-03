@@ -20,7 +20,8 @@ import { createPicture } from '../board/picture';
 import { createBattleBar } from '../components/battleBar';
 import { el } from '../dom';
 import { playSound } from '../sound';
-import type { PlaySession } from './gameScreen';
+import { pickSwapRows } from '../../engine/swap';
+import type { BoardControls, PlaySession } from './gameScreen';
 
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const wait = (ms: number) => new Promise((resolve) => window.setTimeout(resolve, ms));
@@ -47,6 +48,24 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
   let finished = false;
   let defeatedAs = enemy.name;
   let view: BoardView | null = null;
+  let controls: BoardControls | null = null;
+  // Row swaps wait until no stroke is in progress, so a drag never paints into moved rows.
+  let strokes = 0;
+  let pendingSwaps = 0;
+
+  /** The Mimic (#48): swaps two of your unfinished rows, then resyncs the screen. */
+  const runSwaps = () => {
+    if (strokes > 0 || !controls) return;
+    for (; pendingSwaps > 0; pendingSwaps--) {
+      const rows = pickSwapRows(controls.game.board, puzzle.solution);
+      if (!rows) continue;
+      controls.game.swapRows(...rows);
+      controls.refresh();
+      view?.flashSwap(...rows);
+      playSound('phase');
+      bar.say(`${form().name} swapped rows ${rows[0] + 1} and ${rows[1] + 1}! Undo can't help.`);
+    }
+  };
 
   /** Why a gadget can't be used right now, or null if it can. */
   const blocker = (gadget: Gadget): string | null => {
@@ -83,12 +102,17 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
 
   /**
    * Starts any phases the enemy's HP has fallen into: new form, harder hits,
-   * and fog over lines not yet completed. Returns a message to announce.
+   * fog over lines not yet completed, and row swaps. Returns a message to announce.
    */
   const checkPhase = (state: BattleState): { state: BattleState; message: string } => {
     const { state: next, entered } = advancePhase(enemy, state);
     if (!entered.length) return { state, message: '' };
+    const before = currentForm(enemy, state).name;
     const { name, sprite } = currentForm(enemy, next);
+    if (entered.some((p) => p.swap)) {
+      pendingSwaps += entered.filter((p) => p.swap).length;
+      window.setTimeout(runSwaps, 0); // outside the redraw that triggered the phase
+    }
     const taunt = entered
       .map((p) => p.taunt)
       .filter(Boolean)
@@ -100,7 +124,7 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
     const fogged = (next.fog?.rows.length ?? 0) - (state.fog?.rows.length ?? 0);
     return {
       state: next,
-      message: `${enemy.name} becomes ${name}! ${taunt}${fogged > 0 ? ` ${fogged} rows go dark.` : ''}`,
+      message: `${name !== before ? `${before} becomes ${name}! ` : ''}${taunt}${fogged > 0 ? ` ${fogged} rows go dark.` : ''}`,
     };
   };
 
@@ -133,8 +157,16 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
   > = {
     header: bar.root,
 
-    onBoard(boardView) {
+    onBoard(boardView, boardControls) {
       view = boardView;
+      controls = boardControls;
+      view.root.addEventListener('pointerdown', () => strokes++);
+      const lift = () => {
+        strokes = Math.max(0, strokes - 1);
+        if (!strokes && pendingSwaps) window.setTimeout(runSwaps, 0);
+      };
+      view.root.addEventListener('pointerup', lift);
+      view.root.addEventListener('pointercancel', lift);
       const fog = battle().fog;
       if (fog) view.setFog(fog);
     },

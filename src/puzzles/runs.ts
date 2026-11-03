@@ -70,6 +70,9 @@ function parseEnemy(data: unknown, puzzle: Puzzle, fail: (msg: string) => never)
       ) {
         fail(`phase ${i + 1} fogCount must be a positive whole number`);
       }
+      if (phase.swap !== undefined && typeof phase.swap !== 'boolean') {
+        fail(`phase ${i + 1} swap must be true or false`);
+      }
       return {
         at: at!,
         ...(phase.name ? { name: phase.name } : {}),
@@ -78,6 +81,7 @@ function parseEnemy(data: unknown, puzzle: Puzzle, fail: (msg: string) => never)
         ...(phase.taunt ? { taunt: phase.taunt } : {}),
         ...(phase.fog !== undefined ? { fog: parseFog(phase.fog) } : {}),
         ...(phase.fogCount !== undefined ? { fogCount: phase.fogCount } : {}),
+        ...(phase.swap === true ? { swap: true } : {}),
       };
     });
   }

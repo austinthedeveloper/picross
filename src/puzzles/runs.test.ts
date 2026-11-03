@@ -38,6 +38,7 @@ describe('parseEncounter', () => {
     [{ ...encounter, enemy: { ...enemy, phases: [{ at: 1.5 }] } }, /between 0 and 1/],
     [{ ...encounter, enemy: { ...enemy, phases: [{ at: 0.3 }, { at: 0.6 }] } }, /decreasing/],
     [{ ...encounter, scene: 'nope' }, /unknown scene "nope"/],
+    [{ ...encounter, enemy: { ...enemy, phases: [{ at: 0.5, swap: 'yes' }] } }, /swap must be/],
   ])('rejects bad input %#', (input, error) => {
     expect(() => parseEncounter(input, find)).toThrow(error);
   });

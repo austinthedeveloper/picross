@@ -27,6 +27,7 @@ src/
     history.ts             Change/Move types and the undo/redo History
     solver.ts              Line solver: uniqueness / no-guess check (CI and the editor), fog-aware
     fog.ts                 Fogged clues and the rule for lifting them (#30)
+    swap.ts                Which two rows the Mimic swaps (#48)
   puzzles/
     format.ts              Puzzle file format, parse/validate, export helpers
     index.ts               Loads pack/*.json and sets play order (ORDER)
@@ -266,6 +267,22 @@ hits for 3, and fogs 3 more of rows 2, 5, 8, 10, and 15. At 84% (about 8 lines) 
 Blackout, hits for 4, and fogs 2 more from the same pool. That's up to 8 of 15 rows dark.
 Line damage is 1 per line and columns mostly finish late in a solve, so keep phase
 thresholds high if you want them to land mid-fight.
+
+### Row swaps (the Mimic)
+
+A phase can set `"swap": true`. When it starts, the Mimic swaps the contents of two of your
+rows: your fills and X's move, but the solution doesn't, so solvability never changes.
+`pickSwapRows` (`engine/swap.ts`) picks the pair whose swap turns the most of your correct
+marks wrong. That way it always costs you something, never swaps a pair back (which would
+help you), and never touches a finished row. `Game.swapRows` applies it and starts the undo
+history over, since older moves would point at the wrong cells. Swaps wait until no stroke
+is in progress. The fight reaches the game through the `controls` that `onBoard` receives
+(`{ game, refresh }`). Swapped rows flash, the swap is announced, and clue feedback shows
+what's now wrong. Erasing moved fills is never a mistake.
+
+The Night Shift run (`runs/night-shift.json`, #46) starts with the Mimic, a 15×15 chest
+with teeth that swaps at 90%, 80%, and 70% HP and turns Hungry (attack 3) on the last.
+It isn't reachable from the game until the jobs board (#47) lands.
 
 ## Digs
 

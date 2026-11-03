@@ -41,8 +41,12 @@ export interface PlaySession {
   header?: HTMLElement;
   /** Restyles the screen: adds a `theme-<name>` class (e.g. the dig's dirt board). */
   theme?: string;
-  /** Called once with the board view before play starts (e.g. to fog clues). */
-  onBoard?(view: BoardView): void;
+  /**
+   * Called once with the board view before play starts (e.g. to fog clues).
+   * `controls` lets an encounter change the board itself and then resync the
+   * screen (e.g. the Mimic swapping rows).
+   */
+  onBoard?(view: BoardView, controls: BoardControls): void;
   /** Lines that just became complete. May return a message to announce instead. */
   onLinesComplete?(lines: Line[]): string | void;
   /** A wrong fill was caught (hearts and battle modes). May return a message to announce. */
@@ -51,6 +55,12 @@ export interface PlaySession {
   ended?(): EndState | null;
   /** Plays after `complete` and before the solved panel (e.g. the picture attacking). */
   celebrate?(board: HTMLElement): Promise<void>;
+}
+
+export interface BoardControls {
+  game: Game;
+  /** Redraws, saves, and rechecks the board after an outside change. */
+  refresh(): void;
 }
 
 /** A panel that replaces play when a session ends it early. */
@@ -72,7 +82,7 @@ export function renderGameScreen(
 ): () => void {
   const game = new Game(puzzle, session.saved, session.mode);
   const view = createBoardView(puzzle);
-  session.onBoard?.(view);
+  session.onBoard?.(view, { game, refresh: () => refresh() });
 
   // Top bar
   const title = el('h1', { textContent: session.title });
