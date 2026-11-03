@@ -12,7 +12,8 @@ export interface Settings {
 const KEY = 'picross:settings';
 const settings: Settings = readStore<Settings>(KEY, {
   mode: 'relaxed',
-  muted: false,
+  // Sound starts off; the speaker button turns it on.
+  muted: true,
   highContrast: false,
 });
 

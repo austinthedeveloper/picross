@@ -200,3 +200,15 @@
     opacity: 0;
   }
 }
+
+/* Finished (solved, out of hearts, or knocked out): only the result panel remains. */
+.show-end .toolbar,
+.show-end .board-wrap,
+.show-end .zoom-bar,
+.show-end .help {
+  display: none;
+}
+
+.show-end .end-panel {
+  margin-top: 4px;
+}
