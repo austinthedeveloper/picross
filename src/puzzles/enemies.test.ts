@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { POWERS } from '../ui/powers';
-import { enemyPowers, phasePowers, startingPowers } from './enemies';
+import { enemyPowers, parseEnemy, phasePowers, startingPowers } from './enemies';
+import { parsePuzzle } from './format';
 import { getEncounter, runs } from './runs';
 
 const powersOf = (id: string) => enemyPowers(getEncounter(id)!.enemy!);
@@ -32,5 +33,32 @@ describe('enemy powers (#79)', () => {
       .flatMap((r) => r.encounters)
       .flatMap((e) => (e.enemy ? enemyPowers(e.enemy) : []));
     for (const power of all) expect(POWERS[power]?.tip).toBeTruthy();
+  });
+});
+
+describe('suspects (#64)', () => {
+  const puzzle = parsePuzzle({
+    id: 'p',
+    name: 'P',
+    width: 3,
+    height: 3,
+    solution: ['##.', '.#.', '###'],
+  });
+  const fail = (msg: string): never => {
+    throw new Error(msg);
+  };
+  const forger = (suspects: unknown) =>
+    parseEnemy({ name: 'F', hp: 10, attack: 1, fakes: { rows: [0] }, suspects }, puzzle, fail);
+
+  it('hold every fake plus at least one honest line', () => {
+    expect(forger({ rows: [0, 2] }).suspects).toEqual({ rows: [0, 2], cols: [] });
+  });
+
+  it.each([
+    [{ rows: [2, 1] }, /include every fake/],
+    [{ rows: [0] }, /at least one honest line/],
+    [undefined, /include every fake/],
+  ])('rejects %j', (suspects, error) => {
+    expect(() => forger(suspects)).toThrow(error);
   });
 });

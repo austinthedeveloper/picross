@@ -101,30 +101,46 @@ test('clockwork owl: scrambled clues show sorted and restore when solved', async
   await solve(page, owl);
 });
 
-test('forger: forged clues, call-outs right and wrong, and a faked line that waits', async ({
+test('forger: 🎭 suspects settle by logic; call out the fakes, not the honest ones', async ({
   page,
 }) => {
   await fight(page, 'night-shift', 2);
   const palette = encounterSolution('forger');
   const rowClue = (r: number) => page.locator('.row-clue').nth(r);
+  const suspects = page.locator('.clue.suspect');
+  await expect(suspects).toHaveCount(5); // rows 3, 4, 7, 8, 14: three fakes, two honest
   await expect(page.locator('.battle .fakes')).toHaveText('🎭 3');
   await expect(rowClue(3)).toHaveText(/^6\D*7$/); // really 3 2 7
 
-  // Accusing an honest clue lets the Forger hit you.
+  // Only 🎭 clues can be accused: tapping another one costs nothing.
   await press(page, 'Call out');
   await rowClue(0).tap();
-  await expect.poll(() => announcements(page)).toContain('Row 1 was honest!');
-  expect(await meter(page, 'player-hp')).toBe(12);
+  await expect.poll(() => announcements(page)).toContain("Row 1 isn't a suspect.");
+  expect(await meter(page, 'player-hp')).toBe(14);
+  await press(page, 'Pick a clue');
 
-  // A forged line you fill correctly doesn't count until you call it out.
+  // An honest suspect, solved from the columns, lights up and loses its 🎭.
+  await fillRow(page, palette, 2);
+  await expect(suspects).toHaveCount(4);
+  await expect.poll(() => announcements(page)).toContain('Row 3 checks out: honest.');
+
+  // A forged one filled correctly stays dark, until you call it out.
+  const hp = await meter(page, 'enemy-hp');
   await fillRow(page, palette, 7);
-  expect(await meter(page, 'enemy-hp')).toBe(45);
+  expect(await meter(page, 'enemy-hp')).toBe(hp);
   await press(page, 'Call out');
   await rowClue(7).tap();
   await expect.poll(() => announcements(page)).toContain('Row 8 was a forgery');
   await expect(rowClue(7)).toHaveText(/^2\D*9$/);
-  expect(await meter(page, 'enemy-hp')).toBe(39); // 5 for the call-out, 1 for the line
-  await expect(page.locator('.battle .fakes')).toHaveText('🎭 2');
+  expect(await meter(page, 'enemy-hp')).toBe(hp - 6); // 5 for the call-out, 1 for the line
+  await expect(suspects).toHaveCount(3);
+
+  // Accusing an honest suspect hurts, but settles it.
+  await press(page, 'Call out');
+  await rowClue(6).tap();
+  await expect.poll(() => announcements(page)).toContain('Row 7 was honest!');
+  expect(await meter(page, 'player-hp')).toBe(12);
+  await expect(suspects).toHaveCount(2);
 
   await solve(page, palette);
   await expect(page.locator('.end-panel:not([hidden]) .end-note')).toContainText('defeated');

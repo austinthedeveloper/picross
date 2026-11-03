@@ -3,15 +3,15 @@
   "cast": {
     "rook": {
       "name": "Rook",
-      "portrait": "\ud83e\uddd1\u200d\ud83d\udcbc"
+      "portrait": "🧑‍💼"
     },
     "dee": {
       "name": "Dee",
-      "portrait": "\ud83d\udc69\u200d\ud83d\udd2c"
+      "portrait": "👩‍🔬"
     },
     "forger": {
       "name": "The Forger",
-      "portrait": "\ud83c\udfa8"
+      "portrait": "🎨"
     }
   },
   "nodes": {
@@ -26,15 +26,15 @@
         },
         {
           "who": "dee",
-          "text": "Three of these clues are fakes. \ud83c\udfad See the count by its name."
+          "text": "See the 🎭 clues? Five of them. Three are fakes. The other two are telling the truth."
         },
         {
           "who": "rook",
-          "text": "So we trust the lines that add up. A line that's filled right but won't light up? That's a forgery."
+          "text": "So we don't trust any 🎭 clue. We solve those rows from the columns. If a row lights up, it was honest."
         },
         {
           "who": "dee",
-          "text": "Tap \ud83d\udd0d Call out, then the clue. Right, and it hurts. Wrong, and it hurts us."
+          "text": "And if it's filled right but stays dark, it's a forgery. Then we tap 🔍 Call out and point at it. Guess wrong and it hurts us."
         }
       ]
     }

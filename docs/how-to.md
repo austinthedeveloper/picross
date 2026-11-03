@@ -66,8 +66,9 @@ a cell or two inside that tile.
    two different run lengths can be scrambled. For armor (the Beetle), add
    `"armor": { "weakPoints": { "rows": [8], "cols": [2] }, "attack": 4 }`; pick weak points
    that take some work, not lines solved in the first pass. For forged clues (the
-   Forger), add `"fakes": { "rows": [3, 7, 13] }`. The forgeries are generated for you;
-   the suite checks the puzzle is still solvable with those lines unread. Sets of rows
+   Forger), add `"fakes": { "rows": [3, 7, 13] }` and `"suspects"`: the lines marked 🎭,
+   holding every fake plus at least one honest line. The forgeries are generated for you;
+   the suite checks the puzzle is still solvable with every suspect unread. Sets of rows
    only or columns only work best. For a charge meter (the Eel), add `"charge": 30`
    (seconds to fill) to the enemy or a phase. For ink (the Cuttlefish), give a phase
    `"ink": 4` (block size) and optionally `"inkCount": 2`.

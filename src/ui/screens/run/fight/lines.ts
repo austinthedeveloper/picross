@@ -3,6 +3,7 @@ import {
   clearFog,
   clearInk,
   clearScramble,
+  clearSuspects,
   clearWiped,
   type BattleState,
 } from '../../../../game/battle';
@@ -40,7 +41,9 @@ export function completeLines(
   const fogged = clearFog(ctx.battle(), lines);
   const washedOut = clearInk(fogged.state, lines, ctx.puzzle.width);
   const refilled = clearWiped(washedOut.state, lines);
-  const unscrambled = clearScramble(refilled.state, lines);
+  // A suspect that completes showed its real clue all along: it was honest.
+  const cleared = clearSuspects(refilled.state, lines);
+  const unscrambled = clearScramble(cleared.state, lines);
   const chipped = chip(
     unscrambled.state,
     lines.map((l) => lineKey(l.kind, l.index)),
@@ -60,6 +63,12 @@ export function completeLines(
     messages.push(`You solved through the fog: ${names(fogged.revealed)} revealed.`);
   }
   if (refilled.revealed.length) view?.setWiped(state.wiped ?? noLines());
+  if (cleared.revealed.length) {
+    view?.setSuspects(state.suspects ?? noLines());
+    const verb = cleared.revealed.length > 1 ? 'check' : 'checks';
+    const which = cleared.revealed.map((l, i) => lineName(l, i === 0)).join(', ');
+    messages.push(`${which} ${verb} out: honest.`);
+  }
   if (washedOut.washed.length) {
     view?.setInk(state.ink ?? [], washedOut.washed);
     messages.push('The ink washes away.');

@@ -6,6 +6,7 @@ import {
   CALL_OUT_DAMAGE,
   callOut,
   clearInk,
+  clearSuspects,
   clearWiped,
   markWiped,
   FALSE_ACCUSATION_HEAL,
@@ -260,5 +261,33 @@ describe('wiped lines', () => {
     const { state: next, revealed } = clearWiped(state, [{ kind: 'row', index: 5 }]);
     expect(revealed).toEqual([{ kind: 'row', index: 5 }]);
     expect(next.wiped).toEqual({ rows: [2], cols: [] });
+  });
+});
+
+describe('suspects', () => {
+  const forger = {
+    ...goblin,
+    hp: 20,
+    fakes: { rows: [1], cols: [] },
+    suspects: { rows: [0, 1, 2], cols: [] },
+  };
+
+  it('a solved suspect was honest: its 🎭 comes off', () => {
+    const { state, revealed } = clearSuspects(startBattle(forger), [{ kind: 'row', index: 2 }]);
+    expect(revealed).toEqual([{ kind: 'row', index: 2 }]);
+    expect(state.suspects).toEqual({ rows: [0, 1], cols: [] });
+  });
+
+  it('calling out a fake clears it from the suspects too', () => {
+    const { state, caught } = callOut(startBattle(forger), { kind: 'row', index: 1 });
+    expect(caught).toBe(true);
+    expect(state.suspects).toEqual({ rows: [0, 2], cols: [] });
+  });
+
+  it('accusing an honest suspect fails, but settles it', () => {
+    const { state, caught } = callOut(startBattle(forger), { kind: 'row', index: 0 });
+    expect(caught).toBe(false);
+    expect(state.suspects).toEqual({ rows: [1, 2], cols: [] });
+    expect(state.enemyHp).toBe(20);
   });
 });

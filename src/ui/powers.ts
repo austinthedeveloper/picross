@@ -20,7 +20,7 @@ export const POWERS: Record<Power, { icon: string; name: string; tip: string }> 
   fakes: {
     icon: '🎭',
     name: 'Forged clues',
-    tip: "Some clues are fakes. A line you've filled right that won't light up is one: tap 🔍 Call out, then the clue.",
+    tip: "Some 🎭 clues are fakes, but not all. Don't trust them: solve those lines from the ones crossing them. Honest ones light up; a fake stays dark. Then 🔍 Call out the fake.",
   },
   charge: {
     icon: '⚡',
