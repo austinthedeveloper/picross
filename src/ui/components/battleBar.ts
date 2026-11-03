@@ -21,6 +21,10 @@ export interface BattleBar {
   setGadgets(buttons: HTMLElement[]): void;
   /** Announces a message to screen readers. */
   say(message: string): void;
+  /** Shows the enemy's armor and how many weak points are left (#50); 0 hides it. */
+  setArmor(weakPoints: number): void;
+  /** The armor shatters. */
+  armorBreaks(): void;
   /** Changes the enemy's name and sprite (boss phases, #42). */
   setForm(name: string, icon: string): void;
   /** A banner across the bar when a boss changes phase. */
@@ -68,11 +72,15 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
   const enemyMeter = meter(`${enemy.name} HP`, 'enemy-hp');
   const playerMeter = meter('Your HP', 'player-hp');
   const enemyName = el('span', { className: 'battle-name', textContent: enemy.name });
+  const armor = el('span', { className: 'armor', hidden: true });
   const banner = el('div', { className: 'phase-banner', hidden: true });
   banner.setAttribute('aria-hidden', 'true');
   const enemySide = el('div', { className: 'battle-side enemy' }, [
     sprite,
-    el('div', { className: 'battle-info' }, [enemyName, enemyMeter.root]),
+    el('div', { className: 'battle-info' }, [
+      el('span', { className: 'battle-name-row' }, [enemyName, armor]),
+      enemyMeter.root,
+    ]),
   ]);
   const shield = el('span', { className: 'shield', hidden: true });
   const playerSide = el('div', { className: 'battle-side player' }, [
@@ -121,6 +129,17 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
     setGadgets(buttons) {
       tray.replaceChildren(...buttons);
       tray.hidden = buttons.length === 0;
+    },
+    setArmor(weakPoints) {
+      armor.hidden = weakPoints <= 0;
+      armor.textContent = `🛡 ${weakPoints}🎯`;
+      armor.title = `Armored: ${weakPoints} weak point${weakPoints === 1 ? '' : 's'} left`;
+    },
+    armorBreaks() {
+      replay(armor, 'shatter', 600);
+      replay(sprite, 'flinch');
+      floatNumber(enemySide, 'Armor broken!', 'to-enemy');
+      window.setTimeout(() => (armor.hidden = true), 600);
     },
     setForm(name, icon) {
       enemyName.textContent = name;

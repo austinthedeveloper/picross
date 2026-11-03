@@ -172,9 +172,13 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
       };
       view.root.addEventListener('pointerup', lift);
       view.root.addEventListener('pointercancel', lift);
-      const { fog, scramble } = battle();
+      const { fog, scramble, armor } = battle();
       if (fog) view.setFog(fog);
       if (scramble) view.setScramble(scramble);
+      if (armor) {
+        view.setWeakPoints(armor);
+        bar.setArmor(armor.rows.length + armor.cols.length);
+      }
     },
 
     onLinesComplete(lines) {
@@ -186,6 +190,16 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
         lines.map((l) => lineKey(l.kind, l.index)),
       );
       const dealt = chipped.dealt;
+      if (chipped.cracked.length || chipped.broke) {
+        const armor = chipped.state.armor ?? { rows: [], cols: [] };
+        const toLine = (key: string) => ({
+          kind: key[0] === 'r' ? ('row' as const) : ('col' as const),
+          index: Number(key.slice(1)),
+        });
+        view?.setWeakPoints(armor, chipped.cracked.map(toLine));
+        bar.setArmor(armor.rows.length + armor.cols.length);
+        if (chipped.broke) bar.armorBreaks();
+      }
       const phased = checkPhase(chipped.state);
       const state = phased.state;
       if (fogged.revealed.length && state.fog) {
@@ -209,6 +223,11 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
         playSound('strike');
         renderGadgets(); // a bomb can't help once the enemy is down to 1 HP
         messages.unshift(`${enemy.name} takes ${dealt} damage, ${state.enemyHp} HP left.`);
+      }
+      if (chipped.cracked.length) messages.push('Weak point! Triple damage.');
+      if (chipped.broke) messages.push(`${form().name}'s armor breaks! Its hits soften.`);
+      else if (!dealt && lines.length && form().armored) {
+        messages.push('The armor shrugs it off. Find the 🎯 weak points.');
       }
       if (phased.message) messages.push(phased.message);
       return messages.join(' ') || undefined;

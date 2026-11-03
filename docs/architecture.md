@@ -289,6 +289,17 @@ The Owl (`encounters/clockwork-owl.json`) is a 15×15 owl. Rows 6, 8, 10, and 12
 columns 4, 7, and 10 start scrambled. At 85% HP it winds up, hits for 3, and scrambles 3
 more.
 
+### Armor (the Armored Beetle)
+
+An enemy can have `armor: { weakPoints: { rows, cols }, attack }`. While any weak point is
+unsolved, ordinary lines deal no damage (they still count as struck, so they never chip
+later), and the enemy hits for the armored `attack`. Weak-point clues are marked 🎯.
+Completing one deals `WEAK_POINT_DAMAGE` (3) and cracks the armor, and after the last one
+it breaks and normal rules return (`chip` in `game/battle.ts`). Since the finisher always
+wins, armor matters through mistakes: in Hits-on runs, cracking it early softens the
+beetle's hits (4 → 2). The Beetle is a 15×15 beetle with weak points at rows 9 and 12 and
+column 3.
+
 ### Row swaps (the Mimic)
 
 A phase can set `"swap": true`. When it starts, the Mimic swaps the contents of two of your
