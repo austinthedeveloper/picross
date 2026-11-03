@@ -13,6 +13,12 @@
   --hl: #fbefc9;
   --cell-bg: #fffdf8;
   --mark: #b0aa9c;
+  /* Dig encounters (#29) */
+  --dirt: #a9825a;
+  --dirt-speck: #8d6a45;
+  --dirt-line: #93704b;
+  --dug: #e8d8bd;
+  --metal: #3d4450;
   color-scheme: light;
   font-family:
     system-ui,
@@ -36,6 +42,11 @@
     --hl: #2e2b20;
     --cell-bg: #1c1e23;
     --mark: #5d606b;
+    --dirt: #5e4630;
+    --dirt-speck: #4b3725;
+    --dirt-line: #6d543b;
+    --dug: #2e2a24;
+    --metal: #b9c2cf;
     color-scheme: dark;
   }
 }
@@ -54,5 +65,10 @@
   --hl: #ffe14d;
   --cell-bg: #ffffff;
   --mark: #444444;
+  --dirt: #ffffff;
+  --dirt-speck: #ffffff;
+  --dirt-line: #000000;
+  --dug: #ffffff;
+  --metal: #000000;
   color-scheme: light;
 }

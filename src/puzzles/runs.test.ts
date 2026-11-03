@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { parsePuzzle } from './format';
+import { solve } from '../engine/solver';
 import { CHIP_DAMAGE } from '../game/battle';
 import { DEFAULT_RUN_ID, getRun, parseEncounter, parseRun, runs } from './runs';
 
@@ -25,6 +26,7 @@ describe('parseEncounter', () => {
     [{ ...encounter, name: '' }, /missing name/],
     [{ ...encounter, enemy: undefined }, /need an enemy/],
     [{ ...encounter, enemy: { ...enemy, hp: 0 } }, /hp/],
+    [{ ...encounter, enemy: { ...enemy, fog: { rows: [5] } } }, /fog rows and cols/],
   ])('rejects bad input %#', (input, error) => {
     expect(() => parseEncounter(input, find)).toThrow(error);
   });
@@ -66,5 +68,13 @@ describe('bundled fights', () => {
   it.each(fights.map((e) => [e.id, e] as const))('%s leaves room for the finisher', (_, e) => {
     const maxChip = (e.puzzle.width + e.puzzle.height) * CHIP_DAMAGE;
     expect(maxChip).toBeLessThanOrEqual((e.enemy!.hp * 2) / 3);
+  });
+
+  // Fogged clues can't be read until play lifts the fog, so the puzzle must
+  // be solvable that way without guessing.
+  const fogged = fights.filter((e) => e.enemy!.fog);
+  it.each(fogged.map((e) => [e.id, e] as const))('%s is solvable through its fog', (_, e) => {
+    const { width, height, clues } = e.puzzle;
+    expect(solve(width, height, clues, e.enemy!.fog).status).toBe('unique');
   });
 });

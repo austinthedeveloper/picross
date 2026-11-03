@@ -23,7 +23,7 @@ export interface Encounter extends Omit<EncounterFile, 'puzzle'> {
   puzzle: Puzzle;
 }
 
-function parseEnemy(data: unknown, fail: (msg: string) => never): Enemy {
+function parseEnemy(data: unknown, puzzle: Puzzle, fail: (msg: string) => never): Enemy {
   const enemy = data as Partial<Enemy> | undefined;
   if (!enemy || typeof enemy !== 'object') return fail('fights need an enemy');
   if (typeof enemy.name !== 'string' || !enemy.name) fail('enemy needs a name');
@@ -31,12 +31,22 @@ function parseEnemy(data: unknown, fail: (msg: string) => never): Enemy {
   if (!Number.isInteger(enemy.attack) || enemy.attack! < 0) {
     fail('enemy attack must be a whole number');
   }
-  return {
+  const parsed: Enemy = {
     name: enemy.name!,
     sprite: typeof enemy.sprite === 'string' ? enemy.sprite : '👾',
     hp: enemy.hp!,
     attack: enemy.attack!,
   };
+  if (enemy.fog !== undefined) {
+    const { rows = [], cols = [] } = enemy.fog as Partial<Enemy['fog'] & object>;
+    const inRange = (list: unknown, size: number) =>
+      Array.isArray(list) && list.every((i) => Number.isInteger(i) && i >= 0 && i < size);
+    if (!inRange(rows, puzzle.height) || !inRange(cols, puzzle.width)) {
+      fail('fog rows and cols must be line indexes within the puzzle');
+    }
+    parsed.fog = { rows: [...rows], cols: [...cols] };
+  }
+  return parsed;
 }
 
 /** A run: an ordered path of encounters. */
@@ -80,7 +90,7 @@ export function parseEncounter(
     kind: file.kind!,
     puzzle: puzzle!,
     ...(file.blurb ? { blurb: file.blurb } : {}),
-    ...(file.kind === 'fight' ? { enemy: parseEnemy(file.enemy, fail) } : {}),
+    ...(file.kind === 'fight' ? { enemy: parseEnemy(file.enemy, puzzle!, fail) } : {}),
   };
 }
 

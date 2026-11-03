@@ -1,6 +1,7 @@
 import {
   absorbHit,
   chip,
+  clearFog,
   finish,
   lineKey,
   startBattle,
@@ -11,6 +12,7 @@ import { damage, removeGadget, withBattle, type RunState } from '../../game/run'
 import { getCurrentRun, saveCurrentRun } from '../../game/runSave';
 import type { Puzzle } from '../../puzzles/format';
 import { getGadget, type Gadget } from '../../puzzles/gadgets';
+import type { BoardView } from '../board/boardView';
 import { createPicture } from '../board/picture';
 import { createBattleBar } from '../components/battleBar';
 import { el } from '../dom';
@@ -37,6 +39,7 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
   bar.setShield(battle().shield ?? 0);
   let finisher = 0;
   let finished = false;
+  let view: BoardView | null = null;
 
   /** Why a gadget can't be used right now, or null if it can. */
   const blocker = (gadget: Gadget): string | null => {
@@ -92,22 +95,39 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
 
   const hooks: Pick<
     PlaySession,
-    'header' | 'onLinesComplete' | 'onMistake' | 'ended' | 'celebrate'
+    'header' | 'onBoard' | 'onLinesComplete' | 'onMistake' | 'ended' | 'celebrate'
   > = {
     header: bar.root,
 
+    onBoard(boardView) {
+      view = boardView;
+      const fog = battle().fog;
+      if (fog) view.setFog(fog);
+    },
+
     onLinesComplete(lines) {
+      const messages: string[] = [];
+      const fogged = clearFog(battle(), lines, puzzle.solution);
       const { state, dealt } = chip(
-        battle(),
+        fogged.state,
         lines.map((l) => lineKey(l.kind, l.index)),
       );
-      if (!dealt) return;
-      saveCurrentRun(withBattle(current(), state));
-      bar.setEnemyHp(state.enemyHp);
-      bar.hitEnemy(dealt);
-      playSound('strike');
-      renderGadgets(); // a bomb can't help once the enemy is down to 1 HP
-      return `${enemy.name} takes ${dealt} damage, ${state.enemyHp} HP left.`;
+      if (fogged.revealed.length && state.fog) {
+        view?.setFog(state.fog, fogged.revealed);
+        const names = fogged.revealed.map(
+          (l) => `${l.kind === 'row' ? 'row' : 'column'} ${l.index + 1}`,
+        );
+        messages.push(`The fog lifts from ${names.join(', ')}.`);
+      }
+      if (state !== battle()) saveCurrentRun(withBattle(current(), state));
+      if (dealt) {
+        bar.setEnemyHp(state.enemyHp);
+        bar.hitEnemy(dealt);
+        playSound('strike');
+        renderGadgets(); // a bomb can't help once the enemy is down to 1 HP
+        messages.unshift(`${enemy.name} takes ${dealt} damage, ${state.enemyHp} HP left.`);
+      }
+      return messages.join(' ') || undefined;
     },
 
     onMistake() {

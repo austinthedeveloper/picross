@@ -25,7 +25,8 @@ src/
     board.ts               Cell states (Empty/Filled/Marked), Grid/Board/Solution, isSolved
     clues.ts               Clue derivation and per-clue "satisfied" check (clue dimming)
     history.ts             Change/Move types and the undo/redo History
-    solver.ts              Line solver: uniqueness / no-guess check (CI and the editor)
+    solver.ts              Line solver: uniqueness / no-guess check (CI and the editor), fog-aware
+    fog.ts                 Fogged clues and the rule for lifting them (#30)
   puzzles/
     format.ts              Puzzle file format, parse/validate, export helpers
     index.ts               Loads pack/*.json and sets play order (ORDER)
@@ -59,6 +60,7 @@ src/
       runScreen.ts         Run hub, path map, results; run encounters (#/run, #/run/play)
       sceneScreen.ts       Plays a scene full screen; #/scene/<id> previews one
       fightHooks.ts        Fight rules wired into a run encounter's PlaySession
+      digHooks.ts          Dig encounters: dirt board, header, the reveal on solve
       editorScreen.ts      Puzzle authoring tool                   (#/editor)
     board/
       boardView.ts         Renders clues + cells (ARIA grid), clue dimming, flashes
@@ -190,14 +192,17 @@ working. Shared button styles live in `base.css`: `.button`, `.ghost`, `.primary
 - the saved board, and `save(board | null)` to save or clear it
 - `complete(game)`, which records the solve and returns the solved panel's note and
   buttons
-- optional encounter hooks: a `header` above the board, `onLinesComplete`, `onMistake`,
+- optional encounter hooks: a `header` above the board, a `theme` (adds `theme-<name>` to
+  the screen for restyling), `onLinesComplete`, `onMistake`,
   `ended()` to stop play early (e.g. knocked out), and `celebrate()` to animate before the
   solved panel appears
+- `onBoard(view)`, called once with the board view before play (fights use it to fog
+  clues)
 
 `freePlaySession(puzzle)` is the default. It saves to `progress.ts` and records best
 times. A run encounter (`runScreen.ts`) saves the board into the run state and clears the
 encounter instead, so run solves never touch free-play stats. Fights (`fightHooks.ts`)
-plug in through the optional hooks, and digs (#29) will too, so the game screen has no
+and digs (`digHooks.ts`) plug in through the optional hooks, so the game screen has no
 special cases for encounter types.
 
 ## Runs
@@ -227,8 +232,28 @@ A fight encounter has an `enemy` (`name`, `sprite`, `hp`, `attack`). The rules l
   run is lost and the screen shows "Knocked out." In a Relaxed run, fights don't check
   fills and the enemy never hits.
 
-Battle progress (enemy HP, which lines have struck, and any active shield) is saved in
-`RunState.battle`, so a reload resumes mid-fight.
+Battle progress (enemy HP, which lines have struck, any active shield, and the fog still
+up) is saved in `RunState.battle`, so a reload resumes mid-fight.
+
+### Fog (the fog bat)
+
+An enemy can list `fog: { rows, cols }`: clues hidden behind a cloudy "?" when the fight
+starts. Fog lifts as you play (`liftFog` in `engine/fog.ts`). Completing a line clears its
+own fog and the fog on every crossing line it meets at a filled cell. Fogging a row and a
+column hides the cell where they cross from both of its lines, so fog has to lift during
+play. The check simulates that: `solve(width, height, clues, fog)` starts with the fogged
+clues hidden and applies the same lift rule whenever a line becomes fully known. A test
+requires every fogged fight to come out `unique` that way.
+
+## Digs
+
+A dig encounter (`kind: "dig"`) has no enemy and never checks fills, even in a Hits-on
+run, so there's no HP pressure. `digHooks.ts` sets the `dig` theme, which turns empty
+cells into dirt and filled cells into metal (`styles/run.css`, with `--dirt`, `--dug`,
+and `--metal` tokens for each theme). It also adds a header with a "?" for the buried
+find. On solve, the dirt brushes away in a diagonal wave, the part gleams, and the
+puzzle's gadget pops into the header before the solved panel appears. The dig in First
+Job is a 10×10 bomb casing that becomes the bomb.
 
 ## Gadgets
 

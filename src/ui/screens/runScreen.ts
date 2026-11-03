@@ -7,6 +7,7 @@ import { DEFAULT_RUN_ID, getRun, type Encounter, type RunDef } from '../../puzzl
 import { getScene } from '../../puzzles/scenes';
 import { el } from '../dom';
 import { formatTime } from '../format';
+import { digHooks } from './digHooks';
 import { fightHooks } from './fightHooks';
 import { renderGameScreen, type PlaySession } from './gameScreen';
 import { renderSceneScreen } from './sceneScreen';
@@ -296,7 +297,7 @@ export function renderRunEncounter(app: HTMLElement): (() => void) | undefined {
     // In Hearts runs, fights check fills so the enemy can hit back. Digs never do.
     mode: fight && state.mode === 'hearts' ? 'battle' : 'relaxed',
     saved: state.board,
-    ...fight?.hooks,
+    ...(fight ? fight.hooks : digHooks(encounter.puzzle)),
     save: (board) => {
       const current = getCurrentRun();
       if (current?.status === 'active') saveCurrentRun(withBoard(current, board));
