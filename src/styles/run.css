@@ -587,3 +587,79 @@
 .sign-off strong {
   color: var(--accent);
 }
+
+/* Boss (#42): a heavier map node, and a banner when it changes phase. */
+.node.boss .node-icon {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 15%, var(--cell-bg));
+}
+
+.node.boss .node-name {
+  font-size: 1.1rem;
+}
+
+.node.boss.current .node-body {
+  border-width: 3px;
+}
+
+.battle {
+  position: relative;
+}
+
+.phase-banner {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--ink) 88%, transparent);
+  color: var(--bg);
+  text-align: center;
+  pointer-events: none;
+  animation: banner 2.2s ease-in-out forwards;
+}
+
+.phase-banner[hidden] {
+  display: none;
+}
+
+.phase-banner strong {
+  font-size: 1.15rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+@keyframes banner {
+  0% {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+  12%,
+  80% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.battle.phase-shift {
+  animation: phase-shift 0.6s ease-in-out;
+}
+
+@keyframes phase-shift {
+  20%,
+  60% {
+    transform: translateX(-4px);
+  }
+  40%,
+  80% {
+    transform: translateX(4px);
+  }
+}

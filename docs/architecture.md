@@ -246,6 +246,21 @@ lines, so neither could ever be finished. `solve(width, height, clues, fog)` pla
 the same way, and a test requires every fogged fight to come out `unique`. The fog bat
 fogs rows 4, 6, 7, and 10, including both full-width rows.
 
+### Bosses and phases
+
+An enemy can list `phases`. Each one starts once the enemy's HP falls to its `at` fraction
+of max, and can change the enemy's `name`, `sprite`, and `attack`, show a `taunt`, and
+fog more lines (`advancePhase` and `currentForm` in `game/battle.ts`). A phase's fog only
+covers lines you haven't completed yet, and it clears by solving, like the fog bat's. All
+of an enemy's fog, starting and from every phase, must be in one direction. A test proves
+the puzzle is solvable with all of it applied from the very start, so the boss stays fair
+however far along you are when it changes. The current phase is saved with the battle.
+
+An encounter can also be `"boss": true` (a 👑 node on the map) and name a `scene` that plays
+the first time you open it, before any progress is saved. First Job ends with the
+**Generator Gremlin**: a 15×15 wrench with 45 HP. At 70% HP (about halfway through the
+lines) it turns Overcharged, attacks for 3 instead of 2, and fogs rows 6, 7, 11, and 15.
+
 ## Digs
 
 A dig encounter (`kind: "dig"`) has no enemy and never checks fills, even in a Hits-on

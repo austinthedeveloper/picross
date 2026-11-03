@@ -44,6 +44,16 @@ starter-pack test expects 5×5 to 15×15 and at most 15 puzzles, so update
    ```
 4. Run `npm test`. Loading fails with a clear error if a run names an unknown encounter
    or an encounter names an unknown puzzle.
+   For a boss, add `"boss": true`, an optional `"scene": "<scene id>"` that plays before the
+   fight, and `phases` on the enemy:
+   ```json
+   "phases": [
+     { "at": 0.7, "name": "Overcharged Gremlin", "sprite": "😈", "attack": 3,
+       "taunt": "Lights out!", "fog": { "rows": [5, 6, 10, 14] } }
+   ]
+   ```
+   Phases trigger in order at decreasing `at` values. Line damage is 1 per line, so pick
+   `at` so the phase lands midway, not just before the finisher.
 
 "Start a run" always begins `DEFAULT_RUN_ID` in `src/puzzles/runs.ts`.
 

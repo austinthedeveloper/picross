@@ -1,0 +1,27 @@
+{
+  "id": "gremlin",
+  "name": "Generator Gremlin",
+  "kind": "fight",
+  "boss": true,
+  "puzzle": "wrench",
+  "scene": "gremlin-intro",
+  "blurb": "The generator isn't broken. Something lives in it.",
+  "enemy": {
+    "name": "Generator Gremlin",
+    "sprite": "👹",
+    "hp": 45,
+    "attack": 2,
+    "phases": [
+      {
+        "at": 0.7,
+        "name": "Overcharged Gremlin",
+        "sprite": "😈",
+        "attack": 3,
+        "taunt": "Lights out, tinkerer!",
+        "fog": {
+          "rows": [5, 6, 10, 14]
+        }
+      }
+    ]
+  }
+}

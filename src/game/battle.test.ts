@@ -1,5 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { absorbHit, chip, clearFog, finish, lineKey, startBattle, useGadget } from './battle';
+import {
+  absorbHit,
+  advancePhase,
+  chip,
+  clearFog,
+  currentForm,
+  finish,
+  lineKey,
+  startBattle,
+  useGadget,
+} from './battle';
 
 const goblin = { name: 'Goblin', sprite: '👺', hp: 5, attack: 2 };
 
@@ -65,5 +75,48 @@ describe('fog', () => {
     const { state, revealed } = clearFog(startBattle(bat), completed);
     expect(state.fog).toEqual({ rows: [1], cols: [] });
     expect(revealed).toEqual([{ kind: 'row', index: 2 }]);
+  });
+});
+
+describe('phases', () => {
+  const boss = {
+    name: 'Gremlin',
+    sprite: 'G',
+    hp: 10,
+    attack: 2,
+    phases: [
+      {
+        at: 0.5,
+        name: 'Overcharged Gremlin',
+        sprite: 'O',
+        attack: 3,
+        fog: { rows: [1, 2, 4], cols: [] },
+      },
+    ],
+  };
+
+  it('waits until HP falls to the threshold', () => {
+    const { state, entered } = advancePhase(boss, { ...startBattle(boss), enemyHp: 6 });
+    expect(entered).toEqual([]);
+    expect(currentForm(boss, state)).toEqual({ name: 'Gremlin', sprite: 'G', attack: 2 });
+  });
+
+  it('starts the phase: new form, harder hits, fog on lines not yet completed', () => {
+    const start = { ...startBattle(boss), enemyHp: 5, struck: ['r2', 'c1'] };
+    const { state, entered } = advancePhase(boss, start);
+    expect(entered).toHaveLength(1);
+    expect(state.phase).toBe(1);
+    expect(state.fog).toEqual({ rows: [1, 4], cols: [] });
+    expect(currentForm(boss, state)).toEqual({
+      name: 'Overcharged Gremlin',
+      sprite: 'O',
+      attack: 3,
+    });
+    expect(advancePhase(boss, state).entered).toEqual([]); // only once
+  });
+
+  it('keeps phase and fog through chip damage', () => {
+    const { state } = advancePhase(boss, { ...startBattle(boss), enemyHp: 5 });
+    expect(chip(state, ['c0']).state).toMatchObject({ phase: 1, fog: { rows: [1, 2, 4] } });
   });
 });

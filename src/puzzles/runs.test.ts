@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { parsePuzzle } from './format';
 import { solve } from '../engine/solver';
 import { CHIP_DAMAGE } from '../game/battle';
-import { DEFAULT_RUN_ID, getRun, parseEncounter, parseRun, runs } from './runs';
+import { allFog, DEFAULT_RUN_ID, getRun, parseEncounter, parseRun, runs } from './runs';
 
 const puzzle = parsePuzzle({ id: 'p', name: 'P', width: 2, height: 1, solution: ['#.'] });
 const find = (id: string) => (id === 'p' ? puzzle : undefined);
@@ -28,6 +28,16 @@ describe('parseEncounter', () => {
     [{ ...encounter, enemy: { ...enemy, hp: 0 } }, /hp/],
     [{ ...encounter, enemy: { ...enemy, fog: { rows: [5] } } }, /fog rows and cols/],
     [{ ...encounter, enemy: { ...enemy, fog: { rows: [0], cols: [0] } } }, /not both/],
+    [
+      {
+        ...encounter,
+        enemy: { ...enemy, fog: { rows: [0] }, phases: [{ at: 0.5, fog: { cols: [0] } }] },
+      },
+      /not both/,
+    ],
+    [{ ...encounter, enemy: { ...enemy, phases: [{ at: 1.5 }] } }, /between 0 and 1/],
+    [{ ...encounter, enemy: { ...enemy, phases: [{ at: 0.3 }, { at: 0.6 }] } }, /decreasing/],
+    [{ ...encounter, scene: 'nope' }, /unknown scene "nope"/],
   ])('rejects bad input %#', (input, error) => {
     expect(() => parseEncounter(input, find)).toThrow(error);
   });
@@ -71,11 +81,15 @@ describe('bundled fights', () => {
     expect(maxChip).toBeLessThanOrEqual((e.enemy!.hp * 2) / 3);
   });
 
-  // Fogged clues can't be read until play lifts the fog, so the puzzle must
-  // be solvable that way without guessing.
-  const fogged = fights.filter((e) => e.enemy!.fog);
-  it.each(fogged.map((e) => [e.id, e] as const))('%s is solvable through its fog', (_, e) => {
+  // Fogged clues can't be read until you solve their lines, so the puzzle must be
+  // solvable without guessing even with every fog the enemy can bring (starting and
+  // from every phase) applied from the very start.
+  const fogged = fights.filter((e) => {
+    const fog = allFog(e.enemy!);
+    return fog.rows.length + fog.cols.length > 0;
+  });
+  it.each(fogged.map((e) => [e.id, e] as const))('%s is solvable through all its fog', (_, e) => {
     const { width, height, clues } = e.puzzle;
-    expect(solve(width, height, clues, e.enemy!.fog).status).toBe('unique');
+    expect(solve(width, height, clues, allFog(e.enemy!)).status).toBe('unique');
   });
 });
