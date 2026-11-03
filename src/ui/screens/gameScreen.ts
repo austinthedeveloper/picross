@@ -1,3 +1,4 @@
+import { debug } from '../../debug/hooks';
 import { Cell } from '../../engine/board';
 import { revertMove, type Change } from '../../engine/history';
 import { Game, MAX_HEARTS, type GameMode, type HintTarget } from '../../game/game';
@@ -238,6 +239,21 @@ export function renderGameScreen(
     if (document.visibilityState === 'hidden') persist();
   };
   document.addEventListener('visibilitychange', onVisibilityChange);
+
+  if (import.meta.env.VITE_DEBUG === '1') {
+    debug.board = {
+      solve() {
+        const changes = puzzle.solution.cells.flatMap((filled, index) => {
+          const from = game.board.cells[index];
+          const to = filled ? Cell.Filled : from === Cell.Marked ? Cell.Marked : Cell.Empty;
+          return from === to ? [] : [{ index, from, to }];
+        });
+        const { applied } = play(changes);
+        game.commit(applied);
+        refresh();
+      },
+    };
+  }
 
   /** Syncs everything after a committed change. */
   function refresh() {

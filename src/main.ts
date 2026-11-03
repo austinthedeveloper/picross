@@ -22,6 +22,11 @@ import { applyTheme } from './ui/theme';
 
 applyTheme();
 
+// Dev builds only (#65): production builds drop this branch and the whole module.
+if (import.meta.env.VITE_DEBUG === '1') {
+  void import('./debug/panel').then(({ installDebugPanel }) => installDebugPanel());
+}
+
 const app = document.querySelector<HTMLDivElement>('#app')!;
 let cleanup: (() => void) | undefined;
 

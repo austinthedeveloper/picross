@@ -18,7 +18,7 @@ export interface Gadget {
   effect: GadgetEffect;
 }
 
-const catalog: Gadget[] = [
+export const catalog: Gadget[] = [
   {
     id: 'bomb',
     name: 'Bomb',

@@ -1,3 +1,4 @@
+import { debug } from '../debug/hooks';
 import { Cell, createBoard, isSolved, type Board } from '../engine/board';
 import { applyMove, History, type Change, type Move } from '../engine/history';
 import type { Puzzle } from '../puzzles/format';
@@ -96,7 +97,8 @@ export class Game {
       ) {
         const mistake = { ...change, to: Cell.Marked };
         this.board.cells[change.index] = Cell.Marked;
-        if (this.mode === 'hearts') this.hearts--;
+        const spared = import.meta.env.VITE_DEBUG === '1' && debug.infiniteHealth();
+        if (this.mode === 'hearts' && !spared) this.hearts--;
         applied.push(mistake);
         return { applied, mistake };
       }
