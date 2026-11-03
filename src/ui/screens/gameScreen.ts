@@ -3,7 +3,7 @@ import { revertMove, type Change } from '../../engine/history';
 import { Game, MAX_HEARTS, type GameMode, type HintTarget } from '../../game/game';
 import type { SavedBoard } from '../../game/progress';
 import type { Puzzle } from '../../puzzles/format';
-import { createBoardView, type Line } from '../board/boardView';
+import { createBoardView, type BoardView, type Line } from '../board/boardView';
 import { attachInput, type Tool } from '../board/input';
 import { attachKeyboard } from '../board/keyboard';
 import { attachZoom } from '../board/zoom';
@@ -39,6 +39,8 @@ export interface PlaySession {
   header?: HTMLElement;
   /** Restyles the screen: adds a `theme-<name>` class (e.g. the dig's dirt board). */
   theme?: string;
+  /** Called once with the board view before play starts (e.g. to fog clues). */
+  onBoard?(view: BoardView): void;
   /** Lines that just became complete. May return a message to announce instead. */
   onLinesComplete?(lines: Line[]): string | void;
   /** A wrong fill was caught (hearts and battle modes). May return a message to announce. */
@@ -68,6 +70,7 @@ export function renderGameScreen(
 ): () => void {
   const game = new Game(puzzle, session.saved, session.mode);
   const view = createBoardView(puzzle);
+  session.onBoard?.(view);
 
   // Top bar
   const title = el('h1', { textContent: session.title });

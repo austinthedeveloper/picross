@@ -1,3 +1,5 @@
+import type { Solution } from '../engine/board';
+import { liftFog, type Fog } from '../engine/fog';
 import type { GadgetEffect } from '../puzzles/gadgets';
 
 /** An enemy in a fight encounter (#27). */
@@ -8,6 +10,8 @@ export interface Enemy {
   hp: number;
   /** Run HP lost each time the player fills a wrong cell. */
   attack: number;
+  /** Clues hidden at the start of the fight (#30). */
+  fog?: Fog;
 }
 
 /** A fight in progress. Saved with the run so a reload resumes it. */
@@ -17,6 +21,8 @@ export interface BattleState {
   struck: string[];
   /** Enemy hits still blocked by a patch kit (#28). */
   shield?: number;
+  /** Clues still fogged (#30). */
+  fog?: Fog;
 }
 
 /** Damage per newly completed row or column. */
@@ -25,7 +31,38 @@ export const CHIP_DAMAGE = 1;
 export const lineKey = (kind: 'row' | 'col', index: number) => `${kind[0]}${index}`;
 
 export function startBattle(enemy: Enemy): BattleState {
-  return { enemyHp: enemy.hp, struck: [] };
+  const state: BattleState = { enemyHp: enemy.hp, struck: [] };
+  if (enemy.fog) state.fog = { rows: [...enemy.fog.rows], cols: [...enemy.fog.cols] };
+  return state;
+}
+
+/**
+ * Lifts fog for newly completed lines (see `liftFog`), using the solution to
+ * tell where a completed line is filled. Returns the lines that were revealed.
+ */
+export function clearFog(
+  state: BattleState,
+  lines: { kind: 'row' | 'col'; index: number }[],
+  solution: Solution,
+): { state: BattleState; revealed: { kind: 'row' | 'col'; index: number }[] } {
+  if (!state.fog) return { state, revealed: [] };
+  let fog = state.fog;
+  for (const { kind, index } of lines) {
+    fog = liftFog(fog, kind, index, (cross) =>
+      kind === 'row'
+        ? solution.cells[index * solution.width + cross]
+        : solution.cells[cross * solution.width + index],
+    );
+  }
+  const revealed = [
+    ...state.fog.rows
+      .filter((i) => !fog.rows.includes(i))
+      .map((index) => ({ kind: 'row' as const, index })),
+    ...state.fog.cols
+      .filter((i) => !fog.cols.includes(i))
+      .map((index) => ({ kind: 'col' as const, index })),
+  ];
+  return { state: { ...state, fog }, revealed };
 }
 
 /**
@@ -37,7 +74,7 @@ export function chip(state: BattleState, keys: string[]): { state: BattleState; 
   if (!fresh.length) return { state, dealt: 0 };
   const enemyHp = Math.max(1, state.enemyHp - fresh.length * CHIP_DAMAGE);
   return {
-    state: { enemyHp, struck: [...state.struck, ...fresh] },
+    state: { ...state, enemyHp, struck: [...state.struck, ...fresh] },
     dealt: state.enemyHp - enemyHp,
   };
 }
