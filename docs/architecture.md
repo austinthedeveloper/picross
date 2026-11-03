@@ -27,7 +27,7 @@ src/
     history.ts             Change/Move types and the undo/redo History
     lines.ts               LineSet: sets of rows/columns (fog, scrambles, weak points)
     solver.ts              Line solver: uniqueness/no-guess check; fog and scramble aware
-    swap.ts                Which two rows the Mimic swaps (#48)
+    swap.ts                Which two lines the Mimic swaps and wipes (#48)
   puzzles/                 Content and its validation
     format.ts              Puzzle file format, parse/validate, export helpers
     index.ts               Loads pack/*.json (free play, in ORDER) and run/*.json
@@ -42,7 +42,7 @@ src/
     runs/*.json            Jobs: HP, encounters, gadgets, intro/outro, order, requires
     scenes/*.json          Scenes: cast, nodes of lines, choices, and conditions
   game/                    Game state and saves, no DOM
-    game.ts                Game: board, history, mode/hearts, hints, clock, row swaps
+    game.ts                Game: board, history, mode/hearts, hints, clock, wipes
     battle.ts              Enemy and BattleState: chip, finisher, gadgets, phases, armor
     run.ts                 RunState and its pure transitions
     dialogue.ts            Scene runner: current line or choices, advance, choose, flags
@@ -74,7 +74,7 @@ src/
           context.ts       Shared state: enemy, battle bar, battle, form, saving
           lines.ts         Completed lines: fog, scramble, armor, chip damage
           phases.ts        Phase changes: form, banner, more fog/scramble, swaps
-          swaps.ts         The Mimic's row swaps (wait for strokes to end)
+          swaps.ts         The Mimic's swaps (wait for strokes to end)
           gadgets.ts       The gadget tray
           hits.ts          Mistakes, shields, knockouts
           finisher.ts      The solved picture flying at the enemy
@@ -339,17 +339,18 @@ wins, armor matters through mistakes: in Hits-on runs, cracking it early softens
 beetle's hits (4 → 2). The Beetle is a 15×15 beetle with weak points at rows 9 and 12 and
 column 3.
 
-### Row swaps (the Mimic)
+### Swaps (the Mimic)
 
-A phase can set `"swap": true`. When it starts, the Mimic swaps the contents of two of your
-rows: your fills and X's move, but the solution doesn't, so solvability never changes.
-`pickSwapRows` (`engine/swap.ts`) picks the pair whose swap turns the most of your correct
-marks wrong. That way it always costs you something, never swaps a pair back (which would
-help you), and never touches a finished row. `Game.swapRows` applies it and starts the undo
-history over, since older moves would point at the wrong cells. Swaps wait until no stroke
-is in progress. The fight reaches the game through the `controls` that `onBoard` receives
-(`{ game, refresh }`). Swapped rows flash, the swap is announced, and clue feedback shows
-what's now wrong. Erasing moved fills is never a mistake.
+A phase can set `"swap": true`. When it starts, the Mimic swaps two of your rows or two of
+your columns and wipes what was in them, so you know exactly what to redo. (It used to move
+your marks, leaving you to work out which ones were now wrong; that played badly.) The
+solution doesn't change, so solvability never does. `pickSwap` (`engine/swap.ts`) picks the
+two unfinished rows, or the two unfinished columns, holding the most correct marks, so a
+swap always costs something. Cells in a finished line are never wiped, so finished lines
+stay finished. `Game.wipe` clears the cells and starts the undo history over, since undo
+would bring the marks back. Swaps wait until no stroke is in progress. The fight reaches
+the game through the `controls` that `onBoard` receives (`{ game, refresh }`). The wiped
+lines flash and the swap is announced.
 
 The Night Shift run (`runs/night-shift.json`, #46) starts with the Mimic, a 15×15 chest
 with teeth that swaps at 90%, 80%, and 70% HP and turns Hungry (attack 3) on the last.
@@ -363,7 +364,7 @@ board disruption so far:
 - **Start:** rows 4 and 10 fogged.
 - **92% HP:** Clockwork Curator, hits for 3, fogs rows 8 and 20.
 - **85% HP:** scrambles 3 of columns 9, 10, 12, and 15.
-- **78% HP:** Overwound Curator, hits for 4, and swaps two of your rows.
+- **78% HP:** Overwound Curator, hits for 4, and swaps and wipes two of your lines.
 
 The thin outlines leave the watch less room than the solid wrench: 4 fogged rows plus 4
 scrambled columns was the most the solver could still finish. Its 20×20 size and the swap

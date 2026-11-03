@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Cell, type Board, type Solution } from './board';
-import { pickSwapRows } from './swap';
+import { pickSwap } from './swap';
 
 const { Empty: _, Filled: F, Marked: X } = Cell;
 // 4x4 solution: #### / ##.. / ..## / .##.
@@ -18,26 +18,39 @@ const solution: Solution = {
 };
 const board = (rows: Cell[][]): Board => ({ width: 4, height: 4, cells: rows.flat() });
 
-describe('pickSwapRows', () => {
-  it('picks the swap that turns the most correct marks wrong', () => {
+describe('pickSwap', () => {
+  it('wipes the two unfinished rows holding the most correct marks', () => {
     const b = board([
-      [F, F, F, F], // done: never swapped
-      [F, _, X, X], // 3 correct here, none would fit row 3
-      [X, X, F, _], // 3 correct here, none would fit row 2
+      [F, F, F, F], // done: never wiped
+      [_, _, X, X], // 2 correct
+      [X, X, _, _], // 2 correct
       [_, _, _, _],
     ]);
-    expect(pickSwapRows(b, solution)).toEqual([1, 2]);
+    expect(pickSwap(b, solution)).toEqual({ kind: 'row', lines: [1, 2], cells: [6, 7, 8, 9] });
   });
 
-  it('never swaps a pair back (that would help you)', () => {
-    // Rows 3 and 4 hold each other's answers: swapping them again would fix both.
+  it('picks columns when they hold more', () => {
     const b = board([
-      [_, _, _, _],
-      [_, _, _, _],
-      [X, F, F, X],
-      [X, X, F, F],
+      [_, F, _, _],
+      [_, _, _, X],
+      [_, X, _, F],
+      [_, F, _, X],
     ]);
-    expect(pickSwapRows(b, solution)).not.toEqual([2, 3]);
+    expect(pickSwap(b, solution)).toEqual({
+      kind: 'col',
+      lines: [1, 3],
+      cells: [1, 9, 13, 7, 11, 15],
+    });
+  });
+
+  it('keeps marks that are part of a finished line', () => {
+    const b = board([
+      [F, _, _, _],
+      [F, _, X, X],
+      [X, X, F, _],
+      [X, _, _, _], // column 1 is done, so its cells stay
+    ]);
+    expect(pickSwap(b, solution)).toEqual({ kind: 'row', lines: [1, 2], cells: [6, 7, 9, 10] });
   });
 
   it('returns null before you have marked anything', () => {
@@ -47,6 +60,6 @@ describe('pickSwapRows', () => {
       [_, _, _, _],
       [_, _, _, _],
     ]);
-    expect(pickSwapRows(empty, solution)).toBeNull();
+    expect(pickSwap(empty, solution)).toBeNull();
   });
 });

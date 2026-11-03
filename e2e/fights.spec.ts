@@ -63,12 +63,14 @@ test('gremlin: fog waves land on unsolved rows as it turns Overcharged, then Bla
   );
 });
 
-test('mimic: swaps two of your rows, and cleaning up costs no HP', async ({ page }) => {
+test('mimic: swaps and wipes two of your lines, and refilling costs no HP', async ({ page }) => {
   await fight(page, 'night-shift', 0);
   const chest = encounterSolution('mimic');
   for (const c of [1, 2, 3]) await cell(page, 10 * 15 + c).tap(); // progress in row 11
   for (let r = 0; r <= 4; r++) await fillRow(page, chest, r);
-  await expect.poll(() => announcements(page)).toMatch(/swapped rows \d+ and \d+/);
+  await expect
+    .poll(() => announcements(page))
+    .toMatch(/swapped (rows|columns) \d+ and \d+ and ate your marks/);
   await expect(page.getByRole('button', { name: 'Undo' })).toBeDisabled();
   const hp = await meter(page, 'player-hp');
   await solve(page, chest);

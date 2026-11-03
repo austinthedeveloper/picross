@@ -280,7 +280,7 @@
   }
 }
 
-/* The Mimic swapped these two rows (#48). */
+/* The Mimic swapped and wiped these two lines (#48). */
 .cell.swapped::after {
   --flash: color-mix(in srgb, #7b5cff 70%, var(--accent));
   animation: overlay-flash 1s ease-out;
