@@ -1,0 +1,45 @@
+name: Deploy to Azure
+
+# Publishing a GitHub release (tag v*) builds that tag and deploys it to the
+# Azure Storage static website. Pre-releases are skipped. "Run workflow" on
+# the Actions tab redeploys any v* tag or main by hand.
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write # OIDC login to Azure; no stored Azure secret
+
+concurrency:
+  group: deploy-azure
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.event_name == 'workflow_dispatch' || !github.event.release.prerelease
+    runs-on: ubuntu-latest
+    # Only release tags (v*) and main may use this environment; see
+    # scripts/setup-azure-deploy.sh.
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      - name: Upload to the $web container
+        id: deploy
+        run: ./scripts/deploy-azure.sh "${{ vars.AZURE_STORAGE_ACCOUNT }}" dist

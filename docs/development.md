@@ -72,8 +72,49 @@ Local Storage).
 4. `npm run build`
 
 Pushes to `main` then deploy `dist/` to GitHub Pages at
-https://austinthedeveloper.github.io/picross/. Vite builds with `base: './'`, so the site
-works under the `/picross/` path.
+https://austinthedeveloper.github.io/picross/ (a preview of `main`). Releases go to Azure;
+see below. Vite builds with `base: './'`, so the same build works under GitHub Pages'
+`/picross/` path and at the Azure site's root.
+
+## Azure deployment (releases)
+
+Releases deploy to an Azure Storage static website:
+**https://picross.z13.web.core.windows.net/**
+
+| Piece          | Where                                                                                   |
+| -------------- | --------------------------------------------------------------------------------------- |
+| Resource group | `picross` (eastus)                                                                      |
+| Storage        | Account `picross`, static website on, `index.html` as index and 404 page                |
+| Upload script  | `scripts/deploy-azure.sh`: hashed `assets/` cached a year, then `no-cache` `index.html` |
+| Pipeline       | `.github/workflows/deploy-azure.yml`                                                    |
+| Identity       | App registration `picross-github-deploy`, signed in through GitHub OIDC                 |
+
+**To release:** create a GitHub release with a new `v*` tag, for example
+`gh release create v0.2.0 --generate-notes`. Publishing it runs **Deploy to Azure**,
+which checks out the tag, lints, tests, builds, and uploads. Pre-releases don't deploy.
+To redeploy without a new release, use **Run workflow** on the Actions tab, picking a
+tag or `main`.
+
+**Manual deploy** from your machine (Azure CLI logged in):
+
+```bash
+npm run build
+AZ_AUTH_MODE=key ./scripts/deploy-azure.sh picross
+```
+
+`AZ_AUTH_MODE=key` uses the storage account key, which your account can read as an
+owner. Without it, the script signs in with your Azure AD user, which needs the
+"Storage Blob Data Contributor" role on the account.
+
+**One-time pipeline setup** (run once, and again if anything is recreated): `scripts/setup-azure-deploy.sh`. It creates the app registration and a
+federated credential that trusts only this repo's `production` environment. It
+grants the app Storage Blob Data Contributor and Reader on the storage account only,
+creates the GitHub `production` environment (deployable from `v*` tags and `main`
+only), and stores the client, tenant, and subscription IDs and the account name as
+environment variables. No Azure secret is stored in GitHub.
+
+Old hashed assets stay in the container after a deploy, so anyone mid-session keeps
+working. They're small. Clear them out occasionally if you like.
 
 ## Branches and stacked PRs
 
