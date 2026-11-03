@@ -1,4 +1,6 @@
+import type { BattleState } from './battle';
 import type { SavedBoard } from './progress';
+import type { Mode } from './settings';
 
 /**
  * Where a player is in a run. Pure data, so it can be saved as-is. Change it
@@ -13,12 +15,24 @@ export interface RunState {
   /** Gadget ids held for the rest of the run (#28). */
   gadgets: string[];
   status: 'active' | 'won' | 'lost';
+  /** Chosen at the start: in relaxed runs enemies never hit (older saves lack it). */
+  mode?: Mode;
   /** The current encounter's board, so a reload mid-puzzle resumes it. */
   board?: SavedBoard;
+  /** The current fight's progress, if the current encounter is a fight. */
+  battle?: BattleState;
 }
 
-export function startRun(runId: string, hp: number): RunState {
-  return { runId, node: 0, hp, maxHp: hp, gadgets: [], status: 'active' };
+export function startRun(runId: string, hp: number, mode: Mode = 'relaxed'): RunState {
+  return { runId, node: 0, hp, maxHp: hp, gadgets: [], status: 'active', mode };
+}
+
+/** Saves (or clears) the current fight's progress. */
+export function withBattle(state: RunState, battle: BattleState | null): RunState {
+  const next = { ...state };
+  if (battle) next.battle = battle;
+  else delete next.battle;
+  return next;
 }
 
 /** Saves (or clears) the in-progress board for the current encounter. */
@@ -40,5 +54,6 @@ export function damage(state: RunState, amount: number): RunState {
 export function completeEncounter(state: RunState, length: number): RunState {
   if (state.status !== 'active') return state;
   const node = state.node + 1;
-  return { ...withBoard(state, null), node, status: node >= length ? 'won' : 'active' };
+  const cleared = withBattle(withBoard(state, null), null);
+  return { ...cleared, node, status: node >= length ? 'won' : 'active' };
 }

@@ -1,4 +1,5 @@
 import { getPuzzle } from './index';
+import type { Enemy } from '../game/battle';
 import type { Puzzle } from './format';
 
 /** What kind of node an encounter is. Fights and digs play differently from #27 and #29 on. */
@@ -12,10 +13,28 @@ export interface EncounterFile {
   puzzle: string;
   /** One line of flavor shown on the run map. */
   blurb?: string;
+  /** Required for fights. */
+  enemy?: Enemy;
 }
 
 export interface Encounter extends Omit<EncounterFile, 'puzzle'> {
   puzzle: Puzzle;
+}
+
+function parseEnemy(data: unknown, fail: (msg: string) => never): Enemy {
+  const enemy = data as Partial<Enemy> | undefined;
+  if (!enemy || typeof enemy !== 'object') return fail('fights need an enemy');
+  if (typeof enemy.name !== 'string' || !enemy.name) fail('enemy needs a name');
+  if (!Number.isInteger(enemy.hp) || enemy.hp! < 1) fail('enemy hp must be a positive integer');
+  if (!Number.isInteger(enemy.attack) || enemy.attack! < 0) {
+    fail('enemy attack must be a whole number');
+  }
+  return {
+    name: enemy.name!,
+    sprite: typeof enemy.sprite === 'string' ? enemy.sprite : '👾',
+    hp: enemy.hp!,
+    attack: enemy.attack!,
+  };
 }
 
 /** A run: an ordered path of encounters. */
@@ -52,6 +71,7 @@ export function parseEncounter(
     kind: file.kind!,
     puzzle: puzzle!,
     ...(file.blurb ? { blurb: file.blurb } : {}),
+    ...(file.kind === 'fight' ? { enemy: parseEnemy(file.enemy, fail) } : {}),
   };
 }
 

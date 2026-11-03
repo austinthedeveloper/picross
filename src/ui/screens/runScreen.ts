@@ -1,8 +1,10 @@
 import { completeEncounter, startRun, withBoard, type RunState } from '../../game/run';
 import { getCurrentRun, saveCurrentRun } from '../../game/runSave';
+import { getSettings, updateSettings, type Mode } from '../../game/settings';
 import { DEFAULT_RUN_ID, getRun, type Encounter, type RunDef } from '../../puzzles/runs';
 import { el } from '../dom';
 import { formatTime } from '../format';
+import { fightHooks } from './fightHooks';
 import { renderGameScreen, type PlaySession } from './gameScreen';
 
 const KIND_ICON: Record<Encounter['kind'], string> = { fight: '⚔️', dig: '⛏️' };
@@ -36,10 +38,39 @@ function newRunButton(app: HTMLElement, label: string): HTMLButtonElement {
     textContent: label,
     onclick: () => {
       const def = getRun(DEFAULT_RUN_ID)!;
-      saveCurrentRun(startRun(def.id, def.hp));
+      saveCurrentRun(startRun(def.id, def.hp, getSettings().mode));
       renderRunScreen(app);
     },
   });
+}
+
+const MODE_NOTES: Record<Mode, string> = {
+  relaxed: 'Enemies can’t hurt you. Lines and the finished picture still deal damage.',
+  hearts: 'Each wrong fill lets the enemy hit you. Run out of HP and the run is over.',
+};
+
+/** Relaxed vs. hits-on choice for the next run (shares the puzzle list's mode setting). */
+function modePicker(app: HTMLElement): HTMLElement {
+  const mode = getSettings().mode;
+  const option = (value: Mode, label: string) => {
+    const button = el('button', {
+      className: 'toggle',
+      textContent: label,
+      onclick: () => {
+        updateSettings({ mode: value });
+        renderRunScreen(app);
+      },
+    });
+    button.setAttribute('aria-pressed', String(mode === value));
+    return button;
+  };
+  return el('div', { className: 'run-mode' }, [
+    el('div', { className: 'segmented', role: 'group', ariaLabel: 'Run mode' }, [
+      option('relaxed', 'Relaxed'),
+      option('hearts', '♥ Hits on'),
+    ]),
+    el('p', { className: 'run-meta', textContent: MODE_NOTES[mode] }),
+  ]);
 }
 
 /**
@@ -71,6 +102,7 @@ function startPanel(app: HTMLElement): Node[] {
         { className: 'run-preview' },
         def.encounters.map((e) => el('li', { textContent: `${KIND_ICON[e.kind]} ${e.name}` })),
       ),
+      modePicker(app),
       newRunButton(app, 'Start run'),
     ]),
   ];
@@ -139,6 +171,10 @@ function pathMap(app: HTMLElement, state: RunState, def: RunDef): Node[] {
     el('div', { className: 'run-status' }, [
       hpBar(state),
       el('span', {
+        className: 'run-mode-label',
+        textContent: state.mode === 'hearts' ? '♥ Hits on' : 'Relaxed',
+      }),
+      el('span', {
         className: 'gadgets',
         textContent: state.gadgets.length ? state.gadgets.join(', ') : 'No gadgets yet',
       }),
@@ -159,6 +195,7 @@ function results(app: HTMLElement, state: RunState, def: RunDef): Node[] {
         className: 'run-meta',
         textContent: `${cleared}/${def.encounters.length} encounters cleared · ${state.hp}/${state.maxHp} HP left`,
       }),
+      modePicker(app),
       el('div', { className: 'end-actions' }, [
         el('a', { className: 'button ghost', href: '#/', textContent: 'Puzzles' }),
         newRunButton(app, 'New run'),
@@ -178,22 +215,28 @@ export function renderRunEncounter(app: HTMLElement): (() => void) | undefined {
   const encounter = def.encounters[state.node];
   const length = def.encounters.length;
 
+  const fight = encounter.enemy ? fightHooks(encounter.enemy, encounter.puzzle) : null;
   const session: PlaySession = {
     back: { href: '#/run', label: '← Map' },
     title: encounter.name,
-    // Fights decide what mistakes cost (#27); until then encounters don't check fills.
-    mode: 'relaxed',
+    // In Hearts runs, fights check fills so the enemy can hit back. Digs never do.
+    mode: fight && state.mode === 'hearts' ? 'battle' : 'relaxed',
     saved: state.board,
+    ...fight?.hooks,
     save: (board) => {
       const current = getCurrentRun();
       if (current?.status === 'active') saveCurrentRun(withBoard(current, board));
     },
     complete(game) {
+      const finisher = fight?.land();
       const next = completeEncounter(getCurrentRun() ?? state, length);
       saveCurrentRun(next);
       const last = next.status === 'won';
+      const time = formatTime(game.elapsed);
       return {
-        note: `${encounter.name} cleared in ${formatTime(game.elapsed)}`,
+        note: fight
+          ? `${encounter.enemy!.name} defeated! Finisher −${finisher} · ${time}`
+          : `${encounter.name} cleared in ${time}`,
         actions: [
           el('a', {
             className: 'button primary',

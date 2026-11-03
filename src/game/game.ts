@@ -4,6 +4,13 @@ import type { Puzzle } from '../puzzles/format';
 import type { SavedBoard } from './progress';
 import type { Mode } from './settings';
 
+/**
+ * How mistakes work: relaxed never checks fills; hearts checks them and fails
+ * after three; battle checks them and reports each one (the fight decides the
+ * cost), but never fails on its own.
+ */
+export type GameMode = Mode | 'battle';
+
 export const MAX_HEARTS = 3;
 export const MAX_HINTS = 3;
 
@@ -12,7 +19,7 @@ export type HintTarget = 'cell' | 'row' | 'col';
 export interface PreviewResult {
   /** Changes actually made, which may differ from those requested. */
   applied: Change[];
-  /** A wrong fill in hearts mode; the stroke should end here. */
+  /** A wrong fill in hearts or battle mode; the stroke should end here. */
   mistake: Change | null;
 }
 
@@ -20,7 +27,7 @@ export interface PreviewResult {
 export class Game {
   readonly board: Board;
   history = new History();
-  readonly mode: Mode;
+  readonly mode: GameMode;
   hearts = MAX_HEARTS;
   hintsUsed = 0;
   solved = false;
@@ -30,7 +37,7 @@ export class Game {
   constructor(
     readonly puzzle: Puzzle,
     saved?: SavedBoard,
-    mode: Mode = 'relaxed',
+    mode: GameMode = 'relaxed',
   ) {
     this.board = createBoard(puzzle.width, puzzle.height);
     this.mode = saved?.mode ?? mode;
@@ -76,19 +83,20 @@ export class Game {
 
   /**
    * Sets cells without recording history, for live drag previews. In hearts
-   * mode a wrong fill costs a heart and is marked instead.
+   * and battle modes a wrong fill is marked instead and reported as a mistake;
+   * in hearts mode it also costs a heart.
    */
   preview(changes: Iterable<Change>): PreviewResult {
     const applied: Change[] = [];
     for (const change of changes) {
       if (
-        this.mode === 'hearts' &&
+        this.mode !== 'relaxed' &&
         change.to === Cell.Filled &&
         !this.puzzle.solution.cells[change.index]
       ) {
         const mistake = { ...change, to: Cell.Marked };
         this.board.cells[change.index] = Cell.Marked;
-        this.hearts--;
+        if (this.mode === 'hearts') this.hearts--;
         applied.push(mistake);
         return { applied, mistake };
       }

@@ -2,6 +2,12 @@
   "id": "goblin",
   "name": "Goblin",
   "kind": "fight",
-  "puzzle": "mushroom",
-  "blurb": "A goblin is guarding the workshop's back door."
+  "puzzle": "sword",
+  "blurb": "A goblin is guarding the workshop's back door. It wants your lunch.",
+  "enemy": {
+    "name": "Goblin",
+    "sprite": "👺",
+    "hp": 30,
+    "attack": 2
+  }
 }

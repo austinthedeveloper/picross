@@ -209,3 +209,179 @@
 .abandon {
   color: var(--muted);
 }
+
+.run-mode {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.run-card.results .run-mode {
+  align-items: center;
+}
+
+.run-mode-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* Fights: enemy and player HP above the board. */
+
+.battle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.battle-side {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.battle-side.player {
+  text-align: right;
+}
+
+.battle-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.battle-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.enemy-sprite {
+  font-size: 2.4rem;
+  line-height: 1;
+  display: inline-block;
+  transition:
+    transform 0.4s ease-in,
+    opacity 0.4s ease-in;
+}
+
+.enemy-sprite.flinch {
+  animation: flinch 0.4s ease-out;
+}
+
+.enemy-sprite.lunge {
+  animation: lunge 0.35s ease-out;
+}
+
+.enemy-sprite.defeated {
+  transform: rotate(90deg) translateY(10px) scale(0.8);
+  opacity: 0.35;
+  filter: grayscale(1);
+}
+
+@keyframes flinch {
+  20% {
+    transform: translateX(-6px) rotate(-8deg);
+    filter: brightness(2);
+  }
+  50% {
+    transform: translateX(5px) rotate(5deg);
+  }
+}
+
+@keyframes lunge {
+  40% {
+    transform: translateX(18px) scale(1.15);
+  }
+}
+
+.meter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.player-hp {
+  flex-direction: row-reverse;
+}
+
+.meter-track {
+  width: 84px;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.meter-fill {
+  display: block;
+  height: 100%;
+  width: calc(var(--value) * 100%);
+  background: var(--accent);
+  transition: width 0.3s ease-out;
+}
+
+.player-hp .meter-fill {
+  background: var(--ok);
+  margin-left: auto;
+}
+
+.battle-side.player.hurt {
+  animation: hurt 0.5s ease-out;
+}
+
+@keyframes hurt {
+  15% {
+    transform: translateX(6px);
+    color: var(--accent);
+  }
+  35% {
+    transform: translateX(-5px);
+  }
+  55% {
+    transform: translateX(3px);
+  }
+}
+
+.float-number {
+  position: absolute;
+  top: -6px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--accent);
+  pointer-events: none;
+  animation: float-up 0.9s ease-out forwards;
+}
+
+.float-number.to-enemy {
+  left: 10px;
+}
+
+.float-number.to-player {
+  right: 0;
+}
+
+@keyframes float-up {
+  to {
+    transform: translateY(-26px);
+    opacity: 0;
+  }
+}
+
+/* The solved picture flying at the enemy (positioned by the Web Animations API). */
+.projectile {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 20;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 6px rgb(0 0 0 / 0.3));
+}

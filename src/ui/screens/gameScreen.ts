@@ -1,14 +1,13 @@
 import { Cell } from '../../engine/board';
 import { revertMove, type Change } from '../../engine/history';
-import { Game, MAX_HEARTS, type HintTarget } from '../../game/game';
+import { Game, MAX_HEARTS, type GameMode, type HintTarget } from '../../game/game';
 import type { SavedBoard } from '../../game/progress';
-import type { Mode } from '../../game/settings';
 import type { Puzzle } from '../../puzzles/format';
 import { createBoardView, type Line } from '../board/boardView';
 import { attachInput, type Tool } from '../board/input';
 import { attachKeyboard } from '../board/keyboard';
 import { attachZoom } from '../board/zoom';
-import { createFailedPanel, solvedPanelContent } from '../components/endPanels';
+import { createEndPanel, createFailedPanel, solvedPanelContent } from '../components/endPanels';
 import { freePlaySession } from './freePlaySession';
 import { createHintMenu } from '../components/hintMenu';
 import { createMuteButton } from '../components/muteButton';
@@ -27,12 +26,32 @@ export interface PlaySession {
   back: { href: string; label: string };
   /** Heading before the puzzle is solved (after, it shows the puzzle's name). */
   title: string;
-  mode: Mode;
+  mode: GameMode;
   saved?: SavedBoard;
   /** Saves the in-progress board, or clears it with null. */
   save(board: SavedBoard | null): void;
   /** Called once when solved. Returns the solved panel's note and buttons. */
   complete(game: Game): { note: string; actions: HTMLElement[] };
+
+  // Optional encounter hooks (fights use all of them).
+
+  /** Extra UI shown between the toolbar and the board. */
+  header?: HTMLElement;
+  /** Lines that just became complete. May return a message to announce instead. */
+  onLinesComplete?(lines: Line[]): string | void;
+  /** A wrong fill was caught (hearts and battle modes). May return a message to announce. */
+  onMistake?(): string | void;
+  /** Non-null once something outside the puzzle ends play (e.g. knocked out). */
+  ended?(): EndState | null;
+  /** Plays after `complete` and before the solved panel (e.g. the picture attacking). */
+  celebrate?(board: HTMLElement): Promise<void>;
+}
+
+/** A panel that replaces play when a session ends it early. */
+export interface EndState {
+  title: string;
+  note: string;
+  actions: HTMLElement[];
 }
 
 /**
@@ -87,6 +106,9 @@ export function renderGameScreen(
   const zoomBar = createZoomBar(attachZoom(boardWrap, view.root));
   const solvedPanel = el('div', { className: 'end-panel', hidden: true });
   const failedPanel = createFailedPanel(() => (game.retry(), refresh()));
+  const endedPanel = el('div', { className: 'end-panel failed', hidden: true });
+  /** Play is over: solved, out of hearts, or ended by the session. */
+  const over = () => game.over || Boolean(session.ended?.());
 
   // Screen-reader announcements
   const live = el('div', { className: 'sr-only', ariaLive: 'polite' });
@@ -108,6 +130,7 @@ export function renderGameScreen(
       createMuteButton(true),
     ]),
     toolbar,
+    ...(session.header ? [session.header] : []),
     boardWrap,
     zoomBar,
     el('p', {
@@ -117,20 +140,23 @@ export function renderGameScreen(
     }),
     solvedPanel,
     failedPanel,
+    endedPanel,
     live,
   ]);
   app.replaceChildren(screen);
 
   /** Lets the session record the solve, then shows the picture and its next steps. */
-  const showSolved = () => {
+  const showSolved = async () => {
     const { note, actions } = session.complete(game);
     title.textContent = puzzle.name;
+    view.highlight(null, null);
+    if (session.celebrate) await session.celebrate(view.root);
     solvedPanel.replaceChildren(...solvedPanelContent(puzzle, note, actions));
     solvedPanel.hidden = false;
-    view.highlight(null, null);
     announce(`Solved! ${puzzle.name}. ${note}.`);
     playSound('solve');
   };
+  let solvedShown = false;
 
   const lineName = (line: Line) => `${line.kind === 'row' ? 'Row' : 'Column'} ${line.index + 1}`;
 
@@ -138,7 +164,9 @@ export function renderGameScreen(
   const redraw = () => {
     const completed = view.update(game.board);
     if (completed.length && !game.solved) {
-      announce(`${completed.map(lineName).join(', ')} complete`);
+      const names = `${completed.map(lineName).join(', ')} complete`;
+      const extra = session.onLinesComplete?.(completed);
+      announce(extra ? `${names}. ${extra}` : names);
       completed.forEach(view.flashLine);
       playSound('line');
     }
@@ -151,10 +179,12 @@ export function renderGameScreen(
     if (mistake) {
       playSound('error');
       view.flashError(mistake.index);
+      const message = session.onMistake?.();
       announce(
-        game.failed
-          ? 'Wrong. Out of hearts.'
-          : `Wrong, that cell is empty. ${plural(game.hearts, 'heart')} left.`,
+        message ||
+          (game.failed
+            ? 'Wrong. Out of hearts.'
+            : `Wrong, that cell is empty. ${plural(game.hearts, 'heart')} left.`),
       );
     } else if (applied.length) {
       const to = applied[applied.length - 1].to;
@@ -166,14 +196,14 @@ export function renderGameScreen(
   const persist = () => {
     if (game.solved) return; // session.complete clears the save
     // A failed board can't continue, so reopening it starts fresh.
-    session.save(game.started && !game.failed ? game.serialize() : null);
+    session.save(game.started && !over() ? game.serialize() : null);
   };
 
   // The clock runs while the page is visible and the puzzle is in play.
   let lastTick = performance.now();
   const tick = () => {
     const now = performance.now();
-    if (document.visibilityState === 'visible') game.tick(now - lastTick);
+    if (document.visibilityState === 'visible' && !session.ended?.()) game.tick(now - lastTick);
     lastTick = now;
     timer.textContent = formatTime(game.elapsed);
   };
@@ -194,17 +224,26 @@ export function renderGameScreen(
     hearts.textContent = '♥'.repeat(game.hearts) + '♡'.repeat(MAX_HEARTS - game.hearts);
     hearts.ariaLabel = `${game.hearts} of ${MAX_HEARTS} hearts left`;
     hintMenu.update(game.hintsLeft, keyboard.cursor);
+    const ended = session.ended?.();
     screen.classList.toggle('is-solved', game.solved);
-    screen.classList.toggle('is-failed', game.failed);
-    toolbar.inert = game.over;
+    screen.classList.toggle('is-failed', game.failed || Boolean(ended));
+    toolbar.inert = over();
     failedPanel.hidden = !game.failed;
-    if (game.solved && solvedPanel.hidden) showSolved();
+    if (ended && endedPanel.hidden) {
+      endedPanel.replaceChildren(...createEndPanel(ended.title, ended.note, ended.actions));
+      endedPanel.hidden = false;
+      announce(`${ended.title}. ${ended.note}`);
+    }
+    if (game.solved && !solvedShown) {
+      solvedShown = true;
+      void showSolved();
+    }
   }
 
   attachInput(view.root, {
     board: game.board,
     getTool: () => tool,
-    enabled: () => !game.over,
+    enabled: () => !over(),
     onPreview: play,
     onCommit: (changes) => {
       game.commit(changes);
@@ -219,7 +258,7 @@ export function renderGameScreen(
 
   const keyboard = attachKeyboard(view, {
     board: game.board,
-    enabled: () => !game.over,
+    enabled: () => !over(),
     act: (index, match, target) => {
       const { applied } = play([{ index, from: match, to: target }]);
       game.commit(applied);
@@ -248,7 +287,7 @@ export function renderGameScreen(
   }
 
   const onUndoKeys = (e: KeyboardEvent) => {
-    if (game.over || !(e.ctrlKey || e.metaKey)) return;
+    if (over() || !(e.ctrlKey || e.metaKey)) return;
     const key = e.key.toLowerCase();
     if (key === 'z' && !e.shiftKey) game.undo();
     else if ((key === 'z' && e.shiftKey) || key === 'y') game.redo();

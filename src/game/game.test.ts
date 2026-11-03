@@ -148,3 +148,16 @@ describe('hints', () => {
     expect(new Game(grid, game.serialize()).hintsUsed).toBe(1);
   });
 });
+
+describe('battle mode', () => {
+  it('reports wrong fills as mistakes without hearts or failing', () => {
+    const wide = parsePuzzle({ id: 'w', name: 'W', width: 4, height: 1, solution: ['#...'] });
+    const game = new Game(wide, undefined, 'battle');
+    for (const i of [1, 2, 3]) {
+      expect(game.preview([{ index: i, from: Cell.Empty, to: Cell.Filled }]).mistake).toBeTruthy();
+    }
+    expect(game.board.cells.slice(1)).toEqual([Cell.Marked, Cell.Marked, Cell.Marked]);
+    expect(game.hearts).toBe(3);
+    expect(game.failed).toBe(false);
+  });
+});
