@@ -249,17 +249,23 @@ fogs rows 4, 6, 7, and 10, including both full-width rows.
 ### Bosses and phases
 
 An enemy can list `phases`. Each one starts once the enemy's HP falls to its `at` fraction
-of max, and can change the enemy's `name`, `sprite`, and `attack`, show a `taunt`, and
-fog more lines (`advancePhase` and `currentForm` in `game/battle.ts`). A phase's fog only
-covers lines you haven't completed yet, and it clears by solving, like the fog bat's. All
-of an enemy's fog, starting and from every phase, must be in one direction. A test proves
-the puzzle is solvable with all of it applied from the very start, so the boss stays fair
-however far along you are when it changes. The current phase is saved with the battle.
+of max, and can change the enemy's `name`, `sprite`, and `attack`, and show a `taunt`. It
+can also fog more lines (`advancePhase` and `currentForm` in `game/battle.ts`). A phase's
+`fog` is a pool in priority order: it fogs up to `fogCount` lines from the pool that you
+haven't completed and that aren't already fogged. So each wave lands on what you're still
+working on, and it clears by solving, like the fog bat's. All of an enemy's fog (starting
+fog plus every pool) must be in one direction. A test proves the puzzle is solvable with
+all of it applied from the very start, so any wave you can actually get is fair. The
+current phase is saved with the battle.
 
 An encounter can also be `"boss": true` (a 👑 node on the map) and name a `scene` that plays
 the first time you open it, before any progress is saved. First Job ends with the
-**Generator Gremlin**: a 15×15 wrench with 45 HP. At 70% HP (about halfway through the
-lines) it turns Overcharged, attacks for 3 instead of 2, and fogs rows 6, 7, 11, and 15.
+**Generator Gremlin**, a 15×15 wrench with 45 HP, tuned to the fog bat's "hard to very
+hard". Rows 4, 9, and 11 start fogged. At 90% HP (about 5 lines in) it turns Overcharged,
+hits for 3, and fogs 3 more of rows 2, 5, 8, 10, and 15. At 84% (about 8 lines) it turns
+Blackout, hits for 4, and fogs 2 more from the same pool. That's up to 8 of 15 rows dark.
+Line damage is 1 per line and columns mostly finish late in a solve, so keep phase
+thresholds high if you want them to land mid-fight.
 
 ## Digs
 

@@ -48,12 +48,15 @@ starter-pack test expects 5×5 to 15×15 and at most 15 puzzles, so update
    fight, and `phases` on the enemy:
    ```json
    "phases": [
-     { "at": 0.7, "name": "Overcharged Gremlin", "sprite": "😈", "attack": 3,
-       "taunt": "Lights out!", "fog": { "rows": [5, 6, 10, 14] } }
+     { "at": 0.9, "name": "Overcharged Gremlin", "sprite": "😈", "attack": 3,
+       "taunt": "Lights out!", "fog": { "rows": [1, 7, 14, 4, 9] }, "fogCount": 3 }
    ]
    ```
-   Phases trigger in order at decreasing `at` values. Line damage is 1 per line, so pick
-   `at` so the phase lands midway, not just before the finisher.
+   Phases trigger in order at decreasing `at` values. A phase's `fog` is a pool, and it fogs
+   up to `fogCount` unsolved lines from it. Line damage is 1 per line and columns mostly
+   finish late, so set `at` high (0.8–0.9) for a phase to land mid-solve. To find a fog
+   pool that stays solvable, try sets with the solver; the test suite checks the starting
+   fog plus every pool together.
 
 "Start a run" always begins `DEFAULT_RUN_ID` in `src/puzzles/runs.ts`.
 

@@ -115,6 +115,16 @@ describe('phases', () => {
     expect(advancePhase(boss, state).entered).toEqual([]); // only once
   });
 
+  it('fogs only up to fogCount unsolved, unfogged lines, in priority order', () => {
+    const picky = {
+      ...boss,
+      fog: { rows: [0], cols: [] },
+      phases: [{ at: 0.5, fog: { rows: [0, 1, 2, 3], cols: [] }, fogCount: 2 }],
+    };
+    const start = { ...startBattle(picky), enemyHp: 5, struck: ['r1'] };
+    expect(advancePhase(picky, start).state.fog).toEqual({ rows: [0, 2, 3], cols: [] });
+  });
+
   it('keeps phase and fog through chip damage', () => {
     const { state } = advancePhase(boss, { ...startBattle(boss), enemyHp: 5 });
     expect(chip(state, ['c0']).state).toMatchObject({ phase: 1, fog: { rows: [1, 2, 4] } });
