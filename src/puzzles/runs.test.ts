@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { parsePuzzle } from './format';
 import { solve } from '../engine/solver';
 import { CHIP_DAMAGE } from '../game/battle';
-import { allFog, allScramble, getRun, parseEncounter, parseRun, runs } from './runs';
+import { allFog, allScramble } from './enemies';
+import { getRun, parseEncounter, parseRun, runs } from './runs';
 
 const puzzle = parsePuzzle({ id: 'p', name: 'P', width: 2, height: 1, solution: ['#.'] });
 const find = (id: string) => (id === 'p' ? puzzle : undefined);
