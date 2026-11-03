@@ -6,7 +6,7 @@ import {
   endlessSetup,
   ENDLESS_ID,
   fightsBefore,
-  isDig,
+  isBreak,
   scaleEnemy,
 } from './endless';
 import { getRun, runs } from './runs';
@@ -18,19 +18,30 @@ describe('endless setup', () => {
     const firstJob = endlessSetup([getRun('first-job')!], 1);
     expect(firstJob.fights).toEqual(['goblin', 'fog-bat', 'gremlin']);
     expect(firstJob.digs).toEqual(['dig-site']);
+    expect(firstJob.rests).toEqual(['tea-break']);
   });
 });
 
 describe('endlessEncounter', () => {
-  it('makes every fourth node a dig', () => {
-    expect([0, 1, 2, 3, 7].map(isDig)).toEqual([false, false, false, true, true]);
-    expect(endlessEncounter(setup, 3).kind).toBe('dig');
+  it('makes every fourth node a break: a dig, then a rest stop, in turn', () => {
+    expect([0, 1, 2, 3, 7].map(isBreak)).toEqual([false, false, false, true, true]);
+    expect([3, 7, 11, 15].map((n) => endlessEncounter(setup, n).kind)).toEqual([
+      'dig',
+      'rest',
+      'dig',
+      'rest',
+    ]);
     expect(fightsBefore(8)).toBe(6);
+  });
+
+  it('runs saved before rest stops existed still play, with digs only', () => {
+    const old = { seed: 1, fights: setup.fights, digs: setup.digs };
+    expect(endlessEncounter(old, 7).kind).toBe('dig');
   });
 
   it('plays every fight once before any repeats', () => {
     const fights = Array.from({ length: 40 }, (_, n) => n)
-      .filter((n) => !isDig(n))
+      .filter((n) => !isBreak(n))
       .slice(0, setup.fights.length)
       .map((n) => endlessEncounter(setup, n).id.split('@')[0]);
     expect(new Set(fights).size).toBe(setup.fights.length);

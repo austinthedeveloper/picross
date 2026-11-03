@@ -3,7 +3,7 @@ import { parsePuzzle } from './format';
 import { solve } from '../engine/solver';
 import { CHIP_DAMAGE } from '../game/battle';
 import { allScramble, allUnreadable } from './enemies';
-import { getRun, parseEncounter, parseRun, runs } from './runs';
+import { getRun, parseEncounter, parseRun, restHeal, runs } from './runs';
 
 const puzzle = parsePuzzle({ id: 'p', name: 'P', width: 2, height: 1, solution: ['#.'] });
 const find = (id: string) => (id === 'p' ? puzzle : undefined);
@@ -45,6 +45,8 @@ describe('parseEncounter', () => {
     [{ ...encounter, enemy: { ...enemy, scramble: { rows: [0] } } }, /only one order/],
     [{ ...encounter, enemy: { ...enemy, fakes: {} } }, /at least one line/],
     [{ ...encounter, enemy: { ...enemy, charge: 1 } }, /charge must be at least 3 seconds/],
+    [{ ...encounter, kind: 'rest', enemy: undefined }, /rest stops need/],
+    [{ ...encounter, kind: 'rest', rest: { seconds: 60, heal: 1 } }, /heal must be more than 1/],
     [{ ...encounter, enemy: { ...enemy, phases: [{ at: 0.5, ink: 0 }] } }, /ink must be/],
     [{ ...encounter, enemy: { ...enemy, phases: [{ at: 0.5, inkCount: 2 }] } }, /no ink/],
     [
@@ -115,4 +117,20 @@ describe('bundled fights', () => {
       expect(result.status).toBe('unique');
     },
   );
+});
+
+describe('rest stops', () => {
+  it('give the full heal in time and a little after', () => {
+    const rest = { seconds: 90, heal: 4 };
+    expect(restHeal(rest, 89_000)).toBe(4);
+    expect(restHeal(rest, 90_000)).toBe(4);
+    expect(restHeal(rest, 90_001)).toBe(1);
+  });
+
+  it('come right before every boss', () => {
+    for (const job of runs) {
+      const boss = job.encounters.findIndex((e) => e.boss);
+      if (boss > 0) expect(job.encounters[boss - 1].kind).toBe('rest');
+    }
+  });
 });

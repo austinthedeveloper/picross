@@ -1,4 +1,4 @@
-/* Dig encounters (#29): a dirt board that's brushed away on solve. */
+/* Dig encounters (#29): a dirt board that is brushed away on solve. Rest stops (#77) at the end. */
 
 .dig {
   display: flex;
@@ -89,4 +89,40 @@
     opacity: 0;
     background-position: 0 0;
   }
+}
+
+/* Rest stops (#77): a calm board and a countdown. */
+.rest {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.rest-icon {
+  font-size: 1.6rem;
+}
+
+.rest-status {
+  font-size: 0.9rem;
+}
+
+.rest-clock {
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: var(--ok);
+}
+
+.rest-clock.low {
+  color: var(--spark-hot);
+}
+
+.rest-clock.late {
+  color: var(--muted);
+  text-decoration: line-through;
 }

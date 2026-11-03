@@ -13,8 +13,12 @@ export interface Hub {
   playScene(id: string): void;
 }
 
-const KIND_ICON: Record<Encounter['kind'], string> = { fight: '⚔️', dig: '⛏️' };
-const KIND_LABEL: Record<Encounter['kind'], string> = { fight: 'Fight', dig: 'Dig' };
+const KIND_ICON: Record<Encounter['kind'], string> = { fight: '⚔️', dig: '⛏️', rest: '☕' };
+const KIND_LABEL: Record<Encounter['kind'], string> = {
+  fight: 'Fight',
+  dig: 'Dig',
+  rest: 'Rest stop',
+};
 export const nodeIcon = (e: Encounter) => (e.boss ? '👑' : KIND_ICON[e.kind]);
 export const nodeLabel = (e: Encounter) => (e.boss ? 'Boss' : KIND_LABEL[e.kind]);
 

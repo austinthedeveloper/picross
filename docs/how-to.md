@@ -35,7 +35,8 @@ a cell or two inside that tile.
    ```json
    { "id": "goblin", "name": "Goblin", "kind": "fight", "puzzle": "sword", "blurb": "..." }
    ```
-   `kind` is `fight` or `dig`, and `blurb` is optional. Fights also need an enemy:
+   `kind` is `fight`, `dig`, or `rest`, and `blurb` is optional. A rest stop needs
+   `"rest": { "seconds": 90, "heal": 4 }` and a small puzzle. Fights also need an enemy:
    ```json
    "enemy": { "name": "Goblin", "sprite": "👺", "hp": 30, "attack": 2 }
    ```

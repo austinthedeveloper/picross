@@ -523,6 +523,21 @@ find. On solve, the dirt brushes away in a diagonal wave, the part gleams, and t
 puzzle's gadget pops into the header before the solved panel appears. The dig in First
 Job is a 10×10 bomb casing that becomes the bomb.
 
+## Rest stops
+
+A rest stop (`kind: "rest"`, #77) is how a run gets HP back. It's a small 10×10 puzzle
+with `rest: { seconds, heal }`. `run/rest.ts` puts a ☕ header with a countdown over the
+board. The countdown follows the game clock, so it pauses when the page is hidden and
+picks up after a reload. It turns orange in the last 15 seconds and is struck through
+once time's up.
+
+Solving within `seconds` heals `heal` HP (`restHeal` in `puzzles/runs.ts`); finishing
+late still heals `REST_LATE_HEAL` (1). Healing never goes past max HP. Like a dig, it never
+checks fills. Each job has one right before its boss: the Tea break (thermos), the
+Break room (coffee), and the Lifeguard chair (life ring), all 90 seconds for +4. The
+tests check that every boss has one in front of it. In Endless, every fourth node is a
+break that alternates between a dig and a rest stop.
+
 ## Gadgets
 
 A puzzle's JSON can name a `gadget`. Solving that puzzle in a run adds the gadget to

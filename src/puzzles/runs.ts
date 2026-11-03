@@ -5,8 +5,21 @@ import type { Puzzle } from './format';
 import { getGadget } from './gadgets';
 import { getScene } from './scenes';
 
-/** What kind of node an encounter is. Fights and digs play differently from #27 and #29 on. */
-export type EncounterKind = 'fight' | 'dig';
+/** What kind of node an encounter is: fights (#27), digs (#29), and rest stops (#77). */
+export type EncounterKind = 'fight' | 'dig' | 'rest';
+
+/** A rest stop (#77): solve within `seconds` to heal `heal` HP; finish late and heal less. */
+export interface Rest {
+  seconds: number;
+  heal: number;
+}
+
+/** HP a rest stop still gives when you finish after the timer runs out. */
+export const REST_LATE_HEAL = 1;
+
+/** How much a rest stop heals for a solve that took `elapsed` ms. */
+export const restHeal = (rest: Rest, elapsed: number) =>
+  elapsed <= rest.seconds * 1000 ? rest.heal : REST_LATE_HEAL;
 
 export interface EncounterFile {
   id: string;
@@ -22,10 +35,23 @@ export interface EncounterFile {
   boss?: boolean;
   /** Scene played the first time you open this node (#42). */
   scene?: string;
+  /** Required for rest stops (#77). */
+  rest?: Rest;
 }
 
 export interface Encounter extends Omit<EncounterFile, 'puzzle'> {
   puzzle: Puzzle;
+}
+
+function parseRest(data: unknown, fail: (msg: string) => never): Rest {
+  const rest = data as Partial<Rest> | undefined;
+  if (!rest || !Number.isInteger(rest.seconds) || rest.seconds! < 10) {
+    return fail('rest stops need "rest": { "seconds": 10 or more, "heal": ... }');
+  }
+  if (!Number.isInteger(rest.heal) || rest.heal! <= REST_LATE_HEAL) {
+    return fail(`a rest stop's heal must be more than ${REST_LATE_HEAL}`);
+  }
+  return { seconds: rest.seconds!, heal: rest.heal! };
 }
 
 function checkScene(id: unknown, fail: (msg: string) => never): string {
@@ -61,7 +87,7 @@ export interface RunDef extends Omit<RunFile, 'encounters' | 'gadgets'> {
   endless?: boolean;
 }
 
-const KINDS: EncounterKind[] = ['fight', 'dig'];
+const KINDS: EncounterKind[] = ['fight', 'dig', 'rest'];
 
 export function parseEncounter(
   data: unknown,
@@ -83,6 +109,7 @@ export function parseEncounter(
     puzzle: puzzle!,
     ...(file.blurb ? { blurb: file.blurb } : {}),
     ...(file.kind === 'fight' ? { enemy: parseEnemy(file.enemy, puzzle!, fail) } : {}),
+    ...(file.kind === 'rest' ? { rest: parseRest(file.rest, fail) } : {}),
     ...(file.boss ? { boss: true } : {}),
     ...(file.scene !== undefined ? { scene: checkScene(file.scene, fail) } : {}),
   };
