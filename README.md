@@ -35,6 +35,7 @@ Then open http://localhost:5173.
 | `npm run format`        | Format everything with Prettier                                 |
 | `npm run build`         | Type-check and build to `dist/`                                 |
 | `npm run preview`       | Serve the production build locally                              |
+| `npm run e2e`           | Browser tests (Playwright, phone-sized) against the build       |
 
 ## Docs
 

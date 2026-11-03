@@ -72,7 +72,7 @@ groups puzzles by size, biggest first, so a new size gets its own section automa
    emoji until there's art), one-line description, and effect.
 2. If the effect is a new kind, add it to the `GadgetEffect` union, handle it in
    `useGadget` in `src/game/battle.ts` (with a test in `battle.test.ts`), and give it
-   feedback in `use()` in `src/ui/screens/run/fight.ts`.
+   feedback in `use()` in `src/ui/screens/run/fight/gadgets.ts`.
 3. Hand it out: set `"gadget": "<id>"` on the puzzle JSON whose picture becomes it, or
    list it in a run's `"gadgets"` to start with it. Unknown ids fail at load.
 
