@@ -1,0 +1,1701 @@
+{
+  "round": 2,
+  "generator": "built-in image_gen",
+  "brief_sources": [
+    "../prompts/README.md",
+    "cast-round1-review.md",
+    "../prompts/01-cast.md",
+    "../prompts/02-enemies.md"
+  ],
+  "scope": "Three requested cast v3 refinements and two candidates for each of 20 enemy forms",
+  "status": "Generated candidates for review; originals retain generated resolution and alpha",
+  "grid_note": "Cast requested at the accepted 96x96 cell size; enemies requested at 32x32. Actual grid fidelity and final palette snapping remain review items.",
+  "assets": [
+    {
+      "id": "cast-curator",
+      "variant": 3,
+      "filename": "cast-curator-v3.png",
+      "prompt": "Use case: precise-object-edit. Create cast-curator-v3 for the same cozy Picross game's matched cast. Reference image 1 supplies the exact FACE AND HEAD to preserve: slicked-back hair, raised chin, looking down his nose, monocle, thin curled mustache and smug faint smirk. Reference image 2 supplies ONLY the close-trimmed SILHOUETTE TREATMENT, shoulder/head scale, bow tie and suit crop. Use image 1's head on image 2's trimmed treatment. Remove the entire coral backing disc from image 1; outside the man must be fully transparent. Thick paper #f6f3ec die-cut sticker border follows the actual head-and-shoulders silhouette, with clear margins all around, no scene and no circular colored backing. Match the existing portraits' 96x96 pixel grid (about 13px square cells on the supplied 1254px canvas), same outline weight and head size; do not reduce to 48x48. Flat solid colors ONLY graphite #23262f, paper #f6f3ec and coral #d9534f. Coral is for the bow tie. Crisp square pixel steps with no texture, blur, gradients, glossy lighting, smoothing, grey smudges, shadows or extra props. Keep the pre-reveal gentleman entirely human, no gears or machinery. Square transparent PNG, same composition for the 140px circle.",
+      "refs": [
+        "cast-curator-v1.png",
+        "cast-curator-v2.png"
+      ],
+      "kind": "cast",
+      "review_note": "V1's raised-chin head and slicked hair retained; coral backing disc removed; trimmed silhouette.",
+      "requested_grid": 96,
+      "inspection": {
+        "filename": "cast-curator-v3.png",
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 891657,
+        "partially_transparent_pixels": 680177,
+        "subject_bounds_at_alpha_200": [
+          199,
+          40,
+          1026,
+          1238
+        ],
+        "clear_margins_at_alpha_200": [
+          199,
+          40,
+          228,
+          16
+        ],
+        "sha256": "87be53eebc18cbaceafe03b596b2a591a73b07bac524d827fab0b52079e78db6"
+      }
+    },
+    {
+      "id": "cast-tess",
+      "variant": 3,
+      "filename": "cast-tess-v3.png",
+      "prompt": "Use case: precise-object-edit. Make cast-tess-v3 by changing ONLY the scar on this accepted cast-tess-v2 portrait. Erase the long paper-white zigzag on the upper-right mantle and replace it with a SHORT GRAPHITE #23262f scar line, a small stepped diagonal healed mark with one short cross-stitch, around 5 logical pixels long on the 96x96 grid. It must read as a quiet old scar, not a white lightning bolt, reflection or open wound. Fill the removed white area with flat coral #d9534f. Preserve the same eyes, heavy lids, wrinkled brow, face identity, mantle shape, curled arms, suckers, head size, circle composition and paper-colored border. Match the existing 96x96 pixel grid and line weight exactly; do not simplify to 48x48. ONLY flat graphite #23262f, paper #f6f3ec and coral #d9534f. Transparent background, clear padding, no colored disc, scenery, texture, shading, gradients, blur, smudges or extra marks. Square PNG.",
+      "refs": [
+        "cast-tess-v2.png"
+      ],
+      "kind": "cast",
+      "review_note": "Long white zigzag replaced with a short graphite healed scar.",
+      "requested_grid": 96,
+      "inspection": {
+        "filename": "cast-tess-v3.png",
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 530119,
+        "partially_transparent_pixels": 1040997,
+        "subject_bounds_at_alpha_200": [
+          77,
+          57,
+          1176,
+          1247
+        ],
+        "clear_margins_at_alpha_200": [
+          77,
+          57,
+          78,
+          7
+        ],
+        "sha256": "0b1dfba25d0b036b0a1fb91803e6141d0b40cd407f497fef654eaeb1f6794a9f"
+      }
+    },
+    {
+      "id": "cast-gremlin",
+      "variant": 3,
+      "filename": "cast-gremlin-v3.png",
+      "prompt": "Use case: precise-object-edit. Make cast-gremlin-v3 from this accepted cast-gremlin-v2 portrait with SIMPLER FUR. Preserve the exact face identity, huge bat ears, paper-colored ear interiors, yellow eyes, wide gleeful toothy grin, chewed yellow electrical wire in the teeth, wire route, sparks, head size, pose and overall silhouette. Replace dense graphite stripes across hair, cheeks and torso with broad quiet flat fur masses and just a few large tuft notches. Keep about three major hair tufts and two cheek tufts per side, reduce internal fur hatch lines by at least two thirds. The ears, eyes, wire and sparks must be the first things seen at 40px. Match the SAME 96x96 pixel cell size as the input (about 13px cells on its 1254px canvas), same outline thickness and paper sticker border; do not coarsen to 48x48 or change the character. ONLY flat solid graphite #23262f, paper #f6f3ec, yellow #e0a800. Transparent square PNG with clear margins. No scene, generator backing, colored disc, accessories, clothes, goggles, texture, smoothing, blur, shading or shadows.",
+      "refs": [
+        "cast-gremlin-v2.png"
+      ],
+      "kind": "cast",
+      "review_note": "Dense fur hatching replaced with broad masses; face, wire and yellow eyes retained.",
+      "requested_grid": 96,
+      "inspection": {
+        "filename": "cast-gremlin-v3.png",
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 642834,
+        "partially_transparent_pixels": 927181,
+        "subject_bounds_at_alpha_200": [
+          55,
+          77,
+          1198,
+          1231
+        ],
+        "clear_margins_at_alpha_200": [
+          55,
+          77,
+          56,
+          23
+        ],
+        "sha256": "7c7fb8f8ed6250a9451a64ea9ef83ed44b5825e4ba7ce308ac7d03cd66446bea"
+      }
+    },
+    {
+      "id": "enemy-goblin",
+      "base": null,
+      "phase": null,
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, green #2e8b57. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a small scrappy green goblin crouched like it is guarding a door, big pointed ears, a wide mischievous grin with two little teeth, holding a stolen sandwich in both hands close to its chest. Reads at 40 px as: a goblin with your lunch.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nCandidate 1 of 2. Use a near-frontal view with the clearest possible silhouette.",
+      "source": "02-enemies.md",
+      "variant": 1,
+      "filename": "enemy-goblin-v1.png",
+      "kind": "enemy",
+      "refs": [],
+      "review_note": "Pointed ears, two teeth and held sandwich remain the dominant shapes.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 664802,
+        "partially_transparent_pixels": 906253,
+        "subject_bounds_at_alpha_200": [
+          95,
+          82,
+          1147,
+          1234
+        ],
+        "clear_margins_at_alpha_200": [
+          95,
+          82,
+          107,
+          20
+        ],
+        "sha256": "41dd123f7726ebe7ffcc376edc94ad7f78b599f37d7c0db6f9e3fa262b66cb48"
+      }
+    },
+    {
+      "id": "enemy-goblin",
+      "base": null,
+      "phase": null,
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, green #2e8b57. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a small scrappy green goblin crouched like it is guarding a door, big pointed ears, a wide mischievous grin with two little teeth, holding a stolen sandwich in both hands close to its chest. Reads at 40 px as: a goblin with your lunch.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nCandidate 2 of 2. Use the allowed slight three-quarter view with a distinct but equally simple silhouette; preserve all defining props and colors.",
+      "source": "02-enemies.md",
+      "variant": 2,
+      "filename": "enemy-goblin-v2.png",
+      "kind": "enemy",
+      "refs": [],
+      "corrections": [
+        {
+          "prompt": "Use case: precise-object-edit. Correct this game sprite candidate by completely removing the large paper-colored sack/backpack behind the goblin on the left. Preserve the same goblin, green pointy ears, sly grin with two little teeth, body, crouching legs, both hands and stolen sandwich held close to the chest. No additional props. One subject only. Keep only graphite #23262f, paper #f6f3ec and green #2e8b57. Keep the chunky 32x32 game-sprite pixel-art appearance and thick paper-colored border around the actual goblin silhouette. Recompose so the ENTIRE goblin, all ears/feet and COMPLETE sticker border fit within the central 80% of a square transparent PNG; clear transparent padding on every side. No colored backing, scene, textures, shading, smoothing or shadows.",
+          "input_filename": "enemy-goblin-v2.png"
+        }
+      ],
+      "review_note": "Unrequested sack removed; pointed ears and sandwich retained.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 818049,
+        "partially_transparent_pixels": 752568,
+        "subject_bounds_at_alpha_200": [
+          138,
+          78,
+          1139,
+          1231
+        ],
+        "clear_margins_at_alpha_200": [
+          138,
+          78,
+          115,
+          23
+        ],
+        "sha256": "2e28b39fd373342a4548e573777b72eb79d08320857f81180936531151c182de"
+      }
+    },
+    {
+      "id": "enemy-fog-bat",
+      "base": null,
+      "phase": null,
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, soft gray #7a7e8a. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a round little graphite bat in flight, wings spread wide, tiny fangs, puffing a big soft gray cloud of fog out of its mouth that drifts to one side. The fog cloud is as big as the bat. Reads at 40 px as: a bat breathing fog.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nCandidate 1 of 2. Use a near-frontal view with the clearest possible silhouette.",
+      "source": "02-enemies.md",
+      "variant": 1,
+      "filename": "enemy-fog-bat-v1.png",
+      "kind": "enemy",
+      "refs": [],
+      "review_note": "Reframed for clear margins and a complete sticker border.",
+      "corrections": [
+        {
+          "prompt": "Use case: precise-object-edit. Fix the framing of this fog-bat game sprite. Preserve this exact bat design, wings, face, little fangs and attached gray fog puff, but make the ENTIRE sticker smaller within the SAME square canvas so it occupies at most the central 75% of the width. Center it with at least 12% completely transparent margin on left AND right and similarly generous top/bottom. Reconstruct any cut-off paper sticker border at the wing tips and fog edge so the border is continuous around the full silhouette. No part touches any frame edge. Preserve the chunky low-resolution 32x32 pixel-art treatment; all visible contour steps should be coarse square pixels, not smooth rounded sticker corners. Only flat graphite #23262f, off-white paper #f6f3ec and fog gray #7a7e8a. No scenery, disc, textures, shadows, gradients, blur or extra objects. Output transparent square PNG.",
+          "input_filename": "enemy-fog-bat-v1.png"
+        }
+      ],
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 1276073,
+        "partially_transparent_pixels": 295431,
+        "subject_bounds_at_alpha_200": [
+          223,
+          387,
+          1023,
+          909
+        ],
+        "clear_margins_at_alpha_200": [
+          223,
+          387,
+          231,
+          345
+        ],
+        "sha256": "56221697d3da2e56d62e783e7d3f6d31b9d54038f48a5b05eb79b4c99f4529a2"
+      }
+    },
+    {
+      "id": "enemy-fog-bat",
+      "base": null,
+      "phase": null,
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, soft gray #7a7e8a. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a round little graphite bat in flight, wings spread wide, tiny fangs, puffing a big soft gray cloud of fog out of its mouth that drifts to one side. The fog cloud is as big as the bat. Reads at 40 px as: a bat breathing fog.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nCandidate 2 of 2. Use the allowed slight three-quarter view with a distinct but equally simple silhouette; preserve all defining props and colors.",
+      "source": "02-enemies.md",
+      "variant": 2,
+      "filename": "enemy-fog-bat-v2.png",
+      "kind": "enemy",
+      "refs": [],
+      "review_note": "Reframed for clear margins and a complete sticker border.",
+      "corrections": [
+        {
+          "prompt": "Use case: precise-object-edit. Fix the framing of this fog-bat game sprite. Preserve this exact bat design, wings, face, little fangs and attached gray fog puff, but make the ENTIRE sticker smaller within the SAME square canvas so it occupies at most the central 75% of the width. Center it with at least 12% completely transparent margin on left AND right and similarly generous top/bottom. Reconstruct any cut-off paper sticker border at the wing tips and fog edge so the border is continuous around the full silhouette. No part touches any frame edge. Preserve the chunky low-resolution 32x32 pixel-art treatment; all visible contour steps should be coarse square pixels, not smooth rounded sticker corners. Only flat graphite #23262f, off-white paper #f6f3ec and fog gray #7a7e8a. No scenery, disc, textures, shadows, gradients, blur or extra objects. Output transparent square PNG.",
+          "input_filename": "enemy-fog-bat-v2.png"
+        }
+      ],
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 1269048,
+        "partially_transparent_pixels": 302348,
+        "subject_bounds_at_alpha_200": [
+          199,
+          374,
+          1051,
+          881
+        ],
+        "clear_margins_at_alpha_200": [
+          199,
+          374,
+          203,
+          373
+        ],
+        "sha256": "a40097a3b862af3589fb1af66981b99202479a2180ca53e9fb5bfc4985d1b3fa"
+      }
+    },
+    {
+      "id": "enemy-gremlin",
+      "base": null,
+      "phase": null,
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, warm yellow #e0a800. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a squat hairy gremlin with huge bat-like ears squatting on top of a boxy old generator, holding a chewed electrical wire in one hand with a couple of yellow sparks coming off it, round yellow eyes, wide toothy grin. Reads at 40 px as: a gremlin sitting on a machine.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\nInput image 1 is an IDENTITY reference only for the same character's face, hair/ears and signature palette. Create a NEW full-body 32x32 sprite, much coarser and simpler than the supplied 96x96 portrait. Do not copy its bust crop or fine fur/detail.\nCandidate 1 of 2. Near-frontal view, simple broad silhouette.",
+      "source": "02-enemies.md",
+      "variant": 1,
+      "filename": "enemy-gremlin-v1.png",
+      "kind": "enemy",
+      "refs": [
+        "cast-gremlin-v3.png"
+      ],
+      "review_note": "Cast identity and full-body silhouette retained. Facial details remain finer than the requested 32x32 grid; review for simplification before production.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 843608,
+        "partially_transparent_pixels": 727401,
+        "subject_bounds_at_alpha_200": [
+          179,
+          82,
+          1058,
+          1204
+        ],
+        "clear_margins_at_alpha_200": [
+          179,
+          82,
+          196,
+          50
+        ],
+        "sha256": "2f3c54f48f374681651e6cfa6a402c0ae24012e003013f2e037d5fce01fcc842"
+      }
+    },
+    {
+      "id": "enemy-gremlin",
+      "base": null,
+      "phase": null,
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, warm yellow #e0a800. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a squat hairy gremlin with huge bat-like ears squatting on top of a boxy old generator, holding a chewed electrical wire in one hand with a couple of yellow sparks coming off it, round yellow eyes, wide toothy grin. Reads at 40 px as: a gremlin sitting on a machine.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\nInput image 1 is an IDENTITY reference only for the same character's face, hair/ears and signature palette. Create a NEW full-body 32x32 sprite, much coarser and simpler than the supplied 96x96 portrait. Do not copy its bust crop or fine fur/detail.\nCandidate 2 of 2. Slight three-quarter view, simple broad silhouette; match the described character and props.",
+      "source": "02-enemies.md",
+      "variant": 2,
+      "filename": "enemy-gremlin-v2.png",
+      "kind": "enemy",
+      "refs": [
+        "cast-gremlin-v3.png"
+      ],
+      "review_note": "Cast identity and full-body silhouette retained. Facial details remain finer than the requested 32x32 grid; review for simplification before production.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 744498,
+        "partially_transparent_pixels": 826948,
+        "subject_bounds_at_alpha_200": [
+          158,
+          60,
+          1105,
+          1233
+        ],
+        "clear_margins_at_alpha_200": [
+          158,
+          60,
+          149,
+          21
+        ],
+        "sha256": "4a7709df8fdb69c0a104ab5b489baeb2ddb87e7167f0a20a4098a712b835f517"
+      }
+    },
+    {
+      "id": "enemy-overcharged-gremlin",
+      "base": "enemy-gremlin",
+      "phase": "Overcharged Gremlin",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, orange #f07c00. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: the same squat hairy gremlin squatting on top of the same boxy generator in the same pose, but now overcharged: its hair stands straight up, orange lightning bolts crackle off its ears and the wire in its hand, eyes glowing orange, grin even wider. Same silhouette as before, plus the bolts. Reads at 40 px as: the gremlin, electrified.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\n\nUse case: precise-object-edit. Input image 1 is the MATCHING BASE candidate 1 of this same enemy. Treat it as the identity, full-body proportions, placement, pose, pixel scale, line weight and silhouette reference. Modify ONLY what this phase specifies; it must read as the same creature changing state, not a redesign. Keep the base's canvas alignment and camera angle. Keep the generator, creature position, ears and hand holding the wire aligned to the input. Replace ALL yellow accent with orange #f07c00, stand the hair up and add only a few bold orange bolts.",
+      "source": "02-enemies.md",
+      "variant": 1,
+      "filename": "enemy-overcharged-gremlin-v1.png",
+      "kind": "enemy",
+      "refs": [
+        "enemy-gremlin-v1.png"
+      ],
+      "review_note": "Matching base pose/generator retained; yellow changed to orange, with upright hair and bolts. Details remain finer than 32x32.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 745682,
+        "partially_transparent_pixels": 825763,
+        "subject_bounds_at_alpha_200": [
+          172,
+          46,
+          1075,
+          1204
+        ],
+        "clear_margins_at_alpha_200": [
+          172,
+          46,
+          179,
+          50
+        ],
+        "sha256": "81b66e9c7abd2acec1e686caa6bbd940f58106d8202c65988ab52e706a428f44"
+      }
+    },
+    {
+      "id": "enemy-overcharged-gremlin",
+      "base": "enemy-gremlin",
+      "phase": "Overcharged Gremlin",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, orange #f07c00. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: the same squat hairy gremlin squatting on top of the same boxy generator in the same pose, but now overcharged: its hair stands straight up, orange lightning bolts crackle off its ears and the wire in its hand, eyes glowing orange, grin even wider. Same silhouette as before, plus the bolts. Reads at 40 px as: the gremlin, electrified.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\n\nUse case: precise-object-edit. Input image 1 is the MATCHING BASE candidate 2 of this same enemy. Treat it as the identity, full-body proportions, placement, pose, pixel scale, line weight and silhouette reference. Modify ONLY what this phase specifies; it must read as the same creature changing state, not a redesign. Keep the base's canvas alignment and camera angle. Keep the generator, creature position, ears and hand holding the wire aligned to the input. Replace ALL yellow accent with orange #f07c00, stand the hair up and add only a few bold orange bolts.",
+      "source": "02-enemies.md",
+      "variant": 2,
+      "filename": "enemy-overcharged-gremlin-v2.png",
+      "kind": "enemy",
+      "refs": [
+        "enemy-gremlin-v2.png"
+      ],
+      "review_note": "Matching base pose/generator retained; yellow changed to orange, with upright hair and bolts. Details remain finer than 32x32.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 682567,
+        "partially_transparent_pixels": 888222,
+        "subject_bounds_at_alpha_200": [
+          160,
+          43,
+          1093,
+          1232
+        ],
+        "clear_margins_at_alpha_200": [
+          160,
+          43,
+          161,
+          22
+        ],
+        "sha256": "257e9c03716839184ddcf85c47a2903510601c1155c698c0b2b91fda95e80bed"
+      }
+    },
+    {
+      "id": "enemy-blackout-gremlin",
+      "base": "enemy-gremlin",
+      "phase": "Blackout Gremlin",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, deep ink purple #2c2350. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: the same squat gremlin squatting on top of the same boxy generator in the same pose, but the lights are out: the gremlin and generator are a single deep purple-black silhouette, with only two round paper-colored glowing eyes and a paper-colored toothy grin visible, and a few purple wisps of darkness around it. Same silhouette as before. Reads at 40 px as: eyes and a grin in the dark.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\n\nUse case: precise-object-edit. Input image 1 is the MATCHING BASE candidate 1 of this same enemy. Treat it as the identity, full-body proportions, placement, pose, pixel scale, line weight and silhouette reference. Modify ONLY what this phase specifies; it must read as the same creature changing state, not a redesign. Keep the base's canvas alignment and camera angle. Preserve the exact outer body+generator contour and placement. Collapse ALL internal body/machine detail into ONE deep ink-purple #2c2350 filled silhouette, except two PAPER-colored eyes and PAPER-colored toothy grin. NO yellow or orange remains. Keep paper silhouette border and a few purple darkness wisps.",
+      "source": "02-enemies.md",
+      "variant": 1,
+      "filename": "enemy-blackout-gremlin-v1.png",
+      "kind": "enemy",
+      "refs": [
+        "enemy-gremlin-v1.png"
+      ],
+      "review_note": "Body and generator collapsed into one ink-purple silhouette with paper eyes/grin; base outline retained.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 742965,
+        "partially_transparent_pixels": 827882,
+        "subject_bounds_at_alpha_200": [
+          177,
+          81,
+          1060,
+          1204
+        ],
+        "clear_margins_at_alpha_200": [
+          177,
+          81,
+          194,
+          50
+        ],
+        "sha256": "0f1a7f80616c0df1f7ce786821137e15141e1963969ffe65233281000b7de17d"
+      }
+    },
+    {
+      "id": "enemy-blackout-gremlin",
+      "base": "enemy-gremlin",
+      "phase": "Blackout Gremlin",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, deep ink purple #2c2350. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: the same squat gremlin squatting on top of the same boxy generator in the same pose, but the lights are out: the gremlin and generator are a single deep purple-black silhouette, with only two round paper-colored glowing eyes and a paper-colored toothy grin visible, and a few purple wisps of darkness around it. Same silhouette as before. Reads at 40 px as: eyes and a grin in the dark.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\n\nUse case: precise-object-edit. Input image 1 is the MATCHING BASE candidate 2 of this same enemy. Treat it as the identity, full-body proportions, placement, pose, pixel scale, line weight and silhouette reference. Modify ONLY what this phase specifies; it must read as the same creature changing state, not a redesign. Keep the base's canvas alignment and camera angle. Preserve the exact outer body+generator contour and placement. Collapse ALL internal body/machine detail into ONE deep ink-purple #2c2350 filled silhouette, except two PAPER-colored eyes and PAPER-colored toothy grin. NO yellow or orange remains. Keep paper silhouette border and a few purple darkness wisps.",
+      "source": "02-enemies.md",
+      "variant": 2,
+      "filename": "enemy-blackout-gremlin-v2.png",
+      "kind": "enemy",
+      "refs": [
+        "enemy-gremlin-v2.png"
+      ],
+      "review_note": "Body and generator collapsed into one ink-purple silhouette with paper eyes/grin; base outline retained.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 667844,
+        "partially_transparent_pixels": 902556,
+        "subject_bounds_at_alpha_200": [
+          156,
+          60,
+          1106,
+          1234
+        ],
+        "clear_margins_at_alpha_200": [
+          156,
+          60,
+          148,
+          20
+        ],
+        "sha256": "85a3e1391089b808d84a10314d76eae000e7c411d800d885420ad2c11d790b70"
+      }
+    },
+    {
+      "id": "enemy-mimic",
+      "base": null,
+      "phase": null,
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, wood brown #a9825a. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a wooden treasure chest with graphite iron bands, closed, slightly tilted, with a thin sliver of a toothy grin showing along the seam of the lid and one eye peeking out of the keyhole. Reads at 40 px as: a chest that is not just a chest.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\nCandidate 1 of 2. Near-frontal view, simple broad silhouette.",
+      "source": "02-enemies.md",
+      "variant": 1,
+      "filename": "enemy-mimic-v1.png",
+      "kind": "enemy",
+      "refs": [],
+      "corrections": [
+        {
+          "prompt": "Use case: precise-object-edit. Palette correction ONLY for this closed mimic chest sprite. Recolor ALL blue-gray/steel-gray regions on iron bands, metal straps, hinges and the keyhole plate to the SAME flat dark graphite #23262f as the outlines. There must be NO blue-gray or medium gray accent anywhere. Keep all brown wood exactly wood brown #a9825a, and paper-colored rivets, tiny teeth, keyhole eye and die-cut sticker border exactly paper #f6f3ec. Final image uses ONLY three flat opaque colors: #23262f, #a9825a, #f6f3ec plus full transparency. Remove any surface gradients, mottled texture, metallic shading or glossy highlight. Preserve the exact chest design, pose, silhouette, size, proportions, teeth along lid seam and eye peeking through keyhole. Preserve the chunky game-sprite pixel steps and clear transparent margin. No extra objects, no background or disc. Square transparent PNG.",
+          "input_filename": "enemy-mimic-v1.png"
+        }
+      ],
+      "review_note": "Steel-gray band/lock accents corrected to graphite; only wood brown, graphite and paper remain as requested colors.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 905001,
+        "partially_transparent_pixels": 666604,
+        "subject_bounds_at_alpha_200": [
+          153,
+          252,
+          1082,
+          1077
+        ],
+        "clear_margins_at_alpha_200": [
+          153,
+          252,
+          172,
+          177
+        ],
+        "sha256": "420801b46a1b1e76d50de327bc1440453a7ee8ad6c305b215bb675687518cb28"
+      }
+    },
+    {
+      "id": "enemy-mimic",
+      "base": null,
+      "phase": null,
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, wood brown #a9825a. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a wooden treasure chest with graphite iron bands, closed, slightly tilted, with a thin sliver of a toothy grin showing along the seam of the lid and one eye peeking out of the keyhole. Reads at 40 px as: a chest that is not just a chest.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\nCandidate 2 of 2. Slight three-quarter view, simple broad silhouette; match the described character and props.",
+      "source": "02-enemies.md",
+      "variant": 2,
+      "filename": "enemy-mimic-v2.png",
+      "kind": "enemy",
+      "refs": [],
+      "corrections": [
+        {
+          "prompt": "Use case: precise-object-edit. Palette correction ONLY for this closed mimic chest sprite. Recolor ALL blue-gray/steel-gray regions on iron bands, metal straps, hinges and the keyhole plate to the SAME flat dark graphite #23262f as the outlines. There must be NO blue-gray or medium gray accent anywhere. Keep all brown wood exactly wood brown #a9825a, and paper-colored rivets, tiny teeth, keyhole eye and die-cut sticker border exactly paper #f6f3ec. Final image uses ONLY three flat opaque colors: #23262f, #a9825a, #f6f3ec plus full transparency. Remove any surface gradients, mottled texture, metallic shading or glossy highlight. Preserve the exact chest design, pose, silhouette, size, proportions, teeth along lid seam and eye peeking through keyhole. Preserve the chunky game-sprite pixel steps and clear transparent margin. No extra objects, no background or disc. Square transparent PNG.",
+          "input_filename": "enemy-mimic-v2.png"
+        }
+      ],
+      "review_note": "Steel-gray band/lock accents corrected to graphite; only wood brown, graphite and paper remain as requested colors.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 815449,
+        "partially_transparent_pixels": 755357,
+        "subject_bounds_at_alpha_200": [
+          117,
+          246,
+          1136,
+          1135
+        ],
+        "clear_margins_at_alpha_200": [
+          117,
+          246,
+          118,
+          119
+        ],
+        "sha256": "a39fede441886114f86d3a2eadeb2cf538d1a4edba8ac9cc4e4e74039f3a095a"
+      }
+    },
+    {
+      "id": "enemy-hungry-mimic",
+      "base": "enemy-mimic",
+      "phase": "Hungry Mimic",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, wood brown #a9825a, plus a second accent, bright purple #7b5cff, used only for the tongue. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: the same wooden treasure chest with graphite iron bands, now flung wide open: the inside is a huge mouth with a double row of pointed paper-colored teeth, a long bright purple tongue lolling out over the front edge, and two round eyes on the inside of the lid. Same chest shape and size as the closed version. Reads at 40 px as: a chest with a mouth.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\n\nUse case: precise-object-edit. Input image 1 is the MATCHING BASE candidate 1 of this same enemy. Treat it as the identity, full-body proportions, placement, pose, pixel scale, line weight and silhouette reference. Modify ONLY what this phase specifies; it must read as the same creature changing state, not a redesign. Keep the base's canvas alignment and camera angle. Preserve the same chest lower box, perspective, iron bands, width and position. Open only the lid, add the prescribed mouth/teeth and eyes inside it, and one long purple #7b5cff tongue. Purple is used ONLY for the tongue; wood stays #a9825a.",
+      "source": "02-enemies.md",
+      "variant": 1,
+      "filename": "enemy-hungry-mimic-v1.png",
+      "kind": "enemy",
+      "refs": [
+        "enemy-mimic-v1.png"
+      ],
+      "review_note": "Matching chest perspective retained; open toothy lid with eyes and purple tongue.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 888524,
+        "partially_transparent_pixels": 683502,
+        "subject_bounds_at_alpha_200": [
+          173,
+          225,
+          1083,
+          1078
+        ],
+        "clear_margins_at_alpha_200": [
+          173,
+          225,
+          171,
+          176
+        ],
+        "sha256": "42812c90ab890c9cdef5db63a10d67b8a5e0cc570489cde27a33bbb3b9aaded1"
+      }
+    },
+    {
+      "id": "enemy-hungry-mimic",
+      "base": "enemy-mimic",
+      "phase": "Hungry Mimic",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, wood brown #a9825a, plus a second accent, bright purple #7b5cff, used only for the tongue. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: the same wooden treasure chest with graphite iron bands, now flung wide open: the inside is a huge mouth with a double row of pointed paper-colored teeth, a long bright purple tongue lolling out over the front edge, and two round eyes on the inside of the lid. Same chest shape and size as the closed version. Reads at 40 px as: a chest with a mouth.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\n\nUse case: precise-object-edit. Input image 1 is the MATCHING BASE candidate 2 of this same enemy. Treat it as the identity, full-body proportions, placement, pose, pixel scale, line weight and silhouette reference. Modify ONLY what this phase specifies; it must read as the same creature changing state, not a redesign. Keep the base's canvas alignment and camera angle. Preserve the same chest lower box, perspective, iron bands, width and position. Open only the lid, add the prescribed mouth/teeth and eyes inside it, and one long purple #7b5cff tongue. Purple is used ONLY for the tongue; wood stays #a9825a.",
+      "source": "02-enemies.md",
+      "variant": 2,
+      "filename": "enemy-hungry-mimic-v2.png",
+      "kind": "enemy",
+      "refs": [
+        "enemy-mimic-v2.png"
+      ],
+      "review_note": "Matching chest perspective retained; open toothy lid with eyes and purple tongue.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 827061,
+        "partially_transparent_pixels": 744554,
+        "subject_bounds_at_alpha_200": [
+          166,
+          243,
+          1115,
+          1137
+        ],
+        "clear_margins_at_alpha_200": [
+          166,
+          243,
+          139,
+          117
+        ],
+        "sha256": "d87114f11a7938bc99ce417acced8febcec9de646b35bbfacb33f01088240e49"
+      }
+    },
+    {
+      "id": "enemy-clockwork-owl",
+      "base": null,
+      "phase": null,
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, steel blue-gray #3d4450, plus a second accent, warm yellow #e0a800, used only for the wind-up key and one gear. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a plump mechanical owl built from steel plates and rivets, perched upright, one big round eye and the other eye a visible yellow gear, two small gears showing through a panel on its chest, and a large yellow wind-up key sticking out of its back, slightly turned. Reads at 40 px as: a wind-up owl.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\nCandidate 1 of 2. Near-frontal view, simple broad silhouette.",
+      "source": "02-enemies.md",
+      "variant": 1,
+      "filename": "enemy-clockwork-owl-v1.png",
+      "kind": "enemy",
+      "refs": [],
+      "review_note": "Wind-up key and gear eye read clearly. Yellow also appears on a chest gear; restrict accent placement during selection/cleanup.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 783085,
+        "partially_transparent_pixels": 787536,
+        "subject_bounds_at_alpha_200": [
+          137,
+          151,
+          1137,
+          1197
+        ],
+        "clear_margins_at_alpha_200": [
+          137,
+          151,
+          117,
+          57
+        ],
+        "sha256": "988b06d36ce31e1c3a8fae411cb32c9253dadb320cefed1e670ef5613c43cf57"
+      }
+    },
+    {
+      "id": "enemy-clockwork-owl",
+      "base": null,
+      "phase": null,
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, steel blue-gray #3d4450, plus a second accent, warm yellow #e0a800, used only for the wind-up key and one gear. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a plump mechanical owl built from steel plates and rivets, perched upright, one big round eye and the other eye a visible yellow gear, two small gears showing through a panel on its chest, and a large yellow wind-up key sticking out of its back, slightly turned. Reads at 40 px as: a wind-up owl.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\nCandidate 2 of 2. Slight three-quarter view, simple broad silhouette; match the described character and props.",
+      "source": "02-enemies.md",
+      "variant": 2,
+      "filename": "enemy-clockwork-owl-v2.png",
+      "kind": "enemy",
+      "refs": [],
+      "review_note": "Wind-up key and gear eye read clearly. Yellow also appears on a chest gear and feet; restrict accent placement during selection/cleanup.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 740942,
+        "partially_transparent_pixels": 830851,
+        "subject_bounds_at_alpha_200": [
+          139,
+          135,
+          1139,
+          1157
+        ],
+        "clear_margins_at_alpha_200": [
+          139,
+          135,
+          115,
+          97
+        ],
+        "sha256": "830d5ac8c27481db9be70f61ec400562828ad4da55fc8fe9f00494ac02a4b020"
+      }
+    },
+    {
+      "id": "enemy-forger",
+      "base": null,
+      "phase": null,
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a lanky art forger standing with a sly sideways smile and thin curled mustache, coral red beret, paint-smeared smock, holding a big painter's palette with coral paint blobs out in front with one hand and a brush raised in the other. Reads at 40 px as: a painter with a palette.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\nInput image 1 is an IDENTITY reference only for the same character's face, hair/ears and signature palette. Create a NEW full-body 32x32 sprite, much coarser and simpler than the supplied 96x96 portrait. Do not copy its bust crop or fine fur/detail.\nCandidate 1 of 2. Near-frontal view, simple broad silhouette.",
+      "source": "02-enemies.md",
+      "variant": 1,
+      "filename": "enemy-forger-v1.png",
+      "kind": "enemy",
+      "refs": [
+        "cast-forger-v1.png"
+      ],
+      "review_note": "Cast identity and full-body silhouette retained. Facial details remain finer than the requested 32x32 grid; review for simplification before production.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 1005196,
+        "partially_transparent_pixels": 565672,
+        "subject_bounds_at_alpha_200": [
+          206,
+          109,
+          1039,
+          1167
+        ],
+        "clear_margins_at_alpha_200": [
+          206,
+          109,
+          215,
+          87
+        ],
+        "sha256": "3f7421cd55fd45f4473dadb9d32f366c5ba32c1e71b3c63b09384a9c8c7daae4"
+      }
+    },
+    {
+      "id": "enemy-forger",
+      "base": null,
+      "phase": null,
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a lanky art forger standing with a sly sideways smile and thin curled mustache, coral red beret, paint-smeared smock, holding a big painter's palette with coral paint blobs out in front with one hand and a brush raised in the other. Reads at 40 px as: a painter with a palette.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\nInput image 1 is an IDENTITY reference only for the same character's face, hair/ears and signature palette. Create a NEW full-body 32x32 sprite, much coarser and simpler than the supplied 96x96 portrait. Do not copy its bust crop or fine fur/detail.\nCandidate 2 of 2. Slight three-quarter view, simple broad silhouette; match the described character and props.",
+      "source": "02-enemies.md",
+      "variant": 2,
+      "filename": "enemy-forger-v2.png",
+      "kind": "enemy",
+      "refs": [
+        "cast-forger-v1.png"
+      ],
+      "review_note": "Cast identity and full-body silhouette retained. Facial details remain finer than the requested 32x32 grid; review for simplification before production.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 951880,
+        "partially_transparent_pixels": 618372,
+        "subject_bounds_at_alpha_200": [
+          188,
+          76,
+          1058,
+          1192
+        ],
+        "clear_margins_at_alpha_200": [
+          188,
+          76,
+          196,
+          62
+        ],
+        "sha256": "91ee6bfc6921cf56ab8671524644dd7e8fbd88b844dfe33eec915f6cd60f7905"
+      }
+    },
+    {
+      "id": "enemy-master-forger",
+      "base": "enemy-forger",
+      "phase": "Master Forger",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, plus a second accent, bright purple #7b5cff. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: the same lanky art forger in the same beret and smock and the same pose, but now holding an ornate purple picture frame up in front of their face like a mask, their eyes and mustache showing through it as if they were the painting, the palette still in the other hand. Same silhouette as before, plus the frame. Reads at 40 px as: the painter hiding behind a frame.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\n\nUse case: precise-object-edit. Input image 1 is the MATCHING BASE candidate 1 of this same enemy. Treat it as the identity, full-body proportions, placement, pose, pixel scale, line weight and silhouette reference. Modify ONLY what this phase specifies; it must read as the same creature changing state, not a redesign. Keep the base's canvas alignment and camera angle. Preserve the same forger, body pose, beret, smock, feet, palette and position. Replace the raised brush with the required ornate purple #7b5cff picture frame held in front of the face; eyes and moustache visible through its hole. The picture frame is a required hand-held subject prop, not a canvas border.",
+      "source": "02-enemies.md",
+      "variant": 1,
+      "filename": "enemy-master-forger-v1.png",
+      "kind": "enemy",
+      "refs": [
+        "enemy-forger-v1.png"
+      ],
+      "review_note": "Matching painter and palette retained; raised hand now holds purple frame over face. Face/frame detail finer than strict 32x32.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 1034157,
+        "partially_transparent_pixels": 537465,
+        "subject_bounds_at_alpha_200": [
+          296,
+          105,
+          1042,
+          1170
+        ],
+        "clear_margins_at_alpha_200": [
+          296,
+          105,
+          212,
+          84
+        ],
+        "sha256": "264ace2f79f2671c1dbfed3a75975210fbcb1384b58ead791155f2525a918464"
+      }
+    },
+    {
+      "id": "enemy-master-forger",
+      "base": "enemy-forger",
+      "phase": "Master Forger",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, plus a second accent, bright purple #7b5cff. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: the same lanky art forger in the same beret and smock and the same pose, but now holding an ornate purple picture frame up in front of their face like a mask, their eyes and mustache showing through it as if they were the painting, the palette still in the other hand. Same silhouette as before, plus the frame. Reads at 40 px as: the painter hiding behind a frame.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\n\nUse case: precise-object-edit. Input image 1 is the MATCHING BASE candidate 2 of this same enemy. Treat it as the identity, full-body proportions, placement, pose, pixel scale, line weight and silhouette reference. Modify ONLY what this phase specifies; it must read as the same creature changing state, not a redesign. Keep the base's canvas alignment and camera angle. Preserve the same forger, body pose, beret, smock, feet, palette and position. Replace the raised brush with the required ornate purple #7b5cff picture frame held in front of the face; eyes and moustache visible through its hole. The picture frame is a required hand-held subject prop, not a canvas border.",
+      "source": "02-enemies.md",
+      "variant": 2,
+      "filename": "enemy-master-forger-v2.png",
+      "kind": "enemy",
+      "refs": [
+        "enemy-forger-v2.png"
+      ],
+      "review_note": "Matching painter and palette retained; raised hand now holds purple frame over face. Face/frame detail finer than strict 32x32.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 1001156,
+        "partially_transparent_pixels": 570210,
+        "subject_bounds_at_alpha_200": [
+          279,
+          77,
+          1052,
+          1190
+        ],
+        "clear_margins_at_alpha_200": [
+          279,
+          77,
+          202,
+          64
+        ],
+        "sha256": "9215e67c2f1599a3dae3656986c2886ca10bdcfcffd9bafc6223a127dc2f4ed0"
+      }
+    },
+    {
+      "id": "enemy-armored-beetle",
+      "base": null,
+      "phase": null,
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, steel blue-gray #3d4450, plus a second accent, coral red #d9534f, used only for the cracks. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a huge round beetle seen from the front at a slight angle, its shell made of thick steel armor plates with riveted seams, three bright coral red cracks glowing in the plates like weak points, small legs, two short antennae, small determined eyes. Reads at 40 px as: an armored beetle with cracks in it.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\nCandidate 1 of 2. Near-frontal view, simple broad silhouette.",
+      "source": "02-enemies.md",
+      "variant": 1,
+      "filename": "enemy-armored-beetle-v1.png",
+      "kind": "enemy",
+      "refs": [],
+      "review_note": "Three coral cracks and broad armored shell retained. Compare antenna/leg readability at 38px.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 838423,
+        "partially_transparent_pixels": 732910,
+        "subject_bounds_at_alpha_200": [
+          155,
+          199,
+          1099,
+          1125
+        ],
+        "clear_margins_at_alpha_200": [
+          155,
+          199,
+          155,
+          129
+        ],
+        "sha256": "d8ec6007705896ecc08164e689e252f0dddb8177bcbbb6425057e4da40645bf0"
+      }
+    },
+    {
+      "id": "enemy-armored-beetle",
+      "base": null,
+      "phase": null,
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, steel blue-gray #3d4450, plus a second accent, coral red #d9534f, used only for the cracks. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a huge round beetle seen from the front at a slight angle, its shell made of thick steel armor plates with riveted seams, three bright coral red cracks glowing in the plates like weak points, small legs, two short antennae, small determined eyes. Reads at 40 px as: an armored beetle with cracks in it.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\nCandidate 2 of 2. Slight three-quarter view, simple broad silhouette; match the described character and props.",
+      "source": "02-enemies.md",
+      "variant": 2,
+      "filename": "enemy-armored-beetle-v2.png",
+      "kind": "enemy",
+      "refs": [],
+      "review_note": "Three coral cracks and broad armored shell retained. Compare antenna/leg readability at 38px.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 709622,
+        "partially_transparent_pixels": 861678,
+        "subject_bounds_at_alpha_200": [
+          111,
+          159,
+          1120,
+          1139
+        ],
+        "clear_margins_at_alpha_200": [
+          111,
+          159,
+          134,
+          115
+        ],
+        "sha256": "2812a9cdf045875e5dab216d397df363c5ce32ecf6fefb4c0b523c6dbac5f7b9"
+      }
+    },
+    {
+      "id": "enemy-curator",
+      "base": null,
+      "phase": null,
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a tall, prim older gentleman standing very straight, monocle, slicked-back hair, high collar, coral red bow tie, dark three-piece suit, hands clasped in front, chin raised with a faint smirk. Nothing mechanical visible. Reads at 40 px as: a stiff museum curator.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\nInput image 1 is an IDENTITY reference only for the same character's face, hair/ears and signature palette. Create a NEW full-body 32x32 sprite, much coarser and simpler than the supplied 96x96 portrait. Do not copy its bust crop or fine fur/detail.\nCandidate 1 of 2. Near-frontal view, simple broad silhouette.",
+      "source": "02-enemies.md",
+      "variant": 1,
+      "filename": "enemy-curator-v1.png",
+      "kind": "enemy",
+      "refs": [
+        "cast-curator-v3.png"
+      ],
+      "review_note": "Cast identity and full-body silhouette retained. Facial details remain finer than the requested 32x32 grid; review for simplification before production.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 1144431,
+        "partially_transparent_pixels": 427253,
+        "subject_bounds_at_alpha_200": [
+          379,
+          69,
+          874,
+          1198
+        ],
+        "clear_margins_at_alpha_200": [
+          379,
+          69,
+          380,
+          56
+        ],
+        "sha256": "9cb402244c474dfd206e65657bc4d0f66bb748ed34cefd2b6d56d8c58f108ac8"
+      }
+    },
+    {
+      "id": "enemy-curator",
+      "base": null,
+      "phase": null,
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a tall, prim older gentleman standing very straight, monocle, slicked-back hair, high collar, coral red bow tie, dark three-piece suit, hands clasped in front, chin raised with a faint smirk. Nothing mechanical visible. Reads at 40 px as: a stiff museum curator.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\nInput image 1 is an IDENTITY reference only for the same character's face, hair/ears and signature palette. Create a NEW full-body 32x32 sprite, much coarser and simpler than the supplied 96x96 portrait. Do not copy its bust crop or fine fur/detail.\nCandidate 2 of 2. Slight three-quarter view, simple broad silhouette; match the described character and props.",
+      "source": "02-enemies.md",
+      "variant": 2,
+      "filename": "enemy-curator-v2.png",
+      "kind": "enemy",
+      "refs": [
+        "cast-curator-v3.png"
+      ],
+      "review_note": "Cast identity and full-body silhouette retained. Facial details remain finer than the requested 32x32 grid; review for simplification before production.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 1161404,
+        "partially_transparent_pixels": 410336,
+        "subject_bounds_at_alpha_200": [
+          392,
+          45,
+          831,
+          1223
+        ],
+        "clear_margins_at_alpha_200": [
+          392,
+          45,
+          423,
+          31
+        ],
+        "sha256": "b171f9c53278e1cb7bc7ae300c1c1d4fa3050e4afb16dbd2878c60f4b5eed40e"
+      }
+    },
+    {
+      "id": "enemy-clockwork-curator",
+      "base": "enemy-curator",
+      "phase": "Clockwork Curator",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, brass yellow #e0a800. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: the same tall prim gentleman in the same straight pose and suit, but now revealed as clockwork: his jacket hangs open to show brass gears turning in his chest, a large brass wind-up key sticks out of his back, his monocle is a small brass gear, and his smirk is wider. Same silhouette as before, plus the key. Reads at 40 px as: the curator is a wind-up machine.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\nUse case: precise-object-edit. Input image 1 is matching BASE candidate 1. Keep the same gentleman's face identity, body proportions, canvas alignment, pose, camera angle, complete outline and feet placement. Modify only the clockwork reveal. Keep the exact same man, head identity, straight standing pose, hands position and body proportions. Open the jacket to expose a few big brass gears, add a brass key behind him, and turn the monocle into one brass gear. ONLY graphite, paper and yellow #e0a800; replace the coral bow tie accent with graphite or paper so no coral remains.",
+      "source": "02-enemies.md",
+      "variant": 1,
+      "filename": "enemy-clockwork-curator-v1.png",
+      "kind": "enemy",
+      "refs": [
+        "enemy-curator-v1.png"
+      ],
+      "review_note": "Matching gentleman/feet alignment retained; yellow chest gears, gear monocle and key added. Fine details need simplification review.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 1071782,
+        "partially_transparent_pixels": 499699,
+        "subject_bounds_at_alpha_200": [
+          374,
+          67,
+          955,
+          1202
+        ],
+        "clear_margins_at_alpha_200": [
+          374,
+          67,
+          299,
+          52
+        ],
+        "sha256": "69469eb78a9508a917602481064a0cc0744ab256a2ad0a24b7064fefca003dd8"
+      }
+    },
+    {
+      "id": "enemy-clockwork-curator",
+      "base": "enemy-curator",
+      "phase": "Clockwork Curator",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, brass yellow #e0a800. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: the same tall prim gentleman in the same straight pose and suit, but now revealed as clockwork: his jacket hangs open to show brass gears turning in his chest, a large brass wind-up key sticks out of his back, his monocle is a small brass gear, and his smirk is wider. Same silhouette as before, plus the key. Reads at 40 px as: the curator is a wind-up machine.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\nUse case: precise-object-edit. Input image 1 is matching BASE candidate 2. Keep the same gentleman's face identity, body proportions, canvas alignment, pose, camera angle, complete outline and feet placement. Modify only the clockwork reveal. Keep the exact same man, head identity, straight standing pose, hands position and body proportions. Open the jacket to expose a few big brass gears, add a brass key behind him, and turn the monocle into one brass gear. ONLY graphite, paper and yellow #e0a800; replace the coral bow tie accent with graphite or paper so no coral remains.",
+      "source": "02-enemies.md",
+      "variant": 2,
+      "filename": "enemy-clockwork-curator-v2.png",
+      "kind": "enemy",
+      "refs": [
+        "enemy-curator-v2.png"
+      ],
+      "review_note": "Matching gentleman/feet alignment retained; yellow chest gears, gear monocle and key added. Fine details need simplification review.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 1124550,
+        "partially_transparent_pixels": 446761,
+        "subject_bounds_at_alpha_200": [
+          309,
+          45,
+          844,
+          1222
+        ],
+        "clear_margins_at_alpha_200": [
+          309,
+          45,
+          410,
+          32
+        ],
+        "sha256": "9cea9ea231e51e3541be62df54e08c85a475c6f5cead7a9556fe2042efbdc88e"
+      }
+    },
+    {
+      "id": "enemy-overwound-curator",
+      "base": "enemy-curator",
+      "phase": "Overwound Curator",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, orange #f07c00. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: the same clockwork gentleman in the same pose, but overwound: the key in his back is a spinning orange blur, his hair and limbs are jolted askew, two or three orange gears are flying off him, his eyes are spirals, his bow tie is crooked, and the jacket flaps open. Same silhouette as before, with the gears flying off. Reads at 40 px as: the clockwork curator coming apart.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\nUse case: precise-object-edit. Input 1 is the matching CLOCKWORK PHASE candidate; input 2 is its base gentleman. Preserve the same key side, face identity, tall standing proportions, body location and feet baseline. Change only the requested overwound state. Use the Clockwork Curator as the immediate phase reference and the base as identity/pose reference. Retain face, tall body, key and jacket structure. Replace ALL yellow/brass accent with orange #f07c00. Show the required spinning key as crisp stepped orange motion arcs, NEVER actual blurred or translucent pixels. Just two or three loose orange gears, crooked bow tie, spiral eyes and small jolts to the limbs/hair.",
+      "source": "02-enemies.md",
+      "variant": 1,
+      "filename": "enemy-overwound-curator-v1.png",
+      "kind": "enemy",
+      "refs": [
+        "enemy-clockwork-curator-v1.png",
+        "enemy-curator-v1.png"
+      ],
+      "corrections": [
+        {
+          "prompt": "Use case: precise-object-edit. Correct ONLY the jacket/chest on this Overwound Curator phase sprite. His jacket must flap OPEN to reveal a dark graphite chest cavity with TWO OR THREE BIG ORANGE #f07c00 CLOCKWORK GEARS, as in the preceding clockwork form. Replace the central buttoned waistcoat/chest panel with that exposed machinery. Keep the orange crooked bow tie, spiral eyes, head identity, wild hair, exact current jolted limbs/pose, key on the SAME side, orange stepped key motion arcs, two or three loose flying gears, original size, placement and entire paper sticker silhouette. Do not add another accent: only graphite #23262f, paper #f6f3ec and orange #f07c00. Crisp chunky pixel art, no texture, grey shading, blur, gradients or smooth lines. Transparent square PNG with all existing clear margins preserved.",
+          "input_filename": "enemy-overwound-curator-v1.png"
+        }
+      ],
+      "review_note": "Orange key/arcs, spiral eyes and loose gears retained; chest corrected to stay open with orange machinery. Pose moves more than the base, and fine details remain above the strict 32x32 brief.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 950790,
+        "partially_transparent_pixels": 619186,
+        "subject_bounds_at_alpha_200": [
+          198,
+          67,
+          997,
+          1190
+        ],
+        "clear_margins_at_alpha_200": [
+          198,
+          67,
+          257,
+          64
+        ],
+        "sha256": "7873d1edda6071734ee28aeb753ddfc24a2eb02b0a70e51f59258e88e8dddfcf"
+      }
+    },
+    {
+      "id": "enemy-overwound-curator",
+      "base": "enemy-curator",
+      "phase": "Overwound Curator",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, orange #f07c00. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: the same clockwork gentleman in the same pose, but overwound: the key in his back is a spinning orange blur, his hair and limbs are jolted askew, two or three orange gears are flying off him, his eyes are spirals, his bow tie is crooked, and the jacket flaps open. Same silhouette as before, with the gears flying off. Reads at 40 px as: the clockwork curator coming apart.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\nUse case: precise-object-edit. Input 1 is the matching CLOCKWORK PHASE candidate; input 2 is its base gentleman. Preserve the same key side, face identity, tall standing proportions, body location and feet baseline. Change only the requested overwound state. Use the Clockwork Curator as the immediate phase reference and the base as identity/pose reference. Retain face, tall body, key and jacket structure. Replace ALL yellow/brass accent with orange #f07c00. Show the required spinning key as crisp stepped orange motion arcs, NEVER actual blurred or translucent pixels. Just two or three loose orange gears, crooked bow tie, spiral eyes and small jolts to the limbs/hair.",
+      "source": "02-enemies.md",
+      "variant": 2,
+      "filename": "enemy-overwound-curator-v2.png",
+      "kind": "enemy",
+      "refs": [
+        "enemy-clockwork-curator-v2.png",
+        "enemy-curator-v2.png"
+      ],
+      "corrections": [
+        {
+          "prompt": "Use case: precise-object-edit. Correct ONLY the jacket/chest on this Overwound Curator phase sprite. His jacket must flap OPEN to reveal a dark graphite chest cavity with TWO OR THREE BIG ORANGE #f07c00 CLOCKWORK GEARS, as in the preceding clockwork form. Replace the central buttoned waistcoat/chest panel with that exposed machinery. Keep the orange crooked bow tie, spiral eyes, head identity, wild hair, exact current jolted limbs/pose, key on the SAME side, orange stepped key motion arcs, two or three loose flying gears, original size, placement and entire paper sticker silhouette. Do not add another accent: only graphite #23262f, paper #f6f3ec and orange #f07c00. Crisp chunky pixel art, no texture, grey shading, blur, gradients or smooth lines. Transparent square PNG with all existing clear margins preserved.",
+          "input_filename": "enemy-overwound-curator-v2.png"
+        }
+      ],
+      "review_note": "Orange key/arcs, spiral eyes and loose gears retained; chest corrected to stay open with orange machinery. Pose moves more than the base, and fine details remain above the strict 32x32 brief.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 879245,
+        "partially_transparent_pixels": 691139,
+        "subject_bounds_at_alpha_200": [
+          199,
+          74,
+          1063,
+          1205
+        ],
+        "clear_margins_at_alpha_200": [
+          199,
+          74,
+          191,
+          49
+        ],
+        "sha256": "0dd4a09c9e325089d0c8e06c001ad50fd30f139eb975b2dcd94155bf59574a2e"
+      }
+    },
+    {
+      "id": "enemy-electric-eel",
+      "base": null,
+      "phase": null,
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, warm yellow #e0a800. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: an electric eel whose whole body is a bold yellow zigzag, like a lightning bolt with a grinning fish face at the top end, small fins, a thin tail at the bottom end, and a few small sparks jumping off it. The zigzag is the silhouette. Reads at 40 px as: a lightning-bolt-shaped eel.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\nCandidate 1 of 2. Use the most clear near-frontal silhouette.",
+      "source": "02-enemies.md",
+      "variant": 1,
+      "filename": "enemy-electric-eel-v1.png",
+      "kind": "enemy",
+      "refs": [],
+      "review_note": "Bold lightning-bolt silhouette with small fins and sparks; simple and distinct.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 1166035,
+        "partially_transparent_pixels": 403667,
+        "subject_bounds_at_alpha_200": [
+          311,
+          133,
+          969,
+          1114
+        ],
+        "clear_margins_at_alpha_200": [
+          311,
+          133,
+          285,
+          140
+        ],
+        "sha256": "f2a383b0dbeb732e1f456d33c60fd20a92857707a3262387ab45f816a9e3e833"
+      }
+    },
+    {
+      "id": "enemy-electric-eel",
+      "base": null,
+      "phase": null,
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, warm yellow #e0a800. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: an electric eel whose whole body is a bold yellow zigzag, like a lightning bolt with a grinning fish face at the top end, small fins, a thin tail at the bottom end, and a few small sparks jumping off it. The zigzag is the silhouette. Reads at 40 px as: a lightning-bolt-shaped eel.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\nCandidate 2 of 2. Use the permitted slight three-quarter angle with a distinct but equally simple silhouette.",
+      "source": "02-enemies.md",
+      "variant": 2,
+      "filename": "enemy-electric-eel-v2.png",
+      "kind": "enemy",
+      "refs": [],
+      "review_note": "Bold lightning-bolt silhouette with small fins and sparks; simple and distinct.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 1134691,
+        "partially_transparent_pixels": 434793,
+        "subject_bounds_at_alpha_200": [
+          308,
+          150,
+          1046,
+          1137
+        ],
+        "clear_margins_at_alpha_200": [
+          308,
+          150,
+          208,
+          117
+        ],
+        "sha256": "e1bb270d3d18450fd841e9b3d22072d0c4bbe6eeb59211b9145dff0fd7c1bcf1"
+      }
+    },
+    {
+      "id": "enemy-anglerfish",
+      "base": null,
+      "phase": null,
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, deep ink purple #2c2350, plus a second accent, warm yellow #e0a800, used only for the glowing lure. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a round deep-sea anglerfish, deep purple-black body, an enormous open jaw full of long paper-colored needle teeth, one small beady eye, tiny fins, and a long stalk from its forehead curving forward with a round glowing yellow bulb on the end. Reads at 40 px as: an anglerfish with a light.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\nCandidate 1 of 2. Use the most clear near-frontal silhouette.",
+      "source": "02-enemies.md",
+      "variant": 1,
+      "filename": "enemy-anglerfish-v1.png",
+      "kind": "enemy",
+      "refs": [],
+      "review_note": "Large toothy jaw and yellow lure retained; compare lure stalk and needle teeth at 38px.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 860088,
+        "partially_transparent_pixels": 710423,
+        "subject_bounds_at_alpha_200": [
+          115,
+          173,
+          1133,
+          1163
+        ],
+        "clear_margins_at_alpha_200": [
+          115,
+          173,
+          121,
+          91
+        ],
+        "sha256": "983e04b33ea046d0c8681342bd72de131cce7421e44aa3f6563dc77b68e39b47"
+      }
+    },
+    {
+      "id": "enemy-anglerfish",
+      "base": null,
+      "phase": null,
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, deep ink purple #2c2350, plus a second accent, warm yellow #e0a800, used only for the glowing lure. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a round deep-sea anglerfish, deep purple-black body, an enormous open jaw full of long paper-colored needle teeth, one small beady eye, tiny fins, and a long stalk from its forehead curving forward with a round glowing yellow bulb on the end. Reads at 40 px as: an anglerfish with a light.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\nCandidate 2 of 2. Use the permitted slight three-quarter angle with a distinct but equally simple silhouette.",
+      "source": "02-enemies.md",
+      "variant": 2,
+      "filename": "enemy-anglerfish-v2.png",
+      "kind": "enemy",
+      "refs": [],
+      "review_note": "Large toothy jaw and yellow lure retained; compare lure stalk and needle teeth at 38px.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 836943,
+        "partially_transparent_pixels": 733120,
+        "subject_bounds_at_alpha_200": [
+          88,
+          173,
+          1152,
+          1129
+        ],
+        "clear_margins_at_alpha_200": [
+          88,
+          173,
+          102,
+          125
+        ],
+        "sha256": "c77048bf9907033a063cb7be1e4f686a3eef8622436f4a331430f35c0f746f91"
+      }
+    },
+    {
+      "id": "enemy-cuttlefish",
+      "base": null,
+      "phase": null,
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, bright purple #7b5cff, plus a second accent, deep ink purple #2c2350, used only for the ink. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a soft rounded bright purple cuttlefish, a blobby oval body with a frilly fin along the edge, two big W-shaped pupils, short tentacles bunched at the front, and a dark ink splash trailing out behind it, as big as the body, with a few drops. Reads at 40 px as: a blob trailing ink.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\nCandidate 1 of 2. Use the most clear near-frontal silhouette.",
+      "source": "02-enemies.md",
+      "variant": 1,
+      "filename": "enemy-cuttlefish-v1.png",
+      "kind": "enemy",
+      "refs": [],
+      "review_note": "W pupils, purple body and trailing dark ink retained.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 925163,
+        "partially_transparent_pixels": 645870,
+        "subject_bounds_at_alpha_200": [
+          121,
+          303,
+          1148,
+          1104
+        ],
+        "clear_margins_at_alpha_200": [
+          121,
+          303,
+          106,
+          150
+        ],
+        "sha256": "314a64e8c650476ee2e25a5ff6fa51bb154f4026485386439b0d5e75fb0f27eb"
+      }
+    },
+    {
+      "id": "enemy-cuttlefish",
+      "base": null,
+      "phase": null,
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, bright purple #7b5cff, plus a second accent, deep ink purple #2c2350, used only for the ink. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a soft rounded bright purple cuttlefish, a blobby oval body with a frilly fin along the edge, two big W-shaped pupils, short tentacles bunched at the front, and a dark ink splash trailing out behind it, as big as the body, with a few drops. Reads at 40 px as: a blob trailing ink.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\nCandidate 2 of 2. Use the permitted slight three-quarter angle with a distinct but equally simple silhouette.",
+      "source": "02-enemies.md",
+      "variant": 2,
+      "filename": "enemy-cuttlefish-v2.png",
+      "kind": "enemy",
+      "refs": [],
+      "review_note": "W pupils, purple body and trailing dark ink retained. Dark ink-purple also appears on body stripes; recolor those graphite if enforcing ink-only placement.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 1009114,
+        "partially_transparent_pixels": 561960,
+        "subject_bounds_at_alpha_200": [
+          103,
+          341,
+          1151,
+          1064
+        ],
+        "clear_margins_at_alpha_200": [
+          103,
+          341,
+          103,
+          190
+        ],
+        "sha256": "d39c86ed76db64f7ce674f5980e37aed6e6e2c107b608997cfb7eed292f82d30"
+      }
+    },
+    {
+      "id": "enemy-old-tess",
+      "base": null,
+      "phase": null,
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a large elderly coral red octopus sitting heavily, big rounded mantle, heavy-lidded unimpressed eyes, a few wrinkles and one old scar, eight arms spread out and curled at the tips with suckers showing. Reads at 40 px as: a big grumpy octopus.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\nInput image is an identity reference ONLY. Match Old Tess's unimpressed eyes and a SHORT GRAPHITE healed scar, never a white zigzag/shine. Make a NEW FULL-BODY 32x32 sprite with all eight arms, coarser and simpler than the portrait.\nCandidate 1 of 2. Use the most clear near-frontal silhouette.",
+      "source": "02-enemies.md",
+      "variant": 1,
+      "filename": "enemy-old-tess-v1.png",
+      "kind": "enemy",
+      "refs": [
+        "cast-tess-v3.png"
+      ],
+      "review_note": "Grumpy portrait identity and short graphite scar retained; count/readability of eight arms needs review.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 725159,
+        "partially_transparent_pixels": 846724,
+        "subject_bounds_at_alpha_200": [
+          102,
+          126,
+          1153,
+          1177
+        ],
+        "clear_margins_at_alpha_200": [
+          102,
+          126,
+          101,
+          77
+        ],
+        "sha256": "242cad21babc87778ad8316abaf10fb25b9292577399a4763bda61ce34ff705e"
+      }
+    },
+    {
+      "id": "enemy-old-tess",
+      "base": null,
+      "phase": null,
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a large elderly coral red octopus sitting heavily, big rounded mantle, heavy-lidded unimpressed eyes, a few wrinkles and one old scar, eight arms spread out and curled at the tips with suckers showing. Reads at 40 px as: a big grumpy octopus.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\nInput image is an identity reference ONLY. Match Old Tess's unimpressed eyes and a SHORT GRAPHITE healed scar, never a white zigzag/shine. Make a NEW FULL-BODY 32x32 sprite with all eight arms, coarser and simpler than the portrait.\nCandidate 2 of 2. Use the permitted slight three-quarter angle with a distinct but equally simple silhouette.",
+      "source": "02-enemies.md",
+      "variant": 2,
+      "filename": "enemy-old-tess-v2.png",
+      "kind": "enemy",
+      "refs": [
+        "cast-tess-v3.png"
+      ],
+      "review_note": "Grumpy portrait identity and short graphite scar retained; count/readability of eight arms needs review.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 721851,
+        "partially_transparent_pixels": 849605,
+        "subject_bounds_at_alpha_200": [
+          104,
+          157,
+          1149,
+          1130
+        ],
+        "clear_margins_at_alpha_200": [
+          104,
+          157,
+          105,
+          124
+        ],
+        "sha256": "646df017cc80e824ea64f2845ef7e2a3b93fa02d8a57c528d255faed664a007b"
+      }
+    },
+    {
+      "id": "enemy-furious-tess",
+      "base": "enemy-old-tess",
+      "phase": "Furious Tess",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, plus a second accent, deep ink purple #2c2350, used only for the water. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: the same large elderly coral red octopus, now rearing up furious: eyes wide open, all eight arms flung high and wide, a crash of deep purple water and spray bursting up around and behind her. Same octopus, same size, just raised up with the splash around it. Reads at 40 px as: the octopus, enraged, in a wave.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\nUse case: precise-object-edit. Input 1 is matching BASE Tess candidate 1. Preserve her identity, mantle size, scar, canvas scale and arm design while making ONLY the requested furious pose and splash. Preserve the same octopus identity, mantle size, graphite healed scar and canvas scale. Raise her eight arms as specified, open the eyes, and add a bold flat deep ink-purple #2c2350 splash behind/around her. Leave enough margin around the new arms and splash so the whole sticker border is intact; no tank or scene.",
+      "source": "02-enemies.md",
+      "variant": 1,
+      "filename": "enemy-furious-tess-v1.png",
+      "kind": "enemy",
+      "refs": [
+        "enemy-old-tess-v1.png"
+      ],
+      "corrections": [
+        {
+          "prompt": "Use case: precise-object-edit. Fix ONLY the framing and edge cleanliness of this Furious Tess boss-phase sprite. Preserve this exact octopus, eight raised arms, angry wide-open eyes, short graphite scar, coral color and deep-purple wave/spray. Uniformly reduce the entire existing sticker within the SAME square canvas to occupy only the central 78% of its width/height, centered with completely clear transparent margins on ALL four sides. Keep the full paper-colored sticker border intact around all arms and wave. Erase all ragged white grain, speckles, paper smudges and irregular fringe outside the clean stepped border; nothing touches any frame edge. Only flat graphite #23262f, paper #f6f3ec, coral #d9534f and deep ink purple #2c2350. Keep the chunky 32x32 game-sprite pixel-art treatment and all pose/face details. No scene, extra objects, gradients, shadows, blur or texture. Square transparent PNG.",
+          "input_filename": "enemy-furious-tess-v1.png"
+        }
+      ],
+      "review_note": "Matching scar/face identity retained, with wide angry eyes, raised arms and ink-purple wave. Reframed to protect the complete sticker border; edge speckles remain for cleanup.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 749210,
+        "partially_transparent_pixels": 823030,
+        "subject_bounds_at_alpha_200": [
+          137,
+          141,
+          1119,
+          1109
+        ],
+        "clear_margins_at_alpha_200": [
+          137,
+          141,
+          135,
+          145
+        ],
+        "sha256": "52f13ad6c3731f5a8e0bd87cc57f3a79deb9aa56363b14b8e79f8ec4e47b4beb"
+      }
+    },
+    {
+      "id": "enemy-furious-tess",
+      "base": "enemy-old-tess",
+      "phase": "Furious Tess",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, plus a second accent, deep ink purple #2c2350, used only for the water. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: the same large elderly coral red octopus, now rearing up furious: eyes wide open, all eight arms flung high and wide, a crash of deep purple water and spray bursting up around and behind her. Same octopus, same size, just raised up with the splash around it. Reads at 40 px as: the octopus, enraged, in a wave.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\nUse case: precise-object-edit. Input 1 is matching BASE Tess candidate 2. Preserve her identity, mantle size, scar, canvas scale and arm design while making ONLY the requested furious pose and splash. Preserve the same octopus identity, mantle size, graphite healed scar and canvas scale. Raise her eight arms as specified, open the eyes, and add a bold flat deep ink-purple #2c2350 splash behind/around her. Leave enough margin around the new arms and splash so the whole sticker border is intact; no tank or scene.",
+      "source": "02-enemies.md",
+      "variant": 2,
+      "filename": "enemy-furious-tess-v2.png",
+      "kind": "enemy",
+      "refs": [
+        "enemy-old-tess-v2.png"
+      ],
+      "review_note": "Matching scar/face identity retained, with wide angry eyes, raised arms and ink-purple wave. Check arm count and splash density at 38px.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 637556,
+        "partially_transparent_pixels": 932493,
+        "subject_bounds_at_alpha_200": [
+          100,
+          93,
+          1155,
+          1178
+        ],
+        "clear_margins_at_alpha_200": [
+          100,
+          93,
+          99,
+          76
+        ],
+        "sha256": "3a4ded9bb14facd3e0ce11252c3204db71e9815c7d7e29d10c398fa8356d3c5f"
+      }
+    },
+    {
+      "id": "enemy-unknown",
+      "base": null,
+      "phase": null,
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, soft gray #7a7e8a. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a vague rounded gray creature silhouette, like a blob under a sheet, with two round paper-colored eyes and a small question-mark-shaped curl on top of its head. Reads at 40 px as: something, not sure what.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\nCandidate 1 of 2. Use the most clear near-frontal silhouette.",
+      "source": "02-enemies.md",
+      "variant": 1,
+      "filename": "enemy-unknown-v1.png",
+      "kind": "enemy",
+      "refs": [],
+      "review_note": "Simple gray fallback blob, paper eyes and question-shaped head curl.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 1028279,
+        "partially_transparent_pixels": 541891,
+        "subject_bounds_at_alpha_200": [
+          218,
+          109,
+          1036,
+          1152
+        ],
+        "clear_margins_at_alpha_200": [
+          218,
+          109,
+          218,
+          102
+        ],
+        "sha256": "a83d467c5d8944a94c4bebeae84dba0075d9a5822f490cab44c4a43321790297"
+      }
+    },
+    {
+      "id": "enemy-unknown",
+      "base": null,
+      "phase": null,
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, soft gray #7a7e8a. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a vague rounded gray creature silhouette, like a blob under a sheet, with two round paper-colored eyes and a small question-mark-shaped curl on top of its head. Reads at 40 px as: something, not sure what.\n\nRound-1 lessons and production requirements: a literal low-resolution 32x32 GAME SPRITE enlarged with nearest-neighbor, made from only 32 equally sized square cells across the entire square canvas. One logical pixel is 1/32 of the canvas width. All contour steps and internal features use that same coarse grid; no subpixel lines, tiny details or a 96x96 portrait grid. Use simple broad flat masses so it reads at 38-40px. One-pixel graphite outline and roughly one-pixel PAPER-COLORED border closely following the complete silhouette, NOT a filled circular badge. Actual fully transparent background. Keep the ENTIRE sticker border and all limbs/props inside the image with at least two logical pixels of transparent padding on each side. No scenery, accent-colored backing disc, texture, physical paper lighting, glossy highlight, smudges or drop shadow. Only the exact named palette and transparent pixels. Large square PNG, 1024x1024 or larger.\nMandatory composition: reserve FOUR EMPTY LOGICAL PIXELS on ALL FOUR SIDES of the 32x32 canvas. Entire sprite INCLUDING border/effects must fit inside the central 24x24 cells, with clear transparent margin. Avoid extra bags, hats, accessories, scenery or props that the subject description does not name.\nCandidate 2 of 2. Use the permitted slight three-quarter angle with a distinct but equally simple silhouette.",
+      "source": "02-enemies.md",
+      "variant": 2,
+      "filename": "enemy-unknown-v2.png",
+      "kind": "enemy",
+      "refs": [],
+      "review_note": "Simple gray fallback blob, paper eyes and question-shaped head curl.",
+      "requested_grid": 32,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 1117977,
+        "partially_transparent_pixels": 452474,
+        "subject_bounds_at_alpha_200": [
+          247,
+          147,
+          974,
+          1142
+        ],
+        "clear_margins_at_alpha_200": [
+          247,
+          147,
+          280,
+          112
+        ],
+        "sha256": "5cbbbbf78b18bab95031eda36f1ba142bd3f7391283a15756341101e75b3a3a6"
+      }
+    }
+  ]
+}
