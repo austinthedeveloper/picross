@@ -5,6 +5,8 @@ import './styles/game.css';
 import './styles/select.css';
 import './styles/editor.css';
 import './styles/run.css';
+import './styles/fight.css';
+import './styles/dig.css';
 import './styles/dialogue.css';
 import { getPuzzle } from './puzzles/index';
 import { getScene } from './puzzles/scenes';
