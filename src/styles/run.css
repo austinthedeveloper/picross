@@ -276,6 +276,10 @@
   margin-top: 12px;
 }
 
+.run-card h3 {
+  margin: 0;
+}
+
 .job-blurb {
   margin: 0;
 }
@@ -294,4 +298,45 @@
 .job-best.none,
 .run-card.job.locked .job-best {
   color: var(--muted);
+}
+
+/* Chapters (#23): jobs grouped under a story heading. */
+.chapters {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  margin-top: 24px;
+}
+
+.chapter-title {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.chapter-number {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.chapter-progress,
+.chapter-blurb {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.chapter-replay {
+  margin-top: 8px;
+}
+
+.chapter.locked {
+  padding: 16px 20px;
+  border-radius: 14px;
+  border: 2px dashed var(--line);
+  opacity: 0.75;
 }

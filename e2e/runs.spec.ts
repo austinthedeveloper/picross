@@ -2,24 +2,34 @@ import { expect, test } from '@playwright/test';
 import { encounterSolution, meter, runAt, seed, skipScene, solve, press } from './helpers';
 
 test.describe('jobs board', () => {
-  test('the Night Shift is locked until First Job is won', async ({ page }) => {
+  test('chapter 2 is locked until First Job is won', async ({ page }) => {
     await page.goto('/#/');
     await expect(page.locator('.run-banner')).toContainText('1 of 2 jobs open');
     await page.locator('.run-banner').tap();
-    await expect(page.locator('.job h2')).toHaveText(['First Job', '🔒 The Night Shift']);
-    await expect(page.locator('.job.locked')).toContainText('Win First Job to unlock.');
+    await expect(page.locator('.chapter-title').first()).toHaveText('Chapter 1Odd Jobs');
+    await expect(page.locator('.job h3')).toHaveText(['First Job']);
+    await expect(page.locator('.chapter.locked')).toContainText(
+      'Clear First Job to continue the story.',
+    );
   });
 
-  test('a First Job win unlocks the Night Shift and shows the best result', async ({
+  test('a First Job win opens chapter 2 with its story, then shows the best result', async ({
     page,
     context,
   }) => {
     await seed(context, { run: { jobs: { 'first-job': { plays: 2, wins: 1, bestHp: 9 } } } });
     await page.goto('/#/run');
-    await expect(page.locator('.job h2')).toHaveText(['First Job', 'The Night Shift']);
+    await expect(page.locator('.dialogue')).toContainText('Chapter 2: After Hours');
+    await page.locator('.skip').tap();
+    await expect(page.locator('.job h3')).toHaveText(['First Job', 'The Night Shift']);
+    await expect(page.locator('.chapter-progress')).toHaveText(['1/1 cleared', '0/1 cleared']);
     await expect(page.locator('.job').first().locator('.job-best')).toHaveText(
       'Cleared 1× · best 9/12 HP left',
     );
+    // The opening only plays once, then it's a replay button.
+    await page.reload();
+    await expect(page.locator('.dialogue')).toBeHidden();
+    await expect(page.getByRole('button', { name: '▶ Chapter story' })).toBeVisible();
   });
 });
 
@@ -41,6 +51,7 @@ test.describe('First Job', () => {
     await expect(page.locator('.results h2')).toHaveText('Job done!');
     await expect(page.locator('.sign-off')).toContainText("the gremlin's evicted");
     await press(page, 'Jobs board');
+    await skipScene(page); // chapter 2 opens
     await expect(page.locator('.job').first().locator('.job-best')).toContainText('Cleared 1×');
 
     // The intro only plays automatically the first time.

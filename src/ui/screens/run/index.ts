@@ -1,10 +1,10 @@
-import { markSceneSeen } from '../../../game/runSave';
-import type { RunDef } from '../../../puzzles/runs';
+import { hasSeenScene, markSceneSeen } from '../../../game/runSave';
+import { chapters } from '../../../puzzles/chapters';
 import { runs } from '../../../puzzles/runs';
 import { getScene } from '../../../puzzles/scenes';
 import { el } from '../../dom';
 import { renderSceneScreen } from '../sceneScreen';
-import { jobsBoard, unlocked } from './jobsBoard';
+import { chapterOpen, jobsBoard, unlocked } from './jobsBoard';
 import { pathMap } from './pathMap';
 import { results } from './results';
 import { loadRun, type Hub } from './shared';
@@ -23,9 +23,8 @@ export function renderRunScreen(app: HTMLElement): () => void {
   const hub: Hub = {
     app,
     rerender: () => void renderRunScreen(app),
-    // Plays a job's intro full screen, then comes back here.
-    playIntro(def: RunDef) {
-      const scene = def.intro ? getScene(def.intro) : undefined;
+    playScene(id) {
+      const scene = getScene(id);
       if (!scene) return hub.rerender();
       stopScene = renderSceneScreen(app, scene, {
         onEnd: () => {
@@ -37,6 +36,14 @@ export function renderRunScreen(app: HTMLElement): () => void {
     },
   };
   const run = loadRun();
+  // A chapter's opening plays the first time you see the board with it open (#23).
+  const opening = !run
+    ? chapters.find((c) => c.opening && chapterOpen(c) && !hasSeenScene(c.opening))?.opening
+    : undefined;
+  if (opening) {
+    hub.playScene(opening);
+    return () => stopScene?.();
+  }
   const body = !run
     ? jobsBoard(hub)
     : run.state.status === 'active'
