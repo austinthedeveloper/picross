@@ -10,21 +10,21 @@ import {
   useGadget,
   type BattleState,
   type Enemy,
-} from '../../game/battle';
-import { damage, removeGadget, withBattle, type RunState } from '../../game/run';
-import { getCurrentRun, saveCurrentRun } from '../../game/runSave';
-import type { Puzzle } from '../../puzzles/format';
-import { getGadget, type Gadget } from '../../puzzles/gadgets';
-import type { BoardView } from '../board/boardView';
-import { createPicture } from '../board/picture';
-import { createBattleBar } from '../components/battleBar';
-import { el } from '../dom';
-import { lineName } from '../format';
-import { pause, reducedMotion } from '../motion';
-import { playSound } from '../sound';
-import { keyToLine, lineCount, lineKey, type LineSet } from '../../engine/lines';
-import { pickSwapRows } from '../../engine/swap';
-import type { BoardControls, PlaySession } from './gameScreen';
+} from '../../../game/battle';
+import { damage, removeGadget, withBattle, type RunState } from '../../../game/run';
+import { getCurrentRun, saveCurrentRun } from '../../../game/runSave';
+import type { Puzzle } from '../../../puzzles/format';
+import { getGadget, type Gadget } from '../../../puzzles/gadgets';
+import type { BoardView } from '../../board/boardView';
+import { createPicture } from '../../board/picture';
+import { createBattleBar } from '../../components/battleBar';
+import { el } from '../../dom';
+import { lineName } from '../../format';
+import { pause, reducedMotion } from '../../motion';
+import { playSound } from '../../sound';
+import { keyToLine, lineCount, lineKey, type LineSet } from '../../../engine/lines';
+import { pickSwapRows } from '../../../engine/swap';
+import type { BoardControls, PlaySession } from '../gameScreen';
 
 /**
  * Fight rules on top of a run encounter (#27): completed lines chip the

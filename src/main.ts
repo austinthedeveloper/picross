@@ -10,7 +10,7 @@ import { getPuzzle } from './puzzles/index';
 import { getScene } from './puzzles/scenes';
 import { renderEditorScreen } from './ui/screens/editorScreen';
 import { renderGameScreen } from './ui/screens/gameScreen';
-import { renderRunEncounter, renderRunScreen } from './ui/screens/runScreen';
+import { renderRunEncounter, renderRunScreen } from './ui/screens/run';
 import { renderSceneScreen } from './ui/screens/sceneScreen';
 import { renderSelectScreen } from './ui/screens/selectScreen';
 import { applyTheme } from './ui/theme';

@@ -1,8 +1,8 @@
-import type { Puzzle } from '../../puzzles/format';
-import { getGadget } from '../../puzzles/gadgets';
-import { el } from '../dom';
-import { pause } from '../motion';
-import type { PlaySession } from './gameScreen';
+import type { Puzzle } from '../../../puzzles/format';
+import { getGadget } from '../../../puzzles/gadgets';
+import { el } from '../../dom';
+import { pause } from '../../motion';
+import type { PlaySession } from '../gameScreen';
 
 /**
  * A dig encounter (#29): no enemy and no HP pressure. The board is dirt, and
