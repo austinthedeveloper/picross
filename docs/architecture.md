@@ -127,12 +127,12 @@ rules stay identical across input methods.
 
 All saved data lives in `localStorage`, read once at startup and written on change:
 
-| Key                | Module                       | Contents                                                        |
-| ------------------ | ---------------------------- | --------------------------------------------------------------- |
-| `picross:v1`       | `game/progress.ts`           | In-progress boards, per-puzzle stats, total solving time        |
-| `picross:run`      | `game/runSave.ts`            | The current run, including the current encounter's board        |
-| `picross:settings` | `game/settings.ts`           | `mode` (also the default for new runs), `muted`, `highContrast` |
-| `picross:editor`   | `ui/screens/editorScreen.ts` | The editor's current drawing                                    |
+| Key                | Module                       | Contents                                                             |
+| ------------------ | ---------------------------- | -------------------------------------------------------------------- |
+| `picross:v1`       | `game/progress.ts`           | In-progress boards, per-puzzle stats, total solving time             |
+| `picross:run`      | `game/runSave.ts`            | The current run (with the current encounter's board) and seen scenes |
+| `picross:settings` | `game/settings.ts`           | `mode` (also the default for new runs), `muted`, `highContrast`      |
+| `picross:editor`   | `ui/screens/editorScreen.ts` | The editor's current drawing                                         |
 
 `storage.ts` falls back to defaults if storage is blocked or holds bad JSON, so the game
 still works in private browsing. To reset during development, clear the site's local
@@ -266,8 +266,13 @@ shows its `choices`, jumps to `next`, or ends the scene.
 - **Accessibility:** every line is announced to screen readers, and reduced motion shows
   text instantly.
 
-`renderSceneScreen(app, scene, { flags, onEnd })` plays one full screen. The run will use
-this for the crew intro (#31).
+`renderSceneScreen(app, scene, { flags, onEnd })` plays one full screen.
+
+A run's JSON can name an `intro` scene and an `outro` scene (#31). The intro plays
+automatically the first time you start that run. Seen scenes are stored with the run save,
+and after that the start screen offers "Watch the intro." The outro is a single-line
+sign-off picked by the `won` flag and shown on the results screen with the speaker's
+portrait. First Job introduces Rook and Dee in `scenes/first-job-intro.json`.
 
 ## The solver
 

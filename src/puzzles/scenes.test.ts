@@ -35,6 +35,6 @@ describe('parseScene', () => {
 describe('bundled scenes', () => {
   it('all load', () => {
     expect(scenes.length).toBeGreaterThan(0);
-    expect(getScene('demo')).toBeDefined();
+    expect(getScene('first-job-intro')).toBeDefined();
   });
 });

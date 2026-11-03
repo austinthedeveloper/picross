@@ -31,7 +31,7 @@ function route() {
   } else if (scene && getScene(scene[1])) {
     cleanup = renderSceneScreen(app, getScene(scene[1])!);
   } else if (location.hash === '#/run') {
-    renderRunScreen(app);
+    cleanup = renderRunScreen(app);
   } else if (location.hash === '#/run/play') {
     cleanup = renderRunEncounter(app);
   } else if (location.hash === '#/editor') {

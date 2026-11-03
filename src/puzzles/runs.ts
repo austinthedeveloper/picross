@@ -2,6 +2,7 @@ import { getPuzzle } from './index';
 import type { Enemy } from '../game/battle';
 import type { Puzzle } from './format';
 import { getGadget } from './gadgets';
+import { getScene } from './scenes';
 
 /** What kind of node an encounter is. Fights and digs play differently from #27 and #29 on. */
 export type EncounterKind = 'fight' | 'dig';
@@ -47,6 +48,10 @@ export interface RunFile {
   encounters: string[];
   /** Gadget ids the player starts with. */
   gadgets?: string[];
+  /** Scene played before the first run (#31). */
+  intro?: string;
+  /** Scene whose line (picked by the `won` flag) signs off the results screen. */
+  outro?: string;
 }
 
 export interface RunDef extends Omit<RunFile, 'encounters' | 'gadgets'> {
@@ -97,7 +102,19 @@ export function parseRun(
   const gadgets = file.gadgets ?? [];
   if (!Array.isArray(gadgets)) fail('gadgets must be a list');
   for (const g of gadgets) if (!getGadget(g)) fail(`unknown gadget "${g}"`);
-  return { id: file.id!, name: file.name!, hp: file.hp!, encounters, gadgets };
+  for (const key of ['intro', 'outro'] as const) {
+    const id = file[key];
+    if (id !== undefined && !getScene(id)) fail(`unknown ${key} scene "${id}"`);
+  }
+  return {
+    id: file.id!,
+    name: file.name!,
+    hp: file.hp!,
+    encounters,
+    gadgets,
+    ...(file.intro ? { intro: file.intro } : {}),
+    ...(file.outro ? { outro: file.outro } : {}),
+  };
 }
 
 const encounterFiles = import.meta.glob<{ default: unknown }>('./encounters/*.json', {

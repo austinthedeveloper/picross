@@ -45,6 +45,7 @@ describe('parseRun', () => {
     [{ id: 'r', name: 'R', hp: 5, encounters: [] }, /needs encounters/],
     [{ id: 'r', name: 'R', hp: 5, encounters: ['x'] }, /unknown encounter "x"/],
     [{ id: 'r', name: 'R', hp: 5, encounters: ['e'], gadgets: ['laser'] }, /unknown gadget/],
+    [{ id: 'r', name: 'R', hp: 5, encounters: ['e'], intro: 'nope' }, /unknown intro scene/],
   ])('rejects bad input %#', (input, error) => {
     expect(() => parseRun(input, findEncounter)).toThrow(error);
   });

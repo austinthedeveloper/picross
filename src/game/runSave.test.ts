@@ -18,3 +18,12 @@ describe('runSave', () => {
     expect((await load()).getCurrentRun()).toBeNull();
   });
 });
+
+describe('seen scenes', () => {
+  it('remembers scenes across reloads', async () => {
+    const save = await load();
+    expect(save.hasSeenScene('intro')).toBe(false);
+    save.markSceneSeen('intro');
+    expect((await load()).hasSeenScene('intro')).toBe(true);
+  });
+});

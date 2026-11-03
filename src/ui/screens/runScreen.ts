@@ -1,12 +1,15 @@
 import { addGadget, completeEncounter, startRun, withBoard, type RunState } from '../../game/run';
-import { getCurrentRun, saveCurrentRun } from '../../game/runSave';
+import { currentStep, startDialogue } from '../../game/dialogue';
+import { getCurrentRun, hasSeenScene, markSceneSeen, saveCurrentRun } from '../../game/runSave';
 import { getSettings, updateSettings, type Mode } from '../../game/settings';
 import { getGadget } from '../../puzzles/gadgets';
 import { DEFAULT_RUN_ID, getRun, type Encounter, type RunDef } from '../../puzzles/runs';
+import { getScene } from '../../puzzles/scenes';
 import { el } from '../dom';
 import { formatTime } from '../format';
 import { fightHooks } from './fightHooks';
 import { renderGameScreen, type PlaySession } from './gameScreen';
+import { renderSceneScreen } from './sceneScreen';
 
 const KIND_ICON: Record<Encounter['kind'], string> = { fight: '⚔️', dig: '⛏️' };
 const KIND_LABEL: Record<Encounter['kind'], string> = { fight: 'Fight', dig: 'Dig' };
@@ -33,6 +36,22 @@ function hpBar(state: RunState): HTMLElement {
   return bar;
 }
 
+/** Cleanup for a scene playing on the run screen, so navigating away stops it. */
+let stopScene: (() => void) | undefined;
+
+/** Plays a run's intro scene full screen, then comes back to the run screen. */
+function playIntro(app: HTMLElement, def: RunDef) {
+  const scene = def.intro ? getScene(def.intro) : undefined;
+  if (!scene) return renderRunScreen(app);
+  stopScene = renderSceneScreen(app, scene, {
+    onEnd: () => {
+      stopScene = undefined;
+      markSceneSeen(scene.id);
+      renderRunScreen(app);
+    },
+  });
+}
+
 function newRunButton(app: HTMLElement, label: string): HTMLButtonElement {
   return el('button', {
     className: 'button primary',
@@ -40,9 +59,30 @@ function newRunButton(app: HTMLElement, label: string): HTMLButtonElement {
     onclick: () => {
       const def = getRun(DEFAULT_RUN_ID)!;
       saveCurrentRun(startRun(def.id, def.hp, getSettings().mode, def.gadgets));
-      renderRunScreen(app);
+      // The intro plays automatically once; after that it's on the start screen.
+      if (def.intro && !hasSeenScene(def.intro)) playIntro(app, def);
+      else renderRunScreen(app);
     },
   });
+}
+
+/** The run's one-line sign-off for a win or a loss, from its outro scene. */
+function signOff(def: RunDef, won: boolean): HTMLElement | null {
+  const scene = def.outro ? getScene(def.outro) : undefined;
+  if (!scene) return null;
+  const step = currentStep(scene, startDialogue(scene, { won }));
+  if (step.kind !== 'line') return null;
+  return el('figure', { className: 'sign-off' }, [
+    el('span', {
+      className: 'sign-off-portrait',
+      ariaHidden: 'true',
+      textContent: step.speaker?.portrait ?? '',
+    }),
+    el('figcaption', {}, [
+      ...(step.speaker ? [el('strong', { textContent: step.speaker.name })] : []),
+      el('span', { textContent: step.text }),
+    ]),
+  ]);
 }
 
 const MODE_NOTES: Record<Mode, string> = {
@@ -78,7 +118,7 @@ function modePicker(app: HTMLElement): HTMLElement {
  * The run hub at #/run: a start panel when there's no run, the path map while
  * one is active, and a results screen once it's won or lost.
  */
-export function renderRunScreen(app: HTMLElement): void {
+export function renderRunScreen(app: HTMLElement): () => void {
   const run = loadRun();
   const body = !run
     ? startPanel(app)
@@ -86,6 +126,7 @@ export function renderRunScreen(app: HTMLElement): void {
       ? pathMap(app, run.state, run.def)
       : results(app, run.state, run.def);
   app.replaceChildren(el('main', { className: 'screen run' }, body));
+  return () => stopScene?.();
 }
 
 function startPanel(app: HTMLElement): Node[] {
@@ -104,7 +145,18 @@ function startPanel(app: HTMLElement): Node[] {
         def.encounters.map((e) => el('li', { textContent: `${KIND_ICON[e.kind]} ${e.name}` })),
       ),
       modePicker(app),
-      newRunButton(app, 'Start run'),
+      el('div', { className: 'end-actions' }, [
+        newRunButton(app, 'Start run'),
+        ...(def.intro && hasSeenScene(def.intro)
+          ? [
+              el('button', {
+                className: 'button ghost',
+                textContent: '▶ Watch the intro',
+                onclick: () => playIntro(app, def),
+              }),
+            ]
+          : []),
+      ]),
     ]),
   ];
 }
@@ -216,6 +268,7 @@ function results(app: HTMLElement, state: RunState, def: RunDef): Node[] {
         className: 'run-meta',
         textContent: `${cleared}/${def.encounters.length} encounters cleared · ${state.hp}/${state.maxHp} HP left`,
       }),
+      signOff(def, won) ?? '',
       modePicker(app),
       el('div', { className: 'end-actions' }, [
         el('a', { className: 'button ghost', href: '#/', textContent: 'Puzzles' }),
