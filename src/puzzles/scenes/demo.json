@@ -1,0 +1,74 @@
+{
+  "id": "demo",
+  "cast": {
+    "pip": {
+      "name": "Pip",
+      "portrait": "🧑‍🔧"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "👩‍🔬"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "text": "The workshop smells like solder and burnt toast."
+        },
+        {
+          "who": "pip",
+          "text": "Okay. Okay okay okay. Big day. First real job."
+        },
+        {
+          "who": "dee",
+          "text": "You've said 'okay' five times. That's a new record."
+        }
+      ],
+      "choices": [
+        {
+          "text": "Ready to go.",
+          "next": "ready"
+        },
+        {
+          "text": "Is that toast?",
+          "next": "toast",
+          "set": {
+            "asked_toast": true
+          }
+        }
+      ]
+    },
+    "toast": {
+      "lines": [
+        {
+          "who": "dee",
+          "text": "It was a sandwich. I upgraded it."
+        },
+        {
+          "who": "pip",
+          "text": "...With what?"
+        },
+        {
+          "who": "dee",
+          "text": "Science."
+        }
+      ],
+      "next": "ready"
+    },
+    "ready": {
+      "lines": [
+        {
+          "who": "pip",
+          "text": "Grab the toolbox. And maybe not the sandwich.",
+          "if": "asked_toast"
+        },
+        {
+          "who": "pip",
+          "text": "Grab the toolbox. Let's go.",
+          "if": "!asked_toast"
+        }
+      ]
+    }
+  }
+}
