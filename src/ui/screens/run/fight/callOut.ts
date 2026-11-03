@@ -41,7 +41,7 @@ export function createCallOut(ctx: FightContext, checkPhase: CheckPhase, onChang
       playSound('strike');
       message = `Caught it! ${name} was a forgery. ${ctx.form().name} takes ${result.dealt} damage, ${state.enemyHp} HP left. ${phase}`;
     } else if (ctx.hitsOn) {
-      message = `${name} was honest! ${takeHit(ctx, onChange)}`;
+      message = takeHit(ctx, onChange, `${name} was honest!`);
     } else {
       const healed = heal(ctx.battle(), ctx.enemy.hp);
       ctx.saveBattle(healed.state);

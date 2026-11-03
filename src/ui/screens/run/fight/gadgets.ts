@@ -20,6 +20,7 @@ export function createGadgetTray(
   const blocker = (gadget: Gadget): string | null => {
     if (ctx.finished || ctx.run()?.status !== 'active') return 'The fight is over';
     if (gadget.effect.kind === 'shield' && !ctx.hitsOn) return 'Nothing hits you in a Relaxed run';
+    if (gadget.effect.kind === 'wash' && !ctx.battle().ink?.length) return 'No ink to wipe';
     if (gadget.effect.kind === 'damage' && ctx.battle().enemyHp <= 1) {
       return 'Only the finished picture can defeat it now';
     }
@@ -28,6 +29,7 @@ export function createGadgetTray(
 
   const use = (gadget: Gadget) => {
     if (blocker(gadget)) return;
+    const inkBefore = ctx.battle().ink ?? [];
     const used = useGadget(ctx.battle(), gadget.effect);
     const { state, message } = checkPhase(used.state);
     saveCurrentRun(withBattle(removeGadget(ctx.run(), gadget.id), state));
@@ -38,6 +40,10 @@ export function createGadgetTray(
       ctx.bar.say(
         `${gadget.name}! ${ctx.form().name} takes ${used.dealt} damage, ${state.enemyHp} HP left. ${message}`,
       );
+    } else if (gadget.effect.kind === 'wash') {
+      ctx.view?.setInk([], inkBefore);
+      playSound('hint');
+      ctx.bar.say(`${gadget.name}! The ink wipes right off.`);
     } else {
       ctx.bar.setShield(state.shield ?? 0);
       playSound('hint');

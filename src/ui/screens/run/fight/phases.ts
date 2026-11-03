@@ -2,14 +2,15 @@ import { advancePhase, currentForm, type BattleState } from '../../../../game/ba
 import { lineCount, type LineSet } from '../../../../engine/lines';
 import { playSound } from '../../../sound';
 import type { FightContext } from './context';
+import type { Inker } from './ink';
 import type { Swapper } from './swaps';
 
 /**
  * Boss phases (#42): after any damage, starts the phases the enemy's HP has
- * fallen into. Each can change its form and attack, fog or scramble more lines,
- * and swap rows. Returns the new state and a message to announce.
+ * fallen into. Each can change its form, attack, and charge, fog or scramble more
+ * lines, swap lines, and splash ink. Returns the new state and a message to announce.
  */
-export function createPhases(ctx: FightContext, swapper: Swapper) {
+export function createPhases(ctx: FightContext, swapper: Swapper, inker: Inker) {
   return function checkPhase(state: BattleState): { state: BattleState; message: string } {
     const { state: next, entered } = advancePhase(ctx.enemy, state);
     if (!entered.length) return { state, message: '' };
@@ -17,6 +18,14 @@ export function createPhases(ctx: FightContext, swapper: Swapper) {
     const { name, sprite } = currentForm(ctx.enemy, next);
     const swaps = entered.filter((p) => p.swap).length;
     if (swaps) swapper.queue(swaps);
+    // Ink lands after the new state is saved, so it isn't lost to the save.
+    const splashes = entered.filter((p) => p.ink);
+    if (splashes.length) {
+      window.setTimeout(() => {
+        const inked = splashes.reduce((n, p) => n + inker.splash(p.ink!, p.inkCount), 0);
+        if (inked) ctx.bar.say(`${ctx.form().name} squirts ink! ${inked} cells go dark.`);
+      }, 0);
+    }
     const taunt = entered
       .map((p) => p.taunt)
       .filter(Boolean)
@@ -32,6 +41,7 @@ export function createPhases(ctx: FightContext, swapper: Swapper) {
       taunt,
       added('fog') > 0 ? `${added('fog')} lines go dark.` : '',
       added('scramble') > 0 ? `${added('scramble')} clues scramble.` : '',
+      entered.some((p) => p.charge) ? 'The water starts to crackle. ⚡' : '',
     ];
     return { state: next, message: parts.filter(Boolean).join(' ') };
   };

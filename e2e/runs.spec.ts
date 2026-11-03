@@ -4,13 +4,14 @@ import { encounterSolution, meter, runAt, seed, skipScene, solve, press } from '
 test.describe('jobs board', () => {
   test('chapter 2 is locked until First Job is won', async ({ page }) => {
     await page.goto('/#/');
-    await expect(page.locator('.run-banner')).toContainText('1 of 2 jobs open');
+    await expect(page.locator('.run-banner')).toContainText('1 of 3 jobs open');
     await page.locator('.run-banner').tap();
     await expect(page.locator('.chapter-title').first()).toHaveText('Chapter 1Odd Jobs');
     await expect(page.locator('.job h3')).toHaveText(['First Job']);
-    await expect(page.locator('.chapter.locked')).toContainText(
+    await expect(page.locator('.chapter.locked .chapter-blurb')).toHaveText([
       'Clear First Job to continue the story.',
-    );
+      'Clear The Night Shift to continue the story.',
+    ]);
   });
 
   test('a First Job win opens chapter 2 with its story, then shows the best result', async ({

@@ -1,9 +1,11 @@
-/** What a gadget does when used in a fight. Gadgets never touch the grid. */
+/** What a gadget does when used in a fight. Gadgets never change your marks. */
 export type GadgetEffect =
   /** Damages the enemy right away (chip rules: never below 1 HP). */
   | { kind: 'damage'; amount: number }
   /** Blocks the next `hits` enemy hits. */
-  | { kind: 'shield'; hits: number };
+  | { kind: 'shield'; hits: number }
+  /** Wipes every bit of ink off the board (#67). */
+  | { kind: 'wash' };
 
 /** An item a solved picture turns into, kept for the rest of a run (#28). */
 export interface Gadget {
@@ -30,6 +32,13 @@ const catalog: Gadget[] = [
     icon: '🩹',
     description: 'Use in a fight to block the next hit.',
     effect: { kind: 'shield', hits: 1 },
+  },
+  {
+    id: 'sponge',
+    name: 'Sponge',
+    icon: '🧽',
+    description: 'Use in a fight to wipe all the ink off the board.',
+    effect: { kind: 'wash' },
   },
 ];
 

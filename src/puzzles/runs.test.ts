@@ -44,6 +44,9 @@ describe('parseEncounter', () => {
     // the test puzzle is 2x1 '#.': row 1's runs are just "1", so its order is already known
     [{ ...encounter, enemy: { ...enemy, scramble: { rows: [0] } } }, /only one order/],
     [{ ...encounter, enemy: { ...enemy, fakes: {} } }, /at least one line/],
+    [{ ...encounter, enemy: { ...enemy, charge: 1 } }, /charge must be at least 3 seconds/],
+    [{ ...encounter, enemy: { ...enemy, phases: [{ at: 0.5, ink: 0 }] } }, /ink must be/],
+    [{ ...encounter, enemy: { ...enemy, phases: [{ at: 0.5, inkCount: 2 }] } }, /no ink/],
     [
       { ...encounter, enemy: { ...enemy, fog: { rows: [0] }, fakes: { rows: [0] } } },
       /both forged and fogged/,

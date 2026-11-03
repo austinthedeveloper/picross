@@ -26,6 +26,10 @@ export interface BattleBar {
   setArmor(weakPoints: number): void;
   /** Shows how many forged clues are left to call out (#64); hidden at 0. */
   setFakes(count: number): void;
+  /** The charge meter (#67), 0 to 1, or null to hide it. */
+  setCharge(level: number | null): void;
+  /** The enemy zaps you: a flash on the meter. */
+  zap(): void;
   /** The armor shatters. */
   armorBreaks(): void;
   /** Changes the enemy's name and sprite (boss phases, #42). */
@@ -69,6 +73,10 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
   const enemyName = el('span', { className: 'battle-name', textContent: enemy.name });
   const armor = el('span', { className: 'armor', hidden: true });
   const fakes = el('span', { className: 'fakes', hidden: true });
+  const charge = el('span', { className: 'charge', hidden: true, ariaHidden: 'true' }, [
+    el('span', { className: 'charge-icon', textContent: '⚡' }),
+    el('span', { className: 'charge-track' }, [el('span', { className: 'charge-fill' })]),
+  ]);
   const banner = el('div', { className: 'phase-banner', hidden: true });
   banner.setAttribute('aria-hidden', 'true');
   const enemySide = el('div', { className: 'battle-side enemy' }, [
@@ -76,6 +84,7 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
     el('div', { className: 'battle-info' }, [
       el('span', { className: 'battle-name-row' }, [enemyName, armor, fakes]),
       enemyMeter.root,
+      charge,
     ]),
   ]);
   const shield = el('span', { className: 'shield', hidden: true });
@@ -136,6 +145,16 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
       fakes.textContent = `🎭 ${count}`;
       fakes.title = `${count} forged clue${count === 1 ? '' : 's'} left to call out`;
       fakes.ariaLabel = fakes.title;
+    },
+    setCharge(level) {
+      charge.hidden = level === null;
+      charge.style.setProperty('--charge', String(Math.min(1, level ?? 0)));
+      charge.classList.toggle('high', (level ?? 0) >= 0.75);
+    },
+    zap() {
+      playOnce(charge, 'zapped', 600);
+      playOnce(sprite, 'lunge', 700);
+      playOnce(playerSide, 'hurt', 700);
     },
     armorBreaks() {
       playOnce(armor, 'shatter', 600);

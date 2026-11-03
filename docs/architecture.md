@@ -29,6 +29,7 @@ src/
     solver.ts              Line solver: uniqueness/no-guess check; fog and scramble aware
     swap.ts                Which two lines the Mimic swaps and wipes (#48)
     fakes.ts               The Forger's forged clues: a convincing wrong clue per line (#64)
+    ink.ts                 Where ink lands and how completed lines wash it off (#67)
   puzzles/                 Content and its validation
     format.ts              Puzzle file format, parse/validate, export helpers
     index.ts               Loads pack/*.json (free play, in ORDER) and run/*.json
@@ -37,7 +38,7 @@ src/
     pack.test.ts           Uniqueness check over every puzzle
     runs.ts                Loads encounters/*.json and runs/*.json (jobs)
     chapters.ts            Loads chapters/*.json: jobs grouped into story chapters (#23)
-    enemies.ts             Validates an enemy: fog, scramble, armor, forged clues, phases
+    enemies.ts             Validates an enemy: fog, scramble, armor, forged clues, charge, ink, phases
     gadgets.ts             Gadget catalog: name, icon, description, effect
     scenes.ts              Loads and validates scenes/*.json (dialogue, #22)
     encounters/*.json      Encounters: name, kind (fight/dig), puzzle, enemy, boss, scene
@@ -79,6 +80,8 @@ src/
           phases.ts        Phase changes: form, banner, more fog/scramble, swaps
           swaps.ts         The Mimic's swaps (wait for strokes to end)
           callOut.ts       Forged clues: the 🔍 Call out button and accusations
+          ink.ts           Ink splashes from phases (#67)
+          charge.ts        The ⚡ charge meter and its zaps (#67)
           gadgets.ts       The gadget tray
           hits.ts          Mistakes, shields, knockouts
           finisher.ts      The solved picture flying at the enemy
@@ -262,9 +265,10 @@ single card saying which job opens it. An open chapter shows its jobs and how ma
 you've cleared. The first time you reach the board with a chapter open, its opening
 plays (`renderRunScreen` checks before drawing the board), and after that a **▶ Chapter
 story** button replays it. Every job must be in exactly one chapter, or loading fails.
-The chapters so far are 1 · Odd Jobs (First Job) and 2 · After Hours (The Night Shift).
+The chapters so far are 1 · Odd Jobs (First Job), 2 · After Hours (The Night Shift), and
+3 · Deep Water (The Deep End).
 
-Jobs so far: **First Job** (#21) and **The Night Shift** (#46). The Night Shift unlocks after
+Jobs so far: **First Job** (#21), **The Night Shift** (#46), and **The Deep End** (#67). The Night Shift unlocks after
 First Job. It's Mimic → Clockwork Owl → the Forger → Dusty Exhibit (a dig that yields a
 patch kit) → Armored Beetle → the Curator, with Curator Ambrose joining Rook and Dee in its scenes.
 
@@ -408,6 +412,38 @@ The thin outlines leave the watch less room than the solid wrench: 4 fogged rows
 scrambled columns was the most the solver could still finish. Its 20×20 size and the swap
 carry the rest of the difficulty. A reveal scene (`curator-reveal`) plays before the
 fight.
+
+### Charge (the Electric Eel)
+
+An enemy with `charge: <seconds>` shows a ⚡ meter under its HP (`run/fight/charge.ts`).
+It fills over that many seconds; completing a line drains it to zero. If it fills, the
+enemy zaps you through `takeHit` (a patch kit blocks it) and it starts over. In Relaxed
+runs the zap fizzles. A phase can start or change the speed with its own `charge`, and
+`currentForm` returns the current one. The meter pauses while the page is hidden and
+stops when the fight ends or you leave the screen. It isn't saved: a reload starts it
+over.
+
+### Ink (the Cuttlefish and Old Tess)
+
+A phase with `ink: <size>` (and optionally `inkCount`) splashes that many size×size
+blocks of ink. `pickInk` (`engine/ink.ts`) puts each block where it hides the most of
+your marks, skipping cells already inked and lines you've completed. It's deterministic.
+Inked cells (`BattleState.ink`, saved) hide whether they're filled or marked, but you can
+still play them, and mistakes still count. Completing a row or column washes the ink out
+of it (`clearInk` in `completeLines`). The 🧽 **Sponge** gadget (`effect: { kind: 'wash' }`)
+wipes it all. Ink only hides your marks, never clues, so it doesn't affect solvability.
+
+### The Deep End (Chapter 3)
+
+`runs/deep-end.json` (#67) unlocks after the Night Shift, with 16 HP and a patch kit:
+
+- **Electric Eel:** charge 30s, 20s from half HP.
+- **Anglerfish:** 5 fogged columns, 2 more at 80%.
+- **Gift Shop:** a dig whose starfish becomes a sponge.
+- **Cuttlefish:** three ink phases.
+- **Old Tess:** a 20×20 octopus boss. Her phases bring ink at 92%, a double splash at 85%, the eel's charge at 75%, and a final double splash at 60% (attack 4).
+
+Keeper Bo joins Rook and Dee in its scenes.
 
 ## Digs
 

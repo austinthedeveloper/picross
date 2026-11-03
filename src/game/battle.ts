@@ -9,6 +9,7 @@ import {
   type Line,
   type LineSet,
 } from '../engine/lines';
+import { washInk } from '../engine/ink';
 import type { GadgetEffect } from '../puzzles/gadgets';
 
 /** An enemy in a fight encounter (#27). */
@@ -29,6 +30,11 @@ export interface Enemy {
   armor?: Armor;
   /** Lines whose clues are forged (#64) until you call them out. */
   fakes?: LineSet;
+  /**
+   * Seconds for the charge meter to fill (the Electric Eel, #67). Completing a
+   * line drains it; if it fills, the enemy zaps you.
+   */
+  charge?: number;
 }
 
 /**
@@ -63,8 +69,14 @@ export interface Phase {
   scrambleCount?: number;
   /** One line shown in the phase banner. */
   taunt?: string;
-  /** Swaps two of your unfinished rows when the phase starts (the Mimic, #48). */
+  /** Swaps two of your unfinished lines and wipes them when the phase starts (the Mimic, #48). */
   swap?: boolean;
+  /** Splashes a block of ink this many cells across over your marks (#67). */
+  ink?: number;
+  /** How many ink blocks the phase splashes (default 1). */
+  inkCount?: number;
+  /** Starts or changes the charge meter: seconds to fill (#67). */
+  charge?: number;
 }
 
 /** A fight in progress. Saved with the run so a reload resumes it. */
@@ -84,6 +96,8 @@ export interface BattleState {
   armor?: LineSet;
   /** Forged clues not yet called out (#64). */
   fakes?: LineSet;
+  /** Board cells covered in ink (#67); completing a line through them washes it off. */
+  ink?: number[];
 }
 
 /** Damage per weak-point line while armor is up. */
@@ -103,16 +117,17 @@ export function startBattle(enemy: Enemy): BattleState {
   return state;
 }
 
-/** The enemy as it is now: its name, sprite, and attack after any phases. */
+/** The enemy as it is now: its name, sprite, attack, and charge speed after any phases. */
 export function currentForm(enemy: Enemy, state: BattleState) {
-  let { name, sprite, attack } = enemy;
+  let { name, sprite, attack, charge } = enemy;
   for (const phase of (enemy.phases ?? []).slice(0, state.phase ?? 0)) {
     name = phase.name ?? name;
     sprite = phase.sprite ?? sprite;
     attack = phase.attack ?? attack;
+    charge = phase.charge ?? charge;
   }
   if (enemy.armor && armorUp(state)) attack = enemy.armor.attack;
-  return { name, sprite, attack, armored: armorUp(state) };
+  return { name, sprite, attack, charge, armored: armorUp(state) };
 }
 
 /**
@@ -183,6 +198,17 @@ function liftLines(
 
 /** Lifts fog from newly completed lines. Returns the lines revealed. */
 export const clearFog = (state: BattleState, lines: Line[]) => liftLines(state, 'fog', lines);
+
+/** Washes ink out of newly completed lines (#67). Returns the cells washed. */
+export function clearInk(
+  state: BattleState,
+  lines: Line[],
+  width: number,
+): { state: BattleState; washed: number[] } {
+  if (!state.ink?.length) return { state, washed: [] };
+  const { ink, washed } = washInk(state.ink, lines, width);
+  return washed.length ? { state: { ...state, ink }, washed } : { state, washed };
+}
 
 /** Unscrambles newly completed lines (#49). Returns the lines put back in order. */
 export const clearScramble = (state: BattleState, lines: Line[]) =>
@@ -261,6 +287,7 @@ export function useGadget(
   if (effect.kind === 'shield') {
     return { state: { ...state, shield: (state.shield ?? 0) + effect.hits }, dealt: 0 };
   }
+  if (effect.kind === 'wash') return { state: { ...state, ink: [] }, dealt: 0 };
   const enemyHp = Math.max(1, state.enemyHp - effect.amount);
   return { state: { ...state, enemyHp }, dealt: state.enemyHp - enemyHp };
 }

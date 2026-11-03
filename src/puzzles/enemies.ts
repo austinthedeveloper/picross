@@ -5,8 +5,8 @@ import type { Puzzle } from './format';
 
 /**
  * Parses and validates a fight's enemy (#27) against its puzzle: HP and
- * attack, fog (#30), scramble (#49), armor (#50), forged clues (#64), and
- * phases (#42, #48).
+ * attack, fog (#30), scramble (#49), armor (#50), forged clues (#64), charge
+ * and ink (#67), and phases (#42, #48).
  */
 export function parseEnemy(data: unknown, puzzle: Puzzle, fail: (msg: string) => never): Enemy {
   const enemy = data as Partial<Enemy> | undefined;
@@ -55,6 +55,11 @@ export function parseEnemy(data: unknown, puzzle: Puzzle, fail: (msg: string) =>
     }
   };
 
+  const seconds = (value: unknown, label: string) => {
+    if (typeof value !== 'number' || !(value >= 3)) fail(`${label} must be at least 3 seconds`);
+    return value as number;
+  };
+  if (enemy.charge !== undefined) parsed.charge = seconds(enemy.charge, 'charge');
   if (enemy.fog !== undefined) parsed.fog = parseFog(enemy.fog);
   if (enemy.scramble !== undefined) parsed.scramble = parseScramble(enemy.scramble);
   if (enemy.armor !== undefined) {
@@ -83,6 +88,11 @@ export function parseEnemy(data: unknown, puzzle: Puzzle, fail: (msg: string) =>
       if (phase.swap !== undefined && typeof phase.swap !== 'boolean') {
         fail(`phase ${i + 1} swap must be true or false`);
       }
+      positiveCount(phase.ink, `phase ${i + 1} ink`);
+      positiveCount(phase.inkCount, `phase ${i + 1} inkCount`);
+      if (phase.inkCount !== undefined && phase.ink === undefined) {
+        fail(`phase ${i + 1} has inkCount but no ink`);
+      }
       return {
         at: at!,
         ...(phase.name ? { name: phase.name } : {}),
@@ -94,6 +104,11 @@ export function parseEnemy(data: unknown, puzzle: Puzzle, fail: (msg: string) =>
         ...(phase.swap === true ? { swap: true } : {}),
         ...(phase.scramble !== undefined ? { scramble: parseScramble(phase.scramble) } : {}),
         ...(phase.scrambleCount !== undefined ? { scrambleCount: phase.scrambleCount } : {}),
+        ...(phase.ink !== undefined ? { ink: phase.ink } : {}),
+        ...(phase.inkCount !== undefined ? { inkCount: phase.inkCount } : {}),
+        ...(phase.charge !== undefined
+          ? { charge: seconds(phase.charge, `phase ${i + 1} charge`) }
+          : {}),
       };
     });
   }

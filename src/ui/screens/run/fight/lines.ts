@@ -1,4 +1,4 @@
-import { chip, clearFog, clearScramble, type BattleState } from '../../../../game/battle';
+import { chip, clearFog, clearInk, clearScramble, type BattleState } from '../../../../game/battle';
 import { keyToLine, lineCount, lineKey, noLines, type Line } from '../../../../engine/lines';
 import type { BoardView } from '../../../board/boardView';
 import { lineName } from '../../../format';
@@ -18,8 +18,8 @@ export function showLineEffects(ctx: FightContext, view: BoardView) {
 }
 
 /**
- * Everything that happens when lines are completed: fog lifts (#30), scrambles
- * restore (#49), chip damage lands or armor takes it (#50), and phases may
+ * Everything that happens when lines are completed: fog lifts (#30), ink washes
+ * off (#67), scrambles restore (#49), chip damage lands or armor takes it (#50), and phases may
  * start (#42). Saves the battle and returns the announcement, if any.
  */
 export function completeLines(
@@ -30,7 +30,8 @@ export function completeLines(
 ): string | undefined {
   const { bar, view } = ctx;
   const fogged = clearFog(ctx.battle(), lines);
-  const unscrambled = clearScramble(fogged.state, lines);
+  const washedOut = clearInk(fogged.state, lines, ctx.puzzle.width);
+  const unscrambled = clearScramble(washedOut.state, lines);
   const chipped = chip(
     unscrambled.state,
     lines.map((l) => lineKey(l.kind, l.index)),
@@ -48,6 +49,10 @@ export function completeLines(
   if (fogged.revealed.length && state.fog) {
     view?.setFog(state.fog, fogged.revealed);
     messages.push(`You solved through the fog: ${names(fogged.revealed)} revealed.`);
+  }
+  if (washedOut.washed.length) {
+    view?.setInk(state.ink ?? [], washedOut.washed);
+    messages.push('The ink washes away.');
   }
   if (unscrambled.revealed.length && state.scramble) {
     view?.setScramble(state.scramble, unscrambled.revealed);

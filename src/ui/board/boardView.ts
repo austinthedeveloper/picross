@@ -43,6 +43,11 @@ export interface BoardView {
   setFakes(fakes: ReadonlyMap<string, number[]>, unmasked?: Line[]): void;
   /** While set, tapping a clue (or Enter on it) picks its line instead of doing nothing. */
   pickClue(onPick: ((line: Line) => void) | null): void;
+  /**
+   * Covers cells in ink (#67): your marks under it are hidden, though you can
+   * still play there. Cells in `washed` animate as the ink comes off.
+   */
+  setInk(cells: readonly number[], washed?: readonly number[]): void;
 }
 
 const STATE: Record<Cell, { className: string; label: string }> = {
@@ -146,6 +151,8 @@ export function createBoardView(puzzle: Puzzle): BoardView {
   const shown = (kind: LineKind, i: number) =>
     fakes.get(lineKey(kind, i)) ?? (kind === 'row' ? clues.rows : clues.cols)[i];
 
+  let inked = new Set<number>();
+
   let picker: ((line: Line) => void) | null = null;
   const pickable = (g: ClueGroup, line: Line) => {
     g.group.addEventListener('click', () => picker?.(line));
@@ -210,7 +217,8 @@ export function createBoardView(puzzle: Puzzle): BoardView {
         cell.classList.remove('filled', 'marked');
         if (STATE[state].className) cell.classList.add(STATE[state].className);
         const r = Math.floor(i / w);
-        cell.ariaLabel = `Row ${r + 1}, column ${(i % w) + 1}, ${STATE[state].label}`;
+        const shows = inked.has(i) ? 'covered in ink' : STATE[state].label;
+        cell.ariaLabel = `Row ${r + 1}, column ${(i % w) + 1}, ${shows}`;
       });
       const completed: Line[] = [];
       const check = (g: ClueGroup, line: Line, complete: boolean) => {
@@ -297,6 +305,12 @@ export function createBoardView(puzzle: Puzzle): BoardView {
       for (const { kind, index } of unmasked) {
         playOnce((kind === 'row' ? rowClues : colClues)[index].group, 'unmasked');
       }
+    },
+    setInk(next, washed = []) {
+      for (const i of inked) if (!next.includes(i)) cells[i].classList.remove('inked');
+      inked = new Set(next);
+      for (const i of inked) cells[i].classList.add('inked');
+      for (const i of washed) playOnce(cells[i], 'washed');
     },
     pickClue(onPick) {
       picker = onPick;

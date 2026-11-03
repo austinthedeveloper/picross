@@ -5,6 +5,7 @@ import {
   advancePhase,
   CALL_OUT_DAMAGE,
   callOut,
+  clearInk,
   FALSE_ACCUSATION_HEAL,
   heal,
   WEAK_POINT_DAMAGE,
@@ -218,5 +219,33 @@ describe('forged clues', () => {
     const hurt = { ...startBattle(forger), enemyHp: 10 };
     expect(heal(hurt, 20)).toMatchObject({ healed: FALSE_ACCUSATION_HEAL });
     expect(heal({ ...hurt, enemyHp: 19 }, 20).state.enemyHp).toBe(20);
+  });
+});
+
+describe('charge and ink', () => {
+  const eel = {
+    ...goblin,
+    hp: 20,
+    charge: 30,
+    phases: [{ at: 0.5, name: 'Overcharged', charge: 20 }],
+  };
+
+  it('a phase can speed up the charge meter', () => {
+    const state = startBattle(eel);
+    expect(currentForm(eel, state).charge).toBe(30);
+    expect(currentForm(eel, { ...state, phase: 1 }).charge).toBe(20);
+  });
+
+  it('completed lines wash out ink', () => {
+    const state = { ...startBattle(goblin), ink: [0, 1, 5] };
+    const { state: next, washed } = clearInk(state, [{ kind: 'row', index: 0 }], 4);
+    expect(washed).toEqual([0, 1]);
+    expect(next.ink).toEqual([5]);
+    expect(clearInk(next, [{ kind: 'row', index: 3 }], 4).state).toBe(next);
+  });
+
+  it('a sponge wipes all the ink', () => {
+    const state = { ...startBattle(goblin), ink: [0, 1, 5] };
+    expect(useGadget(state, { kind: 'wash' }).state.ink).toEqual([]);
   });
 });
