@@ -7,7 +7,7 @@ import { formatTime } from '../../format';
 import { renderGameScreen, type PlaySession } from '../gameScreen';
 import { renderSceneScreen } from '../sceneScreen';
 import { digHooks } from './dig';
-import { fightHooks } from './fight';
+import { fightHooks } from './fight/index';
 import { loadRun } from './shared';
 
 /** Plays the current encounter at #/run/play. Returns the game screen's cleanup. */

@@ -44,20 +44,41 @@ checked in the browser instead.
 `progress.ts` and `settings.ts` read storage once at import. Their tests call
 `vi.resetModules()` and re-import to simulate a reload (see `game/progress.test.ts`).
 
-### Checking in a browser
+### Browser tests (`e2e/`)
 
-There are no automated browser tests yet. Before pushing UI changes, run `npm run dev` and
-check:
+Playwright tests run the production build (`vite preview`) on a phone-sized touch screen
+with reduced motion, so animations don't slow them down:
 
-- **Mouse:** click to fill, right-click to mark, drag across a row, and drag from a filled
-  cell to erase.
-- **Keyboard:** Tab to the board, then arrows, Space, X, Shift+arrow, and Ctrl+Z.
-- **Touch:** use devtools' device mode for taps and the zoom bar. Pinch needs a real device
-  or Chrome's touch emulation.
-- **Win and lose:** solve a 5×5 puzzle, and run out of hearts in Hearts mode.
-- **Themes:** light, dark (OS setting), and High contrast.
-- **Persistence:** reload mid-puzzle and confirm the board, timer, and hearts come back.
-- **Editor:** draw, check the solver status, then export and re-import.
+```bash
+npm run e2e                                  # all of them
+npx playwright test e2e/fights.spec.ts       # one file
+npx playwright test --ui                     # watch them run
+```
+
+Locally they use your installed Chrome. CI installs Playwright's Chromium and uploads an
+HTML report (`playwright-report`) when something fails. To debug a failure, run
+`npx playwright show-trace test-results/<test>/trace.zip`.
+
+| File                  | Covers                                                                                                      |
+| --------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `free-play.spec.ts`   | Sizes, sound off by default, solving and the end screen, drag, undo, Hearts and Retry, hints, keyboard play |
+| `runs.spec.ts`        | Jobs board locking, the full First Job (intro once, sign-off, stats), knockouts                             |
+| `fights.spec.ts`      | One test per mechanic: fog, gremlin waves, Mimic swaps, Owl scramble, Beetle armor, gadgets                 |
+| `night-shift.spec.ts` | The whole Night Shift from the jobs board to the Curator                                                    |
+| `editor-zoom.spec.ts` | Editor uniqueness check and export, pinch zoom                                                              |
+
+`e2e/helpers.ts` has the building blocks:
+
+- `seed()` puts saved runs or settings in place before the app loads.
+- `runAt()` starts straight at one encounter.
+- `solution()` and `encounterSolution()` read answers from the content JSON.
+- `solve()` sets every cell to the answer, repeating while enemies move rows around.
+- `press()` taps a button or link by its accessible name.
+
+When you add an enemy mechanic, add a test to `fights.spec.ts`.
+
+Still worth a manual look before a release: light and dark themes, high contrast, and pinch
+on a real phone.
 
 To start from a clean slate, clear the site's local storage in devtools (Application →
 Local Storage).
@@ -68,8 +89,9 @@ Local Storage).
 
 1. `npm ci`
 2. `npm run lint`
-3. `npm test`, which includes the uniqueness check for every pack puzzle
+3. `npm test`, which includes the uniqueness check for every puzzle
 4. `npm run build`
+5. A separate `e2e` job runs the Playwright tests.
 
 Pushes to `main` then deploy `dist/` to GitHub Pages at
 https://austinthedeveloper.github.io/picross/ (a preview of `main`). Releases go to Azure;

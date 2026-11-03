@@ -69,8 +69,15 @@ src/
         pathMap.ts         Path map, HP, gadget inventory
         results.ts         Results and sign-off
         encounter.ts       Plays the current encounter (a PlaySession)
-        fight.ts           Fight hooks: damage, mistakes, gadgets, phases, fog, scramble,
-                           armor, swaps, the finisher
+        fight/             Fight hooks, one module per mechanic:
+          index.ts         Wires them into the session hooks (fightHooks)
+          context.ts       Shared state: enemy, battle bar, battle, form, saving
+          lines.ts         Completed lines: fog, scramble, armor, chip damage
+          phases.ts        Phase changes: form, banner, more fog/scramble, swaps
+          swaps.ts         The Mimic's row swaps (wait for strokes to end)
+          gadgets.ts       The gadget tray
+          hits.ts          Mistakes, shields, knockouts
+          finisher.ts      The solved picture flying at the enemy
         dig.ts             Dig hooks: dirt board, header, the reveal
     board/
       boardView.ts         Clues + cells (ARIA grid), dimming, fog/scramble/weak points
@@ -96,6 +103,7 @@ src/
     fight.css              Battle bar, gadgets, phase banner, armor
     dig.css                The dig's dirt board and reveal
     dialogue.css           Scene player
+e2e/                       Playwright browser tests (see docs/development.md)
 scripts/
   deploy-azure.sh          Upload a build to the Azure static website
   setup-azure-deploy.sh    One-time Azure + GitHub OIDC setup for the release pipeline
@@ -219,7 +227,7 @@ working. Shared button styles live in `base.css`: `.button`, `.ghost`, `.primary
 
 `freePlaySession(puzzle)` is the default. It saves to `progress.ts` and records best
 times. A run encounter (`screens/run/encounter.ts`) saves the board into the run state and clears the
-encounter instead, so run solves never touch free-play stats. Fights (`run/fight.ts`)
+encounter instead, so run solves never touch free-play stats. Fights (`run/fight/`)
 and digs (`run/dig.ts`) plug in through the optional hooks, so the game screen has no
 special cases for encounter types.
 
@@ -383,7 +391,7 @@ patch kit). The catalog in `puzzles/gadgets.ts` describes each gadget's effect a
 - `{ kind: 'shield', hits }` blocks that many enemy hits (`absorbHit` in `battle.ts`).
 
 Held gadgets are listed on the run map and shown as buttons in the fight's battle bar
-(`run/fight.ts`). Using one removes it from the run. Buttons are disabled with a reason
+(`run/fight/`). Using one removes it from the run. Buttons are disabled with a reason
 when a gadget can't help: a shield in a Relaxed run, or damage when the enemy is already
 at 1 HP. Gadgets act on the fight, never on the grid.
 
