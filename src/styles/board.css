@@ -295,3 +295,28 @@
     background: color-mix(in srgb, #7b5cff 40%, transparent);
   }
 }
+
+/* Scrambled clues (#49): the runs are right but in unknown order. */
+.clue.scrambled {
+  outline: 2px dashed color-mix(in srgb, var(--accent) 55%, transparent);
+  outline-offset: -2px;
+}
+
+.row-clue.scrambled::before,
+.col-clue.scrambled::before {
+  content: '⚙';
+  font-size: 1em;
+  line-height: 1;
+  color: var(--accent);
+}
+
+.clue.unscramble {
+  animation: unscramble 0.7s ease-out;
+}
+
+@keyframes unscramble {
+  from {
+    transform: rotate(-8deg) scale(0.9);
+    opacity: 0.4;
+  }
+}

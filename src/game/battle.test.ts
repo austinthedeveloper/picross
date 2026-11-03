@@ -4,6 +4,7 @@ import {
   advancePhase,
   chip,
   clearFog,
+  clearScramble,
   currentForm,
   finish,
   lineKey,
@@ -128,5 +129,30 @@ describe('phases', () => {
   it('keeps phase and fog through chip damage', () => {
     const { state } = advancePhase(boss, { ...startBattle(boss), enemyHp: 5 });
     expect(chip(state, ['c0']).state).toMatchObject({ phase: 1, fog: { rows: [1, 2, 4] } });
+  });
+});
+
+describe('scramble', () => {
+  const owl = { ...goblin, scramble: { rows: [0, 2], cols: [1] } };
+
+  it('starts with the enemy’s scramble and unscrambles completed lines', () => {
+    const start = startBattle(owl);
+    expect(start.scramble).toEqual({ rows: [0, 2], cols: [1] });
+    const { state, revealed } = clearScramble(start, [
+      { kind: 'row', index: 2 },
+      { kind: 'col', index: 0 },
+    ]);
+    expect(state.scramble).toEqual({ rows: [0], cols: [1] });
+    expect(revealed).toEqual([{ kind: 'row', index: 2 }]);
+  });
+
+  it('phases can scramble more lines from a pool', () => {
+    const boss = {
+      ...goblin,
+      hp: 10,
+      phases: [{ at: 0.5, scramble: { rows: [3, 4, 5], cols: [] }, scrambleCount: 2 }],
+    };
+    const { state } = advancePhase(boss, { ...startBattle(boss), enemyHp: 5, struck: ['r3'] });
+    expect(state.scramble).toEqual({ rows: [4, 5], cols: [] });
   });
 });

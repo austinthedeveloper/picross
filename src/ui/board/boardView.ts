@@ -23,6 +23,11 @@ export interface BoardView {
   flashSwap(a: number, b: number): void;
   /** Hides fogged clues behind "?" (#30). Lines in `lifted` animate as the fog clears. */
   setFog(fog: Fog, lifted?: Line[]): void;
+  /**
+   * Shows scrambled clues in ascending order with a ⚙ (#49), so you know the runs but
+   * not their order. Lines in `restored` animate back into order.
+   */
+  setScramble(scramble: Fog, restored?: Line[]): void;
 }
 
 const STATE: Record<Cell, { className: string; label: string }> = {
@@ -113,16 +118,45 @@ export function createBoardView(puzzle: Puzzle): BoardView {
   }
 
   let fog: Fog = noFog();
+  let scramble: Fog = noFog();
   const fogLabel = (g: ClueGroup) => g.label.replace(/clues: .*/, 'clues hidden by fog');
+  const scrambleLabel = (g: ClueGroup, runs: number[]) =>
+    g.label.replace(
+      /clues: .*/,
+      `clues in unknown order: ${[...runs].sort((a, b) => a - b).join(', ')}`,
+    );
 
-  /** Dims satisfied clue numbers; returns whether the whole line is satisfied. */
-  const dim = (g: ClueGroup, clueList: number[], line: Cell[], fogged: boolean): boolean => {
+  /**
+   * Dims satisfied clue numbers; returns whether the whole line is satisfied.
+   * Scrambled clues only dim as a whole: dimming one number would give away its place.
+   */
+  const dim = (
+    g: ClueGroup,
+    clueList: number[],
+    line: Cell[],
+    fogged: boolean,
+    scrambled: boolean,
+  ): boolean => {
     const done =
       clueList.length === 0 ? [!line.includes(Cell.Filled)] : satisfiedClues(line, clueList);
-    done.forEach((d, i) => g.nums[i].classList.toggle('done', d));
     const complete = done.every(Boolean);
-    g.group.ariaLabel = fogged ? fogLabel(g) : complete ? `${g.label}, complete` : g.label;
+    done.forEach((d, i) => g.nums[i].classList.toggle('done', scrambled ? complete : d));
+    g.group.ariaLabel = fogged
+      ? fogLabel(g)
+      : scrambled
+        ? scrambleLabel(g, clueList)
+        : complete
+          ? `${g.label}, complete`
+          : g.label;
     return complete;
+  };
+
+  /** Shows a clue group's numbers sorted (scrambled) or in their real order. */
+  const showOrder = (g: ClueGroup, runs: number[], scrambled: boolean) => {
+    if (!runs.length) return;
+    const shown = scrambled ? [...runs].sort((a, b) => a - b) : runs;
+    shown.forEach((n, i) => (g.nums[i].textContent = String(n)));
+    g.group.classList.toggle('scrambled', scrambled);
   };
 
   let cursor: HTMLElement | null = null;
@@ -148,14 +182,26 @@ export function createBoardView(puzzle: Puzzle): BoardView {
         check(
           rowClues[r],
           { kind: 'row', index: r },
-          dim(rowClues[r], clues.rows[r], row(board, r), isFogged(fog, 'row', r)),
+          dim(
+            rowClues[r],
+            clues.rows[r],
+            row(board, r),
+            isFogged(fog, 'row', r),
+            isFogged(scramble, 'row', r),
+          ),
         );
       }
       for (let c = 0; c < w; c++) {
         check(
           colClues[c],
           { kind: 'col', index: c },
-          dim(colClues[c], clues.cols[c], column(board, c), isFogged(fog, 'col', c)),
+          dim(
+            colClues[c],
+            clues.cols[c],
+            column(board, c),
+            isFogged(fog, 'col', c),
+            isFogged(scramble, 'col', c),
+          ),
         );
       }
       first = false;
@@ -177,6 +223,20 @@ export function createBoardView(puzzle: Puzzle): BoardView {
       for (let k = 0; k < span; k++) {
         const i = kind === 'row' ? index * w + k : k * w + index;
         restartAnimation(cells[i], 'line-flash');
+      }
+    },
+    setScramble(next, restored = []) {
+      scramble = next;
+      rowClues.forEach((g, r) => {
+        showOrder(g, clues.rows[r], isFogged(scramble, 'row', r));
+        if (isFogged(scramble, 'row', r)) g.group.ariaLabel = scrambleLabel(g, clues.rows[r]);
+      });
+      colClues.forEach((g, c) => {
+        showOrder(g, clues.cols[c], isFogged(scramble, 'col', c));
+        if (isFogged(scramble, 'col', c)) g.group.ariaLabel = scrambleLabel(g, clues.cols[c]);
+      });
+      for (const { kind, index } of restored) {
+        restartAnimation((kind === 'row' ? rowClues : colClues)[index].group, 'unscramble');
       }
     },
     setFog(next, lifted = []) {

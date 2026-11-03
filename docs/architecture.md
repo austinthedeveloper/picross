@@ -25,7 +25,7 @@ src/
     board.ts               Cell states (Empty/Filled/Marked), Grid/Board/Solution, isSolved
     clues.ts               Clue derivation and per-clue "satisfied" check (clue dimming)
     history.ts             Change/Move types and the undo/redo History
-    solver.ts              Line solver: uniqueness / no-guess check (CI and the editor), fog-aware
+    solver.ts              Line solver: uniqueness / no-guess check (CI and the editor); fog and scramble aware
     fog.ts                 Fogged clues and the rule for lifting them (#30)
     swap.ts                Which two rows the Mimic swaps (#48)
   puzzles/
@@ -267,6 +267,27 @@ hits for 3, and fogs 3 more of rows 2, 5, 8, 10, and 15. At 84% (about 8 lines) 
 Blackout, hits for 4, and fogs 2 more from the same pool. That's up to 8 of 15 rows dark.
 Line damage is 1 per line and columns mostly finish late in a solve, so keep phase
 thresholds high if you want them to land mid-fight.
+
+### Scrambled clues (the Clockwork Owl)
+
+An enemy can list `scramble: { rows, cols }`, and phases can add more from a `scramble` pool
+with `scrambleCount`. A scrambled clue shows its runs in ascending order with a ⚙ and a
+dashed outline, so you know which runs the line has but not their order. Its numbers
+dim only when the whole line is done, since dimming one would give away its place. Like
+fog, it clears when you complete the line. Unlike fog, rows and columns can both be
+scrambled, because a scrambled clue still says something about every cell. Validation
+rejects lines whose runs have only one order (for example `2 2`).
+
+The solver handles scrambled lines with `solveLineAnyOrder`, which tries every distinct
+order (`runOrders`) and keeps only what they all agree on.
+`solve(w, h, clues, { fog, scramble })` combines the two, and the fight test checks every
+enemy with all of its fog and scramble applied from the start. The solver finds even
+heavily scrambled puzzles easy, much easier than people do, so tune how many lines get
+scrambled by feel, using the fog bat as the reference.
+
+The Owl (`encounters/clockwork-owl.json`) is a 15×15 owl. Rows 6, 8, 10, and 12 and
+columns 4, 7, and 10 start scrambled. At 85% HP it winds up, hits for 3, and scrambles 3
+more.
 
 ### Row swaps (the Mimic)
 
