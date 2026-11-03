@@ -1,0 +1,290 @@
+{
+  "batch": "01-cast",
+  "date": "2026-11-03",
+  "generator": "built-in image_gen",
+  "status": "Candidates for batch review; not production-cleaned",
+  "prompt_sources": [
+    "../prompts/README.md",
+    "../prompts/01-cast.md"
+  ],
+  "remaining_prompt_files": [
+    "02-enemies.md",
+    "03-gadgets.md",
+    "04-icons.md",
+    "05-optional.md"
+  ],
+  "assets": [
+    {
+      "id": "cast-bo",
+      "variant": 1,
+      "filename": "cast-bo-v1.png",
+      "prompt_source": "../prompts/01-cast.md",
+      "submitted_prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, sea green #2e8b57. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: head-and-shoulders bust of Keeper Bo, a gentle, sleepy aquarium night keeper with a full beard and soft tired eyes, giving a small grateful smile. Green rain jacket with the hood down, a whistle on a lanyard, a couple of water droplets on the shoulders. Three-quarter view, looking toward the viewer. Reads at a glance as: the kind caretaker who hasn't slept in three days.\n\nProduction clarification: this is a digital bitmap sprite, NOT a photographed or printed physical sticker. Strictly FLAT solid color fills, no paper texture, no lighting, no speckles, no tiny stray pixels. Build the entire portrait from at most 48x48 chunky square pixel cells enlarged uniformly. The paper sticker border must follow square stepped pixel edges. Keep generous transparent margins so nothing touches the edges. Output a large square PNG. Candidate 1 of 2; use the subject description exactly.",
+      "transparent_background": true,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "fully_transparent_pixels": 718175,
+        "partially_transparent_pixels": 853158,
+        "sha256": "0e1cdaea171aa5ae9b3979022ec7fcfd54f0abba4b87aab3948ae8cc237155d2"
+      }
+    },
+    {
+      "id": "cast-bo",
+      "variant": 2,
+      "filename": "cast-bo-v2.png",
+      "prompt_source": "../prompts/01-cast.md",
+      "submitted_prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, sea green #2e8b57. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: head-and-shoulders bust of Keeper Bo, a gentle, sleepy aquarium night keeper with a full beard and soft tired eyes, giving a small grateful smile. Green rain jacket with the hood down, a whistle on a lanyard, a couple of water droplets on the shoulders. Three-quarter view, looking toward the viewer. Reads at a glance as: the kind caretaker who hasn't slept in three days.\n\nProduction clarification: this is a digital bitmap sprite, NOT a photographed or printed physical sticker. Strictly FLAT solid color fills, no paper texture, no lighting, no speckles, no tiny stray pixels. Build the entire portrait from at most 48x48 chunky square pixel cells enlarged uniformly. The paper sticker border must follow square stepped pixel edges. Keep generous transparent margins so nothing touches the edges. Output a large square PNG. Candidate 2 of 2; explore a distinct hairstyle or expression that still follows every subject requirement.",
+      "correction_prompt": "Use case: precise-object-edit. Edit this existing game portrait candidate. Remove all aquarium tanks, fish, hanging lamps and room scenery behind the man. Preserve the exact face, sleepy kind expression, beard, hair, green rain jacket, whistle lanyard, head size, shoulders and pose. The finished image must contain ONLY the head-and-shoulders man and his clothing/whistle on transparency, with a thick off-white #f6f3ec stepped die-cut border following his silhouette. No circular filled badge or background scenery. Use only flat solid graphite #23262f, paper #f6f3ec and sea green #2e8b57. 48x48 chunky pixel-art look, uniform hard-edged square pixels, no texture, smoothing, lighting, shadows or gradient. Keep generous transparent margins in the square PNG.",
+      "correction_input": "Original generated candidate 2 for cast-bo",
+      "transparent_background": true,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "fully_transparent_pixels": 788182,
+        "partially_transparent_pixels": 783825,
+        "sha256": "76701e1bdbd0a1f665c92c6ff36e43a339c7fc05f6811cc8c6f3526303262b1b"
+      }
+    },
+    {
+      "id": "cast-curator",
+      "variant": 1,
+      "filename": "cast-curator-v1.png",
+      "prompt_source": "../prompts/01-cast.md",
+      "submitted_prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: head-and-shoulders bust of Curator Ambrose, a tall, prim older gentleman. Monocle on one eye, slicked-back hair, high stiff collar, coral red bow tie, chin raised, the faintest smirk. Dark three-piece suit. Three-quarter view, looking down his nose at the viewer. Nothing mechanical visible. Reads at a glance as: a museum curator who is very pleased with himself.\n\nProduction clarification: this is a digital bitmap sprite, NOT a photographed or printed physical sticker. Strictly FLAT solid color fills, no paper texture, no lighting, no speckles, no tiny stray pixels. Build the entire portrait from at most 48x48 chunky square pixel cells enlarged uniformly. The paper sticker border must follow square stepped pixel edges. Keep generous transparent margins so nothing touches the edges. Output a large square PNG. Candidate 1 of 2; use the subject description exactly.",
+      "transparent_background": true,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "fully_transparent_pixels": 597605,
+        "partially_transparent_pixels": 973847,
+        "sha256": "2e12f5d9662e612740941a607bd6b95879d473a2c9757390bc618544d55d0eef"
+      }
+    },
+    {
+      "id": "cast-curator",
+      "variant": 2,
+      "filename": "cast-curator-v2.png",
+      "prompt_source": "../prompts/01-cast.md",
+      "submitted_prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: head-and-shoulders bust of Curator Ambrose, a tall, prim older gentleman. Monocle on one eye, slicked-back hair, high stiff collar, coral red bow tie, chin raised, the faintest smirk. Dark three-piece suit. Three-quarter view, looking down his nose at the viewer. Nothing mechanical visible. Reads at a glance as: a museum curator who is very pleased with himself.\n\nProduction clarification: this is a digital bitmap sprite, NOT a photographed or printed physical sticker. Strictly FLAT solid color fills, no paper texture, no lighting, no speckles, no tiny stray pixels. Build the entire portrait from at most 48x48 chunky square pixel cells enlarged uniformly. The paper sticker border must follow square stepped pixel edges. Keep generous transparent margins so nothing touches the edges. Output a large square PNG. Candidate 2 of 2; explore a distinct hairstyle or expression that still follows every subject requirement.",
+      "transparent_background": true,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "fully_transparent_pixels": 847932,
+        "partially_transparent_pixels": 723869,
+        "sha256": "8ffacf0b58d21d74005ce5d1162da74c4058488c9370f327f735e741216fb2d1"
+      }
+    },
+    {
+      "id": "cast-dee",
+      "variant": 1,
+      "filename": "cast-dee-v1.png",
+      "prompt_source": "../prompts/01-cast.md",
+      "submitted_prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, warm yellow #e0a800. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: head-and-shoulders bust of Dee, a deadpan young woman engineer. Safety goggles with a yellow strap pushed up onto her forehead, hair tied back, one eyebrow raised, small knowing half-smile. Dark coveralls with a wrench sticking out of the chest pocket. Three-quarter view, looking toward the viewer, arms crossed at the bottom edge of the frame. Reads at a glance as: the practical one who already knows this will go wrong.\n\nProduction clarification: this is a digital bitmap sprite, NOT a photographed or printed physical sticker. Strictly FLAT solid color fills, no paper texture, no lighting, no speckles, no tiny stray pixels. Build the entire portrait from at most 48x48 chunky square pixel cells enlarged uniformly. The paper sticker border must follow square stepped pixel edges. Keep generous transparent margins so nothing touches the edges. Output a large square PNG. Candidate 1 of 2; use the subject description exactly.",
+      "transparent_background": true,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "fully_transparent_pixels": 632296,
+        "partially_transparent_pixels": 939651,
+        "sha256": "e5a0f48e984ba8506467eb07a77f0ddb9f9613821b854cbebb325c6edd804dbe"
+      }
+    },
+    {
+      "id": "cast-dee",
+      "variant": 2,
+      "filename": "cast-dee-v2.png",
+      "prompt_source": "../prompts/01-cast.md",
+      "submitted_prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, warm yellow #e0a800. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: head-and-shoulders bust of Dee, a deadpan young woman engineer. Safety goggles with a yellow strap pushed up onto her forehead, hair tied back, one eyebrow raised, small knowing half-smile. Dark coveralls with a wrench sticking out of the chest pocket. Three-quarter view, looking toward the viewer, arms crossed at the bottom edge of the frame. Reads at a glance as: the practical one who already knows this will go wrong.\n\nProduction clarification: this is a digital bitmap sprite, NOT a photographed or printed physical sticker. Strictly FLAT solid color fills, no paper texture, no lighting, no speckles, no tiny stray pixels. Build the entire portrait from at most 48x48 chunky square pixel cells enlarged uniformly. The paper sticker border must follow square stepped pixel edges. Keep generous transparent margins so nothing touches the edges. Output a large square PNG. Candidate 2 of 2; explore a distinct hairstyle or expression that still follows every subject requirement.",
+      "transparent_background": true,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "fully_transparent_pixels": 609001,
+        "partially_transparent_pixels": 961586,
+        "sha256": "a38d25de72317e5076537bff34e102323cd90aa7973b336a2ced9774aab12678"
+      }
+    },
+    {
+      "id": "cast-forger",
+      "variant": 1,
+      "filename": "cast-forger-v1.png",
+      "prompt_source": "../prompts/01-cast.md",
+      "submitted_prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: head-and-shoulders bust of The Forger, a lanky art forger with a sly sideways smile and a thin curled mustache. Coral red beret, paint-smeared smock, a brush tucked behind one ear, and a painter's palette with coral paint blobs held up at the bottom edge of the frame. Three-quarter view, eyes narrowed at the viewer. Reads at a glance as: a charming cheat with a palette.\n\nProduction clarification: this is a digital bitmap sprite, NOT a photographed or printed physical sticker. Strictly FLAT solid color fills, no paper texture, no lighting, no speckles, no tiny stray pixels. Build the entire portrait from at most 48x48 chunky square pixel cells enlarged uniformly. The paper sticker border must follow square stepped pixel edges. Keep generous transparent margins so nothing touches the edges. Output a large square PNG. Candidate 1 of 2; use the subject description exactly.",
+      "transparent_background": true,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "fully_transparent_pixels": 732443,
+        "partially_transparent_pixels": 837962,
+        "sha256": "38b96fd560a28d95f5a3c3279cb8caa77a49a3cd97d0a872ffcb934ad0a43bb2"
+      }
+    },
+    {
+      "id": "cast-forger",
+      "variant": 2,
+      "filename": "cast-forger-v2.png",
+      "prompt_source": "../prompts/01-cast.md",
+      "submitted_prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: head-and-shoulders bust of The Forger, a lanky art forger with a sly sideways smile and a thin curled mustache. Coral red beret, paint-smeared smock, a brush tucked behind one ear, and a painter's palette with coral paint blobs held up at the bottom edge of the frame. Three-quarter view, eyes narrowed at the viewer. Reads at a glance as: a charming cheat with a palette.\n\nProduction clarification: this is a digital bitmap sprite, NOT a photographed or printed physical sticker. Strictly FLAT solid color fills, no paper texture, no lighting, no speckles, no tiny stray pixels. Build the entire portrait from at most 48x48 chunky square pixel cells enlarged uniformly. The paper sticker border must follow square stepped pixel edges. Keep generous transparent margins so nothing touches the edges. Output a large square PNG. Candidate 2 of 2; explore a distinct hairstyle or expression that still follows every subject requirement.",
+      "transparent_background": true,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "fully_transparent_pixels": 509680,
+        "partially_transparent_pixels": 1061225,
+        "sha256": "8b19dcaa10eb500b40c71d63c8209cde4fc7b6c25440c113604992ddf75a5077"
+      }
+    },
+    {
+      "id": "cast-gremlin",
+      "variant": 1,
+      "filename": "cast-gremlin-v1.png",
+      "prompt_source": "../prompts/01-cast.md",
+      "submitted_prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, warm yellow #e0a800. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: close-up head-and-shoulders of a squat, hairy gremlin with huge bat-like ears, a wide gleeful grin full of little teeth, and round glowing yellow eyes. Tufts of wild hair, a chewed electrical wire clamped in its teeth with a few yellow sparks. Facing the viewer. Reads at a glance as: a gleeful pest that lives inside a machine.\n\nProduction clarification: this is a digital bitmap sprite, NOT a photographed or printed physical sticker. Strictly FLAT solid color fills, no paper texture, no lighting, no speckles, no tiny stray pixels. Build the entire portrait from at most 48x48 chunky square pixel cells enlarged uniformly. The paper sticker border must follow square stepped pixel edges. Keep generous transparent margins so nothing touches the edges. Output a large square PNG. Candidate 1 of 2; use the subject description exactly.",
+      "transparent_background": true,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "fully_transparent_pixels": 532410,
+        "partially_transparent_pixels": 1038492,
+        "sha256": "8aa3b7dabac970d9e9ac442c31719fb78fd60595a031fac977a0521ee5f240cb"
+      }
+    },
+    {
+      "id": "cast-gremlin",
+      "variant": 2,
+      "filename": "cast-gremlin-v2.png",
+      "prompt_source": "../prompts/01-cast.md",
+      "submitted_prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, warm yellow #e0a800. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: close-up head-and-shoulders of a squat, hairy gremlin with huge bat-like ears, a wide gleeful grin full of little teeth, and round glowing yellow eyes. Tufts of wild hair, a chewed electrical wire clamped in its teeth with a few yellow sparks. Facing the viewer. Reads at a glance as: a gleeful pest that lives inside a machine.\n\nProduction clarification: this is a digital bitmap sprite, NOT a photographed or printed physical sticker. Strictly FLAT solid color fills, no paper texture, no lighting, no speckles, no tiny stray pixels. Build the entire portrait from at most 48x48 chunky square pixel cells enlarged uniformly. The paper sticker border must follow square stepped pixel edges. Keep generous transparent margins so nothing touches the edges. Output a large square PNG. Candidate 2 of 2; explore a distinct hairstyle or expression that still follows every subject requirement.",
+      "correction_prompt": "Use case: precise-object-edit. Edit this existing gremlin portrait candidate. Remove the goggles sitting above its eyes and replace their area with wild furry hair. Remove the overalls at the bottom and show shaggy fur instead. Preserve the same gremlin's huge bat ears, round yellow eyes, gleeful toothy grin, face identity, pose, yellow chewed electrical wire clamped in its teeth and a few yellow sparks. This is a hairy machine pest, with no clothes or accessories except the chewed wire. One head-and-shoulders creature centered in a square with transparent background and thick paper #f6f3ec stepped sticker border closely following the silhouette. ONLY flat solid colors graphite #23262f, paper #f6f3ec and yellow #e0a800. Hard-edged chunky 48x48 pixel-art, no texture, gradients, smooth edges, shading or drop shadows. Keep transparent padding.",
+      "correction_input": "Original generated candidate 2 for cast-gremlin",
+      "transparent_background": true,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "fully_transparent_pixels": 634149,
+        "partially_transparent_pixels": 936930,
+        "sha256": "13494de7962247d96489fafba35c077730a1c26c2e02c19153036ac1abdd5cbf"
+      }
+    },
+    {
+      "id": "cast-rook",
+      "variant": 1,
+      "filename": "cast-rook-v1.png",
+      "prompt_source": "../prompts/01-cast.md",
+      "submitted_prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: head-and-shoulders bust of Rook, a cheerful, eager young adult who runs a small odd-jobs business. Big open grin, raised eyebrows, bright eyes, slightly messy short hair. Wearing a plain work shirt with rolled sleeves and a coral red name tag or collar, a pencil tucked behind one ear, a clipboard with an invoice held up proudly at the bottom edge of the frame. Three-quarter view, looking toward the viewer. Reads at a glance as: the enthusiastic salesperson who booked a job they shouldn't have.\n\nOutput requirement: 1024x1024 square PNG, actual transparent alpha outside the paper sticker border. Keep the pixel-art cells large and uniform, as if a true 48x48 bitmap were enlarged with nearest-neighbor. Candidate 1 of 2: retain all subject and palette requirements; independently explore the expression and hair shape within the brief.",
+      "transparent_background": true,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "fully_transparent_pixels": 496755,
+        "partially_transparent_pixels": 1074640,
+        "sha256": "c11d6e743d11f05e9d4d177e3c7c28d17f1042e00533a7d06371cab2b2be57be"
+      }
+    },
+    {
+      "id": "cast-rook",
+      "variant": 2,
+      "filename": "cast-rook-v2.png",
+      "prompt_source": "../prompts/01-cast.md",
+      "submitted_prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: head-and-shoulders bust of Rook, a cheerful, eager young adult who runs a small odd-jobs business. Big open grin, raised eyebrows, bright eyes, slightly messy short hair. Wearing a plain work shirt with rolled sleeves and a coral red name tag or collar, a pencil tucked behind one ear, a clipboard with an invoice held up proudly at the bottom edge of the frame. Three-quarter view, looking toward the viewer. Reads at a glance as: the enthusiastic salesperson who booked a job they shouldn't have.\n\nOutput requirement: 1024x1024 square PNG, actual transparent alpha outside the paper sticker border. Keep the pixel-art cells large and uniform, as if a true 48x48 bitmap were enlarged with nearest-neighbor. Candidate 2 of 2: retain all subject and palette requirements; independently explore the expression and hair shape within the brief.",
+      "transparent_background": true,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "fully_transparent_pixels": 450061,
+        "partially_transparent_pixels": 1120941,
+        "sha256": "6e21684e60728de379a8bbee30bd503b852753af33cad4c72be3da53050c509b"
+      }
+    },
+    {
+      "id": "cast-tess",
+      "variant": 1,
+      "filename": "cast-tess-v1.png",
+      "prompt_source": "../prompts/01-cast.md",
+      "submitted_prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: close-up of Old Tess, a large, elderly coral-red octopus. Big heavy-lidded unimpressed eyes, a few wrinkles and one old scar, the mantle filling the top of the frame, two arms curling up into the bottom corners with a few suckers showing. Facing the viewer. Reads at a glance as: an ancient octopus who has seen everything and is not impressed.\n\nProduction clarification: this is a digital bitmap sprite, NOT a photographed or printed physical sticker. Strictly FLAT solid color fills, no paper texture, no lighting, no speckles, no tiny stray pixels. Build the entire portrait from at most 48x48 chunky square pixel cells enlarged uniformly. The paper sticker border must follow square stepped pixel edges. Keep generous transparent margins so nothing touches the edges. Output a large square PNG. Candidate 1 of 2; use the subject description exactly.",
+      "transparent_background": true,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "fully_transparent_pixels": 261502,
+        "partially_transparent_pixels": 1309353,
+        "sha256": "675f8fe8face4e03ac1f44e8d363ccec4a65a02c05d5251d4345d69749ab0346"
+      }
+    },
+    {
+      "id": "cast-tess",
+      "variant": 2,
+      "filename": "cast-tess-v2.png",
+      "prompt_source": "../prompts/01-cast.md",
+      "submitted_prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: close-up of Old Tess, a large, elderly coral-red octopus. Big heavy-lidded unimpressed eyes, a few wrinkles and one old scar, the mantle filling the top of the frame, two arms curling up into the bottom corners with a few suckers showing. Facing the viewer. Reads at a glance as: an ancient octopus who has seen everything and is not impressed.\n\nProduction clarification: this is a digital bitmap sprite, NOT a photographed or printed physical sticker. Strictly FLAT solid color fills, no paper texture, no lighting, no speckles, no tiny stray pixels. Build the entire portrait from at most 48x48 chunky square pixel cells enlarged uniformly. The paper sticker border must follow square stepped pixel edges. Keep generous transparent margins so nothing touches the edges. Output a large square PNG. Candidate 2 of 2; explore a distinct hairstyle or expression that still follows every subject requirement.",
+      "correction_prompt": "Use case: precise-object-edit. Edit this existing octopus portrait candidate. Remove the blurred red dark blotch on the upper-left mantle and fill that area with the same flat coral red as the mantle. Keep the one crisp paper-colored old scar on the upper-right side, her heavy-lidded unimpressed eyes, wrinkled brow, curled arms, suckers, proportions, position and entire pixel outline. Preserve identity. Only flat solid graphite #23262f, off-white #f6f3ec and coral #d9534f. No blurred marks, no gradients, no texture. 48x48 chunky hard-edged pixel-art on a square transparent canvas with a thick paper-colored stepped sticker border. Preserve all transparency and give the sticker a little clear padding. No additional objects or scenery.",
+      "correction_input": "Original generated candidate 2 for cast-tess",
+      "transparent_background": true,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "fully_transparent_pixels": 530724,
+        "partially_transparent_pixels": 1039701,
+        "sha256": "3d89ebcdd0cb4d4dd357da8f62b82e5be5ff2cbd0f22d9ceb81f389d0823e89a"
+      }
+    }
+  ]
+}
