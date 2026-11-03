@@ -36,11 +36,14 @@ src/
     gadgets.ts             Gadget catalog: name, icon, description, effect (damage/shield)
     encounters/*.json      Encounters: name, kind (fight/dig), puzzle, blurb, enemy (fights)
     runs/*.json            Runs: starting HP and an ordered list of encounter ids
+    scenes.ts              Loads and validates scenes/*.json (dialogue, #22)
+    scenes/*.json          Scenes: cast, nodes of lines, choices, and conditions
   game/
     game.ts                Game: board + history + mode/hearts + hints + clock
     progress.ts            Saved boards, solve stats, totals (localStorage)
     settings.ts            Mode, mute, high contrast (localStorage)
     run.ts                 RunState and its pure transitions (start, damage, clear encounter)
+    dialogue.ts            Scene runner: current line or choices, advance, choose, flags
     battle.ts              Enemy and BattleState: chip damage, finisher, gadget effects, shields
     runSave.ts             Saves the current run (localStorage)
     storage.ts             Safe localStorage JSON read/write
@@ -54,6 +57,7 @@ src/
       gameScreen.ts        Play screen; wires everything together  (#/play/<id>)
       freePlaySession.ts   Free-play PlaySession: saves, best times, "Next"
       runScreen.ts         Run hub, path map, results; run encounters (#/run, #/run/play)
+      sceneScreen.ts       Plays a scene full screen; #/scene/<id> previews one
       fightHooks.ts        Fight rules wired into a run encounter's PlaySession
       editorScreen.ts      Puzzle authoring tool                   (#/editor)
     board/
@@ -68,6 +72,7 @@ src/
       endPanels.ts         Solved, out-of-hearts, and generic end panels
       battleBar.ts         Enemy and player HP above the board; hit and defeat effects
       muteButton.ts        Sound toggle
+      dialogue.ts          Scene player: portrait, typed text box, choices, Skip
   styles/
     tokens.css             Color tokens for light, dark, and high-contrast themes
     base.css               Page layout, buttons, toggles, segmented controls
@@ -141,13 +146,14 @@ saved board, and failing in Hearts mode discards it.
 
 `main.ts` routes on the URL hash. Hash routing works on GitHub Pages without server config.
 
-| Hash          | Screen                                                      |
-| ------------- | ----------------------------------------------------------- |
-| `#/`          | `renderSelectScreen` (also the fallback for unknown hashes) |
-| `#/play/<id>` | `renderGameScreen` for a pack puzzle                        |
-| `#/editor`    | `renderEditorScreen`                                        |
-| `#/run`       | `renderRunScreen`: start panel, path map, or results        |
-| `#/run/play`  | `renderRunEncounter`: the current encounter's puzzle        |
+| Hash           | Screen                                                      |
+| -------------- | ----------------------------------------------------------- |
+| `#/`           | `renderSelectScreen` (also the fallback for unknown hashes) |
+| `#/play/<id>`  | `renderGameScreen` for a pack puzzle                        |
+| `#/editor`     | `renderEditorScreen`                                        |
+| `#/run`        | `renderRunScreen`: start panel, path map, or results        |
+| `#/scene/<id>` | `renderSceneScreen`: preview a scene (Replay at the end)    |
+| `#/run/play`   | `renderRunEncounter`: the current encounter's puzzle        |
 
 Each screen replaces `#app`'s children. A screen that adds global listeners or timers
 returns a cleanup function, which the router calls before rendering the next screen. The
@@ -238,6 +244,30 @@ Held gadgets are listed on the run map and shown as buttons in the fight's battl
 (`fightHooks.ts`). Using one removes it from the run. Buttons are disabled with a reason
 when a gadget can't help: a shield in a Relaxed run, or damage when the enemy is already
 at 1 HP. Gadgets act on the fight, never on the grid.
+
+## Scenes (dialogue)
+
+Scenes are JSON in `puzzles/scenes/`, validated at load: unknown speakers, unknown target
+nodes, and empty nodes all fail. A scene has a `cast` (name plus an emoji portrait until
+#25's art) and `nodes`. Play starts at `start`. A node plays its `lines` in order, then
+shows its `choices`, jumps to `next`, or ends the scene.
+
+- Lines and choices can have `"if": "flag"` or `"if": "!flag"`, and they're skipped when
+  the condition fails.
+- Choices can `"set"` flags. Flags start from whatever the caller passes in, so a run can
+  pass `{ "won": true }` for a sign-off.
+
+`game/dialogue.ts` is the pure runner (`startDialogue`, `currentStep`, `advance`,
+`choose`). `ui/components/dialogue.ts` draws it:
+
+- **Lines:** each line types out; a tap, Enter, or Space finishes it and then moves on.
+- **Choices:** buttons, with the first one focused, and number keys pick them.
+- **Skip:** ends the scene.
+- **Accessibility:** every line is announced to screen readers, and reduced motion shows
+  text instantly.
+
+`renderSceneScreen(app, scene, { flags, onEnd })` plays one full screen. The run will use
+this for the crew intro (#31).
 
 ## The solver
 

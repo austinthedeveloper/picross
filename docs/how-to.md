@@ -53,6 +53,31 @@ starter-pack test expects 5×5 to 15×15 and at most 15 puzzles, so update
 3. Hand it out: set `"gadget": "<id>"` on the puzzle JSON whose picture becomes it, or
    list it in a run's `"gadgets"` to start with it. Unknown ids fail at load.
 
+## Write a scene
+
+1. Add `src/puzzles/scenes/<id>.json`:
+   ```json
+   {
+     "id": "intro",
+     "cast": { "pip": { "name": "Pip", "portrait": "🧑‍🔧" } },
+     "nodes": {
+       "start": {
+         "lines": [
+           { "text": "Narration has no speaker." },
+           { "who": "pip", "text": "Only shown after a win.", "if": "won" }
+         ],
+         "choices": [{ "text": "Let's go", "next": "after", "set": { "eager": true } }]
+       },
+       "after": { "lines": [{ "who": "pip", "text": "That's the spirit." }] }
+     }
+   }
+   ```
+2. Preview it at http://localhost:5173/#/scene/<id>. `src/puzzles/scenes/demo.json` shows
+   branching and conditions.
+3. Run `npm test`. Bad references fail at load.
+
+Keep lines short (phone screens), and each scene under a minute to read.
+
 ## Add a screen
 
 1. Create `src/ui/screens/<name>Screen.ts` exporting
