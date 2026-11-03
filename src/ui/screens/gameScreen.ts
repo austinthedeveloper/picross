@@ -21,6 +21,8 @@ import { playSound } from '../sound';
  * progress; a run encounter saves into the run. The screen itself only knows
  * this interface.
  */
+const wait = (ms: number) => new Promise((resolve) => window.setTimeout(resolve, ms));
+
 export interface PlaySession {
   /** Where the back button goes. */
   back: { href: string; label: string };
@@ -157,12 +159,22 @@ export function renderGameScreen(
     title.textContent = puzzle.name;
     view.highlight(null, null);
     if (session.celebrate) await session.celebrate(view.root);
+    // Let the solve wave play on the board, then show only the result.
+    else if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) await wait(900);
     solvedPanel.replaceChildren(...solvedPanelContent(puzzle, note, actions));
     solvedPanel.hidden = false;
+    showEnd(true);
     announce(`Solved! ${puzzle.name}. ${note}.`);
     playSound('solve');
   };
   let solvedShown = false;
+
+  /** Hides the board and its controls so the end panel is all that's left to see. */
+  const showEnd = (end: boolean) => {
+    const changed = screen.classList.contains('show-end') !== end;
+    screen.classList.toggle('show-end', end);
+    if (end && changed) window.scrollTo({ top: 0 });
+  };
 
   const lineName = (line: Line) => `${line.kind === 'row' ? 'Row' : 'Column'} ${line.index + 1}`;
 
@@ -235,6 +247,7 @@ export function renderGameScreen(
     screen.classList.toggle('is-failed', game.failed || Boolean(ended));
     toolbar.inert = over();
     failedPanel.hidden = !game.failed;
+    if (!game.solved) showEnd(game.failed || Boolean(ended));
     if (ended && endedPanel.hidden) {
       endedPanel.replaceChildren(...createEndPanel(ended.title, ended.note, ended.actions));
       endedPanel.hidden = false;
