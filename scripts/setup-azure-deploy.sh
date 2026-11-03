@@ -24,15 +24,26 @@ az ad sp show --id "$app_id" -o none 2>/dev/null || az ad sp create --id "$app_i
 sp_id=$(az ad sp show --id "$app_id" --query id -o tsv)
 
 echo "== Trust GitHub Actions jobs in the '$ENVIRONMENT' environment of $REPO"
-if ! az ad app federated-credential list --id "$app_id" \
-  --query "[?name=='github-$ENVIRONMENT'].name" -o tsv | grep -q .; then
-  az ad app federated-credential create --id "$app_id" -o none --parameters "{
-    \"name\": \"github-$ENVIRONMENT\",
-    \"issuer\": \"https://token.actions.githubusercontent.com\",
-    \"subject\": \"repo:$REPO:environment:$ENVIRONMENT\",
-    \"audiences\": [\"api://AzureADTokenExchange\"]
-  }"
+# GitHub's token subject starts with the repo, either by name ("repo:owner/name")
+# or, for repos using immutable subjects, by name and ID ("repo:owner@1/name@2").
+# Ask GitHub which one this repo sends instead of guessing.
+prefix=$(gh api "repos/$REPO/actions/oidc/customization/sub" --jq '.sub_claim_prefix // empty')
+subject="${prefix:-repo:$REPO}:environment:$ENVIRONMENT"
+credential="{
+  \"name\": \"github-$ENVIRONMENT\",
+  \"issuer\": \"https://token.actions.githubusercontent.com\",
+  \"subject\": \"$subject\",
+  \"audiences\": [\"api://AzureADTokenExchange\"]
+}"
+current=$(az ad app federated-credential list --id "$app_id" \
+  --query "[?name=='github-$ENVIRONMENT'].subject" -o tsv)
+if [[ -z "$current" ]]; then
+  az ad app federated-credential create --id "$app_id" -o none --parameters "$credential"
+elif [[ "$current" != "$subject" ]]; then
+  az ad app federated-credential update --id "$app_id" \
+    --federated-credential-id "github-$ENVIRONMENT" -o none --parameters "$credential"
 fi
+echo "   subject: $subject"
 
 echo "== Roles on the storage account only"
 scope=$(az storage account show -n "$ACCOUNT" -g "$RESOURCE_GROUP" --query id -o tsv)
