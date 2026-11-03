@@ -47,6 +47,7 @@ describe('parseEncounter', () => {
     [{ ...encounter, enemy: { ...enemy, phases: [{ at: 0.3 }, { at: 0.6 }] } }, /decreasing/],
     [{ ...encounter, scene: 'nope' }, /unknown scene "nope"/],
     [{ ...encounter, enemy: { ...enemy, phases: [{ at: 0.5, swap: 'yes' }] } }, /swap must be/],
+    [{ ...encounter, enemy: { ...enemy, armor: { weakPoints: {}, attack: 3 } } }, /weak points/],
     // the test puzzle is 2x1 '#.': row 1's runs are just "1", so its order is already known
     [{ ...encounter, enemy: { ...enemy, scramble: { rows: [0] } } }, /only one order/],
   ])('rejects bad input %#', (input, error) => {

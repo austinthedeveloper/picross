@@ -77,6 +77,15 @@ function parseEnemy(data: unknown, puzzle: Puzzle, fail: (msg: string) => never)
 
   if (enemy.fog !== undefined) parsed.fog = parseFog(enemy.fog);
   if (enemy.scramble !== undefined) parsed.scramble = parseScramble(enemy.scramble);
+  if (enemy.armor !== undefined) {
+    const armor = enemy.armor as Partial<Enemy['armor'] & object>;
+    const weakPoints = parseFog(armor.weakPoints);
+    if (!weakPoints.rows.length && !weakPoints.cols.length) fail('armor needs weak points');
+    if (!Number.isInteger(armor.attack) || armor.attack! < 0) {
+      fail('armor attack must be a whole number');
+    }
+    parsed.armor = { weakPoints, attack: armor.attack! };
+  }
 
   if (enemy.phases !== undefined) {
     if (!Array.isArray(enemy.phases)) fail('phases must be a list');

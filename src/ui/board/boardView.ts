@@ -28,6 +28,8 @@ export interface BoardView {
    * not their order. Lines in `restored` animate back into order.
    */
   setScramble(scramble: Fog, restored?: Line[]): void;
+  /** Marks weak-point clues with 🎯 (#50). Lines in `cracked` flash as they crack. */
+  setWeakPoints(weak: Fog, cracked?: Line[]): void;
 }
 
 const STATE: Record<Cell, { className: string; label: string }> = {
@@ -223,6 +225,13 @@ export function createBoardView(puzzle: Puzzle): BoardView {
       for (let k = 0; k < span; k++) {
         const i = kind === 'row' ? index * w + k : k * w + index;
         restartAnimation(cells[i], 'line-flash');
+      }
+    },
+    setWeakPoints(weak, cracked = []) {
+      rowClues.forEach((g, r) => g.group.classList.toggle('weak-point', isFogged(weak, 'row', r)));
+      colClues.forEach((g, c) => g.group.classList.toggle('weak-point', isFogged(weak, 'col', c)));
+      for (const { kind, index } of cracked) {
+        restartAnimation((kind === 'row' ? rowClues : colClues)[index].group, 'cracked');
       }
     },
     setScramble(next, restored = []) {

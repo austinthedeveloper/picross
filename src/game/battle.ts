@@ -15,6 +15,19 @@ export interface Enemy {
   scramble?: Fog;
   /** Boss phases (#42), in the order they trigger. */
   phases?: Phase[];
+  /** Armor (#50): blocks line damage until its weak points are solved. */
+  armor?: Armor;
+}
+
+/**
+ * While any weak point is left, ordinary lines deal no damage and the enemy
+ * hits for `attack`. Each weak-point line you complete deals triple damage and
+ * cracks the armor; after the last one it breaks and normal rules return.
+ */
+export interface Armor {
+  weakPoints: Fog;
+  /** The enemy's attack while armored. */
+  attack: number;
 }
 
 /** A change partway through a fight, e.g. a boss turning Overcharged at half HP. */
@@ -55,7 +68,18 @@ export interface BattleState {
   phase?: number;
   /** Clues still scrambled (#49). */
   scramble?: Fog;
+  /** Weak points not yet solved (#50); armor is up while any are left. */
+  armor?: Fog;
 }
+
+/** Damage per weak-point line while armor is up. */
+export const WEAK_POINT_DAMAGE = 3;
+
+const fogKeys = (f: Fog) => [
+  ...f.rows.map((i) => lineKey('row', i)),
+  ...f.cols.map((i) => lineKey('col', i)),
+];
+const armorUp = (state: BattleState) => Boolean(state.armor && fogKeys(state.armor).length);
 
 /** Damage per newly completed row or column. */
 export const CHIP_DAMAGE = 1;
@@ -65,6 +89,10 @@ export const lineKey = (kind: 'row' | 'col', index: number) => `${kind[0]}${inde
 export function startBattle(enemy: Enemy): BattleState {
   const state: BattleState = { enemyHp: enemy.hp, struck: [] };
   if (enemy.fog) state.fog = { rows: [...enemy.fog.rows], cols: [...enemy.fog.cols] };
+  if (enemy.armor) {
+    const { rows, cols } = enemy.armor.weakPoints;
+    state.armor = { rows: [...rows], cols: [...cols] };
+  }
   if (enemy.scramble) {
     state.scramble = { rows: [...enemy.scramble.rows], cols: [...enemy.scramble.cols] };
   }
@@ -79,7 +107,8 @@ export function currentForm(enemy: Enemy, state: BattleState) {
     sprite = phase.sprite ?? sprite;
     attack = phase.attack ?? attack;
   }
-  return { name, sprite, attack };
+  if (enemy.armor && armorUp(state)) attack = enemy.armor.attack;
+  return { name, sprite, attack, armored: armorUp(state) };
 }
 
 /**
@@ -168,14 +197,31 @@ export const clearScramble = (state: BattleState, lines: LineRef[]) =>
  * Deals chip damage for completed lines that haven't struck yet. Chip damage
  * never drops the enemy below 1 HP: only the finished picture defeats it.
  */
-export function chip(state: BattleState, keys: string[]): { state: BattleState; dealt: number } {
+export function chip(
+  state: BattleState,
+  keys: string[],
+): { state: BattleState; dealt: number; cracked: string[]; broke: boolean } {
   const fresh = [...new Set(keys)].filter((k) => !state.struck.includes(k));
-  if (!fresh.length) return { state, dealt: 0 };
-  const enemyHp = Math.max(1, state.enemyHp - fresh.length * CHIP_DAMAGE);
-  return {
-    state: { ...state, enemyHp, struck: [...state.struck, ...fresh] },
-    dealt: state.enemyHp - enemyHp,
-  };
+  if (!fresh.length) return { state, dealt: 0, cracked: [], broke: false };
+  let damage = fresh.length * CHIP_DAMAGE;
+  let next: BattleState = { ...state, struck: [...state.struck, ...fresh] };
+  let cracked: string[] = [];
+  let broke = false;
+  if (armorUp(state)) {
+    // Armor: only weak points hurt (triple), and each one solved cracks it.
+    const weak = fogKeys(state.armor!);
+    cracked = fresh.filter((k) => weak.includes(k));
+    damage = cracked.length * WEAK_POINT_DAMAGE;
+    const left = (kind: 'r' | 'c', list: number[]) =>
+      list.filter((i) => !cracked.includes(`${kind}${i}`));
+    next = {
+      ...next,
+      armor: { rows: left('r', state.armor!.rows), cols: left('c', state.armor!.cols) },
+    };
+    broke = !armorUp(next);
+  }
+  const enemyHp = Math.max(1, state.enemyHp - damage);
+  return { state: { ...next, enemyHp }, dealt: state.enemyHp - enemyHp, cracked, broke };
 }
 
 /** The finisher: the solved picture deals whatever HP the enemy has left. */
