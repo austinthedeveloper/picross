@@ -1,0 +1,23 @@
+{
+  "id": "electric-eel",
+  "name": "Electric Eel",
+  "kind": "fight",
+  "puzzle": "eel",
+  "blurb": "The touch tank hums. Don't touch the tank.",
+  "enemy": {
+    "name": "Electric Eel",
+    "sprite": "⚡",
+    "hp": 45,
+    "attack": 2,
+    "charge": 30,
+    "phases": [
+      {
+        "at": 0.6,
+        "name": "Overcharged Eel",
+        "attack": 3,
+        "charge": 20,
+        "taunt": "Bzzzzt!"
+      }
+    ]
+  }
+}

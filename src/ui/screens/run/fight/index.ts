@@ -2,10 +2,12 @@ import { finish, type Enemy } from '../../../../game/battle';
 import type { Puzzle } from '../../../../puzzles/format';
 import type { PlaySession } from '../../gameScreen';
 import { createCallOut } from './callOut';
+import { createCharge } from './charge';
 import { createFightContext } from './context';
 import { playFinisher } from './finisher';
 import { createGadgetTray } from './gadgets';
 import { knockedOut, takeHit } from './hits';
+import { createInker } from './ink';
 import { completeLines, showLineEffects } from './lines';
 import { createPhases } from './phases';
 import { createSwapper } from './swaps';
@@ -14,16 +16,18 @@ import { createSwapper } from './swaps';
  * Fight rules on top of a run encounter (#27): completed lines chip the enemy,
  * the solved picture is the finisher, and in Hits-on runs each wrong fill lets
  * the enemy hit your run HP. Each mechanic lives in its own module: line
- * effects (fog, scramble, armor), phases, swaps, forged clues, gadgets, hits,
- * and the finisher. This wires them into the play session's hooks.
+ * effects (fog, scramble, armor, ink), phases, swaps, forged clues, the charge
+ * meter, gadgets, hits, and the finisher. This wires them into the play session's hooks.
  */
 export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
   const ctx = createFightContext(enemy, puzzle);
   const swapper = createSwapper(ctx);
-  const checkPhase = createPhases(ctx, swapper);
+  const inker = createInker(ctx);
+  const checkPhase = createPhases(ctx, swapper, inker);
   // The call-out button sits in the gadget tray, and calling out refreshes the tray.
   const callOut = createCallOut(ctx, checkPhase, () => gadgets.render());
   const gadgets = createGadgetTray(ctx, checkPhase, callOut.buttons);
+  const charge = createCharge(ctx, () => gadgets.render());
   let finisher = 0;
   let defeatedAs = enemy.name;
 
@@ -38,16 +42,16 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
       swapper.attach(view.root);
       showLineEffects(ctx, view);
       callOut.show();
+      inker.show();
+      charge.start();
     },
     // A bomb can't help once the enemy is down to 1 HP, so damage refreshes the gadgets.
     // A line showing a forgery doesn't count until the forgery is called out.
-    onLinesComplete: (lines) =>
-      completeLines(
-        ctx,
-        lines.filter((line) => !callOut.isFaked(line)),
-        checkPhase,
-        gadgets.render,
-      ),
+    onLinesComplete(lines) {
+      const counted = lines.filter((line) => !callOut.isFaked(line));
+      if (counted.length) charge.drain();
+      return completeLines(ctx, counted, checkPhase, gadgets.render);
+    },
     onMistake: () => takeHit(ctx, gadgets.render),
     ended: () => knockedOut(ctx),
     celebrate: (board) => playFinisher(ctx, board, finisher),

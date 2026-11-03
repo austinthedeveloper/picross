@@ -1,0 +1,34 @@
+{
+  "id": "deep-water-opening",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "🧑‍💼"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "👩‍🔬"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "text": "Chapter 3: Deep Water. A van, a map, and a smell of low tide."
+        },
+        {
+          "who": "dee",
+          "text": "You told the aquarium we're 'water-certified'."
+        },
+        {
+          "who": "rook",
+          "text": "We are. I've been near water. I've been in water. Once."
+        },
+        {
+          "who": "dee",
+          "text": "I'm packing towels."
+        }
+      ]
+    }
+  }
+}

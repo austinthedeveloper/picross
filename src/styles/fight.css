@@ -344,3 +344,51 @@
   color: var(--accent-ink);
   border-color: var(--accent);
 }
+
+/* The charge meter (#67): fills toward a zap, drains when you complete a line. */
+.charge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.charge[hidden] {
+  display: none;
+}
+
+.charge-icon {
+  font-size: 0.8rem;
+}
+
+.charge-track {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.charge-fill {
+  display: block;
+  height: 100%;
+  width: calc(var(--charge, 0) * 100%);
+  background: #e0b400;
+  transition: width 0.25s linear;
+}
+
+.charge.high .charge-fill {
+  background: #ff8a00;
+}
+
+.charge.zapped {
+  animation: zapped 0.6s ease-out;
+}
+
+@keyframes zapped {
+  20%,
+  60% {
+    filter: brightness(2.2);
+    transform: scale(1.08);
+  }
+}

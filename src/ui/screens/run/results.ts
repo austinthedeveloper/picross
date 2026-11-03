@@ -1,6 +1,6 @@
 import { advance, currentStep, startDialogue } from '../../../game/dialogue';
 import type { RunState } from '../../../game/run';
-import { recordRunResult, saveCurrentRun } from '../../../game/runSave';
+import { getJobStats, recordRunResult, saveCurrentRun } from '../../../game/runSave';
 import type { RunDef } from '../../../puzzles/runs';
 import { getScene } from '../../../puzzles/scenes';
 import { el } from '../../dom';
@@ -37,17 +37,21 @@ function signOff(def: RunDef, won: boolean): HTMLElement[] {
 
 /** A finished run: records it once, then shows the outcome, the sign-off, and what's next. */
 export function results(hub: Hub, finished: RunState, def: RunDef): Node[] {
+  const bestBefore = getJobStats(def.id)?.bestDepth ?? 0;
   const state = recordRunResult(finished);
   const won = state.status === 'won';
   const cleared = Math.min(state.node, def.encounters.length);
+  const best = getJobStats(def.id)?.bestDepth ?? 0;
+  // Only the first look counts: on a reload the run is already in the best.
+  const newBest = !finished.recorded && state.node > bestBefore;
+  const summary = def.endless
+    ? `Depth ${state.node} · best ${best}${newBest ? ' · new best!' : ''}`
+    : `${cleared}/${def.encounters.length} encounters cleared · ${state.hp}/${state.maxHp} HP left`;
   return [
     el('header', { className: 'topbar' }, [backToPuzzles(), el('h1', { textContent: def.name })]),
     el('section', { className: `run-card results ${won ? 'won' : 'lost'}` }, [
       el('h2', { textContent: won ? 'Job done!' : 'Run over' }),
-      el('p', {
-        className: 'run-meta',
-        textContent: `${cleared}/${def.encounters.length} encounters cleared · ${state.hp}/${state.maxHp} HP left`,
-      }),
+      el('p', { className: 'run-meta', textContent: summary }),
       ...signOff(def, won),
       modePicker(hub),
       el('div', { className: 'end-actions' }, [

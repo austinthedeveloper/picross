@@ -1,5 +1,6 @@
 import { getJobStats, hasSeenScene } from '../../../game/runSave';
 import { chapters, type Chapter } from '../../../puzzles/chapters';
+import { ENDLESS_GADGETS, ENDLESS_HP, ENDLESS_ID, ENDLESS_HEAL } from '../../../puzzles/endless';
 import { getRun, type RunDef } from '../../../puzzles/runs';
 import { el } from '../../dom';
 import { backToPuzzles, modePicker, newRunButton, nodeIcon, type Hub } from './shared';
@@ -103,18 +104,61 @@ function chapterSection(hub: Hub, chapter: Chapter): HTMLElement {
   ]);
 }
 
+/** Endless mode (#68) opens once you've cleared a job. */
+const ENDLESS_AFTER = 'first-job';
+
+/** Endless mode's card (#68), below the chapters. */
+function endlessSection(hub: Hub): HTMLElement {
+  const open = cleared({ id: ENDLESS_AFTER } as RunDef);
+  const def: RunDef = {
+    id: ENDLESS_ID,
+    name: 'Endless',
+    hp: ENDLESS_HP,
+    gadgets: ENDLESS_GADGETS,
+    encounters: [],
+    endless: true,
+  };
+  const best = getJobStats(ENDLESS_ID)?.bestDepth;
+  return el('section', { className: `chapter endless${open ? '' : ' locked'}` }, [
+    el('h2', { className: 'chapter-title' }, [
+      el('span', { className: 'chapter-number', textContent: 'Endless' }),
+      open ? 'How deep can you go?' : '🔒 ???',
+    ]),
+    el('p', {
+      className: 'chapter-blurb',
+      textContent: open
+        ? `Every enemy from the jobs you've played, in a fresh order, harder as you go. +${ENDLESS_HEAL} HP after each fight, a dig every fourth node.`
+        : `Clear ${getRun(ENDLESS_AFTER)?.name ?? ENDLESS_AFTER} to open Endless.`,
+    }),
+    ...(open
+      ? [
+          el('section', { className: 'run-card job endless' }, [
+            el('p', {
+              className: 'run-meta',
+              textContent: `${ENDLESS_HP} HP · starts with a 🩹 patch kit`,
+            }),
+            el('p', {
+              className: `job-best${best ? '' : ' none'}`,
+              textContent: best ? `Best depth: ${best}` : 'Not played yet',
+            }),
+            el('div', { className: 'end-actions' }, [newRunButton(hub, def, 'Start')]),
+          ]),
+        ]
+      : []),
+  ]);
+}
+
 /**
  * The jobs board (#47), grouped into chapters (#23): every job, its length and
- * boss, your best result, and Start.
+ * boss, your best result, and Start. Endless mode (#68) sits below.
  */
 export function jobsBoard(hub: Hub): Node[] {
   return [
     el('header', { className: 'topbar' }, [backToPuzzles(), el('h1', { textContent: 'Jobs' })]),
     modePicker(hub),
-    el(
-      'div',
-      { className: 'chapters' },
-      chapters.map((c) => chapterSection(hub, c)),
-    ),
+    el('div', { className: 'chapters' }, [
+      ...chapters.map((c) => chapterSection(hub, c)),
+      endlessSection(hub),
+    ]),
   ];
 }

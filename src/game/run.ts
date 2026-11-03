@@ -23,6 +23,8 @@ export interface RunState {
   battle?: BattleState;
   /** Set once the finished run's result is saved to the job stats (#47). */
   recorded?: boolean;
+  /** An endless run's seed and pools (#68); its encounters are generated from them. */
+  endless?: { seed: number; fights: string[]; digs: string[] };
 }
 
 export function startRun(
@@ -68,7 +70,16 @@ export function damage(state: RunState, amount: number): RunState {
   return { ...state, hp, status: hp === 0 ? 'lost' : 'active' };
 }
 
-/** Clears the current encounter and moves on; the run is won after the last one. */
+/** Restores HP, up to the max. */
+export function heal(state: RunState, amount: number): RunState {
+  if (state.status !== 'active') return state;
+  return { ...state, hp: Math.min(state.maxHp, state.hp + amount) };
+}
+
+/**
+ * Clears the current encounter and moves on; the run is won after the last one
+ * (pass Infinity for a run that never ends).
+ */
 export function completeEncounter(state: RunState, length: number): RunState {
   if (state.status !== 'active') return state;
   const node = state.node + 1;

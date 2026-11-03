@@ -1,0 +1,50 @@
+{
+  "id": "tess-reveal",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "🧑‍💼"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "👩‍🔬"
+    },
+    "bo": {
+      "name": "Keeper Bo",
+      "portrait": "🧔"
+    },
+    "tess": {
+      "name": "Old Tess",
+      "portrait": "🐙"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "text": "The center tank. The water is very still. Then it isn't."
+        },
+        {
+          "who": "tess",
+          "text": "Forty years I've watched this door. Forty years of tapping on my glass."
+        },
+        {
+          "who": "bo",
+          "text": "She's never talked before."
+        },
+        {
+          "who": "tess",
+          "text": "I've never had anything to say. Now I do: get out of my aquarium."
+        },
+        {
+          "who": "rook",
+          "text": "Technically it's Bo's aquarium."
+        },
+        {
+          "who": "tess",
+          "text": "Technically, I have eight arms."
+        }
+      ]
+    }
+  }
+}

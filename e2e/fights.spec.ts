@@ -17,7 +17,7 @@ import {
 async function fight(page: Page, runId: string, node: number, extra = {}) {
   await seed(page.context(), {
     run: {
-      seenScenes: ['first-job-intro', 'night-shift-intro'],
+      seenScenes: ['first-job-intro', 'night-shift-intro', 'deep-end-intro', 'tess-reveal'],
       current: runAt(runId, node, extra),
     },
   });
@@ -153,4 +153,42 @@ test('gadgets: a patch kit blocks a hit and the dig hands over a bomb', async ({
   await expect(page.locator('.end-panel:not([hidden]) .end-note')).toContainText('Bomb');
   await press(page, 'Back to map');
   await expect(page.locator('.inventory')).toContainText('Bomb');
+});
+
+test('electric eel: the charge meter zaps you when it fills, and lines drain it', async ({
+  page,
+}) => {
+  await page.clock.install();
+  await fight(page, 'deep-end', 0);
+  const eel = encounterSolution('electric-eel');
+  const level = () =>
+    page.locator('.battle .charge').evaluate((e) => Number(e.style.getPropertyValue('--charge')));
+  await expect(page.locator('.battle .charge')).toBeVisible();
+  await page.clock.runFor(15_000);
+  expect(await level()).toBeGreaterThan(0.4);
+  expect(await level()).toBeLessThan(0.7);
+  await fillRow(page, eel, 7); // a line drains it
+  expect(await level()).toBe(0);
+  await page.clock.runFor(30_500);
+  await page.clock.runFor(100); // the announcement lands on the next frame
+  expect(await meter(page, 'player-hp')).toBe(12);
+  await expect.poll(() => announcements(page)).toContain('Electric Eel zaps you!');
+});
+
+test('cuttlefish: ink hides your marks, lines wash it off, and a sponge wipes it', async ({
+  page,
+}) => {
+  await fight(page, 'deep-end', 3, { gadgets: ['sponge'] });
+  const cuttle = encounterSolution('cuttlefish');
+  const inked = page.locator('.cell.inked');
+  await expect(page.getByRole('button', { name: /Use Sponge/ })).toBeDisabled();
+  for (let r = 0; r <= 4; r++) await fillRow(page, cuttle, r); // down to 90%: ink
+  await expect(inked).toHaveCount(16);
+  const firstInked = Number(await inked.first().getAttribute('data-i'));
+  await fillRow(page, cuttle, Math.floor(firstInked / 15));
+  await expect(inked).toHaveCount(12);
+  await expect.poll(() => announcements(page)).toContain('The ink washes away.');
+  await press(page, 'Use Sponge');
+  await expect(inked).toHaveCount(0);
+  await solve(page, cuttle);
 });

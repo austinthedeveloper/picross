@@ -1,0 +1,43 @@
+{
+  "id": "deep-end-outro",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "🧑‍💼"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "👩‍🔬"
+    },
+    "bo": {
+      "name": "Keeper Bo",
+      "portrait": "🧔"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "who": "bo",
+          "text": "She's sulking under her rock. The eel's asleep. I could cry.",
+          "if": "won"
+        },
+        {
+          "who": "dee",
+          "text": "Tanks clean, lights on, nobody inked. Mostly nobody inked.",
+          "if": "won"
+        },
+        {
+          "who": "rook",
+          "text": "I'm putting 'octopus diplomacy' on the business cards.",
+          "if": "won"
+        },
+        {
+          "who": "rook",
+          "text": "I can't feel my arms. Old Tess can feel all eight of hers.",
+          "if": "!won"
+        }
+      ]
+    }
+  }
+}

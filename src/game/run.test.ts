@@ -3,6 +3,7 @@ import {
   addGadget,
   completeEncounter,
   damage,
+  heal,
   removeGadget,
   startRun,
   withBattle,
@@ -48,5 +49,18 @@ describe('run', () => {
     expect(run.board).toBeUndefined();
     expect(run.battle).toBeUndefined();
     expect(withBoard(run, null)).not.toHaveProperty('board');
+  });
+});
+
+describe('heal', () => {
+  it('restores HP up to the max, and only while the run is going', () => {
+    const run = { ...startRun('r', 10), hp: 7 };
+    expect(heal(run, 2).hp).toBe(9);
+    expect(heal(run, 5).hp).toBe(10);
+    expect(heal({ ...run, status: 'lost' }, 2).hp).toBe(7);
+  });
+
+  it('a run that never ends is never won', () => {
+    expect(completeEncounter({ ...startRun('r', 10), node: 99 }, Infinity).status).toBe('active');
   });
 });

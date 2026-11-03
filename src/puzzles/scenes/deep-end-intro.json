@@ -1,0 +1,50 @@
+{
+  "id": "deep-end-intro",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "🧑‍💼"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "👩‍🔬"
+    },
+    "bo": {
+      "name": "Keeper Bo",
+      "portrait": "🧔"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "text": "The aquarium, after closing. Every tank glows blue. One of them is sparking."
+        },
+        {
+          "who": "bo",
+          "text": "Thank goodness. I'm Bo, night keeper. The animals have been... organizing."
+        },
+        {
+          "who": "rook",
+          "text": "Organizing how?"
+        },
+        {
+          "who": "bo",
+          "text": "The eel shorted the lights. The cuttlefish inked the gift shop. And Old Tess hasn't blinked in three days."
+        },
+        {
+          "who": "dee",
+          "text": "Eels zap if you dawdle. Ink hides your marks until you finish a line through it. Noted."
+        },
+        {
+          "who": "rook",
+          "text": "And Old Tess is...?"
+        },
+        {
+          "who": "bo",
+          "text": "In charge."
+        }
+      ]
+    }
+  }
+}

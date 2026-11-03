@@ -59,13 +59,15 @@ Locally they use your installed Chrome. CI installs Playwright's Chromium and up
 HTML report (`playwright-report`) when something fails. To debug a failure, run
 `npx playwright show-trace test-results/<test>/trace.zip`.
 
-| File                  | Covers                                                                                                        |
-| --------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `free-play.spec.ts`   | Sizes, sound off by default, solving and the end screen, drag, undo, Hearts and Retry, hints, keyboard play   |
-| `runs.spec.ts`        | Jobs board locking, the full First Job (intro once, sign-off, stats), knockouts                               |
-| `fights.spec.ts`      | One test per mechanic: fog, gremlin waves, Mimic swaps, Owl scramble, Forger call-outs, Beetle armor, gadgets |
-| `night-shift.spec.ts` | The whole Night Shift from the jobs board to the Curator                                                      |
-| `editor-zoom.spec.ts` | Editor uniqueness check and export, pinch zoom                                                                |
+| File                  | Covers                                                                                                                                    |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `free-play.spec.ts`   | Sizes, sound off by default, solving and the end screen, drag, undo, Hearts and Retry, hints, keyboard play                               |
+| `runs.spec.ts`        | Jobs board locking, the full First Job (intro once, sign-off, stats), knockouts                                                           |
+| `fights.spec.ts`      | One test per mechanic: fog, gremlin waves, Mimic swaps, Owl scramble, Forger call-outs, Beetle armor, gadgets, Eel charge, Cuttlefish ink |
+| `night-shift.spec.ts` | The whole Night Shift from the jobs board to the Curator                                                                                  |
+| `deep-end.spec.ts`    | The whole Deep End from the chapter 3 opening to Old Tess                                                                                 |
+| `endless.spec.ts`     | Endless mode: unlocking, healing after a fight, the map moving on, best depth                                                             |
+| `editor-zoom.spec.ts` | Editor uniqueness check and export, pinch zoom                                                                                            |
 
 `e2e/helpers.ts` has the building blocks:
 

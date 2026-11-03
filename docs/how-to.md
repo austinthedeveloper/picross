@@ -60,7 +60,9 @@ groups puzzles by size, biggest first, so a new size gets its own section automa
    that take some work, not lines solved in the first pass. For forged clues (the
    Forger), add `"fakes": { "rows": [3, 7, 13] }`. The forgeries are generated for you;
    the suite checks the puzzle is still solvable with those lines unread. Sets of rows
-   only or columns only work best.
+   only or columns only work best. For a charge meter (the Eel), add `"charge": 30`
+   (seconds to fill) to the enemy or a phase. For ink (the Cuttlefish), give a phase
+   `"ink": 4` (block size) and optionally `"inkCount": 2`.
    Phases trigger in order at decreasing `at` values. A phase's `fog` is a pool, and it fogs
    up to `fogCount` unsolved lines from it. Line damage is 1 per line and columns mostly
    finish late, so set `at` high (0.8–0.9) for a phase to land mid-solve. To find a fog
