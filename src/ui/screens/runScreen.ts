@@ -14,6 +14,8 @@ import { renderSceneScreen } from './sceneScreen';
 
 const KIND_ICON: Record<Encounter['kind'], string> = { fight: '⚔️', dig: '⛏️' };
 const KIND_LABEL: Record<Encounter['kind'], string> = { fight: 'Fight', dig: 'Dig' };
+const nodeIcon = (e: Encounter) => (e.boss ? '👑' : KIND_ICON[e.kind]);
+const nodeLabel = (e: Encounter) => (e.boss ? 'Boss' : KIND_LABEL[e.kind]);
 
 /** The saved run with its definition, or null if there's none (or its run was removed). */
 function loadRun(): { state: RunState; def: RunDef } | null {
@@ -143,7 +145,7 @@ function startPanel(app: HTMLElement): Node[] {
       el(
         'ol',
         { className: 'run-preview' },
-        def.encounters.map((e) => el('li', { textContent: `${KIND_ICON[e.kind]} ${e.name}` })),
+        def.encounters.map((e) => el('li', { textContent: `${nodeIcon(e)} ${e.name}` })),
       ),
       modePicker(app),
       el('div', { className: 'end-actions' }, [
@@ -169,13 +171,13 @@ function pathMap(app: HTMLElement, state: RunState, def: RunDef): Node[] {
       el('span', {
         className: 'node-icon',
         ariaHidden: 'true',
-        textContent: KIND_ICON[encounter.kind],
+        textContent: nodeIcon(encounter),
       }),
       el('span', { className: 'node-text' }, [
         el('span', { className: 'node-name', textContent: encounter.name }),
         el('span', {
           className: 'node-kind',
-          textContent: `${KIND_LABEL[encounter.kind]} · ${encounter.puzzle.width}×${encounter.puzzle.height}`,
+          textContent: `${nodeLabel(encounter)} · ${encounter.puzzle.width}×${encounter.puzzle.height}`,
         }),
         ...(status === 'current' && encounter.blurb
           ? [el('span', { className: 'node-blurb', textContent: encounter.blurb })]
@@ -193,12 +195,12 @@ function pathMap(app: HTMLElement, state: RunState, def: RunDef): Node[] {
               : '🔒',
       }),
     ];
-    const label = `${encounter.name}, ${KIND_LABEL[encounter.kind]}, ${status}`;
+    const label = `${encounter.name}, ${nodeLabel(encounter)}, ${status}`;
     const node =
       status === 'current'
         ? el('a', { className: 'node-body', href: '#/run/play', ariaLabel: label }, content)
         : el('div', { className: 'node-body', ariaLabel: label }, content);
-    return el('li', { className: `node ${status}` }, [node]);
+    return el('li', { className: `node ${status}${encounter.boss ? ' boss' : ''}` }, [node]);
   });
 
   let armed = false;
@@ -290,43 +292,52 @@ export function renderRunEncounter(app: HTMLElement): (() => void) | undefined {
   const encounter = def.encounters[state.node];
   const length = def.encounters.length;
 
-  const fight = encounter.enemy ? fightHooks(encounter.enemy, encounter.puzzle) : null;
-  const session: PlaySession = {
-    back: { href: '#/run', label: '← Map' },
-    title: encounter.name,
-    // In Hearts runs, fights check fills so the enemy can hit back. Digs never do.
-    mode: fight && state.mode === 'hearts' ? 'battle' : 'relaxed',
-    saved: state.board,
-    ...(fight ? fight.hooks : digHooks(encounter.puzzle)),
-    save: (board) => {
-      const current = getCurrentRun();
-      if (current?.status === 'active') saveCurrentRun(withBoard(current, board));
-    },
-    complete(game) {
-      const finisher = fight?.land();
-      let next = completeEncounter(getCurrentRun() ?? state, length);
-      const reward = encounter.puzzle.gadget ? getGadget(encounter.puzzle.gadget) : undefined;
-      if (reward) next = addGadget(next, reward.id);
-      saveCurrentRun(next);
-      const last = next.status === 'won';
-      const time = formatTime(game.elapsed);
-      const got = reward ? ` · You got ${reward.icon} ${reward.name}!` : '';
-      return {
-        note:
-          (fight
-            ? `${encounter.enemy!.name} defeated! Finisher −${finisher} · ${time}`
-            : `${encounter.name} cleared in ${time}`) + got,
-        actions: [
-          el('a', {
-            className: 'button primary',
-            href: '#/run',
-            textContent: last ? 'See results →' : 'Back to map →',
-          }),
-        ],
-      };
-    },
+  const play = (): (() => void) => {
+    const fight = encounter.enemy ? fightHooks(encounter.enemy, encounter.puzzle) : null;
+    const session: PlaySession = {
+      back: { href: '#/run', label: '← Map' },
+      title: encounter.name,
+      // In Hearts runs, fights check fills so the enemy can hit back. Digs never do.
+      mode: fight && state.mode === 'hearts' ? 'battle' : 'relaxed',
+      saved: state.board,
+      ...(fight ? fight.hooks : digHooks(encounter.puzzle)),
+      save: (board) => {
+        const current = getCurrentRun();
+        if (current?.status === 'active') saveCurrentRun(withBoard(current, board));
+      },
+      complete(game) {
+        const finisher = fight?.land();
+        let next = completeEncounter(getCurrentRun() ?? state, length);
+        const reward = encounter.puzzle.gadget ? getGadget(encounter.puzzle.gadget) : undefined;
+        if (reward) next = addGadget(next, reward.id);
+        saveCurrentRun(next);
+        const last = next.status === 'won';
+        const time = formatTime(game.elapsed);
+        const got = reward ? ` · You got ${reward.icon} ${reward.name}!` : '';
+        return {
+          note:
+            (fight
+              ? `${fight.name()} defeated! Finisher −${finisher} · ${time}`
+              : `${encounter.name} cleared in ${time}`) + got,
+          actions: [
+            el('a', {
+              className: 'button primary',
+              href: '#/run',
+              textContent: last ? 'See results →' : 'Back to map →',
+            }),
+          ],
+        };
+      },
+    };
+    return renderGameScreen(app, encounter.puzzle, session);
   };
-  return renderGameScreen(app, encounter.puzzle, session);
+
+  // An encounter's scene (e.g. the boss's entrance) plays when you first open it,
+  // before any progress is saved; resuming mid-fight skips it.
+  const scene = encounter.scene ? getScene(encounter.scene) : undefined;
+  if (!scene || state.board || state.battle) return play();
+  let stop = renderSceneScreen(app, scene, { onEnd: () => (stop = play()) });
+  return () => stop();
 }
 
 /** One line for the puzzle list: start or continue a run. */

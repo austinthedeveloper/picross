@@ -1,5 +1,6 @@
 import { getPuzzle } from './index';
-import type { Enemy } from '../game/battle';
+import type { Fog } from '../engine/fog';
+import type { Enemy, Phase } from '../game/battle';
 import type { Puzzle } from './format';
 import { getGadget } from './gadgets';
 import { getScene } from './scenes';
@@ -17,6 +18,10 @@ export interface EncounterFile {
   blurb?: string;
   /** Required for fights. */
   enemy?: Enemy;
+  /** A boss node: stands out on the map (#42). */
+  boss?: boolean;
+  /** Scene played the first time you open this node (#42). */
+  scene?: string;
 }
 
 export interface Encounter extends Omit<EncounterFile, 'puzzle'> {
@@ -37,20 +42,58 @@ function parseEnemy(data: unknown, puzzle: Puzzle, fail: (msg: string) => never)
     hp: enemy.hp!,
     attack: enemy.attack!,
   };
-  if (enemy.fog !== undefined) {
-    const { rows = [], cols = [] } = enemy.fog as Partial<Enemy['fog'] & object>;
+  const parseFog = (data: unknown): Fog => {
+    const { rows = [], cols = [] } = (data ?? {}) as Partial<Fog>;
     const inRange = (list: unknown, size: number) =>
       Array.isArray(list) && list.every((i) => Number.isInteger(i) && i >= 0 && i < size);
     if (!inRange(rows, puzzle.height) || !inRange(cols, puzzle.width)) {
       fail('fog rows and cols must be line indexes within the puzzle');
     }
-    if (rows.length && cols.length) {
-      // The cell where a fogged row and column cross could never be worked out.
-      fail('fog can cover rows or columns, not both');
-    }
-    parsed.fog = { rows: [...rows], cols: [...cols] };
+    return { rows: [...rows], cols: [...cols] };
+  };
+  if (enemy.fog !== undefined) parsed.fog = parseFog(enemy.fog);
+
+  if (enemy.phases !== undefined) {
+    if (!Array.isArray(enemy.phases)) fail('phases must be a list');
+    parsed.phases = enemy.phases!.map((data, i): Phase => {
+      const phase = (data ?? {}) as Partial<Phase>;
+      const at = phase.at;
+      if (typeof at !== 'number' || !(at > 0 && at < 1))
+        fail(`phase ${i + 1} needs "at" between 0 and 1`);
+      if (i > 0 && at! >= enemy.phases![i - 1].at) fail('phases must trigger at decreasing HP');
+      if (phase.attack !== undefined && (!Number.isInteger(phase.attack) || phase.attack < 0)) {
+        fail(`phase ${i + 1} attack must be a whole number`);
+      }
+      return {
+        at: at!,
+        ...(phase.name ? { name: phase.name } : {}),
+        ...(phase.sprite ? { sprite: phase.sprite } : {}),
+        ...(phase.attack !== undefined ? { attack: phase.attack } : {}),
+        ...(phase.taunt ? { taunt: phase.taunt } : {}),
+        ...(phase.fog !== undefined ? { fog: parseFog(phase.fog) } : {}),
+      };
+    });
   }
+
+  // The cell where a fogged row and column cross could never be worked out, so all
+  // of an enemy's fog (starting and from every phase) must be in one direction.
+  const all = allFog(parsed);
+  if (all.rows.length && all.cols.length) fail('fog can cover rows or columns, not both');
   return parsed;
+}
+
+function checkScene(id: unknown, fail: (msg: string) => never): string {
+  if (typeof id !== 'string' || !getScene(id)) return fail(`unknown scene "${String(id)}"`);
+  return id;
+}
+
+/** Every line an enemy can ever fog: its starting fog plus every phase's. */
+export function allFog(enemy: Enemy): Fog {
+  const fogs = [enemy.fog, ...(enemy.phases ?? []).map((p) => p.fog)].filter((f): f is Fog =>
+    Boolean(f),
+  );
+  const union = (key: 'rows' | 'cols') => [...new Set(fogs.flatMap((f) => f[key]))];
+  return { rows: union('rows'), cols: union('cols') };
 }
 
 /** A run: an ordered path of encounters. */
@@ -95,6 +138,8 @@ export function parseEncounter(
     puzzle: puzzle!,
     ...(file.blurb ? { blurb: file.blurb } : {}),
     ...(file.kind === 'fight' ? { enemy: parseEnemy(file.enemy, puzzle!, fail) } : {}),
+    ...(file.boss ? { boss: true } : {}),
+    ...(file.scene !== undefined ? { scene: checkScene(file.scene, fail) } : {}),
   };
 }
 

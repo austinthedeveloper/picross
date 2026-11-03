@@ -11,6 +11,22 @@ export interface Enemy {
   attack: number;
   /** Clues hidden at the start of the fight (#30). */
   fog?: Fog;
+  /** Boss phases (#42), in the order they trigger. */
+  phases?: Phase[];
+}
+
+/** A change partway through a fight, e.g. a boss turning Overcharged at half HP. */
+export interface Phase {
+  /** Starts once enemy HP is at or below this fraction of max (0 to 1). */
+  at: number;
+  name?: string;
+  sprite?: string;
+  /** Replaces the enemy's attack from now on. */
+  attack?: number;
+  /** Lines fogged when the phase starts, unless you've already completed them. */
+  fog?: Fog;
+  /** One line shown in the phase banner. */
+  taunt?: string;
 }
 
 /** A fight in progress. Saved with the run so a reload resumes it. */
@@ -22,6 +38,8 @@ export interface BattleState {
   shield?: number;
   /** Clues still fogged (#30). */
   fog?: Fog;
+  /** How many of the enemy's phases have started (#42). */
+  phase?: number;
 }
 
 /** Damage per newly completed row or column. */
@@ -33,6 +51,49 @@ export function startBattle(enemy: Enemy): BattleState {
   const state: BattleState = { enemyHp: enemy.hp, struck: [] };
   if (enemy.fog) state.fog = { rows: [...enemy.fog.rows], cols: [...enemy.fog.cols] };
   return state;
+}
+
+/** The enemy as it is now: its name, sprite, and attack after any phases. */
+export function currentForm(enemy: Enemy, state: BattleState) {
+  let { name, sprite, attack } = enemy;
+  for (const phase of (enemy.phases ?? []).slice(0, state.phase ?? 0)) {
+    name = phase.name ?? name;
+    sprite = phase.sprite ?? sprite;
+    attack = phase.attack ?? attack;
+  }
+  return { name, sprite, attack };
+}
+
+/**
+ * Starts any phases the enemy's HP has fallen into. A phase's fog covers only
+ * lines you haven't completed. Returns the phases that just started.
+ */
+export function advancePhase(
+  enemy: Enemy,
+  state: BattleState,
+): { state: BattleState; entered: Phase[] } {
+  const phases = enemy.phases ?? [];
+  const entered: Phase[] = [];
+  let next = state;
+  while ((next.phase ?? 0) < phases.length) {
+    const phase = phases[next.phase ?? 0];
+    if (next.enemyHp > phase.at * enemy.hp) break;
+    entered.push(phase);
+    next = { ...next, phase: (next.phase ?? 0) + 1 };
+    if (phase.fog) {
+      const fog = next.fog ?? { rows: [], cols: [] };
+      const add = (kind: 'row' | 'col', list: number[], have: number[]) =>
+        list.filter((i) => !have.includes(i) && !next.struck.includes(lineKey(kind, i)));
+      next = {
+        ...next,
+        fog: {
+          rows: [...fog.rows, ...add('row', phase.fog.rows, fog.rows)],
+          cols: [...fog.cols, ...add('col', phase.fog.cols, fog.cols)],
+        },
+      };
+    }
+  }
+  return { state: next, entered };
 }
 
 /** Lifts fog from newly completed lines (see `liftFog`). Returns the lines revealed. */

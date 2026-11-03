@@ -1,0 +1,46 @@
+{
+  "id": "gremlin-intro",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "🧑‍💼"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "👩‍🔬"
+    },
+    "gremlin": {
+      "name": "Generator Gremlin",
+      "portrait": "👹"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "text": "Part in hand, you reach Mrs. Pell's generator. It rattles. Then it giggles."
+        },
+        {
+          "who": "dee",
+          "text": "Generators shouldn't giggle."
+        },
+        {
+          "who": "rook",
+          "text": "Mrs. Pell? Quick question. Did you know you have a gremlin?"
+        },
+        {
+          "who": "gremlin",
+          "text": "This is MY generator. I've lived here rent-free since 1987."
+        },
+        {
+          "who": "dee",
+          "text": "Boss, I made you something. The Wrench of Science. Picture it, then hit him with it."
+        },
+        {
+          "who": "gremlin",
+          "text": "Wrench? WRENCH?!"
+        }
+      ]
+    }
+  }
+}

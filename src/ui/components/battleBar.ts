@@ -21,6 +21,10 @@ export interface BattleBar {
   setGadgets(buttons: HTMLElement[]): void;
   /** Announces a message to screen readers. */
   say(message: string): void;
+  /** Changes the enemy's name and sprite (boss phases, #42). */
+  setForm(name: string, icon: string): void;
+  /** A banner across the bar when a boss changes phase. */
+  phaseBanner(name: string, taunt: string): void;
 }
 
 function meter(label: string, className: string) {
@@ -63,12 +67,12 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
   sprite.setAttribute('aria-hidden', 'true');
   const enemyMeter = meter(`${enemy.name} HP`, 'enemy-hp');
   const playerMeter = meter('Your HP', 'player-hp');
+  const enemyName = el('span', { className: 'battle-name', textContent: enemy.name });
+  const banner = el('div', { className: 'phase-banner', hidden: true });
+  banner.setAttribute('aria-hidden', 'true');
   const enemySide = el('div', { className: 'battle-side enemy' }, [
     sprite,
-    el('div', { className: 'battle-info' }, [
-      el('span', { className: 'battle-name', textContent: enemy.name }),
-      enemyMeter.root,
-    ]),
+    el('div', { className: 'battle-info' }, [enemyName, enemyMeter.root]),
   ]);
   const shield = el('span', { className: 'shield', hidden: true });
   const playerSide = el('div', { className: 'battle-side player' }, [
@@ -82,6 +86,7 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
   const root = el('section', { className: 'battle', ariaLabel: 'Fight' }, [
     el('div', { className: 'battle-row' }, [enemySide, playerSide]),
     tray,
+    banner,
     live,
   ]);
   enemyMeter.set(enemyHp, enemy.hp);
@@ -116,6 +121,20 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
     setGadgets(buttons) {
       tray.replaceChildren(...buttons);
       tray.hidden = buttons.length === 0;
+    },
+    setForm(name, icon) {
+      enemyName.textContent = name;
+      sprite.textContent = icon;
+    },
+    phaseBanner(name, taunt) {
+      banner.replaceChildren(
+        el('strong', { textContent: name }),
+        ...(taunt ? [el('span', { textContent: taunt })] : []),
+      );
+      banner.hidden = false;
+      replay(root, 'phase-shift', 1200);
+      replay(sprite, 'flinch');
+      window.setTimeout(() => (banner.hidden = true), 2200);
     },
     say(message) {
       live.textContent = '';
