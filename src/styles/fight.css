@@ -164,7 +164,7 @@
   top: 0;
   z-index: 20;
   pointer-events: none;
-  filter: drop-shadow(0 4px 6px rgb(0 0 0 / 0.3));
+  filter: drop-shadow(0 4px 6px var(--shadow));
 }
 
 /* Gadgets (#28) */
@@ -373,12 +373,12 @@
   display: block;
   height: 100%;
   width: calc(var(--charge, 0) * 100%);
-  background: #e0b400;
+  background: var(--spark);
   transition: width 0.25s linear;
 }
 
 .charge.high .charge-fill {
-  background: #ff8a00;
+  background: var(--spark-hot);
 }
 
 .charge.zapped {

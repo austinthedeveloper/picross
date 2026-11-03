@@ -282,7 +282,7 @@
 
 /* The Mimic swapped and wiped these two lines (#48). */
 .cell.swapped::after {
-  --flash: color-mix(in srgb, #7b5cff 70%, var(--accent));
+  --flash: color-mix(in srgb, var(--mischief) 70%, var(--accent));
   animation: overlay-flash 1s ease-out;
 }
 
@@ -292,7 +292,7 @@
 
 @keyframes swap-clue {
   from {
-    background: color-mix(in srgb, #7b5cff 40%, transparent);
+    background: color-mix(in srgb, var(--mischief) 40%, transparent);
   }
 }
 
@@ -372,7 +372,7 @@
 .cell.inked.filled {
   background:
     radial-gradient(circle at 30% 35%, rgb(255 255 255 / 0.08) 0 18%, transparent 19%),
-    radial-gradient(circle at 70% 70%, rgb(0 0 0 / 0.25) 0 22%, transparent 23%), #2c2350;
+    radial-gradient(circle at 70% 70%, rgb(0 0 0 / 0.25) 0 22%, transparent 23%), var(--squid-ink);
   animation: none;
 }
 
@@ -386,6 +386,6 @@
 
 @keyframes washed {
   from {
-    background: color-mix(in srgb, #2c2350 60%, var(--cell-bg));
+    background: color-mix(in srgb, var(--squid-ink) 60%, var(--cell-bg));
   }
 }

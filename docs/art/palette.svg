@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1394" height="320" viewBox="0 0 1394 320" font-family="Rubik, system-ui, sans-serif">
+<rect width="1394" height="320" fill="#ece7dc"/>
+<rect x="8" y="8" width="1378" height="140" rx="12" fill="#f6f3ec"/>
+<rect x="16" y="16" width="88" height="60" rx="8" fill="#f6f3ec" stroke="#00000022"/>
+<text x="16" y="92" font-size="12" font-weight="600" fill="#23262f">Paper</text>
+<text x="16" y="108" font-size="11" fill="#23262f" opacity="0.7">#f6f3ec</text>
+<rect x="114" y="16" width="88" height="60" rx="8" fill="#ffffff" stroke="#00000022"/>
+<text x="114" y="92" font-size="12" font-weight="600" fill="#23262f">Card</text>
+<text x="114" y="108" font-size="11" fill="#23262f" opacity="0.7">#ffffff</text>
+<rect x="212" y="16" width="88" height="60" rx="8" fill="#23262f" stroke="#00000022"/>
+<text x="212" y="92" font-size="12" font-weight="600" fill="#23262f">Graphite</text>
+<text x="212" y="108" font-size="11" fill="#23262f" opacity="0.7">#23262f</text>
+<rect x="310" y="16" width="88" height="60" rx="8" fill="#7a7e8a" stroke="#00000022"/>
+<text x="310" y="92" font-size="12" font-weight="600" fill="#23262f">Pencil</text>
+<text x="310" y="108" font-size="11" fill="#23262f" opacity="0.7">#7a7e8a</text>
+<rect x="408" y="16" width="88" height="60" rx="8" fill="#d6d2c8" stroke="#00000022"/>
+<text x="408" y="92" font-size="12" font-weight="600" fill="#23262f">Rule</text>
+<text x="408" y="108" font-size="11" fill="#23262f" opacity="0.7">#d6d2c8</text>
+<rect x="506" y="16" width="88" height="60" rx="8" fill="#d9534f" stroke="#00000022"/>
+<text x="506" y="92" font-size="12" font-weight="600" fill="#23262f">Job stamp</text>
+<text x="506" y="108" font-size="11" fill="#23262f" opacity="0.7">#d9534f</text>
+<rect x="604" y="16" width="88" height="60" rx="8" fill="#2e8b57" stroke="#00000022"/>
+<text x="604" y="92" font-size="12" font-weight="600" fill="#23262f">Go</text>
+<text x="604" y="108" font-size="11" fill="#23262f" opacity="0.7">#2e8b57</text>
+<rect x="702" y="16" width="88" height="60" rx="8" fill="#fbefc9" stroke="#00000022"/>
+<text x="702" y="92" font-size="12" font-weight="600" fill="#23262f">Highlighter</text>
+<text x="702" y="108" font-size="11" fill="#23262f" opacity="0.7">#fbefc9</text>
+<rect x="800" y="16" width="88" height="60" rx="8" fill="#e0a800" stroke="#00000022"/>
+<text x="800" y="92" font-size="12" font-weight="600" fill="#23262f">Spark</text>
+<text x="800" y="108" font-size="11" fill="#23262f" opacity="0.7">#e0a800</text>
+<rect x="898" y="16" width="88" height="60" rx="8" fill="#f07c00" stroke="#00000022"/>
+<text x="898" y="92" font-size="12" font-weight="600" fill="#23262f">Spark, hot</text>
+<text x="898" y="108" font-size="11" fill="#23262f" opacity="0.7">#f07c00</text>
+<rect x="996" y="16" width="88" height="60" rx="8" fill="#7b5cff" stroke="#00000022"/>
+<text x="996" y="92" font-size="12" font-weight="600" fill="#23262f">Mischief</text>
+<text x="996" y="108" font-size="11" fill="#23262f" opacity="0.7">#7b5cff</text>
+<rect x="1094" y="16" width="88" height="60" rx="8" fill="#2c2350" stroke="#00000022"/>
+<text x="1094" y="92" font-size="12" font-weight="600" fill="#23262f">Squid ink</text>
+<text x="1094" y="108" font-size="11" fill="#23262f" opacity="0.7">#2c2350</text>
+<rect x="1192" y="16" width="88" height="60" rx="8" fill="#a9825a" stroke="#00000022"/>
+<text x="1192" y="92" font-size="12" font-weight="600" fill="#23262f">Dirt</text>
+<text x="1192" y="108" font-size="11" fill="#23262f" opacity="0.7">#a9825a</text>
+<rect x="1290" y="16" width="88" height="60" rx="8" fill="#3d4450" stroke="#00000022"/>
+<text x="1290" y="92" font-size="12" font-weight="600" fill="#23262f">Metal</text>
+<text x="1290" y="108" font-size="11" fill="#23262f" opacity="0.7">#3d4450</text>
+<rect x="8" y="152" width="1378" height="140" rx="12" fill="#17181c"/>
+<rect x="16" y="160" width="88" height="60" rx="8" fill="#17181c" stroke="#00000022"/>
+<text x="16" y="236" font-size="12" font-weight="600" fill="#e9e6de">Paper</text>
+<text x="16" y="252" font-size="11" fill="#e9e6de" opacity="0.7">#17181c</text>
+<rect x="114" y="160" width="88" height="60" rx="8" fill="#212329" stroke="#00000022"/>
+<text x="114" y="236" font-size="12" font-weight="600" fill="#e9e6de">Card</text>
+<text x="114" y="252" font-size="11" fill="#e9e6de" opacity="0.7">#212329</text>
+<rect x="212" y="160" width="88" height="60" rx="8" fill="#e9e6de" stroke="#00000022"/>
+<text x="212" y="236" font-size="12" font-weight="600" fill="#e9e6de">Graphite</text>
+<text x="212" y="252" font-size="11" fill="#e9e6de" opacity="0.7">#e9e6de</text>
+<rect x="310" y="160" width="88" height="60" rx="8" fill="#8d909a" stroke="#00000022"/>
+<text x="310" y="236" font-size="12" font-weight="600" fill="#e9e6de">Pencil</text>
+<text x="310" y="252" font-size="11" fill="#e9e6de" opacity="0.7">#8d909a</text>
+<rect x="408" y="160" width="88" height="60" rx="8" fill="#353841" stroke="#00000022"/>
+<text x="408" y="236" font-size="12" font-weight="600" fill="#e9e6de">Rule</text>
+<text x="408" y="252" font-size="11" fill="#e9e6de" opacity="0.7">#353841</text>
+<rect x="506" y="160" width="88" height="60" rx="8" fill="#e8716d" stroke="#00000022"/>
+<text x="506" y="236" font-size="12" font-weight="600" fill="#e9e6de">Job stamp</text>
+<text x="506" y="252" font-size="11" fill="#e9e6de" opacity="0.7">#e8716d</text>
+<rect x="604" y="160" width="88" height="60" rx="8" fill="#5cc48a" stroke="#00000022"/>
+<text x="604" y="236" font-size="12" font-weight="600" fill="#e9e6de">Go</text>
+<text x="604" y="252" font-size="11" fill="#e9e6de" opacity="0.7">#5cc48a</text>
+<rect x="702" y="160" width="88" height="60" rx="8" fill="#2e2b20" stroke="#00000022"/>
+<text x="702" y="236" font-size="12" font-weight="600" fill="#e9e6de">Highlighter</text>
+<text x="702" y="252" font-size="11" fill="#e9e6de" opacity="0.7">#2e2b20</text>
+<rect x="800" y="160" width="88" height="60" rx="8" fill="#f2c230" stroke="#00000022"/>
+<text x="800" y="236" font-size="12" font-weight="600" fill="#e9e6de">Spark</text>
+<text x="800" y="252" font-size="11" fill="#e9e6de" opacity="0.7">#f2c230</text>
+<rect x="898" y="160" width="88" height="60" rx="8" fill="#ff9a3c" stroke="#00000022"/>
+<text x="898" y="236" font-size="12" font-weight="600" fill="#e9e6de">Spark, hot</text>
+<text x="898" y="252" font-size="11" fill="#e9e6de" opacity="0.7">#ff9a3c</text>
+<rect x="996" y="160" width="88" height="60" rx="8" fill="#9d86ff" stroke="#00000022"/>
+<text x="996" y="236" font-size="12" font-weight="600" fill="#e9e6de">Mischief</text>
+<text x="996" y="252" font-size="11" fill="#e9e6de" opacity="0.7">#9d86ff</text>
+<rect x="1094" y="160" width="88" height="60" rx="8" fill="#4b3d8f" stroke="#00000022"/>
+<text x="1094" y="236" font-size="12" font-weight="600" fill="#e9e6de">Squid ink</text>
+<text x="1094" y="252" font-size="11" fill="#e9e6de" opacity="0.7">#4b3d8f</text>
+<rect x="1192" y="160" width="88" height="60" rx="8" fill="#5e4630" stroke="#00000022"/>
+<text x="1192" y="236" font-size="12" font-weight="600" fill="#e9e6de">Dirt</text>
+<text x="1192" y="252" font-size="11" fill="#e9e6de" opacity="0.7">#5e4630</text>
+<rect x="1290" y="160" width="88" height="60" rx="8" fill="#b9c2cf" stroke="#00000022"/>
+<text x="1290" y="236" font-size="12" font-weight="600" fill="#e9e6de">Metal</text>
+<text x="1290" y="252" font-size="11" fill="#e9e6de" opacity="0.7">#b9c2cf</text>
+</svg>

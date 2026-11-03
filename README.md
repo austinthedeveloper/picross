@@ -43,3 +43,4 @@ Then open http://localhost:5173.
   the code
 - [Development](docs/development.md): running, testing, CI and deploys, branches and stacked PRs
 - [How-to guides](docs/how-to.md): add a puzzle, screen, setting, sound, animation, or game rule
+- [Art direction](docs/art-direction.md): the look and feel, palette, type, and mood board

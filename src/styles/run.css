@@ -185,7 +185,7 @@
 
 .node.current .node-body {
   border: 2px solid var(--accent);
-  box-shadow: 0 6px 18px rgb(0 0 0 / 0.12);
+  box-shadow: 0 6px 18px var(--shadow);
 }
 
 .node.current .node-status {

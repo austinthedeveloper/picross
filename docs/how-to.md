@@ -204,6 +204,10 @@ its own menu, cost, and announcement.
 
 ## Add a color or change the theme
 
+Start from [Art direction](art-direction.md): it says which color is for what and the
+rules for adding one (a light, dark, and high-contrast value, and no raw hex outside
+`tokens.css`).
+
 1. Add or change the token in `src/styles/tokens.css`, in all three blocks: light
    (`:root`), dark (`prefers-color-scheme: dark`), and high contrast
    (`:root[data-contrast='high']`).

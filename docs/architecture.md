@@ -221,7 +221,8 @@ animation.
 
 ## Styling and themes
 
-Every color is a CSS custom property in `styles/tokens.css`. The tokens are redefined for
+Every color, and the font (Rubik, #25), is a CSS custom property in `styles/tokens.css`.
+[Art direction](art-direction.md) says what each one is for. The tokens are redefined for
 dark mode (`prefers-color-scheme`) and for high contrast (`:root[data-contrast='high']`,
 set by `ui/theme.ts`). Use tokens rather than hard-coded colors so all three themes keep
 working. Shared button styles live in `base.css`: `.button`, `.ghost`, `.primary`, a
