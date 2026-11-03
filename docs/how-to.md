@@ -16,9 +16,9 @@ Recipes for common changes. See [architecture.md](architecture.md) for how the p
 5. Run `npm run check:puzzles`. CI runs the same check and fails on ambiguous puzzles.
 
 You can also write the JSON by hand: `id`, `name`, `width`, `height`, and `solution` (one
-string per row, `#` filled and `.` empty). `parsePuzzle` validates it at startup. The
-starter-pack test expects 5×5 to 15×15 and at most 15 puzzles, so update
-`src/puzzles/format.test.ts` if the pack grows past that.
+string per row, `#` filled and `.` empty). `parsePuzzle` validates it at startup. The pack test expects square
+puzzles from 5×5 to 20×20, with at least half of them 15×15 or larger. The puzzle list
+groups puzzles by size, biggest first, so a new size gets its own section automatically.
 
 ## Add an encounter or a run
 

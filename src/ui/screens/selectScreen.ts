@@ -35,6 +35,26 @@ function puzzleCard(p: Puzzle, number: number): HTMLElement {
   ]);
 }
 
+/** The puzzle list grouped by size, biggest first. Cards keep their pack-wide number. */
+function sizeSections(): HTMLElement[] {
+  const sizes = [...new Set(puzzles.map((p) => p.width))].sort((a, b) => b - a);
+  return sizes.map((size) => {
+    const group = puzzles.filter((p) => p.width === size);
+    const solved = group.filter((p) => getPuzzleStats(p.id)).length;
+    return el('section', { className: 'size-section', ariaLabel: `${size}×${size} puzzles` }, [
+      el('h2', { className: 'size-heading' }, [
+        `${size}×${size}`,
+        el('span', { className: 'size-count', textContent: `${solved}/${group.length}` }),
+      ]),
+      el(
+        'div',
+        { className: 'cards' },
+        group.map((p) => puzzleCard(p, puzzles.indexOf(p) + 1)),
+      ),
+    ]);
+  });
+}
+
 /** Renders the puzzle list with settings, mode choice, and stats. */
 export function renderSelectScreen(app: HTMLElement): void {
   const rerender = () => renderSelectScreen(app);
@@ -82,11 +102,7 @@ export function renderSelectScreen(app: HTMLElement): void {
         stat(String(overall.solves), 'Total solves'),
         stat(formatTime(overall.totalTime), 'Time solving'),
       ]),
-      el(
-        'div',
-        { className: 'cards' },
-        puzzles.map((p, i) => puzzleCard(p, i + 1)),
-      ),
+      ...sizeSections(),
       el('footer', { className: 'footer' }, [
         el('a', { href: '#/editor', textContent: 'Make your own puzzle →' }),
       ]),

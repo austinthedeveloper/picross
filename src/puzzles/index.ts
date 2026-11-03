@@ -19,6 +19,16 @@ const ORDER = [
   'tree',
   'rocket',
   'sailboat',
+  'lighthouse',
+  'anchor',
+  'mug',
+  'turtle',
+  'robot',
+  'balloon',
+  'cactus',
+  'castle',
+  'guitar',
+  'teapot',
 ];
 
 const byId = new Map<string, Puzzle>();
