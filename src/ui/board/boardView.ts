@@ -1,7 +1,7 @@
-import { Cell, column, row, type Board } from '../engine/board';
-import { satisfiedClues } from '../engine/clues';
-import type { Puzzle } from '../puzzles/format';
-import { el } from './dom';
+import { Cell, column, row, type Board } from '../../engine/board';
+import { satisfiedClues } from '../../engine/clues';
+import type { Puzzle } from '../../puzzles/format';
+import { el } from '../dom';
 
 export interface Line {
   kind: 'row' | 'col';

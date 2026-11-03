@@ -27,10 +27,6 @@ interface SaveData {
 const data: SaveData = readStore<SaveData>(KEY, { solved: {}, boards: {}, totalTime: 0 });
 const persist = () => writeStore(KEY, data);
 
-export function isPuzzleSolved(id: string): boolean {
-  return Boolean(data.solved[id]);
-}
-
 export function getPuzzleStats(id: string): PuzzleStats | undefined {
   return data.solved[id];
 }

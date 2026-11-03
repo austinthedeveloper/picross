@@ -1,0 +1,58 @@
+/* Theme tokens. Every color in the app comes from these. */
+
+:root {
+  --bg: #f6f3ec;
+  --surface: #ffffff;
+  --ink: #23262f;
+  --muted: #7a7e8a;
+  --line: #d6d2c8;
+  --guide: #8a8679;
+  --accent: #d9534f;
+  --accent-ink: #ffffff;
+  --ok: #2e8b57;
+  --hl: #fbefc9;
+  --cell-bg: #fffdf8;
+  --mark: #b0aa9c;
+  color-scheme: light;
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #17181c;
+    --surface: #212329;
+    --ink: #e9e6de;
+    --muted: #8d909a;
+    --line: #353841;
+    --guide: #6c7080;
+    --accent: #e8716d;
+    --accent-ink: #17181c;
+    --ok: #5cc48a;
+    --hl: #2e2b20;
+    --cell-bg: #1c1e23;
+    --mark: #5d606b;
+    color-scheme: dark;
+  }
+}
+
+/* High-contrast theme (settings toggle): pure black and white with strong lines. */
+:root[data-contrast='high'] {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --ink: #000000;
+  --muted: #000000;
+  --line: #000000;
+  --guide: #000000;
+  --accent: #c00000;
+  --accent-ink: #ffffff;
+  --ok: #006b2e;
+  --hl: #ffe14d;
+  --cell-bg: #ffffff;
+  --mark: #444444;
+  color-scheme: light;
+}

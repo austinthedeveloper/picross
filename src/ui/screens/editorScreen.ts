@@ -1,17 +1,17 @@
-import { Cell, createBoard, type Solution } from '../engine/board';
-import { deriveClues } from '../engine/clues';
-import { checkSolution, Unknown } from '../engine/solver';
-import { readStore, writeStore } from '../game/storage';
+import { Cell, createBoard, type Solution } from '../../engine/board';
+import { deriveClues } from '../../engine/clues';
+import { checkSolution, Unknown } from '../../engine/solver';
+import { readStore, writeStore } from '../../game/storage';
 import {
   parsePuzzle,
   slugify,
   stringifyPuzzle,
   toPuzzleFile,
   type Puzzle,
-} from '../puzzles/format';
-import { createBoardView } from './boardView';
-import { el } from './dom';
-import { attachInput } from './input';
+} from '../../puzzles/format';
+import { createBoardView } from '../board/boardView';
+import { el } from '../dom';
+import { attachInput } from '../board/input';
 
 const MIN_SIZE = 2;
 const MAX_SIZE = 30;
@@ -64,6 +64,11 @@ export function renderEditorScreen(app: HTMLElement): void {
   const gridHost = el('div', { className: 'board-wrap editor-grid' });
 
   const save = () => writeStore(DRAFT_KEY, draft);
+  const updateJson = () => {
+    output.value = stringifyPuzzle(
+      toPuzzleFile(draft.id, draft.name, draft.width, draft.height, draft.cells),
+    );
+  };
 
   const puzzleFromDraft = (): Puzzle => {
     const solution: Solution = { width: draft.width, height: draft.height, cells: draft.cells };
@@ -116,9 +121,7 @@ export function renderEditorScreen(app: HTMLElement): void {
 
     gridHost.replaceChildren(view.root);
     check(view.cells);
-    output.value = stringifyPuzzle(
-      toPuzzleFile(draft.id, draft.name, draft.width, draft.height, draft.cells),
-    );
+    updateJson();
   };
 
   const check = (cells: HTMLElement[]) => {
@@ -168,17 +171,13 @@ export function renderEditorScreen(app: HTMLElement): void {
       idInput.value = draft.id;
     }
     save();
-    output.value = stringifyPuzzle(
-      toPuzzleFile(draft.id, draft.name, draft.width, draft.height, draft.cells),
-    );
+    updateJson();
   };
   idInput.oninput = () => {
     idEdited = true;
     draft.id = slugify(idInput.value);
     save();
-    output.value = stringifyPuzzle(
-      toPuzzleFile(draft.id, draft.name, draft.width, draft.height, draft.cells),
-    );
+    updateJson();
   };
 
   const message = el('span', { className: 'editor-message', role: 'status' });

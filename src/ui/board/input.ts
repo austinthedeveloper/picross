@@ -1,5 +1,5 @@
-import { Cell, type Board } from '../engine/board';
-import type { Change } from '../engine/history';
+import { Cell, type Board } from '../../engine/board';
+import type { Change } from '../../engine/history';
 
 export type Tool = typeof Cell.Filled | typeof Cell.Marked;
 
@@ -42,20 +42,23 @@ export function attachInput(root: HTMLElement, opts: InputOptions): void {
     return { r: Math.floor(i / w), c: i % w };
   };
 
+  /** Extends the stroke along its axis (locked by the first move) to (r, c). */
   const paintTo = (r: number, c: number) => {
-    if (!stroke) return;
-    const { start } = stroke;
-    if (!stroke.axis) {
+    const s = stroke;
+    if (!s) return;
+    const { start } = s;
+    if (!s.axis) {
       if (r === start.r && c === start.c) return;
-      stroke.axis = Math.abs(c - start.c) >= Math.abs(r - start.r) ? 'row' : 'col';
+      s.axis = Math.abs(c - start.c) >= Math.abs(r - start.r) ? 'row' : 'col';
     }
+    // Fill every cell between start and here, so fast drags don't skip any.
     const fresh: Change[] = [];
     const visit = (rr: number, cc: number) => {
       const index = rr * w + cc;
-      if (stroke!.changes.has(index) || board.cells[index] !== stroke!.match) return;
-      fresh.push({ index, from: board.cells[index], to: stroke!.target });
+      if (s.changes.has(index) || board.cells[index] !== s.match) return;
+      fresh.push({ index, from: board.cells[index], to: s.target });
     };
-    if (stroke.axis === 'row') {
+    if (s.axis === 'row') {
       const step = Math.sign(c - start.c) || 1;
       for (let cc = start.c; cc !== c + step; cc += step) visit(start.r, cc);
     } else {

@@ -1,4 +1,4 @@
-import type { Solution } from '../engine/board';
+import type { Solution } from '../../engine/board';
 
 /** Draws a solution as a small pixel image. */
 export function createPicture(solution: Solution, pixel: number): HTMLCanvasElement {

@@ -1,8 +1,13 @@
-import './style.css';
+import './styles/tokens.css';
+import './styles/base.css';
+import './styles/board.css';
+import './styles/game.css';
+import './styles/select.css';
+import './styles/editor.css';
 import { getPuzzle } from './puzzles/index';
-import { renderEditorScreen } from './ui/editorScreen';
-import { renderGameScreen } from './ui/gameScreen';
-import { renderSelectScreen } from './ui/selectScreen';
+import { renderEditorScreen } from './ui/screens/editorScreen';
+import { renderGameScreen } from './ui/screens/gameScreen';
+import { renderSelectScreen } from './ui/screens/selectScreen';
 import { applyTheme } from './ui/theme';
 
 applyTheme();

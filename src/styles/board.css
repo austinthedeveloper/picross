@@ -1,0 +1,249 @@
+/* The puzzle board: clues, cells, cursor, and cell animations. Shared by the game and editor. */
+
+.board-wrap {
+  overflow: auto;
+  max-height: calc(100dvh - 200px);
+  overscroll-behavior: contain;
+}
+
+.board-wrap.zoomed {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.board {
+  /* Fit the clues and grid within the viewport, then apply zoom. */
+  --cell: calc(
+    clamp(
+        16px,
+        min(
+          calc((100vw - 40px) / (var(--w) + var(--rc) * 0.7 + 0.5)),
+          calc((100dvh - 190px) / (var(--h) + var(--cc) * 0.85 + 0.5))
+        ),
+        var(--cell-max, 40px)
+      ) *
+      var(--zoom, 1)
+  );
+  --clue-size: min(calc(var(--cell) * 0.55), 20px);
+  display: grid;
+  width: max-content;
+  margin: 0 auto;
+  padding: 4px;
+  grid-template-columns: auto repeat(var(--w), var(--cell));
+  grid-template-rows: auto repeat(var(--h), var(--cell));
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+
+/* Touch: small grids get finger-sized cells; pinch or the zoom bar for large ones. */
+@media (pointer: coarse) {
+  .board {
+    --cell-max: 44px;
+  }
+}
+
+/* ARIA rows wrap the cells without affecting the CSS grid. */
+.board-row {
+  display: contents;
+}
+
+.board:focus {
+  outline: none;
+}
+
+/* Clues */
+
+.clue {
+  display: flex;
+  gap: calc(var(--cell) * 0.25);
+  font-size: var(--clue-size);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  border-radius: 4px;
+}
+
+.col-clue {
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 2px;
+  padding-bottom: 4px;
+}
+
+.row-clue {
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 6px;
+}
+
+/* Clues stay in view while a zoomed board is panned. */
+.col-clue,
+.row-clue,
+.corner {
+  position: sticky;
+  background: var(--bg);
+  z-index: 2;
+}
+
+.col-clue,
+.corner {
+  top: 0;
+}
+
+.row-clue,
+.corner {
+  left: 0;
+}
+
+.corner {
+  z-index: 3;
+}
+
+.clue.hl {
+  background: var(--hl);
+}
+
+.clue .done {
+  color: var(--mark);
+  opacity: 0.6;
+}
+
+:root[data-contrast='high'] .clue .done {
+  opacity: 1;
+  text-decoration: line-through;
+}
+
+/* Cells */
+
+.cell {
+  background: var(--cell-bg);
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  position: relative;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cell.edge-left {
+  border-left: 2px solid var(--guide);
+}
+
+.cell.edge-top {
+  border-top: 2px solid var(--guide);
+}
+
+.cell.edge-right,
+.cell.guide-x {
+  border-right: 2px solid var(--guide);
+}
+
+.cell.edge-bottom,
+.cell.guide-y {
+  border-bottom: 2px solid var(--guide);
+}
+
+.cell.filled {
+  background: var(--ink);
+  animation: fill-pop 0.14s ease-out;
+}
+
+.cell.marked::before {
+  content: '';
+  position: absolute;
+  inset: 22%;
+  background:
+    linear-gradient(
+      45deg,
+      transparent calc(50% - 1px),
+      var(--mark) calc(50% - 1px),
+      var(--mark) calc(50% + 1px),
+      transparent calc(50% + 1px)
+    ),
+    linear-gradient(
+      -45deg,
+      transparent calc(50% - 1px),
+      var(--mark) calc(50% - 1px),
+      var(--mark) calc(50% + 1px),
+      transparent calc(50% + 1px)
+    );
+  animation: mark-in 0.14s ease-out;
+}
+
+:root[data-contrast='high'] .cell.marked::before {
+  inset: 15%;
+}
+
+@media (hover: hover) {
+  .cell:not(.filled):hover {
+    background: var(--hl);
+  }
+}
+
+.board:focus-visible .cell.cursor {
+  outline: 3px solid var(--accent);
+  outline-offset: -2px;
+  z-index: 1;
+}
+
+@keyframes fill-pop {
+  from {
+    transform: scale(0.7);
+  }
+}
+
+@keyframes mark-in {
+  from {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+}
+
+/* One-shot flashes (see restartAnimation in boardView.ts) play on an overlay so
+   they never restart the cell's own animation. */
+.cell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: var(--flash);
+}
+
+@keyframes overlay-flash {
+  from {
+    opacity: 0.6;
+  }
+}
+
+.cell.line-flash::after {
+  --flash: var(--accent);
+  animation: overlay-flash 0.5s ease-out;
+}
+
+.cell.error::after {
+  --flash: var(--accent);
+  animation: overlay-flash 0.6s ease-out;
+}
+
+.cell.hinted::after {
+  --flash: var(--hl);
+  animation: overlay-flash 0.8s ease-out;
+}
+
+.clue.line-flash {
+  animation: clue-flash 0.5s ease-out;
+}
+
+@keyframes clue-flash {
+  from {
+    background: color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+}
+
+/* Pixel-art preview of a solution (solved panel, puzzle cards). */
+.picture {
+  image-rendering: pixelated;
+  display: block;
+}
