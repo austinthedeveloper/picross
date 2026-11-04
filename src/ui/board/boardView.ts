@@ -20,6 +20,8 @@ export interface BoardView {
   /** Redraws the board. Returns lines whose clues just became fully satisfied. */
   update(board: Board): Line[];
   highlight(r: number | null, c: number | null): void;
+  /** Keeps these lines highlighted, clues and cells, until the next call (How to play). */
+  setFocus(lines: readonly Line[]): void;
   setCursor(r: number, c: number): void;
   flashError(index: number): void;
   flashHint(indexes: number[]): void;
@@ -355,6 +357,14 @@ export function createBoardView(puzzle: Puzzle): BoardView {
     },
     flashHint(indexes) {
       for (const i of indexes) playOnce(cells[i], 'hinted');
+    },
+    setFocus(lines) {
+      const on = (kind: LineKind, i: number) => lines.some((l) => l.kind === kind && l.index === i);
+      rowClues.forEach((g, r) => g.group.classList.toggle('focus', on('row', r)));
+      colClues.forEach((g, c) => g.group.classList.toggle('focus', on('col', c)));
+      cells.forEach((cell, i) =>
+        cell.classList.toggle('focus', on('row', Math.floor(i / w)) || on('col', i % w)),
+      );
     },
     highlight(r, c) {
       rowClues.forEach((g, i) => g.group.classList.toggle('hl', i === r));

@@ -44,6 +44,11 @@ describe('starter pack', () => {
     expect(big * 2).toBeGreaterThanOrEqual(puzzles.length);
   });
 
+  it('runs from the smallest puzzles to the biggest', () => {
+    const sizes = puzzles.map((p) => p.width);
+    expect(sizes).toEqual([...sizes].sort((a, b) => a - b));
+  });
+
   it('has unique ids', () => {
     expect(new Set(puzzles.map((p) => p.id)).size).toBe(puzzles.length);
   });

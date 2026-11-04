@@ -2,10 +2,13 @@ import { expect, test } from '@playwright/test';
 import { announcements, boardState, cell, seed, solution, solve, press } from './helpers';
 
 test.describe('free play', () => {
-  test('a fresh visit: sound off, big puzzles first, fish is 10×10', async ({ page }) => {
+  test('a fresh visit: sound off, small puzzles first, fish is 10×10', async ({ page }) => {
     await page.goto('/#/');
     await expect(page.locator('.mute')).toHaveText(/Sound off/);
     await expect(page.locator('.size-section:not(.murals) .size-heading').first()).toHaveText(
+      /5×5/,
+    );
+    await expect(page.locator('.size-section:not(.murals) .size-heading').last()).toHaveText(
       /20×20/,
     );
     await page.goto('/#/play/fish');
@@ -19,6 +22,40 @@ test.describe('free play', () => {
     await expect(page.locator('.end-panel:not([hidden]) h2')).toHaveText('Solved!');
     await press(page, 'All puzzles');
     await expect(page.locator('.card.solved')).toHaveCount(1);
+  });
+
+  test('the filter shows completed or not completed, and is remembered', async ({ page }) => {
+    await page.goto('/#/play/heart');
+    await solve(page, solution('heart'));
+    await expect(page.locator('.end-panel:not([hidden]) h2')).toHaveText('Solved!');
+    await press(page, 'All puzzles');
+    const cards = page.locator('.size-section:not(.murals) .card');
+    const total = await cards.count();
+    await page.getByRole('button', { name: 'Completed', exact: true }).tap();
+    await expect(cards).toHaveCount(1);
+    await expect(cards.first()).toContainText('Heart');
+    await expect(page.locator('.mural-card')).toHaveCount(0);
+    await page.reload();
+    await expect(cards).toHaveCount(1);
+    await page.getByRole('button', { name: 'Not completed' }).tap();
+    await expect(cards).toHaveCount(total - 1);
+    await expect(page.locator('.mural-card').first()).toBeVisible();
+    await expect(page.locator('.size-section:not(.murals) .size-heading').first()).toContainText(
+      '1/4',
+    );
+  });
+
+  test('the completed filter says so when nothing is', async ({ page }) => {
+    await page.goto('/#/');
+    await page.getByRole('button', { name: 'Completed', exact: true }).tap();
+    await expect(page.locator('.empty-list')).toContainText('Nothing completed yet');
+  });
+
+  test('"Next" walks from the smallest puzzles up', async ({ page }) => {
+    await page.goto('/#/play/smile');
+    await solve(page, solution('smile'));
+    await press(page, 'Next →');
+    await expect(page).toHaveURL(/#\/play\/key$/);
   });
 
   test('a drag paints a line and undo/redo/reset work', async ({ page }) => {

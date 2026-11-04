@@ -1,5 +1,11 @@
 import { getOverallStats, getPuzzleStats, getSavedBoard } from '../../game/progress';
-import { getSettings, updateSettings, type Mode } from '../../game/settings';
+import {
+  getSettings,
+  passesFilter,
+  updateSettings,
+  type ListFilter,
+  type Mode,
+} from '../../game/settings';
 import { puzzles } from '../../puzzles/index';
 import type { Puzzle } from '../../puzzles/format';
 import { createPicture } from '../board/picture';
@@ -10,6 +16,18 @@ import { applyTheme } from '../theme';
 import { dailyCard } from './daily';
 import { muralSection } from './mural';
 import { runBanner } from './run';
+
+const FILTERS: [ListFilter, string][] = [
+  ['all', 'All'],
+  ['todo', 'Not completed'],
+  ['done', 'Completed'],
+];
+
+const EMPTY_LIST: Record<ListFilter, string> = {
+  all: '',
+  todo: 'You’ve completed everything. Well done.',
+  done: 'Nothing completed yet. Pick a puzzle and get going.',
+};
 
 const MODE_HINTS: Record<Mode, string> = {
   relaxed: 'No checking. Solve at your own pace.',
@@ -37,12 +55,17 @@ function puzzleCard(p: Puzzle, number: number): HTMLElement {
   ]);
 }
 
-/** The puzzle list grouped by size, biggest first. Cards keep their pack-wide number. */
-function sizeSections(): HTMLElement[] {
-  const sizes = [...new Set(puzzles.map((p) => p.width))].sort((a, b) => b - a);
-  return sizes.map((size) => {
+/**
+ * The puzzle list grouped by size, smallest first. Cards keep their pack-wide
+ * number, and the headings count the whole size whatever the filter hides.
+ */
+function sizeSections(filter: ListFilter): HTMLElement[] {
+  const sizes = [...new Set(puzzles.map((p) => p.width))].sort((a, b) => a - b);
+  return sizes.flatMap((size) => {
     const group = puzzles.filter((p) => p.width === size);
     const solved = group.filter((p) => getPuzzleStats(p.id)).length;
+    const shown = group.filter((p) => passesFilter(filter, Boolean(getPuzzleStats(p.id))));
+    if (!shown.length) return [];
     return el('section', { className: 'size-section', ariaLabel: `${size}×${size} puzzles` }, [
       el('h2', { className: 'size-heading' }, [
         `${size}×${size}`,
@@ -51,7 +74,7 @@ function sizeSections(): HTMLElement[] {
       el(
         'div',
         { className: 'cards' },
-        group.map((p) => puzzleCard(p, puzzles.indexOf(p) + 1)),
+        shown.map((p) => puzzleCard(p, puzzles.indexOf(p) + 1)),
       ),
     ]);
   });
@@ -77,6 +100,8 @@ export function renderSelectScreen(app: HTMLElement): void {
       el('span', { textContent: label }),
     ]);
   const overall = getOverallStats();
+  const filter = settings.listFilter;
+  const list = [muralSection(filter), ...sizeSections(filter)].flatMap((s) => s ?? []);
 
   app.replaceChildren(
     el('main', { className: 'screen select' }, [
@@ -93,6 +118,11 @@ export function renderSelectScreen(app: HTMLElement): void {
       ]),
       dailyCard(),
       runBanner(),
+      el('a', {
+        className: 'how-to-link',
+        href: '#/how-to-play',
+        textContent: overall.solves ? 'How to play →' : 'New to picross? Learn it in a minute →',
+      }),
       el('div', { className: 'mode-row' }, [
         el('div', { className: 'segmented', role: 'group', ariaLabel: 'Mode' }, [
           modeButton('relaxed', 'Relaxed', 'No checking'),
@@ -109,8 +139,21 @@ export function renderSelectScreen(app: HTMLElement): void {
         stat(String(overall.solves), 'Total solves'),
         stat(formatTime(overall.totalTime), 'Time solving'),
       ]),
-      muralSection(),
-      ...sizeSections(),
+      el('div', { className: 'filter-row' }, [
+        el(
+          'div',
+          { className: 'segmented', role: 'group', ariaLabel: 'Show puzzles' },
+          FILTERS.map(([value, label]) =>
+            toggle(label, filter === value, () => {
+              updateSettings({ listFilter: value });
+              rerender();
+            }),
+          ),
+        ),
+      ]),
+      ...(list.length
+        ? list
+        : [el('p', { className: 'empty-list', textContent: EMPTY_LIST[filter] })]),
       el('footer', { className: 'footer' }, [
         el('a', { href: '#/editor', textContent: 'Make your own puzzle →' }),
       ]),
