@@ -1,0 +1,49 @@
+{
+  "id": "the-1159-reveal",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "rook"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "dee"
+    },
+    "pim": {
+      "name": "Stationmaster Pim",
+      "portrait": "🧑‍✈️"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "text": "Midnight, and for the first time in forty years, something is early. The rails begin to hum."
+        },
+        {
+          "who": "pim",
+          "text": "Stand behind the yellow line, please."
+        },
+        {
+          "who": "dee",
+          "text": "It's not slowing down."
+        },
+        {
+          "who": "rook",
+          "text": "Excuse me! Is this the 11:59?"
+        },
+        {
+          "who": "dee",
+          "text": "Brass key, on the boiler where the whistle ought to be. Still turning."
+        },
+        {
+          "who": "rook",
+          "text": "I'd like to report a late train."
+        },
+        {
+          "text": "The whistle blows. It sounds a lot like an apology."
+        }
+      ]
+    }
+  }
+}

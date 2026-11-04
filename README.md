@@ -6,7 +6,7 @@ the current `main` at https://austinthedeveloper.github.io/picross/.
 
 Fill cells so each row and column matches its clue numbers, and a pixel picture appears.
 
-- 22 handmade free-play puzzles from 5×5 to 20×20 (mostly 15×15 and up), each checked to have one solution reachable without
+- 462 handmade free-play puzzles from 5×5 to 20×20 (mostly 15×15 and up), each checked to have one solution reachable without
   guessing
 - Mouse, touch, and keyboard play: drag to paint lines, right-click or the Mark tool to place
   X's, pinch to zoom

@@ -342,11 +342,12 @@ plays (`renderRunScreen` checks before drawing the board), and after that a **�
 story** button replays it. Every job must be in exactly one chapter, or loading fails.
 The chapters so far are 1 · Odd Jobs (First Job), 2 · After Hours (The Night Shift),
 3 · Deep Water (The Deep End), 4 · Green Thumbs (The Glasshouse), 5 · Step Right Up (The
-Midway), 6 · Cold Snap (Summit Station), and 7 · Wound Up (Closing Time).
+Midway), 6 · Cold Snap (Summit Station), 7 · End of the Line (The Night Mail), 8 · Below
+Stairs (The Undercroft), 9 · Peer Review (The Annex), and 10 · Wound Up (Closing Time).
 
 Jobs so far: **First Job** (#21), **The Night Shift** (#46), and **The Deep End** (#67). The Night Shift unlocks after
 First Job. It's Mimic → Clockwork Owl → the Forger → Dusty Exhibit (a dig that yields a
-patch kit) → Armored Beetle → Break room → the Museum Rex, with Curator Ambrose joining Rook and Dee in its scenes. Chapters 4 to 7 are covered under [The later chapters](#the-later-chapters-chapters-4-to-7).
+patch kit) → Armored Beetle → Break room → the Museum Rex, with Curator Ambrose joining Rook and Dee in its scenes. Chapters 4 to 10 are covered under [The later chapters](#the-later-chapters-chapters-4-to-10).
 
 ## Endless mode
 
@@ -513,7 +514,7 @@ scrambled columns was the most the solver could still finish. Its 20×20 size an
 carry the rest of the difficulty. A scene (`curator-return`) plays before the fight.
 
 This was the Night Shift's boss until playtesting showed it was the hardest fight in the
-game and came before much easier ones. The fight moved to Chapter 7 unchanged, and the
+game and came before much easier ones. The fight moved to the last chapter unchanged, and the
 Night Shift now ends with the **Museum Rex**: a 20×20 skull with 60 HP that scrambles 5
 columns in total and swaps twice. The Curator still sets it loose in `rex-reveal` and
 gets away, leaving a brass key behind.
@@ -561,7 +562,7 @@ wipes it all. Ink only hides your marks, never clues, so it doesn't affect solva
 
 Keeper Bo joins Rook and Dee in its scenes.
 
-### The later chapters (Chapters 4 to 7)
+### The later chapters (Chapters 4 to 10)
 
 From here on, fights pair powers the player already knows rather than adding new ones.
 A boss winds up a brass key, which goes in Rook and Dee's jar: that thread leads to the
@@ -570,9 +571,14 @@ Curator's return without counting the keys, so chapters can be added before him.
 - **The Glasshouse:** Snapjaw (charge, swap) → Spore Puff (fog, ink) → Potting Shed (dig: sponge) → Ironbark (armor, scramble) → Garden bench → **Mother Bramble** (fog, ink, swap).
 - **The Midway:** Funhouse Mirror (scramble, swap) → Madame Vesper (fakes, ink) → Prop Wagon (dig: bomb) → The Great Bruno (armor, charge) → Popcorn stand → **The Ringmaster** (fakes, scramble, charge, swap).
 - **Summit Station:** Whiteout (fog, ink) → Falling Star (fakes, scramble) → Supply Cache (dig: patch kit) → Ice Mammoth (armor, fog, charge) → Cocoa break → **The Yeti** (fog, scramble, ink, charge).
+- **The Night Mail:** Signal Box (fog, scramble) → Ticket Inspector (fakes, charge) → Lost Property (dig: sponge) → Gerald, the Coal Heap (armor, ink) → Station buffet → **The 11:59** (fog, scramble, swap, charge).
+- **The Undercroft:** Rusted Sentry (armor, swap) → Cellar Ooze (scramble, ink) → Wine Cellar (dig: bomb) → The Rat King (fakes, swap) → Guard room → **The Old Wyrm** (armor, fakes, scramble, charge, ink).
+- **The Annex:** Spark Hound (scramble, charge) → Failed Clone (fog, swap) → Supply Closet (dig: sponge) → Reviewer Two (armor, fakes) → Faculty lounge → **Professor Ostrander** (fakes, scramble, swap, ink).
 - **Closing Time:** Tin Soldier (armor, fog, scramble) → Dusty Exhibit → Break room → **The Curator**. The dig and rest stop are the Night Shift's own.
 
-Hollis, Bigsby, and Dr. Lund join Rook and Dee in their jobs' scenes.
+Hollis, Bigsby, Dr. Lund, Stationmaster Pim, Sir Dennis, and Priya join Rook and Dee in their
+jobs' scenes. The last three chapters' enemies and new characters use emoji until their art is
+made.
 
 ### Difficulty
 
@@ -590,10 +596,13 @@ first pass fills in. More passes and less first-pass progress mean harder.
 | Mother Bramble    | 4       | 20×20 | 6      | 21%        |
 | The Ringmaster    | 5       | 20×20 | 8      | 25%        |
 | The Yeti          | 6       | 20×20 | 9      | 14%        |
-| The Curator       | 7       | 20×20 | 12     | 12%        |
+| The 11:59         | 7       | 20×20 | 9      | 20%        |
+| The Old Wyrm      | 8       | 20×20 | 10     | 31%        |
+| Prof. Ostrander   | 9       | 20×20 | 11     | 14%        |
+| The Curator       | 10      | 20×20 | 12     | 12%        |
 
 The solver can't see ink, charge, swaps, or armor, so bosses leaning on those play harder
-than their numbers (Old Tess especially). To tune a charge, expect about 1 to 3 zaps a
+than their numbers (Old Tess and the Old Wyrm especially). To tune a charge, expect about 1 to 3 zaps a
 fight from a player ignoring the live line, at 5 or 6 lines to fill the meter. The picture matters more than the powers: dense
 drawings stay easy under any number of powers, and thin outlines get hard quickly, so
 give a thin drawing some solid areas to start from.

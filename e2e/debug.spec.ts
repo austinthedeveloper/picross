@@ -26,6 +26,9 @@ test('the dev build shows it, and unlock and reset work', async ({ page }) => {
     'The Glasshouse',
     'The Midway',
     'Summit Station',
+    'The Night Mail',
+    'The Undercroft',
+    'The Annex',
     'Closing Time',
   ]);
   await expect(page.locator('.chapter.locked')).toHaveCount(0);
@@ -33,7 +36,7 @@ test('the dev build shows it, and unlock and reset work', async ({ page }) => {
 
   await openPanel(page);
   await press(page, 'Reset everything');
-  await expect(page.locator('.run-banner')).toContainText('1 of 7 jobs open');
+  await expect(page.locator('.run-banner')).toContainText('1 of 10 jobs open');
 });
 
 test('jump to a boss, force a phase, deal damage, and solve the board', async ({ page }) => {
@@ -78,17 +81,20 @@ test('forged clues survive every phase of a fight that also scrambles', async ({
 
   await openPanel(page);
   const phases = [
-    { hp: 54, name: 'The Ringmaster', sprite: '🎩', scrambled: 1 },
-    { hp: 48, name: 'Grand Ringmaster', sprite: '🎩', scrambled: 3 },
-    { hp: 39, name: 'Grand Ringmaster', sprite: '🎩', scrambled: 3 },
-    { hp: 27, name: 'Showstopper', sprite: '🎪', scrambled: 3 },
+    { hp: 54, name: 'The Ringmaster', sprite: 'ringmaster', scrambled: 1 },
+    { hp: 48, name: 'Grand Ringmaster', sprite: 'ringmaster', scrambled: 3 },
+    { hp: 39, name: 'Grand Ringmaster', sprite: 'ringmaster', scrambled: 3 },
+    { hp: 27, name: 'Showstopper', sprite: 'showstopper', scrambled: 3 },
   ];
   for (const { hp, name, sprite, scrambled } of phases) {
     await press(page, 'Next phase');
     expect(errors).toEqual([]);
     expect(await meter(page, 'enemy-hp')).toBe(hp);
     await expect(page.locator('.battle-side.enemy .battle-name')).toHaveText(name);
-    await expect(page.locator('.enemy-sprite')).toHaveText(sprite);
+    await expect(page.locator('.enemy-sprite img')).toHaveAttribute(
+      'src',
+      `./art/enemies/${sprite}.png`,
+    );
     await expect(page.locator('.clue.scrambled')).toHaveCount(scrambled);
     for (const { row, numbers } of forged) {
       expect(await clueNumbers(page, row)).toEqual(numbers);

@@ -4,7 +4,7 @@ import { encounterSolution, meter, runAt, seed, skipScene, solve, press } from '
 test.describe('jobs board', () => {
   test('chapter 2 is locked until First Job is won', async ({ page }) => {
     await page.goto('/#/');
-    await expect(page.locator('.run-banner')).toContainText('1 of 7 jobs open');
+    await expect(page.locator('.run-banner')).toContainText('1 of 10 jobs open');
     await page.locator('.run-banner').tap();
     await expect(page.locator('.chapter-title').first()).toHaveText('Chapter 1Odd Jobs');
     await expect(page.locator('.job h3')).toHaveText(['First Job']);
@@ -15,6 +15,9 @@ test.describe('jobs board', () => {
       'Clear The Glasshouse to continue the story.',
       'Clear The Midway to continue the story.',
       'Clear Summit Station to continue the story.',
+      'Clear The Night Mail to continue the story.',
+      'Clear The Undercroft to continue the story.',
+      'Clear The Annex to continue the story.',
     ]);
   });
 

@@ -1,0 +1,54 @@
+{
+  "id": "undercroft-intro",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "rook"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "dee"
+    },
+    "dennis": {
+      "name": "Sir Dennis",
+      "portrait": "🤺"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "text": "Castle Ambry, after the last tour. The gift shop is shut. The stairs keep going."
+        },
+        {
+          "who": "dennis",
+          "text": "Halt! Oh, thank goodness. Are you from the council?"
+        },
+        {
+          "who": "rook",
+          "text": "Close enough. How's it looking down there?"
+        },
+        {
+          "who": "dennis",
+          "text": "That armor isn't one of ours. Something in the cellar ate the map. The rats have a king now. I bowed. I panicked."
+        },
+        {
+          "who": "dee",
+          "text": "And at the bottom?"
+        },
+        {
+          "who": "dennis",
+          "text": "Something very large, asleep on what I'd hoped was the gift shop float. It has been breathing on the stairs."
+        },
+        {
+          "who": "dee",
+          "text": "Nobody said anything about a dragon."
+        },
+        {
+          "who": "rook",
+          "text": "Dragons are a different rate."
+        }
+      ]
+    }
+  }
+}

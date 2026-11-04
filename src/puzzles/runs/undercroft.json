@@ -1,0 +1,19 @@
+{
+  "id": "undercroft",
+  "name": "The Undercroft",
+  "hp": 18,
+  "encounters": [
+    "rusted-sentry",
+    "cellar-ooze",
+    "wine-cellar",
+    "rat-king",
+    "guard-room",
+    "old-wyrm"
+  ],
+  "order": 8,
+  "requires": "night-mail",
+  "gadgets": ["patch-kit"],
+  "blurb": "A castle tour that used to go down one flight of stairs. Today it goes down nine.",
+  "intro": "undercroft-intro",
+  "outro": "undercroft-outro"
+}

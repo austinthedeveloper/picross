@@ -40,7 +40,7 @@ describe('endlessEncounter', () => {
   });
 
   it('plays every fight once before any repeats', () => {
-    const fights = Array.from({ length: 40 }, (_, n) => n)
+    const fights = Array.from({ length: setup.fights.length * 2 }, (_, n) => n)
       .filter((n) => !isBreak(n))
       .slice(0, setup.fights.length)
       .map((n) => endlessEncounter(setup, n).id.split('@')[0]);

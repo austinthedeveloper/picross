@@ -1,0 +1,50 @@
+{
+  "id": "night-mail-intro",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "rook"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "dee"
+    },
+    "pim": {
+      "name": "Stationmaster Pim",
+      "portrait": "🧑‍✈️"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "text": "Halt Junction, a quarter to midnight. Weeds between the rails. One lamp still lit."
+        },
+        {
+          "who": "pim",
+          "text": "You'll be the odd-jobs people. Mind the signals. They've started giving opinions."
+        },
+        {
+          "who": "rook",
+          "text": "Signals don't have opinions."
+        },
+        {
+          "who": "pim",
+          "text": "This one has fogged its own lamp and shuffled the timetable. And the inspector is writing fines with numbers on them that are not numbers."
+        },
+        {
+          "who": "dee",
+          "text": "Something's moving in the coal yard, too."
+        },
+        {
+          "who": "pim",
+          "text": "That is Gerald. Gerald used to be the coal."
+        },
+        {
+          "who": "rook",
+          "text": "Soot is extra."
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "ostrander-reveal",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "rook"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "dee"
+    },
+    "priya": {
+      "name": "Priya",
+      "portrait": "🧑‍🔬"
+    },
+    "ostrander": {
+      "name": "Professor Ostrander",
+      "portrait": "🧑‍🏫"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "text": "The top floor. Every wall is covered in charts, and every chart has been corrected in red."
+        },
+        {
+          "who": "ostrander",
+          "text": "You are late. I have reviewed your invoice, and your figures do not add up."
+        },
+        {
+          "who": "rook",
+          "text": "They're not meant to add up. They're meant to be paid."
+        },
+        {
+          "who": "dee",
+          "text": "Brass key, on a lanyard. Professor, who gave you that?"
+        },
+        {
+          "who": "ostrander",
+          "text": "A colleague, for services to his collection. Now then. Page one. Rejected."
+        },
+        {
+          "who": "priya",
+          "text": "She does that."
+        }
+      ]
+    }
+  }
+}
