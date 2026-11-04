@@ -53,11 +53,12 @@ Everything else not picked is a fine spare, not a reject.
 
 ## Batch-wide findings
 
-- **Sprite grid is roughly 40 to 64 cells, not 32.** Same situation as the portraits.
-  Each sprite is clean stepped pixel art at its own cell size; the cell size varies by
-  sprite. Recommendation: accept, and on cleanup snap each sprite to its own nearest
-  grid. At 38 px the display is under one screen pixel per cell either way, so only the
-  silhouette and accent survive, and those all hold.
+- **Sprite grid is not 32 cells. Decision: native grids accepted.** Each sprite is
+  stepped pixel art at its own cell size, and the size varies by sprite. The silhouettes
+  and accents all survive at 38 px, so no enemy gets regenerated for this. **Correction
+  after round 3:** the range is roughly 45 to 95 cells, not 40 to 64, and most sprites
+  are not on one regular lattice, so snapping to a grid is not a given. See
+  `round3-review.md`.
 - **Palette is clean** on every pick except the clockwork owl, where the steel plates are
   a lighter blue-grey than the metal token and about 15% of pixels sit between tokens. It
   gets recolored to `#3d4450` on cleanup; no regeneration.
@@ -78,6 +79,5 @@ Everything else not picked is a fine spare, not a reject.
 No round-3 asks for the cast or the enemies. The generator can move on to
 `../prompts/03-gadgets.md`.
 
-Cleanup (trim, grid snap, palette snap, alpha threshold, resize, the gremlin-v3 smudge,
-the owl recolor) and wiring under `public/art/` is my side, and starts once the sprite
-grid decision above is confirmed.
+Cleanup (trim, palette snap, alpha threshold, resize, the gremlin-v3 smudge, the owl
+recolor) and wiring under `public/art/` is my side, not the generator's.

@@ -19,7 +19,7 @@ copy one fenced block into the image generator as-is.
 3. Save candidates as `docs/art/incoming/<id>-v1.png`, `<id>-v2.png`, and so on, using the
    `id` from each prompt's heading (for example `enemy-goblin-v1.png`). Tell me when a batch is
    there and I'll review it against the checklist below and send notes back.
-4. Once a candidate is approved I'll clean it (re-snap to the pixel grid, trim, resize) and
+4. Once a candidate is approved I'll clean it (palette, trim, resize) and
    wire it in under `public/art/`. No need to resize anything yourself.
 
 ## The house style
@@ -29,9 +29,11 @@ puzzle pictures are 1-bit pixel art, so the characters are pixel art too, in the
 with the risograph-sticker feel of the mood board.
 
 - **Pixel art on a strict grid.** Sprites on 32×32, portraits on 48×48, glyphs on 16×16.
-  Exception, decided after round 1: the cast portraits came back on a ~96×96 grid and
-  were accepted that way (see `../incoming/cast-round1-review.md`). Any further cast
-  candidate should match the round-1 picks at 96×96. Everything else stays as listed.
+  These are what to ask for. Decided after rounds 1 to 3: the generator overshoots them
+  and the native result is accepted, so a chunky stepped look matters more than the exact
+  count (see `../incoming/round3-review.md`). Keep asking for these sizes, since the ask
+  is what keeps the art chunky. A new cast candidate should match the cell size of the
+  picks.
   Shown large with crisp hard-edged pixels. No anti-aliasing, blur, or smoothing.
 - **Flat color.** No gradients, glossy highlights, 3D, photo, or painterly texture.
 - **The palette only.** Graphite `#23262f` for outlines and detail, paper `#f6f3ec` for
@@ -73,8 +75,8 @@ What I'll check on every candidate, and the notes you'll get back:
 - **Palette.** Graphite, paper, and the named accent only. Stray colors get rejected, or
   I'll recolor if they're minor.
 - **Sticker border present** and roughly even all the way around.
-- **Clean pixel grid.** Consistent pixel size, no half-pixels, no smoothing. A slightly
-  irregular grid is fine; I can re-snap it. A smooth vector look is not.
+- **Clean pixel grid.** Stepped edges, no half-pixels, no smoothing. An irregular or
+  finer-than-asked grid is accepted. A smooth vector look is not.
 - **Same scale across a set.** A beetle and a bat should be the same sprite size, with
   bosses allowed to be a touch bigger.
 - **Phase forms keep the base silhouette.** Overcharged Gremlin must still be the gremlin.

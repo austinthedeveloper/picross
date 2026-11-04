@@ -58,6 +58,9 @@ for the five humans, with the two monsters allowed to fill more of the frame.
   pixel art, and the fight sprites at 38 px are no chunkier). Any round-2 cast candidate
   must match this: draw it at the same cell size as the round-1 picks, not 48. Sprites,
   gadgets and glyphs keep the sizes in the README.
+  **Correction after round 3:** "96" was an overstatement from a rough estimate. Measured
+  properly, the portraits vary from roughly 55 to 115 cells and are not on one regular
+  lattice. See `round3-review.md`.
 - **Palette is clean.** Apart from the edge blends, every pick is graphite, paper and its
   one accent. No stray hues. The two rejected smudges are the only real violations.
 - **Alpha is 253/254, not 255,** on every subject pixel. Cosmetic; a threshold on cleanup
