@@ -1,6 +1,8 @@
 node_modules
 dist
 dist-dev
+dist-script-review
+.script-review
 .DS_Store
 *.log
 .claude/worktrees

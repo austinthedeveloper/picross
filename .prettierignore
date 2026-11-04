@@ -1,4 +1,6 @@
 dist
+dist-script-review
+.script-review
 node_modules
 package-lock.json
 docs/art/incoming/*.json

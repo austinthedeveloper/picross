@@ -195,6 +195,41 @@ that, but `npm test` does. For how hard to make a new fight, see Difficulty in
 
 Keep lines short (phone screens), and each scene under a minute to read.
 
+## Review the script
+
+To read every line in the game and leave notes on them:
+
+```bash
+npm run script-review
+```
+
+Then open http://localhost:4177. It regenerates the site each time it starts, so restart it
+to pick up new writing. There's one chat page per chapter in play order (scenes, map blurbs,
+and enemy taunts with their sprites), plus a page for power tips, gadgets, and the tutorial.
+Scenes come from the game's own modules, so a new scene appears without any setup, even
+before it's hooked up to a job.
+
+Choose **+ Note** on a line or heading, pick Change, Question, or Love it, and save. Notes go to
+`.script-review/notes.json` in the main checkout, even when run from a worktree, so they outlive
+the worktree and every session sees the same ones. The file is ignored by git.
+
+To act on the notes, ask Claude to read them, or run:
+
+```bash
+npm run script-review:notes
+```
+
+This prints the open notes as Markdown, with counts by kind and speaker, and the file to edit
+for each line. Add `-- --all` to include resolved notes, or `-- --json` for the raw data. Close
+one with what was done, which then shows under the note on the site:
+
+```bash
+npx vite-node scripts/script-review.ts resolve <id> "Shortened the line."
+```
+
+Notes survive rewrites. A line that moved is found again by its wording. A reworded line keeps
+its note and shows what it used to say. A deleted line's note moves to the Notes page.
+
 ## Add a screen
 
 1. Create `src/ui/screens/<name>Screen.ts` exporting

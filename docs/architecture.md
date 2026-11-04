@@ -126,6 +126,8 @@ src/
 e2e/                       Playwright browser tests (see docs/development.md)
 scripts/
   puzzle-sheet.ts          Check, repair and export puzzle sheets (batches of drawings; see docs/how-to.md)
+  script-review.ts         Build the script review site, serve it, and report notes (see docs/how-to.md)
+  script-review/           Its page model, renderer, notes store, server, and browser assets
   deploy-azure.sh          Upload a build to the Azure static website
   setup-azure-deploy.sh    One-time Azure + GitHub OIDC setup for the release pipeline
 .github/workflows/
