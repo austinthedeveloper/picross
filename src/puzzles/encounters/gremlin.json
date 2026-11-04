@@ -8,7 +8,7 @@
   "blurb": "The generator isn't broken. Something lives in it, and it likes the dark.",
   "enemy": {
     "name": "Generator Gremlin",
-    "sprite": "👹",
+    "sprite": "gremlin",
     "hp": 45,
     "attack": 2,
     "fog": {
@@ -18,7 +18,7 @@
       {
         "at": 0.9,
         "name": "Overcharged Gremlin",
-        "sprite": "😈",
+        "sprite": "overcharged-gremlin",
         "attack": 3,
         "taunt": "Lights out, tinkerer!",
         "fog": {
@@ -29,7 +29,7 @@
       {
         "at": 0.84,
         "name": "Blackout Gremlin",
-        "sprite": "👿",
+        "sprite": "blackout-gremlin",
         "attack": 4,
         "taunt": "Who needs clues? Not you!",
         "fog": {

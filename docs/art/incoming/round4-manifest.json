@@ -1,0 +1,1356 @@
+{
+  "round": 4,
+  "generator": "built-in image_gen",
+  "brief_sources": [
+    "../prompts/README.md",
+    "../prompts/03-gadgets.md",
+    "../prompts/04-icons.md",
+    "round3-review.md"
+  ],
+  "scope": "Sponge v3/v4, two candidates for each of four map icons and nine power glyphs",
+  "expected_png_count": 28,
+  "saved_png_count": 28,
+  "native_grid_policy": "Requested counts are prompts, not measurements. Native stepped grids accepted per round3-review.md.",
+  "glyph_alpha_status": "All generated glyph files pass binary alpha",
+  "glyph_files_with_partial_alpha": [],
+  "mask_export_approved": true,
+  "assets": [
+    {
+      "id": "gadget-sponge",
+      "prompt": "Pixel-art sticker icon for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, one accent color, warm yellow #e0a800, plus a second accent, dark purple #2c2350, used only for the ink. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One object, centered, filling about 80% of a square frame. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a chunky yellow kitchen sponge with soft rounded corners and a slightly squashed, pillowy outline, seen almost straight on, with only a thin side edge showing. Its face has many small irregular graphite pores of mixed sizes, mostly tiny, and no large round holes. A bold dark purple ink streak is being wiped across the yellow face, about a third of the sponge wide, with yellow showing all around it so it does not touch the graphite outline. Chunky and bold. Reads at a glance, even tiny, as: a sponge wiping up ink. It must not look like cheese, butter, or a box.\n\nProduction clarification: digital bitmap pixel-art game asset. Keep the named subject simple and chunky with hard square steps and flat solid palette colors. One centered object, no scenery, decorative symbols, colored backing disc, paper grain, texture, material lighting, grey shading, blur, gradients or drop shadow. The thick paper-colored border closely follows the actual silhouette; keep it complete and clear of all frame edges. Fully transparent outer background. Large square PNG, 1024x1024 or larger.\nCandidate 3. Use this REWRITTEN subject description: soft pillowy near-frontal shape, only a thin side edge, MANY SMALL IRREGULAR PORES with no large round holes, and a BOLD dark purple ink STREAK about one third of the sponge wide fully surrounded by yellow, separated from the graphite outline. Preserve this readable ink streak at 18px; it must not shrink to a tiny edge dot. Use a gently squashed rounded rectangular silhouette.",
+      "source": "../prompts/03-gadgets.md",
+      "requested_grid": 32,
+      "kind": "gadget",
+      "variant": 3,
+      "filename": "gadget-sponge-v3.png",
+      "review_note": "Rewritten pillowy near-frontal sponge, fine irregular pores, and a bold interior ink streak surrounded by yellow.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 741619,
+        "partially_transparent_pixels": 829329,
+        "subject_bounds_at_alpha_200": [
+          76,
+          220,
+          1140,
+          1068
+        ],
+        "clear_margins_at_alpha_200": [
+          76,
+          220,
+          114,
+          186
+        ],
+        "sha256": "ae37d86fadee4a3a6904567c62a6c77b753bda20a3ff7fbde2c0dc65accd32d5"
+      }
+    },
+    {
+      "id": "gadget-sponge",
+      "prompt": "Pixel-art sticker icon for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, one accent color, warm yellow #e0a800, plus a second accent, dark purple #2c2350, used only for the ink. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One object, centered, filling about 80% of a square frame. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a chunky yellow kitchen sponge with soft rounded corners and a slightly squashed, pillowy outline, seen almost straight on, with only a thin side edge showing. Its face has many small irregular graphite pores of mixed sizes, mostly tiny, and no large round holes. A bold dark purple ink streak is being wiped across the yellow face, about a third of the sponge wide, with yellow showing all around it so it does not touch the graphite outline. Chunky and bold. Reads at a glance, even tiny, as: a sponge wiping up ink. It must not look like cheese, butter, or a box.\n\nProduction clarification: digital bitmap pixel-art game asset. Keep the named subject simple and chunky with hard square steps and flat solid palette colors. One centered object, no scenery, decorative symbols, colored backing disc, paper grain, texture, material lighting, grey shading, blur, gradients or drop shadow. The thick paper-colored border closely follows the actual silhouette; keep it complete and clear of all frame edges. Fully transparent outer background. Large square PNG, 1024x1024 or larger.\nCandidate 4. Use this REWRITTEN subject description: soft pillowy near-frontal shape, only a thin side edge, MANY SMALL IRREGULAR PORES with no large round holes, and a BOLD dark purple ink STREAK about one third of the sponge wide fully surrounded by yellow, separated from the graphite outline. Preserve this readable ink streak at 18px; it must not shrink to a tiny edge dot. Make an independent candidate with a slightly softer, more compressed pillowy silhouette, still recognizable as a kitchen sponge.",
+      "source": "../prompts/03-gadgets.md",
+      "requested_grid": 32,
+      "kind": "gadget",
+      "variant": 4,
+      "filename": "gadget-sponge-v4.png",
+      "review_note": "Rewritten pillowy near-frontal sponge, fine irregular pores, and a bold interior ink streak surrounded by yellow.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 757972,
+        "partially_transparent_pixels": 813041,
+        "subject_bounds_at_alpha_200": [
+          70,
+          291,
+          1164,
+          1107
+        ],
+        "clear_margins_at_alpha_200": [
+          70,
+          291,
+          90,
+          147
+        ],
+        "sha256": "d970a44db965a6bcbfb749480c8b826b7d9c5ef927bdd6e1cdfc0eb9fa90f665"
+      }
+    },
+    {
+      "id": "icon-fight",
+      "prompt": "Pixel-art sticker icon for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One object, centered, filling about 80% of a square frame. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a pencil and an adjustable wrench crossed in an X, like crossed swords. The pencil has a coral red eraser end. Chunky and bold. Reads at a glance, even tiny, as: a fight, in a game where you fight by drawing.\n\nProduction clarification: digital bitmap pixel-art game asset. Keep the named subject simple and chunky with hard square steps and flat solid palette colors. One centered object, no scenery, decorative symbols, colored backing disc, paper grain, texture, material lighting, grey shading, blur, gradients or drop shadow. The thick paper-colored border closely follows the actual silhouette; keep it complete and clear of all frame edges. Fully transparent outer background. Large square PNG, 1024x1024 or larger.\nCandidate 1 of 2. Use the simplest broad silhouette described.",
+      "source": "../prompts/04-icons.md",
+      "requested_grid": 32,
+      "kind": "map",
+      "variant": 1,
+      "filename": "icon-fight-v1.png",
+      "review_note": "Crossed pencil and adjustable wrench, with coral confined to the eraser.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 629088,
+        "partially_transparent_pixels": 940887,
+        "subject_bounds_at_alpha_200": [
+          52,
+          90,
+          1203,
+          1224
+        ],
+        "clear_margins_at_alpha_200": [
+          52,
+          90,
+          51,
+          30
+        ],
+        "sha256": "ddfb4285b493a949b1d464b44568e1bb010a76be43b47270e92a3a3af3f35e35"
+      }
+    },
+    {
+      "id": "icon-fight",
+      "prompt": "Pixel-art sticker icon for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One object, centered, filling about 80% of a square frame. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a pencil and an adjustable wrench crossed in an X, like crossed swords. The pencil has a coral red eraser end. Chunky and bold. Reads at a glance, even tiny, as: a fight, in a game where you fight by drawing.\n\nProduction clarification: digital bitmap pixel-art game asset. Keep the named subject simple and chunky with hard square steps and flat solid palette colors. One centered object, no scenery, decorative symbols, colored backing disc, paper grain, texture, material lighting, grey shading, blur, gradients or drop shadow. The thick paper-colored border closely follows the actual silhouette; keep it complete and clear of all frame edges. Fully transparent outer background. Large square PNG, 1024x1024 or larger.\nCandidate 2 of 2. Create an independent candidate with slightly different proportions within the same description; preserve the required object, accent placement and clarity at 19px.",
+      "source": "../prompts/04-icons.md",
+      "requested_grid": 32,
+      "kind": "map",
+      "variant": 2,
+      "filename": "icon-fight-v2.png",
+      "review_note": "Crossed pencil and adjustable wrench, with coral confined to the eraser.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 689599,
+        "partially_transparent_pixels": 880471,
+        "subject_bounds_at_alpha_200": [
+          66,
+          87,
+          1158,
+          1199
+        ],
+        "clear_margins_at_alpha_200": [
+          66,
+          87,
+          96,
+          55
+        ],
+        "sha256": "5a270ae5b9386422361c429f2d300f77894b79add2005b2c63faf85e2df1f4e7"
+      }
+    },
+    {
+      "id": "icon-dig",
+      "prompt": "Pixel-art sticker icon for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, earthy brown #a9825a. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One object, centered, filling about 80% of a square frame. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a hand trowel stuck into a small mound of brown dirt, a couple of dirt specks flying. Chunky and bold. Reads at a glance, even tiny, as: digging.\n\nProduction clarification: digital bitmap pixel-art game asset. Keep the named subject simple and chunky with hard square steps and flat solid palette colors. One centered object, no scenery, decorative symbols, colored backing disc, paper grain, texture, material lighting, grey shading, blur, gradients or drop shadow. The thick paper-colored border closely follows the actual silhouette; keep it complete and clear of all frame edges. Fully transparent outer background. Large square PNG, 1024x1024 or larger.\nCandidate 1 of 2. Use the simplest broad silhouette described.",
+      "source": "../prompts/04-icons.md",
+      "requested_grid": 32,
+      "kind": "map",
+      "variant": 1,
+      "filename": "icon-dig-v1.png",
+      "review_note": "Hand trowel in brown dirt mound with two flying dirt specks.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 858656,
+        "partially_transparent_pixels": 712132,
+        "subject_bounds_at_alpha_200": [
+          148,
+          120,
+          1152,
+          1197
+        ],
+        "clear_margins_at_alpha_200": [
+          148,
+          120,
+          102,
+          57
+        ],
+        "sha256": "1e19a55806fc22e543ecdc51ca966b1094fedd690307a08dbee323a3a60e6707"
+      }
+    },
+    {
+      "id": "icon-dig",
+      "prompt": "Pixel-art sticker icon for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, earthy brown #a9825a. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One object, centered, filling about 80% of a square frame. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a hand trowel stuck into a small mound of brown dirt, a couple of dirt specks flying. Chunky and bold. Reads at a glance, even tiny, as: digging.\n\nProduction clarification: digital bitmap pixel-art game asset. Keep the named subject simple and chunky with hard square steps and flat solid palette colors. One centered object, no scenery, decorative symbols, colored backing disc, paper grain, texture, material lighting, grey shading, blur, gradients or drop shadow. The thick paper-colored border closely follows the actual silhouette; keep it complete and clear of all frame edges. Fully transparent outer background. Large square PNG, 1024x1024 or larger.\nCandidate 2 of 2. Create an independent candidate with slightly different proportions within the same description; preserve the required object, accent placement and clarity at 19px.",
+      "source": "../prompts/04-icons.md",
+      "requested_grid": 32,
+      "kind": "map",
+      "variant": 2,
+      "filename": "icon-dig-v2.png",
+      "review_note": "Hand trowel in brown dirt mound with two flying dirt specks.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 850920,
+        "partially_transparent_pixels": 719937,
+        "subject_bounds_at_alpha_200": [
+          128,
+          103,
+          1127,
+          1211
+        ],
+        "clear_margins_at_alpha_200": [
+          128,
+          103,
+          127,
+          43
+        ],
+        "sha256": "cbdd40235ff7b40dbfd39a3b944081e84fece531ebd297b0b241af4f8bbd7fb0"
+      }
+    },
+    {
+      "id": "icon-rest",
+      "prompt": "Pixel-art sticker icon for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One object, centered, filling about 80% of a square frame. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a coral red enamel mug with a graphite rim and handle, two wavy lines of steam rising. Chunky and bold. Reads at a glance, even tiny, as: a coffee break.\n\nProduction clarification: digital bitmap pixel-art game asset. Keep the named subject simple and chunky with hard square steps and flat solid palette colors. One centered object, no scenery, decorative symbols, colored backing disc, paper grain, texture, material lighting, grey shading, blur, gradients or drop shadow. The thick paper-colored border closely follows the actual silhouette; keep it complete and clear of all frame edges. Fully transparent outer background. Large square PNG, 1024x1024 or larger.\nCandidate 1 of 2. Use the simplest broad silhouette described.",
+      "source": "../prompts/04-icons.md",
+      "requested_grid": 32,
+      "kind": "map",
+      "variant": 1,
+      "filename": "icon-rest-v1.png",
+      "review_note": "Coral enamel mug with graphite rim/handle and two steam lines.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 775389,
+        "partially_transparent_pixels": 795381,
+        "subject_bounds_at_alpha_200": [
+          149,
+          67,
+          1127,
+          1209
+        ],
+        "clear_margins_at_alpha_200": [
+          149,
+          67,
+          127,
+          45
+        ],
+        "sha256": "21d5ea6962808f6cac2fe70738d69665a5dd6390276149f8e8033c5156d9e616"
+      }
+    },
+    {
+      "id": "icon-rest",
+      "prompt": "Pixel-art sticker icon for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One object, centered, filling about 80% of a square frame. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a coral red enamel mug with a graphite rim and handle, two wavy lines of steam rising. Chunky and bold. Reads at a glance, even tiny, as: a coffee break.\n\nProduction clarification: digital bitmap pixel-art game asset. Keep the named subject simple and chunky with hard square steps and flat solid palette colors. One centered object, no scenery, decorative symbols, colored backing disc, paper grain, texture, material lighting, grey shading, blur, gradients or drop shadow. The thick paper-colored border closely follows the actual silhouette; keep it complete and clear of all frame edges. Fully transparent outer background. Large square PNG, 1024x1024 or larger.\nCandidate 2 of 2. Create an independent candidate with slightly different proportions within the same description; preserve the required object, accent placement and clarity at 19px.",
+      "source": "../prompts/04-icons.md",
+      "requested_grid": 32,
+      "kind": "map",
+      "variant": 2,
+      "filename": "icon-rest-v2.png",
+      "review_note": "Coral enamel mug with graphite rim/handle and two steam lines.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 846039,
+        "partially_transparent_pixels": 724905,
+        "subject_bounds_at_alpha_200": [
+          182,
+          79,
+          1105,
+          1198
+        ],
+        "clear_margins_at_alpha_200": [
+          182,
+          79,
+          149,
+          56
+        ],
+        "sha256": "05c42c1b739eeb1191a02a6b4857aa5189bc724491cc30faf42af56d5e1df252"
+      }
+    },
+    {
+      "id": "icon-boss",
+      "prompt": "Pixel-art sticker icon for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One object, centered, filling about 80% of a square frame. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a simple three-point crown in coral red with graphite outline and three small paper-colored dots. Chunky and bold. Reads at a glance, even tiny, as: the boss.\n\nProduction clarification: digital bitmap pixel-art game asset. Keep the named subject simple and chunky with hard square steps and flat solid palette colors. One centered object, no scenery, decorative symbols, colored backing disc, paper grain, texture, material lighting, grey shading, blur, gradients or drop shadow. The thick paper-colored border closely follows the actual silhouette; keep it complete and clear of all frame edges. Fully transparent outer background. Large square PNG, 1024x1024 or larger.\nCandidate 1 of 2. Use the simplest broad silhouette described.",
+      "source": "../prompts/04-icons.md",
+      "requested_grid": 32,
+      "kind": "map",
+      "variant": 1,
+      "filename": "icon-boss-v1.png",
+      "corrections": [
+        {
+          "prompt": "Use case: precise-object-edit. Fix ONLY the framing of this three-point crown pixel-art map icon. Preserve the exact crown shape, three points, three paper dots, coral fill and graphite outline. Make the entire crown INCLUDING its full thick paper-colored sticker border fit within the central 78% of the SAME square canvas, centered with at least 10% completely transparent padding on left AND right. Reconstruct any clipped left/right border so the outline is complete. No part touches any frame edge. Preserve chunky 32x32-style hard square steps; no smooth vector redesign. ONLY flat coral #d9534f, graphite #23262f and paper #f6f3ec. No scene, backing disc, extra symbols, texture, gray shading, blur, gradients or shadows. Square transparent PNG.",
+          "input": "Original generated icon-boss-v1.png"
+        }
+      ],
+      "generation_corrected": true,
+      "review_note": "Three-point coral crown with three paper dots. Reframed to keep the complete paper border inside the canvas.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 1085292,
+        "partially_transparent_pixels": 485319,
+        "subject_bounds_at_alpha_200": [
+          138,
+          300,
+          1116,
+          946
+        ],
+        "clear_margins_at_alpha_200": [
+          138,
+          300,
+          138,
+          308
+        ],
+        "sha256": "ca752e9937a2fd54704367c3271b16636c6d5637921787e79f63655189aa73bb"
+      }
+    },
+    {
+      "id": "icon-boss",
+      "prompt": "Pixel-art sticker icon for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One object, centered, filling about 80% of a square frame. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a simple three-point crown in coral red with graphite outline and three small paper-colored dots. Chunky and bold. Reads at a glance, even tiny, as: the boss.\n\nProduction clarification: digital bitmap pixel-art game asset. Keep the named subject simple and chunky with hard square steps and flat solid palette colors. One centered object, no scenery, decorative symbols, colored backing disc, paper grain, texture, material lighting, grey shading, blur, gradients or drop shadow. The thick paper-colored border closely follows the actual silhouette; keep it complete and clear of all frame edges. Fully transparent outer background. Large square PNG, 1024x1024 or larger.\nCandidate 2 of 2. Create an independent candidate with slightly different proportions within the same description; preserve the required object, accent placement and clarity at 19px.",
+      "source": "../prompts/04-icons.md",
+      "requested_grid": 32,
+      "kind": "map",
+      "variant": 2,
+      "filename": "icon-boss-v2.png",
+      "review_note": "Three-point coral crown with three paper dots.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 902810,
+        "partially_transparent_pixels": 667974,
+        "subject_bounds_at_alpha_200": [
+          62,
+          246,
+          1193,
+          1032
+        ],
+        "clear_margins_at_alpha_200": [
+          62,
+          246,
+          61,
+          222
+        ],
+        "sha256": "dc089562480aa28f5d576eb39375f0fda854338e363c035800953a115e15bd80"
+      }
+    },
+    {
+      "id": "glyph-fog",
+      "prompt": "Pixel-art glyph, drawn on a strict 16x16 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Pure solid black #000000 on a fully transparent background, exactly one color, no outline, no border, no shading, no gradients, no 3D. One bold closed shape, centered, filling about 85% of a square frame. No text, letters, numbers, watermark, or frame.\n\nSubject: a puffy cloud with a flat bottom. Reads at 13 px as: fog.\n\nProduction requirement for a CSS MASK: the alpha channel IS the artwork. Every filled pixel must be pure solid BLACK RGBA (0,0,0,255); every empty pixel must be fully transparent RGBA (0,0,0,0). Alpha values must be ONLY 0 and 255, with NO partially transparent pixels at all. No alpha 253/254, no soft fringe, anti-aliasing, feathering, glow, shadow or texture. Render a literal binary 1-bit 16x16 pixel silhouette enlarged with nearest-neighbor square cells, including square stepped corners. All cutout holes are fully transparent, never white paint. Use NO paper sticker border, NO accent color, NO grey/white highlights, NO outlines around the shape, NO drawn checkerboard or scene. Only the specified single black glyph, centered with clear empty margins, filling about 85% of the square. Large square transparent PNG, 1024x1024 or larger.\nCandidate 1 of 2. Use the clearest, simplest bold silhouette described.",
+      "source": "../prompts/04-icons.md",
+      "requested_grid": 16,
+      "kind": "glyph",
+      "variant": 1,
+      "filename": "glyph-fog-v1.png",
+      "review_note": "Flat-base cloud; upper lobes revised through image generation for a clearer puffy silhouette.",
+      "original_generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-80e37813-bffd-4c39-96b3-4c4708ad68da.png",
+      "generation_corrected": true,
+      "corrections": [
+        {
+          "reason": "Clarify distinct cloud lobes; initial silhouettes read as mounds.",
+          "prompt": "Pixel-art glyph, drawn on a strict 16x16 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Pure solid black #000000 on a fully transparent background, exactly one color, no outline, no border, no shading, no gradients, no 3D. One bold closed shape, centered, filling about 85% of a square frame. No text, letters, numbers, watermark, or frame.\n\nSubject: a puffy cloud with a flat bottom. Reads at 13 px as: fog.\n\nProduction requirement for a CSS MASK: the alpha channel IS the artwork. Every filled pixel must be pure solid BLACK RGBA (0,0,0,255); every empty pixel must be fully transparent RGBA (0,0,0,0). Alpha values must be ONLY 0 and 255, with NO partially transparent pixels at all. No alpha 253/254, no soft fringe, anti-aliasing, feathering, glow, shadow or texture. Render a literal binary 1-bit 16x16 pixel silhouette enlarged with nearest-neighbor square cells, including square stepped corners. All cutout holes are fully transparent, never white paint. Use NO paper sticker border, NO accent color, NO grey/white highlights, NO outlines around the shape, NO drawn checkerboard or scene. Only the specified single black glyph, centered with clear empty margins, filling about 85% of the square. Large square transparent PNG, 1024x1024 or larger.\nCandidate 1 of 2. Use the clearest, simplest bold silhouette described.\n\nShape correction: Make an unmistakable WIDE PUFFY CLOUD with THREE OR FOUR DISTINCT ROUNDED LOBES of DIFFERENT HEIGHTS, with deep concave notches separating the lobes across its upper contour. A large tall round puff sits slightly off-center; a clearly separate smaller round puff on each side. Wide flat horizontal base. The upper contour MUST go up, down into a notch, up into another rounded puff, down into a notch, up again. Avoid a single central triangular peak or a monotonically sloping hill, pyramid, mountain, mound or pile. Build rounded puffs from coarse square steps. Keep pure solid black interior and fully transparent surroundings.",
+          "path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-6e567df9-097e-4f4a-8ffa-843df72f7c8d.png"
+        }
+      ],
+      "original_generation_sha256": "7d502fb47adb0560cf6e497656e4ed1d108e930ea20edd764d8b3abe860456c2",
+      "mask_export": {
+        "width": 1254,
+        "height": 1254,
+        "black_opaque_pixels": 451853,
+        "transparent_pixels": 1120663,
+        "threshold": 128,
+        "alpha_values": [
+          0,
+          255
+        ],
+        "rgb_values": [
+          0,
+          0,
+          0
+        ],
+        "sha256": "3fca661cee1ca3d2be66b7c60ffe1c0a313216fb7f7832d7b47f9608fccdc491"
+      },
+      "mask_export_approved": true,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 255,
+        "fully_transparent_pixels": 1120663,
+        "partially_transparent_pixels": 0,
+        "subject_bounds_at_alpha_200": [
+          50,
+          359,
+          1204,
+          974
+        ],
+        "clear_margins_at_alpha_200": [
+          50,
+          359,
+          50,
+          280
+        ],
+        "sha256": "3fca661cee1ca3d2be66b7c60ffe1c0a313216fb7f7832d7b47f9608fccdc491"
+      },
+      "binary_alpha_pass": true
+    },
+    {
+      "id": "glyph-fog",
+      "prompt": "Pixel-art glyph, drawn on a strict 16x16 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Pure solid black #000000 on a fully transparent background, exactly one color, no outline, no border, no shading, no gradients, no 3D. One bold closed shape, centered, filling about 85% of a square frame. No text, letters, numbers, watermark, or frame.\n\nSubject: a puffy cloud with a flat bottom. Reads at 13 px as: fog.\n\nProduction requirement for a CSS MASK: the alpha channel IS the artwork. Every filled pixel must be pure solid BLACK RGBA (0,0,0,255); every empty pixel must be fully transparent RGBA (0,0,0,0). Alpha values must be ONLY 0 and 255, with NO partially transparent pixels at all. No alpha 253/254, no soft fringe, anti-aliasing, feathering, glow, shadow or texture. Render a literal binary 1-bit 16x16 pixel silhouette enlarged with nearest-neighbor square cells, including square stepped corners. All cutout holes are fully transparent, never white paint. Use NO paper sticker border, NO accent color, NO grey/white highlights, NO outlines around the shape, NO drawn checkerboard or scene. Only the specified single black glyph, centered with clear empty margins, filling about 85% of the square. Large square transparent PNG, 1024x1024 or larger.\nCandidate 2 of 2. Create a distinct proportion variant of exactly the same specified glyph; keep it bold, simple and legible at 13px.",
+      "source": "../prompts/04-icons.md",
+      "requested_grid": 16,
+      "kind": "glyph",
+      "variant": 2,
+      "filename": "glyph-fog-v2.png",
+      "review_note": "Flat-base cloud; upper lobes revised through image generation for a clearer puffy silhouette. Native frame is 1261\u00d71247; retained without resizing.",
+      "original_generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-195a30a2-7c70-4896-96e2-9135a0380f9c.png",
+      "generation_corrected": true,
+      "corrections": [
+        {
+          "reason": "Clarify distinct cloud lobes; initial silhouettes read as mounds.",
+          "prompt": "Pixel-art glyph, drawn on a strict 16x16 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Pure solid black #000000 on a fully transparent background, exactly one color, no outline, no border, no shading, no gradients, no 3D. One bold closed shape, centered, filling about 85% of a square frame. No text, letters, numbers, watermark, or frame.\n\nSubject: a puffy cloud with a flat bottom. Reads at 13 px as: fog.\n\nProduction requirement for a CSS MASK: the alpha channel IS the artwork. Every filled pixel must be pure solid BLACK RGBA (0,0,0,255); every empty pixel must be fully transparent RGBA (0,0,0,0). Alpha values must be ONLY 0 and 255, with NO partially transparent pixels at all. No alpha 253/254, no soft fringe, anti-aliasing, feathering, glow, shadow or texture. Render a literal binary 1-bit 16x16 pixel silhouette enlarged with nearest-neighbor square cells, including square stepped corners. All cutout holes are fully transparent, never white paint. Use NO paper sticker border, NO accent color, NO grey/white highlights, NO outlines around the shape, NO drawn checkerboard or scene. Only the specified single black glyph, centered with clear empty margins, filling about 85% of the square. Large square transparent PNG, 1024x1024 or larger.\nCandidate 2 of 2. Create a distinct proportion variant of exactly the same specified glyph; keep it bold, simple and legible at 13px.\n\nShape correction: Make an unmistakable WIDE PUFFY CLOUD with THREE OR FOUR DISTINCT ROUNDED LOBES of DIFFERENT HEIGHTS, with deep concave notches separating the lobes across its upper contour. A large tall round puff sits slightly off-center; a clearly separate smaller round puff on each side. Wide flat horizontal base. The upper contour MUST go up, down into a notch, up into another rounded puff, down into a notch, up again. Avoid a single central triangular peak or a monotonically sloping hill, pyramid, mountain, mound or pile. Build rounded puffs from coarse square steps. Keep pure solid black interior and fully transparent surroundings.",
+          "path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-db17a5a5-6ac0-4c9f-8d3a-63c44f1dad0c.png"
+        }
+      ],
+      "original_generation_sha256": "f3f8b1ed0e2657a374b4af1fc0738141aa8a847fa0e0cff9eb6350d7b13f9a5f",
+      "mask_export": {
+        "width": 1261,
+        "height": 1247,
+        "black_opaque_pixels": 402654,
+        "transparent_pixels": 1169813,
+        "threshold": 128,
+        "alpha_values": [
+          0,
+          255
+        ],
+        "rgb_values": [
+          0,
+          0,
+          0
+        ],
+        "sha256": "97178a5dd58e87d582d68ee4c7e8bf1a941532d752bd925272b17ab201d71b8e"
+      },
+      "mask_export_approved": true,
+      "inspection": {
+        "width": 1261,
+        "height": 1247,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 255,
+        "fully_transparent_pixels": 1169813,
+        "partially_transparent_pixels": 0,
+        "subject_bounds_at_alpha_200": [
+          54,
+          334,
+          1206,
+          913
+        ],
+        "clear_margins_at_alpha_200": [
+          54,
+          334,
+          55,
+          334
+        ],
+        "sha256": "97178a5dd58e87d582d68ee4c7e8bf1a941532d752bd925272b17ab201d71b8e"
+      },
+      "binary_alpha_pass": true
+    },
+    {
+      "id": "glyph-scramble",
+      "prompt": "Pixel-art glyph, drawn on a strict 16x16 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Pure solid black #000000 on a fully transparent background, exactly one color, no outline, no border, no shading, no gradients, no 3D. One bold closed shape, centered, filling about 85% of a square frame. No text, letters, numbers, watermark, or frame.\n\nSubject: a six-tooth gear with a round hole in the middle. Reads at 13 px as: a gear.\n\nProduction requirement for a CSS MASK: the alpha channel IS the artwork. Every filled pixel must be pure solid BLACK RGBA (0,0,0,255); every empty pixel must be fully transparent RGBA (0,0,0,0). Alpha values must be ONLY 0 and 255, with NO partially transparent pixels at all. No alpha 253/254, no soft fringe, anti-aliasing, feathering, glow, shadow or texture. Render a literal binary 1-bit 16x16 pixel silhouette enlarged with nearest-neighbor square cells, including square stepped corners. All cutout holes are fully transparent, never white paint. Use NO paper sticker border, NO accent color, NO grey/white highlights, NO outlines around the shape, NO drawn checkerboard or scene. Only the specified single black glyph, centered with clear empty margins, filling about 85% of the square. Large square transparent PNG, 1024x1024 or larger.\nCandidate 1 of 2. Use the clearest, simplest bold silhouette described.",
+      "source": "../prompts/04-icons.md",
+      "requested_grid": 16,
+      "kind": "glyph",
+      "variant": 1,
+      "filename": "glyph-scramble-v1.png",
+      "review_note": "Six teeth and a transparent center hole. Bold silhouette checked at 13 / 21 px.",
+      "original_generation_sha256": "42b31fed1355230bbd0d8df6e2b7a8fe70af0ea16c77d7facd0b3df357c0a415",
+      "mask_export": {
+        "width": 1254,
+        "height": 1254,
+        "black_opaque_pixels": 463710,
+        "transparent_pixels": 1108806,
+        "threshold": 128,
+        "alpha_values": [
+          0,
+          255
+        ],
+        "rgb_values": [
+          0,
+          0,
+          0
+        ],
+        "sha256": "5e25a0db561db13e42387f43f73c28c3eeb8287b14ae230c06e6fa487a816268"
+      },
+      "mask_export_approved": true,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 255,
+        "fully_transparent_pixels": 1108806,
+        "partially_transparent_pixels": 0,
+        "subject_bounds_at_alpha_200": [
+          176,
+          161,
+          1079,
+          1092
+        ],
+        "clear_margins_at_alpha_200": [
+          176,
+          161,
+          175,
+          162
+        ],
+        "sha256": "5e25a0db561db13e42387f43f73c28c3eeb8287b14ae230c06e6fa487a816268"
+      },
+      "binary_alpha_pass": true
+    },
+    {
+      "id": "glyph-scramble",
+      "prompt": "Pixel-art glyph, drawn on a strict 16x16 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Pure solid black #000000 on a fully transparent background, exactly one color, no outline, no border, no shading, no gradients, no 3D. One bold closed shape, centered, filling about 85% of a square frame. No text, letters, numbers, watermark, or frame.\n\nSubject: a six-tooth gear with a round hole in the middle. Reads at 13 px as: a gear.\n\nProduction requirement for a CSS MASK: the alpha channel IS the artwork. Every filled pixel must be pure solid BLACK RGBA (0,0,0,255); every empty pixel must be fully transparent RGBA (0,0,0,0). Alpha values must be ONLY 0 and 255, with NO partially transparent pixels at all. No alpha 253/254, no soft fringe, anti-aliasing, feathering, glow, shadow or texture. Render a literal binary 1-bit 16x16 pixel silhouette enlarged with nearest-neighbor square cells, including square stepped corners. All cutout holes are fully transparent, never white paint. Use NO paper sticker border, NO accent color, NO grey/white highlights, NO outlines around the shape, NO drawn checkerboard or scene. Only the specified single black glyph, centered with clear empty margins, filling about 85% of the square. Large square transparent PNG, 1024x1024 or larger.\nCandidate 2 of 2. Create a distinct proportion variant of exactly the same specified glyph; keep it bold, simple and legible at 13px.",
+      "source": "../prompts/04-icons.md",
+      "requested_grid": 16,
+      "kind": "glyph",
+      "variant": 2,
+      "filename": "glyph-scramble-v2.png",
+      "review_note": "Six teeth and a transparent center hole. Bold silhouette checked at 13 / 21 px.",
+      "original_generation_sha256": "79668e125029ff46b6c3a5de358e65a6361f990312b057e864e5da9c5d8103d3",
+      "mask_export": {
+        "width": 1254,
+        "height": 1254,
+        "black_opaque_pixels": 473939,
+        "transparent_pixels": 1098577,
+        "threshold": 128,
+        "alpha_values": [
+          0,
+          255
+        ],
+        "rgb_values": [
+          0,
+          0,
+          0
+        ],
+        "sha256": "3a7bf692f1646148122b6b443e8f78512efc976b0493aae602aff2b5aef7b1f0"
+      },
+      "mask_export_approved": true,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 255,
+        "fully_transparent_pixels": 1098577,
+        "partially_transparent_pixels": 0,
+        "subject_bounds_at_alpha_200": [
+          126,
+          138,
+          1129,
+          1116
+        ],
+        "clear_margins_at_alpha_200": [
+          126,
+          138,
+          125,
+          138
+        ],
+        "sha256": "3a7bf692f1646148122b6b443e8f78512efc976b0493aae602aff2b5aef7b1f0"
+      },
+      "binary_alpha_pass": true
+    },
+    {
+      "id": "glyph-weak-point",
+      "prompt": "Pixel-art glyph, drawn on a strict 16x16 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Pure solid black #000000 on a fully transparent background, exactly one color, no outline, no border, no shading, no gradients, no 3D. One bold closed shape, centered, filling about 85% of a square frame. No text, letters, numbers, watermark, or frame.\n\nSubject: a target: a thick ring with a solid dot in the center and four short tick marks at top, bottom, left and right. Reads at 13 px as: a crosshair.\n\nProduction requirement for a CSS MASK: the alpha channel IS the artwork. Every filled pixel must be pure solid BLACK RGBA (0,0,0,255); every empty pixel must be fully transparent RGBA (0,0,0,0). Alpha values must be ONLY 0 and 255, with NO partially transparent pixels at all. No alpha 253/254, no soft fringe, anti-aliasing, feathering, glow, shadow or texture. Render a literal binary 1-bit 16x16 pixel silhouette enlarged with nearest-neighbor square cells, including square stepped corners. All cutout holes are fully transparent, never white paint. Use NO paper sticker border, NO accent color, NO grey/white highlights, NO outlines around the shape, NO drawn checkerboard or scene. Only the specified single black glyph, centered with clear empty margins, filling about 85% of the square. Large square transparent PNG, 1024x1024 or larger.\nCandidate 1 of 2. Use the clearest, simplest bold silhouette described.",
+      "source": "../prompts/04-icons.md",
+      "requested_grid": 16,
+      "kind": "glyph",
+      "variant": 1,
+      "filename": "glyph-weak-point-v1.png",
+      "review_note": "Thick ring, center dot and four cardinal ticks. Transparent spacing keeps the center separate.",
+      "original_generation_sha256": "04dfe16b49b38a21be76db0f1bb133c147804c774651e9870d73e266602ff54a",
+      "mask_export": {
+        "width": 1254,
+        "height": 1254,
+        "black_opaque_pixels": 386113,
+        "transparent_pixels": 1186403,
+        "threshold": 128,
+        "alpha_values": [
+          0,
+          255
+        ],
+        "rgb_values": [
+          0,
+          0,
+          0
+        ],
+        "sha256": "90f99735bdd172c1172dd939a552cd1a0f9e49dd7fe8411ff5334d399a4cf8f8"
+      },
+      "mask_export_approved": true,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 255,
+        "fully_transparent_pixels": 1186403,
+        "partially_transparent_pixels": 0,
+        "subject_bounds_at_alpha_200": [
+          97,
+          119,
+          1157,
+          1135
+        ],
+        "clear_margins_at_alpha_200": [
+          97,
+          119,
+          97,
+          119
+        ],
+        "sha256": "90f99735bdd172c1172dd939a552cd1a0f9e49dd7fe8411ff5334d399a4cf8f8"
+      },
+      "binary_alpha_pass": true
+    },
+    {
+      "id": "glyph-weak-point",
+      "prompt": "Pixel-art glyph, drawn on a strict 16x16 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Pure solid black #000000 on a fully transparent background, exactly one color, no outline, no border, no shading, no gradients, no 3D. One bold closed shape, centered, filling about 85% of a square frame. No text, letters, numbers, watermark, or frame.\n\nSubject: a target: a thick ring with a solid dot in the center and four short tick marks at top, bottom, left and right. Reads at 13 px as: a crosshair.\n\nProduction requirement for a CSS MASK: the alpha channel IS the artwork. Every filled pixel must be pure solid BLACK RGBA (0,0,0,255); every empty pixel must be fully transparent RGBA (0,0,0,0). Alpha values must be ONLY 0 and 255, with NO partially transparent pixels at all. No alpha 253/254, no soft fringe, anti-aliasing, feathering, glow, shadow or texture. Render a literal binary 1-bit 16x16 pixel silhouette enlarged with nearest-neighbor square cells, including square stepped corners. All cutout holes are fully transparent, never white paint. Use NO paper sticker border, NO accent color, NO grey/white highlights, NO outlines around the shape, NO drawn checkerboard or scene. Only the specified single black glyph, centered with clear empty margins, filling about 85% of the square. Large square transparent PNG, 1024x1024 or larger.\nCandidate 2 of 2. Create a distinct proportion variant of exactly the same specified glyph; keep it bold, simple and legible at 13px.",
+      "source": "../prompts/04-icons.md",
+      "requested_grid": 16,
+      "kind": "glyph",
+      "variant": 2,
+      "filename": "glyph-weak-point-v2.png",
+      "review_note": "Thick ring, center dot and four cardinal ticks. Transparent spacing keeps the center separate.",
+      "original_generation_sha256": "41c8eaa363b1ab75fa5d9192999214356845a3ad0b6b92b8e25d4acb2dc2a042",
+      "mask_export": {
+        "width": 1254,
+        "height": 1254,
+        "black_opaque_pixels": 365852,
+        "transparent_pixels": 1206664,
+        "threshold": 128,
+        "alpha_values": [
+          0,
+          255
+        ],
+        "rgb_values": [
+          0,
+          0,
+          0
+        ],
+        "sha256": "717165df52462e509e9130494a1f2d75cc33929a4ebff73ff7951ff95fb100ce"
+      },
+      "mask_export_approved": true,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 255,
+        "fully_transparent_pixels": 1206664,
+        "partially_transparent_pixels": 0,
+        "subject_bounds_at_alpha_200": [
+          139,
+          138,
+          1116,
+          1116
+        ],
+        "clear_margins_at_alpha_200": [
+          139,
+          138,
+          138,
+          138
+        ],
+        "sha256": "717165df52462e509e9130494a1f2d75cc33929a4ebff73ff7951ff95fb100ce"
+      },
+      "binary_alpha_pass": true
+    },
+    {
+      "id": "glyph-forged",
+      "prompt": "Pixel-art glyph, drawn on a strict 16x16 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Pure solid black #000000 on a fully transparent background, exactly one color, no outline, no border, no shading, no gradients, no 3D. One bold closed shape, centered, filling about 85% of a square frame. No text, letters, numbers, watermark, or frame.\n\nSubject: a single theatre mask, a solid face shape with two cut-out eye holes and a cut-out smiling mouth. Reads at 13 px as: a mask.\n\nProduction requirement for a CSS MASK: the alpha channel IS the artwork. Every filled pixel must be pure solid BLACK RGBA (0,0,0,255); every empty pixel must be fully transparent RGBA (0,0,0,0). Alpha values must be ONLY 0 and 255, with NO partially transparent pixels at all. No alpha 253/254, no soft fringe, anti-aliasing, feathering, glow, shadow or texture. Render a literal binary 1-bit 16x16 pixel silhouette enlarged with nearest-neighbor square cells, including square stepped corners. All cutout holes are fully transparent, never white paint. Use NO paper sticker border, NO accent color, NO grey/white highlights, NO outlines around the shape, NO drawn checkerboard or scene. Only the specified single black glyph, centered with clear empty margins, filling about 85% of the square. Large square transparent PNG, 1024x1024 or larger.\nCandidate 1 of 2. Use the clearest, simplest bold silhouette described.",
+      "source": "../prompts/04-icons.md",
+      "requested_grid": 16,
+      "kind": "glyph",
+      "variant": 1,
+      "filename": "glyph-forged-v1.png",
+      "review_note": "Single smiling theatre mask with two transparent eye holes and a transparent smiling mouth.",
+      "original_generation_sha256": "b1b567e7b9917ffe52a9b8e42d0cf005374fb2612eeed0649a665b879e97cb63",
+      "mask_export": {
+        "width": 1254,
+        "height": 1254,
+        "black_opaque_pixels": 620200,
+        "transparent_pixels": 952316,
+        "threshold": 128,
+        "alpha_values": [
+          0,
+          255
+        ],
+        "rgb_values": [
+          0,
+          0,
+          0
+        ],
+        "sha256": "463cd27a113a3491a4e2f93565c9bc0efa2d08b6775aa647d1b9b5d32c986473"
+      },
+      "mask_export_approved": true,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 255,
+        "fully_transparent_pixels": 952316,
+        "partially_transparent_pixels": 0,
+        "subject_bounds_at_alpha_200": [
+          140,
+          141,
+          1114,
+          1191
+        ],
+        "clear_margins_at_alpha_200": [
+          140,
+          141,
+          140,
+          63
+        ],
+        "sha256": "463cd27a113a3491a4e2f93565c9bc0efa2d08b6775aa647d1b9b5d32c986473"
+      },
+      "binary_alpha_pass": true
+    },
+    {
+      "id": "glyph-forged",
+      "prompt": "Pixel-art glyph, drawn on a strict 16x16 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Pure solid black #000000 on a fully transparent background, exactly one color, no outline, no border, no shading, no gradients, no 3D. One bold closed shape, centered, filling about 85% of a square frame. No text, letters, numbers, watermark, or frame.\n\nSubject: a single theatre mask, a solid face shape with two cut-out eye holes and a cut-out smiling mouth. Reads at 13 px as: a mask.\n\nProduction requirement for a CSS MASK: the alpha channel IS the artwork. Every filled pixel must be pure solid BLACK RGBA (0,0,0,255); every empty pixel must be fully transparent RGBA (0,0,0,0). Alpha values must be ONLY 0 and 255, with NO partially transparent pixels at all. No alpha 253/254, no soft fringe, anti-aliasing, feathering, glow, shadow or texture. Render a literal binary 1-bit 16x16 pixel silhouette enlarged with nearest-neighbor square cells, including square stepped corners. All cutout holes are fully transparent, never white paint. Use NO paper sticker border, NO accent color, NO grey/white highlights, NO outlines around the shape, NO drawn checkerboard or scene. Only the specified single black glyph, centered with clear empty margins, filling about 85% of the square. Large square transparent PNG, 1024x1024 or larger.\nCandidate 2 of 2. Create a distinct proportion variant of exactly the same specified glyph; keep it bold, simple and legible at 13px.",
+      "source": "../prompts/04-icons.md",
+      "requested_grid": 16,
+      "kind": "glyph",
+      "variant": 2,
+      "filename": "glyph-forged-v2.png",
+      "review_note": "Single smiling theatre mask with two transparent eye holes and a transparent smiling mouth.",
+      "original_generation_sha256": "9f1793b2c31fee44fbdbd46517fb6eecae117786703ea15eb250e5ef1e4a977d",
+      "mask_export": {
+        "width": 1254,
+        "height": 1254,
+        "black_opaque_pixels": 516754,
+        "transparent_pixels": 1055762,
+        "threshold": 128,
+        "alpha_values": [
+          0,
+          255
+        ],
+        "rgb_values": [
+          0,
+          0,
+          0
+        ],
+        "sha256": "be39ff77a99e1f8e2bff91e9b47f8e8d9958eef82b6dd41f73adbce389df8c4c"
+      },
+      "mask_export_approved": true,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 255,
+        "fully_transparent_pixels": 1055762,
+        "partially_transparent_pixels": 0,
+        "subject_bounds_at_alpha_200": [
+          114,
+          229,
+          1140,
+          1128
+        ],
+        "clear_margins_at_alpha_200": [
+          114,
+          229,
+          114,
+          126
+        ],
+        "sha256": "be39ff77a99e1f8e2bff91e9b47f8e8d9958eef82b6dd41f73adbce389df8c4c"
+      },
+      "binary_alpha_pass": true
+    },
+    {
+      "id": "glyph-charge",
+      "prompt": "Pixel-art glyph, drawn on a strict 16x16 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Pure solid black #000000 on a fully transparent background, exactly one color, no outline, no border, no shading, no gradients, no 3D. One bold closed shape, centered, filling about 85% of a square frame. No text, letters, numbers, watermark, or frame.\n\nSubject: a chunky lightning bolt. Reads at 13 px as: electricity.\n\nProduction requirement for a CSS MASK: the alpha channel IS the artwork. Every filled pixel must be pure solid BLACK RGBA (0,0,0,255); every empty pixel must be fully transparent RGBA (0,0,0,0). Alpha values must be ONLY 0 and 255, with NO partially transparent pixels at all. No alpha 253/254, no soft fringe, anti-aliasing, feathering, glow, shadow or texture. Render a literal binary 1-bit 16x16 pixel silhouette enlarged with nearest-neighbor square cells, including square stepped corners. All cutout holes are fully transparent, never white paint. Use NO paper sticker border, NO accent color, NO grey/white highlights, NO outlines around the shape, NO drawn checkerboard or scene. Only the specified single black glyph, centered with clear empty margins, filling about 85% of the square. Large square transparent PNG, 1024x1024 or larger.\nCandidate 1 of 2. Use the clearest, simplest bold silhouette described.",
+      "source": "../prompts/04-icons.md",
+      "requested_grid": 16,
+      "kind": "glyph",
+      "variant": 1,
+      "filename": "glyph-charge-v1.png",
+      "review_note": "Chunky stepped lightning bolt with a continuous solid silhouette.",
+      "original_generation_sha256": "a1b63c338454bf930a970e534383958a4c7a88eece81784fed49ddb28f7bbe85",
+      "mask_export": {
+        "width": 1254,
+        "height": 1254,
+        "black_opaque_pixels": 300803,
+        "transparent_pixels": 1271713,
+        "threshold": 128,
+        "alpha_values": [
+          0,
+          255
+        ],
+        "rgb_values": [
+          0,
+          0,
+          0
+        ],
+        "sha256": "b436a53ca5d47381a52af489045d05bf3dac844262d192744a578e18de3f0354"
+      },
+      "mask_export_approved": true,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 255,
+        "fully_transparent_pixels": 1271713,
+        "partially_transparent_pixels": 0,
+        "subject_bounds_at_alpha_200": [
+          292,
+          182,
+          985,
+          1133
+        ],
+        "clear_margins_at_alpha_200": [
+          292,
+          182,
+          269,
+          121
+        ],
+        "sha256": "b436a53ca5d47381a52af489045d05bf3dac844262d192744a578e18de3f0354"
+      },
+      "binary_alpha_pass": true
+    },
+    {
+      "id": "glyph-charge",
+      "prompt": "Pixel-art glyph, drawn on a strict 16x16 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Pure solid black #000000 on a fully transparent background, exactly one color, no outline, no border, no shading, no gradients, no 3D. One bold closed shape, centered, filling about 85% of a square frame. No text, letters, numbers, watermark, or frame.\n\nSubject: a chunky lightning bolt. Reads at 13 px as: electricity.\n\nProduction requirement for a CSS MASK: the alpha channel IS the artwork. Every filled pixel must be pure solid BLACK RGBA (0,0,0,255); every empty pixel must be fully transparent RGBA (0,0,0,0). Alpha values must be ONLY 0 and 255, with NO partially transparent pixels at all. No alpha 253/254, no soft fringe, anti-aliasing, feathering, glow, shadow or texture. Render a literal binary 1-bit 16x16 pixel silhouette enlarged with nearest-neighbor square cells, including square stepped corners. All cutout holes are fully transparent, never white paint. Use NO paper sticker border, NO accent color, NO grey/white highlights, NO outlines around the shape, NO drawn checkerboard or scene. Only the specified single black glyph, centered with clear empty margins, filling about 85% of the square. Large square transparent PNG, 1024x1024 or larger.\nCandidate 2 of 2. Create a distinct proportion variant of exactly the same specified glyph; keep it bold, simple and legible at 13px.",
+      "source": "../prompts/04-icons.md",
+      "requested_grid": 16,
+      "kind": "glyph",
+      "variant": 2,
+      "filename": "glyph-charge-v2.png",
+      "review_note": "Chunky stepped lightning bolt with a continuous solid silhouette.",
+      "original_generation_sha256": "de812f4de13fc9536ad06dc8c0322d45b4216b90d6ea8be168015b03c6f5dc1e",
+      "mask_export": {
+        "width": 1254,
+        "height": 1254,
+        "black_opaque_pixels": 311436,
+        "transparent_pixels": 1261080,
+        "threshold": 128,
+        "alpha_values": [
+          0,
+          255
+        ],
+        "rgb_values": [
+          0,
+          0,
+          0
+        ],
+        "sha256": "9bece98ad26d6c0d6a0fbc381cbe6aa1c774b87f64a902e9b0d76b0c0a0b9ec5"
+      },
+      "mask_export_approved": true,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 255,
+        "fully_transparent_pixels": 1261080,
+        "partially_transparent_pixels": 0,
+        "subject_bounds_at_alpha_200": [
+          274,
+          102,
+          943,
+          1152
+        ],
+        "clear_margins_at_alpha_200": [
+          274,
+          102,
+          311,
+          102
+        ],
+        "sha256": "9bece98ad26d6c0d6a0fbc381cbe6aa1c774b87f64a902e9b0d76b0c0a0b9ec5"
+      },
+      "binary_alpha_pass": true
+    },
+    {
+      "id": "glyph-ink",
+      "prompt": "Pixel-art glyph, drawn on a strict 16x16 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Pure solid black #000000 on a fully transparent background, exactly one color, no outline, no border, no shading, no gradients, no 3D. One bold closed shape, centered, filling about 85% of a square frame. No text, letters, numbers, watermark, or frame.\n\nSubject: a fat ink drop with a small splash of three dots beside it. Reads at 13 px as: an ink splat.\n\nProduction requirement for a CSS MASK: the alpha channel IS the artwork. Every filled pixel must be pure solid BLACK RGBA (0,0,0,255); every empty pixel must be fully transparent RGBA (0,0,0,0). Alpha values must be ONLY 0 and 255, with NO partially transparent pixels at all. No alpha 253/254, no soft fringe, anti-aliasing, feathering, glow, shadow or texture. Render a literal binary 1-bit 16x16 pixel silhouette enlarged with nearest-neighbor square cells, including square stepped corners. All cutout holes are fully transparent, never white paint. Use NO paper sticker border, NO accent color, NO grey/white highlights, NO outlines around the shape, NO drawn checkerboard or scene. Only the specified single black glyph, centered with clear empty margins, filling about 85% of the square. Large square transparent PNG, 1024x1024 or larger.\nCandidate 1 of 2. Use the clearest, simplest bold silhouette described.",
+      "source": "../prompts/04-icons.md",
+      "requested_grid": 16,
+      "kind": "glyph",
+      "variant": 1,
+      "filename": "glyph-ink-v1.png",
+      "review_note": "Fat irregular ink splat with three separate splash dots. Candidate 1 has the fuller body; candidate 2 spreads wider.",
+      "original_generation_sha256": "093da349e712c0c7106a2864119fe0f2d1510a870783d6c5025cf3a73166ba48",
+      "mask_export": {
+        "width": 1254,
+        "height": 1254,
+        "black_opaque_pixels": 558419,
+        "transparent_pixels": 1014097,
+        "threshold": 128,
+        "alpha_values": [
+          0,
+          255
+        ],
+        "rgb_values": [
+          0,
+          0,
+          0
+        ],
+        "sha256": "5f3fc6043fafaa270e51d435c335195d3d5cc7b176bf67f3be9e184a31068aff"
+      },
+      "mask_export_approved": true,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 255,
+        "fully_transparent_pixels": 1014097,
+        "partially_transparent_pixels": 0,
+        "subject_bounds_at_alpha_200": [
+          154,
+          155,
+          1157,
+          1101
+        ],
+        "clear_margins_at_alpha_200": [
+          154,
+          155,
+          97,
+          153
+        ],
+        "sha256": "5f3fc6043fafaa270e51d435c335195d3d5cc7b176bf67f3be9e184a31068aff"
+      },
+      "binary_alpha_pass": true
+    },
+    {
+      "id": "glyph-ink",
+      "prompt": "Pixel-art glyph, drawn on a strict 16x16 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Pure solid black #000000 on a fully transparent background, exactly one color, no outline, no border, no shading, no gradients, no 3D. One bold closed shape, centered, filling about 85% of a square frame. No text, letters, numbers, watermark, or frame.\n\nSubject: a fat ink drop with a small splash of three dots beside it. Reads at 13 px as: an ink splat.\n\nProduction requirement for a CSS MASK: the alpha channel IS the artwork. Every filled pixel must be pure solid BLACK RGBA (0,0,0,255); every empty pixel must be fully transparent RGBA (0,0,0,0). Alpha values must be ONLY 0 and 255, with NO partially transparent pixels at all. No alpha 253/254, no soft fringe, anti-aliasing, feathering, glow, shadow or texture. Render a literal binary 1-bit 16x16 pixel silhouette enlarged with nearest-neighbor square cells, including square stepped corners. All cutout holes are fully transparent, never white paint. Use NO paper sticker border, NO accent color, NO grey/white highlights, NO outlines around the shape, NO drawn checkerboard or scene. Only the specified single black glyph, centered with clear empty margins, filling about 85% of the square. Large square transparent PNG, 1024x1024 or larger.\nCandidate 2 of 2. Create a distinct proportion variant of exactly the same specified glyph; keep it bold, simple and legible at 13px.",
+      "source": "../prompts/04-icons.md",
+      "requested_grid": 16,
+      "kind": "glyph",
+      "variant": 2,
+      "filename": "glyph-ink-v2.png",
+      "review_note": "Fat irregular ink splat with three separate splash dots. Candidate 1 has the fuller body; candidate 2 spreads wider.",
+      "original_generation_sha256": "24162d44b01977f44178150264e602259af19cc30cc2041243d6a1b2aaedc7b4",
+      "mask_export": {
+        "width": 1254,
+        "height": 1254,
+        "black_opaque_pixels": 429987,
+        "transparent_pixels": 1142529,
+        "threshold": 128,
+        "alpha_values": [
+          0,
+          255
+        ],
+        "rgb_values": [
+          0,
+          0,
+          0
+        ],
+        "sha256": "e2290613bf38bbc9badeeed30a68df8f5eccc327335153d16fd40d9ac5f63d2b"
+      },
+      "mask_export_approved": true,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 255,
+        "fully_transparent_pixels": 1142529,
+        "partially_transparent_pixels": 0,
+        "subject_bounds_at_alpha_200": [
+          83,
+          224,
+          1195,
+          1070
+        ],
+        "clear_margins_at_alpha_200": [
+          83,
+          224,
+          59,
+          184
+        ],
+        "sha256": "e2290613bf38bbc9badeeed30a68df8f5eccc327335153d16fd40d9ac5f63d2b"
+      },
+      "binary_alpha_pass": true
+    },
+    {
+      "id": "glyph-swap",
+      "prompt": "Pixel-art glyph, drawn on a strict 16x16 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Pure solid black #000000 on a fully transparent background, exactly one color, no outline, no border, no shading, no gradients, no 3D. One bold closed shape, centered, filling about 85% of a square frame. No text, letters, numbers, watermark, or frame.\n\nSubject: a wide grinning mouth, a solid shape with a row of cut-out square teeth along the top. Reads at 13 px as: a toothy grin.\n\nProduction requirement for a CSS MASK: the alpha channel IS the artwork. Every filled pixel must be pure solid BLACK RGBA (0,0,0,255); every empty pixel must be fully transparent RGBA (0,0,0,0). Alpha values must be ONLY 0 and 255, with NO partially transparent pixels at all. No alpha 253/254, no soft fringe, anti-aliasing, feathering, glow, shadow or texture. Render a literal binary 1-bit 16x16 pixel silhouette enlarged with nearest-neighbor square cells, including square stepped corners. All cutout holes are fully transparent, never white paint. Use NO paper sticker border, NO accent color, NO grey/white highlights, NO outlines around the shape, NO drawn checkerboard or scene. Only the specified single black glyph, centered with clear empty margins, filling about 85% of the square. Large square transparent PNG, 1024x1024 or larger.\nCandidate 1 of 2. Use the clearest, simplest bold silhouette described.",
+      "source": "../prompts/04-icons.md",
+      "requested_grid": 16,
+      "kind": "glyph",
+      "variant": 1,
+      "filename": "glyph-swap-v1.png",
+      "review_note": "Wide grin with a row of square transparent tooth cutouts along the top.",
+      "original_generation_sha256": "4ce42cc556ecd4d52b4bf0778447251321472b14ce6a65c149b511daa814cdf5",
+      "mask_export": {
+        "width": 1254,
+        "height": 1254,
+        "black_opaque_pixels": 414088,
+        "transparent_pixels": 1158428,
+        "threshold": 128,
+        "alpha_values": [
+          0,
+          255
+        ],
+        "rgb_values": [
+          0,
+          0,
+          0
+        ],
+        "sha256": "4fe9bf48266174031e1f38725a913857b9c177e45bd111f504844350a47f4a11"
+      },
+      "mask_export_approved": true,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 255,
+        "fully_transparent_pixels": 1158428,
+        "partially_transparent_pixels": 0,
+        "subject_bounds_at_alpha_200": [
+          78,
+          352,
+          1176,
+          1035
+        ],
+        "clear_margins_at_alpha_200": [
+          78,
+          352,
+          78,
+          219
+        ],
+        "sha256": "4fe9bf48266174031e1f38725a913857b9c177e45bd111f504844350a47f4a11"
+      },
+      "binary_alpha_pass": true
+    },
+    {
+      "id": "glyph-swap",
+      "prompt": "Pixel-art glyph, drawn on a strict 16x16 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Pure solid black #000000 on a fully transparent background, exactly one color, no outline, no border, no shading, no gradients, no 3D. One bold closed shape, centered, filling about 85% of a square frame. No text, letters, numbers, watermark, or frame.\n\nSubject: a wide grinning mouth, a solid shape with a row of cut-out square teeth along the top. Reads at 13 px as: a toothy grin.\n\nProduction requirement for a CSS MASK: the alpha channel IS the artwork. Every filled pixel must be pure solid BLACK RGBA (0,0,0,255); every empty pixel must be fully transparent RGBA (0,0,0,0). Alpha values must be ONLY 0 and 255, with NO partially transparent pixels at all. No alpha 253/254, no soft fringe, anti-aliasing, feathering, glow, shadow or texture. Render a literal binary 1-bit 16x16 pixel silhouette enlarged with nearest-neighbor square cells, including square stepped corners. All cutout holes are fully transparent, never white paint. Use NO paper sticker border, NO accent color, NO grey/white highlights, NO outlines around the shape, NO drawn checkerboard or scene. Only the specified single black glyph, centered with clear empty margins, filling about 85% of the square. Large square transparent PNG, 1024x1024 or larger.\nCandidate 2 of 2. Create a distinct proportion variant of exactly the same specified glyph; keep it bold, simple and legible at 13px.",
+      "source": "../prompts/04-icons.md",
+      "requested_grid": 16,
+      "kind": "glyph",
+      "variant": 2,
+      "filename": "glyph-swap-v2.png",
+      "review_note": "Wide grin with a row of square transparent tooth cutouts along the top.",
+      "original_generation_sha256": "db3b93bb4ba81a4fd951d2fbdf5db0620c932ffe1633576823a821c25d1be70f",
+      "mask_export": {
+        "width": 1254,
+        "height": 1254,
+        "black_opaque_pixels": 330152,
+        "transparent_pixels": 1242364,
+        "threshold": 128,
+        "alpha_values": [
+          0,
+          255
+        ],
+        "rgb_values": [
+          0,
+          0,
+          0
+        ],
+        "sha256": "90230790769c456c24c23b9739834d058800e33908610e4c9716c6dbc7f65fc2"
+      },
+      "mask_export_approved": true,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 255,
+        "fully_transparent_pixels": 1242364,
+        "partially_transparent_pixels": 0,
+        "subject_bounds_at_alpha_200": [
+          86,
+          385,
+          1168,
+          930
+        ],
+        "clear_margins_at_alpha_200": [
+          86,
+          385,
+          86,
+          324
+        ],
+        "sha256": "90230790769c456c24c23b9739834d058800e33908610e4c9716c6dbc7f65fc2"
+      },
+      "binary_alpha_pass": true
+    },
+    {
+      "id": "glyph-call-out",
+      "prompt": "Pixel-art glyph, drawn on a strict 16x16 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Pure solid black #000000 on a fully transparent background, exactly one color, no outline, no border, no shading, no gradients, no 3D. One bold closed shape, centered, filling about 85% of a square frame. No text, letters, numbers, watermark, or frame.\n\nSubject: a magnifying glass with a thick ring and a short stubby handle pointing to the lower right. Reads at 13 px as: a magnifying glass.\n\nProduction requirement for a CSS MASK: the alpha channel IS the artwork. Every filled pixel must be pure solid BLACK RGBA (0,0,0,255); every empty pixel must be fully transparent RGBA (0,0,0,0). Alpha values must be ONLY 0 and 255, with NO partially transparent pixels at all. No alpha 253/254, no soft fringe, anti-aliasing, feathering, glow, shadow or texture. Render a literal binary 1-bit 16x16 pixel silhouette enlarged with nearest-neighbor square cells, including square stepped corners. All cutout holes are fully transparent, never white paint. Use NO paper sticker border, NO accent color, NO grey/white highlights, NO outlines around the shape, NO drawn checkerboard or scene. Only the specified single black glyph, centered with clear empty margins, filling about 85% of the square. Large square transparent PNG, 1024x1024 or larger.\nCandidate 1 of 2. Use the clearest, simplest bold silhouette described.",
+      "source": "../prompts/04-icons.md",
+      "requested_grid": 16,
+      "kind": "glyph",
+      "variant": 1,
+      "filename": "glyph-call-out-v1.png",
+      "review_note": "Thick magnifier ring with a short handle toward the lower right.",
+      "original_generation_sha256": "935e408e6a59bc45041d27fa0bcddb949251a9cc6ad6f38357f04de3cab2c38e",
+      "mask_export": {
+        "width": 1254,
+        "height": 1254,
+        "black_opaque_pixels": 410679,
+        "transparent_pixels": 1161837,
+        "threshold": 128,
+        "alpha_values": [
+          0,
+          255
+        ],
+        "rgb_values": [
+          0,
+          0,
+          0
+        ],
+        "sha256": "e6984d120f1b6a98849eb9447c1fbb033f30ebcdad5284aa0d05452c198cadf8"
+      },
+      "mask_export_approved": true,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 255,
+        "fully_transparent_pixels": 1161837,
+        "partially_transparent_pixels": 0,
+        "subject_bounds_at_alpha_200": [
+          108,
+          156,
+          1146,
+          1184
+        ],
+        "clear_margins_at_alpha_200": [
+          108,
+          156,
+          108,
+          70
+        ],
+        "sha256": "e6984d120f1b6a98849eb9447c1fbb033f30ebcdad5284aa0d05452c198cadf8"
+      },
+      "binary_alpha_pass": true
+    },
+    {
+      "id": "glyph-call-out",
+      "prompt": "Pixel-art glyph, drawn on a strict 16x16 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Pure solid black #000000 on a fully transparent background, exactly one color, no outline, no border, no shading, no gradients, no 3D. One bold closed shape, centered, filling about 85% of a square frame. No text, letters, numbers, watermark, or frame.\n\nSubject: a magnifying glass with a thick ring and a short stubby handle pointing to the lower right. Reads at 13 px as: a magnifying glass.\n\nProduction requirement for a CSS MASK: the alpha channel IS the artwork. Every filled pixel must be pure solid BLACK RGBA (0,0,0,255); every empty pixel must be fully transparent RGBA (0,0,0,0). Alpha values must be ONLY 0 and 255, with NO partially transparent pixels at all. No alpha 253/254, no soft fringe, anti-aliasing, feathering, glow, shadow or texture. Render a literal binary 1-bit 16x16 pixel silhouette enlarged with nearest-neighbor square cells, including square stepped corners. All cutout holes are fully transparent, never white paint. Use NO paper sticker border, NO accent color, NO grey/white highlights, NO outlines around the shape, NO drawn checkerboard or scene. Only the specified single black glyph, centered with clear empty margins, filling about 85% of the square. Large square transparent PNG, 1024x1024 or larger.\nCandidate 2 of 2. Create a distinct proportion variant of exactly the same specified glyph; keep it bold, simple and legible at 13px.",
+      "source": "../prompts/04-icons.md",
+      "requested_grid": 16,
+      "kind": "glyph",
+      "variant": 2,
+      "filename": "glyph-call-out-v2.png",
+      "review_note": "Thick magnifier ring with a short handle toward the lower right.",
+      "original_generation_sha256": "b2e733338d81888ac1bcc17055806c59fe3ebc4d3bcfe01f7ed40b5b18ad1c87",
+      "mask_export": {
+        "width": 1254,
+        "height": 1254,
+        "black_opaque_pixels": 317485,
+        "transparent_pixels": 1255031,
+        "threshold": 128,
+        "alpha_values": [
+          0,
+          255
+        ],
+        "rgb_values": [
+          0,
+          0,
+          0
+        ],
+        "sha256": "0044a931d755f5e9671e11e47a1919b6ae4c8a59461bc7cdd1ea0e95e937fec0"
+      },
+      "mask_export_approved": true,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 255,
+        "fully_transparent_pixels": 1255031,
+        "partially_transparent_pixels": 0,
+        "subject_bounds_at_alpha_200": [
+          167,
+          184,
+          1089,
+          1111
+        ],
+        "clear_margins_at_alpha_200": [
+          167,
+          184,
+          165,
+          143
+        ],
+        "sha256": "0044a931d755f5e9671e11e47a1919b6ae4c8a59461bc7cdd1ea0e95e937fec0"
+      },
+      "binary_alpha_pass": true
+    },
+    {
+      "id": "glyph-shield",
+      "prompt": "Pixel-art glyph, drawn on a strict 16x16 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Pure solid black #000000 on a fully transparent background, exactly one color, no outline, no border, no shading, no gradients, no 3D. One bold closed shape, centered, filling about 85% of a square frame. No text, letters, numbers, watermark, or frame.\n\nSubject: a solid heater shield, flat top and pointed bottom. Reads at 13 px as: a shield.\n\nProduction requirement for a CSS MASK: the alpha channel IS the artwork. Every filled pixel must be pure solid BLACK RGBA (0,0,0,255); every empty pixel must be fully transparent RGBA (0,0,0,0). Alpha values must be ONLY 0 and 255, with NO partially transparent pixels at all. No alpha 253/254, no soft fringe, anti-aliasing, feathering, glow, shadow or texture. Render a literal binary 1-bit 16x16 pixel silhouette enlarged with nearest-neighbor square cells, including square stepped corners. All cutout holes are fully transparent, never white paint. Use NO paper sticker border, NO accent color, NO grey/white highlights, NO outlines around the shape, NO drawn checkerboard or scene. Only the specified single black glyph, centered with clear empty margins, filling about 85% of the square. Large square transparent PNG, 1024x1024 or larger.\nCandidate 1 of 2. Use the clearest, simplest bold silhouette described.",
+      "source": "../prompts/04-icons.md",
+      "requested_grid": 16,
+      "kind": "glyph",
+      "variant": 1,
+      "filename": "glyph-shield-v1.png",
+      "review_note": "Solid flat-top heater shield with a pointed base.",
+      "original_generation_sha256": "fc044f8580f17f3b31811dc3e38190232da6e370288f04ae23609d2062ed300f",
+      "mask_export": {
+        "width": 1254,
+        "height": 1254,
+        "black_opaque_pixels": 646047,
+        "transparent_pixels": 926469,
+        "threshold": 128,
+        "alpha_values": [
+          0,
+          255
+        ],
+        "rgb_values": [
+          0,
+          0,
+          0
+        ],
+        "sha256": "e15176adb07ccc24935fa1ca069e093779d979f190e13970ed553bf2f5e5130c"
+      },
+      "mask_export_approved": true,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 255,
+        "fully_transparent_pixels": 926469,
+        "partially_transparent_pixels": 0,
+        "subject_bounds_at_alpha_200": [
+          195,
+          176,
+          1059,
+          1156
+        ],
+        "clear_margins_at_alpha_200": [
+          195,
+          176,
+          195,
+          98
+        ],
+        "sha256": "e15176adb07ccc24935fa1ca069e093779d979f190e13970ed553bf2f5e5130c"
+      },
+      "binary_alpha_pass": true
+    },
+    {
+      "id": "glyph-shield",
+      "prompt": "Pixel-art glyph, drawn on a strict 16x16 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Pure solid black #000000 on a fully transparent background, exactly one color, no outline, no border, no shading, no gradients, no 3D. One bold closed shape, centered, filling about 85% of a square frame. No text, letters, numbers, watermark, or frame.\n\nSubject: a solid heater shield, flat top and pointed bottom. Reads at 13 px as: a shield.\n\nProduction requirement for a CSS MASK: the alpha channel IS the artwork. Every filled pixel must be pure solid BLACK RGBA (0,0,0,255); every empty pixel must be fully transparent RGBA (0,0,0,0). Alpha values must be ONLY 0 and 255, with NO partially transparent pixels at all. No alpha 253/254, no soft fringe, anti-aliasing, feathering, glow, shadow or texture. Render a literal binary 1-bit 16x16 pixel silhouette enlarged with nearest-neighbor square cells, including square stepped corners. All cutout holes are fully transparent, never white paint. Use NO paper sticker border, NO accent color, NO grey/white highlights, NO outlines around the shape, NO drawn checkerboard or scene. Only the specified single black glyph, centered with clear empty margins, filling about 85% of the square. Large square transparent PNG, 1024x1024 or larger.\nCandidate 2 of 2. Create a distinct proportion variant of exactly the same specified glyph; keep it bold, simple and legible at 13px.",
+      "source": "../prompts/04-icons.md",
+      "requested_grid": 16,
+      "kind": "glyph",
+      "variant": 2,
+      "filename": "glyph-shield-v2.png",
+      "review_note": "Solid flat-top heater shield with a pointed base.",
+      "original_generation_sha256": "345aad9f43537c1740886af7364c7ca0442d443e76afd0e36f138d88015abc66",
+      "mask_export": {
+        "width": 1254,
+        "height": 1254,
+        "black_opaque_pixels": 588367,
+        "transparent_pixels": 984149,
+        "threshold": 128,
+        "alpha_values": [
+          0,
+          255
+        ],
+        "rgb_values": [
+          0,
+          0,
+          0
+        ],
+        "sha256": "7e929370ef1ea46389e0140770e7fa1235dd838d3299194fb05352ba3d020ef3"
+      },
+      "mask_export_approved": true,
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 255,
+        "fully_transparent_pixels": 984149,
+        "partially_transparent_pixels": 0,
+        "subject_bounds_at_alpha_200": [
+          182,
+          236,
+          1072,
+          1171
+        ],
+        "clear_margins_at_alpha_200": [
+          182,
+          236,
+          182,
+          83
+        ],
+        "sha256": "7e929370ef1ea46389e0140770e7fa1235dd838d3299194fb05352ba3d020ef3"
+      },
+      "binary_alpha_pass": true
+    }
+  ]
+}

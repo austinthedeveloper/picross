@@ -32,7 +32,7 @@ test('the whole Deep End, from chapter 3 opening to Old Tess', async ({ page, co
     if (id === 'old-tess') await expect(page.locator('.cell')).toHaveCount(400);
     await solve(page, encounterSolution(id));
     if (id === 'gift-shop')
-      await expect(page.locator('.end-panel:not([hidden])')).toContainText('You got 🧽 Sponge');
+      await expect(page.locator('.end-panel:not([hidden])')).toContainText('Sponge');
     await press(page, id === 'old-tess' ? 'See results' : 'Back to map');
   }
 

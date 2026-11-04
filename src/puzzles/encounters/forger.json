@@ -7,7 +7,7 @@
   "blurb": "The gallery's paintings look... slightly off.",
   "enemy": {
     "name": "The Forger",
-    "sprite": "🎨",
+    "sprite": "forger",
     "hp": 45,
     "attack": 2,
     "fakes": {
@@ -20,7 +20,7 @@
       {
         "at": 0.5,
         "name": "Master Forger",
-        "sprite": "🖼️",
+        "sprite": "master-forger",
         "attack": 3,
         "taunt": "Every clue's a masterpiece. Some are even real."
       }

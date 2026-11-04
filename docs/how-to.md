@@ -85,7 +85,8 @@ row or column counts from 1, as players do; the code counts from 0.
    "enemy": { "name": "Goblin", "sprite": "👺", "hp": 30, "attack": 2 }
    ```
    Keep `hp` at least 1.5 × (width + height) so the finisher stays the big hit. A test
-   enforces this. `attack` is the run HP lost per wrong fill in Hits-on runs.
+   enforces this. `attack` is the run HP lost per wrong fill in Hits-on runs. `sprite` is a
+   file name from `public/art/enemies/` without the `.png`, or an emoji until the art exists.
    To fog clues, add `"fog": { "rows": [3, 5] }` (or `"cols"`, never both) to the enemy,
    using 0-based line indexes. Fogged lines must be solvable from their crossing lines, and
    the test suite checks this. If it fails, fog fewer lines or lines the crossing clues pin
@@ -158,8 +159,9 @@ that, but `npm test` does. For how hard to make a new fight, see Difficulty in
 
 ## Add a gadget
 
-1. Add an entry to the catalog in `src/puzzles/gadgets.ts` with an id, name, icon (an
-   emoji until there's art), one-line description, and effect.
+1. Add an entry to the catalog in `src/puzzles/gadgets.ts` with an id, name, icon (the
+   emoji that stands for it in text), one-line description, and effect. Its art goes in
+   `public/art/gadgets/<id>.png`, and a test checks that it's there.
 2. If the effect is a new kind, add it to the `GadgetEffect` union, handle it in
    `useGadget` in `src/game/battle.ts` (with a test in `battle.test.ts`), and give it
    feedback in `use()` in `src/ui/screens/run/fight/gadgets.ts`.

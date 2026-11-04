@@ -6,7 +6,7 @@
   "blurb": "A treasure chest in the gift shop. It's breathing.",
   "enemy": {
     "name": "Mimic",
-    "sprite": "📦",
+    "sprite": "mimic",
     "hp": 45,
     "attack": 2,
     "phases": [
@@ -23,7 +23,7 @@
       {
         "at": 0.55,
         "name": "Hungry Mimic",
-        "sprite": "👄",
+        "sprite": "hungry-mimic",
         "attack": 3,
         "taunt": "Which row was it again?",
         "swap": true

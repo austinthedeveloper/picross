@@ -3,6 +3,7 @@ import type { RunState } from '../../../game/run';
 import { getJobStats, recordRunResult, saveCurrentRun } from '../../../game/runSave';
 import type { RunDef } from '../../../puzzles/runs';
 import { getScene } from '../../../puzzles/scenes';
+import { portraitArt, withArt } from '../../art';
 import { el } from '../../dom';
 import { backToPuzzles, modePicker, newRunButton, type Hub } from './shared';
 
@@ -19,14 +20,14 @@ function signOff(def: RunDef, won: boolean): HTMLElement[] {
   ) {
     lines.push(
       el('figure', { className: 'sign-off' }, [
-        el('span', {
-          className: 'sign-off-portrait',
-          ariaHidden: 'true',
-          textContent: step.speaker?.portrait ?? '',
-        }),
+        el(
+          'span',
+          { className: 'sign-off-portrait', ariaHidden: 'true' },
+          step.speaker ? [portraitArt(step.speaker.portrait)] : [],
+        ),
         el('figcaption', {}, [
           ...(step.speaker ? [el('strong', { textContent: step.speaker.name })] : []),
-          el('span', { textContent: step.text }),
+          el('span', {}, withArt(step.text)),
         ]),
       ]),
     );

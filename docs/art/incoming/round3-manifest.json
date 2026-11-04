@@ -1,0 +1,230 @@
+{
+  "round": 3,
+  "generator": "built-in image_gen",
+  "brief_sources": [
+    "../prompts/README.md",
+    "../prompts/03-gadgets.md",
+    "round2-review.md"
+  ],
+  "scope": "Two candidates for each of the three gadget prompts; six original PNGs",
+  "status": "Candidates for batch review; production cleanup and installation are on the project owner side",
+  "grid_note": "32x32 was requested for all gadgets. The requested_grid field is the brief, not a verified measurement of generated cells.",
+  "assets": [
+    {
+      "id": "gadget-bomb",
+      "prompt": "Pixel-art sticker icon for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, orange #f07c00. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One object, centered, filling about 80% of a square frame. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a classic round cartoon bomb, solid graphite with a single small paper-colored highlight, a short fuse on top with a little orange flame and two sparks. Simple and chunky. Reads at a glance, even tiny, as: a bomb.\n\nProduction requirement: this is a DIGITAL low-resolution bitmap game icon, not a physical sticker or illustration with a pixel filter. Draw a genuine coarse 32x32 logical pixel grid enlarged uniformly, hard square steps of one consistent size. Aim for one dominant silhouette and ONE identifying detail, legible at 18px; leave out decorative marks and fine interior lines. Sticker border is a solid paper #f6f3ec band that follows the object's pixel silhouette closely, not a circular/colored backing disc. One subject only, no scene, no extra props or symbols. Use only the exact listed flat solid colors; no grey shading, gradients, metallic sheen, material lighting, paper grain, speckles, smudges, blur or drop shadow. Keep the full object AND border comfortably within the central 80% of the square frame, with clear fully transparent margins on all four sides. Transparent PNG, 1024x1024 or larger. No trimming, resizing or production cleanup is requested.\nCandidate 1 of 2. Use the subject description exactly, with the simplest recognizable shape.",
+      "source": "../prompts/03-gadgets.md",
+      "requested_grid": 32,
+      "kind": "gadget",
+      "variant": 1,
+      "filename": "gadget-bomb-v1.png",
+      "review_note": "Round graphite bomb, paper highlight, short fuse and orange flame with two sparks.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 1056292,
+        "partially_transparent_pixels": 514448,
+        "subject_bounds_at_alpha_200": [
+          271,
+          83,
+          1000,
+          1159
+        ],
+        "clear_margins_at_alpha_200": [
+          271,
+          83,
+          254,
+          95
+        ],
+        "sha256": "14320d16a63293d9bf407cdeb21a54ee6511979e1b5d8f2b60bb1ff9c5f0c48a"
+      }
+    },
+    {
+      "id": "gadget-bomb",
+      "prompt": "Pixel-art sticker icon for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, orange #f07c00. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One object, centered, filling about 80% of a square frame. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a classic round cartoon bomb, solid graphite with a single small paper-colored highlight, a short fuse on top with a little orange flame and two sparks. Simple and chunky. Reads at a glance, even tiny, as: a bomb.\n\nProduction requirement: this is a DIGITAL low-resolution bitmap game icon, not a physical sticker or illustration with a pixel filter. Draw a genuine coarse 32x32 logical pixel grid enlarged uniformly, hard square steps of one consistent size. Aim for one dominant silhouette and ONE identifying detail, legible at 18px; leave out decorative marks and fine interior lines. Sticker border is a solid paper #f6f3ec band that follows the object's pixel silhouette closely, not a circular/colored backing disc. One subject only, no scene, no extra props or symbols. Use only the exact listed flat solid colors; no grey shading, gradients, metallic sheen, material lighting, paper grain, speckles, smudges, blur or drop shadow. Keep the full object AND border comfortably within the central 80% of the square frame, with clear fully transparent margins on all four sides. Transparent PNG, 1024x1024 or larger. No trimming, resizing or production cleanup is requested.\nCandidate 2 of 2. Create an independent candidate with slightly different proportions within the same subject description; keep every required prop, color placement and simplicity constraint.",
+      "source": "../prompts/03-gadgets.md",
+      "requested_grid": 32,
+      "kind": "gadget",
+      "variant": 2,
+      "filename": "gadget-bomb-v2.png",
+      "review_note": "Independent bomb candidate in the same palette; compare body/fuse balance at 18px.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 1053145,
+        "partially_transparent_pixels": 517779,
+        "subject_bounds_at_alpha_200": [
+          267,
+          121,
+          1048,
+          1151
+        ],
+        "clear_margins_at_alpha_200": [
+          267,
+          121,
+          206,
+          103
+        ],
+        "sha256": "2ebe6885cdb3775633e224057dc4c626e2957d56e1586ce1b235d04b58f45b5d"
+      }
+    },
+    {
+      "id": "gadget-patch-kit",
+      "prompt": "Pixel-art sticker icon for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One object, centered, filling about 80% of a square frame. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a single adhesive bandage laid diagonally, paper-colored with a coral red pad in the middle and a few graphite dots on the pad. Chunky and bold. Reads at a glance, even tiny, as: a bandage.\n\nProduction requirement: this is a DIGITAL low-resolution bitmap game icon, not a physical sticker or illustration with a pixel filter. Draw a genuine coarse 32x32 logical pixel grid enlarged uniformly, hard square steps of one consistent size. Aim for one dominant silhouette and ONE identifying detail, legible at 18px; leave out decorative marks and fine interior lines. Sticker border is a solid paper #f6f3ec band that follows the object's pixel silhouette closely, not a circular/colored backing disc. One subject only, no scene, no extra props or symbols. Use only the exact listed flat solid colors; no grey shading, gradients, metallic sheen, material lighting, paper grain, speckles, smudges, blur or drop shadow. Keep the full object AND border comfortably within the central 80% of the square frame, with clear fully transparent margins on all four sides. Transparent PNG, 1024x1024 or larger. No trimming, resizing or production cleanup is requested.\nCandidate 1 of 2. Use the subject description exactly, with the simplest recognizable shape.",
+      "source": "../prompts/03-gadgets.md",
+      "requested_grid": 32,
+      "kind": "gadget",
+      "variant": 1,
+      "filename": "gadget-patch-kit-v1.png",
+      "review_note": "Shorter, wider diagonal bandage with coral pad and five graphite dots.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 1111682,
+        "partially_transparent_pixels": 459207,
+        "subject_bounds_at_alpha_200": [
+          143,
+          254,
+          1111,
+          1051
+        ],
+        "clear_margins_at_alpha_200": [
+          143,
+          254,
+          143,
+          203
+        ],
+        "sha256": "e681b71452c87d66aa534a82071662a78f23ddfed4ccea7515f2be6f8acdd866"
+      }
+    },
+    {
+      "id": "gadget-patch-kit",
+      "prompt": "Pixel-art sticker icon for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One object, centered, filling about 80% of a square frame. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a single adhesive bandage laid diagonally, paper-colored with a coral red pad in the middle and a few graphite dots on the pad. Chunky and bold. Reads at a glance, even tiny, as: a bandage.\n\nProduction requirement: this is a DIGITAL low-resolution bitmap game icon, not a physical sticker or illustration with a pixel filter. Draw a genuine coarse 32x32 logical pixel grid enlarged uniformly, hard square steps of one consistent size. Aim for one dominant silhouette and ONE identifying detail, legible at 18px; leave out decorative marks and fine interior lines. Sticker border is a solid paper #f6f3ec band that follows the object's pixel silhouette closely, not a circular/colored backing disc. One subject only, no scene, no extra props or symbols. Use only the exact listed flat solid colors; no grey shading, gradients, metallic sheen, material lighting, paper grain, speckles, smudges, blur or drop shadow. Keep the full object AND border comfortably within the central 80% of the square frame, with clear fully transparent margins on all four sides. Transparent PNG, 1024x1024 or larger. No trimming, resizing or production cleanup is requested.\nCandidate 2 of 2. Create an independent candidate with slightly different proportions within the same subject description; keep every required prop, color placement and simplicity constraint.",
+      "source": "../prompts/03-gadgets.md",
+      "requested_grid": 32,
+      "kind": "gadget",
+      "variant": 2,
+      "filename": "gadget-patch-kit-v2.png",
+      "review_note": "Longer diagonal bandage with coral pad and four bold graphite dots.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 1060400,
+        "partially_transparent_pixels": 510032,
+        "subject_bounds_at_alpha_200": [
+          148,
+          214,
+          1134,
+          1158
+        ],
+        "clear_margins_at_alpha_200": [
+          148,
+          214,
+          120,
+          96
+        ],
+        "sha256": "5439d3774ee075a70441203f86c5457721a8d89266a8cfcf1d55cd1fab30becd"
+      }
+    },
+    {
+      "id": "gadget-sponge",
+      "prompt": "Pixel-art sticker icon for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, one accent color, warm yellow #e0a800, and a single small spot of dark purple #2c2350. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One object, centered, filling about 80% of a square frame. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a rectangular yellow kitchen sponge seen slightly from above, with a few graphite holes, and one dark purple ink drip being wiped off its corner. Chunky and bold. Reads at a glance, even tiny, as: a sponge.\n\nProduction requirement: this is a DIGITAL low-resolution bitmap game icon, not a physical sticker or illustration with a pixel filter. Draw a genuine coarse 32x32 logical pixel grid enlarged uniformly, hard square steps of one consistent size. Aim for one dominant silhouette and ONE identifying detail, legible at 18px; leave out decorative marks and fine interior lines. Sticker border is a solid paper #f6f3ec band that follows the object's pixel silhouette closely, not a circular/colored backing disc. One subject only, no scene, no extra props or symbols. Use only the exact listed flat solid colors; no grey shading, gradients, metallic sheen, material lighting, paper grain, speckles, smudges, blur or drop shadow. Keep the full object AND border comfortably within the central 80% of the square frame, with clear fully transparent margins on all four sides. Transparent PNG, 1024x1024 or larger. No trimming, resizing or production cleanup is requested.\nCandidate 1 of 2. Use the subject description exactly, with the simplest recognizable shape.",
+      "source": "../prompts/03-gadgets.md",
+      "requested_grid": 32,
+      "kind": "gadget",
+      "variant": 1,
+      "filename": "gadget-sponge-v1.png",
+      "corrections": [
+        {
+          "prompt": "Use case: precise-object-edit. Correct this gadget-sponge candidate to match the brief's SINGLE SMALL SPOT OF INK. Erase the entire broad dark-purple smear and long wide drip; restore those areas to the correct flat yellow sponge fill and graphite edge line. In the SAME existing corner, add just ONE small dark-purple #2c2350 ink droplet clinging to the edge: about TWO logical pixels wide and THREE logical pixels long on the 32x32 grid, no more than 3% of the visible sponge area. No smear across the top, no second drip and no detached droplets. The silhouette must read first as a rectangular yellow kitchen sponge, seen slightly from above, with the ink only a small identifying corner detail. Preserve this exact sponge body, perspective, size, position, graphite outline and full paper sticker border. Preserve the existing few graphite pores. ONLY flat colors yellow #e0a800, graphite #23262f, paper #f6f3ec and the tiny ink-purple #2c2350 spot. Coarse hard square pixels on the existing 32x32 pixel-art grid; no gradients, texture, smudges, grey highlights, blur, material lighting, shadows or extra objects. Preserve the transparent square background and all clear margins. Large square PNG.",
+          "input": "Original generated gadget-sponge-v1.png candidate before correction"
+        }
+      ],
+      "review_note": "Ink smear reduced to one small corner droplet; original pores retained.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 947839,
+        "partially_transparent_pixels": 622709,
+        "subject_bounds_at_alpha_200": [
+          118,
+          295,
+          1136,
+          1071
+        ],
+        "clear_margins_at_alpha_200": [
+          118,
+          295,
+          118,
+          183
+        ],
+        "sha256": "a0319ab5c242e0929a221eb039ed049965ea105383b0c70b56fec9f14ea6103b"
+      }
+    },
+    {
+      "id": "gadget-sponge",
+      "prompt": "Pixel-art sticker icon for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, one accent color, warm yellow #e0a800, and a single small spot of dark purple #2c2350. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One object, centered, filling about 80% of a square frame. No text, letters, numbers, watermark, frame, or drop shadow.\n\nSubject: a rectangular yellow kitchen sponge seen slightly from above, with a few graphite holes, and one dark purple ink drip being wiped off its corner. Chunky and bold. Reads at a glance, even tiny, as: a sponge.\n\nProduction requirement: this is a DIGITAL low-resolution bitmap game icon, not a physical sticker or illustration with a pixel filter. Draw a genuine coarse 32x32 logical pixel grid enlarged uniformly, hard square steps of one consistent size. Aim for one dominant silhouette and ONE identifying detail, legible at 18px; leave out decorative marks and fine interior lines. Sticker border is a solid paper #f6f3ec band that follows the object's pixel silhouette closely, not a circular/colored backing disc. One subject only, no scene, no extra props or symbols. Use only the exact listed flat solid colors; no grey shading, gradients, metallic sheen, material lighting, paper grain, speckles, smudges, blur or drop shadow. Keep the full object AND border comfortably within the central 80% of the square frame, with clear fully transparent margins on all four sides. Transparent PNG, 1024x1024 or larger. No trimming, resizing or production cleanup is requested.\nCandidate 2 of 2. Create an independent candidate with slightly different proportions within the same subject description; keep every required prop, color placement and simplicity constraint.",
+      "source": "../prompts/03-gadgets.md",
+      "requested_grid": 32,
+      "kind": "gadget",
+      "variant": 2,
+      "filename": "gadget-sponge-v2.png",
+      "corrections": [
+        {
+          "prompt": "Use case: precise-object-edit. Correct this gadget-sponge candidate to match the brief's SINGLE SMALL SPOT OF INK. Erase the entire broad dark-purple smear and long wide drip; restore those areas to the correct flat yellow sponge fill and graphite edge line. In the SAME existing corner, add just ONE small dark-purple #2c2350 ink droplet clinging to the edge: about TWO logical pixels wide and THREE logical pixels long on the 32x32 grid, no more than 3% of the visible sponge area. No smear across the top, no second drip and no detached droplets. The silhouette must read first as a rectangular yellow kitchen sponge, seen slightly from above, with the ink only a small identifying corner detail. Preserve this exact sponge body, perspective, size, position, graphite outline and full paper sticker border. Simplify the pores to THREE simple chunky graphite holes total, for the cleaner 18px candidate. ONLY flat colors yellow #e0a800, graphite #23262f, paper #f6f3ec and the tiny ink-purple #2c2350 spot. Coarse hard square pixels on the existing 32x32 pixel-art grid; no gradients, texture, smudges, grey highlights, blur, material lighting, shadows or extra objects. Preserve the transparent square background and all clear margins. Large square PNG.",
+          "input": "Original generated gadget-sponge-v2.png candidate before correction"
+        }
+      ],
+      "review_note": "Ink smear reduced to one small corner droplet and pores simplified to three holes for a quieter 18px option.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 934500,
+        "partially_transparent_pixels": 636782,
+        "subject_bounds_at_alpha_200": [
+          121,
+          301,
+          1132,
+          1083
+        ],
+        "clear_margins_at_alpha_200": [
+          121,
+          301,
+          122,
+          171
+        ],
+        "sha256": "4e2c0433297935abcba04a882ef7d40cdbfdb403e149a4bed83c97afa7f4fb1a"
+      }
+    }
+  ]
+}

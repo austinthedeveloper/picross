@@ -6,7 +6,7 @@
   "blurb": "A bat that breathes fog over your clues. Gross, and also a problem.",
   "enemy": {
     "name": "Fog bat",
-    "sprite": "🦇",
+    "sprite": "fog-bat",
     "hp": 30,
     "attack": 2,
     "fog": {

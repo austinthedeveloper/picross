@@ -73,10 +73,14 @@ Three words: **cozy, mischievous, after-hours.**
 
 ## Characters and sprites
 
-- **Today:** enemies, cast portraits and gadgets are emoji placeholders. They're bold, legible at
-  40px, and free.
-- **Next step:** replace them with 32×32 pixel sprites drawn in the palette (graphite
-  outlines, one accent color each, two at most), so they match the puzzle pictures.
+- Enemies, cast portraits, gadgets and map icons are pixel-art stickers in the palette
+  (graphite outlines, one accent color each, two at most), so they match the puzzle
+  pictures. They live in `public/art/` and are referenced by id. Power glyphs are masks
+  that take the theme's text color.
+- The prompts for every piece and the review checklist are in
+  [art/prompts/](art/prompts/README.md). The approved candidates are cleaned by
+  `scripts/art-clean.py`; to swap one, change its entry there and run it again.
+- Text can still say 🎭 or 🩹: `withArt` swaps those emoji for the art when it's drawn.
 - Keep each enemy's silhouette tied to its mechanic. The eel is a zigzag, the cuttlefish
   is a blob with trailing ink, the Forger carries a palette.
 

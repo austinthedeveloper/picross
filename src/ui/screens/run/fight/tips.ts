@@ -1,6 +1,7 @@
 import { hasSeenTip, markTipSeen } from '../../../../game/runSave';
 import { enemyPowers, phasePowers, startingPowers, type Power } from '../../../../puzzles/enemies';
 import { el } from '../../../dom';
+import { withArt } from '../../../art';
 import { POWERS } from '../../../powers';
 import type { FightContext } from './context';
 
@@ -18,8 +19,11 @@ export function createTips(ctx: FightContext) {
     if (!power) return ctx.bar.setTip(null);
     const { icon, name, tip } = POWERS[power];
     const card = el('div', { className: 'tip-card', role: 'status' }, [
-      el('span', { className: 'tip-icon', textContent: icon, ariaHidden: 'true' }),
-      el('p', { className: 'tip-text' }, [el('strong', { textContent: `${name}. ` }), tip]),
+      el('span', { className: 'tip-icon', ariaHidden: 'true' }, withArt(icon)),
+      el('p', { className: 'tip-text' }, [
+        el('strong', { textContent: `${name}. ` }),
+        ...withArt(tip),
+      ]),
       el('button', {
         className: 'button ghost tip-ok',
         textContent: 'Got it',
@@ -52,14 +56,10 @@ export function createTips(ctx: FightContext) {
             { className: 'power-list' },
             powers.map((p) =>
               el('li', {}, [
-                el('span', {
-                  className: 'tip-icon',
-                  textContent: POWERS[p].icon,
-                  ariaHidden: 'true',
-                }),
+                el('span', { className: 'tip-icon', ariaHidden: 'true' }, withArt(POWERS[p].icon)),
                 el('p', { className: 'tip-text' }, [
                   el('strong', { textContent: `${POWERS[p].name}. ` }),
-                  POWERS[p].tip,
+                  ...withArt(POWERS[p].tip),
                 ]),
               ]),
             ),
