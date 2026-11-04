@@ -1,0 +1,34 @@
+{
+  "id": "spark-hound",
+  "name": "Spark Hound",
+  "kind": "fight",
+  "puzzle": "spark-hound",
+  "blurb": "Don't pet the dog. It's on the sign, and on the other sign.",
+  "enemy": {
+    "name": "Spark Hound",
+    "sprite": "🐕",
+    "hp": 45,
+    "attack": 2,
+    "scramble": {
+      "rows": [1, 3]
+    },
+    "phases": [
+      {
+        "at": 0.85,
+        "taunt": "Its fur stands on end. Then so does yours.",
+        "charge": 6
+      },
+      {
+        "at": 0.6,
+        "name": "Good Boy, Overcharged",
+        "attack": 3,
+        "taunt": "Woof. Bzzt.",
+        "charge": 5,
+        "scramble": {
+          "rows": [4, 5]
+        },
+        "scrambleCount": 2
+      }
+    ]
+  }
+}

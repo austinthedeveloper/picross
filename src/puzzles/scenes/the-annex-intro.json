@@ -1,0 +1,50 @@
+{
+  "id": "the-annex-intro",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "rook"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "dee"
+    },
+    "priya": {
+      "name": "Priya",
+      "portrait": "🧑‍🔬"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "text": "The Annex. A long corridor that hums. Every door has a sign saying NOT THIS DOOR."
+        },
+        {
+          "who": "priya",
+          "text": "You're from facilities? Finally. I'm a third-year. I have been a third-year for six years."
+        },
+        {
+          "who": "priya",
+          "text": "Don't pet the dog. Don't help the clone. And some of the numbers on these boards are falsified."
+        },
+        {
+          "who": "rook",
+          "text": "Which ones?"
+        },
+        {
+          "who": "priya",
+          "text": "That's the trouble with falsified numbers."
+        },
+        {
+          "who": "dee",
+          "text": "Who is in charge here?"
+        },
+        {
+          "who": "priya",
+          "text": "Professor Ostrander. She has already read your invoice. She had notes."
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "id": "old-wyrm-reveal",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "rook"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "dee"
+    },
+    "dennis": {
+      "name": "Sir Dennis",
+      "portrait": "🤺"
+    },
+    "wyrm": {
+      "name": "The Old Wyrm",
+      "portrait": "🐉"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "text": "The ninth flight. The stairs open onto gold, and the gold breathes in."
+        },
+        {
+          "who": "dennis",
+          "text": "Foul beast! I challenge you! Also, I should say, I only really do Sundays."
+        },
+        {
+          "who": "dee",
+          "text": "Brass key, between the shoulder blades. Same as the others. Someone wound this up with a very long arm."
+        },
+        {
+          "who": "rook",
+          "text": "Ma'am, the castle closes at five."
+        },
+        {
+          "who": "wyrm",
+          "text": "Mine."
+        },
+        {
+          "who": "rook",
+          "text": "I'm fairly sure that's the gift shop's float."
+        },
+        {
+          "who": "wyrm",
+          "text": "MINE."
+        }
+      ]
+    }
+  }
+}

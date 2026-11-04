@@ -1,0 +1,11 @@
+{
+  "id": "guard-room",
+  "name": "Guard room",
+  "kind": "rest",
+  "puzzle": "mead-horn",
+  "blurb": "Whoever was on watch left in a hurry. They also left the mead.",
+  "rest": {
+    "seconds": 90,
+    "heal": 4
+  }
+}

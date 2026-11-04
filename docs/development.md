@@ -69,7 +69,7 @@ HTML report (`playwright-report`) when something fails. To debug a failure, run
 | `runs.spec.ts`           | Jobs board and chapters, the full First Job (intro once, sign-off, stats), knockouts, rest stops in time and late                                     |
 | `fights.spec.ts`         | One test per mechanic: fog, gremlin waves, Mimic swaps, Owl scramble, Forger call-outs, Beetle armor, gadgets, Eel charge, Cuttlefish ink, power tips |
 | `night-shift.spec.ts`    | The whole Night Shift from the jobs board to the Museum Rex                                                                                           |
-| `later-chapters.spec.ts` | The Glasshouse, the Midway, Summit Station, and Closing Time, each from its chapter opening to its boss                                               |
+| `later-chapters.spec.ts` | Every job from the Glasshouse to Closing Time, each from its chapter opening to its boss                                                              |
 | `deep-end.spec.ts`       | The whole Deep End from the chapter 3 opening to Old Tess                                                                                             |
 | `endless.spec.ts`        | Endless mode: unlocking, healing after a fight, the map moving on, best depth                                                                         |
 | `daily.spec.ts`          | The daily puzzle and its streak across days (fixed clock; solved from the clues on screen)                                                            |

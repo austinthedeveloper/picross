@@ -1,0 +1,43 @@
+{
+  "id": "undercroft-outro",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "rook"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "dee"
+    },
+    "dennis": {
+      "name": "Sir Dennis",
+      "portrait": "🤺"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "who": "dennis",
+          "text": "One flight of stairs, as advertised! The council has sent a very nice note.",
+          "if": "won"
+        },
+        {
+          "who": "dee",
+          "text": "Key goes in the jar. The hoard turned out to be mostly chocolate coins from the gift shop.",
+          "if": "won"
+        },
+        {
+          "who": "rook",
+          "text": "Not all of it. I checked.",
+          "if": "won"
+        },
+        {
+          "who": "rook",
+          "text": "Dennis is leading us back up. He has asked us to call him sir. We're calling him sir.",
+          "if": "!won"
+        }
+      ]
+    }
+  }
+}

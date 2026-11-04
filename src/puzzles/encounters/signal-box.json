@@ -1,0 +1,35 @@
+{
+  "id": "signal-box",
+  "name": "Signal Box",
+  "kind": "fight",
+  "puzzle": "signal-lamp",
+  "blurb": "It's been showing red since before the line closed. It has opinions now.",
+  "enemy": {
+    "name": "Signal Box",
+    "sprite": "🚦",
+    "hp": 45,
+    "attack": 2,
+    "fog": {
+      "rows": [1, 13]
+    },
+    "scramble": {
+      "cols": [6, 7]
+    },
+    "phases": [
+      {
+        "at": 0.75,
+        "name": "Crossed Signals",
+        "attack": 3,
+        "taunt": "The lamp goes from red to something else.",
+        "fog": {
+          "rows": [8]
+        },
+        "fogCount": 1,
+        "scramble": {
+          "cols": [10]
+        },
+        "scrambleCount": 1
+      }
+    ]
+  }
+}

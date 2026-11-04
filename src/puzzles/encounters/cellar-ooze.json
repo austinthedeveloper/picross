@@ -1,0 +1,38 @@
+{
+  "id": "cellar-ooze",
+  "name": "Cellar Ooze",
+  "kind": "fight",
+  "puzzle": "ooze-cube",
+  "blurb": "It ate the tour map. It kept the skull. It is very nearly cube-shaped.",
+  "enemy": {
+    "name": "Cellar Ooze",
+    "sprite": "🧊",
+    "hp": 45,
+    "attack": 2,
+    "scramble": {
+      "cols": [4, 5]
+    },
+    "phases": [
+      {
+        "at": 0.8,
+        "taunt": "Blorp.",
+        "scramble": {
+          "cols": [8, 9]
+        },
+        "scrambleCount": 2
+      },
+      {
+        "at": 0.65,
+        "taunt": "It slops across your work.",
+        "ink": 4
+      },
+      {
+        "at": 0.45,
+        "name": "Overflowing Ooze",
+        "attack": 3,
+        "taunt": "BLORP.",
+        "ink": 5
+      }
+    ]
+  }
+}

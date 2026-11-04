@@ -4,13 +4,26 @@ import { encounterSolution, press, seed, skipScene, solve } from './helpers';
 const won = { plays: 1, wins: 1, bestHp: 10 };
 
 /** Every job in board order, and the opening scene of the chapter that each job after the first starts. */
-const ORDER = ['first-job', 'night-shift', 'deep-end', 'glasshouse', 'midway', 'summit-station'];
+const ORDER = [
+  'first-job',
+  'night-shift',
+  'deep-end',
+  'glasshouse',
+  'midway',
+  'summit-station',
+  'night-mail',
+  'undercroft',
+  'the-annex',
+];
 const OPENINGS = [
   'after-hours-opening',
   'deep-water-opening',
   'green-thumbs-opening',
   'step-right-up-opening',
   'cold-snap-opening',
+  'end-of-the-line-opening',
+  'below-stairs-opening',
+  'peer-review-opening',
 ];
 
 const JOBS = [
@@ -41,6 +54,41 @@ const JOBS = [
     nodes: ['whiteout', 'falling-star', 'supply-cache', 'ice-mammoth', 'cocoa-break', 'yeti'],
     gadget: { at: 'supply-cache', name: 'Patch kit' },
     signOff: 'taking off one coat',
+  },
+  {
+    job: 'night-mail',
+    opening: 'Chapter 7: End of the Line',
+    nodes: [
+      'signal-box',
+      'ticket-inspector',
+      'lost-property',
+      'coal-heap',
+      'station-buffet',
+      'the-1159',
+    ],
+    gadget: { at: 'lost-property', name: 'Sponge' },
+    signOff: 'Forty years late',
+  },
+  {
+    job: 'undercroft',
+    opening: 'Chapter 8: Below Stairs',
+    nodes: ['rusted-sentry', 'cellar-ooze', 'wine-cellar', 'rat-king', 'guard-room', 'old-wyrm'],
+    gadget: { at: 'wine-cellar', name: 'Bomb' },
+    signOff: 'One flight of stairs',
+  },
+  {
+    job: 'the-annex',
+    opening: 'Chapter 9: Peer Review',
+    nodes: [
+      'spark-hound',
+      'failed-clone',
+      'supply-closet',
+      'reviewer-two',
+      'faculty-lounge',
+      'ostrander',
+    ],
+    gadget: { at: 'supply-closet', name: 'Sponge' },
+    signOff: 'back on the map',
   },
   {
     job: 'closing-time',

@@ -1,0 +1,46 @@
+{
+  "id": "peer-review-opening",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "rook"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "dee"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "text": "Chapter 9: Peer Review. A letter on very good paper, with a very long footnote."
+        },
+        {
+          "who": "dee",
+          "text": "The Ostrander Institute has mislaid a building."
+        },
+        {
+          "who": "rook",
+          "text": "How do you mislay a building?"
+        },
+        {
+          "who": "dee",
+          "text": "They call it the Annex. It's not on any of their plans, but it's still getting a power bill."
+        },
+        {
+          "who": "rook",
+          "text": "Who works there?"
+        },
+        {
+          "who": "dee",
+          "text": "One professor. She stopped answering emails last spring. Now she only sends them back, corrected."
+        },
+        {
+          "who": "rook",
+          "text": "I had a teacher like that."
+        }
+      ]
+    }
+  }
+}

@@ -32,6 +32,18 @@ describe('enemy powers (#79)', () => {
     ['ice-mammoth', ['fog', 'armor', 'charge']],
     ['yeti', ['fog', 'scramble', 'ink', 'charge']],
     ['tin-soldier', ['fog', 'scramble', 'armor']],
+    ['signal-box', ['fog', 'scramble']],
+    ['ticket-inspector', ['fakes', 'charge']],
+    ['coal-heap', ['armor', 'ink']],
+    ['the-1159', ['fog', 'scramble', 'swap', 'charge']],
+    ['rusted-sentry', ['armor', 'swap']],
+    ['cellar-ooze', ['scramble', 'ink']],
+    ['rat-king', ['fakes', 'swap']],
+    ['old-wyrm', ['scramble', 'armor', 'fakes', 'charge', 'ink']],
+    ['spark-hound', ['scramble', 'charge']],
+    ['failed-clone', ['fog', 'swap']],
+    ['reviewer-two', ['armor', 'fakes']],
+    ['ostrander', ['scramble', 'fakes', 'swap', 'ink']],
   ])('%s: %j', (id, powers) => {
     expect(powersOf(id)).toEqual(powers);
   });

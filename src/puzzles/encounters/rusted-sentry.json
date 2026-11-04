@@ -1,0 +1,34 @@
+{
+  "id": "rusted-sentry",
+  "name": "Rusted Sentry",
+  "kind": "fight",
+  "puzzle": "sentry-halberd",
+  "blurb": "Not one of the castle's. The castle's ones don't turn their heads.",
+  "enemy": {
+    "name": "Rusted Sentry",
+    "sprite": "🛡️",
+    "hp": 45,
+    "attack": 2,
+    "armor": {
+      "weakPoints": {
+        "rows": [10],
+        "cols": [3, 9]
+      },
+      "attack": 4
+    },
+    "phases": [
+      {
+        "at": 0.8,
+        "taunt": "Its halberd clips your work and sends two lines flying.",
+        "swap": true
+      },
+      {
+        "at": 0.5,
+        "name": "Furious Sentry",
+        "attack": 3,
+        "taunt": "NONE. SHALL. Squeak.",
+        "swap": true
+      }
+    ]
+  }
+}
