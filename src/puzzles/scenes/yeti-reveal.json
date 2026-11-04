@@ -1,0 +1,50 @@
+{
+  "id": "yeti-reveal",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "🧑‍💼"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "👩‍🔬"
+    },
+    "yeti": {
+      "name": "The Yeti",
+      "portrait": "🦍"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "text": "The ridge above the station. The snow stands up, and then it keeps standing up."
+        },
+        {
+          "who": "dee",
+          "text": "That's not a snowdrift."
+        },
+        {
+          "who": "yeti",
+          "text": "HRRRM."
+        },
+        {
+          "who": "rook",
+          "text": "Sir, this is a private observatory."
+        },
+        {
+          "who": "dee",
+          "text": "Brass key. Back of the neck. Who winds up a yeti?"
+        },
+        {
+          "who": "rook",
+          "text": "Someone with a very tall stepladder."
+        },
+        {
+          "who": "yeti",
+          "text": "HRRRRRM."
+        }
+      ]
+    }
+  }
+}

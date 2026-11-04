@@ -1,0 +1,41 @@
+{
+  "id": "wound-up-opening",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "🧑‍💼"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "👩‍🔬"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "text": "Wound Up. The office, late. The jar of brass keys is ticking."
+        },
+        {
+          "who": "dee",
+          "text": "Keys don't tick."
+        },
+        {
+          "who": "rook",
+          "text": "These do. All of them, in time. And an envelope came. Museum letterhead."
+        },
+        {
+          "text": "'You are cordially invited to a private viewing. Closing time. Do bring the keys.'"
+        },
+        {
+          "who": "dee",
+          "text": "That's a trap."
+        },
+        {
+          "who": "rook",
+          "text": "That is definitely a trap. Night rates are still double, though."
+        }
+      ]
+    }
+  }
+}

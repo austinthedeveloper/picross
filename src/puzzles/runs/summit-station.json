@@ -1,0 +1,12 @@
+{
+  "id": "summit-station",
+  "name": "Summit Station",
+  "hp": 18,
+  "encounters": ["whiteout", "falling-star", "supply-cache", "ice-mammoth", "cocoa-break", "yeti"],
+  "order": 6,
+  "requires": "midway",
+  "gadgets": ["bomb"],
+  "blurb": "A mountaintop observatory that's stopped answering its radio. Bring a coat.",
+  "intro": "summit-station-intro",
+  "outro": "summit-station-outro"
+}

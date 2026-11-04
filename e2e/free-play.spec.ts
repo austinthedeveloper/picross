@@ -30,6 +30,7 @@ test.describe('free play', () => {
     await expect(page.locator('.end-panel:not([hidden]) h2')).toHaveText('Solved!');
     await press(page, 'All puzzles');
     const cards = page.locator('.size-section:not(.murals) .card');
+    await expect(cards.first()).toBeVisible(); // count() doesn't wait for the list
     const total = await cards.count();
     await page.getByRole('button', { name: 'Completed', exact: true }).tap();
     await expect(cards).toHaveCount(1);

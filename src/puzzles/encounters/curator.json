@@ -4,7 +4,7 @@
   "kind": "fight",
   "boss": true,
   "puzzle": "pocket-watch",
-  "scene": "curator-reveal",
+  "scene": "curator-return",
   "blurb": "The curator's office. It's ticking.",
   "enemy": {
     "name": "Curator Ambrose",

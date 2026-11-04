@@ -1,0 +1,49 @@
+{
+  "id": "mother-bramble",
+  "name": "Mother Bramble",
+  "kind": "fight",
+  "boss": true,
+  "puzzle": "bramble-rose",
+  "scene": "bramble-reveal",
+  "blurb": "The center dome. Nobody has seen the door since Thursday.",
+  "enemy": {
+    "name": "Mother Bramble",
+    "sprite": "🥀",
+    "hp": 60,
+    "attack": 2,
+    "fog": {
+      "rows": [2, 6]
+    },
+    "phases": [
+      {
+        "at": 0.9,
+        "taunt": "Hold still, little gardeners.",
+        "ink": 4
+      },
+      {
+        "at": 0.82,
+        "name": "Thorned Bramble",
+        "attack": 3,
+        "taunt": "Every spring you prune me. Every spring I remember.",
+        "fog": {
+          "rows": [8, 10]
+        },
+        "fogCount": 2
+      },
+      {
+        "at": 0.7,
+        "taunt": "Let me rearrange your beds.",
+        "swap": true
+      },
+      {
+        "at": 0.5,
+        "name": "Mother Bramble in Bloom",
+        "sprite": "🌹",
+        "attack": 4,
+        "taunt": "Snip, snip, snip.",
+        "ink": 5,
+        "inkCount": 2
+      }
+    ]
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "id": "midway-outro",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "🧑‍💼"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "👩‍🔬"
+    },
+    "bigsby": {
+      "name": "Bigsby",
+      "portrait": "🤹"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "who": "bigsby",
+          "text": "The lights are off and the music's stopped. I've never been so happy to be bankrupt.",
+          "if": "won"
+        },
+        {
+          "who": "dee",
+          "text": "One more key, one more label. That jar's starting to look like a pattern.",
+          "if": "won"
+        },
+        {
+          "who": "rook",
+          "text": "It's a lovely jar.",
+          "if": "won"
+        },
+        {
+          "who": "rook",
+          "text": "I would like a refund. He did say no refunds.",
+          "if": "!won"
+        }
+      ]
+    }
+  }
+}
