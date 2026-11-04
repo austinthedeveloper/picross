@@ -51,6 +51,7 @@
       {
         "at": 0.4,
         "name": "Wrathful Wyrm",
+        "sprite": "wrathful-wyrm",
         "attack": 4,
         "taunt": "ALL OF IT. MINE.",
         "charge": 5,

@@ -173,20 +173,26 @@ The Old Wyrm: "The ninth flight down. The hoard is breathing. Aim between the sc
 trust all the gold." Armored, forges clues, scrambles, charges, and later snorts black smoke
 across your board. Waking Wyrm (at 80% HP) keeps the base sprite, so the base has one eye open
 and works awake. Placeholder today: 🐉, with no sprite on its phases yet. Silhouette: a huge
-coiled dragon, much wider than it is tall, on a heap of coins with a key in its back. The
-portrait in `08-cast-chapters-7-9.md` is the same creature; match its face.
+coiled dragon, a mound about as tall as it is wide, on a heap of coins with a key in its back.
+The portrait in `08-cast-chapters-7-9.md` is the same creature; match its face.
 
-Gold is the trap here. Yellow is reserved for the key and coral for the gaps, which uses up
-both accents, so the dragon is graphite and paper and the hoard is paper. That suits the outro,
-where the hoard is "mostly chocolate coins" anyway. Don't let the generator talk you into gold.
+Gold is the trap here. Yellow is reserved for the key and coral for the gaps, so the hoard is
+paper. That suits the outro, where the hoard is "mostly chocolate coins" anyway. Don't let the
+generator talk you into gold.
 
-**Base**, id `enemy-old-wyrm`. Accents: job stamp coral `#d9534f` (the gaps) and spark yellow
-`#e0a800` (the key). Two accents allowed.
+This set is the one exception to two accents. Round 6 showed the dragon turns into a black blob
+without its gray scale edges, so cleanup keeps gray here (`../incoming/round6-review.md`). The
+same round showed a wide base is a flat strip at 38 px, so the base below is rewritten as a tall
+mound. Generate it as `-v3` and `-v4`, with `enemy-wrathful-wyrm-v1` and `cast-wyrm-v1` as
+references.
+
+**Base**, id `enemy-old-wyrm`. Accents: pencil gray `#7a7e8a` (the scale edges), job stamp coral
+`#d9534f` (the gaps), and spark yellow `#e0a800` (the key).
 
 ```
-Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, used only for the gaps between the scales, plus a second accent, warm yellow #e0a800, used only for the wind-up key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.
+Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, soft gray #7a7e8a, used only for the edges of the scales, plus a second accent, coral red #d9534f, used only for the gaps between the coils, and a third accent, warm yellow #e0a800, used only for the wind-up key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.
 
-Subject: an enormous ancient wingless dragon lying in thick heavy coils on a low, wide heap of round coins. The coils are as thick as its head and stacked in two big loops, so the whole figure is much wider than it is tall. Solid graphite scales, with a few big paper-colored plates along the belly and jaw. The long flat head rests just above the top coil, with two swept-back horns and one huge paper-colored eye half open with a narrow slit pupil. A large yellow wind-up key sticks straight up from between the shoulder blades, behind the head. Three bold jagged coral red gaps run between the scales along the coils, thick enough to see at small size. The coins are plain paper-colored discs with graphite outlines and no markings, spilling out to both sides. The coins are not gold or yellow: the key is the only yellow thing. Reads at 40 px as: a coiled dragon on a coin heap with a key in its back.
+Subject: an enormous ancient wingless dragon curled up on a heap of round coins, drawn as a tall mound about as tall as it is wide, filling the frame from top to bottom. Three thick coils are stacked one on top of the other, each narrower than the one below and each as thick as its head. The long flat head rests on the top coil, large and tilted toward the viewer, about half the width of the mound, with two swept-back horns and one huge paper-colored eye half open with a narrow slit pupil. Solid graphite scales with soft gray edges, and a few big paper-colored plates along the belly and jaw. A large yellow wind-up key as tall as the head sticks straight up from behind the neck, past one side of the head. Three bold jagged coral red gaps run between the coils, thick enough to see at small size. The coins are plain paper-colored discs with graphite outlines and no markings, spilling out at the base. The coins are not gold or yellow: the key is the only yellow thing. Reads at 40 px as: a coiled dragon on a coin heap with a key in its back.
 ```
 
 **Phase "Wrathful Wyrm"** (at 40% HP), id `enemy-wrathful-wyrm`. Accents: job stamp coral

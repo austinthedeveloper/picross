@@ -6,7 +6,7 @@
   "blurb": "He has been checking the same empty carriage since 1986. Some of his paperwork is made up.",
   "enemy": {
     "name": "Ticket Inspector",
-    "sprite": "🎫",
+    "sprite": "ticket-inspector",
     "hp": 45,
     "attack": 2,
     "fakes": {

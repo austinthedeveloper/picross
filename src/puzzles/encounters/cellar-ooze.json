@@ -6,7 +6,7 @@
   "blurb": "It ate the tour map. It kept the skull. It is very nearly cube-shaped.",
   "enemy": {
     "name": "Cellar Ooze",
-    "sprite": "🧊",
+    "sprite": "cellar-ooze",
     "hp": 45,
     "attack": 2,
     "scramble": {

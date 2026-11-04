@@ -6,7 +6,7 @@
   "blurb": "He got the crown from the gift shop. He's forged the receipt.",
   "enemy": {
     "name": "The Rat King",
-    "sprite": "🐀",
+    "sprite": "rat-king",
     "hp": 45,
     "attack": 2,
     "fakes": {

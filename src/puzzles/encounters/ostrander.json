@@ -8,7 +8,7 @@
   "blurb": "Top floor. Every wall is charts, and every chart has been corrected.",
   "enemy": {
     "name": "Professor Ostrander",
-    "sprite": "🧑‍🏫",
+    "sprite": "ostrander",
     "hp": 60,
     "attack": 2,
     "fakes": {
@@ -44,6 +44,7 @@
       {
         "at": 0.5,
         "name": "Reviewer One",
+        "sprite": "reviewer-one",
         "attack": 4,
         "taunt": "Rejected. Rejected. Rejected.",
         "swap": true,

@@ -6,7 +6,7 @@
   "blurb": "The stationmaster calls it Gerald. Aim for the cracks, and mind your clean work.",
   "enemy": {
     "name": "Gerald",
-    "sprite": "🪨",
+    "sprite": "coal-heap",
     "hp": 45,
     "attack": 2,
     "armor": {

@@ -60,6 +60,12 @@ CAST = {
     "bramble": ("cast-bramble-v2", [CORAL, YELLOW]),
     "ringmaster": ("cast-ringmaster-v2", [CORAL, YELLOW]),
     "yeti": ("cast-yeti-v2", [GRAY, YELLOW]),
+    "pim": ("cast-pim-v1", [METAL]),
+    "dennis": ("cast-dennis-v1", [PURPLE]),
+    "priya": ("cast-priya-v2", [GREEN]),
+    # Gray is a third accent on the Wyrm only: without its scale edges it's a black blob.
+    "wyrm": ("cast-wyrm-v1", [CORAL, YELLOW, GRAY]),
+    "ostrander": ("cast-ostrander-v1", [CORAL, YELLOW]),
 }
 
 # (frame fill, {name: (source, accents)}). Forms of one enemy share a scale, so a phase
@@ -148,6 +154,32 @@ ENEMY_SETS = [
         },
     ),
     (0.92, {"tin-soldier": ("enemy-tin-soldier-v2", [CORAL, YELLOW])}),
+    (0.92, {"signal-box": ("enemy-signal-box-v2", [CORAL, GRAY])}),
+    (0.92, {"ticket-inspector": ("enemy-ticket-inspector-v1", [GRAY, PURPLE])}),
+    (0.92, {"coal-heap": ("enemy-coal-heap-v1", [CORAL, GRAY])}),
+    (
+        1.0,
+        {
+            "the-1159": ("enemy-the-1159-v1", [GRAY, YELLOW]),
+            "express-not-stopping": ("enemy-express-not-stopping-v1", [GRAY, YELLOW]),
+        },
+    ),
+    (0.92, {"rusted-sentry": ("enemy-rusted-sentry-v2", [BROWN, CORAL])}),
+    (0.92, {"cellar-ooze": ("enemy-cellar-ooze-v1", [GREEN])}),
+    (0.92, {"rat-king": ("enemy-rat-king-v1", [GRAY, YELLOW])}),
+    # The base "old-wyrm" joins this set once it's regenerated (see round6-review.md). Gray is
+    # a third accent here, as on the Wyrm's portrait.
+    (1.0, {"wrathful-wyrm": ("enemy-wrathful-wyrm-v1", [CORAL, YELLOW, GRAY])}),
+    (0.92, {"spark-hound": ("enemy-spark-hound-v2", [YELLOW])}),
+    (0.92, {"failed-clone": ("enemy-failed-clone-v1", [PURPLE, GRAY])}),
+    (0.92, {"reviewer-two": ("enemy-reviewer-two-v2", [CORAL])}),
+    (
+        1.0,
+        {
+            "ostrander": ("enemy-ostrander-v1", [CORAL, YELLOW]),
+            "reviewer-one": ("enemy-reviewer-one-v1", [CORAL, YELLOW]),
+        },
+    ),
 ]
 
 # (first source row, color, replacement). Coral means "hit here" on armored enemies, and

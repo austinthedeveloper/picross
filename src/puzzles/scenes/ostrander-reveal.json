@@ -11,11 +11,11 @@
     },
     "priya": {
       "name": "Priya",
-      "portrait": "🧑‍🔬"
+      "portrait": "priya"
     },
     "ostrander": {
       "name": "Professor Ostrander",
-      "portrait": "🧑‍🏫"
+      "portrait": "ostrander"
     }
   },
   "nodes": {

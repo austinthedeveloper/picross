@@ -8,7 +8,7 @@
   "blurb": "Platform one. Forty years late, and picking up speed.",
   "enemy": {
     "name": "The 11:59",
-    "sprite": "🚂",
+    "sprite": "the-1159",
     "hp": 60,
     "attack": 2,
     "fog": {
@@ -44,6 +44,7 @@
       {
         "at": 0.5,
         "name": "Express, Not Stopping",
+        "sprite": "express-not-stopping",
         "attack": 4,
         "charge": 6,
         "taunt": "Stand clear of the platform edge."

@@ -1,0 +1,1746 @@
+{
+  "round": 6,
+  "generator": "built-in image_gen",
+  "expected_png_count": 40,
+  "saved_png_count": 40,
+  "brief_sources": [
+    "../prompts/README.md",
+    "../prompts/08-cast-chapters-7-9.md",
+    "../prompts/09-enemies-chapters-7-9.md",
+    "round5-review.md"
+  ],
+  "scope": "Two candidates each for five chapter 7\u20139 portraits and fifteen enemy forms.",
+  "native_grid_policy": "Prompts request 48\u00d748 portraits and 32\u00d732 sprites; native generated stepped grids retained, with no measured cell count asserted.",
+  "workflow": "Portraits generated first; boss sprites reference the same-numbered portraits; phase forms reference the same-numbered base sprites; Reviewer One also references Reviewer Two for its eye bar.",
+  "cleanup": "Native generated PNGs retained. Palette cleanup, trim, resize and installation remain with the project owner.",
+  "assets": [
+    {
+      "id": "cast-pim",
+      "prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, steel blue-gray #3d4450. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: head-and-shoulders bust of Stationmaster Pim, a neat, upright railway stationmaster with a mild, level gaze and a polite flat mouth, completely unalarmed. A peaked stationmaster's cap with a steel blue-gray crown, a paper-colored band, and a plain graphite peak, with no badge on it. A steel blue-gray uniform jacket buttoned up to the collar, with a row of big plain paper-colored buttons. A square railway hand lantern held up at the bottom edge of the frame, with a paper-colored light in it. Clean-shaven. Three-quarter view, looking toward the viewer. Keep the whole cap inside the circle. Reads at a glance as: someone who will calmly fill in a form about this.\n\nReference roles: the two supplied images are approved Rook and Tess portraits for chunky pixel cells, graphite line weight, head/shoulder scale and paper sticker style ONLY. Do not copy their identities, colors, symbols or backing discs. Follow this new subject's exact specified palette and details. Preserve the requested expression in both candidates. Isolated portrait on real transparency, no colored disc, scenery, extra symbols, sweat drops or decorative marks. Entire required hat, horns, plume, key and prop must fit a circular crop, with clear square-frame margins. Keep paper light areas flat; do not add a third accent for highlights. Large square transparent PNG, at least 1024x1024. Request 48x48 cells; native chunky stepped grid accepted.\nCandidate 1 of 2. Use the clearest version of the prescribed pose and expression.",
+      "source": "../prompts/08-cast-chapters-7-9.md",
+      "kind": "cast",
+      "requested_grid": 48,
+      "chapter": "Cast",
+      "variant": 1,
+      "filename": "cast-pim-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/public/art/cast/rook.png",
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/public/art/cast/tess.png"
+      ],
+      "original_sha256": "a0edd893784d1c78efb22ba8f91c4cf60eaa2bb7d2ed1a7326dbaeb48dbca7eb",
+      "review_note": "Calm flat mouth, unbadged cap, plain paper buttons and white lantern light. Steel is the only accent. A broad paper backing remains behind the bust.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 509087,
+        "partially_transparent_pixels": 1063034,
+        "subject_bounds_at_alpha_200": [
+          57,
+          17,
+          1172,
+          1253
+        ],
+        "clear_margins_at_alpha_200": [
+          57,
+          17,
+          82,
+          1
+        ],
+        "sha256": "a0edd893784d1c78efb22ba8f91c4cf60eaa2bb7d2ed1a7326dbaeb48dbca7eb",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-24547597-e1f1-4477-8a81-3b68fac62ff9.png"
+    },
+    {
+      "id": "cast-pim",
+      "prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, steel blue-gray #3d4450. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: head-and-shoulders bust of Stationmaster Pim, a neat, upright railway stationmaster with a mild, level gaze and a polite flat mouth, completely unalarmed. A peaked stationmaster's cap with a steel blue-gray crown, a paper-colored band, and a plain graphite peak, with no badge on it. A steel blue-gray uniform jacket buttoned up to the collar, with a row of big plain paper-colored buttons. A square railway hand lantern held up at the bottom edge of the frame, with a paper-colored light in it. Clean-shaven. Three-quarter view, looking toward the viewer. Keep the whole cap inside the circle. Reads at a glance as: someone who will calmly fill in a form about this.\n\nReference roles: the two supplied images are approved Rook and Tess portraits for chunky pixel cells, graphite line weight, head/shoulder scale and paper sticker style ONLY. Do not copy their identities, colors, symbols or backing discs. Follow this new subject's exact specified palette and details. Preserve the requested expression in both candidates. Isolated portrait on real transparency, no colored disc, scenery, extra symbols, sweat drops or decorative marks. Entire required hat, horns, plume, key and prop must fit a circular crop, with clear square-frame margins. Keep paper light areas flat; do not add a third accent for highlights. Large square transparent PNG, at least 1024x1024. Request 48x48 cells; native chunky stepped grid accepted.\nCandidate 2 of 2. Make a modest variation in tilt and proportions within the exact brief, keeping the stated emotional expression, clothes, props and all identity features.",
+      "source": "../prompts/08-cast-chapters-7-9.md",
+      "kind": "cast",
+      "requested_grid": 48,
+      "chapter": "Cast",
+      "variant": 2,
+      "filename": "cast-pim-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/public/art/cast/rook.png",
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/public/art/cast/tess.png"
+      ],
+      "original_sha256": "e22206bfb927576edb8d0af5f5f512f0dd183efd931c152c7d0a666ec47a6bc1",
+      "review_note": "Calm flat mouth, unbadged cap, plain paper buttons and white lantern light. Steel is the only accent. A broad paper backing remains behind the bust.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 488736,
+        "partially_transparent_pixels": 1082685,
+        "subject_bounds_at_alpha_200": [
+          71,
+          22,
+          1173,
+          1253
+        ],
+        "clear_margins_at_alpha_200": [
+          71,
+          22,
+          81,
+          1
+        ],
+        "sha256": "e22206bfb927576edb8d0af5f5f512f0dd183efd931c152c7d0a666ec47a6bc1",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-5cb3a3fd-b178-473e-bc5e-35f952c30be2.png"
+    },
+    {
+      "id": "cast-dennis",
+      "prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, bright purple #7b5cff. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: head-and-shoulders bust of Sir Dennis, a man in a cheap costume knight's outfit, with a worried, hugely relieved face: eyebrows up, eyes wide, a wobbly grateful smile. A shiny helmet slightly too big for him, with the visor pushed up and a droopy bright purple plume flopping to one side. Thin plain shoulder plates with a visible buckle, over a bright purple tabard with a plain block of paper color on it and no crest or emblem. A crumpled paper lunch bag held up at the bottom edge of the frame, like something he rescued. Clean-shaven. Three-quarter view, looking toward the viewer. Keep the whole helmet and plume inside the circle. Reads at a glance as: a weekend knight who is very glad to see you.\n\nReference roles: the two supplied images are approved Rook and Tess portraits for chunky pixel cells, graphite line weight, head/shoulder scale and paper sticker style ONLY. Do not copy their identities, colors, symbols or backing discs. Follow this new subject's exact specified palette and details. Preserve the requested expression in both candidates. Isolated portrait on real transparency, no colored disc, scenery, extra symbols, sweat drops or decorative marks. Entire required hat, horns, plume, key and prop must fit a circular crop, with clear square-frame margins. Keep paper light areas flat; do not add a third accent for highlights. Large square transparent PNG, at least 1024x1024. Request 48x48 cells; native chunky stepped grid accepted.\nCandidate 1 of 2. Use the clearest version of the prescribed pose and expression.",
+      "source": "../prompts/08-cast-chapters-7-9.md",
+      "kind": "cast",
+      "requested_grid": 48,
+      "chapter": "Cast",
+      "variant": 1,
+      "filename": "cast-dennis-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/public/art/cast/rook.png",
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/public/art/cast/tess.png"
+      ],
+      "original_sha256": "86c8518c7269247f9580da6b97f638d2ec0f0e10899f8c72ec8fc5a290c08fe9",
+      "review_note": "Raised visor, drooping purple plume, costume shoulder plates and crumpled lunch bag remain visible in the circle. Both expressions lean toward delighted relief rather than a shaky smile.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 583351,
+        "partially_transparent_pixels": 988418,
+        "subject_bounds_at_alpha_200": [
+          83,
+          35,
+          1116,
+          1253
+        ],
+        "clear_margins_at_alpha_200": [
+          83,
+          35,
+          138,
+          1
+        ],
+        "sha256": "86c8518c7269247f9580da6b97f638d2ec0f0e10899f8c72ec8fc5a290c08fe9",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-145a104f-3e1e-4211-a645-5375c55e9b23.png"
+    },
+    {
+      "id": "cast-dennis",
+      "prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, bright purple #7b5cff. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: head-and-shoulders bust of Sir Dennis, a man in a cheap costume knight's outfit, with a worried, hugely relieved face: eyebrows up, eyes wide, a wobbly grateful smile. A shiny helmet slightly too big for him, with the visor pushed up and a droopy bright purple plume flopping to one side. Thin plain shoulder plates with a visible buckle, over a bright purple tabard with a plain block of paper color on it and no crest or emblem. A crumpled paper lunch bag held up at the bottom edge of the frame, like something he rescued. Clean-shaven. Three-quarter view, looking toward the viewer. Keep the whole helmet and plume inside the circle. Reads at a glance as: a weekend knight who is very glad to see you.\n\nReference roles: the two supplied images are approved Rook and Tess portraits for chunky pixel cells, graphite line weight, head/shoulder scale and paper sticker style ONLY. Do not copy their identities, colors, symbols or backing discs. Follow this new subject's exact specified palette and details. Preserve the requested expression in both candidates. Isolated portrait on real transparency, no colored disc, scenery, extra symbols, sweat drops or decorative marks. Entire required hat, horns, plume, key and prop must fit a circular crop, with clear square-frame margins. Keep paper light areas flat; do not add a third accent for highlights. Large square transparent PNG, at least 1024x1024. Request 48x48 cells; native chunky stepped grid accepted.\nCandidate 2 of 2. Make a modest variation in tilt and proportions within the exact brief, keeping the stated emotional expression, clothes, props and all identity features.",
+      "source": "../prompts/08-cast-chapters-7-9.md",
+      "kind": "cast",
+      "requested_grid": 48,
+      "chapter": "Cast",
+      "variant": 2,
+      "filename": "cast-dennis-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/public/art/cast/rook.png",
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/public/art/cast/tess.png"
+      ],
+      "original_sha256": "1f93eb58bc0956cbf70cf63e34207005954572246749cdee568a23abf5141bac",
+      "review_note": "Raised visor, drooping purple plume, costume shoulder plates and crumpled lunch bag remain visible in the circle. Both expressions lean toward delighted relief rather than a shaky smile.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 624012,
+        "partially_transparent_pixels": 947798,
+        "subject_bounds_at_alpha_200": [
+          98,
+          46,
+          1103,
+          1242
+        ],
+        "clear_margins_at_alpha_200": [
+          98,
+          46,
+          151,
+          12
+        ],
+        "sha256": "1f93eb58bc0956cbf70cf63e34207005954572246749cdee568a23abf5141bac",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-83b7bde1-c2ed-4286-920c-03a967d42b4a.png"
+    },
+    {
+      "id": "cast-priya",
+      "prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, green #2e8b57. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: head-and-shoulders bust of Priya, a worn-out research student with a flat, patient, deadpan look. Half-lidded eyes with big bags under them, round glasses mended at the bridge with a wrap of tape, and a mouth that has stopped trying to smile. Messy hair held back with a plain bulldog clip. A paper-colored lab coat with its collar askew over a green sweater, several pens crammed into the chest pocket, and a green instant-noodle cup with a fork sticking out of it held up at the bottom edge of the frame. Three-quarter view, looking toward the viewer. Reads at a glance as: someone who has been a third-year for six years.\n\nReference roles: the two supplied images are approved Rook and Tess portraits for chunky pixel cells, graphite line weight, head/shoulder scale and paper sticker style ONLY. Do not copy their identities, colors, symbols or backing discs. Follow this new subject's exact specified palette and details. Preserve the requested expression in both candidates. Isolated portrait on real transparency, no colored disc, scenery, extra symbols, sweat drops or decorative marks. Entire required hat, horns, plume, key and prop must fit a circular crop, with clear square-frame margins. Keep paper light areas flat; do not add a third accent for highlights. Large square transparent PNG, at least 1024x1024. Request 48x48 cells; native chunky stepped grid accepted.\nCandidate 1 of 2. Use the clearest version of the prescribed pose and expression.",
+      "source": "../prompts/08-cast-chapters-7-9.md",
+      "kind": "cast",
+      "requested_grid": 48,
+      "chapter": "Cast",
+      "variant": 1,
+      "filename": "cast-priya-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/public/art/cast/rook.png",
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/public/art/cast/tess.png"
+      ],
+      "original_sha256": "10a77b3fbd01fefb8a23c96eb82a124a40a568df0da249a0d1f4c7b8ead4b5cf",
+      "review_note": "Half-lidded eyes, taped round glasses, bulldog hair clip, pocket pens and a green noodle cup. Candidate 1 has the plainer cup; candidate 2 adds stripes.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 598309,
+        "partially_transparent_pixels": 973652,
+        "subject_bounds_at_alpha_200": [
+          93,
+          24,
+          1090,
+          1253
+        ],
+        "clear_margins_at_alpha_200": [
+          93,
+          24,
+          164,
+          1
+        ],
+        "sha256": "10a77b3fbd01fefb8a23c96eb82a124a40a568df0da249a0d1f4c7b8ead4b5cf",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-26bc8625-7c1f-447e-8671-43ca1e6e145c.png"
+    },
+    {
+      "id": "cast-priya",
+      "prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, green #2e8b57. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: head-and-shoulders bust of Priya, a worn-out research student with a flat, patient, deadpan look. Half-lidded eyes with big bags under them, round glasses mended at the bridge with a wrap of tape, and a mouth that has stopped trying to smile. Messy hair held back with a plain bulldog clip. A paper-colored lab coat with its collar askew over a green sweater, several pens crammed into the chest pocket, and a green instant-noodle cup with a fork sticking out of it held up at the bottom edge of the frame. Three-quarter view, looking toward the viewer. Reads at a glance as: someone who has been a third-year for six years.\n\nReference roles: the two supplied images are approved Rook and Tess portraits for chunky pixel cells, graphite line weight, head/shoulder scale and paper sticker style ONLY. Do not copy their identities, colors, symbols or backing discs. Follow this new subject's exact specified palette and details. Preserve the requested expression in both candidates. Isolated portrait on real transparency, no colored disc, scenery, extra symbols, sweat drops or decorative marks. Entire required hat, horns, plume, key and prop must fit a circular crop, with clear square-frame margins. Keep paper light areas flat; do not add a third accent for highlights. Large square transparent PNG, at least 1024x1024. Request 48x48 cells; native chunky stepped grid accepted.\nCandidate 2 of 2. Make a modest variation in tilt and proportions within the exact brief, keeping the stated emotional expression, clothes, props and all identity features.",
+      "source": "../prompts/08-cast-chapters-7-9.md",
+      "kind": "cast",
+      "requested_grid": 48,
+      "chapter": "Cast",
+      "variant": 2,
+      "filename": "cast-priya-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/public/art/cast/rook.png",
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/public/art/cast/tess.png"
+      ],
+      "original_sha256": "445e9db38308bd405a6059e00f1078aba8e01faeb8afe27f15c9a878c648ceda",
+      "review_note": "Half-lidded eyes, taped round glasses, bulldog hair clip, pocket pens and a green noodle cup. Candidate 1 has the plainer cup; candidate 2 adds stripes.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 507320,
+        "partially_transparent_pixels": 1064438,
+        "subject_bounds_at_alpha_200": [
+          98,
+          18,
+          1157,
+          1253
+        ],
+        "clear_margins_at_alpha_200": [
+          98,
+          18,
+          97,
+          1
+        ],
+        "sha256": "445e9db38308bd405a6059e00f1078aba8e01faeb8afe27f15c9a878c648ceda",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-a4d9c296-0168-4d9f-9847-8f743872fd60.png"
+    },
+    {
+      "id": "cast-wyrm",
+      "prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, used only for the gaps between the scales, plus a second accent, warm yellow #e0a800, used only for the brass key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: close-up of The Old Wyrm, the long flat head of a vast ancient dragon, seen low and heavy, lying across a thick coil of its own neck. Graphite scales, a few big paper-colored plates along the jaw, two swept-back horns kept inside the circle. One huge heavy-lidded paper-colored eye, half open, with a narrow slit pupil, and a look of total possessive certainty. A single plain paper-colored coin held between its front teeth, and a thick curl of graphite smoke rising from one nostril. Two bold coral red gaps between the scales of the neck. A large yellow wind-up key sticks up from behind the neck, past one side of the head, big enough to be seen right away and inside the circle. A few plain paper-colored coins along the bottom edge. The coins are not gold or yellow: the key is the only yellow thing. No wings. Facing the viewer. Reads at a glance as: an enormous old dragon who has already said mine.\n\nReference roles: the two supplied images are approved Rook and Tess portraits for chunky pixel cells, graphite line weight, head/shoulder scale and paper sticker style ONLY. Do not copy their identities, colors, symbols or backing discs. Follow this new subject's exact specified palette and details. Preserve the requested expression in both candidates. Isolated portrait on real transparency, no colored disc, scenery, extra symbols, sweat drops or decorative marks. Entire required hat, horns, plume, key and prop must fit a circular crop, with clear square-frame margins. Keep paper light areas flat; do not add a third accent for highlights. Large square transparent PNG, at least 1024x1024. Request 48x48 cells; native chunky stepped grid accepted.\nCandidate 1 of 2. Use the clearest version of the prescribed pose and expression.",
+      "source": "../prompts/08-cast-chapters-7-9.md",
+      "kind": "cast",
+      "requested_grid": 48,
+      "chapter": "Cast",
+      "variant": 1,
+      "filename": "cast-wyrm-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/public/art/cast/rook.png",
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/public/art/cast/tess.png"
+      ],
+      "original_sha256": "f8058600def44d8c2f697219e4c918e52bf305d644c4f728529e49a4709c41ad",
+      "review_note": "Single heavy-lidded eye, tooth-held paper coin, smoke, horns, coral neck gaps and a large yellow key. Coins remain paper. Gray scale shading is outside the requested palette and may collapse into graphite during cleanup; judge the eye, plates and silhouette after snapping.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 449149,
+        "partially_transparent_pixels": 1122314,
+        "subject_bounds_at_alpha_200": [
+          51,
+          35,
+          1195,
+          1243
+        ],
+        "clear_margins_at_alpha_200": [
+          51,
+          35,
+          59,
+          11
+        ],
+        "sha256": "f8058600def44d8c2f697219e4c918e52bf305d644c4f728529e49a4709c41ad",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-aff0a9c4-dfbe-4e0e-8bfb-943e9b5450a7.png"
+    },
+    {
+      "id": "cast-wyrm",
+      "prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, used only for the gaps between the scales, plus a second accent, warm yellow #e0a800, used only for the brass key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: close-up of The Old Wyrm, the long flat head of a vast ancient dragon, seen low and heavy, lying across a thick coil of its own neck. Graphite scales, a few big paper-colored plates along the jaw, two swept-back horns kept inside the circle. One huge heavy-lidded paper-colored eye, half open, with a narrow slit pupil, and a look of total possessive certainty. A single plain paper-colored coin held between its front teeth, and a thick curl of graphite smoke rising from one nostril. Two bold coral red gaps between the scales of the neck. A large yellow wind-up key sticks up from behind the neck, past one side of the head, big enough to be seen right away and inside the circle. A few plain paper-colored coins along the bottom edge. The coins are not gold or yellow: the key is the only yellow thing. No wings. Facing the viewer. Reads at a glance as: an enormous old dragon who has already said mine.\n\nReference roles: the two supplied images are approved Rook and Tess portraits for chunky pixel cells, graphite line weight, head/shoulder scale and paper sticker style ONLY. Do not copy their identities, colors, symbols or backing discs. Follow this new subject's exact specified palette and details. Preserve the requested expression in both candidates. Isolated portrait on real transparency, no colored disc, scenery, extra symbols, sweat drops or decorative marks. Entire required hat, horns, plume, key and prop must fit a circular crop, with clear square-frame margins. Keep paper light areas flat; do not add a third accent for highlights. Large square transparent PNG, at least 1024x1024. Request 48x48 cells; native chunky stepped grid accepted.\nCandidate 2 of 2. Make a modest variation in tilt and proportions within the exact brief, keeping the stated emotional expression, clothes, props and all identity features.",
+      "source": "../prompts/08-cast-chapters-7-9.md",
+      "kind": "cast",
+      "requested_grid": 48,
+      "chapter": "Cast",
+      "variant": 2,
+      "filename": "cast-wyrm-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/public/art/cast/rook.png",
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/public/art/cast/tess.png"
+      ],
+      "original_sha256": "66ce187fcb7f1df95b7530e9c55cac29f0ac1a532162b0d1885a2e8229b98e7c",
+      "review_note": "Single heavy-lidded eye, tooth-held paper coin, smoke, horns, coral neck gaps and a large yellow key. Coins remain paper. Gray scale shading is outside the requested palette and may collapse into graphite during cleanup; judge the eye, plates and silhouette after snapping.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 516874,
+        "partially_transparent_pixels": 1054620,
+        "subject_bounds_at_alpha_200": [
+          77,
+          56,
+          1176,
+          1221
+        ],
+        "clear_margins_at_alpha_200": [
+          77,
+          56,
+          78,
+          33
+        ],
+        "sha256": "66ce187fcb7f1df95b7530e9c55cac29f0ac1a532162b0d1885a2e8229b98e7c",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-afdd67b5-d303-41a3-9e56-bfe70eb57baa.png"
+    },
+    {
+      "id": "cast-ostrander",
+      "prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, plus a second accent, warm yellow #e0a800, used only for the brass key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: head-and-shoulders bust of Professor Ostrander, a severe older woman academic, chin level, looking at the viewer over half-moon glasses low on her nose. One eyebrow raised by a precise amount, thin lips, an expression of tired disappointment, not rage. A flat graphite mortarboard with a coral red tassel, kept fully inside the circle. A graphite academic gown with a broad coral red hood trim around the shoulders, over a high paper-colored collar. A thick graphite cord hangs around her neck, with a large yellow wind-up key on it resting on her chest, big enough to be seen right away. An oversized coral red pen, uncapped, held up at the bottom edge of the frame. The tassel is coral, not yellow: the key is the only yellow thing. Three-quarter view, looking toward the viewer. Reads at a glance as: a professor who has read your invoice and has notes.\n\nReference roles: the two supplied images are approved Rook and Tess portraits for chunky pixel cells, graphite line weight, head/shoulder scale and paper sticker style ONLY. Do not copy their identities, colors, symbols or backing discs. Follow this new subject's exact specified palette and details. Preserve the requested expression in both candidates. Isolated portrait on real transparency, no colored disc, scenery, extra symbols, sweat drops or decorative marks. Entire required hat, horns, plume, key and prop must fit a circular crop, with clear square-frame margins. Keep paper light areas flat; do not add a third accent for highlights. Large square transparent PNG, at least 1024x1024. Request 48x48 cells; native chunky stepped grid accepted.\nCandidate 1 of 2. Use the clearest version of the prescribed pose and expression.",
+      "source": "../prompts/08-cast-chapters-7-9.md",
+      "kind": "cast",
+      "requested_grid": 48,
+      "chapter": "Cast",
+      "variant": 1,
+      "filename": "cast-ostrander-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/public/art/cast/rook.png",
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/public/art/cast/tess.png"
+      ],
+      "original_sha256": "5cd2151bedc2e9ed1c9a370cd9838c074e4121154dcd3f35656b09bc80b4ce1f",
+      "review_note": "Severe disappointed expression, half-moon glasses, coral tassel and pen, yellow key on a neck cord. Key and mortarboard remain visible in the circle. Minor gray hat/gown shading remains for cleanup.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 505467,
+        "partially_transparent_pixels": 1065929,
+        "subject_bounds_at_alpha_200": [
+          63,
+          10,
+          1155,
+          1253
+        ],
+        "clear_margins_at_alpha_200": [
+          63,
+          10,
+          99,
+          1
+        ],
+        "sha256": "5cd2151bedc2e9ed1c9a370cd9838c074e4121154dcd3f35656b09bc80b4ce1f",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-b082a52e-e827-4a1f-89fd-accb8d687221.png"
+    },
+    {
+      "id": "cast-ostrander",
+      "prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, plus a second accent, warm yellow #e0a800, used only for the brass key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: head-and-shoulders bust of Professor Ostrander, a severe older woman academic, chin level, looking at the viewer over half-moon glasses low on her nose. One eyebrow raised by a precise amount, thin lips, an expression of tired disappointment, not rage. A flat graphite mortarboard with a coral red tassel, kept fully inside the circle. A graphite academic gown with a broad coral red hood trim around the shoulders, over a high paper-colored collar. A thick graphite cord hangs around her neck, with a large yellow wind-up key on it resting on her chest, big enough to be seen right away. An oversized coral red pen, uncapped, held up at the bottom edge of the frame. The tassel is coral, not yellow: the key is the only yellow thing. Three-quarter view, looking toward the viewer. Reads at a glance as: a professor who has read your invoice and has notes.\n\nReference roles: the two supplied images are approved Rook and Tess portraits for chunky pixel cells, graphite line weight, head/shoulder scale and paper sticker style ONLY. Do not copy their identities, colors, symbols or backing discs. Follow this new subject's exact specified palette and details. Preserve the requested expression in both candidates. Isolated portrait on real transparency, no colored disc, scenery, extra symbols, sweat drops or decorative marks. Entire required hat, horns, plume, key and prop must fit a circular crop, with clear square-frame margins. Keep paper light areas flat; do not add a third accent for highlights. Large square transparent PNG, at least 1024x1024. Request 48x48 cells; native chunky stepped grid accepted.\nCandidate 2 of 2. Make a modest variation in tilt and proportions within the exact brief, keeping the stated emotional expression, clothes, props and all identity features.",
+      "source": "../prompts/08-cast-chapters-7-9.md",
+      "kind": "cast",
+      "requested_grid": 48,
+      "chapter": "Cast",
+      "variant": 2,
+      "filename": "cast-ostrander-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/public/art/cast/rook.png",
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/public/art/cast/tess.png"
+      ],
+      "original_sha256": "e3121d499c61648bf2971b73f43f88c0008ab952ffcbdf0df448d5eeb57622f7",
+      "review_note": "Severe disappointed expression, half-moon glasses, coral tassel and pen, yellow key on a neck cord. Key and mortarboard remain visible in the circle. Minor gray hat/gown shading remains for cleanup.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 506433,
+        "partially_transparent_pixels": 1064850,
+        "subject_bounds_at_alpha_200": [
+          83,
+          12,
+          1131,
+          1245
+        ],
+        "clear_margins_at_alpha_200": [
+          83,
+          12,
+          123,
+          9
+        ],
+        "sha256": "e3121d499c61648bf2971b73f43f88c0008ab952ffcbdf0df448d5eeb57622f7",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-71b98316-a178-4a37-88ed-8b0c5203a90e.png"
+    },
+    {
+      "id": "enemy-signal-box",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, plus a second accent, soft gray #7a7e8a, used only for the fog. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a squat, stocky old railway signal with a bad attitude: a big blocky graphite signal head as wide as it is tall, on a short thick post with a wide base. In the head, two huge round lamps, one above the other. The top lamp is solid coral red with a heavy graphite hood lowered across it, like a glaring eye. The bottom lamp is paper-colored and half lost in fog. Two thick paper-colored semaphore arms with a graphite stripe stick out to either side, one angled up and one angled down, so the figure is broad. A big soft gray cloud of fog as big as the head rolls out of the bottom lamp and drifts to one side. No building, track, or ground. Reads at 40 px as: a grumpy railway signal fogging itself up.\n\nOne complete full-body sprite with a broad bold silhouette for 38px display, retaining the prompt's exact palette. Flat chunky stepped shapes for clouds and effects, not gradients or soft blur. Preserve a complete paper sticker edge and clear transparent square-frame margins around every required prop, tail, horn and key. Large square transparent PNG at least 1024x1024. Continue to request 32x32 cells; native chunky stepped grids accepted.\nThe supplied Goblin is a STYLE reference ONLY for chunky stepped cells, line weight and sticker edge. Depict the entirely different subject above. Do not copy the Goblin's face, body, pose, clothes, green or props. The new subject's prompt controls all design and colors.\nSubject-specific priorities: Two railway lamps and TWO semaphore arms only, not a three-lamp road traffic light or a building. Coral only on the top lamp, paper lower lamp, gray only in the head-sized fog.\nCandidate 1 of 2. Use the clearest simple silhouette in the brief.",
+      "source": "../prompts/09-enemies-chapters-7-9.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Night Mail",
+      "variant": 1,
+      "filename": "enemy-signal-box-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/docs/art/incoming/enemy-goblin-v1.png"
+      ],
+      "validation_focus": "Two railway lamps and TWO semaphore arms only, not a three-lamp road traffic light or a building. Coral only on the top lamp, paper lower lamp, gray only in the head-sized fog.",
+      "original_sha256": "ba403c8f8251bdc19136a4e00c2226f824151d4aac4e453fef8b52cf8527753c",
+      "review_note": "Two semaphore arms, red hooded upper lamp and fog across the paper lower lamp. Closer to a plain glaring lamp than v2. Gray shading also appears on the signal frame, beyond its fog-only allocation.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 745909,
+        "partially_transparent_pixels": 824971,
+        "subject_bounds_at_alpha_200": [
+          83,
+          65,
+          1201,
+          1231
+        ],
+        "clear_margins_at_alpha_200": [
+          83,
+          65,
+          53,
+          23
+        ],
+        "sha256": "ba403c8f8251bdc19136a4e00c2226f824151d4aac4e453fef8b52cf8527753c",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-4967da5d-cfaf-4a30-9f69-d8106cb32cbb.png"
+    },
+    {
+      "id": "enemy-signal-box",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, plus a second accent, soft gray #7a7e8a, used only for the fog. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a squat, stocky old railway signal with a bad attitude: a big blocky graphite signal head as wide as it is tall, on a short thick post with a wide base. In the head, two huge round lamps, one above the other. The top lamp is solid coral red with a heavy graphite hood lowered across it, like a glaring eye. The bottom lamp is paper-colored and half lost in fog. Two thick paper-colored semaphore arms with a graphite stripe stick out to either side, one angled up and one angled down, so the figure is broad. A big soft gray cloud of fog as big as the head rolls out of the bottom lamp and drifts to one side. No building, track, or ground. Reads at 40 px as: a grumpy railway signal fogging itself up.\n\nOne complete full-body sprite with a broad bold silhouette for 38px display, retaining the prompt's exact palette. Flat chunky stepped shapes for clouds and effects, not gradients or soft blur. Preserve a complete paper sticker edge and clear transparent square-frame margins around every required prop, tail, horn and key. Large square transparent PNG at least 1024x1024. Continue to request 32x32 cells; native chunky stepped grids accepted.\nThe supplied Goblin is a STYLE reference ONLY for chunky stepped cells, line weight and sticker edge. Depict the entirely different subject above. Do not copy the Goblin's face, body, pose, clothes, green or props. The new subject's prompt controls all design and colors.\nSubject-specific priorities: Two railway lamps and TWO semaphore arms only, not a three-lamp road traffic light or a building. Coral only on the top lamp, paper lower lamp, gray only in the head-sized fog.\nCandidate 2 of 2. Create a modest variation in proportions and pose within the exact brief, preserving its emotional expression, mechanic cues, palette restrictions and required objects.",
+      "source": "../prompts/09-enemies-chapters-7-9.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Night Mail",
+      "variant": 2,
+      "filename": "enemy-signal-box-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/docs/art/incoming/enemy-goblin-v1.png"
+      ],
+      "validation_focus": "Two railway lamps and TWO semaphore arms only, not a three-lamp road traffic light or a building. Coral only on the top lamp, paper lower lamp, gray only in the head-sized fog.",
+      "original_sha256": "335edb24ed4b5385cc37a549c3db78666a51a52a83edd1c785ac7a6007d9a5d7",
+      "review_note": "Two semaphore arms and a large fog cloud; two white eyes were added inside the red lamp. Gray also shades the frame, beyond its fog-only allocation.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 649967,
+        "partially_transparent_pixels": 920768,
+        "subject_bounds_at_alpha_200": [
+          51,
+          49,
+          1205,
+          1231
+        ],
+        "clear_margins_at_alpha_200": [
+          51,
+          49,
+          49,
+          23
+        ],
+        "sha256": "335edb24ed4b5385cc37a549c3db78666a51a52a83edd1c785ac7a6007d9a5d7",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-0f27e633-1e8c-4fe1-9f95-29e498d85f71.png"
+    },
+    {
+      "id": "enemy-ticket-inspector",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, soft gray #7a7e8a, plus a second accent, bright purple #7b5cff, used only for the forged tickets. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a railway ticket inspector in a wide pose, short and broad with legs planted apart, one arm thrust straight out holding a huge ticket punch like a big pair of pliers, the other flung out holding up a wide fan of oversized tickets as big as his torso, so the figure is broad and not a thin sliver. Most of the tickets are paper-colored and the top two are bright purple. All of them are blank, with one notched corner and no writing. A big gray peaked cap, far too large, with a graphite peak pulled down so only two pale dot eyes and a flat disapproving mouth show. A gray uniform with a row of big graphite buttons. Reads at 40 px as: an inspector with a fan of tickets and a punch.\n\nOne complete full-body sprite with a broad bold silhouette for 38px display, retaining the prompt's exact palette. Flat chunky stepped shapes for clouds and effects, not gradients or soft blur. Preserve a complete paper sticker edge and clear transparent square-frame margins around every required prop, tail, horn and key. Large square transparent PNG at least 1024x1024. Continue to request 32x32 cells; native chunky stepped grids accepted.\nThe supplied Goblin is a STYLE reference ONLY for chunky stepped cells, line weight and sticker edge. Depict the entirely different subject above. Do not copy the Goblin's face, body, pose, clothes, green or props. The new subject's prompt controls all design and colors.\nSubject-specific priorities: Keep the uniform gray, the huge punch readable as pliers, and the wide fan of blank notched tickets prominent. Purple belongs only on the top two tickets; no ticket text, stamps or cap badge.\nCandidate 1 of 2. Use the clearest simple silhouette in the brief.",
+      "source": "../prompts/09-enemies-chapters-7-9.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Night Mail",
+      "variant": 1,
+      "filename": "enemy-ticket-inspector-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/docs/art/incoming/enemy-goblin-v1.png"
+      ],
+      "validation_focus": "Keep the uniform gray, the huge punch readable as pliers, and the wide fan of blank notched tickets prominent. Purple belongs only on the top two tickets; no ticket text, stamps or cap badge.",
+      "original_sha256": "efe5f5c253ad49e5d137e7ab68b78c866e9a79186a3384b9cf5e21f8db1c3e58",
+      "review_note": "Broad pose, very large cap, plier-like punch and a fan of blank tickets. Purple stays on the top two tickets, making the forgery cue easy to locate.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 492896,
+        "partially_transparent_pixels": 1077903,
+        "subject_bounds_at_alpha_200": [
+          19,
+          81,
+          1243,
+          1227
+        ],
+        "clear_margins_at_alpha_200": [
+          19,
+          81,
+          11,
+          27
+        ],
+        "sha256": "efe5f5c253ad49e5d137e7ab68b78c866e9a79186a3384b9cf5e21f8db1c3e58",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-850b8c19-04c0-45c9-94e2-6f221e921779.png"
+    },
+    {
+      "id": "enemy-ticket-inspector",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, soft gray #7a7e8a, plus a second accent, bright purple #7b5cff, used only for the forged tickets. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a railway ticket inspector in a wide pose, short and broad with legs planted apart, one arm thrust straight out holding a huge ticket punch like a big pair of pliers, the other flung out holding up a wide fan of oversized tickets as big as his torso, so the figure is broad and not a thin sliver. Most of the tickets are paper-colored and the top two are bright purple. All of them are blank, with one notched corner and no writing. A big gray peaked cap, far too large, with a graphite peak pulled down so only two pale dot eyes and a flat disapproving mouth show. A gray uniform with a row of big graphite buttons. Reads at 40 px as: an inspector with a fan of tickets and a punch.\n\nOne complete full-body sprite with a broad bold silhouette for 38px display, retaining the prompt's exact palette. Flat chunky stepped shapes for clouds and effects, not gradients or soft blur. Preserve a complete paper sticker edge and clear transparent square-frame margins around every required prop, tail, horn and key. Large square transparent PNG at least 1024x1024. Continue to request 32x32 cells; native chunky stepped grids accepted.\nThe supplied Goblin is a STYLE reference ONLY for chunky stepped cells, line weight and sticker edge. Depict the entirely different subject above. Do not copy the Goblin's face, body, pose, clothes, green or props. The new subject's prompt controls all design and colors.\nSubject-specific priorities: Keep the uniform gray, the huge punch readable as pliers, and the wide fan of blank notched tickets prominent. Purple belongs only on the top two tickets; no ticket text, stamps or cap badge.\nCandidate 2 of 2. Create a modest variation in proportions and pose within the exact brief, preserving its emotional expression, mechanic cues, palette restrictions and required objects.",
+      "source": "../prompts/09-enemies-chapters-7-9.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Night Mail",
+      "variant": 2,
+      "filename": "enemy-ticket-inspector-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/docs/art/incoming/enemy-goblin-v1.png"
+      ],
+      "validation_focus": "Keep the uniform gray, the huge punch readable as pliers, and the wide fan of blank notched tickets prominent. Purple belongs only on the top two tickets; no ticket text, stamps or cap badge.",
+      "original_sha256": "906a386865d26cce18235cc75db29c4d88d3d4cd435569537e7617e3ed9e0054",
+      "review_note": "Broad pose, very large cap, plier-like punch and a fan of blank tickets. Purple stays on the top two tickets, making the forgery cue easy to locate.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 559223,
+        "partially_transparent_pixels": 1011822,
+        "subject_bounds_at_alpha_200": [
+          11,
+          126,
+          1238,
+          1236
+        ],
+        "clear_margins_at_alpha_200": [
+          11,
+          126,
+          16,
+          18
+        ],
+        "sha256": "906a386865d26cce18235cc75db29c4d88d3d4cd435569537e7617e3ed9e0054",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-c19e1497-9f38-4d52-9c58-fbea5b0d3ba5.png"
+    },
+    {
+      "id": "enemy-coal-heap",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, used only for the cracks, plus a second accent, soft gray #7a7e8a, used only for the soot cloud. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a low, wide heap of big chunky angular coal lumps that has stood up on two stumpy legs, with two thick lumpy arms hanging at its sides. It is wider than it is tall, more a pile than a person. The lumps are solid graphite, each with one flat paper-colored facet along its top edge so the lumps read as separate. One lump on top serves as a head, with two small paper-colored eyes and a flat, patient mouth: polite, not angry. Three bold coral red cracks run between the lumps across the chest and belly, thick enough to see at small size. A big soft gray cloud of soot puffs off one shoulder, as big as the top half of the heap, with a few chunky graphite flecks falling from it. No ground. Reads at 40 px as: a friendly coal heap, cracked and puffing soot.\n\nOne complete full-body sprite with a broad bold silhouette for 38px display, retaining the prompt's exact palette. Flat chunky stepped shapes for clouds and effects, not gradients or soft blur. Preserve a complete paper sticker edge and clear transparent square-frame margins around every required prop, tail, horn and key. Large square transparent PNG at least 1024x1024. Continue to request 32x32 cells; native chunky stepped grids accepted.\nThe supplied Goblin is a STYLE reference ONLY for chunky stepped cells, line weight and sticker edge. Depict the entirely different subject above. Do not copy the Goblin's face, body, pose, clothes, green or props. The new subject's prompt controls all design and colors.\nSubject-specific priorities: Gerald is a POLITE patient coal heap, not a snarling monster. Solid graphite coal with paper facets, exactly three bold coral weak-point cracks, gray only on the large soot cloud.\nCandidate 1 of 2. Use the clearest simple silhouette in the brief.",
+      "source": "../prompts/09-enemies-chapters-7-9.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Night Mail",
+      "variant": 1,
+      "filename": "enemy-coal-heap-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/docs/art/incoming/enemy-goblin-v1.png"
+      ],
+      "validation_focus": "Gerald is a POLITE patient coal heap, not a snarling monster. Solid graphite coal with paper facets, exactly three bold coral weak-point cracks, gray only on the large soot cloud.",
+      "original_sha256": "f6561add6df4c25de145227ad5793a12a814ca6a673c105dad83b4344c74d955",
+      "review_note": "Wide coal-pile body, plain patient face, branching bold coral cracks and a large gray soot cloud. Paper facets separate the graphite lumps.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 588664,
+        "partially_transparent_pixels": 983325,
+        "subject_bounds_at_alpha_200": [
+          13,
+          51,
+          1231,
+          1232
+        ],
+        "clear_margins_at_alpha_200": [
+          13,
+          51,
+          23,
+          22
+        ],
+        "sha256": "f6561add6df4c25de145227ad5793a12a814ca6a673c105dad83b4344c74d955",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-a9450924-0fee-4ee2-ae7b-ef3ea364e916.png"
+    },
+    {
+      "id": "enemy-coal-heap",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, used only for the cracks, plus a second accent, soft gray #7a7e8a, used only for the soot cloud. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a low, wide heap of big chunky angular coal lumps that has stood up on two stumpy legs, with two thick lumpy arms hanging at its sides. It is wider than it is tall, more a pile than a person. The lumps are solid graphite, each with one flat paper-colored facet along its top edge so the lumps read as separate. One lump on top serves as a head, with two small paper-colored eyes and a flat, patient mouth: polite, not angry. Three bold coral red cracks run between the lumps across the chest and belly, thick enough to see at small size. A big soft gray cloud of soot puffs off one shoulder, as big as the top half of the heap, with a few chunky graphite flecks falling from it. No ground. Reads at 40 px as: a friendly coal heap, cracked and puffing soot.\n\nOne complete full-body sprite with a broad bold silhouette for 38px display, retaining the prompt's exact palette. Flat chunky stepped shapes for clouds and effects, not gradients or soft blur. Preserve a complete paper sticker edge and clear transparent square-frame margins around every required prop, tail, horn and key. Large square transparent PNG at least 1024x1024. Continue to request 32x32 cells; native chunky stepped grids accepted.\nThe supplied Goblin is a STYLE reference ONLY for chunky stepped cells, line weight and sticker edge. Depict the entirely different subject above. Do not copy the Goblin's face, body, pose, clothes, green or props. The new subject's prompt controls all design and colors.\nSubject-specific priorities: Gerald is a POLITE patient coal heap, not a snarling monster. Solid graphite coal with paper facets, exactly three bold coral weak-point cracks, gray only on the large soot cloud.\nCandidate 2 of 2. Create a modest variation in proportions and pose within the exact brief, preserving its emotional expression, mechanic cues, palette restrictions and required objects.",
+      "source": "../prompts/09-enemies-chapters-7-9.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Night Mail",
+      "variant": 2,
+      "filename": "enemy-coal-heap-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/docs/art/incoming/enemy-goblin-v1.png"
+      ],
+      "validation_focus": "Gerald is a POLITE patient coal heap, not a snarling monster. Solid graphite coal with paper facets, exactly three bold coral weak-point cracks, gray only on the large soot cloud.",
+      "original_sha256": "7d08a7aa08af5daf9b41282fabee89e3f5b5d23838f9402b72e63265039512ec",
+      "review_note": "Wide friendly coal heap with strong red cracks and a large soot cloud. Gray was also added to the hands, beyond its soot-only allocation.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 596357,
+        "partially_transparent_pixels": 974764,
+        "subject_bounds_at_alpha_200": [
+          11,
+          65,
+          1241,
+          1229
+        ],
+        "clear_margins_at_alpha_200": [
+          11,
+          65,
+          13,
+          25
+        ],
+        "sha256": "7d08a7aa08af5daf9b41282fabee89e3f5b5d23838f9402b72e63265039512ec",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-5cfad163-53a5-4f23-8129-45bc6e30c948.png"
+    },
+    {
+      "id": "enemy-the-1159",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, soft gray #7a7e8a, plus a second accent, warm yellow #e0a800, used only for the wind-up key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a chunky, stubby old steam locomotive coming toward the viewer in three-quarter view, short and wide like a toy, pale as a ghost. A fat round soft gray boiler with thick graphite bands, a short stubby smokestack, a cab with solid graphite empty windows, and a wide wedge-shaped cowcatcher at the front. The round front of the boiler is a big paper-colored clock face with a thick graphite ring and no numerals or tick marks, with two thick graphite hands almost together, nearly straight up, a moment before twelve. A large yellow wind-up key sticks straight up from the top of the boiler where the whistle would be. A big soft gray cloud of steam rolls back from the smokestack, as big as the engine, and more gray steam hides the wheels. There is no brass and no yellow lamp: the key is the only yellow thing. No track, ground, or carriages. Reads at 40 px as: a ghost train with a clock for a face and a key on top.\n\nOne complete full-body sprite with a broad bold silhouette for 38px display, retaining the prompt's exact palette. Flat chunky stepped shapes for clouds and effects, not gradients or soft blur. Preserve a complete paper sticker edge and clear transparent square-frame margins around every required prop, tail, horn and key. Large square transparent PNG at least 1024x1024. Continue to request 32x32 cells; native chunky stepped grids accepted.\nThe supplied Goblin is a STYLE reference ONLY for chunky stepped cells, line weight and sticker edge. Depict the entirely different subject above. Do not copy the Goblin's face, body, pose, clothes, green or props. The new subject's prompt controls all design and colors.\nSubject-specific priorities: The clock is a completely BLANK paper dial with only two thick nearly vertical hands just apart before twelve. NO numerals, ticks, eyes or mouth. Yellow ONLY on the big wind-up key, never on a lamp, whistle, brass trim or steam.\nCandidate 1 of 2. Use the clearest simple silhouette in the brief.",
+      "source": "../prompts/09-enemies-chapters-7-9.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Night Mail",
+      "variant": 1,
+      "filename": "enemy-the-1159-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/docs/art/incoming/enemy-goblin-v1.png"
+      ],
+      "validation_focus": "The clock is a completely BLANK paper dial with only two thick nearly vertical hands just apart before twelve. NO numerals, ticks, eyes or mouth. Yellow ONLY on the big wind-up key, never on a lamp, whistle, brass trim or steam.",
+      "original_sha256": "dc0bf221a230974c71c6f3d7ae59075e2f3777e343cff679eb3e068e2d4b8ea4",
+      "review_note": "Blank clock dial with two separate near-vertical hands, a large boiler key, gray steam and empty cab windows. Yellow remains confined to the key.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 447143,
+        "partially_transparent_pixels": 1123711,
+        "subject_bounds_at_alpha_200": [
+          60,
+          31,
+          1173,
+          1251
+        ],
+        "clear_margins_at_alpha_200": [
+          60,
+          31,
+          81,
+          3
+        ],
+        "sha256": "dc0bf221a230974c71c6f3d7ae59075e2f3777e343cff679eb3e068e2d4b8ea4",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-e3d8a385-a82f-452a-bba9-75336eb859e1.png"
+    },
+    {
+      "id": "enemy-the-1159",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, soft gray #7a7e8a, plus a second accent, warm yellow #e0a800, used only for the wind-up key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a chunky, stubby old steam locomotive coming toward the viewer in three-quarter view, short and wide like a toy, pale as a ghost. A fat round soft gray boiler with thick graphite bands, a short stubby smokestack, a cab with solid graphite empty windows, and a wide wedge-shaped cowcatcher at the front. The round front of the boiler is a big paper-colored clock face with a thick graphite ring and no numerals or tick marks, with two thick graphite hands almost together, nearly straight up, a moment before twelve. A large yellow wind-up key sticks straight up from the top of the boiler where the whistle would be. A big soft gray cloud of steam rolls back from the smokestack, as big as the engine, and more gray steam hides the wheels. There is no brass and no yellow lamp: the key is the only yellow thing. No track, ground, or carriages. Reads at 40 px as: a ghost train with a clock for a face and a key on top.\n\nOne complete full-body sprite with a broad bold silhouette for 38px display, retaining the prompt's exact palette. Flat chunky stepped shapes for clouds and effects, not gradients or soft blur. Preserve a complete paper sticker edge and clear transparent square-frame margins around every required prop, tail, horn and key. Large square transparent PNG at least 1024x1024. Continue to request 32x32 cells; native chunky stepped grids accepted.\nThe supplied Goblin is a STYLE reference ONLY for chunky stepped cells, line weight and sticker edge. Depict the entirely different subject above. Do not copy the Goblin's face, body, pose, clothes, green or props. The new subject's prompt controls all design and colors.\nSubject-specific priorities: The clock is a completely BLANK paper dial with only two thick nearly vertical hands just apart before twelve. NO numerals, ticks, eyes or mouth. Yellow ONLY on the big wind-up key, never on a lamp, whistle, brass trim or steam.\nCandidate 2 of 2. Create a modest variation in proportions and pose within the exact brief, preserving its emotional expression, mechanic cues, palette restrictions and required objects.",
+      "source": "../prompts/09-enemies-chapters-7-9.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Night Mail",
+      "variant": 2,
+      "filename": "enemy-the-1159-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/docs/art/incoming/enemy-goblin-v1.png"
+      ],
+      "validation_focus": "The clock is a completely BLANK paper dial with only two thick nearly vertical hands just apart before twelve. NO numerals, ticks, eyes or mouth. Yellow ONLY on the big wind-up key, never on a lamp, whistle, brass trim or steam.",
+      "original_sha256": "3cc5b802ad9b88d023f5cbf51c2b6ecc0aa714f5bae7df0cf2bcd526ec5775a9",
+      "review_note": "Blank clock dial with two separate near-vertical hands, a large boiler key, gray steam and empty cab windows. Yellow remains confined to the key.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 476618,
+        "partially_transparent_pixels": 1094551,
+        "subject_bounds_at_alpha_200": [
+          24,
+          54,
+          1232,
+          1250
+        ],
+        "clear_margins_at_alpha_200": [
+          24,
+          54,
+          22,
+          4
+        ],
+        "sha256": "3cc5b802ad9b88d023f5cbf51c2b6ecc0aa714f5bae7df0cf2bcd526ec5775a9",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-78e830e8-fbfe-4ea3-9559-36f176f5577f.png"
+    },
+    {
+      "id": "enemy-express-not-stopping",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, soft gray #7a7e8a, plus a second accent, warm yellow #e0a800, used only for the wind-up key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: the same stubby ghost locomotive in the same three-quarter view, same size, with the same clock face and the same yellow key on top of the boiler, but now at full speed: the two clock hands lie exactly together pointing straight up, the steam is blown flat straight back in one long thick gray streak much wider than before, thick graphite speed lines trail from the cowcatcher, and the wheels show through the steam as blurred graphite ovals. A few chunky paper-colored sparks fly from under the cowcatcher. There is no brass and no yellow lamp: the key is the only yellow thing. No track or ground. Same engine as before, with the steam ripped backward. Reads at 40 px as: the ghost train, not stopping.\n\nThe supplied image is the SAME-NUMBERED BASE of the 11:59. Preserve its exact short/wide engine identity, three-quarter view, cab, boiler, cowcatcher, clock-ring size, key, full-body scale, pose and chunky pixel cells. Change only the specified phase details. On the completely unmarked paper clock dial, merge the TWO hands so they lie exactly together pointing straight UP at midnight; add no numbers, ticks, eyes or mouth. Flatten the steam into one long thick gray streak backward, add thick graphite speed lines, reveal graphite oval wheels through the steam, and a few chunky PAPER sparks under the cowcatcher. Render the motion with flat stepped shapes, not smooth photographic blur. Yellow ONLY on the unchanged key. Entire sticker and steam streak inside a square transparent frame with clear margins; no ground, rails, carriages, backdrop disc, text or other colors. Requested32x32 cells, native stepped grid accepted. Large square transparent PNG at least1024x1024.",
+      "source": "../prompts/09-enemies-chapters-7-9.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Night Mail",
+      "base": "enemy-the-1159",
+      "variant": 1,
+      "filename": "enemy-express-not-stopping-v1.png",
+      "references": [
+        "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-e3d8a385-a82f-452a-bba9-75336eb859e1.png"
+      ],
+      "original_sha256": "4c536cc537520f68502d185a082df94a4fd1773ac502bee5a344dab301863dad",
+      "review_note": "Same-numbered engine reference, clock hands combined into one straight-up midnight stroke, flattened backward steam and exposed graphite oval wheels. Speed lines and sparks are stepped shapes.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 580752,
+        "partially_transparent_pixels": 990239,
+        "subject_bounds_at_alpha_200": [
+          15,
+          217,
+          1221,
+          1211
+        ],
+        "clear_margins_at_alpha_200": [
+          15,
+          217,
+          33,
+          43
+        ],
+        "sha256": "4c536cc537520f68502d185a082df94a4fd1773ac502bee5a344dab301863dad",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-5283bd8c-e3f3-4ae7-be46-78a2c24bda76.png"
+    },
+    {
+      "id": "enemy-express-not-stopping",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, soft gray #7a7e8a, plus a second accent, warm yellow #e0a800, used only for the wind-up key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: the same stubby ghost locomotive in the same three-quarter view, same size, with the same clock face and the same yellow key on top of the boiler, but now at full speed: the two clock hands lie exactly together pointing straight up, the steam is blown flat straight back in one long thick gray streak much wider than before, thick graphite speed lines trail from the cowcatcher, and the wheels show through the steam as blurred graphite ovals. A few chunky paper-colored sparks fly from under the cowcatcher. There is no brass and no yellow lamp: the key is the only yellow thing. No track or ground. Same engine as before, with the steam ripped backward. Reads at 40 px as: the ghost train, not stopping.\n\nThe supplied image is the SAME-NUMBERED BASE of the 11:59. Preserve its exact short/wide engine identity, three-quarter view, cab, boiler, cowcatcher, clock-ring size, key, full-body scale, pose and chunky pixel cells. Change only the specified phase details. On the completely unmarked paper clock dial, merge the TWO hands so they lie exactly together pointing straight UP at midnight; add no numbers, ticks, eyes or mouth. Flatten the steam into one long thick gray streak backward, add thick graphite speed lines, reveal graphite oval wheels through the steam, and a few chunky PAPER sparks under the cowcatcher. Render the motion with flat stepped shapes, not smooth photographic blur. Yellow ONLY on the unchanged key. Entire sticker and steam streak inside a square transparent frame with clear margins; no ground, rails, carriages, backdrop disc, text or other colors. Requested32x32 cells, native stepped grid accepted. Large square transparent PNG at least1024x1024.",
+      "source": "../prompts/09-enemies-chapters-7-9.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Night Mail",
+      "base": "enemy-the-1159",
+      "variant": 2,
+      "filename": "enemy-express-not-stopping-v2.png",
+      "references": [
+        "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-78e830e8-fbfe-4ea3-9559-36f176f5577f.png"
+      ],
+      "original_sha256": "2dbeefd18414e614834306d255517c45d58317c29da45866252979541b3bc4e5",
+      "review_note": "Same-numbered engine reference, clock hands combined into one straight-up midnight stroke, flattened backward steam and exposed graphite oval wheels. Speed lines and sparks are stepped shapes.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 577427,
+        "partially_transparent_pixels": 993542,
+        "subject_bounds_at_alpha_200": [
+          7,
+          211,
+          1247,
+          1247
+        ],
+        "clear_margins_at_alpha_200": [
+          7,
+          211,
+          7,
+          7
+        ],
+        "sha256": "2dbeefd18414e614834306d255517c45d58317c29da45866252979541b3bc4e5",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-4911960b-a868-4749-a40d-26d7694fd3b4.png"
+    },
+    {
+      "id": "enemy-rusted-sentry",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, wood brown #a9825a, plus a second accent, coral red #d9534f, used only for the cracks. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a battered, empty suit of plate armor in a wide stance, legs apart, with huge rounded shoulder plates much wider than the helmet. Wood brown rusty plates with thick graphite edges and a few chunky paper-colored scratches. A closed helmet with a solid graphite eye slit, turned sharply to one side as if it heard you. Both gauntlets grip a huge halberd held diagonally across the whole body, from one low corner to the opposite high corner, with a big paper-colored axe blade sticking out past the silhouette. Three bold coral red cracks run across the breastplate and one thigh, thick enough to see at small size. No plume, no crest, no shield. Reads at 40 px as: a rusty suit of armor with a halberd, cracked.\n\nOne complete full-body sprite with a broad bold silhouette for 38px display, retaining the prompt's exact palette. Flat chunky stepped shapes for clouds and effects, not gradients or soft blur. Preserve a complete paper sticker edge and clear transparent square-frame margins around every required prop, tail, horn and key. Large square transparent PNG at least 1024x1024. Continue to request 32x32 cells; native chunky stepped grids accepted.\nThe supplied Goblin is a STYLE reference ONLY for chunky stepped cells, line weight and sticker edge. Depict the entirely different subject above. Do not copy the Goblin's face, body, pose, clothes, green or props. The new subject's prompt controls all design and colors.\nSubject-specific priorities: Wide rust-brown empty armor, sharply turned closed helmet, no plume, crest or shield. Huge diagonal halberd. Three very bold coral cracks and no other coral.\nCandidate 1 of 2. Use the clearest simple silhouette in the brief.",
+      "source": "../prompts/09-enemies-chapters-7-9.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Undercroft",
+      "variant": 1,
+      "filename": "enemy-rusted-sentry-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/docs/art/incoming/enemy-goblin-v1.png"
+      ],
+      "validation_focus": "Wide rust-brown empty armor, sharply turned closed helmet, no plume, crest or shield. Huge diagonal halberd. Three very bold coral cracks and no other coral.",
+      "original_sha256": "020c3a12ac2fcb9d26f672522e86d13c2f9796c0e623dbe89a256c03261ddd88",
+      "review_note": "Broad rusty armor with a turned closed helmet, a large diagonal halberd and bold coral cracks. No plume, crest or shield. The upper shaft tip sits close to the frame corner.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 589053,
+        "partially_transparent_pixels": 980984,
+        "subject_bounds_at_alpha_200": [
+          40,
+          27,
+          1224,
+          1254
+        ],
+        "clear_margins_at_alpha_200": [
+          40,
+          27,
+          30,
+          0
+        ],
+        "sha256": "020c3a12ac2fcb9d26f672522e86d13c2f9796c0e623dbe89a256c03261ddd88",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-09dbf6fc-97ce-4615-b07d-9b6e79a72e43.png"
+    },
+    {
+      "id": "enemy-rusted-sentry",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, wood brown #a9825a, plus a second accent, coral red #d9534f, used only for the cracks. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a battered, empty suit of plate armor in a wide stance, legs apart, with huge rounded shoulder plates much wider than the helmet. Wood brown rusty plates with thick graphite edges and a few chunky paper-colored scratches. A closed helmet with a solid graphite eye slit, turned sharply to one side as if it heard you. Both gauntlets grip a huge halberd held diagonally across the whole body, from one low corner to the opposite high corner, with a big paper-colored axe blade sticking out past the silhouette. Three bold coral red cracks run across the breastplate and one thigh, thick enough to see at small size. No plume, no crest, no shield. Reads at 40 px as: a rusty suit of armor with a halberd, cracked.\n\nOne complete full-body sprite with a broad bold silhouette for 38px display, retaining the prompt's exact palette. Flat chunky stepped shapes for clouds and effects, not gradients or soft blur. Preserve a complete paper sticker edge and clear transparent square-frame margins around every required prop, tail, horn and key. Large square transparent PNG at least 1024x1024. Continue to request 32x32 cells; native chunky stepped grids accepted.\nThe supplied Goblin is a STYLE reference ONLY for chunky stepped cells, line weight and sticker edge. Depict the entirely different subject above. Do not copy the Goblin's face, body, pose, clothes, green or props. The new subject's prompt controls all design and colors.\nSubject-specific priorities: Wide rust-brown empty armor, sharply turned closed helmet, no plume, crest or shield. Huge diagonal halberd. Three very bold coral cracks and no other coral.\nCandidate 2 of 2. Create a modest variation in proportions and pose within the exact brief, preserving its emotional expression, mechanic cues, palette restrictions and required objects.",
+      "source": "../prompts/09-enemies-chapters-7-9.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Undercroft",
+      "variant": 2,
+      "filename": "enemy-rusted-sentry-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/docs/art/incoming/enemy-goblin-v1.png"
+      ],
+      "validation_focus": "Wide rust-brown empty armor, sharply turned closed helmet, no plume, crest or shield. Huge diagonal halberd. Three very bold coral cracks and no other coral.",
+      "original_sha256": "b25af0a8a2853f48e9a5382147046d843b5d5724e50093b36037a1072cfcd0a0",
+      "review_note": "Broad rusty armor with a turned closed helmet, a large diagonal halberd and bold coral cracks. No plume, crest or shield. The upper shaft tip sits close to the frame corner.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 560758,
+        "partially_transparent_pixels": 1011030,
+        "subject_bounds_at_alpha_200": [
+          26,
+          9,
+          1249,
+          1252
+        ],
+        "clear_margins_at_alpha_200": [
+          26,
+          9,
+          5,
+          2
+        ],
+        "sha256": "b25af0a8a2853f48e9a5382147046d843b5d5724e50093b36037a1072cfcd0a0",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-f5b7c5b5-8aec-4168-8426-3b17ebf10be1.png"
+    },
+    {
+      "id": "enemy-cellar-ooze",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, green #2e8b57. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a big block of slime that is very nearly a cube, drawn front-on so it reads as a square, with one top corner slumping and sagging. Solid flat green with a thick graphite outline. Hanging inside it, clearly visible, are a paper-colored skull near the middle and a crumpled paper-colored map below it, a plain creased rectangle with no writing. Two tiny dopey graphite dot eyes on the surface above the skull. A thick slop of green pours over the front edge and spreads into a puddle as wide as the block, with a few chunky green drips. Reads at 40 px as: a nearly cube-shaped slime with a skull inside.\n\nOne complete full-body sprite with a broad bold silhouette for 38px display, retaining the prompt's exact palette. Flat chunky stepped shapes for clouds and effects, not gradients or soft blur. Preserve a complete paper sticker edge and clear transparent square-frame margins around every required prop, tail, horn and key. Large square transparent PNG at least 1024x1024. Continue to request 32x32 cells; native chunky stepped grids accepted.\nThe supplied Goblin is a STYLE reference ONLY for chunky stepped cells, line weight and sticker edge. Depict the entirely different subject above. Do not copy the Goblin's face, body, pose, clothes, green or props. The new subject's prompt controls all design and colors.\nSubject-specific priorities: Nearly square flat green slime, sagging top corner, visible paper skull and a separate blank creased paper map inside, dopey dot eyes, and a broad green puddle. No writing or extra colors.\nCandidate 1 of 2. Use the clearest simple silhouette in the brief.",
+      "source": "../prompts/09-enemies-chapters-7-9.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Undercroft",
+      "variant": 1,
+      "filename": "enemy-cellar-ooze-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/docs/art/incoming/enemy-goblin-v1.png"
+      ],
+      "validation_focus": "Nearly square flat green slime, sagging top corner, visible paper skull and a separate blank creased paper map inside, dopey dot eyes, and a broad green puddle. No writing or extra colors.",
+      "original_sha256": "03e2d9adc6c1bc895c2ccd6d6e6d166894c24caa051a9be5aecc5795c7f37063",
+      "review_note": "Sagging square green block, visible paper skull and separate blank folded map, dot eyes and a broad puddle. Simpler flat green than v2.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 601344,
+        "partially_transparent_pixels": 970163,
+        "subject_bounds_at_alpha_200": [
+          33,
+          180,
+          1223,
+          1231
+        ],
+        "clear_margins_at_alpha_200": [
+          33,
+          180,
+          31,
+          23
+        ],
+        "sha256": "03e2d9adc6c1bc895c2ccd6d6e6d166894c24caa051a9be5aecc5795c7f37063",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-33896503-6289-4b2f-891c-2ce307a86b73.png"
+    },
+    {
+      "id": "enemy-cellar-ooze",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, green #2e8b57. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a big block of slime that is very nearly a cube, drawn front-on so it reads as a square, with one top corner slumping and sagging. Solid flat green with a thick graphite outline. Hanging inside it, clearly visible, are a paper-colored skull near the middle and a crumpled paper-colored map below it, a plain creased rectangle with no writing. Two tiny dopey graphite dot eyes on the surface above the skull. A thick slop of green pours over the front edge and spreads into a puddle as wide as the block, with a few chunky green drips. Reads at 40 px as: a nearly cube-shaped slime with a skull inside.\n\nOne complete full-body sprite with a broad bold silhouette for 38px display, retaining the prompt's exact palette. Flat chunky stepped shapes for clouds and effects, not gradients or soft blur. Preserve a complete paper sticker edge and clear transparent square-frame margins around every required prop, tail, horn and key. Large square transparent PNG at least 1024x1024. Continue to request 32x32 cells; native chunky stepped grids accepted.\nThe supplied Goblin is a STYLE reference ONLY for chunky stepped cells, line weight and sticker edge. Depict the entirely different subject above. Do not copy the Goblin's face, body, pose, clothes, green or props. The new subject's prompt controls all design and colors.\nSubject-specific priorities: Nearly square flat green slime, sagging top corner, visible paper skull and a separate blank creased paper map inside, dopey dot eyes, and a broad green puddle. No writing or extra colors.\nCandidate 2 of 2. Create a modest variation in proportions and pose within the exact brief, preserving its emotional expression, mechanic cues, palette restrictions and required objects.",
+      "source": "../prompts/09-enemies-chapters-7-9.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Undercroft",
+      "variant": 2,
+      "filename": "enemy-cellar-ooze-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/docs/art/incoming/enemy-goblin-v1.png"
+      ],
+      "validation_focus": "Nearly square flat green slime, sagging top corner, visible paper skull and a separate blank creased paper map inside, dopey dot eyes, and a broad green puddle. No writing or extra colors.",
+      "original_sha256": "b49ff25c167c58f7ad1a67746a0b81dc51b984410125666a18bd885fd63a7c1e",
+      "review_note": "Square slumping slime with skull, blank map and broad puddle. Mint highlights introduce an extra green shade for palette cleanup.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 577949,
+        "partially_transparent_pixels": 993074,
+        "subject_bounds_at_alpha_200": [
+          26,
+          141,
+          1223,
+          1216
+        ],
+        "clear_margins_at_alpha_200": [
+          26,
+          141,
+          31,
+          38
+        ],
+        "sha256": "b49ff25c167c58f7ad1a67746a0b81dc51b984410125666a18bd885fd63a7c1e",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-4cc7154e-bb53-4c0a-b349-cfb384947c60.png"
+    },
+    {
+      "id": "enemy-rat-king",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, soft gray #7a7e8a, plus a second accent, warm yellow #e0a800, used only for the crown. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: one fat, pompous rat standing upright in a wide pose on short back legs, with a big pear-shaped soft gray body, a pointed snout held high, big round ears, and long whiskers. A large cheap yellow crown, far too big for him, plain with no jewels, tilted over one ear. One paw on his hip, the other held out holding up a very long paper-colored receipt, a strip that unspools down to the floor and curls out to one side, as long as he is tall, marked with thick graphite stripes and no writing. A long thick graphite tail curling out on the other side. A smug half-closed look. Reads at 40 px as: a smug rat in a crown with a long receipt.\n\nOne complete full-body sprite with a broad bold silhouette for 38px display, retaining the prompt's exact palette. Flat chunky stepped shapes for clouds and effects, not gradients or soft blur. Preserve a complete paper sticker edge and clear transparent square-frame margins around every required prop, tail, horn and key. Large square transparent PNG at least 1024x1024. Continue to request 32x32 cells; native chunky stepped grids accepted.\nThe supplied Goblin is a STYLE reference ONLY for chunky stepped cells, line weight and sticker edge. Depict the entirely different subject above. Do not copy the Goblin's face, body, pose, clothes, green or props. The new subject's prompt controls all design and colors.\nSubject-specific priorities: ONE pompous fat gray rat, a large plain yellow crown without jewels, a long paper receipt with graphite stripes only and a thick graphite tail. No writing, extra rats or other accent colors.\nCandidate 1 of 2. Use the clearest simple silhouette in the brief.",
+      "source": "../prompts/09-enemies-chapters-7-9.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Undercroft",
+      "variant": 1,
+      "filename": "enemy-rat-king-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/docs/art/incoming/enemy-goblin-v1.png"
+      ],
+      "validation_focus": "ONE pompous fat gray rat, a large plain yellow crown without jewels, a long paper receipt with graphite stripes only and a thick graphite tail. No writing, extra rats or other accent colors.",
+      "original_sha256": "8111ab37048a16312964a0c92deb9f0d89e31c63fc155baa95558996c06553e7",
+      "review_note": "One gray rat, oversized plain yellow crown, smug half-lidded expression, long striped receipt and thick curling graphite tail. No receipt writing or jewels.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 507719,
+        "partially_transparent_pixels": 1063215,
+        "subject_bounds_at_alpha_200": [
+          13,
+          21,
+          1234,
+          1252
+        ],
+        "clear_margins_at_alpha_200": [
+          13,
+          21,
+          20,
+          2
+        ],
+        "sha256": "8111ab37048a16312964a0c92deb9f0d89e31c63fc155baa95558996c06553e7",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-faa6c22f-1fd5-4a47-97a0-0472dfe47c7d.png"
+    },
+    {
+      "id": "enemy-rat-king",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, soft gray #7a7e8a, plus a second accent, warm yellow #e0a800, used only for the crown. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: one fat, pompous rat standing upright in a wide pose on short back legs, with a big pear-shaped soft gray body, a pointed snout held high, big round ears, and long whiskers. A large cheap yellow crown, far too big for him, plain with no jewels, tilted over one ear. One paw on his hip, the other held out holding up a very long paper-colored receipt, a strip that unspools down to the floor and curls out to one side, as long as he is tall, marked with thick graphite stripes and no writing. A long thick graphite tail curling out on the other side. A smug half-closed look. Reads at 40 px as: a smug rat in a crown with a long receipt.\n\nOne complete full-body sprite with a broad bold silhouette for 38px display, retaining the prompt's exact palette. Flat chunky stepped shapes for clouds and effects, not gradients or soft blur. Preserve a complete paper sticker edge and clear transparent square-frame margins around every required prop, tail, horn and key. Large square transparent PNG at least 1024x1024. Continue to request 32x32 cells; native chunky stepped grids accepted.\nThe supplied Goblin is a STYLE reference ONLY for chunky stepped cells, line weight and sticker edge. Depict the entirely different subject above. Do not copy the Goblin's face, body, pose, clothes, green or props. The new subject's prompt controls all design and colors.\nSubject-specific priorities: ONE pompous fat gray rat, a large plain yellow crown without jewels, a long paper receipt with graphite stripes only and a thick graphite tail. No writing, extra rats or other accent colors.\nCandidate 2 of 2. Create a modest variation in proportions and pose within the exact brief, preserving its emotional expression, mechanic cues, palette restrictions and required objects.",
+      "source": "../prompts/09-enemies-chapters-7-9.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Undercroft",
+      "variant": 2,
+      "filename": "enemy-rat-king-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/docs/art/incoming/enemy-goblin-v1.png"
+      ],
+      "validation_focus": "ONE pompous fat gray rat, a large plain yellow crown without jewels, a long paper receipt with graphite stripes only and a thick graphite tail. No writing, extra rats or other accent colors.",
+      "original_sha256": "9c26795db16b1e12b091ab0c914fd62296a4773b94ab1660e916d2d2b6ed6448",
+      "review_note": "One gray rat, oversized plain yellow crown, smug half-lidded expression, long striped receipt and thick curling graphite tail. No receipt writing or jewels.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 498550,
+        "partially_transparent_pixels": 1072207,
+        "subject_bounds_at_alpha_200": [
+          10,
+          12,
+          1243,
+          1252
+        ],
+        "clear_margins_at_alpha_200": [
+          10,
+          12,
+          11,
+          2
+        ],
+        "sha256": "9c26795db16b1e12b091ab0c914fd62296a4773b94ab1660e916d2d2b6ed6448",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-2b1b659a-94a4-456c-a04e-e78125904569.png"
+    },
+    {
+      "id": "enemy-old-wyrm",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, used only for the gaps between the scales, plus a second accent, warm yellow #e0a800, used only for the wind-up key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: an enormous ancient wingless dragon lying in thick heavy coils on a low, wide heap of round coins. The coils are as thick as its head and stacked in two big loops, so the whole figure is much wider than it is tall. Solid graphite scales, with a few big paper-colored plates along the belly and jaw. The long flat head rests just above the top coil, with two swept-back horns and one huge paper-colored eye half open with a narrow slit pupil. A large yellow wind-up key sticks straight up from between the shoulder blades, behind the head. Three bold jagged coral red gaps run between the scales along the coils, thick enough to see at small size. The coins are plain paper-colored discs with graphite outlines and no markings, spilling out to both sides. The coins are not gold or yellow: the key is the only yellow thing. Reads at 40 px as: a coiled dragon on a coin heap with a key in its back.\n\nOne complete full-body sprite with a broad bold silhouette for 38px display, retaining the prompt's exact palette. Flat chunky stepped shapes for clouds and effects, not gradients or soft blur. Preserve a complete paper sticker edge and clear transparent square-frame margins around every required prop, tail, horn and key. Large square transparent PNG at least 1024x1024. Continue to request 32x32 cells; native chunky stepped grids accepted.\nReference 1 is THIS character's same-numbered portrait, for its face identity, expression and key details. Reference 2 is an approved Goblin sprite for coarse pixel cells and sticker line weight ONLY. Make the new full-body pose specified above, simplifying facial detail for the small sprite. Do not copy the Goblin's face, body, green, clothes or props.\nSubject-specific priorities: Wingless graphite dragon in TWO thick heavy coils, much wider than tall, on PAPER-colored coins only. Yellow ONLY on the key; no gold coins, yellow horns or yellow eye. Three bold coral gaps are the only coral. Keep the same-numbered portrait face.\nCandidate 1 of 2. Use the clearest simple silhouette in the brief.",
+      "source": "../prompts/09-enemies-chapters-7-9.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Undercroft",
+      "portrait": "cast-wyrm",
+      "variant": 1,
+      "filename": "enemy-old-wyrm-v1.png",
+      "references": [
+        "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-aff0a9c4-dfbe-4e0e-8bfb-943e9b5450a7.png",
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/docs/art/incoming/enemy-goblin-v1.png"
+      ],
+      "validation_focus": "Wingless graphite dragon in TWO thick heavy coils, much wider than tall, on PAPER-colored coins only. Yellow ONLY on the key; no gold coins, yellow horns or yellow eye. Three bold coral gaps are the only coral. Keep the same-numbered portrait face.",
+      "original_sha256": "0b7e22d5ea0704a75273a3c37f3877c96812244a9bbad649e30d0318cc1265de",
+      "original_generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-f2d24cc5-6b34-407f-bbf0-6accd2722bb6.png",
+      "corrections": [
+        {
+          "filename": "enemy-old-wyrm-v1.png",
+          "id": "enemy-old-wyrm",
+          "variant": 1,
+          "kind": "enemy",
+          "references": [
+            "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-f2d24cc5-6b34-407f-bbf0-6accd2722bb6.png"
+          ],
+          "reason": "The generated base used a landscape canvas; reframe the complete sticker within a square transparent canvas.",
+          "generation_corrected": true,
+          "prompt": "Reframe this exact wingless coiled dragon sticker on a SQUARE transparent canvas. The output image must be 1280 pixels WIDE and 1280 pixels HIGH, equal dimensions, with generous EMPTY TRANSPARENT SPACE ABOVE AND BELOW the low wide creature. Keep the dragon's naturally wide, low silhouette; do NOT stretch it tall or change its pose. Fit the complete existing dragon and coin heap within the central 80% of the square width, leaving fully transparent margins on every side. Preserve this exact dragon face, swept-back horns, thick two coils, paper-colored coins and belly/jaw plates, bold coral scale gaps, yellow key and chunky stepped pixel artwork. No new objects or colors. Keep yellow ONLY on the wind-up key; coins remain paper, not gold. This is a square game sprite sheet cell containing one low horizontal creature centered vertically in a large square, NOT a landscape composition. Complete paper sticker edge, true transparent background, no floor, backdrop, text or symbols. Requested32x32 pixel art, native chunky grid retained. SQUARE PNG with equal width and height, minimum1024x1024.",
+          "path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-f013cf83-ce9a-4c39-a42c-e599d32ff8df.png",
+          "original_sha256": "3d85a56c72e992d75429bc5f786739db430bdf657ea6c2f9aacf69beba6e5691"
+        }
+      ],
+      "generation_corrected": true,
+      "review_note": "Matching portrait face, two low heavy coils, white coin heap, bold coral scale gaps and key-only yellow. Native landscape generations were reframed through image_gen onto square transparent canvases before making the phases. Gray scale shading remains outside the requested palette.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 1083157,
+        "partially_transparent_pixels": 488400,
+        "subject_bounds_at_alpha_200": [
+          44,
+          375,
+          1210,
+          930
+        ],
+        "clear_margins_at_alpha_200": [
+          44,
+          375,
+          44,
+          324
+        ],
+        "sha256": "3d85a56c72e992d75429bc5f786739db430bdf657ea6c2f9aacf69beba6e5691",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-f013cf83-ce9a-4c39-a42c-e599d32ff8df.png"
+    },
+    {
+      "id": "enemy-old-wyrm",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, used only for the gaps between the scales, plus a second accent, warm yellow #e0a800, used only for the wind-up key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: an enormous ancient wingless dragon lying in thick heavy coils on a low, wide heap of round coins. The coils are as thick as its head and stacked in two big loops, so the whole figure is much wider than it is tall. Solid graphite scales, with a few big paper-colored plates along the belly and jaw. The long flat head rests just above the top coil, with two swept-back horns and one huge paper-colored eye half open with a narrow slit pupil. A large yellow wind-up key sticks straight up from between the shoulder blades, behind the head. Three bold jagged coral red gaps run between the scales along the coils, thick enough to see at small size. The coins are plain paper-colored discs with graphite outlines and no markings, spilling out to both sides. The coins are not gold or yellow: the key is the only yellow thing. Reads at 40 px as: a coiled dragon on a coin heap with a key in its back.\n\nOne complete full-body sprite with a broad bold silhouette for 38px display, retaining the prompt's exact palette. Flat chunky stepped shapes for clouds and effects, not gradients or soft blur. Preserve a complete paper sticker edge and clear transparent square-frame margins around every required prop, tail, horn and key. Large square transparent PNG at least 1024x1024. Continue to request 32x32 cells; native chunky stepped grids accepted.\nReference 1 is THIS character's same-numbered portrait, for its face identity, expression and key details. Reference 2 is an approved Goblin sprite for coarse pixel cells and sticker line weight ONLY. Make the new full-body pose specified above, simplifying facial detail for the small sprite. Do not copy the Goblin's face, body, green, clothes or props.\nSubject-specific priorities: Wingless graphite dragon in TWO thick heavy coils, much wider than tall, on PAPER-colored coins only. Yellow ONLY on the key; no gold coins, yellow horns or yellow eye. Three bold coral gaps are the only coral. Keep the same-numbered portrait face.\nCandidate 2 of 2. Create a modest variation in proportions and pose within the exact brief, preserving its emotional expression, mechanic cues, palette restrictions and required objects.",
+      "source": "../prompts/09-enemies-chapters-7-9.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Undercroft",
+      "portrait": "cast-wyrm",
+      "variant": 2,
+      "filename": "enemy-old-wyrm-v2.png",
+      "references": [
+        "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-afdd67b5-d303-41a3-9e56-bfe70eb57baa.png",
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/docs/art/incoming/enemy-goblin-v1.png"
+      ],
+      "validation_focus": "Wingless graphite dragon in TWO thick heavy coils, much wider than tall, on PAPER-colored coins only. Yellow ONLY on the key; no gold coins, yellow horns or yellow eye. Three bold coral gaps are the only coral. Keep the same-numbered portrait face.",
+      "original_sha256": "e565c8ac017f5785c39c8f51cf56d379941de9da5684a028bfc49081f4407818",
+      "original_generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-5594e667-5711-4aa2-b0ca-8bb3140aa2d0.png",
+      "corrections": [
+        {
+          "filename": "enemy-old-wyrm-v2.png",
+          "id": "enemy-old-wyrm",
+          "variant": 2,
+          "kind": "enemy",
+          "references": [
+            "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-5594e667-5711-4aa2-b0ca-8bb3140aa2d0.png"
+          ],
+          "reason": "The generated base used a landscape canvas; reframe the complete sticker within a square transparent canvas.",
+          "generation_corrected": true,
+          "prompt": "Reframe this exact wingless coiled dragon sticker on a SQUARE transparent canvas. The output image must be 1280 pixels WIDE and 1280 pixels HIGH, equal dimensions, with generous EMPTY TRANSPARENT SPACE ABOVE AND BELOW the low wide creature. Keep the dragon's naturally wide, low silhouette; do NOT stretch it tall or change its pose. Fit the complete existing dragon and coin heap within the central 80% of the square width, leaving fully transparent margins on every side. Preserve this exact dragon face, swept-back horns, thick two coils, paper-colored coins and belly/jaw plates, bold coral scale gaps, yellow key and chunky stepped pixel artwork. No new objects or colors. Keep yellow ONLY on the wind-up key; coins remain paper, not gold. This is a square game sprite sheet cell containing one low horizontal creature centered vertically in a large square, NOT a landscape composition. Complete paper sticker edge, true transparent background, no floor, backdrop, text or symbols. Requested32x32 pixel art, native chunky grid retained. SQUARE PNG with equal width and height, minimum1024x1024.",
+          "path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-94450857-f37c-401b-b974-d0cd0447eae5.png",
+          "original_sha256": "4e3a6b05bca3aad8cae8908f92a6b6741b87d681be72a51abf20c48b61c596ed"
+        }
+      ],
+      "generation_corrected": true,
+      "review_note": "Matching portrait face, two low heavy coils, white coin heap, bold coral scale gaps and key-only yellow. Native landscape generations were reframed through image_gen onto square transparent canvases before making the phases. Gray scale shading remains outside the requested palette.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 1089268,
+        "partially_transparent_pixels": 482276,
+        "subject_bounds_at_alpha_200": [
+          47,
+          397,
+          1214,
+          931
+        ],
+        "clear_margins_at_alpha_200": [
+          47,
+          397,
+          40,
+          323
+        ],
+        "sha256": "4e3a6b05bca3aad8cae8908f92a6b6741b87d681be72a51abf20c48b61c596ed",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-94450857-f37c-401b-b974-d0cd0447eae5.png"
+    },
+    {
+      "id": "enemy-wrathful-wyrm",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, used only for the gaps between the scales, plus a second accent, warm yellow #e0a800, used only for the wind-up key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: the same dragon in the same two big coils on the same heap of coins, same size, with the same yellow key between its shoulder blades and the same bold coral red gaps, but now furious: the neck has reared up off the top coil, the jaws are flung wide open showing big paper-colored teeth, the eye is wide open, and a huge billow of solid graphite smoke rolls out of the jaws, as big as the head, with a paper-colored edge so it stands apart from the body. Plain paper-colored coins fly off the heap to both sides. The coins are not gold or yellow: the key is the only yellow thing. Same coils as before, with the head up and smoke pouring out. Reads at 40 px as: the dragon awake and roaring black smoke.\n\nReference 1 is this SAME-NUMBERED BASE dragon, already framed within a square transparent canvas. Preserve its face identity, two low heavy coils, same coil/coin-heap pose and proportions, pixel scale, paper coins, coral scale gaps and yellow key. Use the empty upper space for the rearing neck and head. Change only the phase: head/neck reared, jaws wide, eye wide, head-sized billow of solid graphite smoke with a thick paper edge, and a few plain paper coins flying to the sides. Do not unfold the coils or add wings. Yellow ONLY on the key, no gold anywhere on the hoard or teeth. Retain the same body scale and full square canvas, complete paper sticker edge and transparent margins. No landscape, background, ground, text or markings. Requested32x32 chunky stepped cells, native grid accepted. Output a SQUARE PNG with EQUAL width and height,1280x1280 or larger.",
+      "source": "../prompts/09-enemies-chapters-7-9.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Undercroft",
+      "base": "enemy-old-wyrm",
+      "variant": 1,
+      "filename": "enemy-wrathful-wyrm-v1.png",
+      "references": [
+        "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-f013cf83-ce9a-4c39-a42c-e599d32ff8df.png"
+      ],
+      "original_sha256": "4cd8e5167491d47e21e0057aaa5f89ae2d18bff1d074c79eea2618f87a95caa8",
+      "review_note": "Same-numbered coiled dragon with a reared open jaw, wide eye, head-sized graphite smoke and flying paper coins. The key remains the only yellow. Neck height and body framing shift between phases; v1 keeps three distinct coral gaps, while v2 renders two long coral gaps. Extra gray scale shading remains for cleanup.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 465442,
+        "partially_transparent_pixels": 1104493,
+        "subject_bounds_at_alpha_200": [
+          28,
+          87,
+          1229,
+          1191
+        ],
+        "clear_margins_at_alpha_200": [
+          28,
+          87,
+          25,
+          63
+        ],
+        "sha256": "4cd8e5167491d47e21e0057aaa5f89ae2d18bff1d074c79eea2618f87a95caa8",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-8ebb765d-c0fc-439a-b376-15c62bd21fe3.png"
+    },
+    {
+      "id": "enemy-wrathful-wyrm",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, used only for the gaps between the scales, plus a second accent, warm yellow #e0a800, used only for the wind-up key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: the same dragon in the same two big coils on the same heap of coins, same size, with the same yellow key between its shoulder blades and the same bold coral red gaps, but now furious: the neck has reared up off the top coil, the jaws are flung wide open showing big paper-colored teeth, the eye is wide open, and a huge billow of solid graphite smoke rolls out of the jaws, as big as the head, with a paper-colored edge so it stands apart from the body. Plain paper-colored coins fly off the heap to both sides. The coins are not gold or yellow: the key is the only yellow thing. Same coils as before, with the head up and smoke pouring out. Reads at 40 px as: the dragon awake and roaring black smoke.\n\nReference 1 is this SAME-NUMBERED BASE dragon, already framed within a square transparent canvas. Preserve its face identity, two low heavy coils, same coil/coin-heap pose and proportions, pixel scale, paper coins, coral scale gaps and yellow key. Use the empty upper space for the rearing neck and head. Change only the phase: head/neck reared, jaws wide, eye wide, head-sized billow of solid graphite smoke with a thick paper edge, and a few plain paper coins flying to the sides. Do not unfold the coils or add wings. Yellow ONLY on the key, no gold anywhere on the hoard or teeth. Retain the same body scale and full square canvas, complete paper sticker edge and transparent margins. No landscape, background, ground, text or markings. Requested32x32 chunky stepped cells, native grid accepted. Output a SQUARE PNG with EQUAL width and height,1280x1280 or larger.",
+      "source": "../prompts/09-enemies-chapters-7-9.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Undercroft",
+      "base": "enemy-old-wyrm",
+      "variant": 2,
+      "filename": "enemy-wrathful-wyrm-v2.png",
+      "references": [
+        "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-94450857-f37c-401b-b974-d0cd0447eae5.png"
+      ],
+      "original_sha256": "6d44d28c0c255c6b4194fb08416cc3ba6e5738730361446a76d72472e656e52d",
+      "review_note": "Same-numbered coiled dragon with a reared open jaw, wide eye, head-sized graphite smoke and flying paper coins. The key remains the only yellow. Neck height and body framing shift between phases; v1 keeps three distinct coral gaps, while v2 renders two long coral gaps. Extra gray scale shading remains for cleanup.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 574080,
+        "partially_transparent_pixels": 997085,
+        "subject_bounds_at_alpha_200": [
+          40,
+          143,
+          1216,
+          1140
+        ],
+        "clear_margins_at_alpha_200": [
+          40,
+          143,
+          38,
+          114
+        ],
+        "sha256": "6d44d28c0c255c6b4194fb08416cc3ba6e5738730361446a76d72472e656e52d",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-0e604d14-718b-4a48-a314-85391e2b336f.png"
+    },
+    {
+      "id": "enemy-spark-hound",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, warm yellow #e0a800. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a stocky, delighted dog standing square-on with a broad chest and short thick legs, paper-colored fur with one graphite patch over an eye. All the fur along its back and neck stands straight up in a row of big jagged spikes, and its floppy ears are lifted off its head by static. A huge open happy grin with a long tongue hanging out, and bright round eyes. Its tail is a thick yellow zigzag lightning bolt, and two more big yellow lightning bolts arc off its back. A plain graphite collar with a small blank paper-colored tag. Reads at 40 px as: a happy dog crackling with electricity.\n\nOne complete full-body sprite with a broad bold silhouette for 38px display, retaining the prompt's exact palette. Flat chunky stepped shapes for clouds and effects, not gradients or soft blur. Preserve a complete paper sticker edge and clear transparent square-frame margins around every required prop, tail, horn and key. Large square transparent PNG at least 1024x1024. Continue to request 32x32 cells; native chunky stepped grids accepted.\nThe supplied Goblin is a STYLE reference ONLY for chunky stepped cells, line weight and sticker edge. Depict the entirely different subject above. Do not copy the Goblin's face, body, pose, clothes, green or props. The new subject's prompt controls all design and colors.\nSubject-specific priorities: A delighted VERY GOOD dog, not snarling. Paper fur and paper tongue, no pink/red tongue or green. Big yellow lightning tail plus two back bolts; spiky fur and lifted floppy ears. Blank tag.\nCandidate 1 of 2. Use the clearest simple silhouette in the brief.",
+      "source": "../prompts/09-enemies-chapters-7-9.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Annex",
+      "variant": 1,
+      "filename": "enemy-spark-hound-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/docs/art/incoming/enemy-goblin-v1.png"
+      ],
+      "validation_focus": "A delighted VERY GOOD dog, not snarling. Paper fur and paper tongue, no pink/red tongue or green. Big yellow lightning tail plus two back bolts; spiky fur and lifted floppy ears. Blank tag.",
+      "original_sha256": "2e3c8749337b0209ea05ebe347f4ce1a5c4ec8e2a3bdbb6ad08c90dd23acbfa7",
+      "review_note": "Delighted dog with lifted ears, spiky paper fur, white tongue, one eye patch, a yellow lightning tail and two yellow back bolts. No extra red tongue or green.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 658028,
+        "partially_transparent_pixels": 913108,
+        "subject_bounds_at_alpha_200": [
+          59,
+          90,
+          1155,
+          1239
+        ],
+        "clear_margins_at_alpha_200": [
+          59,
+          90,
+          99,
+          15
+        ],
+        "sha256": "2e3c8749337b0209ea05ebe347f4ce1a5c4ec8e2a3bdbb6ad08c90dd23acbfa7",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-30334025-725d-46fd-87bd-cd693b05a323.png"
+    },
+    {
+      "id": "enemy-spark-hound",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, warm yellow #e0a800. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a stocky, delighted dog standing square-on with a broad chest and short thick legs, paper-colored fur with one graphite patch over an eye. All the fur along its back and neck stands straight up in a row of big jagged spikes, and its floppy ears are lifted off its head by static. A huge open happy grin with a long tongue hanging out, and bright round eyes. Its tail is a thick yellow zigzag lightning bolt, and two more big yellow lightning bolts arc off its back. A plain graphite collar with a small blank paper-colored tag. Reads at 40 px as: a happy dog crackling with electricity.\n\nOne complete full-body sprite with a broad bold silhouette for 38px display, retaining the prompt's exact palette. Flat chunky stepped shapes for clouds and effects, not gradients or soft blur. Preserve a complete paper sticker edge and clear transparent square-frame margins around every required prop, tail, horn and key. Large square transparent PNG at least 1024x1024. Continue to request 32x32 cells; native chunky stepped grids accepted.\nThe supplied Goblin is a STYLE reference ONLY for chunky stepped cells, line weight and sticker edge. Depict the entirely different subject above. Do not copy the Goblin's face, body, pose, clothes, green or props. The new subject's prompt controls all design and colors.\nSubject-specific priorities: A delighted VERY GOOD dog, not snarling. Paper fur and paper tongue, no pink/red tongue or green. Big yellow lightning tail plus two back bolts; spiky fur and lifted floppy ears. Blank tag.\nCandidate 2 of 2. Create a modest variation in proportions and pose within the exact brief, preserving its emotional expression, mechanic cues, palette restrictions and required objects.",
+      "source": "../prompts/09-enemies-chapters-7-9.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Annex",
+      "variant": 2,
+      "filename": "enemy-spark-hound-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/docs/art/incoming/enemy-goblin-v1.png"
+      ],
+      "validation_focus": "A delighted VERY GOOD dog, not snarling. Paper fur and paper tongue, no pink/red tongue or green. Big yellow lightning tail plus two back bolts; spiky fur and lifted floppy ears. Blank tag.",
+      "original_sha256": "81f450e499a9c35aad0ac5fc1cf069feca7ba4ef762ac5dd493f69a77946bba6",
+      "review_note": "Delighted dog with lifted ears, spiky paper fur, white tongue, one eye patch, a yellow lightning tail and two yellow back bolts. No extra red tongue or green.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 578823,
+        "partially_transparent_pixels": 992767,
+        "subject_bounds_at_alpha_200": [
+          18,
+          35,
+          1226,
+          1245
+        ],
+        "clear_margins_at_alpha_200": [
+          18,
+          35,
+          28,
+          9
+        ],
+        "sha256": "81f450e499a9c35aad0ac5fc1cf069feca7ba4ef762ac5dd493f69a77946bba6",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-17212257-eb6b-4801-b9de-7c1b85d5cae8.png"
+    },
+    {
+      "id": "enemy-failed-clone",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, bright purple #7b5cff, plus a second accent, soft gray #7a7e8a, used only for the mist. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a lumpy, unfinished person in a wide stance, in a short bright purple lab smock, with smooth paper-colored skin, no hair, and a thick graphite outline. The head is too big and lopsided, with two round eyes at different heights and a big wonky friendly smile. Three arms held out wide: one on each side, and a third growing out of the ribs in the wrong place, each ending in an open helpful hand. One hand offers a plain blank clipboard, held upside down. A big soft gray cloud of mist pours off its shoulders and drifts to one side, as big as its torso. No blood, no wounds, no rot. Reads at 40 px as: a wonky, eager clone with too many arms.\n\nOne complete full-body sprite with a broad bold silhouette for 38px display, retaining the prompt's exact palette. Flat chunky stepped shapes for clouds and effects, not gradients or soft blur. Preserve a complete paper sticker edge and clear transparent square-frame margins around every required prop, tail, horn and key. Large square transparent PNG at least 1024x1024. Continue to request 32x32 cells; native chunky stepped grids accepted.\nThe supplied Goblin is a STYLE reference ONLY for chunky stepped cells, line weight and sticker edge. Depict the entirely different subject above. Do not copy the Goblin's face, body, pose, clothes, green or props. The new subject's prompt controls all design and colors.\nSubject-specific priorities: Friendly and eager, not undead or frightening. Exactly THREE clearly separate helpful arms, with one upside-down blank clipboard. Purple smock and body-sized gray mist; no extra colors or writing.\nCandidate 1 of 2. Use the clearest simple silhouette in the brief.",
+      "source": "../prompts/09-enemies-chapters-7-9.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Annex",
+      "variant": 1,
+      "filename": "enemy-failed-clone-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/docs/art/incoming/enemy-goblin-v1.png"
+      ],
+      "validation_focus": "Friendly and eager, not undead or frightening. Exactly THREE clearly separate helpful arms, with one upside-down blank clipboard. Purple smock and body-sized gray mist; no extra colors or writing.",
+      "original_sha256": "d7d611837133039f624e60935826a5a3643de9cbe37058836e87fbdf426e4a8e",
+      "review_note": "Three separate helpful arms, uneven eyes, friendly smile, upside-down blank clipboard, purple smock and large gray mist. Candidate 2 uses an additional light mist shade.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 571272,
+        "partially_transparent_pixels": 999214,
+        "subject_bounds_at_alpha_200": [
+          31,
+          80,
+          1209,
+          1242
+        ],
+        "clear_margins_at_alpha_200": [
+          31,
+          80,
+          45,
+          12
+        ],
+        "sha256": "d7d611837133039f624e60935826a5a3643de9cbe37058836e87fbdf426e4a8e",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-e16321bf-4f3b-41e9-8390-1d19b6cdf3f2.png"
+    },
+    {
+      "id": "enemy-failed-clone",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, bright purple #7b5cff, plus a second accent, soft gray #7a7e8a, used only for the mist. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a lumpy, unfinished person in a wide stance, in a short bright purple lab smock, with smooth paper-colored skin, no hair, and a thick graphite outline. The head is too big and lopsided, with two round eyes at different heights and a big wonky friendly smile. Three arms held out wide: one on each side, and a third growing out of the ribs in the wrong place, each ending in an open helpful hand. One hand offers a plain blank clipboard, held upside down. A big soft gray cloud of mist pours off its shoulders and drifts to one side, as big as its torso. No blood, no wounds, no rot. Reads at 40 px as: a wonky, eager clone with too many arms.\n\nOne complete full-body sprite with a broad bold silhouette for 38px display, retaining the prompt's exact palette. Flat chunky stepped shapes for clouds and effects, not gradients or soft blur. Preserve a complete paper sticker edge and clear transparent square-frame margins around every required prop, tail, horn and key. Large square transparent PNG at least 1024x1024. Continue to request 32x32 cells; native chunky stepped grids accepted.\nThe supplied Goblin is a STYLE reference ONLY for chunky stepped cells, line weight and sticker edge. Depict the entirely different subject above. Do not copy the Goblin's face, body, pose, clothes, green or props. The new subject's prompt controls all design and colors.\nSubject-specific priorities: Friendly and eager, not undead or frightening. Exactly THREE clearly separate helpful arms, with one upside-down blank clipboard. Purple smock and body-sized gray mist; no extra colors or writing.\nCandidate 2 of 2. Create a modest variation in proportions and pose within the exact brief, preserving its emotional expression, mechanic cues, palette restrictions and required objects.",
+      "source": "../prompts/09-enemies-chapters-7-9.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Annex",
+      "variant": 2,
+      "filename": "enemy-failed-clone-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/docs/art/incoming/enemy-goblin-v1.png"
+      ],
+      "validation_focus": "Friendly and eager, not undead or frightening. Exactly THREE clearly separate helpful arms, with one upside-down blank clipboard. Purple smock and body-sized gray mist; no extra colors or writing.",
+      "original_sha256": "22716b4bea724319594e7624df2ca3e8f336b990b1afe1c3f0a9a19ad4eda144",
+      "review_note": "Three separate helpful arms, uneven eyes, friendly smile, upside-down blank clipboard, purple smock and large gray mist. Candidate 2 uses an additional light mist shade.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 458963,
+        "partially_transparent_pixels": 1111718,
+        "subject_bounds_at_alpha_200": [
+          8,
+          79,
+          1246,
+          1244
+        ],
+        "clear_margins_at_alpha_200": [
+          8,
+          79,
+          8,
+          10
+        ],
+        "sha256": "22716b4bea724319594e7624df2ca3e8f336b990b1afe1c3f0a9a19ad4eda144",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-7ec0a420-5914-4bd6-be93-72d04fa893e6.png"
+    },
+    {
+      "id": "enemy-reviewer-two",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, used only for the cracks. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: an anonymous reviewer in a wide stance, elbows out, holding an enormous thick manuscript up in front of the body with both hands like a shield. The manuscript is wider than the shoulders and covers the whole torso: a thick stack of paper-colored pages with a heavy graphite clip at the top, the edges of the stack visible, marked with thick graphite stripes and no writing. Three bold coral red cracks run through the stack, thick enough to see at small size. Above it, a square paper-colored head with a single thick solid graphite bar across the eyes, like a censor bar, and a thin flat mouth. A blocky graphite suit, with short legs planted apart below the manuscript. No glasses or monocle. Reads at 40 px as: a faceless reviewer behind a cracked wall of paper.\n\nOne complete full-body sprite with a broad bold silhouette for 38px display, retaining the prompt's exact palette. Flat chunky stepped shapes for clouds and effects, not gradients or soft blur. Preserve a complete paper sticker edge and clear transparent square-frame margins around every required prop, tail, horn and key. Large square transparent PNG at least 1024x1024. Continue to request 32x32 cells; native chunky stepped grids accepted.\nThe supplied Goblin is a STYLE reference ONLY for chunky stepped cells, line weight and sticker edge. Depict the entirely different subject above. Do not copy the Goblin's face, body, pose, clothes, green or props. The new subject's prompt controls all design and colors.\nSubject-specific priorities: Anonymous square head with a single thick solid GRAPHITE EYE BAR, no visible eyes, glasses or monocle. Huge clipped manuscript shield with stripes but no writing. Three thick coral cracks and no other coral; no red pen.\nCandidate 1 of 2. Use the clearest simple silhouette in the brief.",
+      "source": "../prompts/09-enemies-chapters-7-9.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Annex",
+      "variant": 1,
+      "filename": "enemy-reviewer-two-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/docs/art/incoming/enemy-goblin-v1.png"
+      ],
+      "validation_focus": "Anonymous square head with a single thick solid GRAPHITE EYE BAR, no visible eyes, glasses or monocle. Huge clipped manuscript shield with stripes but no writing. Three thick coral cracks and no other coral; no red pen.",
+      "original_sha256": "2dd0dc6be2a740752fde968afb6dccfdb867e344d02ff538a42d211e0c723d4f",
+      "review_note": "Single solid eye bar, huge clipped manuscript, thick horizontal page stripes and prominent coral cracks. No writing or pen. Small gray suit highlights remain outside the requested palette.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 688948,
+        "partially_transparent_pixels": 882446,
+        "subject_bounds_at_alpha_200": [
+          129,
+          38,
+          1126,
+          1239
+        ],
+        "clear_margins_at_alpha_200": [
+          129,
+          38,
+          128,
+          15
+        ],
+        "sha256": "2dd0dc6be2a740752fde968afb6dccfdb867e344d02ff538a42d211e0c723d4f",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-732dc0c3-23ca-4f2e-9260-812fee3bbb6c.png"
+    },
+    {
+      "id": "enemy-reviewer-two",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, used only for the cracks. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: an anonymous reviewer in a wide stance, elbows out, holding an enormous thick manuscript up in front of the body with both hands like a shield. The manuscript is wider than the shoulders and covers the whole torso: a thick stack of paper-colored pages with a heavy graphite clip at the top, the edges of the stack visible, marked with thick graphite stripes and no writing. Three bold coral red cracks run through the stack, thick enough to see at small size. Above it, a square paper-colored head with a single thick solid graphite bar across the eyes, like a censor bar, and a thin flat mouth. A blocky graphite suit, with short legs planted apart below the manuscript. No glasses or monocle. Reads at 40 px as: a faceless reviewer behind a cracked wall of paper.\n\nOne complete full-body sprite with a broad bold silhouette for 38px display, retaining the prompt's exact palette. Flat chunky stepped shapes for clouds and effects, not gradients or soft blur. Preserve a complete paper sticker edge and clear transparent square-frame margins around every required prop, tail, horn and key. Large square transparent PNG at least 1024x1024. Continue to request 32x32 cells; native chunky stepped grids accepted.\nThe supplied Goblin is a STYLE reference ONLY for chunky stepped cells, line weight and sticker edge. Depict the entirely different subject above. Do not copy the Goblin's face, body, pose, clothes, green or props. The new subject's prompt controls all design and colors.\nSubject-specific priorities: Anonymous square head with a single thick solid GRAPHITE EYE BAR, no visible eyes, glasses or monocle. Huge clipped manuscript shield with stripes but no writing. Three thick coral cracks and no other coral; no red pen.\nCandidate 2 of 2. Create a modest variation in proportions and pose within the exact brief, preserving its emotional expression, mechanic cues, palette restrictions and required objects.",
+      "source": "../prompts/09-enemies-chapters-7-9.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Annex",
+      "variant": 2,
+      "filename": "enemy-reviewer-two-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/docs/art/incoming/enemy-goblin-v1.png"
+      ],
+      "validation_focus": "Anonymous square head with a single thick solid GRAPHITE EYE BAR, no visible eyes, glasses or monocle. Huge clipped manuscript shield with stripes but no writing. Three thick coral cracks and no other coral; no red pen.",
+      "original_sha256": "7cb8b01fc2784e2c82f20e59498a79fb611aa35e44f94cbbf81e22abfb1d6daf",
+      "review_note": "Single solid eye bar, huge clipped manuscript, thick horizontal page stripes and prominent coral cracks. No writing or pen. Small gray suit highlights remain outside the requested palette.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 684535,
+        "partially_transparent_pixels": 886298,
+        "subject_bounds_at_alpha_200": [
+          92,
+          62,
+          1160,
+          1251
+        ],
+        "clear_margins_at_alpha_200": [
+          92,
+          62,
+          94,
+          3
+        ],
+        "sha256": "7cb8b01fc2784e2c82f20e59498a79fb611aa35e44f94cbbf81e22abfb1d6daf",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-9def5c61-5a42-4fe4-a3cf-7155e30e7d9d.png"
+    },
+    {
+      "id": "enemy-ostrander",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, plus a second accent, warm yellow #e0a800, used only for the wind-up key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a severe professor in a wide pose, feet apart, her graphite academic gown spread out into big bell-shaped sleeves. One arm is flung straight out to the side gripping an enormous coral red pen as long as she is tall, held like a lance, and the other hand is on her hip, so the figure is broad and not a thin sliver. An oversized flat graphite mortarboard, much wider than her head, with a thick coral red tassel. Half-moon glasses in solid paper color, and a thin flat mouth. A broad coral red hood trim over the shoulders. A thick graphite cord hangs around her neck, with a large yellow wind-up key on it resting on her paper-colored shirt front. The tassel is coral, not yellow: the key is the only yellow thing. Reads at 40 px as: a professor with a giant red pen and a key around her neck.\n\nOne complete full-body sprite with a broad bold silhouette for 38px display, retaining the prompt's exact palette. Flat chunky stepped shapes for clouds and effects, not gradients or soft blur. Preserve a complete paper sticker edge and clear transparent square-frame margins around every required prop, tail, horn and key. Large square transparent PNG at least 1024x1024. Continue to request 32x32 cells; native chunky stepped grids accepted.\nReference 1 is THIS character's same-numbered portrait, for its face identity, expression and key details. Reference 2 is an approved Goblin sprite for coarse pixel cells and sticker line weight ONLY. Make the new full-body pose specified above, simplifying facial detail for the small sprite. Do not copy the Goblin's face, body, green, clothes or props.\nSubject-specific priorities: Broad professor pose with a giant coral pen and flat mortarboard. Keep the portrait's severe disappointed face. Coral tassel and hood; yellow ONLY on the chest key on its thick graphite cord, not on the tassel. No monocle or bow tie.\nCandidate 1 of 2. Use the clearest simple silhouette in the brief.",
+      "source": "../prompts/09-enemies-chapters-7-9.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Annex",
+      "portrait": "cast-ostrander",
+      "variant": 1,
+      "filename": "enemy-ostrander-v1.png",
+      "references": [
+        "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-b082a52e-e827-4a1f-89fd-accb8d687221.png",
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/docs/art/incoming/enemy-goblin-v1.png"
+      ],
+      "validation_focus": "Broad professor pose with a giant coral pen and flat mortarboard. Keep the portrait's severe disappointed face. Coral tassel and hood; yellow ONLY on the chest key on its thick graphite cord, not on the tassel. No monocle or bow tie.",
+      "original_sha256": "b85adeb01ca41acf546e443f3c1cbb8b4db74854915b2dcc23e028aadb87da83",
+      "review_note": "Face matches the same-numbered portrait. Broad gown, huge mortarboard, coral tassel, oversized pen and a large yellow chest key. Both pens are held upright rather than in a horizontal lance pose; gray gown highlights remain for cleanup.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 365562,
+        "partially_transparent_pixels": 1206020,
+        "subject_bounds_at_alpha_200": [
+          70,
+          10,
+          1208,
+          1253
+        ],
+        "clear_margins_at_alpha_200": [
+          70,
+          10,
+          46,
+          1
+        ],
+        "sha256": "b85adeb01ca41acf546e443f3c1cbb8b4db74854915b2dcc23e028aadb87da83",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-c1dcfa69-7370-4635-92f0-db6534ba5c3b.png"
+    },
+    {
+      "id": "enemy-ostrander",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, plus a second accent, warm yellow #e0a800, used only for the wind-up key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a severe professor in a wide pose, feet apart, her graphite academic gown spread out into big bell-shaped sleeves. One arm is flung straight out to the side gripping an enormous coral red pen as long as she is tall, held like a lance, and the other hand is on her hip, so the figure is broad and not a thin sliver. An oversized flat graphite mortarboard, much wider than her head, with a thick coral red tassel. Half-moon glasses in solid paper color, and a thin flat mouth. A broad coral red hood trim over the shoulders. A thick graphite cord hangs around her neck, with a large yellow wind-up key on it resting on her paper-colored shirt front. The tassel is coral, not yellow: the key is the only yellow thing. Reads at 40 px as: a professor with a giant red pen and a key around her neck.\n\nOne complete full-body sprite with a broad bold silhouette for 38px display, retaining the prompt's exact palette. Flat chunky stepped shapes for clouds and effects, not gradients or soft blur. Preserve a complete paper sticker edge and clear transparent square-frame margins around every required prop, tail, horn and key. Large square transparent PNG at least 1024x1024. Continue to request 32x32 cells; native chunky stepped grids accepted.\nReference 1 is THIS character's same-numbered portrait, for its face identity, expression and key details. Reference 2 is an approved Goblin sprite for coarse pixel cells and sticker line weight ONLY. Make the new full-body pose specified above, simplifying facial detail for the small sprite. Do not copy the Goblin's face, body, green, clothes or props.\nSubject-specific priorities: Broad professor pose with a giant coral pen and flat mortarboard. Keep the portrait's severe disappointed face. Coral tassel and hood; yellow ONLY on the chest key on its thick graphite cord, not on the tassel. No monocle or bow tie.\nCandidate 2 of 2. Create a modest variation in proportions and pose within the exact brief, preserving its emotional expression, mechanic cues, palette restrictions and required objects.",
+      "source": "../prompts/09-enemies-chapters-7-9.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Annex",
+      "portrait": "cast-ostrander",
+      "variant": 2,
+      "filename": "enemy-ostrander-v2.png",
+      "references": [
+        "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-71b98316-a178-4a37-88ed-8b0c5203a90e.png",
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/docs/art/incoming/enemy-goblin-v1.png"
+      ],
+      "validation_focus": "Broad professor pose with a giant coral pen and flat mortarboard. Keep the portrait's severe disappointed face. Coral tassel and hood; yellow ONLY on the chest key on its thick graphite cord, not on the tassel. No monocle or bow tie.",
+      "original_sha256": "2b7da4d408fa2955676d0d8823bba94260aed0700c62987baa1554c7eb01a00e",
+      "review_note": "Face matches the same-numbered portrait. Broad gown, huge mortarboard, coral tassel, oversized pen and a large yellow chest key. Both pens are held upright rather than in a horizontal lance pose; gray gown highlights remain for cleanup.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 426940,
+        "partially_transparent_pixels": 1143004,
+        "subject_bounds_at_alpha_200": [
+          53,
+          11,
+          1155,
+          1252
+        ],
+        "clear_margins_at_alpha_200": [
+          53,
+          11,
+          99,
+          2
+        ],
+        "sha256": "2b7da4d408fa2955676d0d8823bba94260aed0700c62987baa1554c7eb01a00e",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-ef6fdca6-daeb-4d81-a452-908c37f822da.png"
+    },
+    {
+      "id": "enemy-reviewer-one",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, plus a second accent, warm yellow #e0a800, used only for the wind-up key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: the same professor in the same wide pose, same size, with the same oversized mortarboard, the same giant coral red pen held out to the side, and the same yellow key on its thick cord, but now revealed: a single thick solid graphite bar covers her eyes in place of the glasses, like a censor bar. A big coral red ink blot as large as her head bursts from the tip of the pen. The hem of the gown has fanned out into a wide skirt of loose paper-colored sheets, each struck through with one thick coral red diagonal stripe and no writing, and two loose sheets fly off to either side. The tassel is coral, not yellow: the key is the only yellow thing. Same head, hat, and arms as before, with the sheets and the blot added. Reads at 40 px as: the professor behind a black bar, with red ink and rejected pages flying.\n\nReference1 is THIS SAME-NUMBERED Professor Ostrander BASE sprite: retain its exact head/hat/face identity, giant pen, key, body, gown sleeves, arm pose, hand on hip, orientation, body proportions and pixel scale. Reference2 is SAME-NUMBERED ReviewerTwo, used ONLY for the thick solid graphite censor BAR covering the eyes. Do NOT copy the second reference's square head, suit, manuscript shield, clip or cracks. Change only the stated Ostrander phase: replace glasses with one thick solid graphite eye bar; a head-sized coral ink blot bursts from the pen tip; the gown hem fans into a skirt of paper sheets with one coral diagonal stripe each, and two loose sheets fly to the sides. Keep her quiet severe mouth, rather than an angry scream. Retain the professor's wide silhouette and scale. Yellow ONLY on her existing chest key; tassel and pen stay coral. Fit the complete hat, pen, blot and sheets inside a SQUARE transparent canvas with a complete paper sticker border. No writing, letters, extra people, backdrop or scenery. Requested32x32 stepped pixel cells; native chunky grid accepted. Output SQUARE transparent PNG with EQUAL width and height,at least1024x1024.",
+      "source": "../prompts/09-enemies-chapters-7-9.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Annex",
+      "base": "enemy-ostrander",
+      "secondary_reference": "enemy-reviewer-two",
+      "variant": 1,
+      "filename": "enemy-reviewer-one-v1.png",
+      "references": [
+        "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-c1dcfa69-7370-4635-92f0-db6534ba5c3b.png",
+        "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-732dc0c3-23ca-4f2e-9260-812fee3bbb6c.png"
+      ],
+      "original_sha256": "a6bd7515dd8e26fa8df20ad4b7a7935a44cf116433a44632411af75d7d849e97",
+      "review_note": "Retains Ostrander\u2019s face, hat, broad gown, key and upright pen; the solid eye bar replaces her glasses. Head-sized coral blot, striped paper hem and two flying sheets read clearly. The pen stays upright as in its base. Gray gown highlights remain for cleanup; no manuscript shield was borrowed from Reviewer Two.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 384521,
+        "partially_transparent_pixels": 1187468,
+        "subject_bounds_at_alpha_200": [
+          3,
+          7,
+          1250,
+          1250
+        ],
+        "clear_margins_at_alpha_200": [
+          3,
+          7,
+          4,
+          4
+        ],
+        "sha256": "a6bd7515dd8e26fa8df20ad4b7a7935a44cf116433a44632411af75d7d849e97",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-14ea23a7-434e-4ea3-b474-9164aaadf305.png"
+    },
+    {
+      "id": "enemy-reviewer-one",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, plus a second accent, warm yellow #e0a800, used only for the wind-up key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: the same professor in the same wide pose, same size, with the same oversized mortarboard, the same giant coral red pen held out to the side, and the same yellow key on its thick cord, but now revealed: a single thick solid graphite bar covers her eyes in place of the glasses, like a censor bar. A big coral red ink blot as large as her head bursts from the tip of the pen. The hem of the gown has fanned out into a wide skirt of loose paper-colored sheets, each struck through with one thick coral red diagonal stripe and no writing, and two loose sheets fly off to either side. The tassel is coral, not yellow: the key is the only yellow thing. Same head, hat, and arms as before, with the sheets and the blot added. Reads at 40 px as: the professor behind a black bar, with red ink and rejected pages flying.\n\nReference1 is THIS SAME-NUMBERED Professor Ostrander BASE sprite: retain its exact head/hat/face identity, giant pen, key, body, gown sleeves, arm pose, hand on hip, orientation, body proportions and pixel scale. Reference2 is SAME-NUMBERED ReviewerTwo, used ONLY for the thick solid graphite censor BAR covering the eyes. Do NOT copy the second reference's square head, suit, manuscript shield, clip or cracks. Change only the stated Ostrander phase: replace glasses with one thick solid graphite eye bar; a head-sized coral ink blot bursts from the pen tip; the gown hem fans into a skirt of paper sheets with one coral diagonal stripe each, and two loose sheets fly to the sides. Keep her quiet severe mouth, rather than an angry scream. Retain the professor's wide silhouette and scale. Yellow ONLY on her existing chest key; tassel and pen stay coral. Fit the complete hat, pen, blot and sheets inside a SQUARE transparent canvas with a complete paper sticker border. No writing, letters, extra people, backdrop or scenery. Requested32x32 stepped pixel cells; native chunky grid accepted. Output SQUARE transparent PNG with EQUAL width and height,at least1024x1024.",
+      "source": "../prompts/09-enemies-chapters-7-9.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Annex",
+      "base": "enemy-ostrander",
+      "secondary_reference": "enemy-reviewer-two",
+      "variant": 2,
+      "filename": "enemy-reviewer-one-v2.png",
+      "references": [
+        "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-ef6fdca6-daeb-4d81-a452-908c37f822da.png",
+        "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-9def5c61-5a42-4fe4-a3cf-7155e30e7d9d.png"
+      ],
+      "original_sha256": "0142789854e6f4322f11c118e5fd1b1e6365e90b740d54397d5593d7a44d084c",
+      "review_note": "Retains Ostrander\u2019s face, hat, broad gown, key and upright pen; the solid eye bar replaces her glasses. Head-sized coral blot, striped paper hem and two flying sheets read clearly. The pen stays upright as in its base. Gray gown highlights remain for cleanup; no manuscript shield was borrowed from Reviewer Two.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 383399,
+        "partially_transparent_pixels": 1188338,
+        "subject_bounds_at_alpha_200": [
+          4,
+          6,
+          1248,
+          1254
+        ],
+        "clear_margins_at_alpha_200": [
+          4,
+          6,
+          6,
+          0
+        ],
+        "sha256": "0142789854e6f4322f11c118e5fd1b1e6365e90b740d54397d5593d7a44d084c",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-abfbf3a4-dc09-4abc-972a-ca759d5a1506.png"
+    }
+  ]
+}
