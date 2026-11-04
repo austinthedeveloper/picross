@@ -105,6 +105,11 @@
   background: var(--hl);
 }
 
+.clue.focus,
+.cell.focus:not(.filled) {
+  background: var(--hl);
+}
+
 .clue .done {
   color: var(--mark);
   opacity: 0.6;

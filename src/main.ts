@@ -13,6 +13,7 @@ import { getMural } from './puzzles/murals';
 import { getScene } from './puzzles/scenes';
 import { renderDailyScreen } from './ui/screens/daily';
 import { renderEditorScreen } from './ui/screens/editorScreen';
+import { renderHowToPlay } from './ui/screens/howToPlay';
 import { renderMuralScreen, renderMuralTile } from './ui/screens/mural';
 import { renderGameScreen } from './ui/screens/gameScreen';
 import { renderRunEncounter, renderRunScreen } from './ui/screens/run';
@@ -21,6 +22,11 @@ import { renderSelectScreen } from './ui/screens/selectScreen';
 import { applyTheme } from './ui/theme';
 
 applyTheme();
+
+// Dev builds only (#65): production builds drop this branch and the whole module.
+if (import.meta.env.VITE_DEBUG === '1') {
+  void import('./debug/panel').then(({ installDebugPanel }) => installDebugPanel());
+}
 
 const app = document.querySelector<HTMLDivElement>('#app')!;
 let cleanup: (() => void) | undefined;
@@ -48,6 +54,8 @@ function route() {
     cleanup = renderRunScreen(app);
   } else if (location.hash === '#/run/play') {
     cleanup = renderRunEncounter(app);
+  } else if (location.hash === '#/how-to-play') {
+    renderHowToPlay(app);
   } else if (location.hash === '#/editor') {
     renderEditorScreen(app);
   } else {

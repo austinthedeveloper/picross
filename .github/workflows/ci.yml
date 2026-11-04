@@ -27,10 +27,14 @@ jobs:
       - run: npm run lint
       - run: npm test
       - run: npm run build
+      - run: npm run check:bundle
+      # GitHub Pages is the dev site: it gets the debug tools (#65). Azure serves
+      # production builds from release tags (deploy-azure.yml).
+      - run: npm run build:dev
       - uses: actions/upload-pages-artifact@v3
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         with:
-          path: dist
+          path: dist-dev
 
   # Browser tests against the production build on a phone-sized screen (e2e/).
   e2e:

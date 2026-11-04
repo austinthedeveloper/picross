@@ -21,6 +21,7 @@ index.html                 Page shell; loads src/main.ts
 public/favicon.svg
 src/
   main.ts                  Entry point: imports styles, applies theme, hash router
+  debug/                   Dev-only tools (#65): panel and hooks; never in production builds
   engine/                  Pure puzzle logic, no DOM
     board.ts               Cell states (Empty/Filled/Marked), Grid/Board/Solution, isSolved
     clues.ts               Clue derivation and per-clue "satisfied" check (clue dimming)
@@ -34,14 +35,16 @@ src/
     transform.ts           The eight turns and flips of a grid (daily puzzle, #69)
   puzzles/                 Content and its validation
     format.ts              Puzzle file format, parse/validate, export helpers
-    index.ts               Loads pack/*.json (free play, in ORDER) and run/*.json
-    pack/*.json            Free-play puzzles (5×5 to 20×20)
+    index.ts               Loads pack/*.json and run/*.json; the list sorts by size, then ORDER
+    pack/*.json            Free-play puzzles (5×5 to 20×20): the starter set plus themed batches
+    sheets/*.txt           The themed batches as drawings; scripts/puzzle-sheet.ts exports them
     run/*.json             Run-only puzzles (the sword, wrench, owl, pocket watch, ...)
     pack.test.ts           Uniqueness check over every puzzle
     runs.ts                Loads encounters/*.json and runs/*.json (jobs)
     chapters.ts            Loads chapters/*.json: jobs grouped into story chapters (#23)
     endless.ts             Endless mode: seeded encounter order, scaling, the run as a RunDef (#68)
     daily.ts               The daily puzzle: date keys and the day's puzzle and turn (#69)
+    tutorial.ts            How to play: its picture and steps, and what counts as a wrong move
     murals.ts              Loads murals/*.json and splits each picture into tile puzzles (#24)
     enemies.ts             Validates an enemy; lists its powers (startingPowers, phasePowers, enemyPowers)
     gadgets.ts             Gadget catalog: name, icon, description, effect
@@ -73,6 +76,7 @@ src/
       daily.ts             The daily puzzle: its card on the list and its PlaySession (#/daily)
       mural.ts             Murals: the list section, a mural's tiles, playing a tile (#/mural/…)
       sceneScreen.ts       Plays a scene full screen               (#/scene/<id>)
+      howToPlay.ts         Guided solve on a real board, then rules (#/how-to-play)
       editorScreen.ts      Puzzle authoring tool                   (#/editor)
       run/                 Runs                                    (#/run, #/run/play)
         index.ts           Run hub router and the puzzle-list banner
@@ -121,6 +125,7 @@ src/
     dialogue.css           Scene player
 e2e/                       Playwright browser tests (see docs/development.md)
 scripts/
+  puzzle-sheet.ts          Check, repair and export puzzle sheets (batches of drawings; see docs/how-to.md)
   deploy-azure.sh          Upload a build to the Azure static website
   setup-azure-deploy.sh    One-time Azure + GitHub OIDC setup for the release pipeline
 .github/workflows/
@@ -175,7 +180,7 @@ All saved data lives in `localStorage`, read once at startup and written on chan
 | ------------------ | ---------------------------- | -------------------------------------------------------------------- |
 | `picross:v1`       | `game/progress.ts`           | In-progress boards, per-puzzle stats, total solving time             |
 | `picross:run`      | `game/runSave.ts`            | The current run (with the current encounter's board) and seen scenes |
-| `picross:settings` | `game/settings.ts`           | `mode` (also the default for new runs), `muted`, `highContrast`      |
+| `picross:settings` | `game/settings.ts`           | `mode` (default for new runs), `listFilter`, `muted`, `highContrast` |
 | `picross:daily`    | `game/daily.ts`              | Daily streak, best streak, solve count, and today's board            |
 | `picross:editor`   | `ui/screens/editorScreen.ts` | The editor's current drawing                                         |
 
@@ -195,6 +200,7 @@ saved board, and failing in Hearts mode discards it.
 | ------------------ | ------------------------------------------------------------------- |
 | `#/`               | `renderSelectScreen` (also the fallback for unknown hashes)         |
 | `#/play/<id>`      | `renderGameScreen` for a pack puzzle                                |
+| `#/how-to-play`    | `renderHowToPlay`: the interactive tutorial and the rules           |
 | `#/editor`         | `renderEditorScreen`                                                |
 | `#/run`            | `renderRunScreen`: start panel, path map, or results                |
 | `#/scene/<id>`     | `renderSceneScreen`: preview a scene (Replay at the end)            |
@@ -257,8 +263,9 @@ special cases for encounter types.
 A card at the top of the puzzle list opens `#/daily` (#69): one puzzle a day, the same
 for everyone on the same local date.
 
-- **The pick:** `puzzles/daily.ts` takes every pack puzzle 15×15 or bigger in all eight
-  turns and flips (`engine/transform.ts`). That's 13 × 8 = 104 boards, shuffled with a
+- **The pick:** `puzzles/daily.ts` takes every pack puzzle 15×15 or bigger (from
+  `packInOrder`, so re-sorting the list doesn't move anyone's daily) in all eight
+  turns and flips (`engine/transform.ts`). That's 213 × 8 = 1704 boards, shuffled with a
   fixed seed into a cycle, so nothing repeats until the cycle runs out. Turning or
   flipping keeps a puzzle uniquely solvable, since its clues just move or reverse. The
   tests solve a sample of days to check.
@@ -268,9 +275,30 @@ for everyone on the same local date.
   It holds today's board, the streak, the best streak and the solve count. A streak
   counts while the last solve was today or yesterday, and shows 0 once a day is missed.
 
+## The puzzle list
+
+`selectScreen.ts` groups the pack by size, smallest first. `puzzles` is sorted the same way, so
+card numbers run in display order and "Next" walks from simple to hard. Murals sit above the
+sizes in one row that scrolls sideways, so they stay easy to find without pushing the first
+puzzles down the page.
+
+The All / Not completed / Completed filter is `listFilter` in the settings, so it survives
+a visit to a puzzle. A puzzle in progress counts as not completed, and so does a mural until
+its last tile is solved. A size with nothing to show disappears; its heading's count always
+covers the whole size.
+
+## How to play
+
+`#/how-to-play` teaches on a real board (`createBoardView`, `attachInput` and `Game`, without
+the game screen). `puzzles/tutorial.ts` holds the steps. The current step is worked out from
+the board each time, so erasing a finished step goes back to it, and a step already done is
+skipped. Moves that contradict the picture are turned away with a nudge instead of being
+played. The tutorial records no solve, and `BoardView.setFocus` is what highlights the step's
+lines.
+
 ## Murals (meta-pictures)
 
-A mural (#24, `puzzles/murals/*.json`) is one big picture, 30×30 or 45×30 so far, split
+A mural (#24, `puzzles/murals/*.json`) is one big picture, 30×30, 45×30 or 45×45 so far, split
 into tiles that are each their own puzzle. `parseMural` checks that the picture divides
 into `tile`-sized squares and builds a puzzle per tile, row by row, with ids like
 `whale-3`. The tests check that every tile is uniquely solvable on its own.

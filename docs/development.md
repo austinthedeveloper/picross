@@ -13,16 +13,19 @@ npm run dev        # http://localhost:5173, hot reload
 
 ## Scripts
 
-| Command                 | What it does                                                |
-| ----------------------- | ----------------------------------------------------------- |
-| `npm run dev`           | Vite dev server                                             |
-| `npm test`              | All unit tests once (Vitest, jsdom)                         |
-| `npm run test:watch`    | Tests in watch mode                                         |
-| `npm run check:puzzles` | Only the pack uniqueness check (`src/puzzles/pack.test.ts`) |
-| `npm run lint`          | ESLint, then `prettier --check`                             |
-| `npm run format`        | `prettier --write .`                                        |
-| `npm run build`         | `tsc --noEmit` type-check, then `vite build` to `dist/`     |
-| `npm run preview`       | Serve `dist/` locally                                       |
+| Command                 | What it does                                                              |
+| ----------------------- | ------------------------------------------------------------------------- |
+| `npm run dev`           | Vite dev server                                                           |
+| `npm run dev:prod`      | Vite dev server without the debug tools                                   |
+| `npm test`              | All unit tests once (Vitest, jsdom)                                       |
+| `npm run test:watch`    | Tests in watch mode                                                       |
+| `npm run check:puzzles` | Only the pack uniqueness check (`src/puzzles/pack.test.ts`)               |
+| `npm run lint`          | ESLint, then `prettier --check`                                           |
+| `npm run format`        | `prettier --write .`                                                      |
+| `npm run build`         | `tsc --noEmit` type-check, then `vite build` to `dist/`                   |
+| `npm run build:dev`     | The same, with the debug tools, to `dist-dev/` (what GitHub Pages serves) |
+| `npm run check:bundle`  | Fails if debug code reached `dist/`                                       |
+| `npm run preview`       | Serve `dist/` locally                                                     |
 
 ## Testing
 
@@ -61,7 +64,8 @@ HTML report (`playwright-report`) when something fails. To debug a failure, run
 
 | File                  | Covers                                                                                                                                                |
 | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `free-play.spec.ts`   | Sizes, sound off by default, solving and the end screen, drag, undo, Hearts and Retry, hints, keyboard play                                           |
+| `free-play.spec.ts`   | Sizes smallest first, the list filter, "Next", sound off by default, solving and the end screen, drag, undo, Hearts and Retry, hints, keyboard play   |
+| `how-to-play.spec.ts` | The tutorial from the first step to Solved: nudges, going back a step, the tool prompt, and that it records nothing                                   |
 | `runs.spec.ts`        | Jobs board and chapters, the full First Job (intro once, sign-off, stats), knockouts, rest stops in time and late                                     |
 | `fights.spec.ts`      | One test per mechanic: fog, gremlin waves, Mimic swaps, Owl scramble, Forger call-outs, Beetle armor, gadgets, Eel charge, Cuttlefish ink, power tips |
 | `night-shift.spec.ts` | The whole Night Shift from the jobs board to the Curator                                                                                              |
@@ -69,6 +73,7 @@ HTML report (`playwright-report`) when something fails. To debug a failure, run
 | `endless.spec.ts`     | Endless mode: unlocking, healing after a fight, the map moving on, best depth                                                                         |
 | `daily.spec.ts`       | The daily puzzle and its streak across days (fixed clock; solved from the clues on screen)                                                            |
 | `murals.spec.ts`      | A mural filling in tile by tile, the last tile, and the finished picture                                                                              |
+| `debug.spec.ts`       | The debug tools, against a dev build (project `dev`, port 4174)                                                                                       |
 | `editor-zoom.spec.ts` | Editor uniqueness check and export, pinch zoom                                                                                                        |
 
 `e2e/helpers.ts` has the building blocks:
@@ -94,13 +99,44 @@ Local Storage).
 1. `npm ci`
 2. `npm run lint`
 3. `npm test`, which includes the uniqueness check for every puzzle
-4. `npm run build`
+4. `npm run build`, then `npm run check:bundle` (no debug code in production)
 5. A separate `e2e` job runs the Playwright tests.
 
-Pushes to `main` then deploy `dist/` to GitHub Pages at
-https://austinthedeveloper.github.io/picross/ (a preview of `main`). Releases go to Azure;
-see below. Vite builds with `base: './'`, so the same build works under GitHub Pages'
+There are two sites, one per environment:
+
+| Site                                                          | Environment    | Deploys from         | Build               | Debug tools |
+| ------------------------------------------------------------- | -------------- | -------------------- | ------------------- | ----------- |
+| [GitHub Pages](https://austinthedeveloper.github.io/picross/) | **Dev**        | Every push to `main` | `npm run build:dev` | Yes         |
+| [Azure](https://picross.z13.web.core.windows.net/)            | **Production** | Release tags         | `npm run build`     | None        |
+
+Azure is covered below. The dev site is public, so anyone with its URL gets the tools.
+That's fine for now, because nothing links to it and nothing it does can affect production. Vite builds with `base: './'`, so the same build works under GitHub Pages'
 `/picross/` path and at the Azure site's root.
+
+## Debug tools (dev builds)
+
+Dev builds have a **🐞 DEV** button in the bottom corner and "DEV" in the page title
+(#65). It opens a drawer for exploring the game without being locked:
+
+- **Player:** infinite health (HP and hearts).
+- **This board:** solve it, take 10 HP off the enemy, or force its next phase.
+- **Jump:** go to any job and node, or win or lose the current run.
+- **Gadgets:** grant any gadget.
+- **Scenes:** play any scene.
+- **Saves:** unlock everything, or reset everything.
+
+**How it stays out of production.** `.env.development` sets `VITE_DEBUG=1`, so
+`npm run dev` and `npm run build:dev` get the tools, and `npm run build` doesn't. Everything
+lives in `src/debug/`. The panel is a dynamic import behind that flag in `main.ts`, and the
+few places the game exposes something for it (`src/debug/hooks.ts`) sit behind
+`import.meta.env.VITE_DEBUG === '1'`, so Vite drops all of it from a production build.
+`npm run check:bundle` greps `dist/` to prove it, in CI and before each Azure deploy.
+
+**To add a tool,** add a button in `src/debug/panel.ts`. If it needs something inside the
+game, add it to `debug` in `hooks.ts` and set it behind the same check. Keep that exact
+check at each spot: a shared constant may not get dropped from the build. Anything that
+navigates should go through `go()`, which leaves the game screen first so its save on
+the way out can't land on the new run.
 
 ## Azure deployment (releases)
 

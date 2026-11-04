@@ -2,7 +2,7 @@ import { deriveClues } from '../engine/clues';
 import { shuffled } from '../engine/random';
 import { TRANSFORMS, transformGrid } from '../engine/transform';
 import type { Puzzle } from './format';
-import { puzzles } from './index';
+import { packInOrder } from './index';
 
 /** Daily puzzles (#69) are 15×15 or bigger. */
 const MIN_SIZE = 15;
@@ -62,4 +62,5 @@ export function dailyFor(key: string, pool: readonly Puzzle[] = bigPuzzles()): D
   };
 }
 
-export const bigPuzzles = () => puzzles.filter((p) => p.width >= MIN_SIZE && p.height >= MIN_SIZE);
+export const bigPuzzles = () =>
+  packInOrder.filter((p) => p.width >= MIN_SIZE && p.height >= MIN_SIZE);
