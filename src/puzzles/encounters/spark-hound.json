@@ -6,7 +6,7 @@
   "blurb": "Don't pet the dog. It's on the sign, and on the other sign.",
   "enemy": {
     "name": "Spark Hound",
-    "sprite": "🐕",
+    "sprite": "spark-hound",
     "hp": 45,
     "attack": 2,
     "scramble": {

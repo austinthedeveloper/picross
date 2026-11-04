@@ -6,7 +6,7 @@
   "blurb": "Attempt 41 copied everything except the instructions. It would like to help.",
   "enemy": {
     "name": "Failed Clone",
-    "sprite": "🧟",
+    "sprite": "failed-clone",
     "hp": 45,
     "attack": 2,
     "fog": {

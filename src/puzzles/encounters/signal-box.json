@@ -6,7 +6,7 @@
   "blurb": "It's been showing red since before the line closed. It has opinions now.",
   "enemy": {
     "name": "Signal Box",
-    "sprite": "🚦",
+    "sprite": "signal-box",
     "hp": 45,
     "attack": 2,
     "fog": {

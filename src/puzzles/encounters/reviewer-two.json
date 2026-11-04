@@ -6,7 +6,7 @@
   "blurb": "Nobody knows who Reviewer Two is. Everybody has met Reviewer Two. Find the weak arguments.",
   "enemy": {
     "name": "Reviewer Two",
-    "sprite": "🧐",
+    "sprite": "reviewer-two",
     "hp": 45,
     "attack": 2,
     "armor": {

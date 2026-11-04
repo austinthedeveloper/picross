@@ -11,11 +11,11 @@
     },
     "dennis": {
       "name": "Sir Dennis",
-      "portrait": "🤺"
+      "portrait": "dennis"
     },
     "wyrm": {
       "name": "The Old Wyrm",
-      "portrait": "🐉"
+      "portrait": "wyrm"
     }
   },
   "nodes": {
