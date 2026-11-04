@@ -25,7 +25,7 @@ export const POWERS: Record<Power, { icon: string; name: string; tip: string }> 
   charge: {
     icon: '⚡',
     name: 'Charge',
-    tip: 'The ⚡ meter fills over time and zaps you when it’s full. Finishing a line drains it.',
+    tip: 'Each line you finish charges the ⚡ meter, and when it’s full you get zapped. Finish the yellow live line first to ground it. Take as long as you like: only finished lines count.',
   },
   ink: {
     icon: '🦑',

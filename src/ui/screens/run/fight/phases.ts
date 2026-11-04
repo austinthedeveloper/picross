@@ -49,7 +49,7 @@ export function createPhases(
       taunt,
       added('fog') > 0 ? `${added('fog')} lines go dark.` : '',
       added('scramble') > 0 ? `${added('scramble')} clues scramble.` : '',
-      entered.some((p) => p.charge) ? 'The water starts to crackle. ⚡' : '',
+      entered.some((p) => p.charge) ? 'The air starts to crackle. ⚡' : '',
     ];
     return { state: next, message: parts.filter(Boolean).join(' ') };
   };

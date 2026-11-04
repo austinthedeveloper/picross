@@ -36,8 +36,8 @@ export interface Enemy {
    */
   suspects?: LineSet;
   /**
-   * Seconds for the charge meter to fill (the Electric Eel, #67). Completing a
-   * line drains it; if it fills, the enemy zaps you.
+   * Lines you can finish before the enemy zaps you (the Electric Eel, #67), unless
+   * one of them is the live ⚡ line, which grounds the charge.
    */
   charge?: number;
 }
@@ -80,7 +80,7 @@ export interface Phase {
   ink?: number;
   /** How many ink blocks the phase splashes (default 1). */
   inkCount?: number;
-  /** Starts or changes the charge meter: seconds to fill (#67). */
+  /** Starts or changes the charge meter: lines to fill it (#67). */
   charge?: number;
 }
 
@@ -107,6 +107,10 @@ export interface BattleState {
   ink?: number[];
   /** Lines the Mimic wiped (#78), highlighted until you complete them again. */
   wiped?: LineSet;
+  /** The ⚡ line (#67): finish it to ground the charge. */
+  live?: Line;
+  /** Lines finished toward the next zap (#67). */
+  charged?: number;
 }
 
 /** Damage per weak-point line while armor is up. */
@@ -310,6 +314,29 @@ export function callOut(
 export function heal(state: BattleState, maxHp: number): { state: BattleState; healed: number } {
   const enemyHp = Math.min(maxHp, state.enemyHp + FALSE_ACCUSATION_HEAL);
   return { state: { ...state, enemyHp }, healed: enemyHp - state.enemyHp };
+}
+
+/** HP a zap costs (#67). Fixed, so a charge stays pressure rather than a run-ender. */
+export const ZAP_DAMAGE = 2;
+
+/**
+ * Lines you've just finished move the charge meter (#67). The live line among them
+ * grounds it; otherwise each one charges it, and at `limit` the enemy zaps. Either
+ * way the meter empties and the live line is cleared, ready for a new one.
+ */
+export function chargeUp(
+  state: BattleState,
+  lines: Line[],
+  limit: number,
+): { state: BattleState; grounded: boolean; zapped: boolean } {
+  const { live } = state;
+  if (!live) return { state, grounded: false, zapped: false };
+  const grounded = lines.some((l) => l.kind === live.kind && l.index === live.index);
+  const charged = grounded ? 0 : (state.charged ?? 0) + lines.length;
+  const zapped = charged >= limit;
+  if (grounded || zapped)
+    return { state: { ...state, charged: 0, live: undefined }, grounded, zapped };
+  return { state: { ...state, charged }, grounded, zapped };
 }
 
 /** The finisher: the solved picture deals whatever HP the enemy has left. */

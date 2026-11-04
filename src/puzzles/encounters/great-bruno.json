@@ -9,7 +9,7 @@
     "sprite": "💪",
     "hp": 45,
     "attack": 2,
-    "charge": 35,
+    "charge": 7,
     "armor": {
       "weakPoints": {
         "rows": [3, 7],
@@ -22,7 +22,7 @@
         "at": 0.5,
         "name": "Greater Bruno",
         "attack": 3,
-        "charge": 25,
+        "charge": 6,
         "taunt": "BRUNO LIFTS. YOU WATCH."
       }
     ]

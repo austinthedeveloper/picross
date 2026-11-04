@@ -5,7 +5,7 @@
   "puzzle": "thermos",
   "blurb": "Mrs. Pell left a thermos on the steps. It's still warm.",
   "rest": {
-    "seconds": 90,
+    "seconds": 120,
     "heal": 4
   }
 }

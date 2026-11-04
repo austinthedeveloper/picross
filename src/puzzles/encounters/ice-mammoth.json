@@ -9,7 +9,7 @@
     "sprite": "🦣",
     "hp": 45,
     "attack": 2,
-    "charge": 35,
+    "charge": 6,
     "armor": {
       "weakPoints": {
         "rows": [11, 13],
@@ -25,7 +25,7 @@
         "at": 0.6,
         "name": "Thawed Mammoth",
         "attack": 3,
-        "charge": 25,
+        "charge": 5,
         "taunt": "HRROOOM.",
         "fog": {
           "cols": [10, 14]

@@ -520,13 +520,24 @@ gets away, leaving a brass key behind.
 
 ### Charge (the Electric Eel)
 
-An enemy with `charge: <seconds>` shows a ⚡ meter under its HP (`run/fight/charge.ts`).
-It fills over that many seconds; completing a line drains it to zero. If it fills, the
-enemy zaps you through `takeHit` (a patch kit blocks it) and it starts over. In Relaxed
-runs the zap fizzles. A phase can start or change the speed with its own `charge`, and
-`currentForm` returns the current one. The meter pauses while the page is hidden and
-stops when the fight ends or you leave the screen. It isn't saved: a reload starts it
-over.
+An enemy with `charge: <lines>` shows a ⚡ meter under its HP and highlights one line's
+clues as live (`run/fight/charge.ts`). The meter names the line, since a big board can
+scroll it off a phone screen. Finishing the live line grounds the charge: the meter empties.
+Finishing any other line adds one to the meter, and when it reaches `charge` the enemy
+zaps you for `ZAP_DAMAGE` (2, through `takeHit`, so a patch kit blocks it). Either way the
+meter empties and another line goes live. In Relaxed runs the zap fizzles. A phase can
+start or change the limit with its own `charge`, and `currentForm` returns the current one.
+
+The meter never moves with time. This used to be a 20 to 40 second timer that a finished
+line reset, and playtesting showed that was far too hard at any length: lines can take
+minutes to work out, and working them out is the game. Don't add a clock that costs HP.
+
+`pickLiveLine` (`engine/charge.ts`) picks the unfinished line you're furthest through,
+then the one with the most cells to fill. It skips lines whose clues you can't read yet
+(fogged, scrambled, or 🎭), and moves on if a phase covers the live line. If nothing
+qualifies, no line is live and the meter waits. Each line charges only once, so refilling
+a wiped line doesn't count. `BattleState.live` and `charged` are saved with the run. A
+finishing move ends the fight before the meter is checked, so it can't knock you out.
 
 ### Ink (the Cuttlefish and Old Tess)
 
@@ -542,11 +553,11 @@ wipes it all. Ink only hides your marks, never clues, so it doesn't affect solva
 
 `runs/deep-end.json` (#67) unlocks after the Night Shift, with 16 HP and a patch kit:
 
-- **Electric Eel:** charge 30s, 20s from half HP.
+- **Electric Eel:** charge 5 lines, 4 from 60% HP.
 - **Anglerfish:** 5 fogged columns, 2 more at 80%.
 - **Gift Shop:** a dig whose starfish becomes a sponge.
 - **Cuttlefish:** three ink phases.
-- **Old Tess:** a 20×20 octopus boss. Her phases bring ink at 92%, a double splash at 85%, the eel's charge at 75%, and a final double splash at 60% (attack 4).
+- **Old Tess:** a 20×20 octopus boss. Her phases bring ink at 92%, a double splash at 85%, a charge of 5 lines at 75%, and a final double splash at 60% (attack 4).
 
 Keeper Bo joins Rook and Dee in its scenes.
 
@@ -582,7 +593,8 @@ first pass fills in. More passes and less first-pass progress mean harder.
 | The Curator       | 7       | 20×20 | 12     | 12%        |
 
 The solver can't see ink, charge, swaps, or armor, so bosses leaning on those play harder
-than their numbers (Old Tess especially). The picture matters more than the powers: dense
+than their numbers (Old Tess especially). To tune a charge, expect about 1 to 3 zaps a
+fight from a player ignoring the live line, at 5 or 6 lines to fill the meter. The picture matters more than the powers: dense
 drawings stay easy under any number of powers, and thin outlines get hard quickly, so
 give a thin drawing some solid areas to start from.
 
@@ -622,7 +634,8 @@ Solving within `seconds` heals `heal` HP (`restHeal` in `puzzles/runs.ts`); fini
 late still heals `REST_LATE_HEAL` (1). Healing never goes past max HP. Like a dig, it never
 checks fills. Each job has one right before its boss: the Tea break (thermos), the
 Break room (coffee), the Lifeguard chair (life ring), the Garden bench (watering can), the
-Popcorn stand (popcorn), and the Cocoa break (cocoa), all 90 seconds for +4. The
+Popcorn stand (popcorn), and the Cocoa break (cocoa), all for +4. The Tea break gets 120
+seconds and the rest get 90. The
 tests check that every boss has one in front of it. In Endless, every fourth node is a
 break that alternates between a dig and a rest stop.
 

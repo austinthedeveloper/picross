@@ -24,7 +24,7 @@
       {
         "at": 0.9,
         "taunt": "Ladies and gentlemen! Tonight only!",
-        "charge": 35
+        "charge": 6
       },
       {
         "at": 0.8,
@@ -46,7 +46,7 @@
         "name": "Showstopper",
         "sprite": "🎪",
         "attack": 4,
-        "charge": 25,
+        "charge": 5,
         "taunt": "No refunds!"
       }
     ]

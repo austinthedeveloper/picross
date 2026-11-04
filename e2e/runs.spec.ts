@@ -101,7 +101,7 @@ test.describe('rest stops', () => {
     await seed(context, { run: { current: runAt('first-job', 3, restAt) } });
     await page.clock.install();
     await page.goto('/#/run/play');
-    await page.clock.runFor(91_000);
+    await page.clock.runFor(121_000);
     await page.clock.resume();
     await expect(page.locator('.rest-clock')).toHaveClass(/late/);
     await expect(page.locator('.rest')).toContainText('Finish anyway for +1 HP');
