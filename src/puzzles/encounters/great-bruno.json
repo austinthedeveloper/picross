@@ -6,7 +6,7 @@
   "blurb": "He can lift a horse. Nobody asked the horse. Aim for the cracks in the iron.",
   "enemy": {
     "name": "The Great Bruno",
-    "sprite": "💪",
+    "sprite": "great-bruno",
     "hp": 45,
     "attack": 2,
     "charge": 35,

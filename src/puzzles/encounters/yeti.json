@@ -8,7 +8,7 @@
   "blurb": "The ridge above the station. There are footprints going up. None come back.",
   "enemy": {
     "name": "The Yeti",
-    "sprite": "🦍",
+    "sprite": "yeti",
     "hp": 60,
     "attack": 2,
     "fog": {
@@ -44,7 +44,7 @@
       {
         "at": 0.65,
         "name": "Avalanche Yeti",
-        "sprite": "🏔️",
+        "sprite": "avalanche-yeti",
         "attack": 4,
         "charge": 40,
         "taunt": "The whole ridge is moving."

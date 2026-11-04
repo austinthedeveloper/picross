@@ -6,7 +6,7 @@
   "blurb": "Do not breathe in. Do not breathe out. Honestly, just leave.",
   "enemy": {
     "name": "Spore Puff",
-    "sprite": "🍄",
+    "sprite": "spore-puff",
     "hp": 45,
     "attack": 2,
     "fog": {

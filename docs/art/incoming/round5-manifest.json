@@ -1,0 +1,2020 @@
+{
+  "round": 5,
+  "generator": "built-in image_gen",
+  "expected_png_count": 48,
+  "saved_png_count": 48,
+  "brief_sources": [
+    "../prompts/README.md",
+    "../prompts/06-cast-chapters-4-7.md",
+    "../prompts/07-enemies-chapters-4-7.md",
+    "round4-review.md"
+  ],
+  "scope": "Two candidates each for six chapter 4\u20137 portraits and eighteen enemy forms, including Museum Rex.",
+  "native_grid_policy": "Prompts request 48\u00d748 portraits and 32\u00d732 sprites; native generated stepped grids retained, with no measured cell count asserted.",
+  "workflow": "Portraits generated first; boss sprites reference the same-numbered portraits; phase forms reference the same-numbered base sprites.",
+  "cleanup": "Native generated PNGs retained. Palette cleanup, trim, resize and installation remain with the project owner.",
+  "assets": [
+    {
+      "id": "cast-hollis",
+      "prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, sea green #2e8b57. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: head-and-shoulders bust of Hollis, a weathered older head gardener with a deadpan, patient look, one eyebrow slightly lowered, mouth a flat line that is almost a smile. A plain straw sun hat with a narrow brim and a green band, a green work apron with a bib over a plain shirt, a small adhesive bandage across the bridge of the nose, and a pair of pruning shears held up at the bottom edge of the frame in a hand with one bandaged finger. No beard. Three-quarter view, looking toward the viewer. Keep the whole hat brim inside the circle. Reads at a glance as: the gardener who has already been bitten today and isn't surprised.\n\nReference images are STYLE AND SCALE references only: Image 1 is the approved Rook portrait; Image 2 is the approved Tess portrait. Match their chunky stepped pixel cells, thick graphite line weight, head scale, limited flat palette and paper sticker edge as one cast. Do not copy their characters, clothes, symbols, circular paper backdrop or decorative marks. Use ONLY the colors specified in this subject's prompt. Keep this portrait as an isolated die-cut silhouette on a genuinely transparent background. No disc, scenery, symbols or decorative marks. Keep the entire hat, key, shoulders and required prop comfortably inside a circular crop with clear square-frame margins. Square large PNG, 1024x1024 or larger. Request remains 48x48 cells; native stepped cells are accepted, no smooth vector curves.\nCandidate 1 of 2. Use the clearest, simplest expression and pose described.",
+      "source": "../prompts/06-cast-chapters-4-7.md",
+      "kind": "cast",
+      "requested_grid": 48,
+      "chapter": "Cast",
+      "variant": 1,
+      "filename": "cast-hollis-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/cast/rook.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/cast/tess.png"
+      ],
+      "review_note": "Hat brim, nose bandage and raised pruning shears stay visible in the circle. A broad paper backing remains around the head and shears; review its appearance on dark surfaces.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 562518,
+        "partially_transparent_pixels": 1008810,
+        "subject_bounds_at_alpha_200": [
+          86,
+          25,
+          1154,
+          1248
+        ],
+        "clear_margins_at_alpha_200": [
+          86,
+          25,
+          100,
+          6
+        ],
+        "sha256": "ea7b81157f989af16234c4faa5ab92d89c2728c3a3a6e6d41531c7c2de82b2ce",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-624c5be4-a40d-4d1e-b0b4-39d993b77efa.png"
+    },
+    {
+      "id": "cast-hollis",
+      "prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, sea green #2e8b57. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: head-and-shoulders bust of Hollis, a weathered older head gardener with a deadpan, patient look, one eyebrow slightly lowered, mouth a flat line that is almost a smile. A plain straw sun hat with a narrow brim and a green band, a green work apron with a bib over a plain shirt, a small adhesive bandage across the bridge of the nose, and a pair of pruning shears held up at the bottom edge of the frame in a hand with one bandaged finger. No beard. Three-quarter view, looking toward the viewer. Keep the whole hat brim inside the circle. Reads at a glance as: the gardener who has already been bitten today and isn't surprised.\n\nReference images are STYLE AND SCALE references only: Image 1 is the approved Rook portrait; Image 2 is the approved Tess portrait. Match their chunky stepped pixel cells, thick graphite line weight, head scale, limited flat palette and paper sticker edge as one cast. Do not copy their characters, clothes, symbols, circular paper backdrop or decorative marks. Use ONLY the colors specified in this subject's prompt. Keep this portrait as an isolated die-cut silhouette on a genuinely transparent background. No disc, scenery, symbols or decorative marks. Keep the entire hat, key, shoulders and required prop comfortably inside a circular crop with clear square-frame margins. Square large PNG, 1024x1024 or larger. Request remains 48x48 cells; native stepped cells are accepted, no smooth vector curves.\nCandidate 2 of 2. Make a distinct candidate through a small change in head tilt and proportion, preserving all specified identity features, props, clothing and expression.",
+      "source": "../prompts/06-cast-chapters-4-7.md",
+      "kind": "cast",
+      "requested_grid": 48,
+      "chapter": "Cast",
+      "variant": 2,
+      "filename": "cast-hollis-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/cast/rook.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/cast/tess.png"
+      ],
+      "review_note": "Hat brim, nose bandage and raised pruning shears stay visible in the circle. A broad paper backing remains around the head and shears; review its appearance on dark surfaces.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 578415,
+        "partially_transparent_pixels": 993461,
+        "subject_bounds_at_alpha_200": [
+          97,
+          17,
+          1112,
+          1252
+        ],
+        "clear_margins_at_alpha_200": [
+          97,
+          17,
+          142,
+          2
+        ],
+        "sha256": "30a74298335ed0c4710fbc604f105d489b28b5d9efff31c817d9ddc1ecd9db65",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-d1415921-3c30-4c4d-b3bb-3038d61da22b.png"
+    },
+    {
+      "id": "cast-bigsby",
+      "prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, warm yellow #e0a800. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: head-and-shoulders bust of Bigsby, a rumpled, tired carnival owner with bags under the eyes, raised worried eyebrows, and a lopsided rueful smile. A flat straw boater hat with a yellow band, tilted, a loud yellow-and-paper striped waistcoat, a crooked graphite bow tie, and one round yellow juggling ball held up at the bottom edge of the frame. Clean-shaven. Three-quarter view, looking toward the viewer. Reads at a glance as: someone who owned a carnival until about Tuesday.\n\nReference images are STYLE AND SCALE references only: Image 1 is the approved Rook portrait; Image 2 is the approved Tess portrait. Match their chunky stepped pixel cells, thick graphite line weight, head scale, limited flat palette and paper sticker edge as one cast. Do not copy their characters, clothes, symbols, circular paper backdrop or decorative marks. Use ONLY the colors specified in this subject's prompt. Keep this portrait as an isolated die-cut silhouette on a genuinely transparent background. No disc, scenery, symbols or decorative marks. Keep the entire hat, key, shoulders and required prop comfortably inside a circular crop with clear square-frame margins. Square large PNG, 1024x1024 or larger. Request remains 48x48 cells; native stepped cells are accepted, no smooth vector curves.\nCandidate 1 of 2. Use the clearest, simplest expression and pose described.",
+      "source": "../prompts/06-cast-chapters-4-7.md",
+      "kind": "cast",
+      "requested_grid": 48,
+      "chapter": "Cast",
+      "variant": 1,
+      "filename": "cast-bigsby-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/cast/rook.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/cast/tess.png"
+      ],
+      "review_note": "Clean-shaven carnival owner with tilted boater, striped waistcoat, worried eyes and a single juggling ball. Small gray bow-tie shading remains for palette cleanup.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 582970,
+        "partially_transparent_pixels": 988980,
+        "subject_bounds_at_alpha_200": [
+          122,
+          10,
+          1088,
+          1254
+        ],
+        "clear_margins_at_alpha_200": [
+          122,
+          10,
+          166,
+          0
+        ],
+        "sha256": "b3c957075dcfec979b0efa466b3cf6570c09caa155af8c192a03b278dff37731",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-62472532-dee9-4273-b788-ed2c083b40aa.png"
+    },
+    {
+      "id": "cast-bigsby",
+      "prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, warm yellow #e0a800. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: head-and-shoulders bust of Bigsby, a rumpled, tired carnival owner with bags under the eyes, raised worried eyebrows, and a lopsided rueful smile. A flat straw boater hat with a yellow band, tilted, a loud yellow-and-paper striped waistcoat, a crooked graphite bow tie, and one round yellow juggling ball held up at the bottom edge of the frame. Clean-shaven. Three-quarter view, looking toward the viewer. Reads at a glance as: someone who owned a carnival until about Tuesday.\n\nReference images are STYLE AND SCALE references only: Image 1 is the approved Rook portrait; Image 2 is the approved Tess portrait. Match their chunky stepped pixel cells, thick graphite line weight, head scale, limited flat palette and paper sticker edge as one cast. Do not copy their characters, clothes, symbols, circular paper backdrop or decorative marks. Use ONLY the colors specified in this subject's prompt. Keep this portrait as an isolated die-cut silhouette on a genuinely transparent background. No disc, scenery, symbols or decorative marks. Keep the entire hat, key, shoulders and required prop comfortably inside a circular crop with clear square-frame margins. Square large PNG, 1024x1024 or larger. Request remains 48x48 cells; native stepped cells are accepted, no smooth vector curves.\nCandidate 2 of 2. Make a distinct candidate through a small change in head tilt and proportion, preserving all specified identity features, props, clothing and expression.",
+      "source": "../prompts/06-cast-chapters-4-7.md",
+      "kind": "cast",
+      "requested_grid": 48,
+      "chapter": "Cast",
+      "variant": 2,
+      "filename": "cast-bigsby-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/cast/rook.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/cast/tess.png"
+      ],
+      "review_note": "Clean-shaven carnival owner with tilted boater, striped waistcoat, worried eyes and a single juggling ball. Small gray bow-tie shading remains for palette cleanup.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 679379,
+        "partially_transparent_pixels": 892945,
+        "subject_bounds_at_alpha_200": [
+          126,
+          19,
+          1066,
+          1254
+        ],
+        "clear_margins_at_alpha_200": [
+          126,
+          19,
+          188,
+          0
+        ],
+        "sha256": "9e23a2b31bfe5d7bbf057dff831c8aee0757448b0c3fd021b982a2e14cb3c0a8",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-2a113f5a-9961-4bb9-93bc-4602ad29b528.png"
+    },
+    {
+      "id": "cast-lund",
+      "prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, orange #f07c00. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: head-and-shoulders bust of Dr. Lund, a polite, half-frozen astronomer peering out of a huge pile of winter coats. Four coat collars stacked one above the other around the neck, each clearly a separate band, the outermost an orange expedition parka with its hood up and a chunky paper-colored fur trim. Round glasses with frost across the lower half, a small hopeful worried smile, and a rolled-up paper star chart held at the bottom edge of the frame in a mittened hand. The shoulders are wide only because of the coats; the head is the same size as the rest of the cast. Three-quarter view, looking toward the viewer. Reads at a glance as: a scientist wearing every coat they own.\n\nReference images are STYLE AND SCALE references only: Image 1 is the approved Rook portrait; Image 2 is the approved Tess portrait. Match their chunky stepped pixel cells, thick graphite line weight, head scale, limited flat palette and paper sticker edge as one cast. Do not copy their characters, clothes, symbols, circular paper backdrop or decorative marks. Use ONLY the colors specified in this subject's prompt. Keep this portrait as an isolated die-cut silhouette on a genuinely transparent background. No disc, scenery, symbols or decorative marks. Keep the entire hat, key, shoulders and required prop comfortably inside a circular crop with clear square-frame margins. Square large PNG, 1024x1024 or larger. Request remains 48x48 cells; native stepped cells are accepted, no smooth vector curves.\nCandidate 1 of 2. Use the clearest, simplest expression and pose described.",
+      "source": "../prompts/06-cast-chapters-4-7.md",
+      "kind": "cast",
+      "requested_grid": 48,
+      "chapter": "Cast",
+      "variant": 1,
+      "filename": "cast-lund-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/cast/rook.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/cast/tess.png"
+      ],
+      "review_note": "Frosted glasses and stacked collars carry the bundled-up character. Inner collars include gray outside the requested three-color palette; a tiny cheek droplet remains. Review these details during cleanup.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 450969,
+        "partially_transparent_pixels": 1121249,
+        "subject_bounds_at_alpha_200": [
+          64,
+          17,
+          1150,
+          1253
+        ],
+        "clear_margins_at_alpha_200": [
+          64,
+          17,
+          104,
+          1
+        ],
+        "sha256": "0c2c8a3a4da3e6d6335c5b047ea3a9f33f7699425e2f4002d64fc02b6d347f74",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-d290ae58-6564-445d-b4cd-1bfc64fcb9e9.png"
+    },
+    {
+      "id": "cast-lund",
+      "prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, orange #f07c00. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: head-and-shoulders bust of Dr. Lund, a polite, half-frozen astronomer peering out of a huge pile of winter coats. Four coat collars stacked one above the other around the neck, each clearly a separate band, the outermost an orange expedition parka with its hood up and a chunky paper-colored fur trim. Round glasses with frost across the lower half, a small hopeful worried smile, and a rolled-up paper star chart held at the bottom edge of the frame in a mittened hand. The shoulders are wide only because of the coats; the head is the same size as the rest of the cast. Three-quarter view, looking toward the viewer. Reads at a glance as: a scientist wearing every coat they own.\n\nReference images are STYLE AND SCALE references only: Image 1 is the approved Rook portrait; Image 2 is the approved Tess portrait. Match their chunky stepped pixel cells, thick graphite line weight, head scale, limited flat palette and paper sticker edge as one cast. Do not copy their characters, clothes, symbols, circular paper backdrop or decorative marks. Use ONLY the colors specified in this subject's prompt. Keep this portrait as an isolated die-cut silhouette on a genuinely transparent background. No disc, scenery, symbols or decorative marks. Keep the entire hat, key, shoulders and required prop comfortably inside a circular crop with clear square-frame margins. Square large PNG, 1024x1024 or larger. Request remains 48x48 cells; native stepped cells are accepted, no smooth vector curves.\nCandidate 2 of 2. Make a distinct candidate through a small change in head tilt and proportion, preserving all specified identity features, props, clothing and expression.",
+      "source": "../prompts/06-cast-chapters-4-7.md",
+      "kind": "cast",
+      "requested_grid": 48,
+      "chapter": "Cast",
+      "variant": 2,
+      "filename": "cast-lund-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/cast/rook.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/cast/tess.png"
+      ],
+      "review_note": "The paler stacked collars read more separately than v1. Fine frost and a tiny cheek droplet remain; review the four-coat cue at sign-off size.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 491812,
+        "partially_transparent_pixels": 1079806,
+        "subject_bounds_at_alpha_200": [
+          70,
+          12,
+          1135,
+          1254
+        ],
+        "clear_margins_at_alpha_200": [
+          70,
+          12,
+          119,
+          0
+        ],
+        "sha256": "fb450f27e94d04bf16c8e1c2e15e68c445c4229e42b01636a85761ceda64d983",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-6241d644-7d5a-4b51-976d-9f2b7d293be0.png"
+    },
+    {
+      "id": "cast-bramble",
+      "prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, plus a second accent, warm yellow #e0a800, used only for the brass key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: close-up of Mother Bramble, one enormous old coral red rose with a face in the center of the bloom. Thick layered petals frame the face, the outer ones curling and starting to droop. Heavy-lidded narrow eyes, chin raised, a small cold smile. Below the bloom a thick graphite stem with big hooked thorns runs down to the bottom edge, and a large yellow wind-up key sticks out of the stem to one side, big enough to be seen right away. A faded paper-colored prize rosette with no writing on it is pinned beside the stem. No green anywhere. Facing the viewer. Reads at a glance as: a prize-winning rose that has decided to be in charge.\n\nReference images are STYLE AND SCALE references only: Image 1 is the approved Rook portrait; Image 2 is the approved Tess portrait. Match their chunky stepped pixel cells, thick graphite line weight, head scale, limited flat palette and paper sticker edge as one cast. Do not copy their characters, clothes, symbols, circular paper backdrop or decorative marks. Use ONLY the colors specified in this subject's prompt. Keep this portrait as an isolated die-cut silhouette on a genuinely transparent background. No disc, scenery, symbols or decorative marks. Keep the entire hat, key, shoulders and required prop comfortably inside a circular crop with clear square-frame margins. Square large PNG, 1024x1024 or larger. Request remains 48x48 cells; native stepped cells are accepted, no smooth vector curves.\nCandidate 1 of 2. Use the clearest, simplest expression and pose described.",
+      "source": "../prompts/06-cast-chapters-4-7.md",
+      "kind": "cast",
+      "requested_grid": 48,
+      "chapter": "Cast",
+      "variant": 1,
+      "filename": "cast-bramble-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/cast/rook.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/cast/tess.png"
+      ],
+      "review_note": "Heavy-lidded rose face, layered drooping petals, blank prize rosette and large yellow key. No green.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 553576,
+        "partially_transparent_pixels": 1018327,
+        "subject_bounds_at_alpha_200": [
+          64,
+          16,
+          1164,
+          1252
+        ],
+        "clear_margins_at_alpha_200": [
+          64,
+          16,
+          90,
+          2
+        ],
+        "sha256": "295ad730a02e517b0ca03fc8583c38296ddcfc639e4990ca31bf488c271d859a",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-5e401b29-e668-4086-a56a-8f2e9e3fe92f.png"
+    },
+    {
+      "id": "cast-bramble",
+      "prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, plus a second accent, warm yellow #e0a800, used only for the brass key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: close-up of Mother Bramble, one enormous old coral red rose with a face in the center of the bloom. Thick layered petals frame the face, the outer ones curling and starting to droop. Heavy-lidded narrow eyes, chin raised, a small cold smile. Below the bloom a thick graphite stem with big hooked thorns runs down to the bottom edge, and a large yellow wind-up key sticks out of the stem to one side, big enough to be seen right away. A faded paper-colored prize rosette with no writing on it is pinned beside the stem. No green anywhere. Facing the viewer. Reads at a glance as: a prize-winning rose that has decided to be in charge.\n\nReference images are STYLE AND SCALE references only: Image 1 is the approved Rook portrait; Image 2 is the approved Tess portrait. Match their chunky stepped pixel cells, thick graphite line weight, head scale, limited flat palette and paper sticker edge as one cast. Do not copy their characters, clothes, symbols, circular paper backdrop or decorative marks. Use ONLY the colors specified in this subject's prompt. Keep this portrait as an isolated die-cut silhouette on a genuinely transparent background. No disc, scenery, symbols or decorative marks. Keep the entire hat, key, shoulders and required prop comfortably inside a circular crop with clear square-frame margins. Square large PNG, 1024x1024 or larger. Request remains 48x48 cells; native stepped cells are accepted, no smooth vector curves.\nCandidate 2 of 2. Make a distinct candidate through a small change in head tilt and proportion, preserving all specified identity features, props, clothing and expression.",
+      "source": "../prompts/06-cast-chapters-4-7.md",
+      "kind": "cast",
+      "requested_grid": 48,
+      "chapter": "Cast",
+      "variant": 2,
+      "filename": "cast-bramble-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/cast/rook.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/cast/tess.png"
+      ],
+      "review_note": "Heavy-lidded rose face, layered drooping petals, blank prize rosette and large yellow key. No green.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 482049,
+        "partially_transparent_pixels": 1090364,
+        "subject_bounds_at_alpha_200": [
+          59,
+          18,
+          1177,
+          1253
+        ],
+        "clear_margins_at_alpha_200": [
+          59,
+          18,
+          77,
+          1
+        ],
+        "sha256": "b03ae1793228a5d125488afcbbf77e30ddf61ab8adce38a772825a4e065321ff",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-e9367577-aaa4-4c71-862d-7884d04b652f.png"
+    },
+    {
+      "id": "cast-ringmaster",
+      "prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, plus a second accent, warm yellow #e0a800, used only for the brass key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: head-and-shoulders bust of The Ringmaster, a thin showman with a huge theatrical grin, eyebrows arched high, eyes wide and a little too fixed. A tall graphite top hat with a coral red band, kept fully inside the circle, with a large yellow wind-up key sticking out of the side of the crown, angled up and outward. A very long graphite moustache that sweeps out wider than his shoulders and ends in a tight curl on each side. Coral red tailcoat with wide lapels over a paper-colored shirt front. Three-quarter view, looking toward the viewer. Reads at a glance as: a showman with a key in his hat and a moustache that is too long.\n\nReference images are STYLE AND SCALE references only: Image 1 is the approved Rook portrait; Image 2 is the approved Tess portrait. Match their chunky stepped pixel cells, thick graphite line weight, head scale, limited flat palette and paper sticker edge as one cast. Do not copy their characters, clothes, symbols, circular paper backdrop or decorative marks. Use ONLY the colors specified in this subject's prompt. Keep this portrait as an isolated die-cut silhouette on a genuinely transparent background. No disc, scenery, symbols or decorative marks. Keep the entire hat, key, shoulders and required prop comfortably inside a circular crop with clear square-frame margins. Square large PNG, 1024x1024 or larger. Request remains 48x48 cells; native stepped cells are accepted, no smooth vector curves.\nCandidate 1 of 2. Use the clearest, simplest expression and pose described.",
+      "source": "../prompts/06-cast-chapters-4-7.md",
+      "kind": "cast",
+      "requested_grid": 48,
+      "chapter": "Cast",
+      "variant": 1,
+      "filename": "cast-ringmaster-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/cast/rook.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/cast/tess.png"
+      ],
+      "review_note": "Very wide curled moustache and a tall hat with a large yellow key. The hat has minor gray highlights outside the requested palette; key and moustache remain distinct in the circle.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 687952,
+        "partially_transparent_pixels": 883939,
+        "subject_bounds_at_alpha_200": [
+          114,
+          5,
+          1135,
+          1254
+        ],
+        "clear_margins_at_alpha_200": [
+          114,
+          5,
+          119,
+          0
+        ],
+        "sha256": "e99163fabcd0d15df50f3d4e3d3b8c7bf6aa8968e1d9a5a267b0fb0b812fe2a3",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-2b283863-a50c-4c8b-911f-1e2bc572a3f3.png"
+    },
+    {
+      "id": "cast-ringmaster",
+      "prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, plus a second accent, warm yellow #e0a800, used only for the brass key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: head-and-shoulders bust of The Ringmaster, a thin showman with a huge theatrical grin, eyebrows arched high, eyes wide and a little too fixed. A tall graphite top hat with a coral red band, kept fully inside the circle, with a large yellow wind-up key sticking out of the side of the crown, angled up and outward. A very long graphite moustache that sweeps out wider than his shoulders and ends in a tight curl on each side. Coral red tailcoat with wide lapels over a paper-colored shirt front. Three-quarter view, looking toward the viewer. Reads at a glance as: a showman with a key in his hat and a moustache that is too long.\n\nReference images are STYLE AND SCALE references only: Image 1 is the approved Rook portrait; Image 2 is the approved Tess portrait. Match their chunky stepped pixel cells, thick graphite line weight, head scale, limited flat palette and paper sticker edge as one cast. Do not copy their characters, clothes, symbols, circular paper backdrop or decorative marks. Use ONLY the colors specified in this subject's prompt. Keep this portrait as an isolated die-cut silhouette on a genuinely transparent background. No disc, scenery, symbols or decorative marks. Keep the entire hat, key, shoulders and required prop comfortably inside a circular crop with clear square-frame margins. Square large PNG, 1024x1024 or larger. Request remains 48x48 cells; native stepped cells are accepted, no smooth vector curves.\nCandidate 2 of 2. Make a distinct candidate through a small change in head tilt and proportion, preserving all specified identity features, props, clothing and expression.",
+      "source": "../prompts/06-cast-chapters-4-7.md",
+      "kind": "cast",
+      "requested_grid": 48,
+      "chapter": "Cast",
+      "variant": 2,
+      "filename": "cast-ringmaster-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/cast/rook.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/cast/tess.png"
+      ],
+      "review_note": "Very wide curled moustache and a tall hat with a large yellow key. The hat has minor gray highlights outside the requested palette; key and moustache remain distinct in the circle.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 464401,
+        "partially_transparent_pixels": 1107133,
+        "subject_bounds_at_alpha_200": [
+          64,
+          9,
+          1166,
+          1246
+        ],
+        "clear_margins_at_alpha_200": [
+          64,
+          9,
+          88,
+          8
+        ],
+        "sha256": "c5bd2c7688593aaff62b53803e61980a897a073a87d032cc139372281b8a12c1",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-fa9916f4-df9b-4048-97b6-bc7bdd690dcb.png"
+    },
+    {
+      "id": "cast-yeti",
+      "prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, soft gray #7a7e8a, plus a second accent, warm yellow #e0a800, used only for the brass key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: close-up head-and-shoulders of The Yeti, a colossal shaggy snow creature. Thick paper-colored fur drawn in big chunky tufts with a thick graphite outline, a flat gray ape-like face, small deep-set eyes under a heavy brow furrowed in slow confusion, two short lower fangs. The head sits low between enormous shoulders that fill the bottom of the frame. A large yellow wind-up key sticks up from the back of the neck, rising past one side of the head, big enough to be seen right away and inside the circle. Facing the viewer. Reads at a glance as: a giant snow ape who doesn't know why it's awake.\n\nReference images are STYLE AND SCALE references only: Image 1 is the approved Rook portrait; Image 2 is the approved Tess portrait. Match their chunky stepped pixel cells, thick graphite line weight, head scale, limited flat palette and paper sticker edge as one cast. Do not copy their characters, clothes, symbols, circular paper backdrop or decorative marks. Use ONLY the colors specified in this subject's prompt. Keep this portrait as an isolated die-cut silhouette on a genuinely transparent background. No disc, scenery, symbols or decorative marks. Keep the entire hat, key, shoulders and required prop comfortably inside a circular crop with clear square-frame margins. Square large PNG, 1024x1024 or larger. Request remains 48x48 cells; native stepped cells are accepted, no smooth vector curves.\nCandidate 1 of 2. Use the clearest, simplest expression and pose described.",
+      "source": "../prompts/06-cast-chapters-4-7.md",
+      "kind": "cast",
+      "requested_grid": 48,
+      "chapter": "Cast",
+      "variant": 1,
+      "filename": "cast-yeti-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/cast/rook.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/cast/tess.png"
+      ],
+      "review_note": "Low gray ape face with two lower fangs, broad paper fur and a conspicuous yellow neck key. The key remains visible in the circle crop.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 529558,
+        "partially_transparent_pixels": 1041666,
+        "subject_bounds_at_alpha_200": [
+          75,
+          17,
+          1190,
+          1250
+        ],
+        "clear_margins_at_alpha_200": [
+          75,
+          17,
+          64,
+          4
+        ],
+        "sha256": "f783c06c6caf81687e246973f4db0ed254b42b261f770229f3367112e22bf5f2",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-30799d73-56ab-40f4-8e66-8f58233b5740.png"
+    },
+    {
+      "id": "cast-yeti",
+      "prompt": "Pixel-art sticker portrait for a cozy puzzle game, drawn on a strict 48x48 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, soft gray #7a7e8a, plus a second accent, warm yellow #e0a800, used only for the brass key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One subject, centered, filling about 80% of a square frame, composed to fit inside a circle. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: close-up head-and-shoulders of The Yeti, a colossal shaggy snow creature. Thick paper-colored fur drawn in big chunky tufts with a thick graphite outline, a flat gray ape-like face, small deep-set eyes under a heavy brow furrowed in slow confusion, two short lower fangs. The head sits low between enormous shoulders that fill the bottom of the frame. A large yellow wind-up key sticks up from the back of the neck, rising past one side of the head, big enough to be seen right away and inside the circle. Facing the viewer. Reads at a glance as: a giant snow ape who doesn't know why it's awake.\n\nReference images are STYLE AND SCALE references only: Image 1 is the approved Rook portrait; Image 2 is the approved Tess portrait. Match their chunky stepped pixel cells, thick graphite line weight, head scale, limited flat palette and paper sticker edge as one cast. Do not copy their characters, clothes, symbols, circular paper backdrop or decorative marks. Use ONLY the colors specified in this subject's prompt. Keep this portrait as an isolated die-cut silhouette on a genuinely transparent background. No disc, scenery, symbols or decorative marks. Keep the entire hat, key, shoulders and required prop comfortably inside a circular crop with clear square-frame margins. Square large PNG, 1024x1024 or larger. Request remains 48x48 cells; native stepped cells are accepted, no smooth vector curves.\nCandidate 2 of 2. Make a distinct candidate through a small change in head tilt and proportion, preserving all specified identity features, props, clothing and expression.",
+      "source": "../prompts/06-cast-chapters-4-7.md",
+      "kind": "cast",
+      "requested_grid": 48,
+      "chapter": "Cast",
+      "variant": 2,
+      "filename": "cast-yeti-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/cast/rook.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/cast/tess.png"
+      ],
+      "review_note": "Low gray ape face with two lower fangs, broad paper fur and a conspicuous yellow neck key. The key remains visible in the circle crop.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 555034,
+        "partially_transparent_pixels": 1016584,
+        "subject_bounds_at_alpha_200": [
+          62,
+          53,
+          1184,
+          1247
+        ],
+        "clear_margins_at_alpha_200": [
+          62,
+          53,
+          70,
+          7
+        ],
+        "sha256": "af053eb3e182030d742f6384dd5b97c58e1bd2081d6ac39c9c66443608e8965e",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-b3382357-f7f2-40ba-a2a4-24508366153a.png"
+    },
+    {
+      "id": "enemy-museum-rex",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, wood brown #a9825a. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a whole Tyrannosaurus rex museum skeleton standing in the classic side-on pose, stiff and upright, with a huge blocky skull, open jaw with big paper-colored teeth, tiny arms, and a long tail stretched out behind for balance. The bones are thick and chunky, paper-colored with wood brown joints and age stains, with a thick graphite outline. The gaps inside the ribcage are solid graphite so the ribs read as a bold cage with only four or five ribs. Empty eye socket. Nothing mechanical visible. No plinth or floor. Reads at 40 px as: a dinosaur skeleton.\n\nProduction emphasis: This is one FULL-BODY fight sprite, not a portrait, with all feet, props, tail, hat and key inside the square and clear empty margins. Make it chunky and broad with a simple mechanic-defining silhouette for a 38px display. Use bold solid accent shapes; armored cracks must be thick coral marks that survive tiny display. Clouds and gusts must be as big as the body and built from flat stepped shapes, not blur. Where the subject has a yellow key, yellow appears ONLY on that key (and the explicitly permitted Rex gears in the wound-up phase). No incidental highlights, decorative symbols, text, colored disc, floor, scenery or drop shadow. Keep the thick paper die-cut edge, true transparent background, square PNG 1024x1024 or larger. Continue to request 32x32 cells; native chunky stepped results are accepted. Keep only the subject's specified palette.\nBoth supplied images are approved enemy sprites, used ONLY as references for chunky stepped pixels, thick outlines, sticker edge and scale. Depict the entirely different subject specified above. Do not copy their bodies, poses, green, armor or facial details; the new subject's prompt controls its design and palette.\nCandidate 1 of 2. Use the clearest bold silhouette described.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Night Shift",
+      "variant": 1,
+      "filename": "enemy-museum-rex-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/goblin.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/armored-beetle.png"
+      ],
+      "original_generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-543de558-cdd5-4958-894e-a92db8a9ec71.png",
+      "corrections": [
+        {
+          "filename": "enemy-museum-rex-v1.png",
+          "path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-9a7c16b0-05df-4862-ac5f-f9863e26fddf.png",
+          "prompt": "Edit this exact pixel-art dinosaur skeleton sticker for framing only. Preserve this same T. rex skeleton, side-on pose, head and jaw, bones, four-or-five-rib graphite cage, tiny arms, legs, tail, brown age stains, paper and graphite colors, thick paper sticker edge and chunky hard stepped pixels. Reproduce the ENTIRE sticker smaller and centered in a LARGE SQUARE transparent canvas. The complete white border around the snout at left and tail at right must be visible with a broad fully transparent margin outside it. The whole sticker should occupy ONLY the central 78% of the square width, leaving at least 10% transparent space on both the left and right sides and ample space above and below. Do not crop or touch any frame edge. Do not add a floor, plinth, text, symbols, shadow, background disc, mechanical parts or new colors. Flat graphite #23262f, paper #f6f3ec and brown #a9825a only. Same cozy game sticker, requested 32x32 stepped cells, native chunky grid accepted. Large square transparent PNG at least 1024x1024.",
+          "references": [
+            "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-543de558-cdd5-4958-894e-a92db8a9ec71.png"
+          ],
+          "reason": "Restore clear empty margins around the complete snout, tail and sticker border.",
+          "generation_corrected": true
+        }
+      ],
+      "generation_corrected": true,
+      "review_note": "Huge skull, dark ribcage and brown joints form a clear skeleton silhouette. Framing was revised through image generation before the phase variants.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 1182159,
+        "partially_transparent_pixels": 389748,
+        "subject_bounds_at_alpha_200": [
+          152,
+          248,
+          1085,
+          1029
+        ],
+        "clear_margins_at_alpha_200": [
+          152,
+          248,
+          169,
+          225
+        ],
+        "sha256": "c55daff8b0e53293b960ca10d064d6212e8f8f7f6fbfd65dea33e9aa83151e52",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-9a7c16b0-05df-4862-ac5f-f9863e26fddf.png"
+    },
+    {
+      "id": "enemy-museum-rex",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, wood brown #a9825a. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a whole Tyrannosaurus rex museum skeleton standing in the classic side-on pose, stiff and upright, with a huge blocky skull, open jaw with big paper-colored teeth, tiny arms, and a long tail stretched out behind for balance. The bones are thick and chunky, paper-colored with wood brown joints and age stains, with a thick graphite outline. The gaps inside the ribcage are solid graphite so the ribs read as a bold cage with only four or five ribs. Empty eye socket. Nothing mechanical visible. No plinth or floor. Reads at 40 px as: a dinosaur skeleton.\n\nProduction emphasis: This is one FULL-BODY fight sprite, not a portrait, with all feet, props, tail, hat and key inside the square and clear empty margins. Make it chunky and broad with a simple mechanic-defining silhouette for a 38px display. Use bold solid accent shapes; armored cracks must be thick coral marks that survive tiny display. Clouds and gusts must be as big as the body and built from flat stepped shapes, not blur. Where the subject has a yellow key, yellow appears ONLY on that key (and the explicitly permitted Rex gears in the wound-up phase). No incidental highlights, decorative symbols, text, colored disc, floor, scenery or drop shadow. Keep the thick paper die-cut edge, true transparent background, square PNG 1024x1024 or larger. Continue to request 32x32 cells; native chunky stepped results are accepted. Keep only the subject's specified palette.\nBoth supplied images are approved enemy sprites, used ONLY as references for chunky stepped pixels, thick outlines, sticker edge and scale. Depict the entirely different subject specified above. Do not copy their bodies, poses, green, armor or facial details; the new subject's prompt controls its design and palette.\nCandidate 2 of 2. Create a distinct proportion/pose variant within this exact brief; preserve all required identity features, props, accents and mechanic cues.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Night Shift",
+      "variant": 2,
+      "filename": "enemy-museum-rex-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/goblin.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/armored-beetle.png"
+      ],
+      "original_generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-a7298d02-51fb-41f8-9e94-3ea5c46742b2.png",
+      "corrections": [
+        {
+          "filename": "enemy-museum-rex-v2.png",
+          "path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-013c2dbd-9b3d-4792-8835-7669fe757fce.png",
+          "prompt": "Edit this exact pixel-art dinosaur skeleton sticker for framing only. Preserve this same T. rex skeleton, side-on pose, head and jaw, bones, four-or-five-rib graphite cage, tiny arms, legs, tail, brown age stains, paper and graphite colors, thick paper sticker edge and chunky hard stepped pixels. Reproduce the ENTIRE sticker smaller and centered in a LARGE SQUARE transparent canvas. The complete white border around the snout at left and tail at right must be visible with a broad fully transparent margin outside it. The whole sticker should occupy ONLY the central 78% of the square width, leaving at least 10% transparent space on both the left and right sides and ample space above and below. Do not crop or touch any frame edge. Do not add a floor, plinth, text, symbols, shadow, background disc, mechanical parts or new colors. Flat graphite #23262f, paper #f6f3ec and brown #a9825a only. Same cozy game sticker, requested 32x32 stepped cells, native chunky grid accepted. Large square transparent PNG at least 1024x1024.",
+          "references": [
+            "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-a7298d02-51fb-41f8-9e94-3ea5c46742b2.png"
+          ],
+          "reason": "Restore clear empty margins around the complete snout, tail and sticker border.",
+          "generation_corrected": true
+        }
+      ],
+      "generation_corrected": true,
+      "review_note": "Huge skull, dark ribcage and brown joints form a clear skeleton silhouette. Framing was revised through image generation before the phase variants.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 1213026,
+        "partially_transparent_pixels": 359037,
+        "subject_bounds_at_alpha_200": [
+          185,
+          244,
+          1044,
+          1003
+        ],
+        "clear_margins_at_alpha_200": [
+          185,
+          244,
+          210,
+          251
+        ],
+        "sha256": "b86bfb4538b747dcfc5ba5365ac3332e15e27d46275075a63aa0e2318247437d",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-013c2dbd-9b3d-4792-8835-7669fe757fce.png"
+    },
+    {
+      "id": "enemy-wound-up-rex",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, wood brown #a9825a, plus a second accent, warm yellow #e0a800, used only for the wind-up key and the gears. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: the same Tyrannosaurus rex museum skeleton in the same side-on pose, same size, but now wound up: a large yellow wind-up key sticks up out of its spine above the hips, two big yellow gears turn inside the graphite ribcage, a small paper-colored eye glares from the socket, the jaw is flung wider, and one loose rib is flying off into the air just past its chest. Same silhouette as before, plus the key and the flying rib. Reads at 40 px as: a wind-up dinosaur skeleton shedding a rib.\n\nThe supplied image is the SAME-NUMBERED BASE sprite to transform into this phase. Preserve its exact side-on pose, skull identity, relative skull/body/tail proportions, foot locations, chunky pixel scale, graphite ribcage, brown joints and centered framing. Do not zoom, crop, change orientation or redesign the skeleton. Change only the explicitly described phase details: large yellow key above the hips, TWO large yellow gears inside the cage, a small glaring paper eye, wider open jaw and ONE loose paper rib just past the chest. Yellow is restricted to the key and gears. Keep the complete paper sticker edge and broad transparent margins; the whole subject including key and loose rib must fit inside the square. Request 32x32 stepped pixel cells, retain native grid; flat colors only, no text, scene, floor or shadows. Large square transparent PNG at least 1024x1024.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Night Shift",
+      "base": "enemy-museum-rex",
+      "variant": 1,
+      "filename": "enemy-wound-up-rex-v1.png",
+      "references": [
+        "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-9a7c16b0-05df-4862-ac5f-f9863e26fddf.png"
+      ],
+      "review_note": "Uses the same-numbered reframed skeleton, with a large spine key and two yellow gears. Check whether the detached bone reads clearly as the loose rib at battle size.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 1079762,
+        "partially_transparent_pixels": 491614,
+        "subject_bounds_at_alpha_200": [
+          148,
+          244,
+          1085,
+          1029
+        ],
+        "clear_margins_at_alpha_200": [
+          148,
+          244,
+          169,
+          225
+        ],
+        "sha256": "c7a731e665d76f0aa1b7db8909654e3c7b3f8694cdde477e66a7478ddf3de2a9",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-3fa2ca48-13d9-4674-99fc-8a00cfce8787.png"
+    },
+    {
+      "id": "enemy-wound-up-rex",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, wood brown #a9825a, plus a second accent, warm yellow #e0a800, used only for the wind-up key and the gears. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: the same Tyrannosaurus rex museum skeleton in the same side-on pose, same size, but now wound up: a large yellow wind-up key sticks up out of its spine above the hips, two big yellow gears turn inside the graphite ribcage, a small paper-colored eye glares from the socket, the jaw is flung wider, and one loose rib is flying off into the air just past its chest. Same silhouette as before, plus the key and the flying rib. Reads at 40 px as: a wind-up dinosaur skeleton shedding a rib.\n\nThe supplied image is the SAME-NUMBERED BASE sprite to transform into this phase. Preserve its exact side-on pose, skull identity, relative skull/body/tail proportions, foot locations, chunky pixel scale, graphite ribcage, brown joints and centered framing. Do not zoom, crop, change orientation or redesign the skeleton. Change only the explicitly described phase details: large yellow key above the hips, TWO large yellow gears inside the cage, a small glaring paper eye, wider open jaw and ONE loose paper rib just past the chest. Yellow is restricted to the key and gears. Keep the complete paper sticker edge and broad transparent margins; the whole subject including key and loose rib must fit inside the square. Request 32x32 stepped pixel cells, retain native grid; flat colors only, no text, scene, floor or shadows. Large square transparent PNG at least 1024x1024.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Night Shift",
+      "base": "enemy-museum-rex",
+      "variant": 2,
+      "filename": "enemy-wound-up-rex-v2.png",
+      "references": [
+        "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-013c2dbd-9b3d-4792-8835-7669fe757fce.png"
+      ],
+      "review_note": "Uses the same-numbered reframed skeleton, with a large spine key and two yellow gears. Check whether the detached bone reads clearly as the loose rib at battle size.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 1045958,
+        "partially_transparent_pixels": 525451,
+        "subject_bounds_at_alpha_200": [
+          152,
+          242,
+          1048,
+          1006
+        ],
+        "clear_margins_at_alpha_200": [
+          152,
+          242,
+          206,
+          248
+        ],
+        "sha256": "f0cd9a47ee80a1cad3b117b3add0b26e8f516fccef7869c6c276b3088afe34c6",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-ef8385af-1202-4eed-a2ee-dbc4c36855f9.png"
+    },
+    {
+      "id": "enemy-snapjaw",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, green #2e8b57, plus a second accent, coral red #d9534f, used only for the inside of the trap. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: one enormous venus flytrap head on a thick green stalk, growing out of a chipped graphite flower pot with a paper-colored rim. The trap is seen side-on and held wide open like jaws about to shut, coral red inside, with a row of long pointed paper-colored teeth along each edge and two small angry eyes on top. Two broad green leaves droop over the pot. The trap is much wider than the pot. Reads at 40 px as: a flytrap about to snap.\n\nProduction emphasis: This is one FULL-BODY fight sprite, not a portrait, with all feet, props, tail, hat and key inside the square and clear empty margins. Make it chunky and broad with a simple mechanic-defining silhouette for a 38px display. Use bold solid accent shapes; armored cracks must be thick coral marks that survive tiny display. Clouds and gusts must be as big as the body and built from flat stepped shapes, not blur. Where the subject has a yellow key, yellow appears ONLY on that key (and the explicitly permitted Rex gears in the wound-up phase). No incidental highlights, decorative symbols, text, colored disc, floor, scenery or drop shadow. Keep the thick paper die-cut edge, true transparent background, square PNG 1024x1024 or larger. Continue to request 32x32 cells; native chunky stepped results are accepted. Keep only the subject's specified palette.\nBoth supplied images are approved enemy sprites, used ONLY as references for chunky stepped pixels, thick outlines, sticker edge and scale. Depict the entirely different subject specified above. Do not copy their bodies, poses, green, armor or facial details; the new subject's prompt controls its design and palette.\nCandidate 1 of 2. Use the clearest bold silhouette described.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Glasshouse",
+      "variant": 1,
+      "filename": "enemy-snapjaw-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/goblin.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/armored-beetle.png"
+      ],
+      "review_note": "Wide side-on jaws, bold coral trap interior and a plain chipped pot. The simpler pot keeps coral confined to the mouth.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 646587,
+        "partially_transparent_pixels": 925492,
+        "subject_bounds_at_alpha_200": [
+          148,
+          37,
+          1104,
+          1249
+        ],
+        "clear_margins_at_alpha_200": [
+          148,
+          37,
+          150,
+          5
+        ],
+        "sha256": "39932beefeeb28eeeb5d23fe4b4114b46cfe28f83ff71901972f2abfee9f2ac0",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-5ad8438e-4793-43bc-97fe-5c2e3634da56.png"
+    },
+    {
+      "id": "enemy-snapjaw",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, green #2e8b57, plus a second accent, coral red #d9534f, used only for the inside of the trap. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: one enormous venus flytrap head on a thick green stalk, growing out of a chipped graphite flower pot with a paper-colored rim. The trap is seen side-on and held wide open like jaws about to shut, coral red inside, with a row of long pointed paper-colored teeth along each edge and two small angry eyes on top. Two broad green leaves droop over the pot. The trap is much wider than the pot. Reads at 40 px as: a flytrap about to snap.\n\nProduction emphasis: This is one FULL-BODY fight sprite, not a portrait, with all feet, props, tail, hat and key inside the square and clear empty margins. Make it chunky and broad with a simple mechanic-defining silhouette for a 38px display. Use bold solid accent shapes; armored cracks must be thick coral marks that survive tiny display. Clouds and gusts must be as big as the body and built from flat stepped shapes, not blur. Where the subject has a yellow key, yellow appears ONLY on that key (and the explicitly permitted Rex gears in the wound-up phase). No incidental highlights, decorative symbols, text, colored disc, floor, scenery or drop shadow. Keep the thick paper die-cut edge, true transparent background, square PNG 1024x1024 or larger. Continue to request 32x32 cells; native chunky stepped results are accepted. Keep only the subject's specified palette.\nBoth supplied images are approved enemy sprites, used ONLY as references for chunky stepped pixels, thick outlines, sticker edge and scale. Depict the entirely different subject specified above. Do not copy their bodies, poses, green, armor or facial details; the new subject's prompt controls its design and palette.\nCandidate 2 of 2. Create a distinct proportion/pose variant within this exact brief; preserve all required identity features, props, accents and mechanic cues.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Glasshouse",
+      "variant": 2,
+      "filename": "enemy-snapjaw-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/goblin.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/armored-beetle.png"
+      ],
+      "review_note": "Wide jaws and drooping leaves; this candidate adds coral cracks on the pot, outside the brief\u2019s mouth-only coral use. Review or recolor that detail.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 608684,
+        "partially_transparent_pixels": 963631,
+        "subject_bounds_at_alpha_200": [
+          140,
+          26,
+          1116,
+          1254
+        ],
+        "clear_margins_at_alpha_200": [
+          140,
+          26,
+          138,
+          0
+        ],
+        "sha256": "11c0d7f8ba5c2cf058ccd1ae1c842a50cda0c150f057c2201176c18746d66db6",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-9fc2c668-fd59-4421-9aff-e005b5b7e1d5.png"
+    },
+    {
+      "id": "enemy-spore-puff",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, plus a second accent, soft gray #7a7e8a, used only for the spore cloud. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a squat, fat little mushroom with a big round coral red cap with three large paper-colored spots and a wide paper-colored stem. A small grumpy face on the stem, cheeks puffed and lips pursed, blowing a big soft gray cloud of spores out of its mouth that drifts to one side. The cloud is as big as the mushroom, with a few chunky gray dots around it. Reads at 40 px as: a mushroom puffing out a cloud.\n\nProduction emphasis: This is one FULL-BODY fight sprite, not a portrait, with all feet, props, tail, hat and key inside the square and clear empty margins. Make it chunky and broad with a simple mechanic-defining silhouette for a 38px display. Use bold solid accent shapes; armored cracks must be thick coral marks that survive tiny display. Clouds and gusts must be as big as the body and built from flat stepped shapes, not blur. Where the subject has a yellow key, yellow appears ONLY on that key (and the explicitly permitted Rex gears in the wound-up phase). No incidental highlights, decorative symbols, text, colored disc, floor, scenery or drop shadow. Keep the thick paper die-cut edge, true transparent background, square PNG 1024x1024 or larger. Continue to request 32x32 cells; native chunky stepped results are accepted. Keep only the subject's specified palette.\nBoth supplied images are approved enemy sprites, used ONLY as references for chunky stepped pixels, thick outlines, sticker edge and scale. Depict the entirely different subject specified above. Do not copy their bodies, poses, green, armor or facial details; the new subject's prompt controls its design and palette.\nCandidate 1 of 2. Use the clearest bold silhouette described.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Glasshouse",
+      "variant": 1,
+      "filename": "enemy-spore-puff-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/goblin.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/armored-beetle.png"
+      ],
+      "review_note": "Three bold cap spots and a large gray spore cloud. Review the body-to-cloud balance at battle size.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 629446,
+        "partially_transparent_pixels": 942592,
+        "subject_bounds_at_alpha_200": [
+          15,
+          172,
+          1237,
+          1210
+        ],
+        "clear_margins_at_alpha_200": [
+          15,
+          172,
+          17,
+          44
+        ],
+        "sha256": "3872929f1ad95d57754d9266fbe20d690a7d8ef17e6eeb1072fc8d1af69783aa",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-ccdf8f09-0344-4bae-bd78-bc0f7d3231b5.png"
+    },
+    {
+      "id": "enemy-spore-puff",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, plus a second accent, soft gray #7a7e8a, used only for the spore cloud. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a squat, fat little mushroom with a big round coral red cap with three large paper-colored spots and a wide paper-colored stem. A small grumpy face on the stem, cheeks puffed and lips pursed, blowing a big soft gray cloud of spores out of its mouth that drifts to one side. The cloud is as big as the mushroom, with a few chunky gray dots around it. Reads at 40 px as: a mushroom puffing out a cloud.\n\nProduction emphasis: This is one FULL-BODY fight sprite, not a portrait, with all feet, props, tail, hat and key inside the square and clear empty margins. Make it chunky and broad with a simple mechanic-defining silhouette for a 38px display. Use bold solid accent shapes; armored cracks must be thick coral marks that survive tiny display. Clouds and gusts must be as big as the body and built from flat stepped shapes, not blur. Where the subject has a yellow key, yellow appears ONLY on that key (and the explicitly permitted Rex gears in the wound-up phase). No incidental highlights, decorative symbols, text, colored disc, floor, scenery or drop shadow. Keep the thick paper die-cut edge, true transparent background, square PNG 1024x1024 or larger. Continue to request 32x32 cells; native chunky stepped results are accepted. Keep only the subject's specified palette.\nBoth supplied images are approved enemy sprites, used ONLY as references for chunky stepped pixels, thick outlines, sticker edge and scale. Depict the entirely different subject specified above. Do not copy their bodies, poses, green, armor or facial details; the new subject's prompt controls its design and palette.\nCandidate 2 of 2. Create a distinct proportion/pose variant within this exact brief; preserve all required identity features, props, accents and mechanic cues.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Glasshouse",
+      "variant": 2,
+      "filename": "enemy-spore-puff-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/goblin.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/armored-beetle.png"
+      ],
+      "review_note": "Three bold cap spots and a large gray spore cloud. Review the body-to-cloud balance at battle size.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 547434,
+        "partially_transparent_pixels": 1024129,
+        "subject_bounds_at_alpha_200": [
+          20,
+          179,
+          1243,
+          1212
+        ],
+        "clear_margins_at_alpha_200": [
+          20,
+          179,
+          11,
+          42
+        ],
+        "sha256": "74c963b08c79a15d314c4f09d553239695fb065b492edd7b51c31b841bf0eba4",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-59e8280b-907d-4398-a2e1-8b8a9808c484.png"
+    },
+    {
+      "id": "enemy-ironbark",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, wood brown #a9825a, plus a second accent, coral red #d9534f, used only for the cracks. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a squat, thick old tree stump standing on stubby gnarled root legs, as wide as it is tall, wood brown bark with a few thick graphite grain lines. The flat cut top tilts toward the viewer and shows three bold paper-and-graphite growth rings. A scowling face in the bark with a heavy brow and a turned-down mouth, two short broken branch arms crossed in front. Three bold coral red cracks run through the bark, thick enough to see at small size. Reads at 40 px as: a grumpy stump with cracks in it.\n\nProduction emphasis: This is one FULL-BODY fight sprite, not a portrait, with all feet, props, tail, hat and key inside the square and clear empty margins. Make it chunky and broad with a simple mechanic-defining silhouette for a 38px display. Use bold solid accent shapes; armored cracks must be thick coral marks that survive tiny display. Clouds and gusts must be as big as the body and built from flat stepped shapes, not blur. Where the subject has a yellow key, yellow appears ONLY on that key (and the explicitly permitted Rex gears in the wound-up phase). No incidental highlights, decorative symbols, text, colored disc, floor, scenery or drop shadow. Keep the thick paper die-cut edge, true transparent background, square PNG 1024x1024 or larger. Continue to request 32x32 cells; native chunky stepped results are accepted. Keep only the subject's specified palette.\nBoth supplied images are approved enemy sprites, used ONLY as references for chunky stepped pixels, thick outlines, sticker edge and scale. Depict the entirely different subject specified above. Do not copy their bodies, poses, green, armor or facial details; the new subject's prompt controls its design and palette.\nCandidate 1 of 2. Use the clearest bold silhouette described.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Glasshouse",
+      "variant": 1,
+      "filename": "enemy-ironbark-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/goblin.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/armored-beetle.png"
+      ],
+      "review_note": "Three bold coral cracks, broad crossed branch arms, root legs and paper growth rings. The cracks remain the clearest accent cue.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 453618,
+        "partially_transparent_pixels": 1118315,
+        "subject_bounds_at_alpha_200": [
+          51,
+          85,
+          1199,
+          1212
+        ],
+        "clear_margins_at_alpha_200": [
+          51,
+          85,
+          55,
+          42
+        ],
+        "sha256": "e99793929dbe30cc69f13863c0161874863d8d5e09ebc870ff1d9911bb4b239f",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-c2907a88-6d8d-4a36-bf2c-d17ddaa94a7a.png"
+    },
+    {
+      "id": "enemy-ironbark",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, wood brown #a9825a, plus a second accent, coral red #d9534f, used only for the cracks. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a squat, thick old tree stump standing on stubby gnarled root legs, as wide as it is tall, wood brown bark with a few thick graphite grain lines. The flat cut top tilts toward the viewer and shows three bold paper-and-graphite growth rings. A scowling face in the bark with a heavy brow and a turned-down mouth, two short broken branch arms crossed in front. Three bold coral red cracks run through the bark, thick enough to see at small size. Reads at 40 px as: a grumpy stump with cracks in it.\n\nProduction emphasis: This is one FULL-BODY fight sprite, not a portrait, with all feet, props, tail, hat and key inside the square and clear empty margins. Make it chunky and broad with a simple mechanic-defining silhouette for a 38px display. Use bold solid accent shapes; armored cracks must be thick coral marks that survive tiny display. Clouds and gusts must be as big as the body and built from flat stepped shapes, not blur. Where the subject has a yellow key, yellow appears ONLY on that key (and the explicitly permitted Rex gears in the wound-up phase). No incidental highlights, decorative symbols, text, colored disc, floor, scenery or drop shadow. Keep the thick paper die-cut edge, true transparent background, square PNG 1024x1024 or larger. Continue to request 32x32 cells; native chunky stepped results are accepted. Keep only the subject's specified palette.\nBoth supplied images are approved enemy sprites, used ONLY as references for chunky stepped pixels, thick outlines, sticker edge and scale. Depict the entirely different subject specified above. Do not copy their bodies, poses, green, armor or facial details; the new subject's prompt controls its design and palette.\nCandidate 2 of 2. Create a distinct proportion/pose variant within this exact brief; preserve all required identity features, props, accents and mechanic cues.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Glasshouse",
+      "variant": 2,
+      "filename": "enemy-ironbark-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/goblin.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/armored-beetle.png"
+      ],
+      "review_note": "Three bold coral cracks, broad crossed branch arms, root legs and paper growth rings. The cracks remain the clearest accent cue.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 516397,
+        "partially_transparent_pixels": 1055802,
+        "subject_bounds_at_alpha_200": [
+          50,
+          83,
+          1199,
+          1221
+        ],
+        "clear_margins_at_alpha_200": [
+          50,
+          83,
+          55,
+          33
+        ],
+        "sha256": "34d1b55db218d839b994871656a42d890de0a1694a202ce045149362632e969f",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-a01a8664-8280-4776-91d8-1244a6d640e8.png"
+    },
+    {
+      "id": "enemy-mother-bramble",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, plus a second accent, warm yellow #e0a800, used only for the wind-up key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: an enormous old rose standing on a thick S-curved graphite stem, with two long thorn vines held out wide to either side like arms, each with big hooked thorns. The coral red bloom sits at the top, half closed and drooping forward, with a face among the petals: heavy-lidded narrow eyes and a small cold smile. A large yellow wind-up key sticks out of the middle of the stem. The stem ends in a few thick roots. No green anywhere. Reads at 40 px as: a wilting rose with thorns and a key.\n\nProduction emphasis: This is one FULL-BODY fight sprite, not a portrait, with all feet, props, tail, hat and key inside the square and clear empty margins. Make it chunky and broad with a simple mechanic-defining silhouette for a 38px display. Use bold solid accent shapes; armored cracks must be thick coral marks that survive tiny display. Clouds and gusts must be as big as the body and built from flat stepped shapes, not blur. Where the subject has a yellow key, yellow appears ONLY on that key (and the explicitly permitted Rex gears in the wound-up phase). No incidental highlights, decorative symbols, text, colored disc, floor, scenery or drop shadow. Keep the thick paper die-cut edge, true transparent background, square PNG 1024x1024 or larger. Continue to request 32x32 cells; native chunky stepped results are accepted. Keep only the subject's specified palette.\nReference 1 is the same-numbered portrait of THIS character: preserve that face, brow, mouth, fur/petal or moustache identity and the distinctive key. Reference 2 is an approved enemy sprite, for coarse pixel cells, bold outlines and small-size sticker style only. Compose a NEW full-body pose as specified, with much less facial detail than the portrait. Do not copy the beetle's body, armor, green or other incidental features.\nCandidate 1 of 2. Use the clearest bold silhouette described.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Glasshouse",
+      "portrait": "cast-bramble",
+      "variant": 1,
+      "filename": "enemy-mother-bramble-v1.png",
+      "references": [
+        "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-5e401b29-e668-4086-a56a-8f2e9e3fe92f.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/armored-beetle.png"
+      ],
+      "review_note": "Face follows the same-numbered portrait. Wide thorn vines, S-curved stem and a large yellow key retain the rose\u2019s identity.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 584269,
+        "partially_transparent_pixels": 986231,
+        "subject_bounds_at_alpha_200": [
+          20,
+          16,
+          1234,
+          1247
+        ],
+        "clear_margins_at_alpha_200": [
+          20,
+          16,
+          20,
+          7
+        ],
+        "sha256": "f84d131a39d1b76d6ddb96cda32e6dbd897ac7cf8cfc2bf5b286a11c11023533",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-49bb13df-ccab-4607-830e-7561bb71fb76.png"
+    },
+    {
+      "id": "enemy-mother-bramble",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, plus a second accent, warm yellow #e0a800, used only for the wind-up key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: an enormous old rose standing on a thick S-curved graphite stem, with two long thorn vines held out wide to either side like arms, each with big hooked thorns. The coral red bloom sits at the top, half closed and drooping forward, with a face among the petals: heavy-lidded narrow eyes and a small cold smile. A large yellow wind-up key sticks out of the middle of the stem. The stem ends in a few thick roots. No green anywhere. Reads at 40 px as: a wilting rose with thorns and a key.\n\nProduction emphasis: This is one FULL-BODY fight sprite, not a portrait, with all feet, props, tail, hat and key inside the square and clear empty margins. Make it chunky and broad with a simple mechanic-defining silhouette for a 38px display. Use bold solid accent shapes; armored cracks must be thick coral marks that survive tiny display. Clouds and gusts must be as big as the body and built from flat stepped shapes, not blur. Where the subject has a yellow key, yellow appears ONLY on that key (and the explicitly permitted Rex gears in the wound-up phase). No incidental highlights, decorative symbols, text, colored disc, floor, scenery or drop shadow. Keep the thick paper die-cut edge, true transparent background, square PNG 1024x1024 or larger. Continue to request 32x32 cells; native chunky stepped results are accepted. Keep only the subject's specified palette.\nReference 1 is the same-numbered portrait of THIS character: preserve that face, brow, mouth, fur/petal or moustache identity and the distinctive key. Reference 2 is an approved enemy sprite, for coarse pixel cells, bold outlines and small-size sticker style only. Compose a NEW full-body pose as specified, with much less facial detail than the portrait. Do not copy the beetle's body, armor, green or other incidental features.\nCandidate 2 of 2. Create a distinct proportion/pose variant within this exact brief; preserve all required identity features, props, accents and mechanic cues.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Glasshouse",
+      "portrait": "cast-bramble",
+      "variant": 2,
+      "filename": "enemy-mother-bramble-v2.png",
+      "references": [
+        "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-e9367577-aaa4-4c71-862d-7884d04b652f.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/armored-beetle.png"
+      ],
+      "review_note": "Face follows the same-numbered portrait. Wide thorn vines, S-curved stem and a large yellow key retain the rose\u2019s identity.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 591484,
+        "partially_transparent_pixels": 980936,
+        "subject_bounds_at_alpha_200": [
+          35,
+          28,
+          1221,
+          1247
+        ],
+        "clear_margins_at_alpha_200": [
+          35,
+          28,
+          33,
+          7
+        ],
+        "sha256": "32c0ee6fd4d9e565f9645a3b093f6114b696864def6e5ca0ebe1f4eeca442a26",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-13083f25-aca7-484d-97a5-18f35ae60eb6.png"
+    },
+    {
+      "id": "enemy-mother-bramble-in-bloom",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, plus a second accent, warm yellow #e0a800, used only for the wind-up key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: the same enormous rose on the same S-curved graphite stem with the same two thorn vines held out wide and the same yellow wind-up key in the stem, at the same size, but now in full bloom: the coral red bloom has lifted and burst wide open with big layered petals, her eyes are wide and her smile shows small pointed teeth, and the thorns are larger. A couple of loose coral petals drift off the bloom. Same silhouette as before, with a much bigger flower. No green anywhere. Reads at 40 px as: the rose, wide open and furious.\n\nThe supplied reference is the SAME-NUMBERED BASE sprite of Mother Bramble. Preserve her exact S-curved stem pose, root positions, both thorn-vine arm positions, key position, face identity, pixel-cell size, graphite/paper/coral/yellow palette and full-body scale. Change only the phase: lift the bloom and open it much wider into layered coral petals, widen her eyes, show small pointed teeth, enlarge the hooked thorns, and add a couple of loose coral petals drifting beside the bloom. Keep the base recognizable. Yellow remains ONLY on the wind-up key; no green or extra colors. Keep a complete paper sticker edge and clear transparent margins. No text, symbols, landscape, ground or disc. Requested 32x32 chunky stepped cells; native generated grid accepted. Large square transparent PNG, at least 1024x1024.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Glasshouse",
+      "base": "enemy-mother-bramble",
+      "variant": 1,
+      "filename": "enemy-mother-bramble-in-bloom-v1.png",
+      "references": [
+        "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-49bb13df-ccab-4607-830e-7561bb71fb76.png"
+      ],
+      "review_note": "Same-numbered base reference, with expanded layered petals, wide eyes, pointed teeth, larger thorns and two drifting petals. Compare pose and scale in the base-to-phase strip.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 539987,
+        "partially_transparent_pixels": 1029846,
+        "subject_bounds_at_alpha_200": [
+          21,
+          17,
+          1232,
+          1246
+        ],
+        "clear_margins_at_alpha_200": [
+          21,
+          17,
+          22,
+          8
+        ],
+        "sha256": "40578ec98e0bcc52cba6a25704c418d2c4aa0a191de09ae31cdfd840f0c335c6",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-47fee613-8a65-4b7d-a65d-0577b9cf2b04.png"
+    },
+    {
+      "id": "enemy-mother-bramble-in-bloom",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, plus a second accent, warm yellow #e0a800, used only for the wind-up key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: the same enormous rose on the same S-curved graphite stem with the same two thorn vines held out wide and the same yellow wind-up key in the stem, at the same size, but now in full bloom: the coral red bloom has lifted and burst wide open with big layered petals, her eyes are wide and her smile shows small pointed teeth, and the thorns are larger. A couple of loose coral petals drift off the bloom. Same silhouette as before, with a much bigger flower. No green anywhere. Reads at 40 px as: the rose, wide open and furious.\n\nThe supplied reference is the SAME-NUMBERED BASE sprite of Mother Bramble. Preserve her exact S-curved stem pose, root positions, both thorn-vine arm positions, key position, face identity, pixel-cell size, graphite/paper/coral/yellow palette and full-body scale. Change only the phase: lift the bloom and open it much wider into layered coral petals, widen her eyes, show small pointed teeth, enlarge the hooked thorns, and add a couple of loose coral petals drifting beside the bloom. Keep the base recognizable. Yellow remains ONLY on the wind-up key; no green or extra colors. Keep a complete paper sticker edge and clear transparent margins. No text, symbols, landscape, ground or disc. Requested 32x32 chunky stepped cells; native generated grid accepted. Large square transparent PNG, at least 1024x1024.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Glasshouse",
+      "base": "enemy-mother-bramble",
+      "variant": 2,
+      "filename": "enemy-mother-bramble-in-bloom-v2.png",
+      "references": [
+        "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-13083f25-aca7-484d-97a5-18f35ae60eb6.png"
+      ],
+      "review_note": "Same-numbered base reference, with expanded layered petals, wide eyes, pointed teeth, larger thorns and two drifting petals. Compare pose and scale in the base-to-phase strip.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 501368,
+        "partially_transparent_pixels": 1070220,
+        "subject_bounds_at_alpha_200": [
+          14,
+          14,
+          1241,
+          1244
+        ],
+        "clear_margins_at_alpha_200": [
+          14,
+          14,
+          13,
+          10
+        ],
+        "sha256": "fb222b34c1333711217db904c3f19ade177ef83f3a7b33fed23ccf8282303050",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-40059dc7-083f-4a5c-8a48-8043d460417a.png"
+    },
+    {
+      "id": "enemy-funhouse-mirror",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, bright purple #7b5cff, plus a second accent, warm yellow #e0a800, used only for the round light bulbs on the frame. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a large carnival funhouse mirror on two stubby feet, its thick graphite frame warped into a wavy hourglass shape that bulges wide at the top and bottom and pinches in at the middle. The glass is solid bright purple and fills most of the frame. In the glass, a stretched paper-colored grin and two eyes at different heights, as if the mirror itself is smirking. Five or six big round yellow light bulbs are spaced around the frame. It is nearly as wide as it is tall. Reads at 40 px as: a warped mirror with a grin.\n\nProduction emphasis: This is one FULL-BODY fight sprite, not a portrait, with all feet, props, tail, hat and key inside the square and clear empty margins. Make it chunky and broad with a simple mechanic-defining silhouette for a 38px display. Use bold solid accent shapes; armored cracks must be thick coral marks that survive tiny display. Clouds and gusts must be as big as the body and built from flat stepped shapes, not blur. Where the subject has a yellow key, yellow appears ONLY on that key (and the explicitly permitted Rex gears in the wound-up phase). No incidental highlights, decorative symbols, text, colored disc, floor, scenery or drop shadow. Keep the thick paper die-cut edge, true transparent background, square PNG 1024x1024 or larger. Continue to request 32x32 cells; native chunky stepped results are accepted. Keep only the subject's specified palette.\nBoth supplied images are approved enemy sprites, used ONLY as references for chunky stepped pixels, thick outlines, sticker edge and scale. Depict the entirely different subject specified above. Do not copy their bodies, poses, green, armor or facial details; the new subject's prompt controls its design and palette.\nCandidate 1 of 2. Use the clearest bold silhouette described.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Midway",
+      "variant": 1,
+      "filename": "enemy-funhouse-mirror-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/goblin.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/armored-beetle.png"
+      ],
+      "review_note": "Six large yellow bulbs and mismatched-height eyes inside a purple hourglass mirror. Minor gray frame shading remains outside the requested palette.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 421139,
+        "partially_transparent_pixels": 1149587,
+        "subject_bounds_at_alpha_200": [
+          107,
+          20,
+          1146,
+          1243
+        ],
+        "clear_margins_at_alpha_200": [
+          107,
+          20,
+          108,
+          11
+        ],
+        "sha256": "9305dcbdc5b2c253093bb505f0b6d37ea28fcb7702b92acfc00cecdab99da1d1",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-b78cab7c-04b7-4b5d-be2d-e9a63d9402cd.png"
+    },
+    {
+      "id": "enemy-funhouse-mirror",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, bright purple #7b5cff, plus a second accent, warm yellow #e0a800, used only for the round light bulbs on the frame. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a large carnival funhouse mirror on two stubby feet, its thick graphite frame warped into a wavy hourglass shape that bulges wide at the top and bottom and pinches in at the middle. The glass is solid bright purple and fills most of the frame. In the glass, a stretched paper-colored grin and two eyes at different heights, as if the mirror itself is smirking. Five or six big round yellow light bulbs are spaced around the frame. It is nearly as wide as it is tall. Reads at 40 px as: a warped mirror with a grin.\n\nProduction emphasis: This is one FULL-BODY fight sprite, not a portrait, with all feet, props, tail, hat and key inside the square and clear empty margins. Make it chunky and broad with a simple mechanic-defining silhouette for a 38px display. Use bold solid accent shapes; armored cracks must be thick coral marks that survive tiny display. Clouds and gusts must be as big as the body and built from flat stepped shapes, not blur. Where the subject has a yellow key, yellow appears ONLY on that key (and the explicitly permitted Rex gears in the wound-up phase). No incidental highlights, decorative symbols, text, colored disc, floor, scenery or drop shadow. Keep the thick paper die-cut edge, true transparent background, square PNG 1024x1024 or larger. Continue to request 32x32 cells; native chunky stepped results are accepted. Keep only the subject's specified palette.\nBoth supplied images are approved enemy sprites, used ONLY as references for chunky stepped pixels, thick outlines, sticker edge and scale. Depict the entirely different subject specified above. Do not copy their bodies, poses, green, armor or facial details; the new subject's prompt controls its design and palette.\nCandidate 2 of 2. Create a distinct proportion/pose variant within this exact brief; preserve all required identity features, props, accents and mechanic cues.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Midway",
+      "variant": 2,
+      "filename": "enemy-funhouse-mirror-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/goblin.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/armored-beetle.png"
+      ],
+      "review_note": "Six large yellow bulbs and mismatched-height eyes inside a purple hourglass mirror. Minor gray frame shading remains outside the requested palette.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 264186,
+        "partially_transparent_pixels": 1308317,
+        "subject_bounds_at_alpha_200": [
+          70,
+          25,
+          1183,
+          1252
+        ],
+        "clear_margins_at_alpha_200": [
+          70,
+          25,
+          71,
+          2
+        ],
+        "sha256": "934a4dcb0bff4382c9dd27d6769aefab9aba093734f40dc062984e2fa4fd1300",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-45964f45-6711-4778-ac96-3b4d3ae40d97.png"
+    },
+    {
+      "id": "enemy-madame-vesper",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, deep ink purple #2c2350, plus a second accent, bright purple #7b5cff, used only for the crystal ball. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a hooded fortune teller seated behind an enormous crystal ball, seen from the front. The ball sits in front of her, as wide as her shoulders, filling the lower half of the figure, solid bright purple with one flat chunky paper-colored crescent on it. A wide deep ink purple robe, hood, and veil cover everything but a paper-colored band with two narrowed, knowing eyes. Two paper-colored hands with long fingers hover on either side of the ball. Two thick curling wisps of deep ink purple mist rise off the ball. Reads at 40 px as: a veiled figure with a crystal ball.\n\nProduction emphasis: This is one FULL-BODY fight sprite, not a portrait, with all feet, props, tail, hat and key inside the square and clear empty margins. Make it chunky and broad with a simple mechanic-defining silhouette for a 38px display. Use bold solid accent shapes; armored cracks must be thick coral marks that survive tiny display. Clouds and gusts must be as big as the body and built from flat stepped shapes, not blur. Where the subject has a yellow key, yellow appears ONLY on that key (and the explicitly permitted Rex gears in the wound-up phase). No incidental highlights, decorative symbols, text, colored disc, floor, scenery or drop shadow. Keep the thick paper die-cut edge, true transparent background, square PNG 1024x1024 or larger. Continue to request 32x32 cells; native chunky stepped results are accepted. Keep only the subject's specified palette.\nBoth supplied images are approved enemy sprites, used ONLY as references for chunky stepped pixels, thick outlines, sticker edge and scale. Depict the entirely different subject specified above. Do not copy their bodies, poses, green, armor or facial details; the new subject's prompt controls its design and palette.\nCandidate 1 of 2. Use the clearest bold silhouette described.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Midway",
+      "variant": 1,
+      "filename": "enemy-madame-vesper-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/goblin.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/armored-beetle.png"
+      ],
+      "review_note": "Large ball, veiled face and two curling wisps. Some bright purple spills onto robe/connecting mist areas; the brief reserves it for the ball.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 258679,
+        "partially_transparent_pixels": 1313089,
+        "subject_bounds_at_alpha_200": [
+          49,
+          26,
+          1206,
+          1254
+        ],
+        "clear_margins_at_alpha_200": [
+          49,
+          26,
+          48,
+          0
+        ],
+        "sha256": "b9ff8edad389bedfc2bb20774acf3685dac4cd0720560d86a44bc34d4af533c0",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-4548b921-64d9-42a4-a62b-d5b72cecc4b7.png"
+    },
+    {
+      "id": "enemy-madame-vesper",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, deep ink purple #2c2350, plus a second accent, bright purple #7b5cff, used only for the crystal ball. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a hooded fortune teller seated behind an enormous crystal ball, seen from the front. The ball sits in front of her, as wide as her shoulders, filling the lower half of the figure, solid bright purple with one flat chunky paper-colored crescent on it. A wide deep ink purple robe, hood, and veil cover everything but a paper-colored band with two narrowed, knowing eyes. Two paper-colored hands with long fingers hover on either side of the ball. Two thick curling wisps of deep ink purple mist rise off the ball. Reads at 40 px as: a veiled figure with a crystal ball.\n\nProduction emphasis: This is one FULL-BODY fight sprite, not a portrait, with all feet, props, tail, hat and key inside the square and clear empty margins. Make it chunky and broad with a simple mechanic-defining silhouette for a 38px display. Use bold solid accent shapes; armored cracks must be thick coral marks that survive tiny display. Clouds and gusts must be as big as the body and built from flat stepped shapes, not blur. Where the subject has a yellow key, yellow appears ONLY on that key (and the explicitly permitted Rex gears in the wound-up phase). No incidental highlights, decorative symbols, text, colored disc, floor, scenery or drop shadow. Keep the thick paper die-cut edge, true transparent background, square PNG 1024x1024 or larger. Continue to request 32x32 cells; native chunky stepped results are accepted. Keep only the subject's specified palette.\nBoth supplied images are approved enemy sprites, used ONLY as references for chunky stepped pixels, thick outlines, sticker edge and scale. Depict the entirely different subject specified above. Do not copy their bodies, poses, green, armor or facial details; the new subject's prompt controls its design and palette.\nCandidate 2 of 2. Create a distinct proportion/pose variant within this exact brief; preserve all required identity features, props, accents and mechanic cues.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Midway",
+      "variant": 2,
+      "filename": "enemy-madame-vesper-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/goblin.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/armored-beetle.png"
+      ],
+      "review_note": "Large bright ball and broad hooded silhouette, with the brighter purple more tightly confined to the crystal ball.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 384604,
+        "partially_transparent_pixels": 1186680,
+        "subject_bounds_at_alpha_200": [
+          95,
+          32,
+          1178,
+          1254
+        ],
+        "clear_margins_at_alpha_200": [
+          95,
+          32,
+          76,
+          0
+        ],
+        "sha256": "1136a68e1e8f5257b8c6230a6dfdbc9c75e53b2a6f4c0dbb06d3f036204917be",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-3bff66b2-8cc7-48dd-bcb0-c016cf3edfbc.png"
+    },
+    {
+      "id": "enemy-great-bruno",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, steel blue-gray #3d4450, plus a second accent, coral red #d9534f, used only for the cracks. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: an enormous carnival strongman with a huge barrel chest, tiny bald head, and short legs planted wide, holding a giant barbell straight overhead with both arms, with a big round steel weight on each end, much wider than his shoulders. Paper-colored skin, no moustache, a heavy brow, and a proud blank stare. A thick riveted steel chest plate is strapped across his torso, with three bold coral red cracks in it, thick enough to see at small size. Reads at 40 px as: a strongman lifting a barbell, armor cracked.\n\nProduction emphasis: This is one FULL-BODY fight sprite, not a portrait, with all feet, props, tail, hat and key inside the square and clear empty margins. Make it chunky and broad with a simple mechanic-defining silhouette for a 38px display. Use bold solid accent shapes; armored cracks must be thick coral marks that survive tiny display. Clouds and gusts must be as big as the body and built from flat stepped shapes, not blur. Where the subject has a yellow key, yellow appears ONLY on that key (and the explicitly permitted Rex gears in the wound-up phase). No incidental highlights, decorative symbols, text, colored disc, floor, scenery or drop shadow. Keep the thick paper die-cut edge, true transparent background, square PNG 1024x1024 or larger. Continue to request 32x32 cells; native chunky stepped results are accepted. Keep only the subject's specified palette.\nBoth supplied images are approved enemy sprites, used ONLY as references for chunky stepped pixels, thick outlines, sticker edge and scale. Depict the entirely different subject specified above. Do not copy their bodies, poses, green, armor or facial details; the new subject's prompt controls its design and palette.\nCandidate 1 of 2. Use the clearest bold silhouette described.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Midway",
+      "variant": 1,
+      "filename": "enemy-great-bruno-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/goblin.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/armored-beetle.png"
+      ],
+      "review_note": "Wide overhead barbell, barrel chest and three bold coral armor cracks. Plainer trunks keep the accent concentrated on the weak points.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 511345,
+        "partially_transparent_pixels": 1059488,
+        "subject_bounds_at_alpha_200": [
+          9,
+          91,
+          1246,
+          1233
+        ],
+        "clear_margins_at_alpha_200": [
+          9,
+          91,
+          8,
+          21
+        ],
+        "sha256": "6462535269b4b95deba5567afa63e59f096ceee74e6c9f4f2f3677d2d4748c0e",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-12bba867-44d0-4ede-9e25-e5a658226977.png"
+    },
+    {
+      "id": "enemy-great-bruno",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, steel blue-gray #3d4450, plus a second accent, coral red #d9534f, used only for the cracks. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: an enormous carnival strongman with a huge barrel chest, tiny bald head, and short legs planted wide, holding a giant barbell straight overhead with both arms, with a big round steel weight on each end, much wider than his shoulders. Paper-colored skin, no moustache, a heavy brow, and a proud blank stare. A thick riveted steel chest plate is strapped across his torso, with three bold coral red cracks in it, thick enough to see at small size. Reads at 40 px as: a strongman lifting a barbell, armor cracked.\n\nProduction emphasis: This is one FULL-BODY fight sprite, not a portrait, with all feet, props, tail, hat and key inside the square and clear empty margins. Make it chunky and broad with a simple mechanic-defining silhouette for a 38px display. Use bold solid accent shapes; armored cracks must be thick coral marks that survive tiny display. Clouds and gusts must be as big as the body and built from flat stepped shapes, not blur. Where the subject has a yellow key, yellow appears ONLY on that key (and the explicitly permitted Rex gears in the wound-up phase). No incidental highlights, decorative symbols, text, colored disc, floor, scenery or drop shadow. Keep the thick paper die-cut edge, true transparent background, square PNG 1024x1024 or larger. Continue to request 32x32 cells; native chunky stepped results are accepted. Keep only the subject's specified palette.\nBoth supplied images are approved enemy sprites, used ONLY as references for chunky stepped pixels, thick outlines, sticker edge and scale. Depict the entirely different subject specified above. Do not copy their bodies, poses, green, armor or facial details; the new subject's prompt controls its design and palette.\nCandidate 2 of 2. Create a distinct proportion/pose variant within this exact brief; preserve all required identity features, props, accents and mechanic cues.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Midway",
+      "variant": 2,
+      "filename": "enemy-great-bruno-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/goblin.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/armored-beetle.png"
+      ],
+      "review_note": "Broader chest and simpler weights; coral-and-paper striped trunks were added, beyond the brief\u2019s cracks-only coral restriction. Review or recolor the trunks.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 567292,
+        "partially_transparent_pixels": 1003636,
+        "subject_bounds_at_alpha_200": [
+          20,
+          59,
+          1234,
+          1240
+        ],
+        "clear_margins_at_alpha_200": [
+          20,
+          59,
+          20,
+          14
+        ],
+        "sha256": "fc8ee6c1ea5421fbdee67f4ec9603b1feb381e21f724d4cd8a8db406fa41bdfb",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-9c665bf3-68ef-44db-bad1-48ab2b214533.png"
+    },
+    {
+      "id": "enemy-ringmaster",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, plus a second accent, warm yellow #e0a800, used only for the wind-up key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a showman in a wide theatrical pose, legs apart, one arm flung out to the side holding a long cane and the other hand on his hip, so the figure is broad and not a thin sliver. An oversized graphite top hat with a coral red band and a large yellow wind-up key sticking out of the side of the crown, angled up and outward. A very long graphite moustache sweeps out wider than his head and ends in a tight curl on each side. Coral red tailcoat with the tails kicked out behind him, paper-colored shirt front, huge fixed grin. Reads at 40 px as: a ringmaster with a key in his hat.\n\nProduction emphasis: This is one FULL-BODY fight sprite, not a portrait, with all feet, props, tail, hat and key inside the square and clear empty margins. Make it chunky and broad with a simple mechanic-defining silhouette for a 38px display. Use bold solid accent shapes; armored cracks must be thick coral marks that survive tiny display. Clouds and gusts must be as big as the body and built from flat stepped shapes, not blur. Where the subject has a yellow key, yellow appears ONLY on that key (and the explicitly permitted Rex gears in the wound-up phase). No incidental highlights, decorative symbols, text, colored disc, floor, scenery or drop shadow. Keep the thick paper die-cut edge, true transparent background, square PNG 1024x1024 or larger. Continue to request 32x32 cells; native chunky stepped results are accepted. Keep only the subject's specified palette.\nReference 1 is the same-numbered portrait of THIS character: preserve that face, brow, mouth, fur/petal or moustache identity and the distinctive key. Reference 2 is an approved enemy sprite, for coarse pixel cells, bold outlines and small-size sticker style only. Compose a NEW full-body pose as specified, with much less facial detail than the portrait. Do not copy the beetle's body, armor, green or other incidental features.\nCandidate 1 of 2. Use the clearest bold silhouette described.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Midway",
+      "portrait": "cast-ringmaster",
+      "variant": 1,
+      "filename": "enemy-ringmaster-v1.png",
+      "references": [
+        "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-2b283863-a50c-4c8b-911f-1e2bc572a3f3.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/armored-beetle.png"
+      ],
+      "review_note": "Uses the same-numbered portrait face, hat, yellow key and curled moustache, expanded into the specified wide cane pose. Fine face detail should be judged at battle size.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 655245,
+        "partially_transparent_pixels": 916902,
+        "subject_bounds_at_alpha_200": [
+          106,
+          9,
+          1158,
+          1251
+        ],
+        "clear_margins_at_alpha_200": [
+          106,
+          9,
+          96,
+          3
+        ],
+        "sha256": "deaf58894cab92d097efe43ffe4c3952bcca5250a547fc66f089c8d6f6f1dfd9",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-83388ae0-514a-4198-9393-40a6fe96a69d.png"
+    },
+    {
+      "id": "enemy-ringmaster",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, plus a second accent, warm yellow #e0a800, used only for the wind-up key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a showman in a wide theatrical pose, legs apart, one arm flung out to the side holding a long cane and the other hand on his hip, so the figure is broad and not a thin sliver. An oversized graphite top hat with a coral red band and a large yellow wind-up key sticking out of the side of the crown, angled up and outward. A very long graphite moustache sweeps out wider than his head and ends in a tight curl on each side. Coral red tailcoat with the tails kicked out behind him, paper-colored shirt front, huge fixed grin. Reads at 40 px as: a ringmaster with a key in his hat.\n\nProduction emphasis: This is one FULL-BODY fight sprite, not a portrait, with all feet, props, tail, hat and key inside the square and clear empty margins. Make it chunky and broad with a simple mechanic-defining silhouette for a 38px display. Use bold solid accent shapes; armored cracks must be thick coral marks that survive tiny display. Clouds and gusts must be as big as the body and built from flat stepped shapes, not blur. Where the subject has a yellow key, yellow appears ONLY on that key (and the explicitly permitted Rex gears in the wound-up phase). No incidental highlights, decorative symbols, text, colored disc, floor, scenery or drop shadow. Keep the thick paper die-cut edge, true transparent background, square PNG 1024x1024 or larger. Continue to request 32x32 cells; native chunky stepped results are accepted. Keep only the subject's specified palette.\nReference 1 is the same-numbered portrait of THIS character: preserve that face, brow, mouth, fur/petal or moustache identity and the distinctive key. Reference 2 is an approved enemy sprite, for coarse pixel cells, bold outlines and small-size sticker style only. Compose a NEW full-body pose as specified, with much less facial detail than the portrait. Do not copy the beetle's body, armor, green or other incidental features.\nCandidate 2 of 2. Create a distinct proportion/pose variant within this exact brief; preserve all required identity features, props, accents and mechanic cues.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Midway",
+      "portrait": "cast-ringmaster",
+      "variant": 2,
+      "filename": "enemy-ringmaster-v2.png",
+      "references": [
+        "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-fa9916f4-df9b-4048-97b6-bc7bdd690dcb.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/armored-beetle.png"
+      ],
+      "review_note": "Uses the same-numbered portrait face, hat, yellow key and curled moustache, expanded into the specified wide cane pose. Fine face detail should be judged at battle size.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 612481,
+        "partially_transparent_pixels": 958919,
+        "subject_bounds_at_alpha_200": [
+          67,
+          19,
+          1099,
+          1247
+        ],
+        "clear_margins_at_alpha_200": [
+          67,
+          19,
+          155,
+          7
+        ],
+        "sha256": "f9329e217a5619015f719d8cf8f5fb80564dea6d24a703b555ec06fc02d95563",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-814d2f6d-fb76-45b8-8dea-ec4a8d35e438.png"
+    },
+    {
+      "id": "enemy-showstopper",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, plus a second accent, warm yellow #e0a800, used only for the wind-up key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: the same showman in the same wide pose with the same oversized top hat, the same yellow key in it, and the same cane, at the same size, but now his coat has become the show: from the waist down the tailcoat spreads out into a huge big-top circus tent in bold coral red and paper-colored stripes, with a scalloped edge at the bottom, hiding his legs. His moustache curls have wound into tight spirals and his grin has gone wider. Same head, hat, and arms as before, with the tent below them. Reads at 40 px as: the ringmaster wearing the big top.\n\nThe supplied image is the SAME-NUMBERED BASE Ringmaster sprite. Preserve this exact head, top hat, yellow key, face, moustache identity, cane, arm pose, orientation, upper-body position and pixel-cell scale. Change only the specified phase: below the waist the coral tailcoat becomes a huge coral-and-paper striped big-top circus tent with scalloped bottom edge, hiding the legs; tighten his moustache curls into spirals and widen his grin. Do not replace the showman with a freestanding tent or add another figure. Retain the same full-body scale, allowing only the stated tent silhouette to spread out. Yellow is ONLY on the hat key. Thick paper sticker edge, flat stepped pixels, clear transparent margins, no scenery, ground, text, symbols, backdrop disc or drop shadow. Request 32x32 cells; native stepped grid accepted. Large square transparent PNG at least 1024x1024.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Midway",
+      "base": "enemy-ringmaster",
+      "variant": 1,
+      "filename": "enemy-showstopper-v1.png",
+      "references": [
+        "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-83388ae0-514a-4198-9393-40a6fe96a69d.png"
+      ],
+      "review_note": "Same-numbered Ringmaster face, hat, key, cane and arm pose, with tightened moustache spirals and a striped scalloped tent replacing the lower coat and legs.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 642029,
+        "partially_transparent_pixels": 928990,
+        "subject_bounds_at_alpha_200": [
+          92,
+          8,
+          1160,
+          1250
+        ],
+        "clear_margins_at_alpha_200": [
+          92,
+          8,
+          94,
+          4
+        ],
+        "sha256": "d267a964b90bba27476385dd5aab5c189bc2aad6835bca9eb46131e86602da3d",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-763758b8-a491-4f89-8cb7-093e6b21bc56.png"
+    },
+    {
+      "id": "enemy-showstopper",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, plus a second accent, warm yellow #e0a800, used only for the wind-up key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: the same showman in the same wide pose with the same oversized top hat, the same yellow key in it, and the same cane, at the same size, but now his coat has become the show: from the waist down the tailcoat spreads out into a huge big-top circus tent in bold coral red and paper-colored stripes, with a scalloped edge at the bottom, hiding his legs. His moustache curls have wound into tight spirals and his grin has gone wider. Same head, hat, and arms as before, with the tent below them. Reads at 40 px as: the ringmaster wearing the big top.\n\nThe supplied image is the SAME-NUMBERED BASE Ringmaster sprite. Preserve this exact head, top hat, yellow key, face, moustache identity, cane, arm pose, orientation, upper-body position and pixel-cell scale. Change only the specified phase: below the waist the coral tailcoat becomes a huge coral-and-paper striped big-top circus tent with scalloped bottom edge, hiding the legs; tighten his moustache curls into spirals and widen his grin. Do not replace the showman with a freestanding tent or add another figure. Retain the same full-body scale, allowing only the stated tent silhouette to spread out. Yellow is ONLY on the hat key. Thick paper sticker edge, flat stepped pixels, clear transparent margins, no scenery, ground, text, symbols, backdrop disc or drop shadow. Request 32x32 cells; native stepped grid accepted. Large square transparent PNG at least 1024x1024.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "The Midway",
+      "base": "enemy-ringmaster",
+      "variant": 2,
+      "filename": "enemy-showstopper-v2.png",
+      "references": [
+        "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-814d2f6d-fb76-45b8-8dea-ec4a8d35e438.png"
+      ],
+      "review_note": "Same-numbered Ringmaster face, hat, key, cane and arm pose, with tightened moustache spirals and a striped scalloped tent replacing the lower coat and legs.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 680267,
+        "partially_transparent_pixels": 891120,
+        "subject_bounds_at_alpha_200": [
+          70,
+          15,
+          1080,
+          1249
+        ],
+        "clear_margins_at_alpha_200": [
+          70,
+          15,
+          174,
+          5
+        ],
+        "sha256": "0bb0fb22c261ada363d563c9c3a3e008b6f64d5061a68748fbb1100823a38cd9",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-8c689ea3-af74-4e5b-a384-f7cb2505566f.png"
+    },
+    {
+      "id": "enemy-whiteout",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, soft gray #7a7e8a. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a tall lumpy snowman of three stacked snowballs, paper-colored with a thick graphite outline and gray shading on one side, with two bare stick arms held out stiffly. Two black coal eyes and a too-wide grin of coal pieces, slightly wrong and unsettling but still cute. The whole snowman leans into the wind, and its far side is blowing away into a big soft gray gust of snow that streams off to one side, as big as the snowman, with a few chunky flakes. Reads at 40 px as: a snowman in a blizzard.\n\nProduction emphasis: This is one FULL-BODY fight sprite, not a portrait, with all feet, props, tail, hat and key inside the square and clear empty margins. Make it chunky and broad with a simple mechanic-defining silhouette for a 38px display. Use bold solid accent shapes; armored cracks must be thick coral marks that survive tiny display. Clouds and gusts must be as big as the body and built from flat stepped shapes, not blur. Where the subject has a yellow key, yellow appears ONLY on that key (and the explicitly permitted Rex gears in the wound-up phase). No incidental highlights, decorative symbols, text, colored disc, floor, scenery or drop shadow. Keep the thick paper die-cut edge, true transparent background, square PNG 1024x1024 or larger. Continue to request 32x32 cells; native chunky stepped results are accepted. Keep only the subject's specified palette.\nBoth supplied images are approved enemy sprites, used ONLY as references for chunky stepped pixels, thick outlines, sticker edge and scale. Depict the entirely different subject specified above. Do not copy their bodies, poses, green, armor or facial details; the new subject's prompt controls its design and palette.\nCandidate 1 of 2. Use the clearest bold silhouette described.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "Summit Station",
+      "variant": 1,
+      "filename": "enemy-whiteout-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/goblin.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/armored-beetle.png"
+      ],
+      "review_note": "Large gray snow gust and a clear snowman face. A knitted hat and scarf were added beyond the brief; v2 is closer to the bare three-snowball design.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 464069,
+        "partially_transparent_pixels": 1107416,
+        "subject_bounds_at_alpha_200": [
+          24,
+          29,
+          1230,
+          1244
+        ],
+        "clear_margins_at_alpha_200": [
+          24,
+          29,
+          24,
+          10
+        ],
+        "sha256": "d8d6af6453e42ee934676092e9e542eab4b2dfbb3523c1afad6d97a0c2f982ba",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-db8631ac-0b35-48c3-9872-119996b08ca9.png"
+    },
+    {
+      "id": "enemy-whiteout",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, soft gray #7a7e8a. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a tall lumpy snowman of three stacked snowballs, paper-colored with a thick graphite outline and gray shading on one side, with two bare stick arms held out stiffly. Two black coal eyes and a too-wide grin of coal pieces, slightly wrong and unsettling but still cute. The whole snowman leans into the wind, and its far side is blowing away into a big soft gray gust of snow that streams off to one side, as big as the snowman, with a few chunky flakes. Reads at 40 px as: a snowman in a blizzard.\n\nProduction emphasis: This is one FULL-BODY fight sprite, not a portrait, with all feet, props, tail, hat and key inside the square and clear empty margins. Make it chunky and broad with a simple mechanic-defining silhouette for a 38px display. Use bold solid accent shapes; armored cracks must be thick coral marks that survive tiny display. Clouds and gusts must be as big as the body and built from flat stepped shapes, not blur. Where the subject has a yellow key, yellow appears ONLY on that key (and the explicitly permitted Rex gears in the wound-up phase). No incidental highlights, decorative symbols, text, colored disc, floor, scenery or drop shadow. Keep the thick paper die-cut edge, true transparent background, square PNG 1024x1024 or larger. Continue to request 32x32 cells; native chunky stepped results are accepted. Keep only the subject's specified palette.\nBoth supplied images are approved enemy sprites, used ONLY as references for chunky stepped pixels, thick outlines, sticker edge and scale. Depict the entirely different subject specified above. Do not copy their bodies, poses, green, armor or facial details; the new subject's prompt controls its design and palette.\nCandidate 2 of 2. Create a distinct proportion/pose variant within this exact brief; preserve all required identity features, props, accents and mechanic cues.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "Summit Station",
+      "variant": 2,
+      "filename": "enemy-whiteout-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/goblin.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/armored-beetle.png"
+      ],
+      "review_note": "Bare three-snowball body and wide stick arms, with a body-sized stepped snow gust blowing off to the side.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 270743,
+        "partially_transparent_pixels": 1301364,
+        "subject_bounds_at_alpha_200": [
+          12,
+          43,
+          1244,
+          1244
+        ],
+        "clear_margins_at_alpha_200": [
+          12,
+          43,
+          10,
+          10
+        ],
+        "sha256": "142a299e7ce90a848c1c03da1a4519a0518ced21c14ff3094dabc467ab12ec20",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-2babf8da-9c62-4e77-a2be-6af092c9be03.png"
+    },
+    {
+      "id": "enemy-falling-star",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, warm yellow #e0a800, plus a second accent, orange #f07c00, used only for the tail. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a chunky five-pointed yellow star with rounded points, diving diagonally down toward one corner, trailing a long wide tail of blocky orange flame that sweeps up to the opposite corner. A smug face on the star: one eye closed in a wink, a sideways smirk. A few paper-colored chunky sparks along the tail. The diagonal fills the frame. Reads at 40 px as: a smirking shooting star.\n\nProduction emphasis: This is one FULL-BODY fight sprite, not a portrait, with all feet, props, tail, hat and key inside the square and clear empty margins. Make it chunky and broad with a simple mechanic-defining silhouette for a 38px display. Use bold solid accent shapes; armored cracks must be thick coral marks that survive tiny display. Clouds and gusts must be as big as the body and built from flat stepped shapes, not blur. Where the subject has a yellow key, yellow appears ONLY on that key (and the explicitly permitted Rex gears in the wound-up phase). No incidental highlights, decorative symbols, text, colored disc, floor, scenery or drop shadow. Keep the thick paper die-cut edge, true transparent background, square PNG 1024x1024 or larger. Continue to request 32x32 cells; native chunky stepped results are accepted. Keep only the subject's specified palette.\nBoth supplied images are approved enemy sprites, used ONLY as references for chunky stepped pixels, thick outlines, sticker edge and scale. Depict the entirely different subject specified above. Do not copy their bodies, poses, green, armor or facial details; the new subject's prompt controls its design and palette.\nCandidate 1 of 2. Use the clearest bold silhouette described.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "Summit Station",
+      "variant": 1,
+      "filename": "enemy-falling-star-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/goblin.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/armored-beetle.png"
+      ],
+      "review_note": "Five-pointed yellow star with a wink and smirk, diving diagonally on a broad orange tail with chunky paper sparks.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 764422,
+        "partially_transparent_pixels": 807448,
+        "subject_bounds_at_alpha_200": [
+          34,
+          21,
+          1235,
+          1241
+        ],
+        "clear_margins_at_alpha_200": [
+          34,
+          21,
+          19,
+          13
+        ],
+        "sha256": "ec72d5e7f8b349481a80e8f26090f7e225dd048b099604d901193b3884b8c271",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-fe01c954-bda9-4030-aad9-ddc55f7e2313.png"
+    },
+    {
+      "id": "enemy-falling-star",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, warm yellow #e0a800, plus a second accent, orange #f07c00, used only for the tail. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a chunky five-pointed yellow star with rounded points, diving diagonally down toward one corner, trailing a long wide tail of blocky orange flame that sweeps up to the opposite corner. A smug face on the star: one eye closed in a wink, a sideways smirk. A few paper-colored chunky sparks along the tail. The diagonal fills the frame. Reads at 40 px as: a smirking shooting star.\n\nProduction emphasis: This is one FULL-BODY fight sprite, not a portrait, with all feet, props, tail, hat and key inside the square and clear empty margins. Make it chunky and broad with a simple mechanic-defining silhouette for a 38px display. Use bold solid accent shapes; armored cracks must be thick coral marks that survive tiny display. Clouds and gusts must be as big as the body and built from flat stepped shapes, not blur. Where the subject has a yellow key, yellow appears ONLY on that key (and the explicitly permitted Rex gears in the wound-up phase). No incidental highlights, decorative symbols, text, colored disc, floor, scenery or drop shadow. Keep the thick paper die-cut edge, true transparent background, square PNG 1024x1024 or larger. Continue to request 32x32 cells; native chunky stepped results are accepted. Keep only the subject's specified palette.\nBoth supplied images are approved enemy sprites, used ONLY as references for chunky stepped pixels, thick outlines, sticker edge and scale. Depict the entirely different subject specified above. Do not copy their bodies, poses, green, armor or facial details; the new subject's prompt controls its design and palette.\nCandidate 2 of 2. Create a distinct proportion/pose variant within this exact brief; preserve all required identity features, props, accents and mechanic cues.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "Summit Station",
+      "variant": 2,
+      "filename": "enemy-falling-star-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/goblin.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/armored-beetle.png"
+      ],
+      "review_note": "Chunky five-pointed star with a clear wink and smirk, diving on a broad orange flame tail with paper sparks.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 724283,
+        "partially_transparent_pixels": 846962,
+        "subject_bounds_at_alpha_200": [
+          30,
+          42,
+          1187,
+          1242
+        ],
+        "clear_margins_at_alpha_200": [
+          30,
+          42,
+          67,
+          12
+        ],
+        "sha256": "3f25c9aa63d218901c01b7c98bda50e92686191199d5807dc3601570d3dd3360",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-8db25188-d9ab-41ba-8cef-13528b171aa6.png"
+    },
+    {
+      "id": "enemy-ice-mammoth",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, wood brown #a9825a, plus a second accent, coral red #d9534f, used only for the gaps in the ice. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a huge round shaggy mammoth sitting heavily on a small boxy graphite generator, squashing it. A high domed head, a thick trunk hanging down, and two long curved paper-colored tusks sweeping out wide in front. Wood brown fur on the head and legs in big chunky tufts. The back and shoulders are covered in thick blocky plates of paper-colored ice with graphite edges, and three bold jagged coral red gaps run between the plates, thick enough to see at small size. Small tired eyes. Plain generator with no markings. Reads at 40 px as: a mammoth in cracked ice, on a generator.\n\nProduction emphasis: This is one FULL-BODY fight sprite, not a portrait, with all feet, props, tail, hat and key inside the square and clear empty margins. Make it chunky and broad with a simple mechanic-defining silhouette for a 38px display. Use bold solid accent shapes; armored cracks must be thick coral marks that survive tiny display. Clouds and gusts must be as big as the body and built from flat stepped shapes, not blur. Where the subject has a yellow key, yellow appears ONLY on that key (and the explicitly permitted Rex gears in the wound-up phase). No incidental highlights, decorative symbols, text, colored disc, floor, scenery or drop shadow. Keep the thick paper die-cut edge, true transparent background, square PNG 1024x1024 or larger. Continue to request 32x32 cells; native chunky stepped results are accepted. Keep only the subject's specified palette.\nBoth supplied images are approved enemy sprites, used ONLY as references for chunky stepped pixels, thick outlines, sticker edge and scale. Depict the entirely different subject specified above. Do not copy their bodies, poses, green, armor or facial details; the new subject's prompt controls its design and palette.\nCandidate 1 of 2. Use the clearest bold silhouette described.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "Summit Station",
+      "variant": 1,
+      "filename": "enemy-ice-mammoth-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/goblin.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/armored-beetle.png"
+      ],
+      "review_note": "Domed shaggy mammoth, wide tusks, squashed generator and three prominent coral gaps in the paper ice plates. Gray generator highlights remain for palette cleanup.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 431467,
+        "partially_transparent_pixels": 1139721,
+        "subject_bounds_at_alpha_200": [
+          41,
+          32,
+          1221,
+          1252
+        ],
+        "clear_margins_at_alpha_200": [
+          41,
+          32,
+          33,
+          2
+        ],
+        "sha256": "9d0f6ef2c8bdd1dfebc943d76ac1a334e72f89e471209783bc3b59b685f18e24",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-59f55845-7374-49e5-aa73-82b6ef65529c.png"
+    },
+    {
+      "id": "enemy-ice-mammoth",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, wood brown #a9825a, plus a second accent, coral red #d9534f, used only for the gaps in the ice. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a huge round shaggy mammoth sitting heavily on a small boxy graphite generator, squashing it. A high domed head, a thick trunk hanging down, and two long curved paper-colored tusks sweeping out wide in front. Wood brown fur on the head and legs in big chunky tufts. The back and shoulders are covered in thick blocky plates of paper-colored ice with graphite edges, and three bold jagged coral red gaps run between the plates, thick enough to see at small size. Small tired eyes. Plain generator with no markings. Reads at 40 px as: a mammoth in cracked ice, on a generator.\n\nProduction emphasis: This is one FULL-BODY fight sprite, not a portrait, with all feet, props, tail, hat and key inside the square and clear empty margins. Make it chunky and broad with a simple mechanic-defining silhouette for a 38px display. Use bold solid accent shapes; armored cracks must be thick coral marks that survive tiny display. Clouds and gusts must be as big as the body and built from flat stepped shapes, not blur. Where the subject has a yellow key, yellow appears ONLY on that key (and the explicitly permitted Rex gears in the wound-up phase). No incidental highlights, decorative symbols, text, colored disc, floor, scenery or drop shadow. Keep the thick paper die-cut edge, true transparent background, square PNG 1024x1024 or larger. Continue to request 32x32 cells; native chunky stepped results are accepted. Keep only the subject's specified palette.\nBoth supplied images are approved enemy sprites, used ONLY as references for chunky stepped pixels, thick outlines, sticker edge and scale. Depict the entirely different subject specified above. Do not copy their bodies, poses, green, armor or facial details; the new subject's prompt controls its design and palette.\nCandidate 2 of 2. Create a distinct proportion/pose variant within this exact brief; preserve all required identity features, props, accents and mechanic cues.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "Summit Station",
+      "variant": 2,
+      "filename": "enemy-ice-mammoth-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/goblin.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/armored-beetle.png"
+      ],
+      "review_note": "Domed shaggy mammoth, wide tusks, squashed generator and three prominent coral gaps in the paper ice plates. Gray generator highlights remain for palette cleanup.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 425757,
+        "partially_transparent_pixels": 1145670,
+        "subject_bounds_at_alpha_200": [
+          46,
+          30,
+          1200,
+          1251
+        ],
+        "clear_margins_at_alpha_200": [
+          46,
+          30,
+          54,
+          3
+        ],
+        "sha256": "410f2e206f382e06963c1f5bf0779fd84a59317b8d22ff8a2f67440d91f19626",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-a644aed8-3a0c-48ba-9f9c-d93ea750f3fd.png"
+    },
+    {
+      "id": "enemy-yeti",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, soft gray #7a7e8a, plus a second accent, warm yellow #e0a800, used only for the wind-up key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a colossal shaggy yeti standing hunched and facing the viewer, enormous wide shoulders, a small head sunk low between them, and long heavy arms hanging down with big fists almost at the ground, short legs. Paper-colored fur in big chunky tufts with a thick graphite outline, flat gray face, hands, and shading. Small deep-set eyes under a furrowed brow, two short lower fangs, looking slowly confused. A large yellow wind-up key sticks up from the back of the neck, rising past one side of the head. Much wider than a person. Reads at 40 px as: a huge snow ape with a key in its neck.\n\nProduction emphasis: This is one FULL-BODY fight sprite, not a portrait, with all feet, props, tail, hat and key inside the square and clear empty margins. Make it chunky and broad with a simple mechanic-defining silhouette for a 38px display. Use bold solid accent shapes; armored cracks must be thick coral marks that survive tiny display. Clouds and gusts must be as big as the body and built from flat stepped shapes, not blur. Where the subject has a yellow key, yellow appears ONLY on that key (and the explicitly permitted Rex gears in the wound-up phase). No incidental highlights, decorative symbols, text, colored disc, floor, scenery or drop shadow. Keep the thick paper die-cut edge, true transparent background, square PNG 1024x1024 or larger. Continue to request 32x32 cells; native chunky stepped results are accepted. Keep only the subject's specified palette.\nReference 1 is the same-numbered portrait of THIS character: preserve that face, brow, mouth, fur/petal or moustache identity and the distinctive key. Reference 2 is an approved enemy sprite, for coarse pixel cells, bold outlines and small-size sticker style only. Compose a NEW full-body pose as specified, with much less facial detail than the portrait. Do not copy the beetle's body, armor, green or other incidental features.\nCandidate 1 of 2. Use the clearest bold silhouette described.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "Summit Station",
+      "portrait": "cast-yeti",
+      "variant": 1,
+      "filename": "enemy-yeti-v1.png",
+      "references": [
+        "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-30799d73-56ab-40f4-8e66-8f58233b5740.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/armored-beetle.png"
+      ],
+      "review_note": "Face follows the same-numbered portrait, including the side of the head where the key rises. Broad shoulders, low head and long arms create a full snow-ape silhouette.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 393839,
+        "partially_transparent_pixels": 1178214,
+        "subject_bounds_at_alpha_200": [
+          8,
+          16,
+          1246,
+          1249
+        ],
+        "clear_margins_at_alpha_200": [
+          8,
+          16,
+          8,
+          5
+        ],
+        "sha256": "64c17b587c7d8bba82719a9d000859b0d0c6ba5de2d01f0d5b46b8aa19890daf",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-a1e75986-ab94-482b-b57c-177c2a7f3d98.png"
+    },
+    {
+      "id": "enemy-yeti",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, soft gray #7a7e8a, plus a second accent, warm yellow #e0a800, used only for the wind-up key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a colossal shaggy yeti standing hunched and facing the viewer, enormous wide shoulders, a small head sunk low between them, and long heavy arms hanging down with big fists almost at the ground, short legs. Paper-colored fur in big chunky tufts with a thick graphite outline, flat gray face, hands, and shading. Small deep-set eyes under a furrowed brow, two short lower fangs, looking slowly confused. A large yellow wind-up key sticks up from the back of the neck, rising past one side of the head. Much wider than a person. Reads at 40 px as: a huge snow ape with a key in its neck.\n\nProduction emphasis: This is one FULL-BODY fight sprite, not a portrait, with all feet, props, tail, hat and key inside the square and clear empty margins. Make it chunky and broad with a simple mechanic-defining silhouette for a 38px display. Use bold solid accent shapes; armored cracks must be thick coral marks that survive tiny display. Clouds and gusts must be as big as the body and built from flat stepped shapes, not blur. Where the subject has a yellow key, yellow appears ONLY on that key (and the explicitly permitted Rex gears in the wound-up phase). No incidental highlights, decorative symbols, text, colored disc, floor, scenery or drop shadow. Keep the thick paper die-cut edge, true transparent background, square PNG 1024x1024 or larger. Continue to request 32x32 cells; native chunky stepped results are accepted. Keep only the subject's specified palette.\nReference 1 is the same-numbered portrait of THIS character: preserve that face, brow, mouth, fur/petal or moustache identity and the distinctive key. Reference 2 is an approved enemy sprite, for coarse pixel cells, bold outlines and small-size sticker style only. Compose a NEW full-body pose as specified, with much less facial detail than the portrait. Do not copy the beetle's body, armor, green or other incidental features.\nCandidate 2 of 2. Create a distinct proportion/pose variant within this exact brief; preserve all required identity features, props, accents and mechanic cues.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "Summit Station",
+      "portrait": "cast-yeti",
+      "variant": 2,
+      "filename": "enemy-yeti-v2.png",
+      "references": [
+        "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-b3382357-f7f2-40ba-a2a4-24508366153a.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/armored-beetle.png"
+      ],
+      "review_note": "Face follows the same-numbered portrait, including the side of the head where the key rises. Broad shoulders, low head and long arms create a full snow-ape silhouette.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 254,
+        "fully_transparent_pixels": 443209,
+        "partially_transparent_pixels": 1128286,
+        "subject_bounds_at_alpha_200": [
+          10,
+          36,
+          1236,
+          1252
+        ],
+        "clear_margins_at_alpha_200": [
+          10,
+          36,
+          18,
+          2
+        ],
+        "sha256": "4595b3343f0355dbc8b9cbf936b1d3ddc8874f8055b473524c7037db1657b6e0",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-ae1fb5a9-5528-4caa-971b-3798e4ac35c9.png"
+    },
+    {
+      "id": "enemy-avalanche-yeti",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, soft gray #7a7e8a, plus a second accent, warm yellow #e0a800, used only for the wind-up key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: the same colossal shaggy yeti in the same hunched pose, same size, with the same yellow key at its neck, but now the ridge has come with it: a jagged snow-capped mountain peak in gray and paper rises from its shoulders and back as if it is part of the creature, with snow pouring down off the peak and over its arms in big chunky slabs and a few boulders tumbling off to the sides. Its eyes are wide and its mouth open in a roar. No ground, sky, or landscape around it. Same yeti as before, with the mountain on its back. Reads at 40 px as: a yeti carrying an avalanche.\n\nThe supplied image is the SAME-NUMBERED BASE Yeti sprite. Preserve this exact creature\u2019s face identity, gray ape features and two lower fangs, huge low shoulders, hunched pose, long arms, big fists, short legs, relative body proportions, pixel-cell scale and yellow key. Keep the same full-body creature at the same scale and orientation. Add ONLY the described phase: a jagged gray-and-paper snow-capped mountain peak attached to the shoulders and back, chunky snow slabs pouring over the arms, and a few tumbling boulders. Widen its eyes and open its mouth in a roar. The mountain must read as part of the Yeti, not a background landscape. Keep the key visible and yellow ONLY on that key. Flat chunky stepped shapes, thick paper die-cut edge, true transparent background, clear square-frame margins. No sky, horizon, ground, scenery, text, symbols, disc, motion blur or extra colors. Requested 32x32 pixel cells, native stepped grid accepted. Large square transparent PNG at least 1024x1024.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "Summit Station",
+      "base": "enemy-yeti",
+      "variant": 1,
+      "filename": "enemy-avalanche-yeti-v1.png",
+      "references": [
+        "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-a1e75986-ab94-482b-b57c-177c2a7f3d98.png"
+      ],
+      "review_note": "Same-numbered Yeti identity and key side, now roaring with a snow-capped peak attached behind its head and shoulders and gray boulders tumbling beside the body. Compare body scale and the snow-slab cue with the base.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 288779,
+        "partially_transparent_pixels": 1282447,
+        "subject_bounds_at_alpha_200": [
+          9,
+          4,
+          1246,
+          1249
+        ],
+        "clear_margins_at_alpha_200": [
+          9,
+          4,
+          8,
+          5
+        ],
+        "sha256": "c42cade709eee22295ccbfe71dd858582d3925616868d2e6c66d8dd650c65a48",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-4156b8e0-2a5c-44af-926f-c51197ea39f6.png"
+    },
+    {
+      "id": "enemy-avalanche-yeti",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, soft gray #7a7e8a, plus a second accent, warm yellow #e0a800, used only for the wind-up key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: the same colossal shaggy yeti in the same hunched pose, same size, with the same yellow key at its neck, but now the ridge has come with it: a jagged snow-capped mountain peak in gray and paper rises from its shoulders and back as if it is part of the creature, with snow pouring down off the peak and over its arms in big chunky slabs and a few boulders tumbling off to the sides. Its eyes are wide and its mouth open in a roar. No ground, sky, or landscape around it. Same yeti as before, with the mountain on its back. Reads at 40 px as: a yeti carrying an avalanche.\n\nThe supplied image is the SAME-NUMBERED BASE Yeti sprite. Preserve this exact creature\u2019s face identity, gray ape features and two lower fangs, huge low shoulders, hunched pose, long arms, big fists, short legs, relative body proportions, pixel-cell scale and yellow key. Keep the same full-body creature at the same scale and orientation. Add ONLY the described phase: a jagged gray-and-paper snow-capped mountain peak attached to the shoulders and back, chunky snow slabs pouring over the arms, and a few tumbling boulders. Widen its eyes and open its mouth in a roar. The mountain must read as part of the Yeti, not a background landscape. Keep the key visible and yellow ONLY on that key. Flat chunky stepped shapes, thick paper die-cut edge, true transparent background, clear square-frame margins. No sky, horizon, ground, scenery, text, symbols, disc, motion blur or extra colors. Requested 32x32 pixel cells, native stepped grid accepted. Large square transparent PNG at least 1024x1024.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "Summit Station",
+      "base": "enemy-yeti",
+      "variant": 2,
+      "filename": "enemy-avalanche-yeti-v2.png",
+      "references": [
+        "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-ae1fb5a9-5528-4caa-971b-3798e4ac35c9.png"
+      ],
+      "review_note": "Same-numbered Yeti identity and key side, now roaring with a snow-capped peak attached behind its head and shoulders and gray boulders tumbling beside the body. Compare body scale and the snow-slab cue with the base.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 298333,
+        "partially_transparent_pixels": 1272616,
+        "subject_bounds_at_alpha_200": [
+          10,
+          7,
+          1240,
+          1252
+        ],
+        "clear_margins_at_alpha_200": [
+          10,
+          7,
+          14,
+          2
+        ],
+        "sha256": "312a0c7f0ad66892382d97739b944388a87692da51ba856b288f99bf5fa9bc84",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-8f9fd00b-c43d-47d1-a3b3-e3e52976a3f7.png"
+    },
+    {
+      "id": "enemy-tin-soldier",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, used only for the cracks, plus a second accent, warm yellow #e0a800, used only for the big wind-up key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a stiff tin toy soldier caught mid-march, one knee lifted high, arms swinging out stiffly to the sides so the figure is broad and not a thin sliver. A tall graphite shako hat, a blocky graphite tunic with paper-colored crossed chest straps, a round paper-colored painted face with two dot eyes, two round painted cheeks, and a blank stare. A large yellow wind-up key sticks out sideways from its back. Three bold coral red cracks run across its chest and legs, thick enough to see at small size. Visible rivets at the joints, like an old toy. Reads at 40 px as: a wind-up toy soldier with cracks in it.\n\nProduction emphasis: This is one FULL-BODY fight sprite, not a portrait, with all feet, props, tail, hat and key inside the square and clear empty margins. Make it chunky and broad with a simple mechanic-defining silhouette for a 38px display. Use bold solid accent shapes; armored cracks must be thick coral marks that survive tiny display. Clouds and gusts must be as big as the body and built from flat stepped shapes, not blur. Where the subject has a yellow key, yellow appears ONLY on that key (and the explicitly permitted Rex gears in the wound-up phase). No incidental highlights, decorative symbols, text, colored disc, floor, scenery or drop shadow. Keep the thick paper die-cut edge, true transparent background, square PNG 1024x1024 or larger. Continue to request 32x32 cells; native chunky stepped results are accepted. Keep only the subject's specified palette.\nBoth supplied images are approved enemy sprites, used ONLY as references for chunky stepped pixels, thick outlines, sticker edge and scale. Depict the entirely different subject specified above. Do not copy their bodies, poses, green, armor or facial details; the new subject's prompt controls its design and palette.\nCandidate 1 of 2. Use the clearest bold silhouette described.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "Closing Time",
+      "variant": 1,
+      "filename": "enemy-tin-soldier-v1.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/goblin.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/armored-beetle.png"
+      ],
+      "review_note": "Wide stiff marching pose, exposed rivets, large back key and three bold coral cracks. Both candidates also use coral painted cheeks, beyond the cracks-only restriction; review or recolor the cheeks.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 716199,
+        "partially_transparent_pixels": 856148,
+        "subject_bounds_at_alpha_200": [
+          144,
+          10,
+          1129,
+          1249
+        ],
+        "clear_margins_at_alpha_200": [
+          144,
+          10,
+          125,
+          5
+        ],
+        "sha256": "82b2e379261b8d51e755ced1a2eb1871984d46e6d2446bc198bbae942cd35da6",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-713c6e66-8395-43ab-b9f3-5c985c7319cd.png"
+    },
+    {
+      "id": "enemy-tin-soldier",
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, coral red #d9534f, used only for the cracks, plus a second accent, warm yellow #e0a800, used only for the big wind-up key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: a stiff tin toy soldier caught mid-march, one knee lifted high, arms swinging out stiffly to the sides so the figure is broad and not a thin sliver. A tall graphite shako hat, a blocky graphite tunic with paper-colored crossed chest straps, a round paper-colored painted face with two dot eyes, two round painted cheeks, and a blank stare. A large yellow wind-up key sticks out sideways from its back. Three bold coral red cracks run across its chest and legs, thick enough to see at small size. Visible rivets at the joints, like an old toy. Reads at 40 px as: a wind-up toy soldier with cracks in it.\n\nProduction emphasis: This is one FULL-BODY fight sprite, not a portrait, with all feet, props, tail, hat and key inside the square and clear empty margins. Make it chunky and broad with a simple mechanic-defining silhouette for a 38px display. Use bold solid accent shapes; armored cracks must be thick coral marks that survive tiny display. Clouds and gusts must be as big as the body and built from flat stepped shapes, not blur. Where the subject has a yellow key, yellow appears ONLY on that key (and the explicitly permitted Rex gears in the wound-up phase). No incidental highlights, decorative symbols, text, colored disc, floor, scenery or drop shadow. Keep the thick paper die-cut edge, true transparent background, square PNG 1024x1024 or larger. Continue to request 32x32 cells; native chunky stepped results are accepted. Keep only the subject's specified palette.\nBoth supplied images are approved enemy sprites, used ONLY as references for chunky stepped pixels, thick outlines, sticker edge and scale. Depict the entirely different subject specified above. Do not copy their bodies, poses, green, armor or facial details; the new subject's prompt controls its design and palette.\nCandidate 2 of 2. Create a distinct proportion/pose variant within this exact brief; preserve all required identity features, props, accents and mechanic cues.",
+      "source": "../prompts/07-enemies-chapters-4-7.md",
+      "kind": "enemy",
+      "requested_grid": 32,
+      "chapter": "Closing Time",
+      "variant": 2,
+      "filename": "enemy-tin-soldier-v2.png",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/goblin.png",
+        "/Users/txdevs/Documents/Development/picross/public/art/enemies/armored-beetle.png"
+      ],
+      "review_note": "Wide stiff marching pose, exposed rivets, large back key and three bold coral cracks. Both candidates also use coral painted cheeks, beyond the cracks-only restriction; review or recolor the cheeks.",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 692442,
+        "partially_transparent_pixels": 879837,
+        "subject_bounds_at_alpha_200": [
+          112,
+          8,
+          1146,
+          1252
+        ],
+        "clear_margins_at_alpha_200": [
+          112,
+          8,
+          108,
+          2
+        ],
+        "sha256": "efd77b654c8c909b2787807269294cc90ef5abf8bcaacbf97f1e7802d7204c6f",
+        "square_frame": true
+      },
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-5c892785-8138-4e00-acca-83cf731dd1b7.png"
+    }
+  ]
+}

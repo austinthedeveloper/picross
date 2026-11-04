@@ -6,7 +6,7 @@
   "blurb": "It makes you look taller. It also makes your clues look wrong.",
   "enemy": {
     "name": "Funhouse Mirror",
-    "sprite": "🪞",
+    "sprite": "funhouse-mirror",
     "hp": 45,
     "attack": 2,
     "scramble": {

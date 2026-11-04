@@ -6,7 +6,7 @@
   "blurb": "Whoever built this snowman isn't up here anymore.",
   "enemy": {
     "name": "Whiteout",
-    "sprite": "⛄",
+    "sprite": "whiteout",
     "hp": 45,
     "attack": 2,
     "fog": {

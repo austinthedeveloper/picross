@@ -8,7 +8,7 @@
   "blurb": "The big top. One spotlight, one top hat, and a very long moustache.",
   "enemy": {
     "name": "The Ringmaster",
-    "sprite": "🎩",
+    "sprite": "ringmaster",
     "hp": 60,
     "attack": 2,
     "fakes": {
@@ -44,7 +44,7 @@
       {
         "at": 0.45,
         "name": "Showstopper",
-        "sprite": "🎪",
+        "sprite": "showstopper",
         "attack": 4,
         "charge": 25,
         "taunt": "No refunds!"

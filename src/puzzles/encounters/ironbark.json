@@ -6,7 +6,7 @@
   "blurb": "An old stump with a bad attitude. Count the rings, then hit it there.",
   "enemy": {
     "name": "Ironbark",
-    "sprite": "🪵",
+    "sprite": "ironbark",
     "hp": 45,
     "attack": 2,
     "armor": {

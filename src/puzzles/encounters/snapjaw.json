@@ -6,7 +6,7 @@
   "blurb": "A flytrap the size of a wheelbarrow. It has started keeping time.",
   "enemy": {
     "name": "Snapjaw",
-    "sprite": "🪴",
+    "sprite": "snapjaw",
     "hp": 45,
     "attack": 2,
     "charge": 30,

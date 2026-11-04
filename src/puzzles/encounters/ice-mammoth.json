@@ -6,7 +6,7 @@
   "blurb": "It thawed out and it's sitting on the generator. Find the gaps in the ice.",
   "enemy": {
     "name": "Ice Mammoth",
-    "sprite": "🦣",
+    "sprite": "ice-mammoth",
     "hp": 45,
     "attack": 2,
     "charge": 35,
