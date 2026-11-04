@@ -1,0 +1,37 @@
+{
+  "id": "ice-mammoth",
+  "name": "Ice Mammoth",
+  "kind": "fight",
+  "puzzle": "ice-mammoth",
+  "blurb": "It thawed out and it's sitting on the generator. Find the gaps in the ice.",
+  "enemy": {
+    "name": "Ice Mammoth",
+    "sprite": "🦣",
+    "hp": 45,
+    "attack": 2,
+    "charge": 35,
+    "armor": {
+      "weakPoints": {
+        "rows": [11, 13],
+        "cols": [3]
+      },
+      "attack": 4
+    },
+    "fog": {
+      "cols": [4, 8, 9]
+    },
+    "phases": [
+      {
+        "at": 0.6,
+        "name": "Thawed Mammoth",
+        "attack": 3,
+        "charge": 25,
+        "taunt": "HRROOOM.",
+        "fog": {
+          "cols": [10, 14]
+        },
+        "fogCount": 2
+      }
+    ]
+  }
+}

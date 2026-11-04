@@ -62,19 +62,20 @@ Locally they use your installed Chrome. CI installs Playwright's Chromium and up
 HTML report (`playwright-report`) when something fails. To debug a failure, run
 `npx playwright show-trace test-results/<test>/trace.zip`.
 
-| File                  | Covers                                                                                                                                                |
-| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `free-play.spec.ts`   | Sizes smallest first, the list filter, "Next", sound off by default, solving and the end screen, drag, undo, Hearts and Retry, hints, keyboard play   |
-| `how-to-play.spec.ts` | The tutorial from the first step to Solved: nudges, going back a step, the tool prompt, and that it records nothing                                   |
-| `runs.spec.ts`        | Jobs board and chapters, the full First Job (intro once, sign-off, stats), knockouts, rest stops in time and late                                     |
-| `fights.spec.ts`      | One test per mechanic: fog, gremlin waves, Mimic swaps, Owl scramble, Forger call-outs, Beetle armor, gadgets, Eel charge, Cuttlefish ink, power tips |
-| `night-shift.spec.ts` | The whole Night Shift from the jobs board to the Curator                                                                                              |
-| `deep-end.spec.ts`    | The whole Deep End from the chapter 3 opening to Old Tess                                                                                             |
-| `endless.spec.ts`     | Endless mode: unlocking, healing after a fight, the map moving on, best depth                                                                         |
-| `daily.spec.ts`       | The daily puzzle and its streak across days (fixed clock; solved from the clues on screen)                                                            |
-| `murals.spec.ts`      | A mural filling in tile by tile, the last tile, and the finished picture                                                                              |
-| `debug.spec.ts`       | The debug tools, against a dev build (project `dev`, port 4174)                                                                                       |
-| `editor-zoom.spec.ts` | Editor uniqueness check and export, pinch zoom                                                                                                        |
+| File                     | Covers                                                                                                                                                |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `free-play.spec.ts`      | Sizes smallest first, the list filter, "Next", sound off by default, solving and the end screen, drag, undo, Hearts and Retry, hints, keyboard play   |
+| `how-to-play.spec.ts`    | The tutorial from the first step to Solved: nudges, going back a step, the tool prompt, and that it records nothing                                   |
+| `runs.spec.ts`           | Jobs board and chapters, the full First Job (intro once, sign-off, stats), knockouts, rest stops in time and late                                     |
+| `fights.spec.ts`         | One test per mechanic: fog, gremlin waves, Mimic swaps, Owl scramble, Forger call-outs, Beetle armor, gadgets, Eel charge, Cuttlefish ink, power tips |
+| `night-shift.spec.ts`    | The whole Night Shift from the jobs board to the Museum Rex                                                                                           |
+| `later-chapters.spec.ts` | The Glasshouse, the Midway, Summit Station, and Closing Time, each from its chapter opening to its boss                                               |
+| `deep-end.spec.ts`       | The whole Deep End from the chapter 3 opening to Old Tess                                                                                             |
+| `endless.spec.ts`        | Endless mode: unlocking, healing after a fight, the map moving on, best depth                                                                         |
+| `daily.spec.ts`          | The daily puzzle and its streak across days (fixed clock; solved from the clues on screen)                                                            |
+| `murals.spec.ts`         | A mural filling in tile by tile, the last tile, and the finished picture                                                                              |
+| `debug.spec.ts`          | The debug tools, against a dev build (project `dev`, port 4174)                                                                                       |
+| `editor-zoom.spec.ts`    | Editor uniqueness check and export, pinch zoom                                                                                                        |
 
 `e2e/helpers.ts` has the building blocks:
 

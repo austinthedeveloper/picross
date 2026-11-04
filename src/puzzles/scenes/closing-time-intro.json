@@ -1,0 +1,34 @@
+{
+  "id": "closing-time-intro",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "🧑‍💼"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "👩‍🔬"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "text": "The museum, after closing. The exhibits stand very still, and every label has been rewritten in a neat hand."
+        },
+        {
+          "who": "dee",
+          "text": "He's re-labeled the whole collection."
+        },
+        {
+          "who": "rook",
+          "text": "The fire exit says 'Exhibit 40: Hope'."
+        },
+        {
+          "who": "dee",
+          "text": "Rook. Something is marching."
+        }
+      ]
+    }
+  }
+}

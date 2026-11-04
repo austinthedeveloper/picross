@@ -340,12 +340,13 @@ single card saying which job opens it. An open chapter shows its jobs and how ma
 you've cleared. The first time you reach the board with a chapter open, its opening
 plays (`renderRunScreen` checks before drawing the board), and after that a **▶ Chapter
 story** button replays it. Every job must be in exactly one chapter, or loading fails.
-The chapters so far are 1 · Odd Jobs (First Job), 2 · After Hours (The Night Shift), and
-3 · Deep Water (The Deep End).
+The chapters so far are 1 · Odd Jobs (First Job), 2 · After Hours (The Night Shift),
+3 · Deep Water (The Deep End), 4 · Green Thumbs (The Glasshouse), 5 · Step Right Up (The
+Midway), 6 · Cold Snap (Summit Station), and 7 · Wound Up (Closing Time).
 
 Jobs so far: **First Job** (#21), **The Night Shift** (#46), and **The Deep End** (#67). The Night Shift unlocks after
 First Job. It's Mimic → Clockwork Owl → the Forger → Dusty Exhibit (a dig that yields a
-patch kit) → Armored Beetle → the Curator, with Curator Ambrose joining Rook and Dee in its scenes.
+patch kit) → Armored Beetle → Break room → the Museum Rex, with Curator Ambrose joining Rook and Dee in its scenes. Chapters 4 to 7 are covered under [The later chapters](#the-later-chapters-chapters-4-to-7).
 
 ## Endless mode
 
@@ -497,7 +498,7 @@ An enemy can have `fakes: { rows, cols }` and `suspects: { rows, cols }`.
 
 **The Forger** (`encounters/forger.json`) is the third Night Shift node: a 15×15 palette. Rows 4, 8 and 14 are forged, and rows 3 and 7 are honest suspects (only two decoy pairs keep the palette solvable). It turns Master Forger (attack 3) at half HP. Its scene (`forger-intro`) and its power tip teach the rule.
 
-### The Curator (Night Shift boss)
+### The Curator (Closing Time boss)
 
 A 20×20 pocket watch with 60 HP (40 lines, so the finisher stays big). It combines every
 board disruption so far:
@@ -509,8 +510,13 @@ board disruption so far:
 
 The thin outlines leave the watch less room than the solid wrench: 4 fogged rows plus 4
 scrambled columns was the most the solver could still finish. Its 20×20 size and the swap
-carry the rest of the difficulty. A reveal scene (`curator-reveal`) plays before the
-fight.
+carry the rest of the difficulty. A scene (`curator-return`) plays before the fight.
+
+This was the Night Shift's boss until playtesting showed it was the hardest fight in the
+game and came before much easier ones. The fight moved to Chapter 7 unchanged, and the
+Night Shift now ends with the **Museum Rex**: a 20×20 skull with 60 HP that scrambles 5
+columns in total and swaps twice. The Curator still sets it loose in `rex-reveal` and
+gets away, leaving a brass key behind.
 
 ### Charge (the Electric Eel)
 
@@ -543,6 +549,42 @@ wipes it all. Ink only hides your marks, never clues, so it doesn't affect solva
 - **Old Tess:** a 20×20 octopus boss. Her phases bring ink at 92%, a double splash at 85%, the eel's charge at 75%, and a final double splash at 60% (attack 4).
 
 Keeper Bo joins Rook and Dee in its scenes.
+
+### The later chapters (Chapters 4 to 7)
+
+From here on, fights pair powers the player already knows rather than adding new ones.
+A boss winds up a brass key, which goes in Rook and Dee's jar: that thread leads to the
+Curator's return without counting the keys, so chapters can be added before him.
+
+- **The Glasshouse:** Snapjaw (charge, swap) → Spore Puff (fog, ink) → Potting Shed (dig: sponge) → Ironbark (armor, scramble) → Garden bench → **Mother Bramble** (fog, ink, swap).
+- **The Midway:** Funhouse Mirror (scramble, swap) → Madame Vesper (fakes, ink) → Prop Wagon (dig: bomb) → The Great Bruno (armor, charge) → Popcorn stand → **The Ringmaster** (fakes, scramble, charge, swap).
+- **Summit Station:** Whiteout (fog, ink) → Falling Star (fakes, scramble) → Supply Cache (dig: patch kit) → Ice Mammoth (armor, fog, charge) → Cocoa break → **The Yeti** (fog, scramble, ink, charge).
+- **Closing Time:** Tin Soldier (armor, fog, scramble) → Dusty Exhibit → Break room → **The Curator**. The dig and rest stop are the Night Shift's own.
+
+Hollis, Bigsby, and Dr. Lund join Rook and Dee in their jobs' scenes.
+
+### Difficulty
+
+The Curator is the ceiling for now: a playtester took 30 minutes on it with no hints or
+mistakes, and thought anything harder should count as "Insane". Tune against the solver,
+with every power an enemy can bring applied from the start, by counting two things: how
+many passes over the readable clues it takes to finish, and how much of the board the
+first pass fills in. More passes and less first-pass progress mean harder.
+
+| Boss              | Chapter | Board | Passes | First pass |
+| ----------------- | ------- | ----- | ------ | ---------- |
+| Generator Gremlin | 1       | 15×15 | 5      | 33%        |
+| Museum Rex        | 2       | 20×20 | 5      | 32%        |
+| Old Tess          | 3       | 20×20 | 5      | 44%        |
+| Mother Bramble    | 4       | 20×20 | 6      | 21%        |
+| The Ringmaster    | 5       | 20×20 | 8      | 25%        |
+| The Yeti          | 6       | 20×20 | 9      | 14%        |
+| The Curator       | 7       | 20×20 | 12     | 12%        |
+
+The solver can't see ink, charge, swaps, or armor, so bosses leaning on those play harder
+than their numbers (Old Tess especially). The picture matters more than the powers: dense
+drawings stay easy under any number of powers, and thin outlines get hard quickly, so
+give a thin drawing some solid areas to start from.
 
 ## Power tips
 
@@ -579,7 +621,8 @@ once time's up.
 Solving within `seconds` heals `heal` HP (`restHeal` in `puzzles/runs.ts`); finishing
 late still heals `REST_LATE_HEAL` (1). Healing never goes past max HP. Like a dig, it never
 checks fills. Each job has one right before its boss: the Tea break (thermos), the
-Break room (coffee), and the Lifeguard chair (life ring), all 90 seconds for +4. The
+Break room (coffee), the Lifeguard chair (life ring), the Garden bench (watering can), the
+Popcorn stand (popcorn), and the Cocoa break (cocoa), all 90 seconds for +4. The
 tests check that every boss has one in front of it. In Endless, every fourth node is a
 break that alternates between a dig and a rest stop.
 

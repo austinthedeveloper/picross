@@ -1,0 +1,50 @@
+{
+  "id": "glasshouse-intro",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "🧑‍💼"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "👩‍🔬"
+    },
+    "hollis": {
+      "name": "Hollis",
+      "portrait": "🧑‍🌾"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "text": "The Glasshouse, after dark. Every pane is fogged. Something in there is breathing."
+        },
+        {
+          "who": "hollis",
+          "text": "You're the odd-jobs people? Good. Mind the flytrap. It's been learning."
+        },
+        {
+          "who": "rook",
+          "text": "Learning what?"
+        },
+        {
+          "who": "hollis",
+          "text": "Timing. It snaps at anything that dawdles, and it'll rip up your work out of spite."
+        },
+        {
+          "who": "dee",
+          "text": "That's two tricks at once. The museum's exhibits only had one each."
+        },
+        {
+          "who": "hollis",
+          "text": "Everything in here has two tricks now. And the old rose in the center dome has more than that."
+        },
+        {
+          "who": "rook",
+          "text": "Two tricks, two rates. Lead the way."
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "id": "curator-return",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "🧑‍💼"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "👩‍🔬"
+    },
+    "curator": {
+      "name": "Curator Ambrose",
+      "portrait": "🧐"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "text": "The curator's office. Every clock in the room is ticking in time with the jar."
+        },
+        {
+          "who": "curator",
+          "text": "Splendid work. Truly. You have returned all my keys."
+        },
+        {
+          "who": "dee",
+          "text": "He's been winding things up all over the county. Curator, why?"
+        },
+        {
+          "who": "curator",
+          "text": "Every collection needs a curator. And this collection was missing its two finest pieces."
+        },
+        {
+          "who": "rook",
+          "text": "You still owe us for the night shift."
+        },
+        {
+          "who": "curator",
+          "text": "Then do collect. Lights, please!"
+        }
+      ]
+    }
+  }
+}

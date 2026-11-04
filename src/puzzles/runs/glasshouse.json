@@ -1,0 +1,19 @@
+{
+  "id": "glasshouse",
+  "name": "The Glasshouse",
+  "hp": 16,
+  "encounters": [
+    "snapjaw",
+    "spore-puff",
+    "potting-shed",
+    "ironbark",
+    "garden-bench",
+    "mother-bramble"
+  ],
+  "order": 4,
+  "requires": "deep-end",
+  "gadgets": ["patch-kit"],
+  "blurb": "The botanical garden's plants have stopped taking direction. One of them bit a school group.",
+  "intro": "glasshouse-intro",
+  "outro": "glasshouse-outro"
+}

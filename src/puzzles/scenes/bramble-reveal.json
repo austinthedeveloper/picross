@@ -1,0 +1,46 @@
+{
+  "id": "bramble-reveal",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "🧑‍💼"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "👩‍🔬"
+    },
+    "hollis": {
+      "name": "Hollis",
+      "portrait": "🧑‍🌾"
+    },
+    "bramble": {
+      "name": "Mother Bramble",
+      "portrait": "🥀"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "text": "The center dome. Thorns across the door, roses across the ceiling, and one bloom the size of a van."
+        },
+        {
+          "who": "hollis",
+          "text": "That is Mother Bramble. She won a ribbon once."
+        },
+        {
+          "who": "dee",
+          "text": "Rook, look at the stem. That's a brass key."
+        },
+        {
+          "who": "rook",
+          "text": "Someone wound up a rose? Can we unwind it?"
+        },
+        {
+          "who": "bramble",
+          "text": "Try."
+        }
+      ]
+    }
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "id": "curator-reveal",
+  "id": "rex-reveal",
   "cast": {
     "rook": {
       "name": "Rook",
@@ -38,7 +38,18 @@
         },
         {
           "who": "curator",
-          "text": "Every collection needs a curator. And every curator needs... a little wind-up. Lights, please!"
+          "text": "Every collection needs a curator. And every curator needs a centerpiece. Do excuse me."
+        },
+        {
+          "text": "He turns a brass key in the wall and slips out the back. In the main hall, a great many bones stand up."
+        },
+        {
+          "who": "rook",
+          "text": "Is that on the invoice?"
+        },
+        {
+          "who": "dee",
+          "text": "Everything is on the invoice. Run."
         }
       ]
     }

@@ -21,23 +21,27 @@ test('the dev build shows it, and unlock and reset work', async ({ page }) => {
     'First Job',
     'The Night Shift',
     'The Deep End',
+    'The Glasshouse',
+    'The Midway',
+    'Summit Station',
+    'Closing Time',
   ]);
   await expect(page.locator('.chapter.locked')).toHaveCount(0);
   await expect(page.locator('.dialogue')).toBeHidden(); // openings are marked seen
 
   await openPanel(page);
   await press(page, 'Reset everything');
-  await expect(page.locator('.run-banner')).toContainText('1 of 3 jobs open');
+  await expect(page.locator('.run-banner')).toContainText('1 of 7 jobs open');
 });
 
 test('jump to a boss, force a phase, deal damage, and solve the board', async ({ page }) => {
   await page.goto('/#/');
   await openPanel(page);
   await jump(page, 'night-shift', 6);
-  await expect(page.locator('h1')).toHaveText('The Curator');
+  await expect(page.locator('h1')).toHaveText('Museum Rex');
   await openPanel(page);
   await press(page, 'Next phase');
-  await expect(page.locator('.battle-side.enemy .battle-name')).toHaveText('Clockwork Curator');
+  await expect(page.locator('.battle-side.enemy .battle-name')).toHaveText('Wound-up Rex');
   const hp = await meter(page, 'enemy-hp');
   await press(page, 'Enemy −10');
   expect(await meter(page, 'enemy-hp')).toBe(hp - 10);
