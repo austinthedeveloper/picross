@@ -11,14 +11,15 @@ Recipes for common changes. See [architecture.md](architecture.md) for how the p
    near them. Common fixes are breaking up symmetric shapes or 2×2 checkerboards, or adding
    a cell to a long empty stretch.
 3. Click **Download** (or **Copy JSON**) and save the file as `src/puzzles/pack/<id>.json`.
-4. Add the id to `ORDER` in `src/puzzles/index.ts`, at the position where it should appear.
-   Ids not listed in `ORDER` still load, but they go at the end.
+4. Add the id to `ORDER` in `src/puzzles/index.ts`, at the position where it should appear
+   among puzzles of its size. Ids not listed in `ORDER` still load, but they go at the end
+   of their size. Adding a 15×15 or bigger changes the daily cycle, which shuffles this list.
 5. Run `npm run check:puzzles`. CI runs the same check and fails on ambiguous puzzles.
 
 You can also write the JSON by hand: `id`, `name`, `width`, `height`, and `solution` (one
 string per row, `#` filled and `.` empty). `parsePuzzle` validates it at startup. The pack test expects square
 puzzles from 5×5 to 20×20, with at least half of them 15×15 or larger. The puzzle list
-groups puzzles by size, biggest first, so a new size gets its own section automatically.
+groups puzzles by size, smallest first, so a new size gets its own section automatically.
 
 ### Add many at once with a sheet
 
@@ -52,8 +53,23 @@ picture ambiguous.
 
 Add `src/puzzles/murals/<id>.json` with `id`, `name`, `order`, `tile` (usually 15) and
 `solution` rows whose width and height are multiples of `tile`. It shows up in the murals
-section. `npm test` checks each tile is uniquely solvable on its own. If one isn't, flip
-a cell or two inside that tile.
+section. `npm test` checks each tile is uniquely solvable on its own. While drawing, this
+renders the picture and shows `?` on the cells a tile can't decide:
+
+```bash
+npx vite-node scripts/puzzle-sheet.ts mural src/puzzles/murals/whale.json
+```
+
+If a tile fails, change a detail inside it, or run `mural-fix` in place of `mural` to flip
+cells for you and then look for warts. Sparse tiles fail most: give empty sky a moon, a
+cloud band or chunky stars rather than single pixels.
+
+## Change the How to play tutorial
+
+The steps are data in `src/puzzles/tutorial.ts`: a title, the text, the lines to highlight,
+and the cells to fill or mark. `tutorial.test.ts` checks that each step's cells really follow
+from its lines and the steps before it, so the lesson can't teach a guess. Text that names a
+row or column counts from 1, as players do; the code counts from 0.
 
 ## Add an encounter or a run
 

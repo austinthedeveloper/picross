@@ -5,6 +5,8 @@
  *   npx vite-node scripts/puzzle-sheet.ts check <sheet.txt>...   report each puzzle
  *   npx vite-node scripts/puzzle-sheet.ts fix <sheet.txt>        repair ambiguous ones in place
  *   npx vite-node scripts/puzzle-sheet.ts export <outdir> <sheet.txt>...
+ *   npx vite-node scripts/puzzle-sheet.ts mural <mural.json>     report each tile of a mural
+ *   npx vite-node scripts/puzzle-sheet.ts mural-fix <mural.json> repair ambiguous tiles in place
  *
  * A sheet is puzzles separated by blank lines. The first line of each is the
  * name, optionally followed by " | id=<id>"; the rest are solution rows made
@@ -19,6 +21,7 @@ import path from 'node:path';
 import { deriveClues } from '../src/engine/clues';
 import { solve, Unknown, type Knowledge } from '../src/engine/solver';
 import { slugify, stringifyPuzzle, type PuzzleFile } from '../src/puzzles/format';
+import { parseMural } from '../src/puzzles/murals';
 
 interface Entry extends PuzzleFile {
   /** Where it came from, for messages. */
@@ -261,6 +264,64 @@ function exportSheets(outDir: string, files: string[]): void {
   console.log(`exported to ${outDir}`);
 }
 
+/** A mural's tiles as puzzle files, row by row, with where each sits in the picture. */
+function muralTiles(rows: string[], tile: number) {
+  const across = rows[0].length / tile;
+  const down = rows.length / tile;
+  return Array.from({ length: across * down }, (_, n) => {
+    const [tr, tc] = [Math.floor(n / across), n % across];
+    const solution = rows
+      .slice(tr * tile, (tr + 1) * tile)
+      .map((r) => r.slice(tc * tile, (tc + 1) * tile));
+    const file: PuzzleFile = {
+      id: `tile-${n + 1}`,
+      name: `Tile ${n + 1}`,
+      width: tile,
+      height: tile,
+      solution,
+    };
+    return { file, tr, tc };
+  });
+}
+
+/** Checks a mural file: its shape, and that every tile is uniquely solvable on its own. */
+function checkMural(file: string): boolean {
+  const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+  parseMural(data); // Throws on a bad shape or an empty tile.
+  const rows: string[] = data.solution;
+  console.log(rows.map((r) => '  ' + r.replace(/#/g, '█').replace(/\./g, '·')).join('\n'));
+  let ok = true;
+  for (const { file: tile } of muralTiles(rows, data.tile)) {
+    const result = solveEntry(tile);
+    const pct = Math.round(fill(tile) * 100);
+    if (result.status === 'unique') {
+      console.log(`✓ ${tile.name} ${pct}%`);
+    } else {
+      ok = false;
+      console.log(`✗ ${tile.name} ${pct}% ${result.status}; \`?\` cells can't be decided`);
+      console.log(picture(tile, result.status === 'ambiguous' ? result.grid : undefined));
+    }
+  }
+  console.log(`${data.name}: ${ok ? 'all good' : 'problems above'}`);
+  return ok;
+}
+
+/** Repairs ambiguous tiles by flipping cells, and rewrites the mural file. */
+function fixMural(file: string): void {
+  const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+  const rows: string[][] = (data.solution as string[]).map((r) => [...r]);
+  for (const { file: tile, tr, tc } of muralTiles(data.solution, data.tile)) {
+    if (solveEntry(tile).status === 'unique') continue;
+    const { cells, flips } = repair(tile, 16);
+    console.log(`${tile.name}: ${flips.length} flip(s) → ${solveEntry(tile, cells).status}`);
+    toRows(tile, cells).forEach((line, r) =>
+      [...line].forEach((ch, c) => (rows[tr * data.tile + r][tc * data.tile + c] = ch)),
+    );
+  }
+  data.solution = rows.map((r) => r.join(''));
+  fs.writeFileSync(file, JSON.stringify(data, null, 2) + '\n');
+}
+
 const [command, ...args] = process.argv.slice(2);
 switch (command) {
   case 'check':
@@ -272,7 +333,13 @@ switch (command) {
   case 'export':
     exportSheets(args[0], args.slice(1));
     break;
+  case 'mural':
+    process.exit(args.map(checkMural).every(Boolean) ? 0 : 1);
+  // eslint-disable-next-line no-fallthrough -- process.exit never returns
+  case 'mural-fix':
+    args.forEach(fixMural);
+    break;
   default:
-    console.error('usage: puzzle-sheet.ts check|fix|export ...');
+    console.error('usage: puzzle-sheet.ts check|fix|export|mural|mural-fix ...');
     process.exit(1);
 }
