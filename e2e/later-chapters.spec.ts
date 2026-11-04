@@ -18,7 +18,7 @@ const JOBS = [
     job: 'glasshouse',
     opening: 'Chapter 4: Green Thumbs',
     nodes: ['snapjaw', 'spore-puff', 'potting-shed', 'ironbark', 'garden-bench', 'mother-bramble'],
-    gadget: { at: 'potting-shed', name: 'You got 🧽 Sponge' },
+    gadget: { at: 'potting-shed', name: 'Sponge' },
     signOff: 'bad-tempered rose',
   },
   {
@@ -32,21 +32,21 @@ const JOBS = [
       'popcorn-stand',
       'ringmaster',
     ],
-    gadget: { at: 'prop-wagon', name: 'You got 💣 Bomb' },
+    gadget: { at: 'prop-wagon', name: 'Bomb' },
     signOff: 'happy to be bankrupt',
   },
   {
     job: 'summit-station',
     opening: 'Chapter 6: Cold Snap',
     nodes: ['whiteout', 'falling-star', 'supply-cache', 'ice-mammoth', 'cocoa-break', 'yeti'],
-    gadget: { at: 'supply-cache', name: 'You got 🩹 Patch kit' },
+    gadget: { at: 'supply-cache', name: 'Patch kit' },
     signOff: 'taking off one coat',
   },
   {
     job: 'closing-time',
     opening: 'Wound Up',
     nodes: ['tin-soldier', 'dusty-exhibit', 'break-room', 'curator'],
-    gadget: { at: 'dusty-exhibit', name: 'You got 🩹 Patch kit' },
+    gadget: { at: 'dusty-exhibit', name: 'Patch kit' },
     signOff: 'back in his case',
   },
 ];

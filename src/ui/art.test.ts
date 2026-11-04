@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { catalog } from '../puzzles/gadgets';
-import { withArt } from './art';
+import { enemyArt, portraitArt, withArt } from './art';
 
 const files = new Set(
   Object.keys(import.meta.glob('/public/art/**/*.png')).map((p) => p.replace('/public/art/', '')),
@@ -17,12 +17,15 @@ function valuesOf(data: unknown, key: string): string[] {
   );
 }
 
+const artIds = (values: string[]) => [...new Set(values)].filter((v) => /^[a-z0-9-]+$/.test(v));
+
 describe('art files', () => {
-  it.each(valuesOf(Object.values(encounters), 'sprite'))('enemy sprite %s exists', (id) => {
+  // An emoji is fine: it stands in until the art is made. A plain id has to have its file.
+  it.each(artIds(valuesOf(Object.values(encounters), 'sprite')))('enemy sprite %s exists', (id) => {
     expect(files).toContain(`enemies/${id}.png`);
   });
 
-  it.each(valuesOf(Object.values(scenes), 'portrait'))('portrait %s exists', (id) => {
+  it.each(artIds(valuesOf(Object.values(scenes), 'portrait')))('portrait %s exists', (id) => {
     expect(files).toContain(`cast/${id}.png`);
   });
 
@@ -39,6 +42,19 @@ describe('art files', () => {
 
   it('has the fallback for an enemy without art', () => {
     expect(files).toContain('enemies/unknown.png');
+  });
+});
+
+describe('placeholders', () => {
+  it('draws an art id as an image', () => {
+    expect(enemyArt('goblin').getAttribute('src')).toBe('./art/enemies/goblin.png');
+    expect(portraitArt('rook').getAttribute('src')).toBe('./art/cast/rook.png');
+  });
+
+  it('draws anything else as the emoji it is', () => {
+    expect(enemyArt('🦖').tagName).toBe('SPAN');
+    expect(enemyArt('🦖').textContent).toBe('🦖');
+    expect(portraitArt('🧑‍🌾').textContent).toBe('🧑‍🌾');
   });
 });
 

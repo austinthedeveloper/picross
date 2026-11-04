@@ -10,9 +10,15 @@ function art(url: string, alt = ''): HTMLImageElement {
 
 const UNKNOWN_ENEMY = artUrl('enemies', 'unknown');
 
-/** An enemy's sprite by id. An enemy without its own art gets the unknown blob. */
-export function enemyArt(id: string): HTMLImageElement {
-  const img = art(artUrl('enemies', id));
+/** Art ids are file names. Anything else is an emoji standing in until the art is made. */
+const isArtId = (value: string) => /^[a-z0-9-]+$/.test(value);
+const placeholder = (emoji: string) =>
+  el('span', { className: 'art-placeholder', textContent: emoji });
+
+/** An enemy's sprite. An id with no file behind it gets the unknown blob. */
+export function enemyArt(sprite: string): HTMLElement {
+  if (!isArtId(sprite)) return placeholder(sprite);
+  const img = art(artUrl('enemies', sprite));
   img.onerror = () => {
     img.onerror = null;
     img.src = UNKNOWN_ENEMY;
@@ -20,13 +26,14 @@ export function enemyArt(id: string): HTMLImageElement {
   return img;
 }
 
-export const portraitArt = (id: string) => art(artUrl('cast', id));
+export const portraitArt = (portrait: string): HTMLElement =>
+  isArtId(portrait) ? art(artUrl('cast', portrait)) : placeholder(portrait);
 export const gadgetArt = (id: string) => art(artUrl('gadgets', id));
 export const iconArt = (id: 'fight' | 'dig' | 'rest' | 'boss') => art(artUrl('icons', id));
 
 /** Loads art before it's needed, so a boss's next form or a new speaker doesn't flash in. */
 export function preloadArt(kind: 'enemies' | 'cast', ids: string[]) {
-  for (const id of ids) new Image().src = artUrl(kind, id);
+  for (const id of ids.filter(isArtId)) new Image().src = artUrl(kind, id);
 }
 
 /**

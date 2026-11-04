@@ -238,6 +238,7 @@
   border-radius: 50%;
   border: 2px solid var(--ink);
   background: var(--cell-bg);
+  font-size: 1.8rem;
   overflow: hidden;
 }
 

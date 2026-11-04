@@ -83,3 +83,7 @@ Done, by `scripts/art-clean.py`. All 43 picks are in `public/art/` and wired int
   That settled the fight icon's weak spot: it reads well on the real map at that size.
 - **Still emoji, because the pack has no art for them:** the lock, the streak flame, the ✨
   for a dig with no gadget, and the debug panel's gadget list.
+- **Still emoji, because the art doesn't exist yet:** chapters 4 to 7 arrived after this
+  pack, so their 18 enemy forms and 6 new characters (Bigsby, Mother Bramble, Hollis, Dr.
+  Lund, the Ringmaster, the Yeti) have no prompts or art. A sprite or portrait that isn't an
+  art id draws as its emoji, so they keep working until they get art.
