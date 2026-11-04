@@ -251,11 +251,17 @@ const load = (files: JsonModules) =>
 const pack = load(packFiles);
 load(runFiles);
 
-/** The free-play puzzle list, in play order. */
-export const puzzles: Puzzle[] = [
+/**
+ * The pack in `ORDER`. The daily puzzle shuffles this list, so its order fixes
+ * which puzzle lands on which day.
+ */
+export const packInOrder: Puzzle[] = [
   ...ORDER.flatMap((id) => pack.find((p) => p.id === id) ?? []),
   ...pack.filter((p) => !ORDER.includes(p.id)),
 ];
+
+/** The free-play puzzle list, simple to hard: smallest first, then `ORDER` within a size. */
+export const puzzles: Puzzle[] = [...packInOrder].sort((a, b) => a.width - b.width);
 
 /** Every puzzle, including run-only ones. */
 export const allPuzzles: Puzzle[] = [...byId.values()];

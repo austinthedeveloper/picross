@@ -64,7 +64,8 @@ HTML report (`playwright-report`) when something fails. To debug a failure, run
 
 | File                     | Covers                                                                                                                                                |
 | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `free-play.spec.ts`      | Sizes, sound off by default, solving and the end screen, drag, undo, Hearts and Retry, hints, keyboard play                                           |
+| `free-play.spec.ts`      | Sizes smallest first, the list filter, "Next", sound off by default, solving and the end screen, drag, undo, Hearts and Retry, hints, keyboard play   |
+| `how-to-play.spec.ts`    | The tutorial from the first step to Solved: nudges, going back a step, the tool prompt, and that it records nothing                                   |
 | `runs.spec.ts`           | Jobs board and chapters, the full First Job (intro once, sign-off, stats), knockouts, rest stops in time and late                                     |
 | `fights.spec.ts`         | One test per mechanic: fog, gremlin waves, Mimic swaps, Owl scramble, Forger call-outs, Beetle armor, gadgets, Eel charge, Cuttlefish ink, power tips |
 | `night-shift.spec.ts`    | The whole Night Shift from the jobs board to the Museum Rex                                                                                           |

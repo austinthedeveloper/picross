@@ -5,7 +5,7 @@ import {
   recordSolve,
   saveBoard,
 } from '../../game/progress';
-import { getSettings } from '../../game/settings';
+import { getSettings, passesFilter, type ListFilter } from '../../game/settings';
 import type { Mural } from '../../puzzles/murals';
 import { murals } from '../../puzzles/murals';
 import { createPicture } from '../board/picture';
@@ -41,8 +41,10 @@ function tileGrid(mural: Mural, pixel: number, links: boolean): HTMLElement {
   return grid;
 }
 
-/** The murals section on the puzzle list (#24). */
-export function muralSection(): HTMLElement {
+/** The murals section on the puzzle list (#24), or null when the filter hides them all. */
+export function muralSection(filter: ListFilter): HTMLElement | null {
+  const shown = murals.filter((mural) => passesFilter(filter, complete(mural)));
+  if (!shown.length) return null;
   return el('section', { className: 'size-section murals', ariaLabel: 'Murals' }, [
     el('h2', { className: 'size-heading' }, [
       'Murals',
@@ -54,7 +56,7 @@ export function muralSection(): HTMLElement {
     el(
       'div',
       { className: 'mural-cards' },
-      murals.map((mural) =>
+      shown.map((mural) =>
         el('a', { className: 'card mural-card', href: `#/mural/${mural.id}` }, [
           tileGrid(mural, 2, false),
           el('div', { className: 'card-name', textContent: title(mural) }),
