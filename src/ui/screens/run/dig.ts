@@ -1,5 +1,6 @@
 import type { Puzzle } from '../../../puzzles/format';
 import { getGadget } from '../../../puzzles/gadgets';
+import { gadgetArt, iconArt } from '../../art';
 import { el } from '../../dom';
 import { pause } from '../../motion';
 import type { PlaySession } from '../gameScreen';
@@ -18,7 +19,7 @@ export function digHooks(puzzle: Puzzle): Pick<PlaySession, 'header' | 'theme' |
     textContent: 'Something is buried here. Take your time: mistakes don’t hurt.',
   });
   const header = el('section', { className: 'dig', ariaLabel: 'Dig site' }, [
-    el('span', { className: 'dig-icon', textContent: '⛏️', ariaHidden: 'true' }),
+    el('span', { className: 'dig-icon', ariaHidden: 'true' }, [iconArt('dig')]),
     status,
     find,
   ]);
@@ -30,7 +31,7 @@ export function digHooks(puzzle: Puzzle): Pick<PlaySession, 'header' | 'theme' |
     async celebrate(board) {
       board.classList.add('excavated');
       await pause(700);
-      find.textContent = gadget?.icon ?? '✨';
+      find.replaceChildren(gadget ? gadgetArt(gadget.id) : '✨');
       find.classList.add('found');
       status.textContent = gadget
         ? `You dug up a ${puzzle.name.toLowerCase()}. It's a ${gadget.name.toLowerCase()} now.`

@@ -2,6 +2,7 @@ import { useGadget } from '../../../../game/battle';
 import { removeGadget, withBattle } from '../../../../game/run';
 import { saveCurrentRun } from '../../../../game/runSave';
 import { getGadget, type Gadget } from '../../../../puzzles/gadgets';
+import { gadgetArt } from '../../../art';
 import { el } from '../../../dom';
 import { playSound } from '../../../sound';
 import type { FightContext } from './context';
@@ -68,7 +69,7 @@ export function createGadgetTray(
         onclick: () => use(gadget),
       });
       button.append(
-        el('span', { className: 'gadget-icon', textContent: gadget.icon, ariaHidden: 'true' }),
+        el('span', { className: 'gadget-icon', ariaHidden: 'true' }, [gadgetArt(gadget.id)]),
         `${gadget.name}${count > 1 ? ` ×${count}` : ''}`,
       );
       return [button];

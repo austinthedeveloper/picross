@@ -3,19 +3,19 @@
   "cast": {
     "rook": {
       "name": "Rook",
-      "portrait": "🧑‍💼"
+      "portrait": "rook"
     },
     "dee": {
       "name": "Dee",
-      "portrait": "👩‍🔬"
+      "portrait": "dee"
     },
     "bo": {
       "name": "Keeper Bo",
-      "portrait": "🧔"
+      "portrait": "bo"
     },
     "tess": {
       "name": "Old Tess",
-      "portrait": "🐙"
+      "portrait": "tess"
     }
   },
   "nodes": {

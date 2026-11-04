@@ -3,11 +3,11 @@
   "cast": {
     "rook": {
       "name": "Rook",
-      "portrait": "🧑‍💼"
+      "portrait": "rook"
     },
     "dee": {
       "name": "Dee",
-      "portrait": "👩‍🔬"
+      "portrait": "dee"
     },
     "lund": {
       "name": "Dr. Lund",

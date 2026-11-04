@@ -3,6 +3,7 @@ import { getCurrentRun, getJobStats, hasSeenScene, saveCurrentRun } from '../../
 import { getSettings, updateSettings, type Mode } from '../../../game/settings';
 import { endlessRun, endlessSetup } from '../../../puzzles/endless';
 import { getRun, runs, type Encounter, type RunDef } from '../../../puzzles/runs';
+import { iconArt } from '../../art';
 import { el } from '../../dom';
 
 /** What the run screens share: where to draw, how to redraw, and how to play a scene. */
@@ -13,13 +14,12 @@ export interface Hub {
   playScene(id: string): void;
 }
 
-const KIND_ICON: Record<Encounter['kind'], string> = { fight: '⚔️', dig: '⛏️', rest: '☕' };
 const KIND_LABEL: Record<Encounter['kind'], string> = {
   fight: 'Fight',
   dig: 'Dig',
   rest: 'Rest stop',
 };
-export const nodeIcon = (e: Encounter) => (e.boss ? '👑' : KIND_ICON[e.kind]);
+export const nodeIcon = (e: Encounter) => iconArt(e.boss ? 'boss' : e.kind);
 export const nodeLabel = (e: Encounter) => (e.boss ? 'Boss' : KIND_LABEL[e.kind]);
 
 /** The saved run with its definition, or null if there's none (or its run was removed). */

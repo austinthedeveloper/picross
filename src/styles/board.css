@@ -309,9 +309,7 @@
 
 .row-clue.scrambled::before,
 .col-clue.scrambled::before {
-  content: '⚙';
-  font-size: 1em;
-  line-height: 1;
+  content: '';
   color: var(--accent);
 }
 
@@ -334,7 +332,7 @@
 
 .row-clue.weak-point::after,
 .col-clue.weak-point::after {
-  content: '🎯';
+  content: '';
   font-size: 0.85em;
 }
 
@@ -352,7 +350,7 @@
 /* Suspects (#64): clues that might be forged. */
 .row-clue.suspect::before,
 .col-clue.suspect::before {
-  content: '🎭';
+  content: '';
   font-size: 0.8em;
 }
 
@@ -419,6 +417,6 @@
 
 .row-clue.wiped::before,
 .col-clue.wiped::before {
-  content: '👄';
+  content: '';
   font-size: 0.8em;
 }

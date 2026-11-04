@@ -657,8 +657,8 @@ at 1 HP. Gadgets act on the fight, never on the grid.
 ## Scenes (dialogue)
 
 Scenes are JSON in `puzzles/scenes/`, validated at load: unknown speakers, unknown target
-nodes, and empty nodes all fail. A scene has a `cast` (name plus an emoji portrait until
-#25's art) and `nodes`. Play starts at `start`. A node plays its `lines` in order, then
+nodes, and empty nodes all fail. A scene has a `cast` (name plus a portrait, which is a
+file name from `public/art/cast/` or an emoji until the art exists) and `nodes`. Play starts at `start`. A node plays its `lines` in order, then
 shows its `choices`, jumps to `next`, or ends the scene.
 
 - Lines and choices can have `"if": "flag"` or `"if": "!flag"`, and they're skipped when

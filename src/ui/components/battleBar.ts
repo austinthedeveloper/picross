@@ -1,4 +1,5 @@
 import type { Enemy } from '../../game/battle';
+import { enemyArt, preloadArt, withArt } from '../art';
 import { el } from '../dom';
 import { playOnce } from '../motion';
 
@@ -37,7 +38,7 @@ export interface BattleBar {
   /** The armor shatters. */
   armorBreaks(): void;
   /** Changes the enemy's name and sprite (boss phases, #42). */
-  setForm(name: string, icon: string): void;
+  setForm(name: string, sprite: string): void;
   /** A banner across the bar when a boss changes phase. */
   phaseBanner(name: string, taunt: string): void;
 }
@@ -70,8 +71,12 @@ function floatNumber(host: HTMLElement, text: string, className: string) {
 
 /** Enemy and player HP shown above the board during a fight. */
 export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
-  const sprite = el('span', { className: 'enemy-sprite', textContent: enemy.sprite });
+  const sprite = el('span', { className: 'enemy-sprite' }, [enemyArt(enemy.sprite)]);
   sprite.setAttribute('aria-hidden', 'true');
+  preloadArt(
+    'enemies',
+    (enemy.phases ?? []).flatMap((p) => p.sprite ?? []),
+  );
   const enemyMeter = meter(`${enemy.name} HP`, 'enemy-hp');
   const playerMeter = meter('Your HP', 'player-hp');
   const enemyName = el('span', { className: 'battle-name', textContent: enemy.name });
@@ -79,7 +84,7 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
   const fakes = el('span', { className: 'fakes', hidden: true });
   const chargeLabel = el('span', { className: 'charge-label' });
   const charge = el('span', { className: 'charge', hidden: true, ariaHidden: 'true' }, [
-    el('span', { className: 'charge-icon', textContent: '⚡' }),
+    el('span', { className: 'charge-icon' }, withArt('⚡')),
     el('span', { className: 'charge-track' }, [el('span', { className: 'charge-fill' })]),
     chargeLabel,
   ]);
@@ -128,7 +133,7 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
     },
     setShield(hits) {
       shield.hidden = hits <= 0;
-      shield.textContent = hits > 1 ? `🛡×${hits} ` : '🛡 ';
+      shield.replaceChildren(...withArt(hits > 1 ? `🛡×${hits} ` : '🛡 '));
       shield.ariaLabel = `Shield blocks ${hits} ${hits === 1 ? 'hit' : 'hits'}`;
     },
     block() {
@@ -142,13 +147,13 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
     },
     setArmor(weakPoints) {
       armor.hidden = weakPoints <= 0;
-      armor.textContent = `🛡 ${weakPoints}🎯`;
+      armor.replaceChildren(...withArt(`🛡 ${weakPoints}🎯`));
       armor.title = `Armored: ${weakPoints} weak point${weakPoints === 1 ? '' : 's'} left`;
     },
     setFakes(count) {
       fakes.hidden = count <= 0;
-      fakes.textContent = `🎭 ${count}`;
-      fakes.title = `${count} of the 🎭 clues ${count === 1 ? 'is' : 'are'} forged`;
+      fakes.replaceChildren(...withArt(`🎭 ${count}`));
+      fakes.title = `${count} of the marked clues ${count === 1 ? 'is' : 'are'} forged`;
       fakes.ariaLabel = fakes.title;
     },
     setTip(content) {
@@ -175,9 +180,9 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
       floatNumber(enemySide, 'Armor broken!', 'to-enemy');
       window.setTimeout(() => (armor.hidden = true), 600);
     },
-    setForm(name, icon) {
+    setForm(name, form) {
       enemyName.textContent = name;
-      sprite.textContent = icon;
+      sprite.replaceChildren(enemyArt(form));
     },
     phaseBanner(name, taunt) {
       banner.replaceChildren(

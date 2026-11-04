@@ -1,4 +1,5 @@
 import { REST_LATE_HEAL, type Rest } from '../../../puzzles/runs';
+import { iconArt } from '../../art';
 import { el } from '../../dom';
 import { formatTime } from '../../format';
 import type { PlaySession } from '../gameScreen';
@@ -19,7 +20,7 @@ export function restHooks(rest: Rest): Pick<PlaySession, 'header' | 'theme' | 'o
     textContent: `Catch your breath. Solve it in time for +${rest.heal} HP.`,
   });
   const header = el('section', { className: 'rest', ariaLabel: 'Rest stop' }, [
-    el('span', { className: 'rest-icon', textContent: '☕', ariaHidden: 'true' }),
+    el('span', { className: 'rest-icon', ariaHidden: 'true' }, [iconArt('rest')]),
     status,
     clock,
   ]);

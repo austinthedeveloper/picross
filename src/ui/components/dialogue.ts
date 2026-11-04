@@ -7,6 +7,7 @@ import {
   type Flags,
 } from '../../game/dialogue';
 import type { Scene } from '../../puzzles/scenes';
+import { portraitArt, preloadArt, withArt } from '../art';
 import { el } from '../dom';
 import { reducedMotion } from '../motion';
 import { playSound } from '../sound';
@@ -31,6 +32,10 @@ export function createDialogue(
   onEnd: (flags: Flags) => void,
 ): DialogueView {
   let state: DialogueState = startDialogue(scene, flags);
+  preloadArt(
+    'cast',
+    Object.values(scene.cast).map((member) => member.portrait),
+  );
   let typing: number | undefined;
   let fullText = '';
   let ended = false;
@@ -62,7 +67,7 @@ export function createDialogue(
   const finishTyping = () => {
     window.clearInterval(typing);
     typing = undefined;
-    text.textContent = fullText;
+    text.replaceChildren(...withArt(fullText));
     box.classList.add('ready');
   };
 
@@ -76,7 +81,7 @@ export function createDialogue(
     text.textContent = '';
     typing = window.setInterval(() => {
       shown += 1;
-      text.textContent = line.slice(0, shown);
+      text.replaceChildren(...withArt(line.slice(0, shown)));
       if (shown >= line.length) finishTyping();
     }, 1000 / CHARS_PER_SECOND);
   };
@@ -87,7 +92,7 @@ export function createDialogue(
     if (step.kind === 'line') {
       choices.replaceChildren();
       root.classList.toggle('narration', !step.speaker);
-      portrait.textContent = step.speaker?.portrait ?? '';
+      portrait.replaceChildren(...(step.speaker ? [portraitArt(step.speaker.portrait)] : []));
       portrait.dataset.who = step.speaker?.id ?? '';
       speaker.textContent = step.speaker?.name ?? '';
       playSound('blip');

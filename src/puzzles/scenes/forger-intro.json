@@ -3,15 +3,15 @@
   "cast": {
     "rook": {
       "name": "Rook",
-      "portrait": "🧑‍💼"
+      "portrait": "rook"
     },
     "dee": {
       "name": "Dee",
-      "portrait": "👩‍🔬"
+      "portrait": "dee"
     },
     "forger": {
       "name": "The Forger",
-      "portrait": "🎨"
+      "portrait": "forger"
     }
   },
   "nodes": {

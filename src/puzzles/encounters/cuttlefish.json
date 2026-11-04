@@ -6,7 +6,7 @@
   "blurb": "It changes color when it's upset. It's very upset.",
   "enemy": {
     "name": "Cuttlefish",
-    "sprite": "🦑",
+    "sprite": "cuttlefish",
     "hp": 45,
     "attack": 2,
     "phases": [

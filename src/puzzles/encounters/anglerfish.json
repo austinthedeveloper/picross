@@ -6,7 +6,7 @@
   "blurb": "The deep-sea tank. Pitch black, except for one friendly little light.",
   "enemy": {
     "name": "Anglerfish",
-    "sprite": "🐟",
+    "sprite": "anglerfish",
     "hp": 45,
     "attack": 2,
     "fog": {

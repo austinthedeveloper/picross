@@ -144,7 +144,7 @@
   border-radius: 50%;
   background: var(--cell-bg);
   border: 2px solid var(--guide);
-  font-size: 1.2rem;
+  font-size: 1.65rem;
 }
 
 .node-text {
@@ -239,6 +239,7 @@
   border: 2px solid var(--ink);
   background: var(--cell-bg);
   font-size: 1.8rem;
+  overflow: hidden;
 }
 
 .sign-off figcaption {

@@ -6,7 +6,7 @@
   "blurb": "The touch tank hums. Don't touch the tank.",
   "enemy": {
     "name": "Electric Eel",
-    "sprite": "⚡",
+    "sprite": "electric-eel",
     "hp": 45,
     "attack": 2,
     "charge": 5,
