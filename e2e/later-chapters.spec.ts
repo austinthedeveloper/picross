@@ -55,6 +55,9 @@ JOBS.forEach(({ job, opening, nodes, gadget, signOff }, i) => {
   const before = ORDER.slice(0, 3 + i);
   test(`the whole of ${job}, from its chapter opening to its boss`, async ({ page, context }) => {
     test.setTimeout(240_000);
+    // An exception in a click handler doesn't fail a test or stop the solve, so watch for them.
+    const errors: string[] = [];
+    page.on('pageerror', (e) => errors.push(e.message));
     await seed(context, {
       run: {
         seenScenes: ['first-job-intro', ...OPENINGS.slice(0, before.length - 1)],
@@ -81,5 +84,6 @@ JOBS.forEach(({ job, opening, nodes, gadget, signOff }, i) => {
 
     await expect(page.locator('.results h2')).toHaveText('Job done!');
     await expect(page.locator('.sign-off').first()).toContainText(signOff);
+    expect(errors).toEqual([]);
   });
 });
