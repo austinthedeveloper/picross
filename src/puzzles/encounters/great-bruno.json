@@ -1,0 +1,30 @@
+{
+  "id": "great-bruno",
+  "name": "The Great Bruno",
+  "kind": "fight",
+  "puzzle": "kettlebell",
+  "blurb": "He can lift a horse. Nobody asked the horse. Aim for the cracks in the iron.",
+  "enemy": {
+    "name": "The Great Bruno",
+    "sprite": "💪",
+    "hp": 45,
+    "attack": 2,
+    "charge": 35,
+    "armor": {
+      "weakPoints": {
+        "rows": [3, 7],
+        "cols": [10]
+      },
+      "attack": 4
+    },
+    "phases": [
+      {
+        "at": 0.5,
+        "name": "Greater Bruno",
+        "attack": 3,
+        "charge": 25,
+        "taunt": "BRUNO LIFTS. YOU WATCH."
+      }
+    ]
+  }
+}

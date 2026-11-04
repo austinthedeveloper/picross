@@ -19,12 +19,17 @@
       "lines": [
         {
           "who": "dee",
-          "text": "Exhibits back on their stands, curator back in his case. Lovely night, boss.",
+          "text": "Exhibits back on their stands, rex back in one piece. Mostly the right pieces.",
+          "if": "won"
+        },
+        {
+          "who": "dee",
+          "text": "No curator, though. Just this, still in the wall.",
           "if": "won"
         },
         {
           "who": "rook",
-          "text": "Also, I may have booked us a job at the aquarium. It's fine. Probably.",
+          "text": "A brass key. It goes in a jar, as evidence. Also, I may have booked us a job at the aquarium. It's fine. Probably.",
           "if": "won"
         },
         {

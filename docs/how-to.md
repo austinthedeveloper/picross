@@ -129,6 +129,17 @@ Chapters (#23) group jobs on the jobs board. Add `src/puzzles/chapters/<id>.json
 that job `requires` from the chapter before. `opening` is an optional scene that plays
 the first time the chapter opens and can be replayed from the board.
 
+A chapter's number comes from its `order`, and each opening's first line usually repeats
+it ("Chapter 3: Deep Water"), so renumbering means editing that line too. To add chapters
+before an existing one, change the later chapter's `order` and point its first job's
+`requires` at the new job before it, and set the job's own `order` to match. **Wound Up**
+(the Curator's return) leaves the number out of its opening and doesn't refer to any
+particular chapter, so moving it needs only those `order` and `requires` changes.
+
+Run-only puzzle ids can't match any pack puzzle. `puzzle-sheet.ts check` doesn't catch
+that, but `npm test` does. For how hard to make a new fight, see Difficulty in
+[architecture.md](architecture.md).
+
 ## Add a gadget
 
 1. Add an entry to the catalog in `src/puzzles/gadgets.ts` with an id, name, icon (an

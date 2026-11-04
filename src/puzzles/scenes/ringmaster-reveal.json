@@ -1,0 +1,43 @@
+{
+  "id": "ringmaster-reveal",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "🧑‍💼"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "👩‍🔬"
+    },
+    "ringmaster": {
+      "name": "The Ringmaster",
+      "portrait": "🎩"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "who": "ringmaster",
+          "text": "Tonight only! Two tinkerers, one puzzle, and no refunds!"
+        },
+        {
+          "who": "dee",
+          "text": "See the 🎭 clues? Some of them are lying again. And the ⚙ ones are out of order."
+        },
+        {
+          "who": "rook",
+          "text": "He's got the whole act. Dee, why is his moustache turning by itself?"
+        },
+        {
+          "who": "dee",
+          "text": "There's a brass key sticking out of that hat."
+        },
+        {
+          "who": "ringmaster",
+          "text": "For my next trick: you lose!"
+        }
+      ]
+    }
+  }
+}

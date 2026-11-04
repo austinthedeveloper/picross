@@ -1,5 +1,5 @@
 {
-  "id": "curator-reveal",
+  "id": "curator-return",
   "cast": {
     "rook": {
       "name": "Rook",
@@ -18,27 +18,27 @@
     "start": {
       "lines": [
         {
-          "text": "The beetle's down. The museum goes quiet, except for a steady tick from the curator's office."
+          "text": "The curator's office. Every clock in the room is ticking in time with the jar."
         },
         {
           "who": "curator",
-          "text": "Splendid work. Truly. You may go."
+          "text": "Splendid work. Truly. You have returned all my keys."
         },
         {
           "who": "dee",
-          "text": "Curator, why are you ticking?"
+          "text": "He's been winding things up all over the county. Curator, why?"
         },
         {
           "who": "curator",
-          "text": "I am not ticking. You are ticking."
+          "text": "Every collection needs a curator. And this collection was missing its two finest pieces."
         },
         {
           "who": "rook",
-          "text": "He's clockwork. He's been winding up the exhibits. Oh, this is going on the invoice."
+          "text": "You still owe us for the night shift."
         },
         {
           "who": "curator",
-          "text": "Every collection needs a curator. And every curator needs... a little wind-up. Lights, please!"
+          "text": "Then do collect. Lights, please!"
         }
       ]
     }

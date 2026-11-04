@@ -1,0 +1,42 @@
+{
+  "id": "cold-snap-opening",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "🧑‍💼"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "👩‍🔬"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "text": "Chapter 6: Cold Snap. The van, pointed uphill, with chains on its tires."
+        },
+        {
+          "who": "dee",
+          "text": "The Summit Station observatory hasn't answered its radio in a week."
+        },
+        {
+          "who": "rook",
+          "text": "Maybe they are busy."
+        },
+        {
+          "who": "dee",
+          "text": "Their last two messages were 'the snowman moved' and 'that's not a snowman'."
+        },
+        {
+          "who": "rook",
+          "text": "Right. It's a mountain, so I packed a coat."
+        },
+        {
+          "who": "dee",
+          "text": "I'm packing towels."
+        }
+      ]
+    }
+  }
+}

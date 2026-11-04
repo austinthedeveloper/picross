@@ -1,0 +1,19 @@
+{
+  "id": "midway",
+  "name": "The Midway",
+  "hp": 18,
+  "encounters": [
+    "funhouse-mirror",
+    "madame-vesper",
+    "prop-wagon",
+    "great-bruno",
+    "popcorn-stand",
+    "ringmaster"
+  ],
+  "order": 5,
+  "requires": "glasshouse",
+  "gadgets": ["patch-kit"],
+  "blurb": "A carnival that runs all night with nobody aboard. The flyer says SEND HELP.",
+  "intro": "midway-intro",
+  "outro": "midway-outro"
+}
