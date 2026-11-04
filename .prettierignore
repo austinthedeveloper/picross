@@ -1,3 +1,5 @@
 dist
 node_modules
 package-lock.json
+docs/art/incoming/*.json
+docs/art/incoming/*.html

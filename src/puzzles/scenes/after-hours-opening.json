@@ -1,8 +1,8 @@
 {
   "id": "after-hours-opening",
   "cast": {
-    "rook": { "name": "Rook", "portrait": "🧑‍💼" },
-    "dee": { "name": "Dee", "portrait": "👩‍🔬" }
+    "rook": { "name": "Rook", "portrait": "rook" },
+    "dee": { "name": "Dee", "portrait": "dee" }
   },
   "nodes": {
     "start": {

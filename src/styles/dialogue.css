@@ -43,8 +43,7 @@
   border-radius: 50%;
   background: var(--surface);
   border: 3px solid var(--ink);
-  font-size: 5rem;
-  line-height: 1;
+  overflow: hidden;
   animation: portrait-in 0.25s ease-out;
 }
 

@@ -8,7 +8,7 @@
   "blurb": "The curator's office. It's ticking.",
   "enemy": {
     "name": "Curator Ambrose",
-    "sprite": "🧐",
+    "sprite": "curator",
     "hp": 60,
     "attack": 2,
     "fog": {
@@ -18,7 +18,7 @@
       {
         "at": 0.92,
         "name": "Clockwork Curator",
-        "sprite": "🤖",
+        "sprite": "clockwork-curator",
         "attack": 3,
         "taunt": "Exhibit hours are over.",
         "fog": {
@@ -37,7 +37,7 @@
       {
         "at": 0.78,
         "name": "Overwound Curator",
-        "sprite": "⚙️",
+        "sprite": "overwound-curator",
         "attack": 4,
         "taunt": "Rearranging the collection!",
         "swap": true

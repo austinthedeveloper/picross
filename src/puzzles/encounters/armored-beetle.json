@@ -6,7 +6,7 @@
   "blurb": "A museum beetle the size of a hatchback. Look for the cracks.",
   "enemy": {
     "name": "Armored Beetle",
-    "sprite": "🪲",
+    "sprite": "armored-beetle",
     "hp": 45,
     "attack": 2,
     "armor": {

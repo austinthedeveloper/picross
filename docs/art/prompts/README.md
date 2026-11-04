@@ -57,8 +57,8 @@ accent, because they're applied as CSS masks and take the theme's text color.
 | --------- | ---------------------------------------------------------- | --------------------- |
 | Enemies   | ~38 px in the battle bar; also the finisher's target       | `public/art/enemies/` |
 | Cast      | 140 px circle in dialogue; 52 px circle in the sign-off    | `public/art/cast/`    |
-| Gadgets   | ~18 px in buttons and the inventory; 40 px in the dig find | `public/art/gadgets/` |
-| Map icons | ~19 px inside a 40 px circle on the path map; inline text  | `public/art/icons/`   |
+| Gadgets   | ~22 px in buttons and the inventory; 30 px in the dig find | `public/art/gadgets/` |
+| Map icons | ~26 px inside a 40 px circle on the path map; inline text  | `public/art/icons/`   |
 | Powers    | ~21 px on tip cards; ~13 px beside clues; battle badges    | `public/art/icons/`   |
 
 The file that each image replaces is listed in its prompt, so you can see where the emoji

@@ -1,5 +1,6 @@
 import type { Puzzle } from '../../puzzles/format';
 import { createPicture } from '../board/picture';
+import { withArt } from '../art';
 import { el } from '../dom';
 
 export const allPuzzlesLink = () =>
@@ -11,7 +12,7 @@ export function solvedPanelContent(puzzle: Puzzle, note: string, actions: HTMLEl
     el('h2', { textContent: 'Solved!' }),
     createPicture(puzzle.solution, Math.max(4, Math.floor(120 / puzzle.width))),
     el('p', { className: 'end-name', textContent: puzzle.name }),
-    el('p', { className: 'end-note', textContent: note }),
+    el('p', { className: 'end-note' }, withArt(note)),
     el('div', { className: 'end-actions' }, actions),
   ];
 }

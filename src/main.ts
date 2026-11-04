@@ -8,6 +8,7 @@ import './styles/run.css';
 import './styles/fight.css';
 import './styles/dig.css';
 import './styles/dialogue.css';
+import './styles/art.css';
 import { getPuzzle } from './puzzles/index';
 import { getMural } from './puzzles/murals';
 import { getScene } from './puzzles/scenes';

@@ -69,3 +69,17 @@ No more generation is needed for tiers 1 to 3. The chapter banners in
 `../prompts/05-optional.md` have no slot in the UI yet, so they stay deferred unless the
 owner asks for them. Cleanup and wiring under `public/art/` are next, and are not the
 generator's job.
+
+## Cleanup results
+
+Done, by `scripts/art-clean.py`. All 43 picks are in `public/art/` and wired into the game.
+
+- **Grid snapping was tried and dropped.** On four test images it scrambled Tess's face and
+  damaged the Forger's, and the unsnapped versions stay clean at display size. Cleanup snaps
+  the palette, trims and downscales instead.
+- **The cleanup fixed** the gremlin-v3 chest smudge, the clockwork owl's off-token steel, and
+  the 253/254 alpha, with no regeneration.
+- **The path map and gadget icons are drawn larger than briefed,** at about 26 px and 22 px.
+  That settled the fight icon's weak spot: it reads well on the real map at that size.
+- **Still emoji, because the pack has no art for them:** the lock, the streak flame, the ✨
+  for a dig with no gadget, and the debug panel's gadget list.

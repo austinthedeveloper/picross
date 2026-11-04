@@ -2,6 +2,7 @@ import { getJobStats, hasSeenScene } from '../../../game/runSave';
 import { chapters, type Chapter } from '../../../puzzles/chapters';
 import { ENDLESS_GADGETS, ENDLESS_HP, ENDLESS_ID, ENDLESS_HEAL } from '../../../puzzles/endless';
 import { getRun, type RunDef } from '../../../puzzles/runs';
+import { withArt } from '../../art';
 import { el } from '../../dom';
 import { backToPuzzles, modePicker, newRunButton, nodeIcon, type Hub } from './shared';
 
@@ -34,7 +35,7 @@ function jobCard(hub: Hub, def: RunDef): HTMLElement {
     el(
       'ol',
       { className: 'run-preview' },
-      def.encounters.map((e) => el('li', { textContent: `${nodeIcon(e)} ${e.name}` })),
+      def.encounters.map((e) => el('li', {}, [nodeIcon(e), e.name])),
     ),
     el('p', {
       className: `job-best${cleared(def) ? '' : ' none'}`,
@@ -133,10 +134,11 @@ function endlessSection(hub: Hub): HTMLElement {
     ...(open
       ? [
           el('section', { className: 'run-card job endless' }, [
-            el('p', {
-              className: 'run-meta',
-              textContent: `${ENDLESS_HP} HP · starts with a 🩹 patch kit`,
-            }),
+            el(
+              'p',
+              { className: 'run-meta' },
+              withArt(`${ENDLESS_HP} HP · starts with a 🩹 patch kit`),
+            ),
             el('p', {
               className: `job-best${best ? '' : ' none'}`,
               textContent: best ? `Best depth: ${best}` : 'Not played yet',

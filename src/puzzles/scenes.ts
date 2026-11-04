@@ -9,7 +9,7 @@ export type Condition = string;
 
 export interface CastMember {
   name: string;
-  /** Placeholder art until #25: an emoji. */
+  /** Art id: a file in public/art/cast. */
   portrait: string;
 }
 

@@ -6,7 +6,7 @@
   "blurb": "Its gears whir. Your clues start spinning.",
   "enemy": {
     "name": "Clockwork Owl",
-    "sprite": "🦉",
+    "sprite": "clockwork-owl",
     "hp": 45,
     "attack": 2,
     "scramble": {

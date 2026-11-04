@@ -8,7 +8,7 @@
   "blurb": "The big tank in the middle. Something in there is watching the door.",
   "enemy": {
     "name": "Old Tess",
-    "sprite": "🐙",
+    "sprite": "old-tess",
     "hp": 70,
     "attack": 2,
     "phases": [
@@ -33,7 +33,7 @@
       {
         "at": 0.6,
         "name": "Furious Tess",
-        "sprite": "🌊",
+        "sprite": "furious-tess",
         "attack": 4,
         "taunt": "NOBODY CLEANS MY TANK.",
         "ink": 5,

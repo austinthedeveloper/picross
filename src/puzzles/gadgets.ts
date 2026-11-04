@@ -11,7 +11,7 @@ export type GadgetEffect =
 export interface Gadget {
   id: string;
   name: string;
-  /** Placeholder art until #25: an emoji. */
+  /** Stands for the gadget's art in text (see withArt); the art itself is found by id. */
   icon: string;
   /** One line shown on the map and in fights. */
   description: string;

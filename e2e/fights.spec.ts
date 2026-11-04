@@ -109,7 +109,7 @@ test('forger: 🎭 suspects settle by logic; call out the fakes, not the honest 
   const rowClue = (r: number) => page.locator('.row-clue').nth(r);
   const suspects = page.locator('.clue.suspect');
   await expect(suspects).toHaveCount(5); // rows 3, 4, 7, 8, 14: three fakes, two honest
-  await expect(page.locator('.battle .fakes')).toHaveText('🎭 3');
+  await expect(page.locator('.battle .fakes')).toHaveText('3');
   await expect(rowClue(3)).toHaveText(/^6\D*7$/); // really 3 2 7
 
   // Only 🎭 clues can be accused: tapping another one costs nothing.

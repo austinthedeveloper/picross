@@ -3,15 +3,15 @@
   "cast": {
     "rook": {
       "name": "Rook",
-      "portrait": "🧑‍💼"
+      "portrait": "rook"
     },
     "dee": {
       "name": "Dee",
-      "portrait": "👩‍🔬"
+      "portrait": "dee"
     },
     "curator": {
       "name": "Curator Ambrose",
-      "portrait": "🧐"
+      "portrait": "curator"
     }
   },
   "nodes": {

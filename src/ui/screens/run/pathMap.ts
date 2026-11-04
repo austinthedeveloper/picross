@@ -2,6 +2,7 @@ import { saveCurrentRun } from '../../../game/runSave';
 import type { RunState } from '../../../game/run';
 import { getGadget } from '../../../puzzles/gadgets';
 import type { RunDef } from '../../../puzzles/runs';
+import { gadgetArt } from '../../art';
 import { el } from '../../dom';
 import { backToPuzzles, nodeIcon, nodeLabel, type Hub } from './shared';
 
@@ -28,11 +29,7 @@ export function pathMap(hub: Hub, state: RunState, def: RunDef): Node[] {
     const i = from + n;
     const status = i < state.node ? 'cleared' : i === state.node ? 'current' : 'locked';
     const content = [
-      el('span', {
-        className: 'node-icon',
-        ariaHidden: 'true',
-        textContent: nodeIcon(encounter),
-      }),
+      el('span', { className: 'node-icon', ariaHidden: 'true' }, [nodeIcon(encounter)]),
       el('span', { className: 'node-text' }, [
         el('span', { className: 'node-name', textContent: encounter.name }),
         el('span', {
@@ -111,7 +108,7 @@ function inventory(state: RunState): HTMLElement {
           {},
           items.map((g) =>
             el('li', {}, [
-              el('span', { className: 'gadget-icon', textContent: g.icon, ariaHidden: 'true' }),
+              el('span', { className: 'gadget-icon', ariaHidden: 'true' }, [gadgetArt(g.id)]),
               el('span', {}, [el('strong', { textContent: g.name }), ` ${g.description}`]),
             ]),
           ),

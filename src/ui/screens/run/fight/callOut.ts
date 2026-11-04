@@ -2,6 +2,7 @@ import { callOut, heal } from '../../../../game/battle';
 import { hasLine } from '../../../../engine/lines';
 import { fakeClues } from '../../../../engine/fakes';
 import { lineCount, noLines, type Line, type LineSet } from '../../../../engine/lines';
+import { withArt } from '../../../art';
 import { el } from '../../../dom';
 import { lineName } from '../../../format';
 import { playSound } from '../../../sound';
@@ -100,7 +101,7 @@ export function createCallOut(ctx: FightContext, checkPhase: CheckPhase, onChang
         onclick: toggle,
       });
       button.append(
-        el('span', { className: 'gadget-icon', textContent: '🔍', ariaHidden: 'true' }),
+        el('span', { className: 'gadget-icon', ariaHidden: 'true' }, withArt('🔍')),
         picking ? 'Pick a clue…' : 'Call out',
       );
       return [button];
