@@ -46,7 +46,7 @@
         "name": "Avalanche Yeti",
         "sprite": "🏔️",
         "attack": 4,
-        "charge": 40,
+        "charge": 6,
         "taunt": "The whole ridge is moving."
       },
       {

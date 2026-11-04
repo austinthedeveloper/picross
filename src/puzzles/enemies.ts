@@ -55,11 +55,12 @@ export function parseEnemy(data: unknown, puzzle: Puzzle, fail: (msg: string) =>
     }
   };
 
-  const seconds = (value: unknown, label: string) => {
-    if (typeof value !== 'number' || !(value >= 3)) fail(`${label} must be at least 3 seconds`);
+  const chargeLines = (value: unknown, label: string) => {
+    if (!Number.isInteger(value) || (value as number) < 2)
+      fail(`${label} must be at least 2 lines`);
     return value as number;
   };
-  if (enemy.charge !== undefined) parsed.charge = seconds(enemy.charge, 'charge');
+  if (enemy.charge !== undefined) parsed.charge = chargeLines(enemy.charge, 'charge');
   if (enemy.fog !== undefined) parsed.fog = parseFog(enemy.fog);
   if (enemy.scramble !== undefined) parsed.scramble = parseScramble(enemy.scramble);
   if (enemy.armor !== undefined) {
@@ -107,7 +108,7 @@ export function parseEnemy(data: unknown, puzzle: Puzzle, fail: (msg: string) =>
         ...(phase.ink !== undefined ? { ink: phase.ink } : {}),
         ...(phase.inkCount !== undefined ? { inkCount: phase.inkCount } : {}),
         ...(phase.charge !== undefined
-          ? { charge: seconds(phase.charge, `phase ${i + 1} charge`) }
+          ? { charge: chargeLines(phase.charge, `phase ${i + 1} charge`) }
           : {}),
       };
     });

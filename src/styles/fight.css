@@ -345,11 +345,12 @@
   border-color: var(--accent);
 }
 
-/* The charge meter (#67): fills toward a zap, drains when you complete a line. */
+/* The charge meter (#67): each finished line fills it toward a zap; the live line drains it. */
 .charge {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 4px;
+  gap: 2px 4px;
   margin-top: 4px;
 }
 
@@ -375,6 +376,13 @@
   width: calc(var(--charge, 0) * 100%);
   background: var(--spark);
   transition: width 0.25s linear;
+}
+
+.charge-label {
+  /* Its own row: a big board can scroll the live line off screen, so the name matters. */
+  flex-basis: 100%;
+  font-size: 0.7rem;
+  color: var(--muted);
 }
 
 .charge.high .charge-fill {

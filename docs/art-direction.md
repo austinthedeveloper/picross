@@ -47,7 +47,7 @@ Three words: **cozy, mischievous, after-hours.**
 | `--accent`                | Job stamp   | The one action color: Start, the current node, kickers, HP           |
 | `--ok`                    | Go          | Your HP, success                                                     |
 | `--hl`                    | Highlighter | The row and column under the cursor                                  |
-| `--spark` / `--spark-hot` | Spark       | The ⚡ charge meter (#67). Hot once it's three-quarters full         |
+| `--spark` / `--spark-hot` | Spark       | The ⚡ charge meter and live line (#67). Meter hot at three-quarters |
 | `--mischief`              | Mischief    | The Mimic's swaps (#48): things that move behind your back           |
 | `--squid-ink`             | Squid ink   | Inked cells (#67); gray in high contrast so it never reads as filled |
 | `--dirt` … `--metal`      | Dig site    | The dig board (#29)                                                  |

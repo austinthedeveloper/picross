@@ -7,10 +7,15 @@ import type { FightContext } from './context';
 
 /**
  * The enemy hits you in a Hits-on fight (a wrong fill, by default): a patch kit's
- * shield blocks it, otherwise the enemy hits your run HP for its current attack.
- * `lead` opens the announcement, which this returns.
+ * shield blocks it, otherwise the enemy hits your run HP for `amount`, or its
+ * current attack. `lead` opens the announcement, which this returns.
  */
-export function takeHit(ctx: FightContext, onKnockout: () => void, lead = 'Wrong cell!'): string {
+export function takeHit(
+  ctx: FightContext,
+  onKnockout: () => void,
+  lead = 'Wrong cell!',
+  amount = ctx.form().attack,
+): string {
   const shielded = absorbHit(ctx.battle());
   if (shielded.blocked) {
     ctx.saveBattle(shielded.state);
@@ -18,16 +23,16 @@ export function takeHit(ctx: FightContext, onKnockout: () => void, lead = 'Wrong
     ctx.bar.block();
     return `${lead} ${ctx.form().name} attacks, but the patch kit blocks it.`;
   }
-  const { name, attack } = ctx.form();
-  const run = damage(ctx.run(), attack);
+  const { name } = ctx.form();
+  const run = damage(ctx.run(), amount);
   saveCurrentRun(run);
   ctx.bar.setPlayerHp(run.hp, run.maxHp);
-  ctx.bar.hitPlayer(attack);
+  ctx.bar.hitPlayer(amount);
   if (run.status === 'lost') {
     onKnockout();
-    return `${name} hits you for ${attack}. You're knocked out.`;
+    return `${name} hits you for ${amount}. You're knocked out.`;
   }
-  return `${lead} ${name} hits you for ${attack}. ${run.hp} HP left.`;
+  return `${lead} ${name} hits you for ${amount}. ${run.hp} HP left.`;
 }
 
 /** The knocked-out panel once the run is lost. */

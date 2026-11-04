@@ -1,4 +1,5 @@
 import { debug } from '../../../../debug/hooks';
+import { lineKey } from '../../../../engine/lines';
 import { finish, useGadget, type Enemy } from '../../../../game/battle';
 import type { Puzzle } from '../../../../puzzles/format';
 import type { PlaySession } from '../../gameScreen';
@@ -26,7 +27,11 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
   const swapper = createSwapper(ctx);
   const inker = createInker(ctx);
   const tips = createTips(ctx);
-  const checkPhase = createPhases(ctx, swapper, inker, tips.phase);
+  const checkPhase = createPhases(ctx, swapper, inker, (powers) => {
+    tips.phase(powers);
+    // Once the phase's new state is saved: it may start the charge or fog the live line.
+    window.setTimeout(charge.sync, 0);
+  });
   // The call-out button sits in the gadget tray, and calling out refreshes the tray.
   const callOut = createCallOut(ctx, checkPhase, () => gadgets.render());
   const gadgets = createGadgetTray(ctx, checkPhase, callOut.buttons);
@@ -46,15 +51,18 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
       showLineEffects(ctx, view);
       callOut.show();
       inker.show();
-      charge.start();
+      charge.sync();
       tips.start();
     },
     // A bomb can't help once the enemy is down to 1 HP, so damage refreshes the gadgets.
     // A line showing a forgery doesn't count until the forgery is called out.
     onLinesComplete(lines) {
       const counted = lines.filter((line) => !callOut.isFaked(line));
-      if (counted.length) charge.drain();
-      return completeLines(ctx, counted, checkPhase, gadgets.render);
+      // A refilled line (after a swap, say) has already counted, so it can't charge again.
+      const { struck } = ctx.battle();
+      const fresh = counted.filter((l) => !struck.includes(lineKey(l.kind, l.index)));
+      const message = completeLines(ctx, counted, checkPhase, gadgets.render);
+      return [message, charge.finished(fresh)].filter(Boolean).join(' ') || undefined;
     },
     onMistake: () => takeHit(ctx, gadgets.render),
     ended: () => knockedOut(ctx),

@@ -28,6 +28,8 @@ export interface BoardView {
   flashLine(line: Line): void;
   /** Highlights the clues of lines the Mimic wiped until they're refilled (#78). */
   setWiped(wiped: LineSet): void;
+  /** Marks the clues of the live ⚡ line (#67), or nothing with null. */
+  setLive(line: Line | null): void;
   /** Flashes two lines the Mimic just swapped and wiped. */
   flashSwap(kind: LineKind, a: number, b: number): void;
   /** Hides fogged clues behind "?" (#30). Lines in `lifted` animate as the fog clears. */
@@ -315,6 +317,14 @@ export function createBoardView(puzzle: Puzzle): BoardView {
     setSuspects(suspects) {
       rowClues.forEach((g, r) => g.group.classList.toggle('suspect', hasLine(suspects, 'row', r)));
       colClues.forEach((g, c) => g.group.classList.toggle('suspect', hasLine(suspects, 'col', c)));
+    },
+    setLive(line) {
+      rowClues.forEach((g, r) =>
+        g.group.classList.toggle('live', line?.kind === 'row' && line.index === r),
+      );
+      colClues.forEach((g, c) =>
+        g.group.classList.toggle('live', line?.kind === 'col' && line.index === c),
+      );
     },
     setWiped(wiped) {
       rowClues.forEach((g, r) => g.group.classList.toggle('wiped', hasLine(wiped, 'row', r)));

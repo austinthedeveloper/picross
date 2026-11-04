@@ -402,6 +402,15 @@
   }
 }
 
+/*
+ * The live line (#67): finish it to ground the charge. No icon: it moves around, so it
+ * must never change a clue's size and nudge the board. The meter names the line.
+ */
+.clue.live {
+  background: color-mix(in srgb, var(--spark) 24%, transparent);
+  box-shadow: inset 0 0 0 2px var(--spark);
+}
+
 /* Lines the Mimic wiped (#78): marked until you refill them. */
 .clue.wiped {
   background: color-mix(in srgb, var(--mischief) 22%, transparent);

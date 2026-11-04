@@ -30,8 +30,8 @@ export interface BattleBar {
   setTip(content: HTMLElement | null): void;
   /** Puts the ⓘ powers button after the enemy's name (#79). */
   setInfo(button: HTMLElement): void;
-  /** The charge meter (#67), 0 to 1, or null to hide it. */
-  setCharge(level: number | null): void;
+  /** The charge meter (#67), 0 to 1, and a label for it. Null hides it. */
+  setCharge(level: number | null, label?: string): void;
   /** The enemy zaps you: a flash on the meter. */
   zap(): void;
   /** The armor shatters. */
@@ -77,9 +77,11 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
   const enemyName = el('span', { className: 'battle-name', textContent: enemy.name });
   const armor = el('span', { className: 'armor', hidden: true });
   const fakes = el('span', { className: 'fakes', hidden: true });
+  const chargeLabel = el('span', { className: 'charge-label' });
   const charge = el('span', { className: 'charge', hidden: true, ariaHidden: 'true' }, [
     el('span', { className: 'charge-icon', textContent: '⚡' }),
     el('span', { className: 'charge-track' }, [el('span', { className: 'charge-fill' })]),
+    chargeLabel,
   ]);
   const banner = el('div', { className: 'phase-banner', hidden: true });
   banner.setAttribute('aria-hidden', 'true');
@@ -156,8 +158,9 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
     setInfo(button) {
       enemyName.after(button);
     },
-    setCharge(level) {
+    setCharge(level, label = '') {
       charge.hidden = level === null;
+      chargeLabel.textContent = label;
       charge.style.setProperty('--charge', String(Math.min(1, level ?? 0)));
       charge.classList.toggle('high', (level ?? 0) >= 0.75);
     },

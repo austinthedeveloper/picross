@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import type { Line } from '../src/engine/lines';
 import {
   announcements,
   boardState,
@@ -183,24 +184,65 @@ test('gadgets: a patch kit blocks a hit and the dig hands over a bomb', async ({
   await expect(page.locator('.inventory')).toContainText('Bomb');
 });
 
-test('electric eel: the charge meter zaps you when it fills, and lines drain it', async ({
+test('electric eel: thinking is free, other lines charge it, the live line grounds it', async ({
   page,
 }) => {
   await page.clock.install();
   await fight(page, 'deep-end', 0);
   const eel = encounterSolution('electric-eel');
-  const level = () =>
-    page.locator('.battle .charge').evaluate((e) => Number(e.style.getPropertyValue('--charge')));
-  await expect(page.locator('.battle .charge')).toBeVisible();
-  await page.clock.runFor(15_000);
-  expect(await level()).toBeGreaterThan(0.4);
-  expect(await level()).toBeLessThan(0.7);
-  await fillRow(page, eel, 7); // a line drains it
+  const charge = page.locator('.battle .charge');
+  const level = () => charge.evaluate((e) => Number(e.style.getPropertyValue('--charge')));
+  const live = () =>
+    page.evaluate(
+      () =>
+        JSON.parse(localStorage.getItem('picross:run')!).current.battle.live as Line | undefined,
+    );
+  await expect(charge).toBeVisible();
+  await expect(page.locator('.clue.live')).toHaveCount(1);
+  await expect(charge).toContainText('5 left');
+
+  // Five minutes of staring at the board costs nothing.
+  await page.clock.runFor(300_000);
   expect(await level()).toBe(0);
-  await page.clock.runFor(30_500);
-  await page.clock.runFor(100); // the announcement lands on the next frame
-  expect(await meter(page, 'player-hp')).toBe(12);
+  expect(await meter(page, 'player-hp')).toBe(14);
+  await page.clock.resume();
+
+  // Finishing other lines charges it, and at five it zaps for 2.
+  const aimedAt = (await live())!;
+  const rows = eel.map((_, r) => r).filter((r) => aimedAt.kind !== 'row' || r !== aimedAt.index);
+  const before = await level();
+  await fillRow(page, eel, rows[0]);
+  await expect.poll(level).toBeGreaterThan(before);
+
+  // It survives a reload.
+  const midway = await level();
+  await page.reload();
+  await expect(charge).toBeVisible();
+  expect(await level()).toBe(midway);
+  await expect(page.locator('.clue.live')).toHaveCount(1);
+
+  for (const r of rows.slice(1)) {
+    await fillRow(page, eel, r);
+    if ((await meter(page, 'player-hp')) < 14) break;
+  }
+  await expect.poll(() => meter(page, 'player-hp')).toBe(12);
   await expect.poll(() => announcements(page)).toContain('Electric Eel zaps you!');
+  await expect.poll(level).toBeLessThan(1);
+
+  // A new line went live. Finishing it grounds the charge.
+  const next = (await live())!;
+  const n = eel[0].length;
+  const cells =
+    next.kind === 'row'
+      ? [...eel[0]].map((_, c) => next.index * n + c)
+      : eel.map((_, r) => r * n + next.index);
+  const board = await boardState(page);
+  for (const i of cells) {
+    if (eel[Math.floor(i / n)][i % n] === '#' && board[i] !== '#') await cell(page, i).tap();
+  }
+  await expect.poll(() => announcements(page)).toContain('Grounded!');
+  await expect.poll(level).toBe(0);
+  expect(await meter(page, 'player-hp')).toBe(12);
 });
 
 test('cuttlefish: ink hides your marks, lines wash it off, and a sponge wipes it', async ({

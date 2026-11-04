@@ -12,6 +12,7 @@ import {
   FALSE_ACCUSATION_HEAL,
   heal,
   WEAK_POINT_DAMAGE,
+  chargeUp,
   chip,
   clearFog,
   clearScramble,
@@ -229,14 +230,46 @@ describe('charge and ink', () => {
   const eel = {
     ...goblin,
     hp: 20,
-    charge: 30,
-    phases: [{ at: 0.5, name: 'Overcharged', charge: 20 }],
+    charge: 5,
+    phases: [{ at: 0.5, name: 'Overcharged', charge: 4 }],
   };
 
   it('a phase can speed up the charge meter', () => {
     const state = startBattle(eel);
-    expect(currentForm(eel, state).charge).toBe(30);
-    expect(currentForm(eel, { ...state, phase: 1 }).charge).toBe(20);
+    expect(currentForm(eel, state).charge).toBe(5);
+    expect(currentForm(eel, { ...state, phase: 1 }).charge).toBe(4);
+  });
+
+  describe('chargeUp', () => {
+    const live = { kind: 'row', index: 2 } as const;
+    const other = (index: number) => ({ kind: 'col', index }) as const;
+    const charged = { ...startBattle(eel), live, charged: 2 };
+
+    it('other lines charge the meter, one each', () => {
+      const result = chargeUp(charged, [other(0), other(1)], 5);
+      expect(result.state.charged).toBe(4);
+      expect(result.state.live).toEqual(live);
+      expect(result).toMatchObject({ grounded: false, zapped: false });
+    });
+
+    it('zaps when the meter fills, then starts over with no live line', () => {
+      const result = chargeUp(charged, [other(0), other(1), other(2)], 5);
+      expect(result.zapped).toBe(true);
+      expect(result.state.charged).toBe(0);
+      expect(result.state.live).toBeUndefined();
+    });
+
+    it('the live line grounds it, even when it would have filled the meter', () => {
+      const result = chargeUp(charged, [other(0), other(1), other(2), live], 5);
+      expect(result).toMatchObject({ grounded: true, zapped: false });
+      expect(result.state.charged).toBe(0);
+      expect(result.state.live).toBeUndefined();
+    });
+
+    it('does nothing with no live line', () => {
+      const state = startBattle(eel);
+      expect(chargeUp(state, [other(0)], 5).state).toBe(state);
+    });
   });
 
   it('completed lines wash out ink', () => {
