@@ -8,7 +8,7 @@
   "blurb": "The ninth flight down. The hoard is breathing. Aim between the scales, and don't trust all the gold.",
   "enemy": {
     "name": "The Old Wyrm",
-    "sprite": "🐉",
+    "sprite": "old-wyrm",
     "hp": 60,
     "attack": 2,
     "armor": {

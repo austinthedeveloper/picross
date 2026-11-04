@@ -8,8 +8,7 @@ copy one fenced block into the image generator as-is.
 
 1. Work through the files in order. Tier 1 is what the game needs; tiers 2 and 3 are
    small glyphs that can wait; tier 4 has no slot in the UI yet. Files 01 to 04, 06 and 07
-   are done and in the game, and so are 08 and 09 apart from the Old Wyrm's base sprite, which
-   is waiting on a regenerated candidate. The banners in 05 are still deferred.
+   are done and in the game, and so are 08 and 09. The banners in 05 are still deferred.
    - [01-cast.md](01-cast.md): portraits for the dialogue scenes (tier 1)
    - [02-enemies.md](02-enemies.md): fight sprites, including boss phase forms (tier 1)
    - [03-gadgets.md](03-gadgets.md): the three gadget icons (tier 1)

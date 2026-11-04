@@ -167,9 +167,14 @@ ENEMY_SETS = [
     (0.92, {"rusted-sentry": ("enemy-rusted-sentry-v2", [BROWN, CORAL])}),
     (0.92, {"cellar-ooze": ("enemy-cellar-ooze-v1", [GREEN])}),
     (0.92, {"rat-king": ("enemy-rat-king-v1", [GRAY, YELLOW])}),
-    # The base "old-wyrm" joins this set once it's regenerated (see round6-review.md). Gray is
-    # a third accent here, as on the Wyrm's portrait.
-    (1.0, {"wrathful-wyrm": ("enemy-wrathful-wyrm-v1", [CORAL, YELLOW, GRAY])}),
+    # Gray is a third accent here, as on the Wyrm's portrait (see round6-review.md).
+    (
+        1.0,
+        {
+            "old-wyrm": ("enemy-old-wyrm-v4", [CORAL, YELLOW, GRAY]),
+            "wrathful-wyrm": ("enemy-wrathful-wyrm-v1", [CORAL, YELLOW, GRAY]),
+        },
+    ),
     (0.92, {"spark-hound": ("enemy-spark-hound-v2", [YELLOW])}),
     (0.92, {"failed-clone": ("enemy-failed-clone-v1", [PURPLE, GRAY])}),
     (0.92, {"reviewer-two": ("enemy-reviewer-two-v2", [CORAL])}),

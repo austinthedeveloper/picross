@@ -57,6 +57,14 @@ Two separate problems, and both trace back to the prompt asking for a graphite d
 The base prompt in `09-enemies-chapters-7-9.md` is rewritten as a tall mound of coils, using
 Wrathful v1 as the reference. Regenerate it as `enemy-old-wyrm-v3.png` and `-v4.png`.
 
+### The regenerated base
+
+The rewrite fixed it. Both candidates now fill the frame at about 38×37 px. **v4 is the pick.** Its
+bigger head, eye and horns still read as a dragon at 38 px, its key is about 9×9 px, and its face
+matches the portrait. v3 is closer to the prompt's proportions, but its small head turns it into
+a striped beehive at that size, with a key of about 6×8 px. Both needed a correction pass to get
+the third coral gap (see `wyrm-revision-manifest.json`).
+
 ## Calls worth a second look
 
 - **Ostrander's pen is upright** in both sets, not held out like a lance as briefed. She stays
@@ -98,20 +106,18 @@ None of these block the batch. Recheck them in the game once they're wired in.
 - **Enemies:** signal-box v2, ticket-inspector v1, coal-heap v1, rusted-sentry v2, cellar-ooze
   v1, rat-king v1, spark-hound v2, failed-clone v1, reviewer-two v2.
 - **Enemy phase sets:** the-1159 and express-not-stopping v1; ostrander and reviewer-one v1;
-  wrathful-wyrm v1, with old-wyrm to come from the regenerated candidates.
+  old-wyrm v4 and wrathful-wyrm v1.
 
 ## Cleanup results
 
-Done, by `scripts/art-clean.py`. The 19 picks are in `public/art/` and wired into the game, and
-the rerun left every existing image byte-for-byte unchanged.
+Done, by `scripts/art-clean.py`. All 20 picks are in `public/art/` and wired into the game, so no
+enemy or character is drawn as an emoji any more. The reruns left every earlier image
+byte-for-byte unchanged.
 
-- **The Wyrm keeps gray.** Its portrait and Wrathful Wyrm are cleaned with gray as a third
-  accent, and both read as a dragon in the game.
-- **The Old Wyrm's base is still 🐉.** It's the only emoji left among the enemies and cast, and
-  the Wyrm's phases before 40% HP show it too. When the regenerated pick is in, add it to the
-  `wrathful-wyrm` set in the script so the two share a scale, then set its `sprite`.
-- **Seen in the game.** All 14 new sprites in the battle bar and all 5 portraits in the dialogue
-  circle, on the dark theme. The 3 phase forms were seen by starting a saved fight at that
-  phase. Light theme and the 52 px sign-off weren't checked in the game.
+- **The Wyrm keeps gray.** Its portrait and both sprites are cleaned with gray as a third accent,
+  and all three read as a dragon in the game.
+- **Seen in the game.** All 15 new sprites in the battle bar and all 5 portraits in the dialogue
+  circle, on the dark theme. The 3 phase forms and Waking Wyrm were seen by starting a saved fight
+  at that phase. Light theme and the 52 px sign-off weren't checked in the game.
 - **Playthroughs pass.** The whole of the Night Mail, the Undercroft and the Annex, on the
-  production build, with no page errors.
+  production build, with no page errors. Only the Undercroft was rerun with the final Wyrm.

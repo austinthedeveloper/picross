@@ -1,0 +1,117 @@
+{
+  "generator": "built-in image_gen",
+  "scope": "Two revised Old Wyrm base candidates only",
+  "sources": [
+    "../prompts/09-enemies-chapters-7-9.md",
+    "round6-review.md"
+  ],
+  "palette_exception": "Keep pencil gray #7a7e8a for Wyrm scale edges, alongside coral gaps and yellow key.",
+  "preserved": "Existing portrait and Wrathful Wyrm v1 remain unchanged.",
+  "cleanup": "Native generated resolution and alpha retained; no palette conversion, trim, resize or installation.",
+  "assets": [
+    {
+      "filename": "enemy-old-wyrm-v3.png",
+      "variant": 3,
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, soft gray #7a7e8a, used only for the edges of the scales, plus a second accent, coral red #d9534f, used only for the gaps between the coils, and a third accent, warm yellow #e0a800, used only for the wind-up key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: an enormous ancient wingless dragon curled up on a heap of round coins, drawn as a tall mound about as tall as it is wide, filling the frame from top to bottom. Three thick coils are stacked one on top of the other, each narrower than the one below and each as thick as its head. The long flat head rests on the top coil, large and tilted toward the viewer, about half the width of the mound, with two swept-back horns and one huge paper-colored eye half open with a narrow slit pupil. Solid graphite scales with soft gray edges, and a few big paper-colored plates along the belly and jaw. A large yellow wind-up key as tall as the head sticks straight up from behind the neck, past one side of the head. Three bold jagged coral red gaps run between the coils, thick enough to see at small size. The coins are plain paper-colored discs with graphite outlines and no markings, spilling out at the base. The coins are not gold or yellow: the key is the only yellow thing. Reads at 40 px as: a coiled dragon on a coin heap with a key in its back.\n\nReference use: Image 1 is the approved Wrathful Wyrm v1 SPRITE, for creature identity, pixel line weight, graphite scales with gray edges, paper belly plates, horns and yellow key. Image 2 is the approved Wyrm v1 PORTRAIT, for the heavy-lidded face and swept horns only. Make the calm BASE form specified above: mouth closed, half-open eye, head resting on the top coil. The body is a tall substantial mound of THREE thick stacked coils, about as tall as wide, with THREE distinct thick coral gaps. Do not copy the roaring open jaws, reared neck, smoke or flying coins from the phase; the coin heap stays at the base. Enlarge the resting head to about half the mound's width, and the key to roughly head-height. Preserve the accepted gray scale-edge palette exception. Yellow only on the key and coral only in the three coil gaps. Every large scale interior stays graphite. Keep full silhouette and sticker border within a SQUARE transparent PNG of at least 1024x1024, with modest transparent breathing room on all sides. This is a 38/40 px boss sprite: emphasize large readable masses, substantial head and key. No flat horizontal strip, wings, scenery, gold coins or writing.",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/docs/art/incoming/enemy-wrathful-wyrm-v1.png",
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/docs/art/incoming/cast-wyrm-v1.png"
+      ],
+      "generator": "built-in image_gen",
+      "brief": "../prompts/09-enemies-chapters-7-9.md",
+      "initial_generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-2d53a906-98da-42f4-bc3b-ddaa16e88e1a.png",
+      "corrections": [
+        {
+          "filename": "enemy-old-wyrm-v3.png",
+          "path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-5930db11-0cc1-41af-a961-f2f15e72d1ab.png",
+          "prompt": "Refine this Old Wyrm BASE game sprite so its COIL STACK reads clearly as three thick coils, with exactly THREE bold separated CORAL RED #d9534f gaps. Keep its tall, roughly square mound silhouette and overall height. Reduce the resting head to about HALF the full mound width (currently the head dominates nearly the whole mound width); keep the same flat long dragon face, half-open white slit eye, swept paper horns and closed mouth, resting on the TOP of the stack. Make the THREE coils beneath/around it each thick as the head, widest at bottom and progressively narrower above. Retain the existing two coral bands and add a THIRD substantial curved jagged coral gap on the LOWEST coil just above its bottom paper belly plates and the paper coin heap: all THREE bold bands must remain visibly separated vertically and easy to count. Preserve the same graphite #23262f scale interiors, gray #7a7e8a scale edges, paper #f6f3ec plates and coins, large yellow #e0a800 wind-up key standing upright behind the neck on one side (the key about head-height), and chunky hard stepped pixel-art style with thick paper sticker outline. Gray scale edges are an approved palette exception. Yellow ONLY on the key, coral ONLY in the THREE gaps, no other colors. Preserve a square transparent PNG with the complete coin heap, horns, key and sticker border in frame. No roar, open jaw, smoke, flying coins, wings, scenery, text or backdrop. Keep the accepted character identity and tall boss scale. This is a compact 38px sprite, so broad readable coils and a calm resting head matter.",
+          "references": [
+            "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-2d53a906-98da-42f4-bc3b-ddaa16e88e1a.png"
+          ]
+        }
+      ],
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-5930db11-0cc1-41af-a961-f2f15e72d1ab.png",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 436665,
+        "partially_transparent_pixels": 1133950,
+        "subject_bounds_at_alpha_200": [
+          14,
+          53,
+          1239,
+          1247
+        ],
+        "clear_margins_at_alpha_200": [
+          14,
+          53,
+          15,
+          7
+        ],
+        "sha256": "8f352e892249aeef40914395702f1d9f4a41af6f70f2edd986132009bbcd0ed7"
+      },
+      "display_bounds_at_38_px": [
+        37.1,
+        36.2
+      ],
+      "review_note": "Closer to the revised proportions: a smaller resting head above three thick stacked coils, with three bold coral bands."
+    },
+    {
+      "filename": "enemy-old-wyrm-v4.png",
+      "variant": 4,
+      "prompt": "Pixel-art sticker sprite for a cozy puzzle game, drawn on a strict 32x32 pixel grid and shown large with crisp hard-edged pixels (no anti-aliasing, no blur, no smoothing). Flat colors only: no gradients, no glossy highlights, no 3D, no photo, no painterly texture. Palette: dark graphite #23262f for outlines and details, off-white paper #f6f3ec for light areas, and one accent color, soft gray #7a7e8a, used only for the edges of the scales, plus a second accent, coral red #d9534f, used only for the gaps between the coils, and a third accent, warm yellow #e0a800, used only for the wind-up key. A thick off-white #f6f3ec die-cut sticker border around the whole silhouette, risograph zine style. Plain flat #f6f3ec background (transparent if supported). One full-body subject, centered, filling about 80% of a square frame, facing the viewer or three-quarter view. No text, letters, numbers, symbols, watermark, frame, or drop shadow. No colored disc or scenery behind the subject.\n\nSubject: an enormous ancient wingless dragon curled up on a heap of round coins, drawn as a tall mound about as tall as it is wide, filling the frame from top to bottom. Three thick coils are stacked one on top of the other, each narrower than the one below and each as thick as its head. The long flat head rests on the top coil, large and tilted toward the viewer, about half the width of the mound, with two swept-back horns and one huge paper-colored eye half open with a narrow slit pupil. Solid graphite scales with soft gray edges, and a few big paper-colored plates along the belly and jaw. A large yellow wind-up key as tall as the head sticks straight up from behind the neck, past one side of the head. Three bold jagged coral red gaps run between the coils, thick enough to see at small size. The coins are plain paper-colored discs with graphite outlines and no markings, spilling out at the base. The coins are not gold or yellow: the key is the only yellow thing. Reads at 40 px as: a coiled dragon on a coin heap with a key in its back.\n\nReference use: Image 1 is the approved Wrathful Wyrm v1 SPRITE, for creature identity, pixel line weight, graphite scales with gray edges, paper belly plates, horns and yellow key. Image 2 is the approved Wyrm v1 PORTRAIT, for the heavy-lidded face and swept horns only. Make the calm BASE form specified above: mouth closed, half-open eye, head resting on the top coil. The body is a tall substantial mound of THREE thick stacked coils, about as tall as wide, with THREE distinct thick coral gaps. Do not copy the roaring open jaws, reared neck, smoke or flying coins from the phase; the coin heap stays at the base. Enlarge the resting head to about half the mound's width, and the key to roughly head-height. Preserve the accepted gray scale-edge palette exception. Yellow only on the key and coral only in the three coil gaps. Every large scale interior stays graphite. Keep full silhouette and sticker border within a SQUARE transparent PNG of at least 1024x1024, with modest transparent breathing room on all sides. This is a 38/40 px boss sprite: emphasize large readable masses, substantial head and key. No flat horizontal strip, wings, scenery, gold coins or writing.",
+      "references": [
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/docs/art/incoming/enemy-wrathful-wyrm-v1.png",
+        "/Users/txdevs/Documents/Development/picross/.claude/worktrees/inspiring-chatelet-5aef6f/docs/art/incoming/cast-wyrm-v1.png"
+      ],
+      "generator": "built-in image_gen",
+      "brief": "../prompts/09-enemies-chapters-7-9.md",
+      "initial_generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-786b150a-b7b2-47b7-88d3-9b31c54ef0e6.png",
+      "corrections": [
+        {
+          "filename": "enemy-old-wyrm-v4.png",
+          "path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-58d0ea2f-7053-46fc-ba74-420d4fadbb5b.png",
+          "prompt": "Edit this Old Wyrm BASE sprite with ONE targeted correction: there must be THREE distinct bold jagged CORAL RED #d9534f gaps, not the current two. Preserve both existing coral bands. Add a THIRD broad curved jagged coral gap across the LOWER coil just above the bottom row of paper belly plates and the coin heap, following the same curved stepped shape as the middle red band. The third gap must clearly separate the lowest graphite coil, visible from left to right at 38px; make it as thick and substantial as the other two. The result has THREE separated coral bands vertically: upper, middle and lower. Keep ALL other artwork unchanged: tall square mound proportions, resting flat head with half-lidded slit eye, swept horns, large yellow key behind head, graphite scale interiors and gray scale edges, paper plates and coins, complete thick paper sticker border, exact pixel line weight, square transparent canvas and image dimensions. No new colors or other coral locations; no roaring, smoke, scenery, markings, yellow coins or backdrop. Retain genuine transparent alpha.",
+          "references": [
+            "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-786b150a-b7b2-47b7-88d3-9b31c54ef0e6.png"
+          ]
+        }
+      ],
+      "generation_path": "/Users/txdevs/.codex/generated_images/01a1a349-349d-7cf2-9053-ea9a41aa5994/exec-58d0ea2f-7053-46fc-ba74-420d4fadbb5b.png",
+      "inspection": {
+        "width": 1254,
+        "height": 1254,
+        "format": "PNG",
+        "mode": "RGBA",
+        "alpha_min": 0,
+        "alpha_max": 255,
+        "dominant_nonzero_alpha": 253,
+        "fully_transparent_pixels": 242829,
+        "partially_transparent_pixels": 1329138,
+        "subject_bounds_at_alpha_200": [
+          17,
+          43,
+          1236,
+          1249
+        ],
+        "clear_margins_at_alpha_200": [
+          17,
+          43,
+          18,
+          5
+        ],
+        "sha256": "f9a8650d268a0500ecacccd34d08050bb72497fb52d188f190eb3b23829d6bc5"
+      },
+      "display_bounds_at_38_px": [
+        36.9,
+        36.5
+      ],
+      "review_note": "Larger head and key than v3; the head remains wider than the requested half-mound proportion. Three coral bands are present after a targeted correction."
+    }
+  ]
+}
