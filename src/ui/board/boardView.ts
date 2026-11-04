@@ -288,12 +288,12 @@ export function createBoardView(puzzle: Puzzle): BoardView {
     setScramble(next, restored = []) {
       scramble = next;
       rowClues.forEach((g, r) => {
-        showOrder(g, clues.rows[r], hasLine(scramble, 'row', r));
-        if (hasLine(scramble, 'row', r)) g.group.ariaLabel = scrambleLabel(g, clues.rows[r]);
+        showOrder(g, shown('row', r), hasLine(scramble, 'row', r));
+        if (hasLine(scramble, 'row', r)) g.group.ariaLabel = scrambleLabel(g, shown('row', r));
       });
       colClues.forEach((g, c) => {
-        showOrder(g, clues.cols[c], hasLine(scramble, 'col', c));
-        if (hasLine(scramble, 'col', c)) g.group.ariaLabel = scrambleLabel(g, clues.cols[c]);
+        showOrder(g, shown('col', c), hasLine(scramble, 'col', c));
+        if (hasLine(scramble, 'col', c)) g.group.ariaLabel = scrambleLabel(g, shown('col', c));
       });
       for (const { kind, index } of restored) {
         playOnce((kind === 'row' ? rowClues : colClues)[index].group, 'unscramble');
