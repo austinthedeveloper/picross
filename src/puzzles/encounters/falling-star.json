@@ -6,7 +6,7 @@
   "blurb": "The charts say it's coming. Then they say it isn't. One of them is lying.",
   "enemy": {
     "name": "Falling Star",
-    "sprite": "🌠",
+    "sprite": "falling-star",
     "hp": 45,
     "attack": 2,
     "fakes": {

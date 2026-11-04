@@ -8,7 +8,7 @@
   "blurb": "The center dome. Nobody has seen the door since Thursday.",
   "enemy": {
     "name": "Mother Bramble",
-    "sprite": "🥀",
+    "sprite": "mother-bramble",
     "hp": 60,
     "attack": 2,
     "fog": {
@@ -38,7 +38,7 @@
       {
         "at": 0.5,
         "name": "Mother Bramble in Bloom",
-        "sprite": "🌹",
+        "sprite": "mother-bramble-in-bloom",
         "attack": 4,
         "taunt": "Snip, snip, snip.",
         "ink": 5,

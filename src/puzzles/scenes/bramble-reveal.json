@@ -11,11 +11,11 @@
     },
     "hollis": {
       "name": "Hollis",
-      "portrait": "🧑‍🌾"
+      "portrait": "hollis"
     },
     "bramble": {
       "name": "Mother Bramble",
-      "portrait": "🥀"
+      "portrait": "bramble"
     }
   },
   "nodes": {

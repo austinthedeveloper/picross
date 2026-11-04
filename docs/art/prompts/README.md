@@ -7,12 +7,17 @@ copy one fenced block into the image generator as-is.
 ## How to run them
 
 1. Work through the files in order. Tier 1 is what the game needs; tiers 2 and 3 are
-   small glyphs that can wait; tier 4 has no slot in the UI yet.
+   small glyphs that can wait; tier 4 has no slot in the UI yet. Files 01 to 04, 06 and 07
+   are done and in the game. Only the banners in 05 are left.
    - [01-cast.md](01-cast.md): portraits for the dialogue scenes (tier 1)
    - [02-enemies.md](02-enemies.md): fight sprites, including boss phase forms (tier 1)
    - [03-gadgets.md](03-gadgets.md): the three gadget icons (tier 1)
    - [04-icons.md](04-icons.md): map node icons and power glyphs (tiers 2 and 3)
    - [05-optional.md](05-optional.md): chapter banners (tier 4)
+   - [06-cast-chapters-4-7.md](06-cast-chapters-4-7.md): portraits for the characters
+     added in chapters 4 to 7 (tier 1)
+   - [07-enemies-chapters-4-7.md](07-enemies-chapters-4-7.md): fight sprites for the enemies
+     added since 02, including Museum Rex and the boss phase forms (tier 1)
 2. Generate 2 to 4 candidates per prompt. Square output, 1024×1024 or the generator's
    largest square. Transparent PNG if the tool supports it; otherwise a flat `#f6f3ec`
    background, which I can key out.

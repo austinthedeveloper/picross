@@ -8,7 +8,7 @@
   "blurb": "The main hall's centerpiece. It has not moved in ninety years. It's moving.",
   "enemy": {
     "name": "Museum Rex",
-    "sprite": "🦴",
+    "sprite": "museum-rex",
     "hp": 60,
     "attack": 2,
     "scramble": {
@@ -18,7 +18,7 @@
       {
         "at": 0.9,
         "name": "Wound-up Rex",
-        "sprite": "🦖",
+        "sprite": "wound-up-rex",
         "attack": 3,
         "taunt": "CREEEAK.",
         "scramble": {

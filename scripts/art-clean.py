@@ -54,6 +54,12 @@ CAST = {
     "forger": ("cast-forger-v1", [CORAL]),
     "gremlin": ("cast-gremlin-v3", [YELLOW]),
     "tess": ("cast-tess-v3", [CORAL]),
+    "hollis": ("cast-hollis-v2", [GREEN]),
+    "bigsby": ("cast-bigsby-v2", [YELLOW]),
+    "lund": ("cast-lund-v1", [ORANGE]),
+    "bramble": ("cast-bramble-v2", [CORAL, YELLOW]),
+    "ringmaster": ("cast-ringmaster-v2", [CORAL, YELLOW]),
+    "yeti": ("cast-yeti-v2", [GRAY, YELLOW]),
 }
 
 # (frame fill, {name: (source, accents)}). Forms of one enemy share a scale, so a phase
@@ -104,7 +110,49 @@ ENEMY_SETS = [
         },
     ),
     (0.92, {"unknown": ("enemy-unknown-v1", [GRAY])}),
+    (
+        1.0,
+        {
+            "museum-rex": ("enemy-museum-rex-v1", [BROWN]),
+            "wound-up-rex": ("enemy-wound-up-rex-v1", [BROWN, YELLOW]),
+        },
+    ),
+    (0.92, {"snapjaw": ("enemy-snapjaw-v1", [GREEN, CORAL])}),
+    (0.92, {"spore-puff": ("enemy-spore-puff-v2", [CORAL, GRAY])}),
+    (0.92, {"ironbark": ("enemy-ironbark-v2", [BROWN, CORAL])}),
+    (
+        1.0,
+        {
+            "mother-bramble": ("enemy-mother-bramble-v2", [CORAL, YELLOW]),
+            "mother-bramble-in-bloom": ("enemy-mother-bramble-in-bloom-v2", [CORAL, YELLOW]),
+        },
+    ),
+    (0.92, {"funhouse-mirror": ("enemy-funhouse-mirror-v2", [PURPLE, YELLOW])}),
+    (0.92, {"madame-vesper": ("enemy-madame-vesper-v2", [INK, PURPLE])}),
+    (0.92, {"great-bruno": ("enemy-great-bruno-v2", [METAL, CORAL])}),
+    (
+        1.0,
+        {
+            "ringmaster": ("enemy-ringmaster-v2", [CORAL, YELLOW]),
+            "showstopper": ("enemy-showstopper-v2", [CORAL, YELLOW]),
+        },
+    ),
+    (0.92, {"whiteout": ("enemy-whiteout-v1", [GRAY])}),
+    (0.92, {"falling-star": ("enemy-falling-star-v1", [YELLOW, ORANGE])}),
+    (0.92, {"ice-mammoth": ("enemy-ice-mammoth-v2", [BROWN, CORAL])}),
+    (
+        1.0,
+        {
+            "yeti": ("enemy-yeti-v2", [GRAY, YELLOW]),
+            "avalanche-yeti": ("enemy-avalanche-yeti-v2", [GRAY, YELLOW]),
+        },
+    ),
+    (0.92, {"tin-soldier": ("enemy-tin-soldier-v2", [CORAL, YELLOW])}),
 ]
+
+# (first source row, color, replacement). Coral means "hit here" on armored enemies, and
+# Bruno's generated trunks were striped in it. His cracks end above this row.
+RECOLOR = {"enemy-great-bruno-v2": (960, CORAL, GRAPHITE)}
 
 GADGETS = {
     "bomb": ("gadget-bomb-v1", [ORANGE]),
@@ -154,6 +202,10 @@ def snap(source, accents):
     low = (pixels.max(-1) - pixels.min(-1)) < NEUTRAL_CHROMA
     index[low] = neutrals[nearest(pixels[low], palette[neutrals])]
     index[~opaque] = -1
+    if source in RECOLOR:
+        row, old, new = RECOLOR[source]
+        below = index[row:]
+        below[below == [GRAPHITE, PAPER, *accents].index(old)] = [GRAPHITE, PAPER, *accents].index(new)
     return remove_specks(index), palette
 
 

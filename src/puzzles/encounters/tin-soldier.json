@@ -6,7 +6,7 @@
   "blurb": "Exhibit 12: Toy Soldier, c. 1890. Life-size as of this evening.",
   "enemy": {
     "name": "Tin Soldier",
-    "sprite": "💂",
+    "sprite": "tin-soldier",
     "hp": 45,
     "attack": 2,
     "armor": {

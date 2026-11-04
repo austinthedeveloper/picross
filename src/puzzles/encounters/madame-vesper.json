@@ -6,7 +6,7 @@
   "blurb": "She sees all, she knows all, and at least some of it is true.",
   "enemy": {
     "name": "Madame Vesper",
-    "sprite": "🔮",
+    "sprite": "madame-vesper",
     "hp": 45,
     "attack": 2,
     "fakes": {
