@@ -31,10 +31,45 @@ describe('seen scenes', () => {
 describe('job stats', () => {
   it('records each finished run once', async () => {
     const save = await load();
-    const won = { ...startRun('job', 10), hp: 7, status: 'won' as const };
+    const won = { ...startRun('job', 10, 'hearts'), hp: 7, status: 'won' as const };
     save.recordRunResult(save.recordRunResult(won)); // second call is a no-op
-    save.recordRunResult({ ...startRun('job', 10), hp: 0, status: 'lost' });
-    expect((await load()).getJobStats('job')).toEqual({ plays: 2, wins: 1, bestHp: 7 });
+    save.recordRunResult({ ...startRun('job', 10, 'hearts'), hp: 0, status: 'lost' });
+    expect((await load()).getJobStats('job')).toEqual({
+      plays: 2,
+      wins: 1,
+      hitsOnWins: 1,
+      bestHp: 7,
+    });
+  });
+
+  it('only lets Hits-on wins set the best HP', async () => {
+    const save = await load();
+    save.recordRunResult({ ...startRun('job', 10), hp: 10, status: 'won' });
+    expect(save.getJobStats('job')).toEqual({ plays: 1, wins: 1 });
+    save.recordRunResult({ ...startRun('job', 10, 'hearts'), hp: 4, status: 'won' });
+    save.recordRunResult({ ...startRun('job', 10, 'hearts'), hp: 2, status: 'won' });
+    save.recordRunResult({ ...startRun('job', 10), hp: 10, status: 'won' });
+    expect(save.getJobStats('job')).toEqual({ plays: 4, wins: 4, hitsOnWins: 2, bestHp: 4 });
+  });
+
+  it('starts fresh over a best HP from before modes were recorded', async () => {
+    localStorage.setItem(
+      'picross:run',
+      JSON.stringify({ seenScenes: [], jobs: { job: { plays: 3, wins: 2, bestHp: 10 } } }),
+    );
+    const save = await load();
+    save.recordRunResult({ ...startRun('job', 10, 'hearts'), hp: 3, status: 'won' });
+    expect(save.getJobStats('job')).toEqual({ plays: 4, wins: 3, hitsOnWins: 1, bestHp: 3 });
+  });
+
+  it('keeps the old best HP on a Relaxed win, and it stays unused', async () => {
+    localStorage.setItem(
+      'picross:run',
+      JSON.stringify({ seenScenes: [], jobs: { job: { plays: 1, wins: 1, bestHp: 10 } } }),
+    );
+    const save = await load();
+    save.recordRunResult({ ...startRun('job', 10), hp: 10, status: 'won' });
+    expect(save.getJobStats('job')).toEqual({ plays: 2, wins: 2, bestHp: 10 });
   });
 
   it('ignores runs still in progress', async () => {

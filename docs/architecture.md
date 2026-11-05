@@ -184,6 +184,7 @@ All saved data lives in `localStorage`, read once at startup and written on chan
 | ------------------ | ---------------------------- | ------------------------------------------------------------------------------------------------------ |
 | `picross:v1`       | `game/progress.ts`           | In-progress boards, per-puzzle stats, total solving time                                               |
 | `picross:run`      | `game/runSave.ts`            | The current run (with the current encounter's board) and seen scenes                                   |
+| `picross:badges`   | `game/badges.ts`             | Earned badges: each one's best tier and the date you first earned it                                   |
 | `picross:settings` | `game/settings.ts`           | `mode` (default for new runs), `listFilter`, `listOrder`, `collapsedSections`, `muted`, `highContrast` |
 | `picross:daily`    | `game/daily.ts`              | Daily streak, best streak, solve count, and today's board                                              |
 | `picross:editor`   | `ui/screens/editorScreen.ts` | The editor's current drawing                                                                           |
@@ -196,6 +197,27 @@ A saved board stores its cells as a digit string (`"0120…"`) plus elapsed time
 hearts, and hints used. A puzzle keeps the mode it was started in. Solving it clears the
 saved board, and failing in Hearts mode discards it.
 
+### Rank and badges
+
+**Rank** (#106) measures how much you've solved. `game/rank.ts` works it out from existing
+solves, so it's never stored and old saves need no migration: each pack puzzle counts once
+by size, plus mural tiles and dailies. Time and mode never count. Thresholds in
+`puzzles/ranks.ts` stay fixed, so new puzzles can't lower anyone's rank.
+
+**Badges** (#108) record how you did something, which can't be worked out afterward, so
+they're saved when earned. `puzzles/badges.ts` is the catalog and `game/badges.ts` holds
+the rules. Tiers only go up, and a badge keeps the date it was first earned.
+
+- **How a run went** (#107): a fight keeps its counts in `BattleState.counts`, which roll
+  into `RunState.tally` when the fight is won. Count each thing at its cause rather than
+  in `takeHit`, which handles wrong fills, wrong accusations and zaps alike and returns
+  early when a patch kit blocks the hit. A blocked wrong fill still counts.
+- **Older saves:** `syncBadges` runs at startup and awards what the stats prove, without
+  dates. Runs from before the tally can't prove they were clean, so they can't earn gold.
+- **`bestHp`** only means something alongside `hitsOnWins`, because older saves may hold a
+  Relaxed run's HP there, and enemies can't hurt you in Relaxed.
+- **Spoilers:** a badge with `opensWith` shows as "???" on the shelf until that job is open.
+
 ## Routing and screens
 
 `main.ts` routes on the URL hash. Hash routing works on GitHub Pages without server config.
@@ -206,6 +228,7 @@ saved board, and failing in Hearts mode discards it.
 | `#/play/<id>`      | `renderGameScreen` for a pack puzzle                                |
 | `#/how-to-play`    | `renderHowToPlay`: the interactive tutorial and the rules           |
 | `#/editor`         | `renderEditorScreen`                                                |
+| `#/badges`         | `renderBadgesScreen`: the badge shelf (#109)                        |
 | `#/run`            | `renderRunScreen`: start panel, path map, or results                |
 | `#/scene/<id>`     | `renderSceneScreen`: preview a scene (Replay at the end)            |
 | `#/run/play`       | `renderRunEncounter`: the current encounter's puzzle                |

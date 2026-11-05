@@ -9,9 +9,12 @@ import './styles/fight.css';
 import './styles/dig.css';
 import './styles/dialogue.css';
 import './styles/art.css';
+import './styles/badges.css';
+import { syncBadges } from './game/badges';
 import { getPuzzle } from './puzzles/index';
 import { getMural } from './puzzles/murals';
 import { getScene } from './puzzles/scenes';
+import { renderBadgesScreen } from './ui/screens/badges';
 import { renderDailyScreen } from './ui/screens/daily';
 import { renderEditorScreen } from './ui/screens/editorScreen';
 import { renderHowToPlay } from './ui/screens/howToPlay';
@@ -23,6 +26,8 @@ import { renderSelectScreen } from './ui/screens/selectScreen';
 import { applyTheme } from './ui/theme';
 
 applyTheme();
+// Older saves have already earned some badges, so nobody starts from zero (#108).
+syncBadges();
 
 // Dev builds only (#65): production builds drop this branch and the whole module.
 if (import.meta.env.VITE_DEBUG === '1') {
@@ -55,6 +60,8 @@ function route() {
     cleanup = renderRunScreen(app);
   } else if (location.hash === '#/run/play') {
     cleanup = renderRunEncounter(app);
+  } else if (location.hash === '#/badges') {
+    renderBadgesScreen(app);
   } else if (location.hash === '#/how-to-play') {
     renderHowToPlay(app);
   } else if (location.hash === '#/editor') {

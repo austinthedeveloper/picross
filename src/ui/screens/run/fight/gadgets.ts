@@ -1,5 +1,5 @@
 import { blastSize, pickBlast } from '../../../../engine/blast';
-import { blastInk, useGadget } from '../../../../game/battle';
+import { blastInk, bump, useGadget, type BattleState } from '../../../../game/battle';
 import { removeGadget, withBattle } from '../../../../game/run';
 import { saveCurrentRun } from '../../../../game/runSave';
 import { getGadget, type Gadget } from '../../../../puzzles/gadgets';
@@ -48,10 +48,17 @@ export function createGadgetTray(
     return `The blast reveals ${plural(revealed.length, 'cell')} around row ${blast.row + 1}, column ${blast.col + 1}.`;
   };
 
+  /** Counts a gadget for the run's tally (#107): bombs rule out gold, sponges a mastery badge. */
+  const counted = (gadget: Gadget): BattleState => {
+    const state = bump(ctx.battle(), 'gadgetsUsed');
+    if (gadget.effect.kind === 'blast') return bump(state, 'bombsUsed');
+    return gadget.effect.kind === 'wash' ? bump(state, 'spongesUsed') : state;
+  };
+
   const use = (gadget: Gadget) => {
     if (blocker(gadget)) return;
     const inkBefore = ctx.battle().ink ?? [];
-    const used = useGadget(ctx.battle(), gadget.effect);
+    const used = useGadget(counted(gadget), gadget.effect);
     const { state, message } = checkPhase(used.state);
     saveCurrentRun(withBattle(removeGadget(ctx.run(), gadget.id), state));
     if (gadget.effect.kind === 'blast') {

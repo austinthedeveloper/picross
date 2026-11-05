@@ -46,7 +46,7 @@ export const encounterSolution = (encounterId: string) =>
 export interface RunSeed {
   current?: Record<string, unknown> | null;
   seenScenes?: string[];
-  jobs?: Record<string, { plays: number; wins: number; bestHp?: number }>;
+  jobs?: Record<string, { plays: number; wins: number; hitsOnWins?: number; bestHp?: number }>;
 }
 
 /** Seeds localStorage before the app loads, once per test (later reloads keep what the app saved). */

@@ -1,4 +1,4 @@
-import { callOut, heal } from '../../../../game/battle';
+import { bump, callOut, heal } from '../../../../game/battle';
 import { hasLine } from '../../../../engine/lines';
 import { fakeClues } from '../../../../engine/fakes';
 import { lineCount, noLines, type Line, type LineSet } from '../../../../engine/lines';
@@ -52,12 +52,12 @@ export function createCallOut(ctx: FightContext, checkPhase: CheckPhase, onChang
       playSound('strike');
       message = `Caught it! ${name} was a forgery. ${ctx.form().name} takes ${result.dealt} damage, ${state.enemyHp} HP left. ${phase}`;
     } else if (ctx.hitsOn) {
-      ctx.saveBattle(result.state);
+      ctx.saveBattle(bump(result.state, 'wrongAccusations'));
       ctx.view?.setSuspects(result.state.suspects ?? noLines());
       message = takeHit(ctx, onChange, `${name} was honest!`);
     } else {
       ctx.view?.setSuspects(result.state.suspects ?? noLines());
-      const healed = heal(result.state, ctx.enemy.hp);
+      const healed = heal(bump(result.state, 'wrongAccusations'), ctx.enemy.hp);
       ctx.saveBattle(healed.state);
       ctx.bar.setEnemyHp(healed.state.enemyHp);
       message = `${name} was honest. ${ctx.form().name} touches up ${healed.healed} HP.`;

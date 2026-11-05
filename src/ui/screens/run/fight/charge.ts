@@ -1,6 +1,6 @@
 import { pickLiveLine } from '../../../../engine/charge';
 import { hasLine, lineKey, unionLines, type Line } from '../../../../engine/lines';
-import { chargeUp, ZAP_DAMAGE } from '../../../../game/battle';
+import { bump, chargeUp, ZAP_DAMAGE } from '../../../../game/battle';
 import { lineName } from '../../../format';
 import { playSound } from '../../../sound';
 import type { FightContext } from './context';
@@ -17,6 +17,7 @@ export function createCharge(ctx: FightContext, onKnockout: () => void) {
     if (ctx.finished || ctx.run()?.status !== 'active') return;
     ctx.bar.zap();
     const { name } = ctx.form();
+    if (ctx.hitsOn) ctx.saveBattle(bump(ctx.battle(), 'zaps'));
     const message = ctx.hitsOn
       ? takeHit(ctx, onKnockout, `⚡ ${name} zaps you!`, ZAP_DAMAGE)
       : `⚡ ${name} zaps the board. It fizzles in a Relaxed run.`;

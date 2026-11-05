@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   addGadget,
+  addToTally,
   completeEncounter,
   damage,
   heal,
@@ -9,6 +10,49 @@ import {
   withBattle,
   withBoard,
 } from './run';
+
+describe('tally', () => {
+  it('starts at zero and adds up each field across encounters', () => {
+    let run = startRun('r', 10);
+    expect(run.tally).toEqual({
+      wrongFills: 0,
+      zaps: 0,
+      wrongAccusations: 0,
+      gadgetsUsed: 0,
+      bombsUsed: 0,
+      spongesUsed: 0,
+      hintsUsed: 0,
+    });
+    run = addToTally(
+      run,
+      {
+        wrongFills: 1,
+        zaps: 2,
+        wrongAccusations: 3,
+        gadgetsUsed: 2,
+        bombsUsed: 1,
+        spongesUsed: 1,
+      },
+      2,
+    );
+    run = addToTally(run, { wrongFills: 4 }, 1);
+    run = addToTally(run);
+    expect(run.tally).toEqual({
+      wrongFills: 5,
+      zaps: 2,
+      wrongAccusations: 3,
+      gadgetsUsed: 2,
+      bombsUsed: 1,
+      spongesUsed: 1,
+      hintsUsed: 3,
+    });
+  });
+
+  it('stays out of runs from before the tally, so they never look clean', () => {
+    const old = { ...startRun('r', 10), tally: undefined };
+    expect(addToTally(old, { wrongFills: 1 }, 1).tally).toBeUndefined();
+  });
+});
 
 describe('run', () => {
   it('advances through encounters and wins after the last', () => {

@@ -27,6 +27,10 @@
   --spark-hot: #f07c00;
   --mischief: #7b5cff;
   --squid-ink: #2c2350;
+  /* Badge tiers (#108). Each also has a text label, so color is never the only signal. */
+  --bronze: #a8672f;
+  --silver: #7f8a96;
+  --gold: #c99a06;
   --shadow: rgb(35 38 47 / 0.14);
   --font-ui: 'Rubik', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   color-scheme: light;
@@ -56,6 +60,9 @@
     --spark-hot: #ff9a3c;
     --mischief: #9d86ff;
     --squid-ink: #4b3d8f;
+    --bronze: #d08a4c;
+    --silver: #b4bdc8;
+    --gold: #f2c230;
     --shadow: rgb(0 0 0 / 0.4);
     color-scheme: dark;
   }
@@ -85,6 +92,9 @@
   --mischief: #c00000;
   /* Gray, not black, so ink never reads as a filled cell. */
   --squid-ink: #6b6b6b;
+  --bronze: #000000;
+  --silver: #000000;
+  --gold: #000000;
   --shadow: rgb(0 0 0 / 0.35);
   color-scheme: light;
 }

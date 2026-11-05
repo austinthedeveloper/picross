@@ -25,7 +25,9 @@ test.describe('jobs board', () => {
     page,
     context,
   }) => {
-    await seed(context, { run: { jobs: { 'first-job': { plays: 2, wins: 1, bestHp: 9 } } } });
+    await seed(context, {
+      run: { jobs: { 'first-job': { plays: 2, wins: 1, hitsOnWins: 1, bestHp: 9 } } },
+    });
     await page.goto('/#/run');
     await expect(page.locator('.dialogue')).toContainText('Chapter 2: After Hours');
     await page.locator('.skip').tap();
