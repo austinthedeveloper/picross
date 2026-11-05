@@ -5,10 +5,18 @@ import {
   recordSolve,
   saveBoard,
 } from '../../game/progress';
-import { getSettings, passesFilter, type ListFilter } from '../../game/settings';
+import {
+  getSettings,
+  inListOrder,
+  passesFilter,
+  type ListFilter,
+  type ListOrder,
+} from '../../game/settings';
 import type { Mural } from '../../puzzles/murals';
 import { murals } from '../../puzzles/murals';
 import { createPicture } from '../board/picture';
+import { homeLink } from '../components/homeLink';
+import { listSection } from '../components/listSection';
 import { el } from '../dom';
 import { formatTime } from '../format';
 import { renderGameScreen, type PlaySession } from './gameScreen';
@@ -42,21 +50,19 @@ function tileGrid(mural: Mural, pixel: number, links: boolean): HTMLElement {
 }
 
 /** The murals section on the puzzle list (#24), or null when the filter hides them all. */
-export function muralSection(filter: ListFilter): HTMLElement | null {
+export function muralSection(filter: ListFilter, order: ListOrder): HTMLElement | null {
   const shown = murals.filter((mural) => passesFilter(filter, complete(mural)));
   if (!shown.length) return null;
-  return el('section', { className: 'size-section murals', ariaLabel: 'Murals' }, [
-    el('h2', { className: 'size-heading' }, [
-      'Murals',
-      el('span', {
-        className: 'size-count',
-        textContent: `${murals.filter(complete).length}/${murals.length}`,
-      }),
-    ]),
-    el(
+  return listSection({
+    id: 'murals',
+    label: 'Murals',
+    heading: 'Murals',
+    count: `${murals.filter(complete).length}/${murals.length}`,
+    className: 'murals',
+    content: el(
       'div',
       { className: 'mural-cards' },
-      shown.map((mural) =>
+      inListOrder(order, shown).map((mural) =>
         el('a', { className: 'card mural-card', href: `#/mural/${mural.id}` }, [
           tileGrid(mural, 2, false),
           el('div', { className: 'card-name', textContent: title(mural) }),
@@ -72,7 +78,7 @@ export function muralSection(filter: ListFilter): HTMLElement | null {
         ]),
       ),
     ),
-  ]);
+  });
 }
 
 /** A mural at #/mural/<id>: its tiles to pick from, or the finished picture. */
@@ -81,10 +87,7 @@ export function renderMuralScreen(app: HTMLElement, mural: Mural): void {
   const pixel = Math.max(3, Math.floor(300 / (mural.across * mural.tiles[0].width)));
   app.replaceChildren(
     el('main', { className: 'screen mural' }, [
-      el('header', { className: 'topbar' }, [
-        el('a', { className: 'button ghost', href: '#/', textContent: '← Puzzles' }),
-        el('h1', { textContent: title(mural) }),
-      ]),
+      el('header', { className: 'topbar' }, [homeLink(), el('h1', { textContent: title(mural) })]),
       el('p', {
         className: 'run-meta',
         textContent: done

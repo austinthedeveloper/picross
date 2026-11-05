@@ -12,6 +12,15 @@ const tile = (n: number) => {
   return whale.slice(tr * 15, tr * 15 + 15).map((r) => r.slice(tc * 15, tc * 15 + 15));
 };
 
+test('a tile keeps Home one tap away, next to the way back to its mural', async ({ page }) => {
+  await page.goto('/#/mural/whale/1');
+  await page.getByRole('link', { name: '← Mural' }).tap();
+  await expect(page).toHaveURL(/#\/mural\/whale$/);
+  await page.goto('/#/mural/whale/1');
+  await page.getByRole('link', { name: 'Home' }).tap();
+  await expect(page.locator('.select')).toBeVisible();
+});
+
 test('a mural fills in tile by tile, then shows the whole picture', async ({ page }) => {
   await page.goto('/#/');
   const card = page.locator('.mural-card').first();

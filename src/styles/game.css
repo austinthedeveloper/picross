@@ -21,7 +21,7 @@
 .toolbar {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 8px;
   margin-bottom: 16px;
 }
@@ -82,12 +82,25 @@
   z-index: 1;
 }
 
-/* Zoom bar */
+/*
+ * Under the board: the Fill/Mark tools and the zoom bar. When a fight's battle bar
+ * pushes this below a short screen, it sticks to the bottom so the tools stay in reach.
+ */
 
-.zoom-bar {
+.board-controls {
+  position: sticky;
+  bottom: 6px;
+  z-index: 3;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  margin-top: 10px;
+  gap: 12px;
+  width: fit-content;
+  max-width: 100%;
+  margin: 6px auto 0;
+  padding: 4px;
+  border-radius: 12px;
+  background: var(--bg);
 }
 
 .zoom-bar button {
@@ -139,7 +152,9 @@
 }
 
 .is-solved .toolbar,
-.is-failed .toolbar {
+.is-failed .toolbar,
+.is-solved .tools,
+.is-failed .tools {
   opacity: 0.4;
 }
 
@@ -204,7 +219,7 @@
 /* Finished (solved, out of hearts, or knocked out): only the result panel remains. */
 .show-end .toolbar,
 .show-end .board-wrap,
-.show-end .zoom-bar,
+.show-end .board-controls,
 .show-end .help {
   display: none;
 }

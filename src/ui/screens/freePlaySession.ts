@@ -16,7 +16,6 @@ import type { PlaySession } from './gameScreen';
 /** Playing a puzzle from the puzzle list: saves boards and records best times. */
 export function freePlaySession(puzzle: Puzzle): PlaySession {
   return {
-    back: { href: '#/', label: '← Puzzles' },
     title: `${puzzle.width}×${puzzle.height}`,
     mode: getSettings().mode,
     saved: getSavedBoard(puzzle.id),

@@ -4,8 +4,9 @@ import { getJobStats, recordRunResult, saveCurrentRun } from '../../../game/runS
 import type { RunDef } from '../../../puzzles/runs';
 import { getScene } from '../../../puzzles/scenes';
 import { portraitArt, withArt } from '../../art';
+import { homeLink } from '../../components/homeLink';
 import { el } from '../../dom';
-import { backToPuzzles, modePicker, newRunButton, type Hub } from './shared';
+import { modePicker, newRunButton, type Hub } from './shared';
 
 /** The run's sign-off for a win or a loss: the lines its outro scene plays for that flag. */
 function signOff(def: RunDef, won: boolean): HTMLElement[] {
@@ -49,7 +50,7 @@ export function results(hub: Hub, finished: RunState, def: RunDef): Node[] {
     ? `Depth ${state.node} · best ${best}${newBest ? ' · new best!' : ''}`
     : `${cleared}/${def.encounters.length} encounters cleared · ${state.hp}/${state.maxHp} HP left`;
   return [
-    el('header', { className: 'topbar' }, [backToPuzzles(), el('h1', { textContent: def.name })]),
+    el('header', { className: 'topbar' }, [homeLink(), el('h1', { textContent: def.name })]),
     el('section', { className: `run-card results ${won ? 'won' : 'lost'}` }, [
       el('h2', { textContent: won ? 'Job done!' : 'Run over' }),
       el('p', { className: 'run-meta', textContent: summary }),

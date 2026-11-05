@@ -3,8 +3,9 @@ import type { RunState } from '../../../game/run';
 import { getGadget } from '../../../puzzles/gadgets';
 import type { RunDef } from '../../../puzzles/runs';
 import { gadgetArt } from '../../art';
+import { homeLink } from '../../components/homeLink';
 import { el } from '../../dom';
-import { backToPuzzles, nodeIcon, nodeLabel, type Hub } from './shared';
+import { nodeIcon, nodeLabel, type Hub } from './shared';
 
 function hpBar(state: RunState): HTMLElement {
   const bar = el('div', { className: 'hp', role: 'meter', ariaLabel: 'HP' }, [
@@ -80,7 +81,7 @@ export function pathMap(hub: Hub, state: RunState, def: RunDef): Node[] {
   });
 
   return [
-    el('header', { className: 'topbar' }, [backToPuzzles(), el('h1', { textContent: def.name })]),
+    el('header', { className: 'topbar' }, [homeLink(), el('h1', { textContent: def.name })]),
     el('div', { className: 'run-status' }, [
       hpBar(state),
       el('span', {

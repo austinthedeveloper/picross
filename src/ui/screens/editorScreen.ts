@@ -10,6 +10,7 @@ import {
   type Puzzle,
 } from '../../puzzles/format';
 import { createBoardView } from '../board/boardView';
+import { homeLink } from '../components/homeLink';
 import { el } from '../dom';
 import { attachInput } from '../board/input';
 
@@ -244,7 +245,7 @@ export function renderEditorScreen(app: HTMLElement): void {
   app.replaceChildren(
     el('main', { className: 'screen editor' }, [
       el('header', { className: 'topbar' }, [
-        el('a', { className: 'button ghost', href: '#/', textContent: '← Puzzles' }),
+        homeLink(),
         el('h1', { textContent: 'Puzzle editor' }),
       ]),
       el('div', { className: 'editor-fields' }, [

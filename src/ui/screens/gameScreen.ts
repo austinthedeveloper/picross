@@ -11,6 +11,7 @@ import { attachZoom } from '../board/zoom';
 import { createEndPanel, createFailedPanel, solvedPanelContent } from '../components/endPanels';
 import { freePlaySession } from './freePlaySession';
 import { createHintMenu } from '../components/hintMenu';
+import { homeLink } from '../components/homeLink';
 import { createMuteButton } from '../components/muteButton';
 import { createZoomBar } from '../components/zoomBar';
 import { el } from '../dom';
@@ -24,8 +25,8 @@ import { playSound } from '../sound';
  * this interface.
  */
 export interface PlaySession {
-  /** Where the back button goes. */
-  back: { href: string; label: string };
+  /** A screen between this one and home (e.g. the run's map), linked next to Home. */
+  back?: { href: string; label: string };
   /** Heading before the puzzle is solved (after, it shows the puzzle's name). */
   title: string;
   mode: GameMode;
@@ -114,13 +115,19 @@ export function renderGameScreen(
   const hintMenu = createHintMenu(useHint);
 
   const toolbar = el('div', { className: 'toolbar' }, [
-    el('div', { className: 'segmented' }, [fillBtn, markBtn]),
     el('div', { className: 'actions' }, [hintMenu.root, undoBtn, redoBtn, resetBtn]),
   ]);
 
-  // Board, zoom, and end-of-game panels
+  // Board, its controls, and end-of-game panels
   const boardWrap = el('div', { className: 'board-wrap' }, [view.root]);
-  const zoomBar = createZoomBar(attachZoom(boardWrap, view.root));
+  const tools = el('div', { className: 'tools segmented', role: 'group', ariaLabel: 'Tool' }, [
+    fillBtn,
+    markBtn,
+  ]);
+  const boardControls = el('div', { className: 'board-controls' }, [
+    tools,
+    createZoomBar(attachZoom(boardWrap, view.root)),
+  ]);
   const solvedPanel = el('div', { className: 'end-panel', hidden: true });
   const failedPanel = createFailedPanel(() => (game.retry(), refresh()));
   const endedPanel = el('div', { className: 'end-panel failed', hidden: true });
@@ -135,12 +142,17 @@ export function renderGameScreen(
   };
 
   const screen = el('main', { className: 'screen game' }, [
-    el('header', { className: 'topbar' }, [
-      el('a', {
-        className: 'button ghost',
-        href: session.back.href,
-        textContent: session.back.label,
-      }),
+    el('header', { className: `topbar${session.back ? ' nested' : ''}` }, [
+      homeLink(),
+      ...(session.back
+        ? [
+            el('a', {
+              className: 'button ghost',
+              href: session.back.href,
+              textContent: session.back.label,
+            }),
+          ]
+        : []),
       title,
       hearts,
       timer,
@@ -149,7 +161,7 @@ export function renderGameScreen(
     toolbar,
     ...(session.header ? [session.header] : []),
     boardWrap,
-    zoomBar,
+    boardControls,
     el('p', {
       className: 'help keyboard',
       textContent:
@@ -269,6 +281,7 @@ export function renderGameScreen(
     screen.classList.toggle('is-solved', game.solved);
     screen.classList.toggle('is-failed', game.failed || Boolean(ended));
     toolbar.inert = over();
+    tools.inert = over();
     failedPanel.hidden = !game.failed;
     if (!game.solved) showEnd(game.failed || Boolean(ended));
     if (ended && endedPanel.hidden) {

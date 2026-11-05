@@ -33,7 +33,6 @@ export function renderDailyScreen(app: HTMLElement): () => void {
   const daily = dailyFor(today());
   const yesterday = previousDay(daily.key);
   const session: PlaySession = {
-    back: { href: '#/', label: '← Puzzles' },
     title: `Daily · ${dayLabel(daily.key)}`,
     mode: getSettings().mode,
     saved: getDailyBoard(daily.key),
