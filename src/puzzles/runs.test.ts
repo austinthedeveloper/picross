@@ -1,9 +1,18 @@
 import { describe, expect, it } from 'vitest';
 import { parsePuzzle } from './format';
 import { solve, solveLine, solveLineAnyOrder, Unknown, type Knowledge } from '../engine/solver';
-import { CHIP_DAMAGE } from '../game/battle';
+import { CHIP_DAMAGE, type Enemy } from '../game/battle';
 import { allScramble, allUnreadable } from './enemies';
-import { getRun, parseEncounter, parseRun, restHeal, runs, type Encounter } from './runs';
+import {
+  getRun,
+  overtimeFor,
+  overtimeRuns,
+  parseEncounter,
+  parseRun,
+  restHeal,
+  runs,
+  type Encounter,
+} from './runs';
 
 const puzzle = parsePuzzle({ id: 'p', name: 'P', width: 2, height: 1, solution: ['#.'] });
 const find = (id: string) => (id === 'p' ? puzzle : undefined);
@@ -90,8 +99,58 @@ describe('bundled runs', () => {
   });
 });
 
+describe('Overtime', () => {
+  it('has a job of its own to replay, and stays off the board', () => {
+    expect(overtimeRuns.length).toBeGreaterThan(0);
+    for (const run of overtimeRuns) {
+      expect(runs).not.toContain(run);
+      expect(getRun(run.overtimeOf!)).toBeDefined();
+      expect(run.requires).toBe(run.overtimeOf);
+      expect(overtimeFor(run.overtimeOf!)).toBe(run);
+    }
+  });
+
+  it('starts as a pilot on the Night Shift, leaving the Curator out', () => {
+    expect(overtimeRuns.map((run) => run.overtimeOf)).toEqual(['night-shift']);
+  });
+
+  it("doesn't change the story version of the job", () => {
+    const story = getRun('night-shift')!.encounters.map((e) => e.id);
+    expect(story).toEqual([
+      'mimic',
+      'clockwork-owl',
+      'forger',
+      'dusty-exhibit',
+      'armored-beetle',
+      'break-room',
+      'museum-rex',
+    ]);
+  });
+
+  it('gives every fight more powers than its story version', () => {
+    const powers = (e: Encounter) =>
+      phasePowersOf(e.enemy!).length + size(allUnreadable(e.enemy!)) + size(allScramble(e.enemy!));
+    for (const run of overtimeRuns) {
+      const job = getRun(run.overtimeOf!)!;
+      run.encounters.forEach((e, i) => {
+        if (e.enemy) expect(powers(e), e.id).toBeGreaterThan(powers(job.encounters[i]));
+      });
+    }
+  });
+
+  it('never replays a story scene mid-fight', () => {
+    for (const run of overtimeRuns) {
+      for (const e of run.encounters) expect(e.scene, e.id).toBeUndefined();
+    }
+  });
+});
+
+const size = (f: { rows: number[]; cols: number[] }) => f.rows.length + f.cols.length;
+const phasePowersOf = (enemy: Enemy) =>
+  (enemy.phases ?? []).flatMap((p) => [p.swap, p.ink, p.charge].filter(Boolean));
+
 describe('bundled fights', () => {
-  const fights = runs.flatMap((r) => r.encounters).filter((e) => e.enemy);
+  const fights = [...runs, ...overtimeRuns].flatMap((r) => r.encounters).filter((e) => e.enemy);
 
   // Chip damage from every row and column should leave at least a third of the
   // enemy's HP for the finisher, so finishing the picture is the big hit.
@@ -103,7 +162,6 @@ describe('bundled fights', () => {
   // Fogged, forged, and scrambled clues can't be trusted until you solve their
   // lines, so the puzzle must be solvable without guessing even with everything the
   // enemy can bring (starting and from every phase) applied from the very start.
-  const size = (f: { rows: number[]; cols: number[] }) => f.rows.length + f.cols.length;
   const tricky = fights.filter(
     (e) => size(allUnreadable(e.enemy!)) + size(allScramble(e.enemy!)) > 0,
   );
@@ -161,7 +219,9 @@ describe('armored fights', () => {
     }
   }
 
-  const armored = [...new Set(runs.flatMap((r) => r.encounters))].filter((e) => e.enemy?.armor);
+  const armored = [...new Set([...runs, ...overtimeRuns].flatMap((r) => r.encounters))].filter(
+    (e) => e.enemy?.armor,
+  );
 
   it('are all checked', () => {
     expect(armored.length).toBeGreaterThanOrEqual(9);

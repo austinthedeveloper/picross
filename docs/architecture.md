@@ -197,6 +197,17 @@ A saved board stores its cells as a digit string (`"0120…"`) plus elapsed time
 hearts, and hints used. A puzzle keeps the mode it was started in. Solving it clears the
 saved board, and failing in Hearts mode discards it.
 
+### Overtime
+
+A job can have a harder replay (#113): a run file with `overtimeOf` and `requires` set to
+that job. It stays out of `runs`, so it doesn't count as a job on the board or feed Endless,
+and it appears on the job's card once the job is cleared. It always plays with Hits on and
+saves its results under its own id. Its fights are separate `overtime-*` encounter files
+with extra powers, so story versions never change, and tests hold them to the same rules:
+solvable without guessing with every power applied, and weak points reachable early.
+
+The Night Shift is the pilot. Closing Time and the Curator are deliberately left out.
+
 ### Rank and badges
 
 **Rank** (#106) measures how much you've solved. `game/rank.ts` works it out from existing

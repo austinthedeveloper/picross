@@ -78,6 +78,11 @@ export interface RunFile {
   order?: number;
   /** A job you must win once before this one unlocks. */
   requires?: string;
+  /**
+   * The job this is a harder replay of (#113). It stays off the jobs board's own list,
+   * shows on that job's card once it's cleared, and always plays with Hits on.
+   */
+  overtimeOf?: string;
 }
 
 export interface RunDef extends Omit<RunFile, 'encounters' | 'gadgets'> {
@@ -148,6 +153,7 @@ export function parseRun(
     ...(file.blurb ? { blurb: file.blurb } : {}),
     ...(file.order !== undefined ? { order: file.order } : {}),
     ...(file.requires ? { requires: file.requires } : {}),
+    ...(file.overtimeOf ? { overtimeOf: file.overtimeOf } : {}),
   };
 }
 
@@ -180,9 +186,18 @@ for (const run of runsById.values()) {
   if (run.requires && !runsById.has(run.requires)) {
     throw new Error(`Invalid run "${run.id}": requires unknown job "${run.requires}"`);
   }
+  if (run.overtimeOf && !runsById.has(run.overtimeOf)) {
+    throw new Error(`Invalid run "${run.id}": overtime of unknown job "${run.overtimeOf}"`);
+  }
 }
 
 /** Every job, in jobs-board order. */
-export const runs: RunDef[] = [...runsById.values()].sort(
-  (a, b) => (a.order ?? 99) - (b.order ?? 99) || a.name.localeCompare(b.name),
-);
+export const runs: RunDef[] = [...runsById.values()]
+  .filter((run) => !run.overtimeOf)
+  .sort((a, b) => (a.order ?? 99) - (b.order ?? 99) || a.name.localeCompare(b.name));
+
+/** Harder replays of cleared jobs (#113). */
+export const overtimeRuns: RunDef[] = [...runsById.values()].filter((run) => run.overtimeOf);
+
+/** A job's Overtime, if it has one. */
+export const overtimeFor = (job: string) => overtimeRuns.find((run) => run.overtimeOf === job);
