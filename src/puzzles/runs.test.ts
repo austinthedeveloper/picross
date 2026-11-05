@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { parsePuzzle } from './format';
-import { solve } from '../engine/solver';
+import { solve, solveLine, solveLineAnyOrder, Unknown, type Knowledge } from '../engine/solver';
 import { CHIP_DAMAGE } from '../game/battle';
 import { allScramble, allUnreadable } from './enemies';
-import { getRun, parseEncounter, parseRun, restHeal, runs } from './runs';
+import { getRun, parseEncounter, parseRun, restHeal, runs, type Encounter } from './runs';
 
 const puzzle = parsePuzzle({ id: 'p', name: 'P', width: 2, height: 1, solution: ['#.'] });
 const find = (id: string) => (id === 'p' ? puzzle : undefined);
@@ -116,6 +116,70 @@ describe('bundled fights', () => {
         scramble: allScramble(e.enemy!),
       });
       expect(result.status).toBe('unique');
+    },
+  );
+});
+
+describe('armored fights', () => {
+  /** Weak points must be solvable this early, or the armor's hits couldn't be avoided (#116). */
+  const WEAK_POINT_PASS_LIMIT = 2;
+
+  /**
+   * The pass of a line solver in which a line becomes fully known, reading clues
+   * as the player can at the start: unreadable ones wait for their crossing lines.
+   */
+  function passKnown(e: Encounter, target: { kind: 'row' | 'col'; index: number }): number {
+    const { width: w, height: h, clues } = e.puzzle;
+    const { fog, suspects, fakes, scramble } = e.enemy!;
+    const blocked = (key: 'rows' | 'cols', i: number) =>
+      [fog, suspects, fakes].some((set) => set?.[key].includes(i));
+    const grid: Knowledge[] = new Array(w * h).fill(Unknown);
+    const rowCells = (r: number) => Array.from({ length: w }, (_, c) => r * w + c);
+    const colCells = (c: number) => Array.from({ length: h }, (_, r) => r * w + c);
+    const goal = target.kind === 'row' ? rowCells(target.index) : colCells(target.index);
+    const work = (key: 'rows' | 'cols', i: number, cells: number[], runs: number[]) => {
+      if (blocked(key, i)) return false;
+      const line = cells.map((n) => grid[n]);
+      const out = scramble?.[key].includes(i)
+        ? solveLineAnyOrder(line, runs)
+        : solveLine(line, runs);
+      let changed = false;
+      out?.forEach((value, n) => {
+        if (grid[cells[n]] !== value) {
+          grid[cells[n]] = value;
+          changed = true;
+        }
+      });
+      return changed;
+    };
+    for (let pass = 1; ; pass++) {
+      let changed = false;
+      for (let r = 0; r < h; r++) changed = work('rows', r, rowCells(r), clues.rows[r]) || changed;
+      for (let c = 0; c < w; c++) changed = work('cols', c, colCells(c), clues.cols[c]) || changed;
+      if (goal.every((n) => grid[n] !== Unknown)) return pass;
+      if (!changed) return Infinity;
+    }
+  }
+
+  const armored = [...new Set(runs.flatMap((r) => r.encounters))].filter((e) => e.enemy?.armor);
+
+  it('are all checked', () => {
+    expect(armored.length).toBeGreaterThanOrEqual(9);
+  });
+
+  it.each(armored.map((e) => [e.id, e] as const))(
+    '%s has weak points you can go after early',
+    (_, e) => {
+      const { rows, cols } = e.enemy!.armor!.weakPoints;
+      const lines = [
+        ...rows.map((index) => ({ kind: 'row' as const, index })),
+        ...cols.map((index) => ({ kind: 'col' as const, index })),
+      ];
+      for (const line of lines) {
+        expect(passKnown(e, line), `${line.kind} ${line.index}`).toBeLessThanOrEqual(
+          WEAK_POINT_PASS_LIMIT,
+        );
+      }
     },
   );
 });

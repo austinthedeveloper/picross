@@ -15,7 +15,7 @@ export const POWERS: Record<Power, { icon: string; name: string; tip: string }> 
   armor: {
     icon: '🎯',
     name: 'Armor',
-    tip: 'Only 🎯 lines hurt it, for triple damage. Solve them all to break the armor.',
+    tip: 'Only 🎯 lines hurt it, for triple damage. Every 5 other lines you finish, the armor hits back. Solve the 🎯 lines to break it.',
   },
   fakes: {
     icon: '🎭',
