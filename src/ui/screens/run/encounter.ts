@@ -1,4 +1,5 @@
-import { addGadget, completeEncounter, heal, withBoard } from '../../../game/run';
+import { badgeNote, earnFromFight } from '../../../game/badges';
+import { addGadget, addToTally, completeEncounter, heal, withBoard } from '../../../game/run';
 import { getCurrentRun, saveCurrentRun } from '../../../game/runSave';
 import { ENDLESS_HEAL } from '../../../puzzles/endless';
 import { restHeal } from '../../../puzzles/runs';
@@ -43,7 +44,15 @@ export function renderRunEncounter(app: HTMLElement): (() => void) | undefined {
       },
       complete(game) {
         const finisher = fight?.land();
-        let next = completeEncounter(getCurrentRun() ?? state, length);
+        const current = getCurrentRun() ?? state;
+        // Fight badges read the battle, which clearing the encounter throws away (#110).
+        const badges =
+          fight && encounter.enemy ? earnFromFight(current, encounter.id, encounter.enemy) : [];
+        let next = addToTally(
+          completeEncounter(current, length),
+          current.battle?.counts,
+          game.hintsUsed,
+        );
         const reward = encounter.puzzle.gadget ? getGadget(encounter.puzzle.gadget) : undefined;
         if (reward) next = addGadget(next, reward.id);
         // Endless (#68) gives a little HP back after each fight; a rest stop (#77)
@@ -57,7 +66,8 @@ export function renderRunEncounter(app: HTMLElement): (() => void) | undefined {
         const time = formatTime(game.elapsed);
         const got =
           (reward ? ` · You got ${reward.icon} ${reward.name}!` : '') +
-          (healed ? ` · +${healed} HP` : '');
+          (healed ? ` · +${healed} HP` : '') +
+          (badges.length ? ` · ${badgeNote(badges)}` : '');
         return {
           note:
             (fight

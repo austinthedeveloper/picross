@@ -32,6 +32,12 @@ export function dailyStreak(today: string, yesterday: string) {
   return { streak: alive ? data.streak : 0, best: data.best, solves: data.solves };
 }
 
+/** Every daily ever solved. Each one counts toward your rank (#106). */
+export const dailySolves = () => data.solves;
+
+/** The longest streak ever. A broken streak doesn't lower it, so badges use this (#111). */
+export const bestDailyStreak = () => data.best;
+
 /** Records today's solve. Returns the streak after it. */
 export function recordDailySolve(today: string, yesterday: string): number {
   if (data.lastSolved !== today) {

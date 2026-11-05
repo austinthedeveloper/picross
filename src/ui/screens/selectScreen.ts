@@ -13,6 +13,7 @@ import type { Puzzle } from '../../puzzles/format';
 import { createPicture } from '../board/picture';
 import { listSection } from '../components/listSection';
 import { createMuteButton } from '../components/muteButton';
+import { rankCard } from '../components/rankCard';
 import { el } from '../dom';
 import { formatTime } from '../format';
 import { applyTheme } from '../theme';
@@ -141,6 +142,7 @@ export function renderSelectScreen(app: HTMLElement): void {
         ]),
         el('span', { className: 'mode-hint', textContent: MODE_HINTS[settings.mode] }),
       ]),
+      rankCard(),
       el('section', { className: 'stats', ariaLabel: 'Stats' }, [
         // Mural tiles share the save, so count pack puzzles only.
         stat(

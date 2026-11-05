@@ -7,7 +7,12 @@ const KEY = 'picross:run';
 export interface JobStats {
   plays: number;
   wins: number;
-  /** Most HP left at the end of a win. */
+  /** Wins with Hits on (#107). */
+  hitsOnWins?: number;
+  /**
+   * Most HP left at the end of a Hits-on win. Saves from before #107 may hold a
+   * Relaxed run's HP here, where nothing can hurt you, so trust it only with `hitsOnWins`.
+   */
   bestHp?: number;
   /** Endless mode (#68): the most encounters cleared in one run. */
   bestDepth?: number;
@@ -73,13 +78,13 @@ export function recordRunResult(run: RunState): RunState {
     return save({ ...run, recorded: true });
   }
   const won = run.status === 'won';
-  data.jobs[run.runId] = {
-    plays: prev.plays + 1,
-    wins: prev.wins + (won ? 1 : 0),
-    ...(won || prev.bestHp !== undefined
-      ? { bestHp: Math.max(prev.bestHp ?? 0, won ? run.hp : 0) }
-      : {}),
-  };
+  const next: JobStats = { ...prev, plays: prev.plays + 1, wins: prev.wins + (won ? 1 : 0) };
+  if (won && run.mode === 'hearts') {
+    // A first Hits-on win starts the best fresh: an older one may be from a Relaxed run.
+    next.bestHp = Math.max(prev.hitsOnWins ? (prev.bestHp ?? 0) : 0, run.hp);
+    next.hitsOnWins = (prev.hitsOnWins ?? 0) + 1;
+  }
+  data.jobs[run.runId] = next;
   return save({ ...run, recorded: true });
 }
 

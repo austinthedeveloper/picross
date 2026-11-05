@@ -1,7 +1,22 @@
 import { debug } from '../debug/hooks';
-import type { BattleState } from './battle';
+import type { BattleState, FightCounts } from './battle';
 import type { SavedBoard } from './progress';
 import type { Mode } from './settings';
+
+/** How a run went (#107), across the fights it has won so far. */
+export interface Tally extends FightCounts {
+  hintsUsed: number;
+}
+
+const emptyTally = (): Tally => ({
+  wrongFills: 0,
+  zaps: 0,
+  wrongAccusations: 0,
+  gadgetsUsed: 0,
+  bombsUsed: 0,
+  spongesUsed: 0,
+  hintsUsed: 0,
+});
 
 /**
  * Where a player is in a run. Pure data, so it can be saved as-is. Change it
@@ -26,6 +41,8 @@ export interface RunState {
   recorded?: boolean;
   /** An endless run's seed and pools (#68); its encounters are generated from them. */
   endless?: { seed: number; fights: string[]; digs: string[]; rests?: string[] };
+  /** Missing on runs started before #107, which can't prove they were clean. */
+  tally?: Tally;
 }
 
 export function startRun(
@@ -34,7 +51,30 @@ export function startRun(
   mode: Mode = 'relaxed',
   gadgets: string[] = [],
 ): RunState {
-  return { runId, node: 0, hp, maxHp: hp, gadgets: [...gadgets], status: 'active', mode };
+  return {
+    runId,
+    node: 0,
+    hp,
+    maxHp: hp,
+    gadgets: [...gadgets],
+    status: 'active',
+    mode,
+    tally: emptyTally(),
+  };
+}
+
+/** Adds a finished encounter's fight counts and hints to the run's tally. */
+export function addToTally(
+  state: RunState,
+  counts: Partial<FightCounts> = {},
+  hintsUsed = 0,
+): RunState {
+  if (!state.tally) return state;
+  const tally = { ...state.tally, hintsUsed: state.tally.hintsUsed + hintsUsed };
+  for (const key of Object.keys(counts) as (keyof FightCounts)[]) {
+    tally[key] += counts[key] ?? 0;
+  }
+  return { ...state, tally };
 }
 
 export function addGadget(state: RunState, id: string): RunState {

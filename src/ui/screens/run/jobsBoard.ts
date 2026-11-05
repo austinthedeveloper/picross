@@ -1,8 +1,11 @@
+import { getEarned, nextTierHint } from '../../../game/badges';
 import { getJobStats, hasSeenScene } from '../../../game/runSave';
+import { jobBadgeFor } from '../../../puzzles/badges';
 import { chapters, type Chapter } from '../../../puzzles/chapters';
 import { ENDLESS_GADGETS, ENDLESS_HP, ENDLESS_ID, ENDLESS_HEAL } from '../../../puzzles/endless';
 import { getRun, type RunDef } from '../../../puzzles/runs';
 import { withArt } from '../../art';
+import { badgeIcon, tierTag } from '../../components/badge';
 import { homeLink } from '../../components/homeLink';
 import { el } from '../../dom';
 import { modePicker, newRunButton, nodeIcon, type Hub } from './shared';
@@ -20,7 +23,26 @@ function bestResult(def: RunDef): string {
   const stats = getJobStats(def.id);
   if (!stats?.plays) return 'Not played yet';
   if (!stats.wins) return `${stats.plays} ${stats.plays === 1 ? 'try' : 'tries'}, not cleared yet`;
-  return `Cleared ${stats.wins}× · best ${stats.bestHp}/${def.hp} HP left`;
+  // Nothing can hurt you in Relaxed, so only Hits-on wins have a best worth showing (#107).
+  const best = stats.hitsOnWins ? ` · best ${stats.bestHp}/${def.hp} HP left` : '';
+  return `Cleared ${stats.wins}×${best}`;
+}
+
+/** A job's badge on its card (#108): the best tier so far, and what the next one needs. */
+function jobBadge(def: RunDef): HTMLElement[] {
+  const badge = jobBadgeFor(def.id);
+  if (!badge) return [];
+  const earned = getEarned(badge.id);
+  return [
+    el('div', { className: 'job-badge' }, [
+      badgeIcon(badge, { earned: Boolean(earned), tier: earned?.tier }),
+      el('div', { className: 'badge-text' }, [
+        el('strong', { className: 'badge-name', textContent: badge.name }),
+        ...(earned?.tier ? [tierTag(earned.tier)] : []),
+        el('span', { className: 'badge-how', textContent: nextTierHint(earned) }),
+      ]),
+    ]),
+  ];
 }
 
 function jobCard(hub: Hub, def: RunDef): HTMLElement {
@@ -42,6 +64,7 @@ function jobCard(hub: Hub, def: RunDef): HTMLElement {
       className: `job-best${cleared(def) ? '' : ' none'}`,
       textContent: bestResult(def),
     }),
+    ...(open ? jobBadge(def) : []),
     open
       ? el('div', { className: 'end-actions' }, [
           newRunButton(hub, def, 'Start'),
@@ -157,7 +180,11 @@ function endlessSection(hub: Hub): HTMLElement {
  */
 export function jobsBoard(hub: Hub): Node[] {
   return [
-    el('header', { className: 'topbar' }, [homeLink(), el('h1', { textContent: 'Jobs' })]),
+    el('header', { className: 'topbar' }, [
+      homeLink(),
+      el('h1', { textContent: 'Jobs' }),
+      el('a', { className: 'jobs-badges', href: '#/badges', textContent: 'Badges →' }),
+    ]),
     modePicker(hub),
     el('div', { className: 'chapters' }, [
       ...chapters.map((c) => chapterSection(hub, c)),

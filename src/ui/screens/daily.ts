@@ -5,6 +5,8 @@ import {
   recordDailySolve,
   saveDailyBoard,
 } from '../../game/daily';
+import { badgeNote, earnFromStats } from '../../game/badges';
+import { currentPoints, rankUpNote } from '../../game/rank';
 import { getSettings } from '../../game/settings';
 import { dailyFor, dateKey, previousDay, type Daily } from '../../puzzles/daily';
 import { createPicture } from '../board/picture';
@@ -39,12 +41,17 @@ export function renderDailyScreen(app: HTMLElement): () => void {
     save: (board) => saveDailyBoard(daily.key, board),
     complete(game) {
       const already = isDailySolved(daily.key);
+      const pointsBefore = currentPoints();
       const streak = recordDailySolve(daily.key, yesterday);
       let note = `Solved in ${formatTime(game.elapsed)}`;
       if (game.hintsUsed) note += ` · ${plural(game.hintsUsed, 'hint')}`;
       note += ` · 🔥 ${plural(streak, 'day')} in a row`;
       if (!already && streak > 1) note += '!';
       note += ` ${reveal(daily)} Come back tomorrow for the next one.`;
+      const rankUp = rankUpNote(pointsBefore);
+      if (rankUp) note += ` ${rankUp}`;
+      const badges = badgeNote(earnFromStats());
+      if (badges) note += ` ${badges}`;
       return { note, actions: [allPuzzlesLink()] };
     },
   };

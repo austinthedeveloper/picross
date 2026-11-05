@@ -1,9 +1,11 @@
+import { earnFromRun, type NewBadge } from '../../../game/badges';
 import { advance, currentStep, startDialogue } from '../../../game/dialogue';
 import type { RunState } from '../../../game/run';
 import { getJobStats, recordRunResult, saveCurrentRun } from '../../../game/runSave';
 import type { RunDef } from '../../../puzzles/runs';
 import { getScene } from '../../../puzzles/scenes';
 import { portraitArt, withArt } from '../../art';
+import { earnedBadges } from '../../components/badge';
 import { homeLink } from '../../components/homeLink';
 import { el } from '../../dom';
 import { modePicker, newRunButton, type Hub } from './shared';
@@ -37,10 +39,17 @@ function signOff(def: RunDef, won: boolean): HTMLElement[] {
   return lines;
 }
 
+/**
+ * Badges from the run just recorded. Kept while this page lives, so changing the
+ * mode here redraws them, but a reload doesn't show them again (#108).
+ */
+let fresh: NewBadge[] = [];
+
 /** A finished run: records it once, then shows the outcome, the sign-off, and what's next. */
 export function results(hub: Hub, finished: RunState, def: RunDef): Node[] {
   const bestBefore = getJobStats(def.id)?.bestDepth ?? 0;
   const state = recordRunResult(finished);
+  if (!finished.recorded) fresh = earnFromRun(state);
   const won = state.status === 'won';
   const cleared = Math.min(state.node, def.encounters.length);
   const best = getJobStats(def.id)?.bestDepth ?? 0;
@@ -54,6 +63,7 @@ export function results(hub: Hub, finished: RunState, def: RunDef): Node[] {
     el('section', { className: `run-card results ${won ? 'won' : 'lost'}` }, [
       el('h2', { textContent: won ? 'Job done!' : 'Run over' }),
       el('p', { className: 'run-meta', textContent: summary }),
+      ...earnedBadges(fresh),
       ...signOff(def, won),
       modePicker(hub),
       el('div', { className: 'end-actions' }, [
@@ -61,6 +71,7 @@ export function results(hub: Hub, finished: RunState, def: RunDef): Node[] {
           className: 'button ghost',
           textContent: 'Jobs board',
           onclick: () => {
+            fresh = [];
             saveCurrentRun(null);
             hub.rerender();
           },

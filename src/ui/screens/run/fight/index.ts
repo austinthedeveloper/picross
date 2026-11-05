@@ -1,6 +1,6 @@
 import { debug } from '../../../../debug/hooks';
 import { lineKey } from '../../../../engine/lines';
-import { finish, useGadget, type Enemy } from '../../../../game/battle';
+import { bump, finish, useGadget, type Enemy } from '../../../../game/battle';
 import type { Puzzle } from '../../../../puzzles/format';
 import type { PlaySession } from '../../gameScreen';
 import { createCallOut } from './callOut';
@@ -63,7 +63,11 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
       const message = completeLines(ctx, counted, checkPhase, gadgets.render);
       return [message, charge.finished(fresh)].filter(Boolean).join(' ') || undefined;
     },
-    onMistake: () => takeHit(ctx, gadgets.render),
+    onMistake() {
+      // Counted here, not in takeHit: zaps and wrong accusations hit too, and a block returns early.
+      ctx.saveBattle(bump(ctx.battle(), 'wrongFills'));
+      return takeHit(ctx, gadgets.render);
+    },
     ended: () => knockedOut(ctx),
     celebrate: (board) => playFinisher(ctx, board, finisher),
   };

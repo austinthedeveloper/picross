@@ -84,8 +84,21 @@ export interface Phase {
   charge?: number;
 }
 
+/** How this fight is going (#107). Rolls up into the run's tally when the fight is won. */
+export interface FightCounts {
+  /** Caught wrong fills, even ones a patch kit blocks. Only Hits-on fights check fills. */
+  wrongFills: number;
+  /** Hits-on only, since a zap fizzles in Relaxed. Blocked zaps still count. */
+  zaps: number;
+  wrongAccusations: number;
+  gadgetsUsed: number;
+  bombsUsed: number;
+  spongesUsed: number;
+}
+
 /** A fight in progress. Saved with the run so a reload resumes it. */
 export interface BattleState {
+  counts?: Partial<FightCounts>;
   enemyHp: number;
   /** Lines that have already dealt chip damage ("r3", "c0"), so each counts once. */
   struck: string[];
@@ -222,6 +235,11 @@ export function clearInk(
   if (!state.ink?.length) return { state, washed: [] };
   const { ink, washed } = washInk(state.ink, lines, width);
   return washed.length ? { state: { ...state, ink }, washed } : { state, washed };
+}
+
+/** Adds one to a fight's count. */
+export function bump(state: BattleState, key: keyof FightCounts): BattleState {
+  return { ...state, counts: { ...state.counts, [key]: (state.counts?.[key] ?? 0) + 1 } };
 }
 
 /** A bomb's blast washes the ink out of the cells it hits (#115). Returns the cells washed. */

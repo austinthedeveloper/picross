@@ -3,8 +3,10 @@
  * read through the game's own modules, so pages follow the real play order and
  * new writing shows up without touching this file.
  */
+import { badges } from '../../src/puzzles/badges';
 import { chapters } from '../../src/puzzles/chapters';
 import { catalog as gadgets } from '../../src/puzzles/gadgets';
+import { ranks } from '../../src/puzzles/ranks';
 import type { Encounter, RunDef } from '../../src/puzzles/runs';
 import { getScene, scenes, type Scene } from '../../src/puzzles/scenes';
 import { tutorialSteps } from '../../src/puzzles/tutorial';
@@ -312,6 +314,18 @@ export function buildPages(): Page[] {
         gadgets.map((gadget) => card(`gadget/${gadget.id}`, gadget.name, gadget.description)),
       ),
       listSection(
+        'ranks',
+        'Ranks',
+        ranks.map((rank) =>
+          card(`rank/${rank.points}`, rank.name, `Reached at ${rank.points} points.`),
+        ),
+      ),
+      listSection(
+        'badges',
+        'Badges',
+        badges.map((badge) => card(`badge/${badge.id}`, badge.name, badge.description)),
+      ),
+      listSection(
         'tutorial',
         'How to play',
         tutorialSteps.map((step, i) => card(`tutorial/${i}`, step.title, step.text)),
@@ -360,6 +374,8 @@ export function sourceFile(key: string): string {
   if (kind === 'chapter') return `${puzzles}/chapters/${id}.json`;
   if (kind === 'power') return 'src/ui/powers.ts';
   if (kind === 'gadget') return `${puzzles}/gadgets.ts`;
+  if (kind === 'rank') return `${puzzles}/ranks.ts`;
+  if (kind === 'badge') return `${puzzles}/badges.ts`;
   if (kind === 'tutorial') return `${puzzles}/tutorial.ts`;
   return '';
 }

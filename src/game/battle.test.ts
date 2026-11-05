@@ -4,6 +4,7 @@ import {
   absorbHit,
   advancePhase,
   blastInk,
+  bump,
   CALL_OUT_DAMAGE,
   callOut,
   clearInk,
@@ -51,6 +52,25 @@ describe('battle', () => {
   it('finishes with whatever HP is left', () => {
     const { state } = chip(startBattle(goblin), ['r0']);
     expect(finish(state)).toEqual({ state: { enemyHp: 0, struck: ['r0'] }, dealt: 4 });
+  });
+});
+
+describe('fight counts', () => {
+  it('counts each kind on its own, without changing anything else', () => {
+    const start = { ...startBattle(goblin), shield: 1 };
+    let state = bump(bump(start, 'wrongFills'), 'wrongFills');
+    state = bump(state, 'zaps');
+    expect(state.counts).toEqual({ wrongFills: 2, zaps: 1 });
+    expect(state.shield).toBe(1);
+    expect(start.counts).toBeUndefined();
+  });
+
+  it('survive everything else a fight does to its state', () => {
+    let state = bump(startBattle(goblin), 'wrongFills');
+    state = chip(state, ['r0']).state;
+    state = useGadget(state, { kind: 'shield', hits: 1 }).state;
+    state = absorbHit(state).state;
+    expect(state.counts).toEqual({ wrongFills: 1 });
   });
 });
 
