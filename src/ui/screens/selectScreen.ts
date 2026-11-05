@@ -1,3 +1,4 @@
+import { randomUnsolved } from '../../game/pickPuzzle';
 import { getOverallStats, getPuzzleStats, getSavedBoard } from '../../game/progress';
 import {
   getSettings,
@@ -89,6 +90,22 @@ function sizeSections(filter: ListFilter, order: ListOrder): HTMLElement[] {
   });
 }
 
+/** Opens a random unsolved puzzle (#114). Gone once everything's solved. */
+function surpriseButton(): HTMLElement[] {
+  const isSolved = (id: string) => Boolean(getPuzzleStats(id));
+  if (!randomUnsolved(puzzles, isSolved)) return [];
+  return [
+    el('button', {
+      className: 'button ghost surprise',
+      textContent: 'Surprise me',
+      onclick: () => {
+        const pick = randomUnsolved(puzzles, isSolved);
+        if (pick) location.hash = `#/play/${pick.id}`;
+      },
+    }),
+  ];
+}
+
 /** Renders the puzzle list with settings, mode choice, and stats. */
 export function renderSelectScreen(app: HTMLElement): void {
   const rerender = () => renderSelectScreen(app);
@@ -143,6 +160,7 @@ export function renderSelectScreen(app: HTMLElement): void {
         el('span', { className: 'mode-hint', textContent: MODE_HINTS[settings.mode] }),
       ]),
       rankCard(),
+      ...surpriseButton(),
       el('section', { className: 'stats', ariaLabel: 'Stats' }, [
         // Mural tiles share the save, so count pack puzzles only.
         stat(

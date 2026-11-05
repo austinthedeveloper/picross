@@ -71,6 +71,11 @@
   text-decoration: none;
 }
 
+.surprise {
+  display: block;
+  margin-bottom: 16px;
+}
+
 .stats {
   display: flex;
   gap: 24px;

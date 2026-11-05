@@ -5,6 +5,7 @@ import {
   recordSolve,
   saveBoard,
 } from '../../game/progress';
+import { nextUnsolved } from '../../game/pickPuzzle';
 import { currentPoints, rankUpNote } from '../../game/rank';
 import { getSettings } from '../../game/settings';
 import type { Puzzle } from '../../puzzles/format';
@@ -36,7 +37,7 @@ export function freePlaySession(puzzle: Puzzle): PlaySession {
       const rankUp = rankUpNote(pointsBefore);
       if (rankUp) note += ` · ${rankUp}`;
 
-      const next = puzzles[puzzles.indexOf(puzzle) + 1];
+      const next = nextUnsolved(puzzles, puzzle.id, (id) => Boolean(getPuzzleStats(id)));
       const actions = [allPuzzlesLink()];
       if (next) {
         actions.push(
