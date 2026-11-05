@@ -184,6 +184,43 @@ test('gadgets: a patch kit blocks a hit and the dig hands over a bomb', async ({
   await expect(page.locator('.inventory')).toContainText('Bomb');
 });
 
+test('armor hits back every 5 other lines, and breaking it stops the count', async ({ page }) => {
+  await fight(page, 'night-shift', 4, { hp: 12, maxHp: 12 });
+  const beetle = encounterSolution('armored-beetle');
+  await expect(page.locator('.armor')).toContainText('0/5');
+  for (const r of [0, 1, 2, 3]) await fillRow(page, beetle, r);
+  await expect(page.locator('.armor')).toContainText('4/5');
+  expect(await meter(page, 'player-hp')).toBe(12);
+  await fillRow(page, beetle, 4);
+  await expect.poll(() => meter(page, 'player-hp')).toBe(10);
+  await expect.poll(() => announcements(page)).toContain('hits back');
+  await expect(page.locator('.armor')).toContainText('0/5');
+
+  // The count survives a reload.
+  await fillRow(page, beetle, 5);
+  await page.reload();
+  await skipScene(page);
+  await expect(page.locator('.armor')).toContainText('1/5');
+
+  // Armor gone: no more hits, however many lines you finish.
+  await fillRow(page, beetle, 8);
+  await fillRow(page, beetle, 11);
+  for (let r = 0; r < 15; r++)
+    if (beetle[r][2] === '#' && (await boardState(page))[r * 15 + 2] !== '#')
+      await cell(page, r * 15 + 2).tap();
+  await expect(page.locator('.armor')).toBeHidden();
+  await solve(page, beetle);
+  expect(await meter(page, 'player-hp')).toBe(10);
+});
+
+test('armor hits back only as a fizzle in a Relaxed run', async ({ page }) => {
+  await fight(page, 'night-shift', 4, { hp: 12, maxHp: 12, mode: 'relaxed' });
+  const beetle = encounterSolution('armored-beetle');
+  for (const r of [0, 1, 2, 3, 4]) await fillRow(page, beetle, r);
+  await expect.poll(() => announcements(page)).toContain('fizzles');
+  expect(await meter(page, 'player-hp')).toBe(12);
+});
+
 test('bomb: 2 damage and a blast of revealed cells that survives a reload', async ({ page }) => {
   await fight(page, 'night-shift', 0, { hp: 14, maxHp: 14, gadgets: ['bomb'] });
   const before = await meter(page, 'enemy-hp');

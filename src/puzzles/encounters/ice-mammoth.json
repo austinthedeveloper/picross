@@ -11,10 +11,7 @@
     "attack": 2,
     "charge": 6,
     "armor": {
-      "weakPoints": {
-        "rows": [11, 13],
-        "cols": [3]
-      },
+      "weakPoints": { "rows": [5, 8], "cols": [10] },
       "attack": 4
     },
     "fog": {

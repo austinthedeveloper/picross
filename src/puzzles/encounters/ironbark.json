@@ -10,10 +10,7 @@
     "hp": 45,
     "attack": 2,
     "armor": {
-      "weakPoints": {
-        "rows": [6, 9],
-        "cols": [3]
-      },
+      "weakPoints": { "rows": [2, 11], "cols": [7] },
       "attack": 4
     },
     "scramble": {

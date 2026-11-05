@@ -10,10 +10,7 @@
     "hp": 45,
     "attack": 2,
     "armor": {
-      "weakPoints": {
-        "rows": [10],
-        "cols": [3, 9]
-      },
+      "weakPoints": { "rows": [8], "cols": [1, 11] },
       "attack": 4
     },
     "phases": [

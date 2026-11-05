@@ -3,6 +3,8 @@ import { lineKey } from '../engine/lines';
 import {
   absorbHit,
   advancePhase,
+  ARMOR_HIT_LINES,
+  armorHitsBack,
   blastInk,
   bump,
   CALL_OUT_DAMAGE,
@@ -52,6 +54,50 @@ describe('battle', () => {
   it('finishes with whatever HP is left', () => {
     const { state } = chip(startBattle(goblin), ['r0']);
     expect(finish(state)).toEqual({ state: { enemyHp: 0, struck: ['r0'] }, dealt: 4 });
+  });
+});
+
+describe('armor hitting back', () => {
+  const beetle = {
+    ...goblin,
+    armor: { weakPoints: { rows: [1], cols: [2] }, attack: 4 },
+  };
+  const row = (index: number) => ({ kind: 'row' as const, index });
+  const col = (index: number) => ({ kind: 'col' as const, index });
+  const weak = beetle.armor.weakPoints;
+  const start = startBattle(beetle);
+
+  it('counts lines that are not weak points, and hits on the limit', () => {
+    let { state, hits } = armorHitsBack(start, [row(0), row(2)], weak);
+    expect([state.armorLines, hits]).toEqual([2, 0]);
+    ({ state, hits } = armorHitsBack(state, [row(3), row(4), row(5)], weak));
+    expect(ARMOR_HIT_LINES).toBe(5);
+    expect([state.armorLines, hits]).toEqual([0, 1]);
+  });
+
+  it('carries what is left over, and can hit twice from one big batch', () => {
+    const lines = Array.from({ length: 11 }, (_, i) => col(i + 3));
+    const { state, hits } = armorHitsBack(start, lines, weak);
+    expect([state.armorLines, hits]).toEqual([1, 2]);
+  });
+
+  it('ignores weak points', () => {
+    const { state, hits } = armorHitsBack(start, [row(1), col(2)], weak);
+    expect(hits).toBe(0);
+    expect(state.armorLines).toBeUndefined();
+  });
+
+  it('stops once the armor is broken, even in the batch that breaks it', () => {
+    const near = { ...start, armorLines: 4 };
+    const broken = { ...near, armor: { rows: [], cols: [] } };
+    const { state, hits } = armorHitsBack(broken, [row(1), col(2), row(0)], weak);
+    expect(hits).toBe(0);
+    expect(state.armorLines).toBeUndefined();
+  });
+
+  it('never touches an enemy with no armor', () => {
+    const plain = startBattle(goblin);
+    expect(armorHitsBack(plain, [row(0)], undefined)).toEqual({ state: plain, hits: 0 });
   });
 });
 

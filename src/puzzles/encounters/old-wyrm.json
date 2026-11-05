@@ -12,10 +12,7 @@
     "hp": 60,
     "attack": 2,
     "armor": {
-      "weakPoints": {
-        "rows": [15],
-        "cols": [2, 17]
-      },
+      "weakPoints": { "rows": [17], "cols": [2, 14] },
       "attack": 4
     },
     "fakes": {
