@@ -20,6 +20,7 @@ npm run dev        # http://localhost:5173, hot reload
 | `npm test`                    | All unit tests once (Vitest, jsdom)                                       |
 | `npm run test:watch`          | Tests in watch mode                                                       |
 | `npm run check:puzzles`       | Only the pack uniqueness check (`src/puzzles/pack.test.ts`)               |
+| `npm run rate:puzzles`        | Re-rate puzzle difficulty after adding or changing puzzles                |
 | `npm run script-review`       | Generate the script review site and serve it at http://localhost:4177     |
 | `npm run script-review:notes` | Print your open script review notes                                       |
 | `npm run lint`                | ESLint, then `prettier --check`                                           |

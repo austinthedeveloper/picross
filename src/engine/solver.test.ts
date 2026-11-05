@@ -2,12 +2,37 @@ import { describe, expect, it } from 'vitest';
 import { deriveClues } from './clues';
 import {
   checkSolution,
+  linePasses,
   runOrders,
   solve,
   solveLine,
   solveLineAnyOrder,
   Unknown as U,
 } from './solver';
+
+describe('linePasses', () => {
+  it('counts one pass for clues that give everything away', () => {
+    const clues = { rows: [[3], [3], [3]], cols: [[3], [3], [3]] };
+    expect(linePasses(3, 3, clues)).toBe(1);
+  });
+
+  it('counts a pass for each round of working lines out from their crossings', () => {
+    const rows = ['.#.#', '###.', '.##.', '...#'];
+    const clues = deriveClues({
+      width: 4,
+      height: 4,
+      cells: [...rows.join('')].map((c) => c === '#'),
+    });
+    expect(solve(4, 4, clues).status).toBe('unique');
+    expect(linePasses(4, 4, clues)).toBe(5);
+  });
+
+  it('stops when a puzzle needs a guess', () => {
+    // Two solutions: the checkerboard corners can go either way.
+    const clues = { rows: [[1], [1]], cols: [[1], [1]] };
+    expect(linePasses(2, 2, clues)).toBe(0);
+  });
+});
 
 describe('solveLine', () => {
   it('fills the overlap of a long run', () => {

@@ -32,6 +32,7 @@ Then open http://localhost:5173.
 | `npm test`                    | Unit tests (Vitest), including the puzzle pack uniqueness check       |
 | `npm run test:watch`          | Tests in watch mode                                                   |
 | `npm run check:puzzles`       | Only the puzzle pack uniqueness check                                 |
+| `npm run rate:puzzles`        | Re-rate puzzle difficulty after adding or changing puzzles            |
 | `npm run script-review`       | Generate the script review site and serve it at http://localhost:4177 |
 | `npm run script-review:notes` | Print your open script review notes                                   |
 | `npm run lint`                | ESLint plus a Prettier format check                                   |
