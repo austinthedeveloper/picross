@@ -25,6 +25,8 @@ export interface BattleBar {
   say(message: string): void;
   /** Shows the enemy's armor and how many weak points are left (#50); 0 hides it. */
   setArmor(weakPoints: number): void;
+  /** Shows how close the armor is to hitting back (#116): lines so far, out of a limit. */
+  setArmorLines(lines: number, limit: number): void;
   /** Shows how many forged clues are left to call out (#64); hidden at 0. */
   setFakes(count: number): void;
   /** Shows a tip card or the powers list under the HP (#79), or clears it with null. */
@@ -81,6 +83,15 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
   const playerMeter = meter('Your HP', 'player-hp');
   const enemyName = el('span', { className: 'battle-name', textContent: enemy.name });
   const armor = el('span', { className: 'armor', hidden: true });
+  let armorWeak = 0;
+  let armorMeter = { lines: 0, limit: 0 };
+  const drawArmor = () => {
+    const { lines, limit } = armorMeter;
+    armor.replaceChildren(...withArt(`🛡 ${armorWeak}🎯${limit ? ` ${lines}/${limit}` : ''}`));
+    const weak = `${armorWeak} weak point${armorWeak === 1 ? '' : 's'} left`;
+    const next = limit ? `. Hits back in ${limit - lines} more other lines` : '';
+    armor.title = `Armored: ${weak}${next}`;
+  };
   const fakes = el('span', { className: 'fakes', hidden: true });
   const chargeLabel = el('span', { className: 'charge-label' });
   const charge = el('span', { className: 'charge', hidden: true, ariaHidden: 'true' }, [
@@ -146,9 +157,13 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
       tray.hidden = buttons.length === 0;
     },
     setArmor(weakPoints) {
+      armorWeak = weakPoints;
       armor.hidden = weakPoints <= 0;
-      armor.replaceChildren(...withArt(`🛡 ${weakPoints}🎯`));
-      armor.title = `Armored: ${weakPoints} weak point${weakPoints === 1 ? '' : 's'} left`;
+      drawArmor();
+    },
+    setArmorLines(lines, limit) {
+      armorMeter = { lines, limit };
+      drawArmor();
     },
     setFakes(count) {
       fakes.hidden = count <= 0;

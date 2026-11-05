@@ -3,6 +3,7 @@ import { lineKey } from '../../../../engine/lines';
 import { bump, finish, useGadget, type Enemy } from '../../../../game/battle';
 import type { Puzzle } from '../../../../puzzles/format';
 import type { PlaySession } from '../../gameScreen';
+import { createArmorBack } from './armorBack';
 import { createCallOut } from './callOut';
 import { createCharge } from './charge';
 import { createFightContext } from './context';
@@ -36,6 +37,7 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
   const callOut = createCallOut(ctx, checkPhase, () => gadgets.render());
   const gadgets = createGadgetTray(ctx, checkPhase, callOut.buttons);
   const charge = createCharge(ctx, () => gadgets.render());
+  const armorBack = createArmorBack(ctx, () => gadgets.render());
   let finisher = 0;
   let defeatedAs = enemy.name;
 
@@ -52,15 +54,17 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
       callOut.show();
       inker.show();
       charge.sync();
+      armorBack.show();
       tips.start();
     },
     // A line showing a forgery doesn't count until the forgery is called out.
     onLinesComplete(lines) {
       const counted = lines.filter((line) => !callOut.isFaked(line));
       // A refilled line (after a swap, say) has already counted, so it can't charge again.
-      const { struck } = ctx.battle();
+      const { struck, armor } = ctx.battle();
       const fresh = counted.filter((l) => !struck.includes(lineKey(l.kind, l.index)));
       const message = completeLines(ctx, counted, checkPhase, gadgets.render);
+      armorBack.finished(fresh, armor);
       return [message, charge.finished(fresh)].filter(Boolean).join(' ') || undefined;
     },
     onMistake() {

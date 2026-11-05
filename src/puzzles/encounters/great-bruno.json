@@ -11,10 +11,7 @@
     "attack": 2,
     "charge": 7,
     "armor": {
-      "weakPoints": {
-        "rows": [3, 7],
-        "cols": [10]
-      },
+      "weakPoints": { "rows": [2, 8], "cols": [7] },
       "attack": 4
     },
     "phases": [

@@ -124,12 +124,44 @@ export interface BattleState {
   live?: Line;
   /** Lines finished toward the next zap (#67). */
   charged?: number;
+  /** Other lines finished toward the armor's next hit (#116). */
+  armorLines?: number;
 }
 
 /** Damage per weak-point line while armor is up. */
 export const WEAK_POINT_DAMAGE = 3;
 
 const armorUp = (state: BattleState) => Boolean(state.armor && lineCount(state.armor));
+
+/** The armor hits back after this many lines that aren't weak points (#116). */
+export const ARMOR_HIT_LINES = 5;
+
+/** HP the armor's hit costs. Measured in lines, like a zap, so thinking stays free. */
+export const ARMOR_HIT_DAMAGE = 2;
+
+/**
+ * Lines you've just finished move the armor's meter (#116), so leaving the weak
+ * points until last costs something rather than skipping the enemy's phases for
+ * free. `weak` is the weak points before these lines landed; `state` is after them,
+ * so breaking the armor stops the count.
+ */
+export function armorHitsBack(
+  state: BattleState,
+  lines: readonly Line[],
+  weak: LineSet | undefined,
+): { state: BattleState; hits: number } {
+  if (!armorUp(state)) {
+    if (state.armorLines === undefined) return { state, hits: 0 };
+    return { state: { ...state, armorLines: undefined }, hits: 0 };
+  }
+  const others = lines.filter((l) => !weak || !hasLine(weak, l.kind, l.index)).length;
+  if (!others) return { state, hits: 0 };
+  const total = (state.armorLines ?? 0) + others;
+  return {
+    state: { ...state, armorLines: total % ARMOR_HIT_LINES },
+    hits: Math.floor(total / ARMOR_HIT_LINES),
+  };
+}
 
 /** Damage per newly completed row or column. */
 export const CHIP_DAMAGE = 1;

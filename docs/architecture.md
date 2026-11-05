@@ -477,10 +477,22 @@ An enemy can have `armor: { weakPoints: { rows, cols }, attack }`. While any wea
 unsolved, ordinary lines deal no damage (they still count as struck, so they never chip
 later), and the enemy hits for the armored `attack`. Weak-point clues are marked 🎯.
 Completing one deals `WEAK_POINT_DAMAGE` (3) and cracks the armor, and after the last one
-it breaks and normal rules return (`chip` in `game/battle.ts`). Since the finisher always
-wins, armor matters through mistakes: in Hits-on runs, cracking it early softens the
-beetle's hits (4 → 2). The Beetle is a 15×15 beetle with weak points at rows 9 and 12 and
-column 3.
+it breaks and normal rules return (`chip` in `game/battle.ts`). The Beetle is a 15×15
+beetle with weak points at rows 9 and 12 and column 3.
+
+Armor matters in two ways, since the finisher always wins and HP only sets when phases
+start:
+
+- **Mistakes:** in Hits-on runs, cracking it early softens the enemy's hits (4 → 2).
+- **It hits back** (#116): every `ARMOR_HIT_LINES` (5) other lines you finish while it's up
+  cost `ARMOR_HIT_DAMAGE` (2), or fizzle in a Relaxed run (`armorHitsBack`,
+  `run/fight/armorBack.ts`). Lines deal no damage under armor, so without this, leaving the
+  weak points until last skips the enemy's phases for free. The count is in lines, not time.
+
+Because of that, weak points have to be reachable early. A test in `runs.test.ts` holds
+every armored fight to it: each weak point must be solvable within the first two passes of
+a line solver, reading only the clues the player can read at the start. Pick weak points
+that meet this when adding an armored enemy.
 
 ### Swaps (the Mimic)
 

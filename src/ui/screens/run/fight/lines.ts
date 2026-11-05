@@ -88,7 +88,7 @@ export function completeLines(
   if (chipped.cracked.length) messages.push('Weak point! Triple damage.');
   if (chipped.broke) messages.push(`${ctx.form().name}'s armor breaks! Its hits soften.`);
   else if (!chipped.dealt && lines.length && ctx.form().armored) {
-    messages.push('The armor shrugs it off. Find the 🎯 weak points.');
+    messages.push('The armor shrugs it off. Find the 🎯 weak points before it hits back.');
   }
   if (phased.message) messages.push(phased.message);
   return messages.join(' ') || undefined;
