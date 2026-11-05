@@ -18,7 +18,7 @@ export interface PuzzleStats {
   bestTime: number;
 }
 
-interface SaveData {
+export interface SaveData {
   solved: Record<string, PuzzleStats>;
   boards: Record<string, SavedBoard>;
   totalTime: number;

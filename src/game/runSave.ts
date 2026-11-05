@@ -18,8 +18,14 @@ export interface JobStats {
   bestDepth?: number;
 }
 
-interface RunSave {
+export interface RunSave {
   current: RunState | null;
+  /**
+   * When `current` last changed, in milliseconds since 1970. It sits beside the run
+   * so that clearing the run is dated too, and merging saves can tell which is newer
+   * (#97). Older saves lack it and count as 0.
+   */
+  currentUpdatedAt?: number;
   /** Scene ids already played, so intros only play automatically once. */
   seenScenes: string[];
   /** Enemy powers whose tip card you've dismissed (#79). Missing in older saves. */
@@ -36,6 +42,9 @@ export function getCurrentRun(): RunState | null {
 
 /** Saves the run (or clears it with null). Called after every change, so a reload resumes it. */
 export function saveCurrentRun(state: RunState | null): void {
+  // Only a real change counts as newer. Opening a run saves it unchanged, which
+  // mustn't let an out-of-date device win a merge.
+  if (JSON.stringify(state) !== JSON.stringify(data.current)) data.currentUpdatedAt = Date.now();
   data.current = state;
   writeStore(KEY, data);
 }
@@ -89,7 +98,6 @@ export function recordRunResult(run: RunState): RunState {
 }
 
 function save(recorded: RunState): RunState {
-  data.current = recorded;
-  writeStore(KEY, data);
+  saveCurrentRun(recorded);
   return recorded;
 }

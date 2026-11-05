@@ -189,6 +189,15 @@ All saved data lives in `localStorage`, read once at startup and written on chan
 | `picross:daily`    | `game/daily.ts`              | Daily streak, best streak, solve count, and today's board                                              |
 | `picross:editor`   | `ui/screens/editorScreen.ts` | The editor's current drawing                                                                           |
 
+`game/saveMerge.ts` combines two copies of a save (#97), so cross-device sync never has to
+ask which one to keep. It's a pure function with one rule per kind of data: bests and
+unlocks are never lost, the run is taken whole from whichever side changed it last
+(`currentUpdatedAt`), and fields it doesn't recognize pass through, so an older client
+can't delete newer data. Counts take the higher side rather than adding up, because adding
+would double-count on every sync, so playing on two devices between syncs can undercount
+`solves`, `plays` and `totalTime`. Settings and the editor's drawing aren't merged, since
+they belong to one device.
+
 `storage.ts` falls back to defaults if storage is blocked or holds bad JSON, so the game
 still works in private browsing. To reset during development, clear the site's local
 storage in devtools.
