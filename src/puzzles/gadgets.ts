@@ -1,7 +1,10 @@
-/** What a gadget does when used in a fight. Gadgets never change your marks. */
+/** What a gadget does when used in a fight. Only a blast changes your marks. */
 export type GadgetEffect =
-  /** Damages the enemy right away (chip rules: never below 1 HP). */
-  | { kind: 'damage'; amount: number }
+  /**
+   * Damages the enemy right away (chip rules: never below 1 HP) and reveals part
+   * of the board (#115). The damage is the price: it brings the next phase closer.
+   */
+  | { kind: 'blast'; damage: number }
   /** Blocks the next `hits` enemy hits. */
   | { kind: 'shield'; hits: number }
   /** Wipes every bit of ink off the board (#67). */
@@ -23,8 +26,8 @@ export const catalog: Gadget[] = [
     id: 'bomb',
     name: 'Bomb',
     icon: '💣',
-    description: 'Throw it in a fight for 5 damage.',
-    effect: { kind: 'damage', amount: 5 },
+    description: 'Throw it in a fight for 2 damage. The blast reveals part of the board.',
+    effect: { kind: 'blast', damage: 2 },
   },
   {
     id: 'patch-kit',

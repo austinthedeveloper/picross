@@ -3,6 +3,7 @@ import { lineKey } from '../engine/lines';
 import {
   absorbHit,
   advancePhase,
+  blastInk,
   CALL_OUT_DAMAGE,
   callOut,
   clearInk,
@@ -55,9 +56,24 @@ describe('battle', () => {
 
 describe('gadgets in battle', () => {
   it('damages with chip rules', () => {
-    const { state, dealt } = useGadget(startBattle(goblin), { kind: 'damage', amount: 3 });
+    const { state, dealt } = useGadget(startBattle(goblin), { kind: 'blast', damage: 3 });
     expect([state.enemyHp, dealt]).toEqual([2, 3]);
-    expect(useGadget(state, { kind: 'damage', amount: 9 }).state.enemyHp).toBe(1);
+    expect(useGadget(state, { kind: 'blast', damage: 9 }).state.enemyHp).toBe(1);
+  });
+
+  it('deals nothing at 1 HP', () => {
+    const low = { ...startBattle(goblin), enemyHp: 1 };
+    const { state, dealt } = useGadget(low, { kind: 'blast', damage: 2 });
+    expect([state.enemyHp, dealt]).toEqual([1, 0]);
+  });
+
+  it('a blast washes only the ink it hits', () => {
+    const inked = { ...startBattle(goblin), ink: [0, 1, 5] };
+    const { state, washed } = blastInk(inked, [1, 5, 9]);
+    expect(washed).toEqual([1, 5]);
+    expect(state.ink).toEqual([0]);
+    expect(blastInk(inked, [7]).state).toBe(inked);
+    expect(blastInk(startBattle(goblin), [7]).washed).toEqual([]);
   });
 
   it('shields block hits one at a time', () => {

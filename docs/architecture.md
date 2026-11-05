@@ -658,14 +658,22 @@ A puzzle's JSON can name a `gadget`. Solving that puzzle in a run adds the gadge
 `RunState.gadgets`, and runs can also list starting gadgets (First Job starts with a
 patch kit). The catalog in `puzzles/gadgets.ts` describes each gadget's effect as data:
 
-- `{ kind: 'damage', amount }` hits the enemy right away. Chip rules apply, so it can't
-  take the enemy below 1 HP and the finisher still lands the win.
+- `{ kind: 'blast', damage }` hits the enemy right away and reveals a square of the board
+  (#115). Chip rules apply, so it can't take the enemy below 1 HP and the finisher still
+  lands the win. Enemy HP only sets when the next phase starts, so the damage is the price
+  of the reveal. `engine/blast.ts` sizes the blast (3×3 on a 10×10, 5×5 on a 15×15 or
+  20×20) and picks a random spot where at least half of it is unsolved, or a spot with the
+  most unsolved cells if none qualifies. `Game.reveal` then fills and marks the cells like
+  a hint, without spending one or counting as a mistake. The result goes straight into
+  the saved board, so a reload can't re-roll it. Lines it finishes count as usual, and it
+  washes ink out of its area.
 - `{ kind: 'shield', hits }` blocks that many enemy hits (`absorbHit` in `battle.ts`).
+- `{ kind: 'wash' }` wipes all the ink off the board.
 
 Held gadgets are listed on the run map and shown as buttons in the fight's battle bar
 (`run/fight/`). Using one removes it from the run. Buttons are disabled with a reason
-when a gadget can't help: a shield in a Relaxed run, or damage when the enemy is already
-at 1 HP. Gadgets act on the fight, never on the grid.
+when a gadget can't help: a shield in a Relaxed run, or a sponge with no ink on the board.
+Only a blast changes the grid.
 
 ## Scenes (dialogue)
 

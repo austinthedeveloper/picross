@@ -110,6 +110,39 @@ describe('hearts mode', () => {
   });
 });
 
+describe('reveal', () => {
+  const grid = parsePuzzle({ id: 'g', name: 'G', width: 3, height: 2, solution: ['#.#', '.#.'] });
+
+  it('shows the truth without spending a hint, as one undoable move', () => {
+    const game = new Game(grid, undefined, 'battle');
+    const changes = game.reveal([0, 1, 2]);
+    expect(changes).toHaveLength(3);
+    expect(game.board.cells.slice(0, 3)).toEqual([Cell.Filled, Cell.Marked, Cell.Filled]);
+    expect(game.hintsUsed).toBe(0);
+    game.undo();
+    expect(game.started).toBe(false);
+  });
+
+  it('corrects a wrong fill and skips cells already right', () => {
+    const game = new Game(grid);
+    stroke(game, [
+      { index: 0, from: Cell.Empty, to: Cell.Filled },
+      { index: 1, from: Cell.Empty, to: Cell.Filled },
+    ]);
+    const changes = game.reveal([0, 1]);
+    expect(changes).toEqual([{ index: 1, from: Cell.Filled, to: Cell.Marked }]);
+  });
+
+  it('can solve the puzzle, and does nothing once it is over', () => {
+    const game = new Game(grid);
+    game.reveal([0, 1, 2, 3, 4, 5]);
+    expect(game.solved).toBe(true);
+    game.undo();
+    game.reveal([0, 1, 2, 3, 4, 5]);
+    expect(game.reveal([0])).toEqual([]);
+  });
+});
+
 describe('hints', () => {
   const grid = parsePuzzle({ id: 'g', name: 'G', width: 3, height: 2, solution: ['#.#', '.#.'] });
 

@@ -1,5 +1,5 @@
 import { debug } from '../debug/hooks';
-import { Cell, createBoard, isSolved, type Board } from '../engine/board';
+import { Cell, createBoard, isSolved, revealedCell, type Board } from '../engine/board';
 import { applyMove, History, type Change, type Move } from '../engine/history';
 import type { Puzzle } from '../puzzles/format';
 import type { SavedBoard } from './progress';
@@ -151,16 +151,27 @@ export class Game {
         : target === 'row'
           ? Array.from({ length: width }, (_, cc) => r * width + cc)
           : Array.from({ length: height }, (_, rr) => rr * width + c);
+    const move = this.reveal(indexes);
+    if (move.length) this.hintsUsed++;
+    return move;
+  }
+
+  /**
+   * Shows the truth in these cells without spending a hint (a bomb's blast, #115):
+   * filled cells are filled and empty cells are marked. It can't count as a
+   * mistake. Returns the changes (undoable as one move).
+   */
+  reveal(indexes: readonly number[]): Change[] {
+    if (this.over) return [];
     const move: Move = [];
     for (const index of indexes) {
       const from = this.board.cells[index];
-      const to = this.puzzle.solution.cells[index] ? Cell.Filled : Cell.Marked;
+      const to = revealedCell(this.puzzle.solution, index);
       if (from !== to) move.push({ index, from, to });
     }
     if (!move.length) return [];
     applyMove(this.board, move);
     this.history.push(move);
-    this.hintsUsed++;
     this.checkSolved();
     return move;
   }

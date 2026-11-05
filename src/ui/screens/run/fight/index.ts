@@ -54,7 +54,6 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
       charge.sync();
       tips.start();
     },
-    // A bomb can't help once the enemy is down to 1 HP, so damage refreshes the gadgets.
     // A line showing a forgery doesn't count until the forgery is called out.
     onLinesComplete(lines) {
       const counted = lines.filter((line) => !callOut.isFaked(line));
@@ -71,7 +70,7 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
 
   if (import.meta.env.VITE_DEBUG === '1') {
     const damage = (amount: number) => {
-      const used = useGadget(ctx.battle(), { kind: 'damage', amount });
+      const used = useGadget(ctx.battle(), { kind: 'blast', damage: amount });
       const { state, message } = checkPhase(used.state);
       ctx.saveBattle(state);
       ctx.bar.setEnemyHp(state.enemyHp);

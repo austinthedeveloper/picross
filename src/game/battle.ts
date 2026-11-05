@@ -224,6 +224,16 @@ export function clearInk(
   return washed.length ? { state: { ...state, ink }, washed } : { state, washed };
 }
 
+/** A bomb's blast washes the ink out of the cells it hits (#115). Returns the cells washed. */
+export function blastInk(
+  state: BattleState,
+  cells: readonly number[],
+): { state: BattleState; washed: number[] } {
+  const washed = (state.ink ?? []).filter((i) => cells.includes(i));
+  if (!washed.length) return { state, washed };
+  return { state: { ...state, ink: state.ink!.filter((i) => !cells.includes(i)) }, washed };
+}
+
 /** Marks lines the Mimic just wiped (#78). */
 export function markWiped(state: BattleState, kind: Line['kind'], lines: number[]): BattleState {
   const wiped = state.wiped ?? { rows: [], cols: [] };
@@ -353,7 +363,7 @@ export function useGadget(
     return { state: { ...state, shield: (state.shield ?? 0) + effect.hits }, dealt: 0 };
   }
   if (effect.kind === 'wash') return { state: { ...state, ink: [] }, dealt: 0 };
-  const enemyHp = Math.max(1, state.enemyHp - effect.amount);
+  const enemyHp = Math.max(1, state.enemyHp - effect.damage);
   return { state: { ...state, enemyHp }, dealt: state.enemyHp - enemyHp };
 }
 

@@ -1,3 +1,4 @@
+import type { Blast } from '../../engine/blast';
 import { Cell, column, row, type Board } from '../../engine/board';
 import { satisfiedClues } from '../../engine/clues';
 import {
@@ -25,6 +26,8 @@ export interface BoardView {
   setCursor(r: number, c: number): void;
   flashError(index: number): void;
   flashHint(indexes: number[]): void;
+  /** Flashes a bomb's blast outward from its center (#115). */
+  flashBlast(blast: Blast): void;
   flashLine(line: Line): void;
   /** Highlights the clues of lines the Mimic wiped until they're refilled (#78). */
   setWiped(wiped: LineSet): void;
@@ -367,6 +370,16 @@ export function createBoardView(puzzle: Puzzle): BoardView {
     },
     flashHint(indexes) {
       for (const i of indexes) playOnce(cells[i], 'hinted');
+    },
+    flashBlast(blast) {
+      for (const i of blast.cells) {
+        const ring = Math.max(
+          Math.abs(Math.floor(i / w) - blast.row),
+          Math.abs((i % w) - blast.col),
+        );
+        cells[i].style.setProperty('--blast-ring', String(ring));
+        playOnce(cells[i], 'blasted');
+      }
     },
     setFocus(lines) {
       const on = (kind: LineKind, i: number) => lines.some((l) => l.kind === kind && l.index === i);
