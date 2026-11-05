@@ -58,6 +58,17 @@ h3 {
   white-space: nowrap;
 }
 
+.home-link {
+  gap: 6px;
+}
+
+/* With a back link beside it, Home shrinks to its icon so a phone keeps room for the title. */
+@media (max-width: 480px) {
+  .topbar.nested .home-label {
+    display: none;
+  }
+}
+
 .help {
   text-align: center;
   color: var(--muted);

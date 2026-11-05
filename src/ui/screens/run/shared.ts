@@ -29,9 +29,6 @@ export function loadRun(): { state: RunState; def: RunDef } | null {
   return state && def ? { state, def } : null;
 }
 
-export const backToPuzzles = () =>
-  el('a', { className: 'button ghost', href: '#/', textContent: '← Puzzles' });
-
 export function newRunButton(hub: Hub, def: RunDef, label: string): HTMLButtonElement {
   return el('button', {
     className: 'button primary',

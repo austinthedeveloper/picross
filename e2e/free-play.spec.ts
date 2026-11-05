@@ -46,6 +46,63 @@ test.describe('free play', () => {
     );
   });
 
+  test('the list can run largest first, and remembers it', async ({ page }) => {
+    await page.goto('/#/');
+    const headings = page.locator('.size-section:not(.murals) .size-heading');
+    const firstCard = page.locator('.size-section:not(.murals) .card-name').first();
+    await expect(page.getByRole('button', { name: 'Smallest first' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    await expect(firstCard).toHaveText('No. 1');
+    const lastNumber = await page
+      .locator('.size-section:not(.murals) .card-name')
+      .last()
+      .textContent();
+
+    await page.getByRole('button', { name: 'Largest first' }).tap();
+    await expect(headings.first()).toContainText('20×20');
+    await expect(headings.last()).toContainText('5×5');
+    await expect(firstCard).toHaveText(lastNumber!);
+
+    await page.reload();
+    await expect(headings.first()).toContainText('20×20');
+  });
+
+  test('sections collapse independently, and stay that way', async ({ page }) => {
+    await page.goto('/#/');
+    const section = (name: string) => page.getByRole('region', { name });
+    const small = section('5×5 puzzles');
+    const medium = section('10×10 puzzles');
+    await small.locator('summary').tap();
+    await section('Murals').locator('summary').tap();
+    await expect(small.locator('.card').first()).toBeHidden();
+    await expect(section('Murals').locator('.card').first()).toBeHidden();
+    await expect(medium.locator('.card').first()).toBeVisible();
+
+    // Other list controls redraw the page, and shouldn't reopen anything.
+    await page.getByRole('button', { name: 'Not completed' }).tap();
+    await expect(small.locator('.card').first()).toBeHidden();
+    await page.reload();
+    await expect(small.locator('.card').first()).toBeHidden();
+    await expect(small).toContainText('0/4'); // the heading still counts them
+
+    await small.locator('summary').tap();
+    await expect(small.locator('.card').first()).toBeVisible();
+    await expect(section('Murals').locator('.card').first()).toBeHidden();
+  });
+
+  test('the tools share a row with zoom, right under the board', async ({ page }) => {
+    await page.goto('/#/play/fish');
+    const board = (await page.locator('.board-wrap').boundingBox())!;
+    const fill = (await page.getByRole('button', { name: '■ Fill' }).boundingBox())!;
+    const zoom = (await page.getByRole('group', { name: 'Zoom' }).boundingBox())!;
+    expect(fill.y).toBeGreaterThanOrEqual(board.y + board.height);
+    expect(fill.y - (board.y + board.height)).toBeLessThan(24);
+    expect(fill.y + fill.height).toBeGreaterThan(zoom.y);
+    expect(zoom.y + zoom.height).toBeGreaterThan(fill.y);
+  });
+
   test('the completed filter says so when nothing is', async ({ page }) => {
     await page.goto('/#/');
     await page.getByRole('button', { name: 'Completed', exact: true }).tap();

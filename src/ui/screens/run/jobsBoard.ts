@@ -3,8 +3,9 @@ import { chapters, type Chapter } from '../../../puzzles/chapters';
 import { ENDLESS_GADGETS, ENDLESS_HP, ENDLESS_ID, ENDLESS_HEAL } from '../../../puzzles/endless';
 import { getRun, type RunDef } from '../../../puzzles/runs';
 import { withArt } from '../../art';
+import { homeLink } from '../../components/homeLink';
 import { el } from '../../dom';
-import { backToPuzzles, modePicker, newRunButton, nodeIcon, type Hub } from './shared';
+import { modePicker, newRunButton, nodeIcon, type Hub } from './shared';
 
 /** A job you can start: everything without `requires`, plus jobs whose requirement you've won. */
 export const unlocked = (def: RunDef) =>
@@ -156,7 +157,7 @@ function endlessSection(hub: Hub): HTMLElement {
  */
 export function jobsBoard(hub: Hub): Node[] {
   return [
-    el('header', { className: 'topbar' }, [backToPuzzles(), el('h1', { textContent: 'Jobs' })]),
+    el('header', { className: 'topbar' }, [homeLink(), el('h1', { textContent: 'Jobs' })]),
     modePicker(hub),
     el('div', { className: 'chapters' }, [
       ...chapters.map((c) => chapterSection(hub, c)),

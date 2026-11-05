@@ -1,14 +1,17 @@
 import { getOverallStats, getPuzzleStats, getSavedBoard } from '../../game/progress';
 import {
   getSettings,
+  inListOrder,
   passesFilter,
   updateSettings,
   type ListFilter,
+  type ListOrder,
   type Mode,
 } from '../../game/settings';
 import { puzzles } from '../../puzzles/index';
 import type { Puzzle } from '../../puzzles/format';
 import { createPicture } from '../board/picture';
+import { listSection } from '../components/listSection';
 import { createMuteButton } from '../components/muteButton';
 import { el } from '../dom';
 import { formatTime } from '../format';
@@ -21,6 +24,11 @@ const FILTERS: [ListFilter, string][] = [
   ['all', 'All'],
   ['todo', 'Not completed'],
   ['done', 'Completed'],
+];
+
+const ORDERS: [ListOrder, string][] = [
+  ['asc', 'Smallest first'],
+  ['desc', 'Largest first'],
 ];
 
 const EMPTY_LIST: Record<ListFilter, string> = {
@@ -56,27 +64,27 @@ function puzzleCard(p: Puzzle, number: number): HTMLElement {
 }
 
 /**
- * The puzzle list grouped by size, smallest first. Cards keep their pack-wide
- * number, and the headings count the whole size whatever the filter hides.
+ * The puzzle list grouped by size. Cards keep their pack-wide number whatever
+ * the order, and the headings count the whole size whatever the filter hides.
  */
-function sizeSections(filter: ListFilter): HTMLElement[] {
+function sizeSections(filter: ListFilter, order: ListOrder): HTMLElement[] {
   const sizes = [...new Set(puzzles.map((p) => p.width))].sort((a, b) => a - b);
-  return sizes.flatMap((size) => {
+  return inListOrder(order, sizes).flatMap((size) => {
     const group = puzzles.filter((p) => p.width === size);
     const solved = group.filter((p) => getPuzzleStats(p.id)).length;
     const shown = group.filter((p) => passesFilter(filter, Boolean(getPuzzleStats(p.id))));
     if (!shown.length) return [];
-    return el('section', { className: 'size-section', ariaLabel: `${size}×${size} puzzles` }, [
-      el('h2', { className: 'size-heading' }, [
-        `${size}×${size}`,
-        el('span', { className: 'size-count', textContent: `${solved}/${group.length}` }),
-      ]),
-      el(
+    return listSection({
+      id: `size-${size}`,
+      label: `${size}×${size} puzzles`,
+      heading: `${size}×${size}`,
+      count: `${solved}/${group.length}`,
+      content: el(
         'div',
         { className: 'cards' },
-        shown.map((p) => puzzleCard(p, puzzles.indexOf(p) + 1)),
+        inListOrder(order, shown).map((p) => puzzleCard(p, puzzles.indexOf(p) + 1)),
       ),
-    ]);
+    });
   });
 }
 
@@ -101,7 +109,10 @@ export function renderSelectScreen(app: HTMLElement): void {
     ]);
   const overall = getOverallStats();
   const filter = settings.listFilter;
-  const list = [muralSection(filter), ...sizeSections(filter)].flatMap((s) => s ?? []);
+  const order = settings.listOrder;
+  const list = [muralSection(filter, order), ...sizeSections(filter, order)].flatMap(
+    (s) => s ?? [],
+  );
 
   app.replaceChildren(
     el('main', { className: 'screen select' }, [
@@ -146,6 +157,16 @@ export function renderSelectScreen(app: HTMLElement): void {
           FILTERS.map(([value, label]) =>
             toggle(label, filter === value, () => {
               updateSettings({ listFilter: value });
+              rerender();
+            }),
+          ),
+        ),
+        el(
+          'div',
+          { className: 'segmented', role: 'group', ariaLabel: 'Sort puzzles' },
+          ORDERS.map(([value, label]) =>
+            toggle(label, order === value, () => {
+              updateSettings({ listOrder: value });
               rerender();
             }),
           ),

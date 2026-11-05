@@ -60,7 +60,7 @@ src/
     dialogue.ts            Scene runner: current line or choices, advance, choose, flags
     progress.ts            Free-play saves, solve stats, totals (localStorage)
     runSave.ts             Current run, seen scenes, job stats (localStorage)
-    settings.ts            Mode, mute, high contrast (localStorage)
+    settings.ts            Mode, list filter/order, closed sections, mute, high contrast (localStorage)
     daily.ts               Daily streak, best, and today's board (localStorage, #69)
     storage.ts             Safe localStorage JSON read/write
   ui/
@@ -110,13 +110,15 @@ src/
       dialogue.ts          Scene player: portrait, typed text box, choices, Skip
       endPanels.ts         Solved, out-of-hearts, and generic end panels
       hintMenu.ts          "Hint n/3" dropdown
+      homeLink.ts          The Home button at the top of every screen
+      listSection.ts       Collapsible puzzle list section
       muteButton.ts        Sound toggle
       zoomBar.ts           − / level / + zoom buttons
   styles/
     tokens.css             Color tokens for light, dark, and high-contrast themes
     base.css               Page layout, buttons, toggles, segmented controls
     board.css              Board, clues, cells, cursor, fog/scramble/weak-point clues
-    game.css               Play screen: toolbar, hint menu, zoom bar, end states
+    game.css               Play screen: toolbar, hint menu, tools and zoom row, end states
     select.css             Puzzle list
     editor.css             Editor
     run.css                Run banner, jobs board, path map, results
@@ -178,13 +180,13 @@ rules stay identical across input methods.
 
 All saved data lives in `localStorage`, read once at startup and written on change:
 
-| Key                | Module                       | Contents                                                             |
-| ------------------ | ---------------------------- | -------------------------------------------------------------------- |
-| `picross:v1`       | `game/progress.ts`           | In-progress boards, per-puzzle stats, total solving time             |
-| `picross:run`      | `game/runSave.ts`            | The current run (with the current encounter's board) and seen scenes |
-| `picross:settings` | `game/settings.ts`           | `mode` (default for new runs), `listFilter`, `muted`, `highContrast` |
-| `picross:daily`    | `game/daily.ts`              | Daily streak, best streak, solve count, and today's board            |
-| `picross:editor`   | `ui/screens/editorScreen.ts` | The editor's current drawing                                         |
+| Key                | Module                       | Contents                                                                                               |
+| ------------------ | ---------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `picross:v1`       | `game/progress.ts`           | In-progress boards, per-puzzle stats, total solving time                                               |
+| `picross:run`      | `game/runSave.ts`            | The current run (with the current encounter's board) and seen scenes                                   |
+| `picross:settings` | `game/settings.ts`           | `mode` (default for new runs), `listFilter`, `listOrder`, `collapsedSections`, `muted`, `highContrast` |
+| `picross:daily`    | `game/daily.ts`              | Daily streak, best streak, solve count, and today's board                                              |
+| `picross:editor`   | `ui/screens/editorScreen.ts` | The editor's current drawing                                                                           |
 
 `storage.ts` falls back to defaults if storage is blocked or holds bad JSON, so the game
 still works in private browsing. To reset during development, clear the site's local

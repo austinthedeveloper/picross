@@ -12,6 +12,7 @@ import { createBoardView } from '../board/boardView';
 import { attachInput, type Tool } from '../board/input';
 import { attachKeyboard } from '../board/keyboard';
 import { solvedPanelContent } from '../components/endPanels';
+import { homeLink } from '../components/homeLink';
 import { el } from '../dom';
 import { pause } from '../motion';
 import { playSound } from '../sound';
@@ -64,19 +65,18 @@ export function renderHowToPlay(app: HTMLElement): void {
   const solvedPanel = el('div', { className: 'end-panel', hidden: true });
 
   const screen = el('main', { className: 'screen game how-to' }, [
-    el('header', { className: 'topbar' }, [
-      el('a', { className: 'button ghost', href: '#/', textContent: '← Puzzles' }),
-      el('h1', { textContent: 'How to play' }),
-    ]),
+    el('header', { className: 'topbar' }, [homeLink(), el('h1', { textContent: 'How to play' })]),
     coach,
     el('div', { className: 'toolbar' }, [
-      el('div', { className: 'segmented' }, [fillBtn, markBtn]),
       el('button', {
         textContent: 'Start over',
         onclick: () => renderHowToPlay(app),
       }),
     ]),
     el('div', { className: 'board-wrap' }, [view.root]),
+    el('div', { className: 'board-controls' }, [
+      el('div', { className: 'segmented' }, [fillBtn, markBtn]),
+    ]),
     solvedPanel,
     el('section', { className: 'rules', ariaLabel: 'The rest of the rules' }, [
       el('h2', { textContent: 'Good to know' }),
