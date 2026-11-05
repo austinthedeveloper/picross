@@ -42,3 +42,8 @@ export function column<T>(grid: Grid<T>, c: number): T[] {
 export function isSolved(board: Board, solution: Solution): boolean {
   return board.cells.every((cell, i) => (cell === Cell.Filled) === solution.cells[i]);
 }
+
+/** What a reveal (a hint or a blast) puts in a cell: filled if it's in the picture, else marked. */
+export function revealedCell(solution: Solution, i: number): Cell {
+  return solution.cells[i] ? Cell.Filled : Cell.Marked;
+}

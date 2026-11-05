@@ -1,9 +1,11 @@
-import { useGadget } from '../../../../game/battle';
+import { blastSize, pickBlast } from '../../../../engine/blast';
+import { blastInk, useGadget } from '../../../../game/battle';
 import { removeGadget, withBattle } from '../../../../game/run';
 import { saveCurrentRun } from '../../../../game/runSave';
 import { getGadget, type Gadget } from '../../../../puzzles/gadgets';
 import { gadgetArt } from '../../../art';
 import { el } from '../../../dom';
+import { plural } from '../../../format';
 import { playSound } from '../../../sound';
 import type { FightContext } from './context';
 import type { CheckPhase } from './phases';
@@ -22,10 +24,28 @@ export function createGadgetTray(
     if (ctx.finished || ctx.run()?.status !== 'active') return 'The fight is over';
     if (gadget.effect.kind === 'shield' && !ctx.hitsOn) return 'Nothing hits you in a Relaxed run';
     if (gadget.effect.kind === 'wash' && !ctx.battle().ink?.length) return 'No ink to wipe';
-    if (gadget.effect.kind === 'damage' && ctx.battle().enemyHp <= 1) {
-      return 'Only the finished picture can defeat it now';
-    }
     return null;
+  };
+
+  /**
+   * A bomb goes off (#115): washes the ink out of the blast and reveals its cells.
+   * Any lines that finishes count as usual, through the refresh. Returns the announcement.
+   */
+  const explode = (): string => {
+    const { controls, view, puzzle } = ctx;
+    if (!controls) return '';
+    const size = blastSize(puzzle.width, puzzle.height);
+    const blast = pickBlast(controls.game.board, puzzle.solution, size);
+    if (!blast) return '';
+    const { state, washed } = blastInk(ctx.battle(), blast.cells);
+    if (washed.length) {
+      ctx.saveBattle(state);
+      view?.setInk(state.ink ?? [], washed);
+    }
+    const revealed = controls.game.reveal(blast.cells);
+    view?.flashBlast(blast);
+    controls.refresh();
+    return `The blast reveals ${plural(revealed.length, 'cell')} around row ${blast.row + 1}, column ${blast.col + 1}.`;
   };
 
   const use = (gadget: Gadget) => {
@@ -34,13 +54,22 @@ export function createGadgetTray(
     const used = useGadget(ctx.battle(), gadget.effect);
     const { state, message } = checkPhase(used.state);
     saveCurrentRun(withBattle(removeGadget(ctx.run(), gadget.id), state));
-    if (gadget.effect.kind === 'damage') {
-      ctx.bar.setEnemyHp(state.enemyHp);
-      ctx.bar.hitEnemy(used.dealt);
+    if (gadget.effect.kind === 'blast') {
+      // At 1 HP there's no damage left to deal, but the reveal still helps.
+      if (used.dealt) {
+        ctx.bar.setEnemyHp(state.enemyHp);
+        ctx.bar.hitEnemy(used.dealt);
+      }
       playSound('finisher');
-      ctx.bar.say(
-        `${gadget.name}! ${ctx.form().name} takes ${used.dealt} damage, ${state.enemyHp} HP left. ${message}`,
-      );
+      const hurt = used.dealt
+        ? `${ctx.form().name} takes ${used.dealt} damage, ${state.enemyHp} HP left.`
+        : '';
+      // After what any phase just queued (ink aims for your marks, swaps eat them), so a
+      // phase the bomb starts can't undo the blast.
+      window.setTimeout(() => {
+        const revealed = explode();
+        ctx.bar.say([`${gadget.name}!`, hurt, revealed, message].filter(Boolean).join(' '));
+      }, 0);
     } else if (gadget.effect.kind === 'wash') {
       ctx.view?.setInk([], inkBefore);
       playSound('hint');

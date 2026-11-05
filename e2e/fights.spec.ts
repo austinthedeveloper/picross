@@ -184,6 +184,63 @@ test('gadgets: a patch kit blocks a hit and the dig hands over a bomb', async ({
   await expect(page.locator('.inventory')).toContainText('Bomb');
 });
 
+test('bomb: 2 damage and a blast of revealed cells that survives a reload', async ({ page }) => {
+  await fight(page, 'night-shift', 0, { hp: 14, maxHp: 14, gadgets: ['bomb'] });
+  const before = await meter(page, 'enemy-hp');
+  await page.locator('.gadget').tap();
+  expect(await meter(page, 'enemy-hp')).toBe(before - 2);
+  expect(await meter(page, 'player-hp')).toBe(14);
+  await expect(page.locator('.gadget')).toHaveCount(0);
+  // A 5×5 blast on an empty 15×15: every cell in it shows the truth.
+  const shown = async () => (await boardState(page)).filter((c) => c !== '.').length;
+  await expect.poll(shown).toBe(25);
+  const revealed = await boardState(page);
+  const rows = encounterSolution('mimic');
+  revealed.forEach((c, i) => {
+    if (c !== '.') expect(c).toBe(rows[Math.floor(i / 15)][i % 15] === '#' ? '#' : 'x');
+  });
+
+  await page.reload();
+  await skipScene(page);
+  await expect(page.locator('.battle')).toBeVisible();
+  expect(await boardState(page)).toEqual(revealed);
+  await expect(page.locator('.gadget')).toHaveCount(0);
+});
+
+test("bomb: a phase it starts can't cover what the blast reveals", async ({ page }) => {
+  // The Cuttlefish's first ink lands at 40 HP, so this bomb sets it off.
+  await fight(page, 'deep-end', 3, {
+    hp: 16,
+    maxHp: 16,
+    gadgets: ['bomb'],
+    battle: { enemyHp: 42, struck: [] },
+  });
+  await page.locator('.gadget').tap();
+  const shown = () => page.locator('.cell.filled, .cell.marked');
+  await expect(shown()).toHaveCount(25);
+  await expect(page.locator('.cell.inked.filled, .cell.inked.marked')).toHaveCount(0);
+});
+
+test('bomb: still works at 1 HP, and a blast can land the finisher', async ({ page }) => {
+  const rows = encounterSolution('goblin');
+  // Every cell shows the truth except one, so the blast has to land on it, and that wins.
+  const missing = rows.join('').indexOf('#');
+  const cells = [...rows.join('')]
+    .map((c, i) => (i === missing ? '0' : c === '#' ? '1' : '2'))
+    .join('');
+  await fight(page, 'first-job', 0, {
+    hp: 12,
+    maxHp: 12,
+    gadgets: ['bomb'],
+    battle: { enemyHp: 1, struck: [] },
+    board: { cells, elapsed: 0, mode: 'battle' },
+  });
+  await expect(page.locator('.gadget')).toBeEnabled();
+  await page.locator('.gadget').tap();
+  await expect(page.locator('.end-panel:not([hidden]) .end-note')).toContainText('defeated');
+  expect(await meter(page, 'player-hp')).toBe(12);
+});
+
 test('electric eel: thinking is free, other lines charge it, the live line grounds it', async ({
   page,
 }) => {

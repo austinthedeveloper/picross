@@ -237,6 +237,13 @@
   animation: overlay-flash 0.8s ease-out;
 }
 
+/* A bomb's blast (#115): the flash spreads out from the center, one ring at a time. */
+.cell.blasted::after {
+  --flash: var(--accent);
+  animation: overlay-flash 0.6s ease-out;
+  animation-delay: calc(var(--blast-ring, 0) * 70ms);
+}
+
 .clue.line-flash {
   animation: clue-flash 0.5s ease-out;
 }
