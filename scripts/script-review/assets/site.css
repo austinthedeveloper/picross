@@ -599,6 +599,112 @@ body.read-only .note-button {
   }
 }
 
+/* Export, import, and versions */
+
+.transfer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.transfer .secondary {
+  color: var(--ink);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.import-panel {
+  width: 100%;
+}
+
+.import-panel[hidden] {
+  display: none;
+}
+
+.import-panel label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.import-panel input[type='text'] {
+  flex: 1;
+  min-width: 160px;
+  padding: 6px 10px;
+  background: var(--bg);
+  border: 1px solid var(--guide);
+  border-radius: 6px;
+  font: inherit;
+  color: inherit;
+}
+
+.import-panel input[type='file'] {
+  max-width: 100%;
+  font: inherit;
+}
+
+.import-errors {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--accent);
+  font-size: 0.85rem;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.import-errors:empty {
+  display: none;
+}
+
+body.read-only .transfer {
+  display: none;
+}
+
+.version-links,
+.list-head {
+  margin-top: 12px;
+}
+
+.list-head {
+  margin-top: 32px;
+  font-size: 1.05rem;
+}
+
+.version-warnings {
+  margin: 12px 0 0;
+  padding: 8px 8px 8px 26px;
+  border-radius: 6px;
+  background: var(--hl);
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+
+body.version .note-button,
+body.version .notes {
+  display: none;
+}
+
+.section.changed > .chat {
+  padding-left: 12px;
+  border-left: 3px solid var(--accent);
+}
+
+.original {
+  margin-top: 16px;
+}
+
+.original summary {
+  color: var(--soft);
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
 /* Index */
 
 .chapters {

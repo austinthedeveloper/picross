@@ -13,22 +13,23 @@ npm run dev        # http://localhost:5173, hot reload
 
 ## Scripts
 
-| Command                       | What it does                                                              |
-| ----------------------------- | ------------------------------------------------------------------------- |
-| `npm run dev`                 | Vite dev server                                                           |
-| `npm run dev:prod`            | Vite dev server without the debug tools                                   |
-| `npm test`                    | All unit tests once (Vitest, jsdom)                                       |
-| `npm run test:watch`          | Tests in watch mode                                                       |
-| `npm run check:puzzles`       | Only the pack uniqueness check (`src/puzzles/pack.test.ts`)               |
-| `npm run rate:puzzles`        | Re-rate puzzle difficulty after adding or changing puzzles                |
-| `npm run script-review`       | Generate the script review site and serve it at http://localhost:4177     |
-| `npm run script-review:notes` | Print your open script review notes                                       |
-| `npm run lint`                | ESLint, then `prettier --check`                                           |
-| `npm run format`              | `prettier --write .`                                                      |
-| `npm run build`               | `tsc --noEmit` type-check, then `vite build` to `dist/`                   |
-| `npm run build:dev`           | The same, with the debug tools, to `dist-dev/` (what GitHub Pages serves) |
-| `npm run check:bundle`        | Fails if debug code reached `dist/`                                       |
-| `npm run preview`             | Serve `dist/` locally                                                     |
+| Command                        | What it does                                                              |
+| ------------------------------ | ------------------------------------------------------------------------- |
+| `npm run dev`                  | Vite dev server                                                           |
+| `npm run dev:prod`             | Vite dev server without the debug tools                                   |
+| `npm test`                     | All unit tests once (Vitest, jsdom)                                       |
+| `npm run test:watch`           | Tests in watch mode                                                       |
+| `npm run check:puzzles`        | Only the pack uniqueness check (`src/puzzles/pack.test.ts`)               |
+| `npm run rate:puzzles`         | Re-rate puzzle difficulty after adding or changing puzzles                |
+| `npm run script-review`        | Generate the script review site and serve it at http://localhost:4177     |
+| `npm run script-review:notes`  | Print your open script review notes                                       |
+| `npm run script-review:export` | Export the whole script and open notes as JSON for rewriting              |
+| `npm run lint`                 | ESLint, then `prettier --check`                                           |
+| `npm run format`               | `prettier --write .`                                                      |
+| `npm run build`                | `tsc --noEmit` type-check, then `vite build` to `dist/`                   |
+| `npm run build:dev`            | The same, with the debug tools, to `dist-dev/` (what GitHub Pages serves) |
+| `npm run check:bundle`         | Fails if debug code reached `dist/`                                       |
+| `npm run preview`              | Serve `dist/` locally                                                     |
 
 ## Testing
 

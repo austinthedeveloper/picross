@@ -158,6 +158,8 @@ function noteCard(note, { withLine = false } = {}) {
 }
 
 function renderInline() {
+  // A version isn't the live script, so notes don't belong on it.
+  if (document.body.classList.contains('version')) return;
   for (const target of document.querySelectorAll('[data-key]')) {
     const box = target.querySelector('.notes');
     const open = box.querySelector('.composer.adding');
@@ -254,6 +256,72 @@ document.addEventListener('click', (event) => {
     }
     renderNotesList();
   }
+});
+
+function openImport(trigger) {
+  const panel = trigger.parentElement.querySelector('.import-panel');
+  const file = el('input', { type: 'file', accept: '.json,.txt,application/json' });
+  const name = el('input', { type: 'text', placeholder: 'bolder-draft', required: true });
+  const errors = el('ul', { className: 'import-errors' });
+  file.onchange = () => {
+    if (!name.value && file.files[0]) name.value = file.files[0].name.replace(/\.[^.]+$/, '');
+  };
+  const form = el('form', { className: 'composer' }, [
+    el('label', {}, ['Rewritten JSON file ', file]),
+    el('label', {}, ['Version name ', name]),
+    el('p', {
+      className: 'detail',
+      textContent: "Saves as a draft you can read and compare. It doesn't change the game.",
+    }),
+    el('div', { className: 'composer-foot' }, [
+      el('button', { type: 'submit', className: 'primary', textContent: 'Save version' }),
+      button('Cancel', () => (panel.hidden = true), 'secondary'),
+    ]),
+    errors,
+  ]);
+  const showErrors = (list) =>
+    errors.replaceChildren(...list.map((textContent) => el('li', { textContent })));
+  form.onsubmit = async (event) => {
+    event.preventDefault();
+    if (!file.files[0]) return showErrors(['Choose the file to import.']);
+    try {
+      const response = await fetch('/api/versions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name.value, document: await file.files[0].text() }),
+      });
+      const data = await response.json();
+      if (!response.ok) return showErrors(data.errors ?? ['That did not import.']);
+      location.href = `v-${data.name}.html`;
+    } catch (error) {
+      showErrors([error.message]);
+    }
+  };
+  panel.replaceChildren(form);
+  panel.hidden = false;
+  file.focus();
+}
+
+function confirmDeleteVersion(trigger) {
+  if (!trigger.dataset.armed) {
+    trigger.dataset.armed = 'true';
+    trigger.textContent = 'Really delete?';
+    return;
+  }
+  fetch(`/api/versions/${encodeURIComponent(trigger.dataset.deleteVersion)}`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+  }).then((response) => {
+    if (response.ok) location.href = 'index.html';
+    else trigger.textContent = 'That did not delete';
+  });
+}
+
+document.addEventListener('click', (event) => {
+  const importer = event.target.closest('[data-import]');
+  if (importer) openImport(importer);
+  const remover = event.target.closest('[data-delete-version]');
+  if (remover) confirmDeleteVersion(remover);
 });
 
 window.addEventListener('hashchange', goToHash);
