@@ -1,13 +1,17 @@
+import { randomUnsolved } from '../../game/pickPuzzle';
 import { getOverallStats, getPuzzleStats, getSavedBoard } from '../../game/progress';
 import {
   getSettings,
   inListOrder,
+  inPuzzleOrder,
   passesFilter,
   updateSettings,
+  type DifficultyFilter,
   type ListFilter,
   type ListOrder,
   type Mode,
 } from '../../game/settings';
+import { DIFFICULTIES, puzzleDifficulty, puzzlePasses } from '../../puzzles/difficulty';
 import { puzzles } from '../../puzzles/index';
 import type { Puzzle } from '../../puzzles/format';
 import { createPicture } from '../board/picture';
@@ -30,6 +34,8 @@ const FILTERS: [ListFilter, string][] = [
 const ORDERS: [ListOrder, string][] = [
   ['asc', 'Smallest first'],
   ['desc', 'Largest first'],
+  ['easiest', 'Easiest first'],
+  ['hardest', 'Hardest first'],
 ];
 
 const EMPTY_LIST: Record<ListFilter, string> = {
@@ -46,6 +52,7 @@ const MODE_HINTS: Record<Mode, string> = {
 /** One puzzle card. The picture and name stay hidden until it's solved. */
 function puzzleCard(p: Puzzle, number: number): HTMLElement {
   const stats = getPuzzleStats(p.id);
+  const difficulty = puzzleDifficulty(p.id);
   const status = stats
     ? `✓ ${formatTime(stats.bestTime)}`
     : getSavedBoard(p.id)
@@ -58,7 +65,13 @@ function puzzleCard(p: Puzzle, number: number): HTMLElement {
     el('div', { className: 'thumb' }, [thumb]),
     el('div', { className: 'card-name', textContent: stats ? p.name : `No. ${number}` }),
     el('div', { className: 'card-meta' }, [
-      el('span', { textContent: `${p.width}×${p.height}` }),
+      el('span', { className: 'card-size' }, [
+        `${p.width}×${p.height} · `,
+        el('span', {
+          className: `difficulty ${difficulty.id}`,
+          textContent: difficulty.label,
+        }),
+      ]),
       el('span', { className: 'status', textContent: status }),
     ]),
   ]);
@@ -68,12 +81,20 @@ function puzzleCard(p: Puzzle, number: number): HTMLElement {
  * The puzzle list grouped by size. Cards keep their pack-wide number whatever
  * the order, and the headings count the whole size whatever the filter hides.
  */
-function sizeSections(filter: ListFilter, order: ListOrder): HTMLElement[] {
+function sizeSections(
+  filter: ListFilter,
+  order: ListOrder,
+  difficulty: DifficultyFilter,
+): HTMLElement[] {
   const sizes = [...new Set(puzzles.map((p) => p.width))].sort((a, b) => a - b);
   return inListOrder(order, sizes).flatMap((size) => {
     const group = puzzles.filter((p) => p.width === size);
     const solved = group.filter((p) => getPuzzleStats(p.id)).length;
-    const shown = group.filter((p) => passesFilter(filter, Boolean(getPuzzleStats(p.id))));
+    const shown = group.filter(
+      (p) =>
+        passesFilter(filter, Boolean(getPuzzleStats(p.id))) &&
+        (difficulty === 'any' || puzzleDifficulty(p.id).id === difficulty),
+    );
     if (!shown.length) return [];
     return listSection({
       id: `size-${size}`,
@@ -83,10 +104,45 @@ function sizeSections(filter: ListFilter, order: ListOrder): HTMLElement[] {
       content: el(
         'div',
         { className: 'cards' },
-        inListOrder(order, shown).map((p) => puzzleCard(p, puzzles.indexOf(p) + 1)),
+        inPuzzleOrder(order, shown, (p) => puzzlePasses(p.id)).map((p) =>
+          puzzleCard(p, puzzles.indexOf(p) + 1),
+        ),
       ),
     });
   });
+}
+
+/** Shows only one difficulty of puzzle (#112). */
+function difficultySelect(current: DifficultyFilter, rerender: () => void): HTMLSelectElement {
+  const options = [
+    el('option', { value: 'any', textContent: 'Any' }),
+    ...DIFFICULTIES.map((band) => el('option', { value: band.id, textContent: band.label })),
+  ];
+  const select = el('select', {
+    onchange: () => {
+      updateSettings({ listDifficulty: select.value as DifficultyFilter });
+      rerender();
+    },
+  });
+  select.append(...options);
+  select.value = current;
+  return select;
+}
+
+/** Opens a random unsolved puzzle (#114). Gone once everything's solved. */
+function surpriseButton(): HTMLElement[] {
+  const isSolved = (id: string) => Boolean(getPuzzleStats(id));
+  if (!randomUnsolved(puzzles, isSolved)) return [];
+  return [
+    el('button', {
+      className: 'button ghost surprise',
+      textContent: 'Surprise me',
+      onclick: () => {
+        const pick = randomUnsolved(puzzles, isSolved);
+        if (pick) location.hash = `#/play/${pick.id}`;
+      },
+    }),
+  ];
 }
 
 /** Renders the puzzle list with settings, mode choice, and stats. */
@@ -111,9 +167,10 @@ export function renderSelectScreen(app: HTMLElement): void {
   const overall = getOverallStats();
   const filter = settings.listFilter;
   const order = settings.listOrder;
-  const list = [muralSection(filter, order), ...sizeSections(filter, order)].flatMap(
-    (s) => s ?? [],
-  );
+  const difficulty = settings.listDifficulty;
+  // Murals aren't rated, so a difficulty filter leaves them out.
+  const murals = difficulty === 'any' ? muralSection(filter, order) : null;
+  const list = [murals, ...sizeSections(filter, order, difficulty)].flatMap((s) => s ?? []);
 
   app.replaceChildren(
     el('main', { className: 'screen select' }, [
@@ -143,6 +200,7 @@ export function renderSelectScreen(app: HTMLElement): void {
         el('span', { className: 'mode-hint', textContent: MODE_HINTS[settings.mode] }),
       ]),
       rankCard(),
+      ...surpriseButton(),
       el('section', { className: 'stats', ariaLabel: 'Stats' }, [
         // Mural tiles share the save, so count pack puzzles only.
         stat(
@@ -173,10 +231,20 @@ export function renderSelectScreen(app: HTMLElement): void {
             }),
           ),
         ),
+        el('label', { className: 'difficulty-filter' }, [
+          'Difficulty ',
+          difficultySelect(difficulty, rerender),
+        ]),
       ]),
       ...(list.length
         ? list
-        : [el('p', { className: 'empty-list', textContent: EMPTY_LIST[filter] })]),
+        : [
+            el('p', {
+              className: 'empty-list',
+              textContent:
+                difficulty === 'any' ? EMPTY_LIST[filter] : 'No puzzles match those filters.',
+            }),
+          ]),
       el('footer', { className: 'footer' }, [
         el('a', { href: '#/editor', textContent: 'Make your own puzzle →' }),
       ]),

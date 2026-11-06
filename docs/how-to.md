@@ -15,6 +15,7 @@ Recipes for common changes. See [architecture.md](architecture.md) for how the p
    among puzzles of its size. Ids not listed in `ORDER` still load, but they go at the end
    of their size. Adding a 15×15 or bigger changes the daily cycle, which shuffles this list.
 5. Run `npm run check:puzzles`. CI runs the same check and fails on ambiguous puzzles.
+6. Run `npm run rate:puzzles` to rate the new puzzle's difficulty. A test fails until you do.
 
 You can also write the JSON by hand: `id`, `name`, `width`, `height`, and `solution` (one
 string per row, `#` filled and `.` empty). `parsePuzzle` validates it at startup. The pack test expects square

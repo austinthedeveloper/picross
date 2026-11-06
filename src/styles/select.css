@@ -71,6 +71,11 @@
   text-decoration: none;
 }
 
+.surprise {
+  display: block;
+  margin-bottom: 16px;
+}
+
 .stats {
   display: flex;
   gap: 24px;
@@ -90,6 +95,32 @@
 .stat span {
   font-size: 0.8rem;
   color: var(--muted);
+}
+
+/* Difficulty (#112): the label on a card, and the filter. */
+.difficulty {
+  font-weight: 600;
+}
+
+.difficulty.expert,
+.difficulty.insane {
+  color: var(--accent);
+}
+
+.difficulty-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+}
+
+.difficulty-filter select {
+  padding: 4px 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
 }
 
 .filter-row {

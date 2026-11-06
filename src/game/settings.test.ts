@@ -1,5 +1,31 @@
 import { describe, expect, it } from 'vitest';
-import { getSettings, inListOrder, passesFilter, setSectionCollapsed } from './settings';
+import {
+  getSettings,
+  inListOrder,
+  inPuzzleOrder,
+  passesFilter,
+  setSectionCollapsed,
+} from './settings';
+
+describe('inPuzzleOrder', () => {
+  const list = [3, 1, 2];
+  it('leaves pack order alone, or reverses it, when sorting by size', () => {
+    expect(inPuzzleOrder('asc', list, (n) => n)).toEqual([3, 1, 2]);
+    expect(inPuzzleOrder('desc', list, (n) => n)).toEqual([2, 1, 3]);
+  });
+
+  it('sorts by difficulty when asked, without changing the list', () => {
+    expect(inPuzzleOrder('easiest', list, (n) => n)).toEqual([1, 2, 3]);
+    expect(inPuzzleOrder('hardest', list, (n) => n)).toEqual([3, 2, 1]);
+    expect(list).toEqual([3, 1, 2]);
+  });
+
+  it('keeps pack order among equally hard puzzles', () => {
+    const tied = ['b', 'a', 'c'];
+    expect(inPuzzleOrder('easiest', tied, () => 1)).toEqual(tied);
+    expect(inPuzzleOrder('hardest', tied, () => 1)).toEqual(tied);
+  });
+});
 
 describe('passesFilter', () => {
   it('shows everything under "all"', () => {

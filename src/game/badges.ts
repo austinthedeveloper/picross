@@ -16,7 +16,7 @@ export interface Earned {
   at?: number;
 }
 
-interface BadgeSave {
+export interface BadgeSave {
   earned: Record<string, Earned>;
 }
 

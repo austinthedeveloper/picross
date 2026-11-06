@@ -180,14 +180,23 @@ rules stay identical across input methods.
 
 All saved data lives in `localStorage`, read once at startup and written on change:
 
-| Key                | Module                       | Contents                                                                                               |
-| ------------------ | ---------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `picross:v1`       | `game/progress.ts`           | In-progress boards, per-puzzle stats, total solving time                                               |
-| `picross:run`      | `game/runSave.ts`            | The current run (with the current encounter's board) and seen scenes                                   |
-| `picross:badges`   | `game/badges.ts`             | Earned badges: each one's best tier and the date you first earned it                                   |
-| `picross:settings` | `game/settings.ts`           | `mode` (default for new runs), `listFilter`, `listOrder`, `collapsedSections`, `muted`, `highContrast` |
-| `picross:daily`    | `game/daily.ts`              | Daily streak, best streak, solve count, and today's board                                              |
-| `picross:editor`   | `ui/screens/editorScreen.ts` | The editor's current drawing                                                                           |
+| Key                | Module                       | Contents                                                                                                                 |
+| ------------------ | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `picross:v1`       | `game/progress.ts`           | In-progress boards, per-puzzle stats, total solving time                                                                 |
+| `picross:run`      | `game/runSave.ts`            | The current run (with the current encounter's board) and seen scenes                                                     |
+| `picross:badges`   | `game/badges.ts`             | Earned badges: each one's best tier and the date you first earned it                                                     |
+| `picross:settings` | `game/settings.ts`           | `mode` (default for new runs), `listFilter`, `listOrder`, `listDifficulty`, `collapsedSections`, `muted`, `highContrast` |
+| `picross:daily`    | `game/daily.ts`              | Daily streak, best streak, solve count, and today's board                                                                |
+| `picross:editor`   | `ui/screens/editorScreen.ts` | The editor's current drawing                                                                                             |
+
+`game/saveMerge.ts` combines two copies of a save (#97), so cross-device sync never has to
+ask which one to keep. It's a pure function with one rule per kind of data: bests and
+unlocks are never lost, the run is taken whole from whichever side changed it last
+(`currentUpdatedAt`), and fields it doesn't recognize pass through, so an older client
+can't delete newer data. Counts take the higher side rather than adding up, because adding
+would double-count on every sync, so playing on two devices between syncs can undercount
+`solves`, `plays` and `totalTime`. Settings and the editor's drawing aren't merged, since
+they belong to one device.
 
 `storage.ts` falls back to defaults if storage is blocked or holds bad JSON, so the game
 still works in private browsing. To reset during development, clear the site's local
@@ -207,6 +216,16 @@ with extra powers, so story versions never change, and tests hold them to the sa
 solvable without guessing with every power applied, and weak points reachable early.
 
 The Night Shift is the pilot. Closing Time and the Curator are deliberately left out.
+
+### Difficulty ratings
+
+Each pack puzzle is rated (#112) from how many passes a line solver needs on its plain
+clues (`linePasses` in `engine/solver.ts`), sorted into bands in `puzzles/difficulty.ts`.
+Rating the whole pack takes long enough to stall the list on a phone, so the numbers are
+saved in `puzzles/ratings.json` by `npm run rate:puzzles`, and a test fails if they fall out
+of step with the puzzles. Passes only approximate how hard a puzzle feels, and enemy powers
+aren't counted, so fights aren't rated. Murals aren't either, and a difficulty filter
+leaves them out.
 
 ### Rank and badges
 

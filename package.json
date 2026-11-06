@@ -17,6 +17,7 @@
     "check:puzzles": "vitest run src/puzzles/pack.test.ts",
     "script-review": "vite-node scripts/script-review.ts serve",
     "script-review:notes": "vite-node scripts/script-review.ts notes",
+    "rate:puzzles": "vite-node scripts/rate-puzzles.ts",
     "e2e": "playwright test"
   },
   "devDependencies": {

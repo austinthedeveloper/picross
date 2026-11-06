@@ -1,5 +1,18 @@
-import { expect, test } from '@playwright/test';
+import fs from 'node:fs';
+import { expect, test, type Page } from '@playwright/test';
 import { announcements, boardState, cell, seed, solution, solve, press } from './helpers';
+
+/** Saves puzzles as solved before the app loads, once per test. */
+async function seedSolved(page: Page, ids: string[]) {
+  await page.context().addInitScript((list) => {
+    if (sessionStorage.getItem('solved')) return;
+    sessionStorage.setItem('solved', '1');
+    const solved = Object.fromEntries(list.map((id) => [id, { solves: 1, bestTime: 1000 }]));
+    localStorage.setItem('picross:v1', JSON.stringify({ solved, boards: {}, totalTime: 0 }));
+  }, ids);
+}
+
+const packIds = () => fs.readdirSync('src/puzzles/pack').map((file) => file.replace(/\.json$/, ''));
 
 test.describe('free play', () => {
   test('a fresh visit: sound off, small puzzles first, fish is 10×10', async ({ page }) => {
@@ -114,6 +127,78 @@ test.describe('free play', () => {
     await solve(page, solution('smile'));
     await press(page, 'Next →');
     await expect(page).toHaveURL(/#\/play\/key$/);
+  });
+
+  test('cards show a difficulty, which can filter and sort the list', async ({ page }) => {
+    await page.goto('/#/');
+    const cards = page.locator('.size-section:not(.murals) .card');
+    await expect(page.locator('.difficulty').first()).toHaveText(/Easy|Medium/);
+    await expect(page.locator('.murals')).toBeVisible();
+
+    await page.getByLabel('Difficulty').selectOption('insane');
+    await expect(cards).toHaveCount(6);
+    await expect(page.locator('.difficulty')).toHaveText(Array(6).fill('Insane'));
+    await expect(page.locator('.murals')).toHaveCount(0);
+    // Rating a puzzle mustn't give it away.
+    await expect(cards.first().locator('.card-name')).toHaveText(/^No\. \d+$/);
+
+    await page.reload();
+    await expect(page.getByLabel('Difficulty')).toHaveValue('insane');
+    await expect(cards).toHaveCount(6);
+
+    await page.getByRole('button', { name: 'Completed', exact: true }).tap();
+    await expect(page.locator('.empty-list')).toHaveText('No puzzles match those filters.');
+    await page.getByRole('button', { name: 'All', exact: true }).tap();
+    await page.getByLabel('Difficulty').selectOption('any');
+
+    await page.getByRole('button', { name: 'Hardest first' }).tap();
+    await expect(page.locator('.size-section:not(.murals) .size-heading').first()).toHaveText(
+      /20×20/,
+    );
+    await expect(page.locator('.difficulty').first()).toHaveText('Insane');
+    await page.getByRole('button', { name: 'Easiest first' }).tap();
+    await expect(page.locator('.size-section:not(.murals) .size-heading').first()).toHaveText(
+      /5×5/,
+    );
+    await expect(page.locator('.difficulty').first()).toHaveText('Easy');
+  });
+
+  test('"Next" skips puzzles you have already solved', async ({ page }) => {
+    await seedSolved(page, ['key', 'arrow']);
+    await page.goto('/#/play/smile');
+    await solve(page, solution('smile'));
+    // The pack runs smile, key, then the 10×10s: key is done, so it steps over it.
+    await press(page, 'Next →');
+    await expect(page).not.toHaveURL(/#\/play\/(key|smile)$/);
+  });
+
+  test('"Next" is gone with nothing left to play', async ({ page }) => {
+    await seedSolved(
+      page,
+      packIds().filter((id) => id !== 'heart'),
+    );
+    await page.goto('/#/play/heart');
+    await solve(page, solution('heart'));
+    await expect(page.locator('.end-panel:not([hidden])')).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Next →' })).toHaveCount(0);
+    await expect(page.getByRole('link', { name: 'All puzzles' })).toBeVisible();
+  });
+
+  test('"Surprise me" opens an unsolved puzzle', async ({ page }) => {
+    const ids = packIds();
+    const [left] = ids.slice(-1);
+    await seedSolved(page, ids.slice(0, -1));
+    await page.goto('/#/');
+    await page.getByRole('button', { name: 'Surprise me' }).tap();
+    await expect(page).toHaveURL(new RegExp(`#/play/${left}$`));
+    await expect(page.locator('.cell').first()).toBeVisible();
+  });
+
+  test('"Surprise me" is hidden when everything is solved', async ({ page }) => {
+    await seedSolved(page, packIds());
+    await page.goto('/#/');
+    await expect(page.locator('.rank-card')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Surprise me' })).toHaveCount(0);
   });
 
   test('a drag paints a line and undo/redo/reset work', async ({ page }) => {
