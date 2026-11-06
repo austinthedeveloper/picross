@@ -4,7 +4,7 @@ import { readStore, writeStore } from './storage';
 const KEY = 'picross:daily';
 
 /** Daily puzzle progress (#69): the streak, and today's board in progress. */
-interface DailySave {
+export interface DailySave {
   /** Day key of the last daily solved. */
   lastSolved?: string;
   /** Days in a row solved, ending at `lastSolved`. */

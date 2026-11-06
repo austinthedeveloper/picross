@@ -19,6 +19,35 @@ describe('runSave', () => {
   });
 });
 
+describe('when the run last changed', () => {
+  const stamp = () => JSON.parse(localStorage.getItem('picross:run')!).currentUpdatedAt;
+
+  it('is stamped when the run changes, and when it is cleared', async () => {
+    vi.useFakeTimers({ now: 1000 });
+    const save = await load();
+    save.saveCurrentRun(startRun('r', 5));
+    expect(stamp()).toBe(1000);
+    vi.setSystemTime(2000);
+    save.saveCurrentRun({ ...startRun('r', 5), node: 1 });
+    expect(stamp()).toBe(2000);
+    vi.setSystemTime(3000);
+    save.saveCurrentRun(null);
+    expect(stamp()).toBe(3000);
+    vi.useRealTimers();
+  });
+
+  it("doesn't change when the same run is saved again, as opening it does", async () => {
+    vi.useFakeTimers({ now: 1000 });
+    const save = await load();
+    const run = startRun('r', 5);
+    save.saveCurrentRun(run);
+    vi.setSystemTime(9000);
+    save.saveCurrentRun({ ...run });
+    expect(stamp()).toBe(1000);
+    vi.useRealTimers();
+  });
+});
+
 describe('seen scenes', () => {
   it('remembers scenes across reloads', async () => {
     const save = await load();
