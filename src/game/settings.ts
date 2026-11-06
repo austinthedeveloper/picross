@@ -1,3 +1,4 @@
+import type { Difficulty } from '../puzzles/difficulty';
 import { readStore, writeStore } from './storage';
 
 /** Relaxed never checks fills; hearts mode costs a heart for each wrong fill. */
@@ -10,18 +11,36 @@ export function passesFilter(filter: ListFilter, completed: boolean): boolean {
   return filter === 'all' || (filter === 'done') === completed;
 }
 
-/** How the list runs: smallest puzzles first, or the whole thing reversed. */
-export type ListOrder = 'asc' | 'desc';
+/**
+ * How the list runs: smallest puzzles first, or the whole thing reversed. Easiest
+ * and hardest keep to that size order and sort within each size (#112).
+ */
+export type ListOrder = 'asc' | 'desc' | 'easiest' | 'hardest';
 
 /** Puts items that are already smallest-first into the chosen order. */
 export function inListOrder<T>(order: ListOrder, items: readonly T[]): T[] {
-  return order === 'desc' ? [...items].reverse() : [...items];
+  return order === 'desc' || order === 'hardest' ? [...items].reverse() : [...items];
 }
+
+/** Puts one size's puzzles, already in pack order, into the chosen order. */
+export function inPuzzleOrder<T>(
+  order: ListOrder,
+  items: readonly T[],
+  passes: (item: T) => number,
+): T[] {
+  if (order === 'asc' || order === 'desc') return inListOrder(order, items);
+  const sign = order === 'easiest' ? 1 : -1;
+  return [...items].sort((a, b) => sign * (passes(a) - passes(b)));
+}
+
+/** Which difficulty the list shows (#112): a band's id, or 'any'. */
+export type DifficultyFilter = Difficulty | 'any';
 
 export interface Settings {
   mode: Mode;
   listFilter: ListFilter;
   listOrder: ListOrder;
+  listDifficulty: DifficultyFilter;
   /** Ids of the puzzle list sections the player has closed. */
   collapsedSections: string[];
   muted: boolean;
@@ -33,6 +52,7 @@ const settings: Settings = readStore<Settings>(KEY, {
   mode: 'relaxed',
   listFilter: 'all',
   listOrder: 'asc',
+  listDifficulty: 'any',
   collapsedSections: [],
   // Sound starts off; the speaker button turns it on.
   muted: true,

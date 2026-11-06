@@ -129,6 +129,40 @@ test.describe('free play', () => {
     await expect(page).toHaveURL(/#\/play\/key$/);
   });
 
+  test('cards show a difficulty, which can filter and sort the list', async ({ page }) => {
+    await page.goto('/#/');
+    const cards = page.locator('.size-section:not(.murals) .card');
+    await expect(page.locator('.difficulty').first()).toHaveText(/Easy|Medium/);
+    await expect(page.locator('.murals')).toBeVisible();
+
+    await page.getByLabel('Difficulty').selectOption('insane');
+    await expect(cards).toHaveCount(6);
+    await expect(page.locator('.difficulty')).toHaveText(Array(6).fill('Insane'));
+    await expect(page.locator('.murals')).toHaveCount(0);
+    // Rating a puzzle mustn't give it away.
+    await expect(cards.first().locator('.card-name')).toHaveText(/^No\. \d+$/);
+
+    await page.reload();
+    await expect(page.getByLabel('Difficulty')).toHaveValue('insane');
+    await expect(cards).toHaveCount(6);
+
+    await page.getByRole('button', { name: 'Completed', exact: true }).tap();
+    await expect(page.locator('.empty-list')).toHaveText('No puzzles match those filters.');
+    await page.getByRole('button', { name: 'All', exact: true }).tap();
+    await page.getByLabel('Difficulty').selectOption('any');
+
+    await page.getByRole('button', { name: 'Hardest first' }).tap();
+    await expect(page.locator('.size-section:not(.murals) .size-heading').first()).toHaveText(
+      /20×20/,
+    );
+    await expect(page.locator('.difficulty').first()).toHaveText('Insane');
+    await page.getByRole('button', { name: 'Easiest first' }).tap();
+    await expect(page.locator('.size-section:not(.murals) .size-heading').first()).toHaveText(
+      /5×5/,
+    );
+    await expect(page.locator('.difficulty').first()).toHaveText('Easy');
+  });
+
   test('"Next" skips puzzles you have already solved', async ({ page }) => {
     await seedSolved(page, ['key', 'arrow']);
     await page.goto('/#/play/smile');

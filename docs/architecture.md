@@ -180,14 +180,14 @@ rules stay identical across input methods.
 
 All saved data lives in `localStorage`, read once at startup and written on change:
 
-| Key                | Module                       | Contents                                                                                               |
-| ------------------ | ---------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `picross:v1`       | `game/progress.ts`           | In-progress boards, per-puzzle stats, total solving time                                               |
-| `picross:run`      | `game/runSave.ts`            | The current run (with the current encounter's board) and seen scenes                                   |
-| `picross:badges`   | `game/badges.ts`             | Earned badges: each one's best tier and the date you first earned it                                   |
-| `picross:settings` | `game/settings.ts`           | `mode` (default for new runs), `listFilter`, `listOrder`, `collapsedSections`, `muted`, `highContrast` |
-| `picross:daily`    | `game/daily.ts`              | Daily streak, best streak, solve count, and today's board                                              |
-| `picross:editor`   | `ui/screens/editorScreen.ts` | The editor's current drawing                                                                           |
+| Key                | Module                       | Contents                                                                                                                 |
+| ------------------ | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `picross:v1`       | `game/progress.ts`           | In-progress boards, per-puzzle stats, total solving time                                                                 |
+| `picross:run`      | `game/runSave.ts`            | The current run (with the current encounter's board) and seen scenes                                                     |
+| `picross:badges`   | `game/badges.ts`             | Earned badges: each one's best tier and the date you first earned it                                                     |
+| `picross:settings` | `game/settings.ts`           | `mode` (default for new runs), `listFilter`, `listOrder`, `listDifficulty`, `collapsedSections`, `muted`, `highContrast` |
+| `picross:daily`    | `game/daily.ts`              | Daily streak, best streak, solve count, and today's board                                                                |
+| `picross:editor`   | `ui/screens/editorScreen.ts` | The editor's current drawing                                                                                             |
 
 `storage.ts` falls back to defaults if storage is blocked or holds bad JSON, so the game
 still works in private browsing. To reset during development, clear the site's local
@@ -196,6 +196,16 @@ storage in devtools.
 A saved board stores its cells as a digit string (`"0120…"`) plus elapsed time, mode,
 hearts, and hints used. A puzzle keeps the mode it was started in. Solving it clears the
 saved board, and failing in Hearts mode discards it.
+
+### Difficulty ratings
+
+Each pack puzzle is rated (#112) from how many passes a line solver needs on its plain
+clues (`linePasses` in `engine/solver.ts`), sorted into bands in `puzzles/difficulty.ts`.
+Rating the whole pack takes long enough to stall the list on a phone, so the numbers are
+saved in `puzzles/ratings.json` by `npm run rate:puzzles`, and a test fails if they fall out
+of step with the puzzles. Passes only approximate how hard a puzzle feels, and enemy powers
+aren't counted, so fights aren't rated. Murals aren't either, and a difficulty filter
+leaves them out.
 
 ### Rank and badges
 
