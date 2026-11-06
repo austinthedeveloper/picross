@@ -1,5 +1,6 @@
 {
   "id": "first-job-intro",
+  "backdrop": "workshop",
   "cast": {
     "rook": {
       "name": "Rook",

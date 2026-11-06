@@ -1,3 +1,5 @@
+import { getBackdrop } from './backdrops';
+
 /**
  * Scenes (#22): short dialogue between puzzles, written as JSON in
  * src/puzzles/scenes/. A scene has a cast and named nodes. Each node plays
@@ -38,6 +40,8 @@ export interface SceneNode {
 
 export interface Scene {
   id: string;
+  /** Where it happens: a file in src/puzzles/backdrops. Leave out for a bare stage. */
+  backdrop?: string;
   cast: Record<string, CastMember>;
   /** First node; defaults to "start". */
   start: string;
@@ -50,6 +54,9 @@ export function parseScene(data: unknown): Scene {
     throw new Error(`Invalid scene${file?.id ? ` "${file.id}"` : ''}: ${msg}`);
   };
   if (typeof file?.id !== 'string' || !file.id) fail('missing id');
+  if (file.backdrop !== undefined && !getBackdrop(file.backdrop)) {
+    fail(`unknown backdrop "${String(file.backdrop)}"`);
+  }
   const cast = file.cast ?? {};
   for (const [id, member] of Object.entries(cast)) {
     if (!member?.name || !member.portrait) fail(`cast member "${id}" needs a name and portrait`);
@@ -78,7 +85,7 @@ export function parseScene(data: unknown): Scene {
     target(id, node.next);
     if (!node.lines?.length && !node.choices?.length) fail(`node "${id}" is empty`);
   }
-  return { id: file.id!, cast, start, nodes: nodes! };
+  return { id: file.id!, backdrop: file.backdrop, cast, start, nodes: nodes! };
 }
 
 const files = import.meta.glob<{ default: unknown }>('./scenes/*.json', { eager: true });

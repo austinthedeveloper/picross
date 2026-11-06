@@ -1,4 +1,4 @@
-/* Scenes (#22): portrait stage, typed text box, and choices. Phone-first. */
+/* Scenes (#22): backdrop and portrait stage, typed text box, and choices. Phone-first. */
 
 .scene-screen {
   max-width: 560px;
@@ -21,6 +21,13 @@
   position: absolute;
   top: 0;
   right: 0;
+  z-index: 1;
+}
+
+.has-backdrop .skip {
+  top: 10px;
+  right: 10px;
+  background: var(--surface);
 }
 
 .stage,
@@ -29,28 +36,64 @@
 }
 
 .stage {
+  position: relative;
   flex: 1;
-  display: grid;
-  place-items: end center;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  /* Room for a portrait: on a short screen the page scrolls instead of clipping it. */
+  min-height: 170px;
+  overflow: hidden;
   cursor: pointer;
 }
 
+.has-backdrop .stage {
+  padding: 12px;
+  border: 2px solid var(--line);
+  border-radius: 14px;
+}
+
+/* Fills the panel, cropping the sides on a tall phone and the top on a wide screen. */
+.backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: var(--backdrop);
+}
+
+.stage-cast {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+
+/* Sized by share of the stage so three fit on the narrowest phone. */
 .portrait {
+  flex: 0 1 140px;
+  min-width: 0;
+  aspect-ratio: 1;
   display: grid;
   place-items: center;
-  width: 140px;
-  height: 140px;
   border-radius: 50%;
   background: var(--surface);
   border: 3px solid var(--ink);
   font-size: 5rem;
   line-height: 1;
   overflow: hidden;
+  transition:
+    flex-basis 0.15s ease-out,
+    opacity 0.15s ease-out;
   animation: portrait-in 0.25s ease-out;
 }
 
-.narration .portrait {
-  visibility: hidden;
+.portrait.listening {
+  flex-basis: 88px;
+  font-size: 3rem;
+  opacity: 0.6;
 }
 
 @keyframes portrait-in {

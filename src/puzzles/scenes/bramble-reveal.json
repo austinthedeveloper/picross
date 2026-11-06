@@ -1,5 +1,6 @@
 {
   "id": "bramble-reveal",
+  "backdrop": "glasshouse",
   "cast": {
     "rook": {
       "name": "Rook",

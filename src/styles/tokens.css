@@ -9,6 +9,7 @@
   --ink: #23262f;
   --muted: #7a7e8a;
   --line: #d6d2c8;
+  --backdrop: #e2ded3;
   --guide: #8a8679;
   --accent: #d9534f;
   --accent-ink: #ffffff;
@@ -44,6 +45,7 @@
     --ink: #e9e6de;
     --muted: #8d909a;
     --line: #353841;
+    --backdrop: #2c2e36;
     --guide: #6c7080;
     --accent: #e8716d;
     --accent-ink: #17181c;
@@ -75,6 +77,8 @@
   --ink: #000000;
   --muted: #000000;
   --line: #000000;
+  /* Light gray, not black, so scenery never competes with the portraits. */
+  --backdrop: #d9d9d9;
   --guide: #000000;
   --accent: #c00000;
   --accent-ink: #ffffff;

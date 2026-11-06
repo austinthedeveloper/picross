@@ -1,5 +1,6 @@
 {
   "id": "old-wyrm-reveal",
+  "backdrop": "hoard",
   "cast": {
     "rook": {
       "name": "Rook",

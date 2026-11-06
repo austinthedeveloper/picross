@@ -192,9 +192,21 @@ that, but `npm test` does. For how hard to make a new fight, see Difficulty in
    and `first-job-outro.json` shows win/loss conditions.
 3. To play it with a run, set `"intro": "<id>"` (before the first run) or `"outro": "<id>"`
    (one-line sign-off; use `"if": "won"` / `"!won"`) in the run's JSON.
-4. Run `npm test`. Bad references fail at load.
+4. Add `"backdrop": "<id>"` next to the scene's `id` to show where it happens, using a file
+   from `src/puzzles/backdrops/`. A test fails if a scene that plays doesn't have one. Only a
+   run's outro goes without, because it's text on the results screen.
+5. Run `npm test`. Bad references fail at load.
 
 Keep lines short (phone screens), and each scene under a minute to read.
+
+The stage holds three portraits. Characters walk on when they first speak, and a fourth
+replaces whoever has been quiet longest.
+
+## Add a backdrop
+
+Add `src/puzzles/backdrops/<id>.json` with an `id` and `rows` of `#` and `.`, like a puzzle's
+solution, and point a scene at it. See [art direction](art-direction.md#backdrops) for how to
+draw one. A test fails if no scene uses it.
 
 ## Review the script
 

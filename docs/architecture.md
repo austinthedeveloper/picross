@@ -49,10 +49,12 @@ src/
     enemies.ts             Validates an enemy; lists its powers (startingPowers, phasePowers, enemyPowers)
     gadgets.ts             Gadget catalog: name, icon, description, effect
     scenes.ts              Loads and validates scenes/*.json (dialogue, #22)
+    backdrops.ts           Loads and validates backdrops/*.json (where a scene happens)
     encounters/*.json      Encounters: name, kind (fight/dig), puzzle, enemy, boss, scene
     runs/*.json            Jobs: HP, encounters, gadgets, intro/outro, order, requires
     chapters/*.json        Chapters: title, order, blurb, jobs, opening scene
-    scenes/*.json          Scenes: cast, nodes of lines, choices, and conditions
+    scenes/*.json          Scenes: backdrop, cast, nodes of lines, choices, and conditions
+    backdrops/*.json       Backdrops: rows of # and ., drawn behind a scene's portraits
   game/                    Game state and saves, no DOM
     game.ts                Game: board, history, mode/hearts, hints, clock, wipes
     battle.ts              Enemy and BattleState: chip, finisher, gadgets, phases, armor, call-outs
@@ -107,7 +109,8 @@ src/
       picture.ts           Pixel-art canvas of a solution
     components/
       battleBar.ts         Enemy/player HP, gadgets, armor, 🎭 forgeries, phase banner, hit effects
-      dialogue.ts          Scene player: portrait, typed text box, choices, Skip
+      dialogue.ts          Scene player: stage of portraits, typed text box, choices, Skip
+      backdrop.ts          Draws a backdrop as an SVG in the theme's color
       endPanels.ts         Solved, out-of-hearts, and generic end panels
       hintMenu.ts          "Hint n/3" dropdown
       homeLink.ts          The Home button at the top of every screen

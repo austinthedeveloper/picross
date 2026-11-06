@@ -1,5 +1,6 @@
 {
   "id": "ostrander-reveal",
+  "backdrop": "chart-room",
   "cast": {
     "rook": {
       "name": "Rook",

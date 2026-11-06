@@ -2,13 +2,17 @@ import {
   advance,
   choose,
   currentStep,
+  emptyStage,
+  speakOnStage,
   startDialogue,
   type DialogueState,
   type Flags,
 } from '../../game/dialogue';
+import { getBackdrop } from '../../puzzles/backdrops';
 import type { Scene } from '../../puzzles/scenes';
 import { portraitArt, preloadArt, withArt } from '../art';
 import { el } from '../dom';
+import { createBackdrop } from './backdrop';
 import { reducedMotion } from '../motion';
 import { playSound } from '../sound';
 
@@ -21,8 +25,9 @@ export interface DialogueView {
 }
 
 /**
- * Plays a scene (#22): a portrait for whoever's speaking, a text box that
- * types each line out, and choice buttons. Tap, Enter, or Space finishes the
+ * Plays a scene (#22): the place it happens, a portrait for everyone who's
+ * spoken with the speaker up front, a text box that types each line out, and
+ * choice buttons. Tap, Enter, or Space finishes the
  * line or moves on; number keys pick choices. Calls `onEnd` with the scene's
  * final flags when it ends or is skipped.
  */
@@ -40,7 +45,9 @@ export function createDialogue(
   let fullText = '';
   let ended = false;
 
-  const portrait = el('div', { className: 'portrait', ariaHidden: 'true' });
+  const backdrop = scene.backdrop ? getBackdrop(scene.backdrop) : undefined;
+  const cast = el('div', { className: 'stage-cast', ariaHidden: 'true' });
+  let onStage = emptyStage;
   const speaker = el('p', { className: 'speaker' });
   const text = el('p', { className: 'line-text' });
   const more = el('span', { className: 'more', ariaHidden: 'true', textContent: '▼' });
@@ -48,7 +55,10 @@ export function createDialogue(
   const box = el('div', { className: 'text-box' }, [speaker, text, more]);
   const choices = el('div', { className: 'choices', role: 'group', ariaLabel: 'Choices' });
   const skip = el('button', { className: 'button ghost skip', textContent: 'Skip ⏭' });
-  const stage = el('div', { className: 'stage' }, [portrait]);
+  const stage = el('div', { className: 'stage' }, [
+    ...(backdrop ? [createBackdrop(backdrop)] : []),
+    cast,
+  ]);
   const root = el('section', { className: 'dialogue', ariaLabel: 'Scene' }, [
     skip,
     stage,
@@ -56,6 +66,27 @@ export function createDialogue(
     choices,
     live,
   ]);
+
+  root.classList.toggle('has-backdrop', Boolean(backdrop));
+
+  /** Walks the speaker on if they're new, then puts them up front. Narration brings nobody up. */
+  const updateStage = (speaker?: { id: string; portrait: string }) => {
+    if (speaker) {
+      const before = onStage.cast;
+      onStage = speakOnStage(onStage, speaker.id);
+      if (!before.includes(speaker.id)) {
+        const portrait = el('div', { className: 'portrait' }, [portraitArt(speaker.portrait)]);
+        portrait.dataset.who = speaker.id;
+        const leaving = before.find((id) => !onStage.cast.includes(id));
+        const seat = leaving && cast.querySelector(`[data-who="${leaving}"]`);
+        if (seat) seat.replaceWith(portrait);
+        else cast.append(portrait);
+      }
+    }
+    for (const portrait of cast.children) {
+      portrait.classList.toggle('listening', (portrait as HTMLElement).dataset.who !== speaker?.id);
+    }
+  };
 
   const finish = () => {
     if (ended) return;
@@ -92,8 +123,7 @@ export function createDialogue(
     if (step.kind === 'line') {
       choices.replaceChildren();
       root.classList.toggle('narration', !step.speaker);
-      portrait.replaceChildren(...(step.speaker ? [portraitArt(step.speaker.portrait)] : []));
-      portrait.dataset.who = step.speaker?.id ?? '';
+      updateStage(step.speaker);
       speaker.textContent = step.speaker?.name ?? '';
       playSound('blip');
       typeOut(step.text);
