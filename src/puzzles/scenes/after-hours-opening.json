@@ -1,5 +1,6 @@
 {
   "id": "after-hours-opening",
+  "backdrop": "office",
   "cast": {
     "rook": { "name": "Rook", "portrait": "rook" },
     "dee": { "name": "Dee", "portrait": "dee" }

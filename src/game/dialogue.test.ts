@@ -1,6 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { parseScene } from '../puzzles/scenes';
-import { advance, check, choose, currentStep, startDialogue } from './dialogue';
+import {
+  advance,
+  check,
+  choose,
+  currentStep,
+  emptyStage,
+  speakOnStage,
+  startDialogue,
+} from './dialogue';
 
 const scene = parseScene({
   id: 't',
@@ -109,5 +117,21 @@ describe('first-job sign-off', () => {
     };
     expect(lineFor(true)).toMatch(/Nice work/);
     expect(lineFor(false)).toMatch(/alive/);
+  });
+});
+
+describe('speakOnStage', () => {
+  const speak = (...ids: string[]) => ids.reduce(speakOnStage, emptyStage);
+
+  it('brings characters on as they first speak and keeps their places', () => {
+    expect(speak('rook', 'dee', 'rook', 'bo').cast).toEqual(['rook', 'dee', 'bo']);
+  });
+
+  it('swaps the longest-quiet character for a newcomer when full', () => {
+    expect(speak('rook', 'dee', 'bo', 'rook', 'bramble').cast).toEqual(['rook', 'bramble', 'bo']);
+  });
+
+  it('lets someone who left come back', () => {
+    expect(speak('rook', 'dee', 'bo', 'hollis', 'rook').cast).toEqual(['hollis', 'rook', 'bo']);
   });
 });

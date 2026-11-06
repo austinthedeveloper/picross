@@ -44,6 +44,7 @@ Three words: **cozy, mischievous, after-hours.**
 | `--ink`                   | Graphite    | Text, filled cells, pictures                                         |
 | `--muted`                 | Pencil      | Secondary text, done clues                                           |
 | `--line` / `--guide`      | Rule        | Grid lines, borders; guides every 5 cells                            |
+| `--backdrop`              | Scenery     | The pictures behind scenes; quiet, because the cast goes on top      |
 | `--accent`                | Job stamp   | The one action color: Start, the current node, kickers, HP           |
 | `--ok`                    | Go          | Your HP, success                                                     |
 | `--hl`                    | Highlighter | The row and column under the cursor                                  |
@@ -83,6 +84,19 @@ Three words: **cozy, mischievous, after-hours.**
 - Text can still say 🎭 or 🩹: `withArt` swaps those emoji for the art when it's drawn.
 - Keep each enemy's silhouette tied to its mechanic. The eel is a zigzag, the cuttlefish
   is a blob with trailing ink, the Forger carries a palette.
+
+## Backdrops
+
+The place a scene happens, behind the portraits: one flat color, drawn in `--backdrop`, so it
+follows every theme. They're original pictures, not murals, because a mural is a puzzle's
+answer and showing it would spoil it.
+
+- **Size:** 32×48 cells. The picture covers the panel, so a tall phone crops about 4 columns
+  from each side and a laptop crops up to 14 rows from the top. Keep the main subject in the
+  middle columns, between rows 14 and 36. Portraits cover the bottom rows, and a phone on its
+  side only shows those.
+- **Shapes:** big and simple, so it reads at low contrast. One-cell detail turns to noise.
+- **Places, not chapters:** the same office can open any chapter.
 
 ## Motion
 

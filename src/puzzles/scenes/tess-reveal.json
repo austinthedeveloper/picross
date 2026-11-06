@@ -1,5 +1,6 @@
 {
   "id": "tess-reveal",
+  "backdrop": "aquarium",
   "cast": {
     "rook": {
       "name": "Rook",

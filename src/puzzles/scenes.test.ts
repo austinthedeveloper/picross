@@ -27,6 +27,7 @@ describe('parseScene', () => {
     [{ ...valid, start: 'missing' }, /start node "missing"/],
     [{ ...valid, nodes: { start: {} } }, /is empty/],
     [{ ...valid, cast: { pip: { name: 'Pip' } } }, /name and portrait/],
+    [{ ...valid, backdrop: 'nowhere' }, /unknown backdrop "nowhere"/],
   ])('rejects bad input %#', (input, error) => {
     expect(() => parseScene(input)).toThrow(error);
   });

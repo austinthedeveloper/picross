@@ -81,3 +81,32 @@ export function choose(scene: Scene, state: DialogueState, index: number): Dialo
   if (!choice.next) return { ...state, flags, ended: true };
   return settle(scene, { node: choice.next, line: 0, flags, ended: false });
 }
+
+/** Who's on stage, left to right, and who spoke last (most recent first). */
+export interface Stage {
+  cast: string[];
+  recent: string[];
+}
+
+/** Most portraits that fit side by side on a phone. */
+export const STAGE_SIZE = 3;
+
+export const emptyStage: Stage = { cast: [], recent: [] };
+
+/**
+ * The stage after someone speaks. Characters walk on the first time they talk and keep their
+ * place. When it's full, the newcomer takes the place of whoever has been quiet longest.
+ */
+export function speakOnStage(stage: Stage, id: string): Stage {
+  if (stage.cast.includes(id)) {
+    return { cast: stage.cast, recent: [id, ...stage.recent.filter((who) => who !== id)] };
+  }
+  if (stage.cast.length < STAGE_SIZE) {
+    return { cast: [...stage.cast, id], recent: [id, ...stage.recent] };
+  }
+  const leaving = stage.recent[stage.recent.length - 1];
+  return {
+    cast: stage.cast.map((who) => (who === leaving ? id : who)),
+    recent: [id, ...stage.recent.filter((who) => who !== leaving)],
+  };
+}

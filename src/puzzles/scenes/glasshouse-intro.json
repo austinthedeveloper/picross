@@ -1,5 +1,6 @@
 {
   "id": "glasshouse-intro",
+  "backdrop": "glasshouse",
   "cast": {
     "rook": {
       "name": "Rook",

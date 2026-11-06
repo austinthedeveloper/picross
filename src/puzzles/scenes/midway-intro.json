@@ -1,5 +1,6 @@
 {
   "id": "midway-intro",
+  "backdrop": "midway",
   "cast": {
     "rook": {
       "name": "Rook",
