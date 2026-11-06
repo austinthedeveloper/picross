@@ -632,6 +632,16 @@ body.read-only .note-button {
   font-weight: 500;
 }
 
+.import-panel label[hidden] {
+  display: none;
+}
+
+.import-modes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
 .import-panel input[type='text'] {
   flex: 1;
   min-width: 160px;
@@ -689,20 +699,45 @@ body.version .notes {
   display: none;
 }
 
-.section.changed > .chat {
-  padding-left: 12px;
+/* A version's changed sections take two columns; everything else keeps its usual width. */
+body.version main {
+  max-width: 1240px;
+}
+
+body.version main > :not(.section.changed) {
+  max-width: 728px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.compare {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.side-label {
+  position: sticky;
+  top: 44px;
+  z-index: 1;
+  margin: 0 0 8px;
+  padding: 6px 0;
+  background: var(--bg);
+  border-bottom: 1px solid var(--guide);
+  color: var(--soft);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.item.unique {
+  padding-left: 10px;
   border-left: 3px solid var(--accent);
 }
 
-.original {
-  margin-top: 16px;
-}
-
-.original summary {
-  color: var(--soft);
-  font-size: 0.88rem;
-  font-weight: 500;
-  cursor: pointer;
+@media (max-width: 760px) {
+  .compare {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 /* Index */

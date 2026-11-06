@@ -263,18 +263,35 @@ function openImport(trigger) {
   const file = el('input', { type: 'file', accept: '.json,.txt,application/json' });
   const name = el('input', { type: 'text', placeholder: 'bolder-draft', required: true });
   const errors = el('ul', { className: 'import-errors' });
+  const nameRow = el('label', {}, ['Version name ', name]);
+  const detail = el('p', { className: 'detail' });
+  const submit = el('button', { type: 'submit', className: 'primary' });
+  const asDraft = el('input', { type: 'radio', name: 'import-mode', checked: true });
+  const asReplace = el('input', { type: 'radio', name: 'import-mode' });
+  const showMode = () => {
+    nameRow.hidden = asReplace.checked;
+    name.required = asDraft.checked;
+    submit.textContent = asReplace.checked ? 'Replace the script' : 'Save version';
+    detail.textContent = asReplace.checked
+      ? "Writes it into the game's files now, in place of what's there. Characters stay as they are. To undo it, use git."
+      : "Saves as a draft you can read and compare. It doesn't change the game.";
+  };
+  asDraft.onchange = showMode;
+  asReplace.onchange = showMode;
+  showMode();
   file.onchange = () => {
     if (!name.value && file.files[0]) name.value = file.files[0].name.replace(/\.[^.]+$/, '');
   };
   const form = el('form', { className: 'composer' }, [
     el('label', {}, ['Rewritten JSON file ', file]),
-    el('label', {}, ['Version name ', name]),
-    el('p', {
-      className: 'detail',
-      textContent: "Saves as a draft you can read and compare. It doesn't change the game.",
-    }),
+    el('div', { className: 'import-modes', role: 'group', 'aria-label': 'What to do with it' }, [
+      el('label', {}, [asDraft, 'Save as a draft version']),
+      el('label', {}, [asReplace, 'Replace the script']),
+    ]),
+    nameRow,
+    detail,
     el('div', { className: 'composer-foot' }, [
-      el('button', { type: 'submit', className: 'primary', textContent: 'Save version' }),
+      submit,
       button('Cancel', () => (panel.hidden = true), 'secondary'),
     ]),
     errors,
@@ -284,7 +301,10 @@ function openImport(trigger) {
   form.onsubmit = async (event) => {
     event.preventDefault();
     if (!file.files[0]) return showErrors(['Choose the file to import.']);
+    submit.disabled = true;
     try {
+      if (asReplace.checked)
+        return await replaceScript(panel, await file.files[0].text(), showErrors);
       const response = await fetch('/api/versions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -295,11 +315,67 @@ function openImport(trigger) {
       location.href = `v-${data.name}.html`;
     } catch (error) {
       showErrors([error.message]);
+    } finally {
+      submit.disabled = false;
     }
   };
   panel.replaceChildren(form);
   panel.hidden = false;
   file.focus();
+}
+
+/** Waits for the server to come back after restarting on the new script. */
+async function serverIsBack() {
+  for (let tries = 0; tries < 60; tries += 1) {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    try {
+      if ((await fetch(API)).ok) return true;
+    } catch {
+      // Still restarting.
+    }
+  }
+  return false;
+}
+
+async function replaceScript(panel, text, showErrors) {
+  const response = await fetch('/api/replace', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ document: text }),
+  });
+  const data = await response.json();
+  if (!response.ok) return showErrors(data.errors ?? ['That did not import.']);
+  const count = data.files.length;
+  const status = el('p', {
+    className: 'detail',
+    textContent: `Replaced the script in ${count} ${count === 1 ? 'file' : 'files'}. Restarting the site…`,
+  });
+  const notices = [
+    ...data.warnings,
+    ...data.manual.map((m) => `Change this by hand in ${m.file} (${m.key}): ${m.text}`),
+  ];
+  panel.replaceChildren(status);
+  if (notices.length) {
+    panel.append(
+      el(
+        'ul',
+        { className: 'version-warnings' },
+        notices.map((textContent) => el('li', { textContent })),
+      ),
+    );
+  }
+  const back = await serverIsBack();
+  if (back && !notices.length) return location.reload();
+  status.replaceChildren(
+    back
+      ? el('button', {
+          type: 'button',
+          className: 'secondary',
+          textContent: 'Reload the page',
+          onclick: () => location.reload(),
+        })
+      : "The script was replaced, but the site didn't come back. Check the terminal running it.",
+  );
 }
 
 function confirmDeleteVersion(trigger) {

@@ -28,8 +28,8 @@ function avatar(art?: string): string {
 
 const tag = (text?: string) => (text ? `<span class="tag">${escapeHtml(text)}</span>` : '');
 
-function renderItem(item: Item): string {
-  const attrs = `class="item ${item.kind}" data-key="${escapeHtml(item.key)}"`;
+function renderItem(item: Item, unique = false): string {
+  const attrs = `class="item ${item.kind}${unique ? ' unique' : ''}" data-key="${escapeHtml(item.key)}"`;
   const text = `<p class="text">${escapeHtml(item.text)}</p>`;
   const notes = '<div class="notes"></div>';
   if (item.kind === 'narration') {
@@ -66,13 +66,15 @@ function renderItem(item: Item): string {
   </article>`;
 }
 
-const renderEntry = (entry: Entry) =>
+const renderEntry = (entry: Entry, unique = false) =>
   isItem(entry)
-    ? renderItem(entry)
+    ? renderItem(entry, unique)
     : `<p class="divider" id="${escapeHtml(entry.id)}">${escapeHtml(entry.text)}</p>`;
 
-function renderSection(section: Section): string {
-  const head = `<header class="section-head" data-key="${escapeHtml(section.key)}">
+function sectionHead(section: Section): string {
+  return section.kind === 'lead'
+    ? ''
+    : `<header class="section-head" data-key="${escapeHtml(section.key)}">
       <div class="row">
         ${section.art ? avatar(section.art) : ''}
         <div class="heading">
@@ -84,9 +86,12 @@ function renderSection(section: Section): string {
       </div>
       <div class="notes"></div>
     </header>`;
+}
+
+function renderSection(section: Section): string {
   return `<section class="section ${section.kind}" id="${escapeHtml(section.id)}">
-    ${section.kind === 'lead' ? '' : head}
-    <div class="chat">${section.entries.map(renderEntry).join('\n')}</div>
+    ${sectionHead(section)}
+    <div class="chat">${section.entries.map((entry) => renderEntry(entry)).join('\n')}</div>
   </section>`;
 }
 
@@ -226,23 +231,35 @@ const renderNotesPage = () =>
   );
 
 /** Ids get a prefix so the original's links stay inside the original. */
-function renderOriginal(section: Section): string {
-  const entries = section.entries.map((entry): Entry => {
-    if (!isItem(entry)) return { ...entry, id: `original-${entry.id}` };
-    return entry.jump ? { ...entry, jump: `original-${entry.jump}` } : entry;
-  });
-  return `<details class="original">
-    <summary>Show what the game says now</summary>
-    <div class="chat">${entries.map(renderEntry).join('\n')}</div>
-  </details>`;
+const asOriginal = (entry: Entry): Entry => {
+  if (!isItem(entry)) return { ...entry, id: `original-${entry.id}` };
+  return entry.jump ? { ...entry, jump: `original-${entry.jump}` } : entry;
+};
+
+/** One column of a comparison. Lines the other side doesn't have are marked. */
+function renderSide(label: string, entries: Entry[], other: Entry[]): string {
+  const elsewhere = new Set(other.filter(isItem).map((item) => item.text));
+  const rendered = entries.map((entry) =>
+    renderEntry(entry, isItem(entry) && !elsewhere.has(entry.text)),
+  );
+  return `<div class="side">
+    <p class="side-label">${label}</p>
+    <div class="chat">${rendered.join('\n')}</div>
+  </div>`;
 }
 
-function renderVersionSection({ section, original }: VersionPage['sections'][number]): string {
-  const rendered = renderSection(section);
-  if (!original) return rendered;
-  return rendered
-    .replace(`class="section ${section.kind}"`, `class="section ${section.kind} changed"`)
-    .replace(/<\/section>$/, `${renderOriginal(original)}</section>`);
+export function renderVersionSection({
+  section,
+  original,
+}: VersionPage['sections'][number]): string {
+  if (!original) return renderSection(section);
+  return `<section class="section ${section.kind} changed" id="${escapeHtml(section.id)}">
+    ${sectionHead(section)}
+    <div class="compare">
+      ${renderSide('In the game now', original.entries.map(asOriginal), section.entries)}
+      ${renderSide('This version', section.entries, original.entries)}
+    </div>
+  </section>`;
 }
 
 const countsLine = ({ changed, added, removed }: VersionPage) =>

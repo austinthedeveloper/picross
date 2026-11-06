@@ -248,15 +248,21 @@ its note and shows what it used to say. A deleted line's note moves to the Notes
 The home page has **Export everything**, and each chapter has **Export JSON**. Either downloads
 the writing in play order with your open notes beside the lines, plus instructions for whoever
 rewrites it. Scenes come with their structure, so a rewrite can add, cut, and reorder lines,
-branches, and choices. Names, labels, and backdrops stay as they are, and text worked out from
+branches, and choices. Characters, labels, and backdrops stay as they are, and text worked out from
 other data, like rank thresholds and `Clear <job>.` badges, is left out.
 
 Choose **Import JSON** on the site to bring the result back, in the same format whether it holds
-one page or all of them. The import is checked against the game's scene rules and saved as a named
-version in `.script-review/versions/`, without changing the game. Open the version from the home
-page to read it, with **Show what the game says now** under each changed section.
+one page or all of them. It's checked against the game's scene rules, and nothing is written if
+any of it fails. Then pick what happens to it:
 
-To put a version in the game, then check it with `git diff` and `npm test`:
+- **Replace the script** writes it straight into the game's files, in place of what's there, and
+  the site restarts on the new script. Check it with `git diff` and `npm test`, and undo it with
+  git. It goes ahead even if a line was edited after the export, and warns you that it did.
+- **Save as a draft version** keeps it in `.script-review/versions/` without changing the game.
+  Open it from the home page to read each changed section beside what the game says now, with
+  lines only one side has marked.
+
+To put a draft version in the game, then check it with `git diff` and `npm test`:
 
 ```bash
 npx vite-node scripts/script-review.ts apply <version>
@@ -280,8 +286,8 @@ npx vite-node scripts/script-review.ts export 1 --out chapter-1.json
 npx vite-node scripts/script-review.ts import chapter-1.json --as bolder-draft
 ```
 
-Without `--out`, exports go to `.script-review/exports/`. Add `--apply` to `import` to apply it
-in one step. `versions` lists what's saved, and `delete-version <version>` removes one.
+Without `--out`, exports go to `.script-review/exports/`. Add `--replace` to `import` to replace
+the script with no version saved, or `--apply` to save a version and apply it in one step. `versions` lists what's saved, and `delete-version <version>` removes one.
 
 ## Add a screen
 

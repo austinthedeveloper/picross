@@ -5,7 +5,7 @@ import path from 'node:path';
 import type { Page, Target } from './model';
 import { addNote, loadNotes, locateAll, saveNotes, updateNote, type Note } from './notes';
 import { buildExport } from './transfer';
-import { deleteVersion, importVersion } from './versions';
+import { deleteVersion, importVersion, replaceScript } from './versions';
 
 const TYPES: Record<string, string> = {
   '.html': 'text/html; charset=utf-8',
@@ -44,9 +44,11 @@ export function startServer(options: {
   versionsDir: string;
   /** Rewrites the site after a version is added or removed. */
   regenerate: () => void;
+  /** Starts over on the new script, once the game's files have been replaced. */
+  restart: () => void;
   port: number;
 }) {
-  const { outDir, notesFile, targets, pages, versionsDir, regenerate, port } = options;
+  const { outDir, notesFile, targets, pages, versionsDir, regenerate, restart, port } = options;
   const root = path.resolve(outDir);
 
   const respond = (res: http.ServerResponse, status: number, data: unknown) => {
@@ -124,6 +126,18 @@ export function startServer(options: {
     respond(res, 405, { error: 'Not allowed.' });
   };
 
+  const replaceApi = async (req: http.IncomingMessage, res: http.ServerResponse) => {
+    if (req.method !== 'POST') return respond(res, 405, { error: 'Not allowed.' });
+    if (!req.headers['content-type']?.startsWith('application/json')) {
+      return respond(res, 415, { error: 'Expected JSON.' });
+    }
+    const input = await readJson(req, MAX_IMPORT);
+    const outcome = await replaceScript(String(input.document ?? ''), pages);
+    if (outcome.errors) return respond(res, 400, { errors: outcome.errors });
+    res.on('finish', restart);
+    respond(res, 200, outcome);
+  };
+
   /** The file a URL path asks for, or null if it's malformed or outside the site. */
   const filePath = (pathname: string) => {
     try {
@@ -152,6 +166,10 @@ export function startServer(options: {
       versionsApi(req, res, url).catch((error: Error) =>
         respond(res, 400, { errors: [error.message] }),
       );
+      return;
+    }
+    if (url.pathname === '/api/replace') {
+      replaceApi(req, res).catch((error: Error) => respond(res, 400, { errors: [error.message] }));
       return;
     }
     if (!url.pathname.startsWith('/api/notes')) return serveFile(url, res);

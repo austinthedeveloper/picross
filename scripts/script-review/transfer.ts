@@ -3,7 +3,6 @@
  * in the same format, with open notes next to the lines they're about.
  */
 import { createHash } from 'node:crypto';
-import fs from 'node:fs';
 import { badges } from '../../src/puzzles/badges';
 import { getScene, parseScene, type Scene, type SceneNode } from '../../src/puzzles/scenes';
 import { isItem, type Item, type Page } from './model';
@@ -16,7 +15,7 @@ const INSTRUCTIONS = [
   'Write in "text" fields. Each text item is one piece of writing: rewrite its "text" and keep its "key".',
   'Each scene is a conversation. You may rewrite, add, remove and reorder lines, and add or remove nodes and choices. A line\'s "who" must be a cast id; leave it out for narration. Every "next" must name a node in that scene.',
   'A line with "if": "won" only plays after a win, and "if": "!won" only after a loss. When a scene has both, keep both outcomes covered. Do not invent other conditions.',
-  'You may add cast members, but "portrait" must be an existing art id from this document or a single emoji.',
+  'The cast of each scene is fixed: only those characters can speak in it, and changes to "cast" are ignored.',
   'Leave every "type", "key", "id", "base", "backdrop" and "label" as it is. Names and labels can\'t be changed here.',
   '"notes" are the author\'s comments on the line or section they sit on. "change" asks for a change, "question" asks you to think the point through, and "like" means keep what works about that line. Notes are ignored when this comes back, so you can leave them in.',
 ].join('\n');
@@ -221,11 +220,6 @@ function parseDocument(raw: string): unknown {
   return JSON.parse(fenced ? fenced[1] : raw);
 }
 
-const portraitProblem = (id: string, portrait: string) =>
-  /^[a-z0-9-]+$/.test(portrait) && !fs.existsSync(`public/art/cast/${portrait}.png`)
-    ? `cast member "${id}" uses art "${portrait}", which doesn't exist. Use existing art or an emoji.`
-    : undefined;
-
 const conditionsIn = (scene: Scene) =>
   Object.values(scene.nodes).flatMap((node) => [
     ...(node.lines ?? []).flatMap((l) => (l.if ? [l.if] : [])),
@@ -277,20 +271,19 @@ export function readImport(raw: string, pages: Page[]): ImportResult {
         continue;
       }
       try {
-        // The backdrop is staging rather than writing, so a rewrite can't move it.
-        const { backdrop } = original;
-        const scene = canonicalScene(parseScene({ ...item, backdrop }));
-        const problems = [
-          ...Object.entries(scene.cast).map(([id, m]) => portraitProblem(id, m.portrait)),
-          ...conditionsIn(scene).map((condition) => {
+        // Staging and characters aren't writing, so a rewrite can't change them.
+        const { backdrop, cast } = original;
+        const scene = canonicalScene(parseScene({ ...item, backdrop, cast }));
+        const problems = conditionsIn(scene)
+          .map((condition) => {
             const flag = condition.replace(/^!/, '');
             return flag === 'won' ||
               flagsSetIn(scene).includes(flag) ||
               flagsSetIn(original).includes(flag)
               ? undefined
               : `condition "${condition}" isn't one the game can set.`;
-          }),
-        ].filter(Boolean);
+          })
+          .filter(Boolean);
         for (const problem of problems) errors.push(`Scene "${item.id}": ${problem}`);
         if (problems.length) continue;
         for (const outcome of ['won', '!won']) {
@@ -316,7 +309,7 @@ export function readImport(raw: string, pages: Page[]): ImportResult {
     ([id, base]) => base !== currentBase(id, pages),
   );
   for (const [id] of stale) {
-    warnings.push(`"${id}" has been edited since this was exported, so applying it needs --force.`);
+    warnings.push(`"${id}" has been edited since this was exported. This overwrites that edit.`);
   }
   return result();
 }

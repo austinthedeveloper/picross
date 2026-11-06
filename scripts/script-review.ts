@@ -8,12 +8,14 @@
  *   npx vite-node scripts/script-review.ts resolve <id> [what changed]
  *   npx vite-node scripts/script-review.ts export [all|<chapter number>|<page>] [--out file]
  *   npx vite-node scripts/script-review.ts import <file> [--as name] [--apply] [--force]
+ *   npx vite-node scripts/script-review.ts import <file> --replace
  *   npx vite-node scripts/script-review.ts versions
  *   npx vite-node scripts/script-review.ts apply <version> [--force]
  *   npx vite-node scripts/script-review.ts delete-version <version>
  *
  * Add --notes <file> to use a different notes file.
  */
+import { spawn, type ChildProcess } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { buildPages, buildTargets } from './script-review/model';
@@ -33,15 +35,19 @@ import {
   listVersions,
   loadVersion,
   planApply,
+  replaceScript,
   saveVersion,
   versionPages,
   versionsDir,
   writePlan,
+  type ApplyPlan,
   type Version,
 } from './script-review/versions';
 
 const OUT_DIR = 'dist-script-review';
 const DEFAULT_PORT = 4177;
+/** How the server asks to be started again. */
+const RESTART_CODE = 75;
 
 const args = process.argv.slice(2);
 const takeOption = (name: string) => {
@@ -62,6 +68,32 @@ const targets = buildTargets(pages);
 const versionDir = versionsDir(notesFile);
 const regenerate = () => writeSite(pages, OUT_DIR, listVersions(versionDir));
 
+function printManual(manual: ApplyPlan['manual']) {
+  if (!manual.length) return;
+  console.log('\nThese need changing by hand, because they are not simple strings:');
+  for (const { key, file, text } of manual) console.log(`  ${key} (${file})\n    ${text}`);
+}
+
+/**
+ * The game's script loads once per process, so a replace needs a new one. This parent
+ * stays put so the terminal running the site doesn't close when that happens.
+ */
+function superviseServer() {
+  let worker: ChildProcess;
+  const start = () => {
+    worker = spawn(
+      'node_modules/.bin/vite-node',
+      ['scripts/script-review.ts', ...process.argv.slice(2)],
+      { stdio: 'inherit', env: { ...process.env, SCRIPT_REVIEW_WORKER: '1' } },
+    );
+    worker.on('exit', (code) => (code === RESTART_CODE ? start() : process.exit(code ?? 0)));
+  };
+  for (const signal of ['SIGINT', 'SIGTERM', 'SIGHUP'] as const) {
+    process.on(signal, () => worker.kill(signal));
+  }
+  start();
+}
+
 /** Writes a version into the game's files, unless it would overwrite newer edits. */
 async function applyVersion(version: Version, force: boolean) {
   const plan = await planApply(version, pages);
@@ -75,14 +107,13 @@ async function applyVersion(version: Version, force: boolean) {
   saveVersion(versionDir, { ...version, appliedAt: new Date().toISOString() });
   console.log(`Applied "${version.name}" to ${plan.writes.length} files:`);
   for (const { file } of plan.writes) console.log(`  ${file}`);
-  if (plan.manual.length) {
-    console.log('\nThese need changing by hand, because they are not simple strings:');
-    for (const { key, file, text } of plan.manual) console.log(`  ${key} (${file})\n    ${text}`);
-  }
+  printManual(plan.manual);
   console.log('\nCheck the result with `git diff` and `npm test`, then restart the review site.');
 }
 
-if (command === 'serve') {
+if (command === 'serve' && !process.env.SCRIPT_REVIEW_WORKER) {
+  superviseServer();
+} else if (command === 'serve') {
   const port = Number(takeOption('--port') ?? DEFAULT_PORT);
   regenerate();
   startServer({
@@ -92,6 +123,7 @@ if (command === 'serve') {
     pages,
     versionsDir: versionDir,
     regenerate,
+    restart: () => process.exit(RESTART_CODE),
     port,
   });
 } else if (command === 'build') {
@@ -144,6 +176,19 @@ if (command === 'serve') {
   if (!file || !fs.existsSync(file)) {
     console.error(`Can't find the file to import${file ? `: ${file}` : ''}.`);
     process.exit(1);
+  }
+  if (rest.includes('--replace')) {
+    const replaced = await replaceScript(fs.readFileSync(file, 'utf8'), pages);
+    if (replaced.errors) {
+      console.error(`Not imported:\n  ${replaced.errors.join('\n  ')}`);
+      process.exit(1);
+    }
+    console.log(`Replaced the script in ${replaced.files.length} files:`);
+    for (const written of replaced.files) console.log(`  ${written}`);
+    for (const warning of replaced.warnings) console.log(`  Warning: ${warning}`);
+    printManual(replaced.manual);
+    console.log('\nCheck the result with `git diff` and `npm test`.');
+    process.exit(0);
   }
   const fallback = path.basename(file, path.extname(file));
   const outcome = importVersion(fs.readFileSync(file, 'utf8'), name ?? fallback, pages, versionDir);

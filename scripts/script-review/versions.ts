@@ -79,6 +79,29 @@ export function importVersion(
   return { version };
 }
 
+export type ReplaceOutcome =
+  | { files: string[]; manual: ApplyPlan['manual']; warnings: string[]; errors?: undefined }
+  | { errors: string[]; files?: undefined };
+
+/**
+ * Writes a rewrite straight into the game's files, with no version in between. Git is
+ * the way back. Nothing is written if any of it fails the checks.
+ */
+export async function replaceScript(
+  raw: string,
+  pages: Page[],
+  root = '.',
+): Promise<ReplaceOutcome> {
+  const { changes, errors, warnings } = readImport(raw, pages);
+  if (errors.length) return { errors };
+  if (!Object.keys(changes.bases).length) {
+    return { errors: ["Nothing in this file differs from the game's current script."] };
+  }
+  const plan = await planApply({ name: '', createdAt: '', warnings, ...changes }, pages, root);
+  writePlan(plan, root);
+  return { files: plan.writes.map((w) => w.file), manual: plan.manual, warnings };
+}
+
 /** A section with the version's writing swapped in. */
 function overlaySection(section: Section, version: Version): Section {
   const entries: Entry[] = [];

@@ -6,7 +6,8 @@ import { scenes } from '../../src/puzzles/scenes';
 import { buildPages, buildTargets, isItem } from './model';
 import { locateAll, type Note } from './notes';
 import { buildExport, readImport, type ExportDoc, type SceneItem, type TextItem } from './transfer';
-import { importVersion, planApply, versionPages, type Version } from './versions';
+import { renderVersionSection } from './render';
+import { importVersion, planApply, replaceScript, versionPages, type Version } from './versions';
 
 const pages = buildPages();
 const items = (doc: ExportDoc) => doc.pages.flatMap((p) => p.sections.flatMap((s) => s.content));
@@ -114,17 +115,36 @@ describe('readImport', () => {
     expect(changes.scenes[scene.id].backdrop).toBe(original);
   });
 
+  it("keeps a scene's cast whatever comes back", () => {
+    const doc = clone(fresh());
+    const scene = sceneItems(doc).find((s) => Object.keys(s.cast).length)!;
+    const original = clone(scene.cast);
+    const [id] = Object.keys(scene.cast);
+    scene.cast[id].name = 'Renamed';
+    scene.cast.stranger = { name: 'Stranger', portrait: 'no-such-art' };
+    Object.values(scene.nodes)[0].lines![0].text = 'Changed.';
+    const { changes, errors } = reread(doc);
+    expect(errors).toEqual([]);
+    expect(changes.scenes[scene.id].cast).toEqual(original);
+  });
+
+  it('refuses a line from someone outside the cast', () => {
+    const doc = clone(fresh());
+    const scene = sceneItems(doc)[0];
+    scene.cast.stranger = { name: 'Stranger', portrait: '🙂' };
+    Object.values(scene.nodes)[0].lines![0].who = 'stranger';
+    expect(reread(doc).errors.join()).toMatch(/unknown speaker "stranger"/);
+  });
+
   it('refuses what the game could not play', () => {
     const doc = clone(fresh());
-    const [one, two, three, four] = sceneItems(doc);
+    const [one, two, , four] = sceneItems(doc);
     Object.values(one.nodes)[0].lines![0].who = 'nobody';
     Object.values(two.nodes)[0].next = 'nowhere';
-    three.cast.stranger = { name: 'Stranger', portrait: 'no-such-art' };
     Object.values(four.nodes)[0].lines![0].if = 'made-up';
     const { errors } = reread(doc);
     expect(errors.join('\n')).toMatch(/unknown speaker "nobody"/);
     expect(errors.join('\n')).toMatch(/unknown node "nowhere"/);
-    expect(errors.join('\n')).toMatch(/no-such-art/);
     expect(errors.join('\n')).toMatch(/"made-up"/);
   });
 
@@ -200,6 +220,70 @@ describe('versions', () => {
     expect(after).toContain('Added.');
     const before = changed.flatMap((s) => s.original!.entries.filter(isItem).map((i) => i.text));
     expect(before).not.toContain('Added.');
+  });
+});
+
+describe('renderVersionSection', () => {
+  it('shows a changed section as two columns, marking lines only one side has', () => {
+    const doc = clone(fresh(firstChapter));
+    const scene = sceneItems(doc)[0];
+    Object.values(scene.nodes)[0].lines!.unshift({ text: 'Only in the rewrite.' });
+    const { version } = importVersion(JSON.stringify(doc), 'draft', pages, tempDir());
+    const [view] = versionPages(pages, version!);
+    const html = renderVersionSection(view.sections.find((s) => s.original)!);
+    expect(html).toContain('In the game now');
+    expect(html).toContain('This version');
+    expect(html).toMatch(/class="item [a-z]+ unique"[^]*Only in the rewrite\./);
+    expect(html).not.toContain('<details');
+  });
+
+  it('leaves an untouched section as one column', () => {
+    const [{ sections }] = pages.map((page) => ({ sections: page.sections }));
+    const html = renderVersionSection({ section: sections[0] });
+    expect(html).not.toContain('class="compare"');
+  });
+});
+
+describe('replaceScript', () => {
+  const copyScene = (id: string) => {
+    const root = tempDir();
+    const file = `src/puzzles/scenes/${id}.json`;
+    fs.mkdirSync(path.join(root, path.dirname(file)), { recursive: true });
+    fs.copyFileSync(file, path.join(root, file));
+    return { root, written: path.join(root, file), before: fs.readFileSync(file, 'utf8') };
+  };
+
+  it("writes a restructured conversation over the game's file, with the cast as it was", async () => {
+    const doc = clone(fresh());
+    const scene = sceneItems(doc)[0];
+    const { root, written } = copyScene(scene.id);
+    const cast = clone(scene.cast);
+    const node = scene.nodes[scene.start];
+    const lines = node.lines!;
+    node.lines = [...lines.reverse(), ...Array(48).fill({ text: 'One more.' })];
+    scene.cast.stranger = { name: 'Stranger', portrait: '🙂' };
+    const outcome = await replaceScript(JSON.stringify(doc), pages, root);
+    expect(outcome.errors).toBeUndefined();
+    const saved = JSON.parse(fs.readFileSync(written, 'utf8'));
+    expect(saved.nodes[scene.start].lines).toHaveLength(lines.length + 48);
+    expect(saved.nodes[scene.start].lines[0].text).toBe(lines[0].text);
+    expect(saved.cast).toEqual(cast);
+  });
+
+  it('writes nothing when any of it fails the checks', async () => {
+    const doc = clone(fresh());
+    const [good, bad] = sceneItems(doc);
+    const { root, written, before } = copyScene(good.id);
+    good.nodes[good.start].lines![0].text = 'Changed.';
+    Object.values(bad.nodes)[0].next = 'nowhere';
+    const outcome = await replaceScript(JSON.stringify(doc), pages, root);
+    expect(outcome.errors?.join()).toMatch(/unknown node "nowhere"/);
+    expect(fs.readFileSync(written, 'utf8')).toBe(before);
+  });
+
+  it('refuses a file that changes nothing', async () => {
+    const outcome = await replaceScript(JSON.stringify(fresh()), pages, tempDir());
+    expect(outcome.errors?.join()).toMatch(/Nothing in this file differs/);
   });
 });
 
