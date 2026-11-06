@@ -243,6 +243,46 @@ npx vite-node scripts/script-review.ts resolve <id> "Shortened the line."
 Notes survive rewrites. A line that moved is found again by its wording. A reworded line keeps
 its note and shows what it used to say. A deleted line's note moves to the Notes page.
 
+### Rewrite the script with another AI
+
+The home page has **Export everything**, and each chapter has **Export JSON**. Either downloads
+the writing in play order with your open notes beside the lines, plus instructions for whoever
+rewrites it. Scenes come with their structure, so a rewrite can add, cut, and reorder lines,
+branches, and choices. Names, labels, and backdrops stay as they are, and text worked out from
+other data, like rank thresholds and `Clear <job>.` badges, is left out.
+
+Choose **Import JSON** on the site to bring the result back, in the same format whether it holds
+one page or all of them. The import is checked against the game's scene rules and saved as a named
+version in `.script-review/versions/`, without changing the game. Open the version from the home
+page to read it, with **Show what the game says now** under each changed section.
+
+To put a version in the game, then check it with `git diff` and `npm test`:
+
+```bash
+npx vite-node scripts/script-review.ts apply <version>
+```
+
+Applying stops if a line was edited after the export, unless you add `--force`. Restart the site
+afterwards to see the new script. Anything in code it can't safely replace is printed for you to
+change by hand. Notes aren't closed for you, so a rewritten line's note shows what it used to say.
+
+The same steps work from the terminal:
+
+```bash
+npm run script-review:export
+```
+
+```bash
+npx vite-node scripts/script-review.ts export 1 --out chapter-1.json
+```
+
+```bash
+npx vite-node scripts/script-review.ts import chapter-1.json --as bolder-draft
+```
+
+Without `--out`, exports go to `.script-review/exports/`. Add `--apply` to `import` to apply it
+in one step. `versions` lists what's saved, and `delete-version <version>` removes one.
+
 ## Add a screen
 
 1. Create `src/ui/screens/<name>Screen.ts` exporting

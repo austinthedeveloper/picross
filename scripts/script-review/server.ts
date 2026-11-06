@@ -2,8 +2,10 @@
 import fs from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
-import type { Target } from './model';
+import type { Page, Target } from './model';
 import { addNote, loadNotes, locateAll, saveNotes, updateNote, type Note } from './notes';
+import { buildExport } from './transfer';
+import { deleteVersion, importVersion } from './versions';
 
 const TYPES: Record<string, string> = {
   '.html': 'text/html; charset=utf-8',
@@ -13,13 +15,15 @@ const TYPES: Record<string, string> = {
 };
 
 const MAX_BODY = 64 * 1024;
+/** A rewrite of the whole game comes back through here. */
+const MAX_IMPORT = 8 * 1024 * 1024;
 
-function readJson(req: http.IncomingMessage): Promise<Record<string, unknown>> {
+function readJson(req: http.IncomingMessage, limit = MAX_BODY): Promise<Record<string, unknown>> {
   return new Promise((resolve, reject) => {
     let raw = '';
     req.on('data', (chunk) => {
       raw += chunk;
-      if (raw.length > MAX_BODY) reject(new Error('That note is too long.'));
+      if (raw.length > limit) reject(new Error('That is too long.'));
     });
     req.on('end', () => {
       try {
@@ -36,9 +40,13 @@ export function startServer(options: {
   outDir: string;
   notesFile: string;
   targets: Target[];
+  pages: Page[];
+  versionsDir: string;
+  /** Rewrites the site after a version is added or removed. */
+  regenerate: () => void;
   port: number;
 }) {
-  const { outDir, notesFile, targets, port } = options;
+  const { outDir, notesFile, targets, pages, versionsDir, regenerate, port } = options;
   const root = path.resolve(outDir);
 
   const respond = (res: http.ServerResponse, status: number, data: unknown) => {
@@ -74,6 +82,48 @@ export function startServer(options: {
     respond(res, 405, { error: 'Not allowed.' });
   };
 
+  const exportScript = (res: http.ServerResponse, url: URL) => {
+    const scope = url.searchParams.get('page') ?? 'all';
+    if (scope !== 'all' && !pages.some((page) => page.slug === scope)) {
+      return respond(res, 404, { error: `Unknown page "${scope}".` });
+    }
+    const notes = locateAll(loadNotes(notesFile), targets);
+    res.writeHead(200, {
+      'Content-Type': 'application/json',
+      'Content-Disposition': `attachment; filename="script-${scope}.json"`,
+    });
+    res.end(
+      `${JSON.stringify(buildExport(pages, notes, scope === 'all' ? undefined : scope), null, 2)}\n`,
+    );
+  };
+
+  const versionsApi = async (req: http.IncomingMessage, res: http.ServerResponse, url: URL) => {
+    if (!req.headers['content-type']?.startsWith('application/json')) {
+      return respond(res, 415, { error: 'Expected JSON.' });
+    }
+    const name = url.pathname.split('/')[3];
+    if (req.method === 'POST' && !name) {
+      const input = await readJson(req, MAX_IMPORT);
+      const outcome = importVersion(
+        String(input.document ?? ''),
+        String(input.name ?? ''),
+        pages,
+        versionsDir,
+      );
+      if (outcome.errors) return respond(res, 400, { errors: outcome.errors });
+      regenerate();
+      return respond(res, 201, { name: outcome.version.name });
+    }
+    if (req.method === 'DELETE' && name) {
+      if (!deleteVersion(versionsDir, decodeURIComponent(name))) {
+        return respond(res, 404, { error: 'No such version.' });
+      }
+      regenerate();
+      return respond(res, 200, {});
+    }
+    respond(res, 405, { error: 'Not allowed.' });
+  };
+
   /** The file a URL path asks for, or null if it's malformed or outside the site. */
   const filePath = (pathname: string) => {
     try {
@@ -97,6 +147,13 @@ export function startServer(options: {
 
   const server = http.createServer((req, res) => {
     const url = new URL(req.url ?? '/', 'http://localhost');
+    if (url.pathname === '/api/export' && req.method === 'GET') return exportScript(res, url);
+    if (url.pathname.startsWith('/api/versions')) {
+      versionsApi(req, res, url).catch((error: Error) =>
+        respond(res, 400, { errors: [error.message] }),
+      );
+      return;
+    }
     if (!url.pathname.startsWith('/api/notes')) return serveFile(url, res);
     api(req, res, url).catch((error: Error) => respond(res, 400, { error: error.message }));
   });
