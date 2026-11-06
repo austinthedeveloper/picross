@@ -1,0 +1,51 @@
+{
+  "id": "overtime-museum-rex",
+  "name": "Museum Rex",
+  "kind": "fight",
+  "boss": true,
+  "puzzle": "rex-skull",
+  "blurb": "Back on its feet, and missing fewer pieces than you'd hope.",
+  "enemy": {
+    "name": "Museum Rex",
+    "sprite": "museum-rex",
+    "hp": 60,
+    "attack": 2,
+    "scramble": {
+      "cols": [0, 1, 2, 7, 8, 11]
+    },
+    "phases": [
+      {
+        "at": 0.9,
+        "name": "Wound-up Rex",
+        "sprite": "wound-up-rex",
+        "attack": 3,
+        "taunt": "CREEEAK.",
+        "scramble": {
+          "cols": [4, 5, 15]
+        },
+        "scrambleCount": 3
+      },
+      {
+        "at": 0.75,
+        "taunt": "A rib flies off and rearranges your work.",
+        "swap": true,
+        "ink": 5
+      },
+      {
+        "at": 0.6,
+        "taunt": "Somebody left the fuse box in its ribcage.",
+        "charge": 6
+      },
+      {
+        "at": 0.5,
+        "name": "Rampaging Rex",
+        "attack": 4,
+        "taunt": "ROAR. (It is mostly squeaking.)",
+        "swap": true
+      }
+    ],
+    "fog": {
+      "rows": [0, 6]
+    }
+  }
+}

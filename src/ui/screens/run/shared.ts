@@ -34,7 +34,9 @@ export function newRunButton(hub: Hub, def: RunDef, label: string): HTMLButtonEl
     className: 'button primary',
     textContent: label,
     onclick: () => {
-      const run = startRun(def.id, def.hp, getSettings().mode, def.gadgets);
+      // Overtime always plays with Hits on (#113).
+      const mode = def.overtimeOf ? 'hearts' : getSettings().mode;
+      const run = startRun(def.id, def.hp, mode, def.gadgets);
       if (def.endless) {
         // Endless draws from every job you've played, in an order set by a fresh seed.
         const played = runs.filter((j) => (getJobStats(j.id)?.plays ?? 0) > 0);

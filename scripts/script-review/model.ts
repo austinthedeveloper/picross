@@ -7,7 +7,7 @@ import { badges } from '../../src/puzzles/badges';
 import { chapters } from '../../src/puzzles/chapters';
 import { catalog as gadgets } from '../../src/puzzles/gadgets';
 import { ranks } from '../../src/puzzles/ranks';
-import type { Encounter, RunDef } from '../../src/puzzles/runs';
+import { overtimeRuns, type Encounter, type RunDef } from '../../src/puzzles/runs';
 import { getScene, scenes, type Scene } from '../../src/puzzles/scenes';
 import { tutorialSteps } from '../../src/puzzles/tutorial';
 import { POWERS } from '../../src/ui/powers';
@@ -324,6 +324,21 @@ export function buildPages(): Page[] {
         'badges',
         'Badges',
         badges.map((badge) => card(`badge/${badge.id}`, badge.name, badge.description)),
+      ),
+      listSection(
+        'overtime',
+        'Overtime',
+        overtimeRuns.flatMap((run) => [
+          card(`job/${run.id}`, run.name, run.blurb ?? ''),
+          ...run.encounters
+            .filter((e) => e.id.startsWith('overtime-'))
+            .flatMap((e) => [
+              card(`encounter/${e.id}`, e.name, e.blurb ?? ''),
+              ...(e.enemy?.phases ?? []).flatMap((phase, i) =>
+                phase.taunt ? [card(`encounter/${e.id}/taunt/${i}`, e.name, phase.taunt)] : [],
+              ),
+            ]),
+        ]),
       ),
       listSection(
         'tutorial',

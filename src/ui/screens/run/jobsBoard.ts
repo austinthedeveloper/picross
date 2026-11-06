@@ -3,7 +3,7 @@ import { getJobStats, hasSeenScene } from '../../../game/runSave';
 import { jobBadgeFor } from '../../../puzzles/badges';
 import { chapters, type Chapter } from '../../../puzzles/chapters';
 import { ENDLESS_GADGETS, ENDLESS_HP, ENDLESS_ID, ENDLESS_HEAL } from '../../../puzzles/endless';
-import { getRun, type RunDef } from '../../../puzzles/runs';
+import { getRun, overtimeFor, type RunDef } from '../../../puzzles/runs';
 import { withArt } from '../../art';
 import { badgeIcon, tierTag } from '../../components/badge';
 import { homeLink } from '../../components/homeLink';
@@ -45,6 +45,27 @@ function jobBadge(def: RunDef): HTMLElement[] {
   ];
 }
 
+/** A cleared job's harder replay (#113), on its card. */
+function overtimeOffer(hub: Hub, def: RunDef): HTMLElement[] {
+  const overtime = overtimeFor(def.id);
+  if (!overtime || !cleared(def)) return [];
+  return [
+    el('div', { className: 'job-overtime' }, [
+      el('strong', { textContent: 'Overtime' }),
+      ...(overtime.blurb ? [el('p', { className: 'job-blurb', textContent: overtime.blurb })] : []),
+      el('p', {
+        className: 'run-meta',
+        textContent: `${overtime.encounters.length} encounters · ${overtime.hp} HP · Hits on only`,
+      }),
+      el('p', {
+        className: `job-best${cleared(overtime) ? '' : ' none'}`,
+        textContent: bestResult(overtime),
+      }),
+      newRunButton(hub, overtime, 'Start Overtime'),
+    ]),
+  ];
+}
+
 function jobCard(hub: Hub, def: RunDef): HTMLElement {
   const open = unlocked(def);
   const boss = def.encounters.find((e) => e.boss);
@@ -65,6 +86,7 @@ function jobCard(hub: Hub, def: RunDef): HTMLElement {
       textContent: bestResult(def),
     }),
     ...(open ? jobBadge(def) : []),
+    ...(open ? overtimeOffer(hub, def) : []),
     open
       ? el('div', { className: 'end-actions' }, [
           newRunButton(hub, def, 'Start'),
