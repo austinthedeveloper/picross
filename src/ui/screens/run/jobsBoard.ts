@@ -3,7 +3,7 @@ import { getJobStats, hasSeenScene } from '../../../game/runSave';
 import { jobBadgeFor } from '../../../puzzles/badges';
 import { chapters, type Chapter } from '../../../puzzles/chapters';
 import { ENDLESS_GADGETS, ENDLESS_HP, ENDLESS_ID, ENDLESS_HEAL } from '../../../puzzles/endless';
-import { getRun, overtimeFor, type RunDef } from '../../../puzzles/runs';
+import { bossFightsFor, getRun, overtimeFor, type RunDef } from '../../../puzzles/runs';
 import { withArt } from '../../art';
 import { badgeIcon, tierTag } from '../../components/badge';
 import { homeLink } from '../../components/homeLink';
@@ -66,6 +66,24 @@ function overtimeOffer(hub: Hub, def: RunDef): HTMLElement[] {
   ];
 }
 
+/** Standalone boss fights a cleared job unlocks, on its card. */
+function bossOffers(hub: Hub, def: RunDef): HTMLElement[] {
+  if (!cleared(def)) return [];
+  return bossFightsFor(def.id).map((fight) => {
+    const boss = fight.encounters.find((e) => e.boss) ?? fight.encounters[0];
+    return el('div', { className: 'job-boss-fight' }, [
+      el('strong', { textContent: `Boss fight: ${boss.name}` }),
+      ...(fight.blurb ? [el('p', { className: 'job-blurb', textContent: fight.blurb })] : []),
+      el('p', { className: 'run-meta', textContent: `One fight · ${fight.hp} HP` }),
+      el('p', {
+        className: `job-best${cleared(fight) ? '' : ' none'}`,
+        textContent: bestResult(fight),
+      }),
+      newRunButton(hub, fight, 'Start boss fight'),
+    ]);
+  });
+}
+
 function jobCard(hub: Hub, def: RunDef): HTMLElement {
   const open = unlocked(def);
   const boss = def.encounters.find((e) => e.boss);
@@ -87,6 +105,7 @@ function jobCard(hub: Hub, def: RunDef): HTMLElement {
     }),
     ...(open ? jobBadge(def) : []),
     ...(open ? overtimeOffer(hub, def) : []),
+    ...(open ? bossOffers(hub, def) : []),
     open
       ? el('div', { className: 'end-actions' }, [
           newRunButton(hub, def, 'Start'),

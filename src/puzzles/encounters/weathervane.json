@@ -3,6 +3,7 @@
   "name": "Weathervane",
   "kind": "fight",
   "puzzle": "weathervane",
+  "boss": true,
   "blurb": "It points wherever the wind says. Today the wind says you.",
   "enemy": {
     "name": "Weathervane",
