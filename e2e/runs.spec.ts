@@ -33,7 +33,7 @@ test.describe('jobs board', () => {
     await page.locator('.skip').tap();
     await expect(page.locator('.job h3')).toHaveText(['First Job', 'The Night Shift']);
     await expect(page.locator('.chapter-progress')).toHaveText(['1/1 cleared', '0/1 cleared']);
-    await expect(page.locator('.job').first().locator('.job-best')).toHaveText(
+    await expect(page.locator('.job').first().locator(':scope > .job-best')).toHaveText(
       'Cleared 1× · best 9/12 HP left',
     );
     // The opening only plays once, then it's a replay button.
@@ -46,7 +46,7 @@ test.describe('jobs board', () => {
 test.describe('First Job', () => {
   test('the intro plays once, the run finishes, and the result is recorded', async ({ page }) => {
     await page.goto('/#/run');
-    await page.locator('.job').first().locator('text=Start').tap();
+    await page.locator('.job').first().getByRole('button', { name: 'Start', exact: true }).tap();
     await expect(page.locator('.dialogue')).toBeVisible();
     await page.locator('.skip').tap();
 
@@ -62,10 +62,12 @@ test.describe('First Job', () => {
     await expect(page.locator('.sign-off')).toContainText("the gremlin's evicted");
     await press(page, 'Jobs board');
     await skipScene(page); // chapter 2 opens
-    await expect(page.locator('.job').first().locator('.job-best')).toContainText('Cleared 1×');
+    await expect(page.locator('.job').first().locator(':scope > .job-best')).toContainText(
+      'Cleared 1×',
+    );
 
     // The intro only plays automatically the first time.
-    await page.locator('.job').first().locator('text=Start').tap();
+    await page.locator('.job').first().getByRole('button', { name: 'Start', exact: true }).tap();
     await expect(page.locator('.run-path')).toBeVisible();
     await expect(page.locator('.dialogue')).toBeHidden();
   });

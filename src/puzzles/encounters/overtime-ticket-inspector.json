@@ -1,0 +1,42 @@
+{
+  "id": "overtime-ticket-inspector",
+  "name": "Ticket Inspector",
+  "kind": "fight",
+  "puzzle": "inspector",
+  "blurb": "Still checking the same carriage. He has started making up the timetable too.",
+  "enemy": {
+    "name": "Ticket Inspector",
+    "sprite": "ticket-inspector",
+    "hp": 45,
+    "attack": 2,
+    "fakes": {
+      "rows": [2, 4]
+    },
+    "suspects": {
+      "rows": [2, 3, 4]
+    },
+    "phases": [
+      {
+        "at": 0.8,
+        "taunt": "Tickets, please.",
+        "charge": 6
+      },
+      {
+        "at": 0.65,
+        "taunt": "These seats have been reallocated.",
+        "swap": true,
+        "ink": 4
+      },
+      {
+        "at": 0.5,
+        "name": "Chief Inspector",
+        "attack": 3,
+        "taunt": "That'll be a penalty fare.",
+        "charge": 5
+      }
+    ],
+    "scramble": {
+      "cols": [6]
+    }
+  }
+}

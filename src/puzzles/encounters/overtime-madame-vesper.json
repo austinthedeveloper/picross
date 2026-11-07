@@ -1,0 +1,41 @@
+{
+  "id": "overtime-madame-vesper",
+  "name": "Madame Vesper",
+  "kind": "fight",
+  "puzzle": "vesper-ball",
+  "blurb": "She foresaw your return. She has prepared more of the truth than usual.",
+  "enemy": {
+    "name": "Madame Vesper",
+    "sprite": "madame-vesper",
+    "hp": 45,
+    "attack": 2,
+    "fakes": {
+      "rows": [4, 10]
+    },
+    "suspects": {
+      "rows": [4, 10, 13]
+    },
+    "phases": [
+      {
+        "at": 0.85,
+        "taunt": "I see a spark in your future.",
+        "charge": 6
+      },
+      {
+        "at": 0.7,
+        "taunt": "The mists are clouding over.",
+        "ink": 4
+      },
+      {
+        "at": 0.5,
+        "name": "Vesper Unveiled",
+        "attack": 3,
+        "taunt": "I foresaw that you would say that.",
+        "ink": 4
+      }
+    ],
+    "scramble": {
+      "cols": [5, 9]
+    }
+  }
+}
