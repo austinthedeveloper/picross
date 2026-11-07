@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import { Cell, column } from '../engine/board';
 import { lineKey } from '../engine/lines';
+import { parsePuzzle } from '../puzzles/format';
 import {
   absorbHit,
   advancePhase,
@@ -24,8 +26,13 @@ import {
   currentForm,
   finish,
   startBattle,
+  turnBattle,
+  turnDue,
+  turnedPuzzle,
+  turnUp,
   useGadget,
 } from './battle';
+import { Game } from './game';
 
 const goblin = { name: 'Goblin', sprite: '👺', hp: 5, attack: 2 };
 
@@ -419,5 +426,106 @@ describe('suspects', () => {
     expect(caught).toBe(false);
     expect(state.suspects).toEqual({ rows: [1, 2], cols: [] });
     expect(state.enemyHp).toBe(20);
+  });
+});
+
+describe('turns (#83)', () => {
+  const vane = { ...goblin, hp: 20, rotate: 3, phases: [{ at: 0.5, rotate: 2 }] };
+  // 3×3: row 0 is the only full line as drawn.
+  const drawn = parsePuzzle({
+    id: 'v',
+    name: 'V',
+    width: 3,
+    height: 3,
+    solution: ['###', '#..', '...'],
+  });
+
+  it('counts finished lines until the board is due to turn', () => {
+    let state = turnUp(startBattle(vane), [{ kind: 'row', index: 0 }]);
+    expect(turnDue(state, currentForm(vane, state).rotate)).toBe(false);
+    state = turnUp(state, [
+      { kind: 'col', index: 0 },
+      { kind: 'row', index: 1 },
+    ]);
+    expect(state.turning).toBe(3);
+    expect(turnDue(state, 3)).toBe(true);
+    expect(turnUp(state, [])).toBe(state);
+    expect(turnDue(state, undefined)).toBe(false);
+  });
+
+  it('lets a phase speed it up', () => {
+    const state = advancePhase(vane, { ...startBattle(vane), enemyHp: 10 }).state;
+    expect(currentForm(vane, state).rotate).toBe(2);
+  });
+
+  it('turns every line and cell the battle marks with the board', () => {
+    const state = turnBattle(
+      {
+        ...startBattle(vane),
+        struck: ['r0', 'c1'],
+        fog: { rows: [2], cols: [] },
+        scramble: { rows: [], cols: [0] },
+        armor: { rows: [1], cols: [] },
+        fakes: { rows: [0], cols: [] },
+        suspects: { rows: [0, 1], cols: [] },
+        wiped: { rows: [], cols: [2] },
+        ink: [0, 4, 6],
+        live: { kind: 'row', index: 1 },
+        charged: 2,
+        turning: 3,
+      },
+      3,
+    );
+    expect(state.struck).toEqual(['c2', 'r1']);
+    expect(state.fog).toEqual({ rows: [], cols: [0] });
+    expect(state.scramble).toEqual({ rows: [0], cols: [] });
+    expect(state.armor).toEqual({ rows: [], cols: [1] });
+    expect(state.fakes).toEqual({ rows: [], cols: [2] });
+    expect(state.suspects).toEqual({ rows: [], cols: [2, 1] });
+    expect(state.wiped).toEqual({ rows: [2], cols: [] });
+    // (0,0) → (0,2), the center stays, (2,0) → (0,0).
+    expect(state.ink).toEqual([2, 4, 0]);
+    expect(state.live).toEqual({ kind: 'col', index: 1 });
+    expect(state).toMatchObject({ turns: 1, turning: 0, charged: 2 });
+    expect(turnBattle(turnBattle(turnBattle(state, 3), 3), 3).turns).toBe(0);
+  });
+
+  it('leaves out what the battle never had', () => {
+    const state = turnBattle(startBattle(goblin), 3);
+    expect(state).toEqual({ enemyHp: 5, struck: [], turns: 1, turning: 0 });
+  });
+
+  it("turns a phase's pool, written as drawn, with the board", () => {
+    const boss = { ...goblin, hp: 10, phases: [{ at: 0.5, fog: { rows: [0, 1], cols: [] } }] };
+    const turned = { ...startBattle(boss), enemyHp: 5, turns: 1, struck: ['c2'] };
+    // Row 0 is column 2 now (and finished); row 1 is column 1.
+    expect(advancePhase(boss, turned, 3).state.fog).toEqual({ rows: [], cols: [1] });
+  });
+
+  it('turns the puzzle from the one drawn, so a reload matches turning step by step', () => {
+    let puzzle = drawn;
+    for (const turns of [1, 2, 3, 0]) {
+      puzzle = turnedPuzzle(puzzle, 1);
+      expect(turnedPuzzle(drawn, turns)).toEqual(puzzle);
+    }
+    expect(turnedPuzzle(drawn, 0)).toBe(drawn);
+    // Row 0 (full) is column 2 after a quarter turn.
+    expect(turnedPuzzle(drawn, 1).clues.cols[2]).toEqual([3]);
+  });
+
+  it('reloads a turned fight consistently: board, struck lines and puzzle agree', () => {
+    const game = new Game(drawn, undefined, 'battle');
+    game.preview([0, 1, 2].map((index) => ({ index, from: Cell.Empty, to: Cell.Filled })));
+    game.commit([0, 1, 2].map((index) => ({ index, from: Cell.Empty, to: Cell.Filled })));
+    let state = { ...startBattle(vane), struck: ['r0'] };
+    state = turnBattle(state, 3);
+    game.turn(turnedPuzzle(drawn, state.turns));
+
+    const reloaded = new Game(turnedPuzzle(drawn, state.turns), game.serialize(), 'battle');
+    expect(reloaded.board.cells).toEqual(game.board.cells);
+    // The finished line is column 3 now, filled top to bottom, and that's what's struck.
+    expect(column(reloaded.board, 2)).toEqual([Cell.Filled, Cell.Filled, Cell.Filled]);
+    expect(state.struck).toEqual(['c2']);
+    expect(reloaded.puzzle.clues.cols[2]).toEqual([3]);
   });
 });

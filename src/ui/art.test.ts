@@ -33,7 +33,7 @@ describe('art files', () => {
     expect(files).toContain(`gadgets/${id}.png`);
   });
 
-  it.each(['fight', 'dig', 'rest', 'boss', 'glyph-forged', 'glyph-shield'])(
+  it.each(['fight', 'dig', 'rest', 'boss', 'glyph-forged', 'glyph-shield', 'glyph-turn'])(
     'icon %s exists',
     (id) => {
       expect(files).toContain(`icons/${id}.png`);

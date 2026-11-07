@@ -32,7 +32,7 @@ src/
     fakes.ts               The Forger's forged clues: a convincing wrong clue per line (#64)
     ink.ts                 Where ink lands and how completed lines wash it off (#67)
     random.ts              Seeded random numbers and shuffles (endless, daily)
-    transform.ts           The eight turns and flips of a grid (daily puzzle, #69)
+    transform.ts           The eight turns and flips of a grid (daily, #69); turning cells and lines (#83)
   puzzles/                 Content and its validation
     format.ts              Puzzle file format, parse/validate, export helpers
     index.ts               Loads pack/*.json and run/*.json; the list sorts by size, then ORDER
@@ -97,6 +97,7 @@ src/
           callOut.ts       Forged clues: the 🔍 Call out button and accusations
           ink.ts           Ink splashes from phases (#67)
           charge.ts        The ⚡ charge meter and its zaps (#67)
+          turns.ts         The 🔃 turn meter: the board turns a quarter clockwise (#83)
           tips.ts          Power tips: a card the first time you meet a power, and the ⓘ list (#79)
           gadgets.ts       The gadget tray
           hits.ts          Mistakes, shields, knockouts
@@ -625,6 +626,39 @@ still play them, and mistakes still count. Completing a row or column washes the
 of it (`clearInk` in `completeLines`). The 🧽 **Sponge** gadget (`effect: { kind: 'wash' }`)
 wipes it all. Ink only hides your marks, never clues, so it doesn't affect solvability.
 
+### Turns (the Weathervane)
+
+An enemy with `rotate: <lines>` turns the whole board a quarter clockwise every time you
+finish that many lines for the first time (#83). A 🔃 meter under its HP counts them
+down, and a phase can start or change the count with its own `rotate`. Like the charge,
+it never moves with time. Turns are always clockwise, and only square puzzles can turn,
+since a turn swaps width and height (`parseEnemy` checks).
+
+- **What turns:** everything. The solution, your marks, and the clues (rows become
+  columns, and a column that becomes a row reads backwards). So does every line and cell
+  the battle marks: fog, scrambles, weak points, forgeries and suspects, wiped lines,
+  struck lines, ink, and the live ⚡ line (`turnBattle` in `game/battle.ts`, using
+  `turnIndex`, `turnLine` and `turnLines` in `engine/transform.ts`). Forgeries are made
+  from the clues as drawn and then turned, so a turn moves a forgery but never changes it.
+  Phase pools are written as drawn and turned when a phase starts.
+- **Saves:** `BattleState.turns` (0 to 3) says how far the board has turned, and the saved
+  board is already turned. The fight works out the turned puzzle from the drawn one
+  (`turnedPuzzle`), and the encounter opens the game screen on it, so a reload is
+  consistent. `BattleState.turning` counts lines toward the next turn. A turn that's due
+  stays due until it happens, so one waiting on a stroke survives a reload.
+- **Undo:** the history turns with the board (`Game.turn`, `History.remap`), so undo
+  and redo still change the cells you changed, wherever they are now.
+- **Feel:** a turn waits until no stroke is in progress, like a swap. The board swings a
+  quarter turn into place (none with reduced motion), and the announcement says "The
+  board turns a quarter clockwise."
+- **Solvability:** turning a puzzle keeps it uniquely solvable, since its clues only move
+  or reverse.
+
+The **Weathervane** (`encounters/weathervane.json`) is a 15×15 rooster weathervane that
+turns every 6 lines, then every 4 from 60% HP. No job uses it yet: start it from the
+debug panel's **Fight anyone**, which plays any fight as an Endless run of just that
+fight.
+
 ### The Deep End (Chapter 3)
 
 `runs/deep-end.json` (#67) unlocks after the Night Shift, with 16 HP and a patch kit:
@@ -684,7 +718,7 @@ give a thin drawing some solid areas to start from.
 
 ## Power tips
 
-Each enemy power (fog, scramble, armor, fakes, charge, ink, swap) gets a one-line
+Each enemy power (fog, scramble, armor, fakes, charge, ink, swap, rotate) gets a one-line
 explanation in `ui/powers.ts` (#79). `puzzles/enemies.ts` works out which powers an
 enemy has: `startingPowers` for the start, `phasePowers` for what a phase brings in,
 and `enemyPowers` for all of them.

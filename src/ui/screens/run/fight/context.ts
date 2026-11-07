@@ -1,4 +1,10 @@
-import { currentForm, startBattle, type BattleState, type Enemy } from '../../../../game/battle';
+import {
+  currentForm,
+  startBattle,
+  turnedPuzzle,
+  type BattleState,
+  type Enemy,
+} from '../../../../game/battle';
 import { withBattle, type RunState } from '../../../../game/run';
 import { getCurrentRun, saveCurrentRun } from '../../../../game/runSave';
 import type { Puzzle } from '../../../../puzzles/format';
@@ -12,7 +18,10 @@ import type { BoardControls } from '../../gameScreen';
  */
 export interface FightContext {
   enemy: Enemy;
+  /** The puzzle as the board stands: turned, if the board has turned (#83). */
   puzzle: Puzzle;
+  /** The puzzle as drawn, before any turns. */
+  drawn: Puzzle;
   bar: BattleBar;
   /** True in Hits-on runs, where mistakes let the enemy hit you. */
   hitsOn: boolean;
@@ -34,7 +43,8 @@ export function createFightContext(enemy: Enemy, puzzle: Puzzle): FightContext {
   const battle = () => run().battle ?? startBattle(enemy);
   const ctx: FightContext = {
     enemy,
-    puzzle,
+    puzzle: turnedPuzzle(puzzle, battle().turns),
+    drawn: puzzle,
     bar: createBattleBar(enemy, battle().enemyHp),
     hitsOn: run().mode === 'hearts',
     run,

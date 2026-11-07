@@ -178,6 +178,9 @@ export function getEncounter(id: string): Encounter | undefined {
   return encountersById.get(id);
 }
 
+/** Every encounter, including ones no job uses yet (the debug panel can still start them). */
+export const encounters: Encounter[] = [...encountersById.values()];
+
 export function getRun(id: string): RunDef | undefined {
   return runsById.get(id);
 }

@@ -6,7 +6,7 @@ import type { Puzzle } from './format';
 /**
  * Parses and validates a fight's enemy (#27) against its puzzle: HP and
  * attack, fog (#30), scramble (#49), armor (#50), forged clues (#64), charge
- * and ink (#67), and phases (#42, #48).
+ * and ink (#67), turns (#83), and phases (#42, #48).
  */
 export function parseEnemy(data: unknown, puzzle: Puzzle, fail: (msg: string) => never): Enemy {
   const enemy = data as Partial<Enemy> | undefined;
@@ -60,7 +60,15 @@ export function parseEnemy(data: unknown, puzzle: Puzzle, fail: (msg: string) =>
       fail(`${label} must be at least 2 lines`);
     return value as number;
   };
+  // A turn swaps a board's width and height, so only square boards can turn (#83).
+  const rotateLines = (value: unknown, label: string) => {
+    if (puzzle.width !== puzzle.height) fail(`${label} needs a square puzzle`);
+    if (!Number.isInteger(value) || (value as number) < 2)
+      fail(`${label} must be at least 2 lines`);
+    return value as number;
+  };
   if (enemy.charge !== undefined) parsed.charge = chargeLines(enemy.charge, 'charge');
+  if (enemy.rotate !== undefined) parsed.rotate = rotateLines(enemy.rotate, 'rotate');
   if (enemy.fog !== undefined) parsed.fog = parseFog(enemy.fog);
   if (enemy.scramble !== undefined) parsed.scramble = parseScramble(enemy.scramble);
   if (enemy.armor !== undefined) {
@@ -109,6 +117,9 @@ export function parseEnemy(data: unknown, puzzle: Puzzle, fail: (msg: string) =>
         ...(phase.inkCount !== undefined ? { inkCount: phase.inkCount } : {}),
         ...(phase.charge !== undefined
           ? { charge: chargeLines(phase.charge, `phase ${i + 1} charge`) }
+          : {}),
+        ...(phase.rotate !== undefined
+          ? { rotate: rotateLines(phase.rotate, `phase ${i + 1} rotate`) }
           : {}),
       };
     });
@@ -178,7 +189,7 @@ export function allScramble(enemy: Enemy): LineSet {
 }
 
 /** An enemy power (#79): what the tip cards and the ⓘ list explain. */
-export type Power = 'fog' | 'scramble' | 'armor' | 'fakes' | 'charge' | 'ink' | 'swap';
+export type Power = 'fog' | 'scramble' | 'armor' | 'fakes' | 'charge' | 'ink' | 'swap' | 'rotate';
 
 /** Powers an enemy has before any phase starts. */
 export function startingPowers(enemy: Enemy): Power[] {
@@ -188,6 +199,7 @@ export function startingPowers(enemy: Enemy): Power[] {
   if (enemy.armor) powers.push('armor');
   if (enemy.fakes) powers.push('fakes');
   if (enemy.charge) powers.push('charge');
+  if (enemy.rotate) powers.push('rotate');
   return powers;
 }
 
@@ -199,6 +211,7 @@ export function phasePowers(phase: Phase): Power[] {
   if (phase.charge) powers.push('charge');
   if (phase.ink) powers.push('ink');
   if (phase.swap) powers.push('swap');
+  if (phase.rotate) powers.push('rotate');
   return powers;
 }
 

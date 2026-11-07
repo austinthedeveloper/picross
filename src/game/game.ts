@@ -1,6 +1,7 @@
 import { debug } from '../debug/hooks';
 import { Cell, createBoard, isSolved, revealedCell, type Board } from '../engine/board';
 import { applyMove, History, type Change, type Move } from '../engine/history';
+import { transformGrid, turnIndex } from '../engine/transform';
 import type { Puzzle } from '../puzzles/format';
 import type { SavedBoard } from './progress';
 import type { Mode } from './settings';
@@ -36,7 +37,8 @@ export class Game {
   elapsed = 0;
 
   constructor(
-    readonly puzzle: Puzzle,
+    /** Replaced only when the board turns mid-fight (#83). */
+    public puzzle: Puzzle,
     saved?: SavedBoard,
     mode: GameMode = 'relaxed',
   ) {
@@ -183,6 +185,20 @@ export class Game {
   wipe(indexes: readonly number[]): void {
     for (const i of indexes) this.board.cells[i] = Cell.Empty;
     this.history = new History();
+    this.checkSolved();
+  }
+
+  /**
+   * Turns a square board a quarter clockwise onto `puzzle`, the same picture turned
+   * (#83). Your marks turn with it, and so does the undo history, so undo and redo
+   * keep working on the cells you actually changed.
+   */
+  turn(puzzle: Puzzle): void {
+    const n = this.board.width;
+    const turned = transformGrid(this.board, 1);
+    turned.cells.forEach((cell, i) => (this.board.cells[i] = cell));
+    this.history.remap((i) => turnIndex(i, n));
+    this.puzzle = puzzle;
     this.checkSolved();
   }
 

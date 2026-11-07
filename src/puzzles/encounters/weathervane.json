@@ -1,0 +1,23 @@
+{
+  "id": "weathervane",
+  "name": "Weathervane",
+  "kind": "fight",
+  "puzzle": "weathervane",
+  "blurb": "It points wherever the wind says. Today the wind says you.",
+  "enemy": {
+    "name": "Weathervane",
+    "sprite": "🐓",
+    "hp": 45,
+    "attack": 2,
+    "rotate": 6,
+    "phases": [
+      {
+        "at": 0.6,
+        "name": "Whirling Weathervane",
+        "attack": 3,
+        "rotate": 4,
+        "taunt": "Which way's north? Every way!"
+      }
+    ]
+  }
+}

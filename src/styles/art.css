@@ -99,3 +99,7 @@
 .glyph-shield {
   --glyph: url('/art/icons/glyph-shield.png');
 }
+
+.glyph-turn {
+  --glyph: url('/art/icons/glyph-turn.png');
+}

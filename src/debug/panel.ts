@@ -8,8 +8,9 @@ import {
 } from '../game/runSave';
 import { getSettings } from '../game/settings';
 import { chapters } from '../puzzles/chapters';
+import { ENDLESS_GADGETS, ENDLESS_HP, ENDLESS_ID } from '../puzzles/endless';
 import { catalog } from '../puzzles/gadgets';
-import { getRun, runs } from '../puzzles/runs';
+import { encounters, getRun, runs } from '../puzzles/runs';
 import { scenes } from '../puzzles/scenes';
 import { el } from '../ui/dom';
 import { debug } from './hooks';
@@ -52,6 +53,17 @@ function jumpTo(jobId: string, node: number) {
   const job = getRun(jobId);
   if (!job) return;
   saveCurrentRun({ ...startRun(job.id, job.hp, getSettings().mode, job.gadgets), node });
+}
+
+/**
+ * Starts any fight, even one no job uses yet (the Weathervane, #83): an Endless run
+ * whose only fight is this one, so it comes back after every break.
+ */
+function fightAny(id: string) {
+  saveCurrentRun({
+    ...startRun(ENDLESS_ID, ENDLESS_HP, getSettings().mode, ENDLESS_GADGETS),
+    endless: { seed: 0, fights: [id], digs: [], rests: [] },
+  });
 }
 
 /** Ends the current run: straight to its results screen. */
@@ -109,6 +121,18 @@ export function installDebugPanel(): void {
   };
   job.onchange = fillNodes;
   fillNodes();
+
+  // Any fight, by itself
+  const fight = el(
+    'select',
+    { ariaLabel: 'Any fight' },
+    options(
+      encounters
+        .filter((e) => e.enemy)
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .map((e) => ({ value: e.id, label: e.name })),
+    ),
+  );
 
   // Gadgets
   const gadget = el(
@@ -176,6 +200,13 @@ export function installDebugPanel(): void {
           button('Go', () => go(() => jumpTo(job.value, Number(node.value)), '#/run/play')),
           button('Win run', () => go(() => finishRun(true), '#/run')),
           button('Lose run', () => go(() => finishRun(false), '#/run')),
+        ),
+      ),
+      section(
+        'Fight anyone',
+        row(
+          fight,
+          button('Fight', () => go(() => fightAny(fight.value), '#/run/play')),
         ),
       ),
       section(

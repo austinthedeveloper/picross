@@ -201,7 +201,8 @@ export function renderGameScreen(
     if (session.celebrate) await session.celebrate(view.root);
     // Let the solve wave play on the board, then show only the result.
     else await pause(900);
-    solvedPanel.replaceChildren(...solvedPanelContent(puzzle, note, actions));
+    // The picture as it ended up on the board, which a fight may have turned (#83).
+    solvedPanel.replaceChildren(...solvedPanelContent(game.puzzle, note, actions));
     solvedPanel.hidden = false;
     showEnd(true);
     announce(`Solved! ${puzzle.name}. ${note}.`);
@@ -281,7 +282,7 @@ export function renderGameScreen(
   if (import.meta.env.VITE_DEBUG === '1') {
     debug.board = {
       solve() {
-        const changes = puzzle.solution.cells.flatMap((filled, index) => {
+        const changes = game.puzzle.solution.cells.flatMap((filled, index) => {
           const from = game.board.cells[index];
           const to = filled ? Cell.Filled : from === Cell.Marked ? Cell.Marked : Cell.Empty;
           return from === to ? [] : [{ index, from, to }];

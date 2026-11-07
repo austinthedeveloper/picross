@@ -19,7 +19,7 @@ export function createPhases(
   onPowers: (powers: ReturnType<typeof phasePowers>) => void = () => {},
 ) {
   return function checkPhase(state: BattleState): { state: BattleState; message: string } {
-    const { state: next, entered } = advancePhase(ctx.enemy, state);
+    const { state: next, entered } = advancePhase(ctx.enemy, state, ctx.puzzle.width);
     if (!entered.length) return { state, message: '' };
     const before = currentForm(ctx.enemy, state).name;
     const { name, sprite } = currentForm(ctx.enemy, next);
@@ -50,6 +50,7 @@ export function createPhases(
       added('fog') > 0 ? `${added('fog')} lines go dark.` : '',
       added('scramble') > 0 ? `${added('scramble')} clues scramble.` : '',
       entered.some((p) => p.charge) ? 'The air starts to crackle. ⚡' : '',
+      entered.some((p) => p.rotate) ? 'The wind picks up. 🔃' : '',
     ];
     return { state: next, message: parts.filter(Boolean).join(' ') };
   };

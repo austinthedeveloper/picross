@@ -36,6 +36,17 @@
   touch-action: none;
 }
 
+/* The board turns a quarter clockwise (#83): it starts where it stood and swings into place. */
+.board.turned {
+  animation: board-turn 0.7s cubic-bezier(0.3, 0, 0.2, 1);
+}
+
+@keyframes board-turn {
+  from {
+    transform: rotate(-90deg) scale(0.85);
+  }
+}
+
 /*
  * Phones: the game board runs nearly edge to edge. The wrap reaches into the
  * screen's 16px padding and the board keeps 2px, so 12px of the width is lost

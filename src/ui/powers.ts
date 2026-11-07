@@ -37,4 +37,9 @@ export const POWERS: Record<Power, { icon: string; name: string; tip: string }> 
     name: 'Swaps',
     tip: 'Two lines get wiped clean and boxed with 👄. Fill them in again.',
   },
+  rotate: {
+    icon: '🔃',
+    name: 'Turns',
+    tip: 'Every few lines you finish, the 🔃 meter fills and the whole board turns a quarter clockwise. Your marks, clues and everything on them turn too: rows become columns. Only finished lines count.',
+  },
 };

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { Cell } from '../engine/board';
 import type { Move } from '../engine/history';
 import { parsePuzzle } from '../puzzles/format';
+import { turnedPuzzle } from './battle';
 import { Game } from './game';
 
 const puzzle = parsePuzzle({ id: 't', name: 'T', width: 2, height: 1, solution: ['#.'] });
@@ -203,5 +204,31 @@ describe('wipe', () => {
     game.wipe([0]);
     expect(game.board.cells).toEqual([Cell.Empty, Cell.Empty, Cell.Empty, Cell.Empty]);
     expect(game.history.canUndo).toBe(false);
+  });
+});
+
+describe('turn (#83)', () => {
+  const lopsided = parsePuzzle({ id: 'l', name: 'L', width: 2, height: 2, solution: ['##', '..'] });
+
+  it('turns your marks and the undo history with the board', () => {
+    const game = new Game(lopsided, undefined, 'battle');
+    stroke(game, [{ index: 0, from: Cell.Empty, to: Cell.Filled }]);
+    stroke(game, [{ index: 2, from: Cell.Empty, to: Cell.Marked }]);
+    game.turn(turnedPuzzle(lopsided, 1));
+    // Top left goes to top right, bottom left to top left.
+    expect(game.board.cells).toEqual([Cell.Marked, Cell.Filled, Cell.Empty, Cell.Empty]);
+    game.undo();
+    expect(game.board.cells).toEqual([Cell.Empty, Cell.Filled, Cell.Empty, Cell.Empty]);
+    game.redo();
+    expect(game.board.cells).toEqual([Cell.Marked, Cell.Filled, Cell.Empty, Cell.Empty]);
+  });
+
+  it('checks fills and solving against the turned picture', () => {
+    const game = new Game(lopsided, undefined, 'battle');
+    stroke(game, [{ index: 0, from: Cell.Empty, to: Cell.Filled }]);
+    game.turn(turnedPuzzle(lopsided, 1)); // now .# / .#
+    expect(game.preview([{ index: 2, from: Cell.Empty, to: Cell.Filled }]).mistake).toBeTruthy();
+    stroke(game, [{ index: 3, from: Cell.Empty, to: Cell.Filled }]);
+    expect(game.solved).toBe(true);
   });
 });

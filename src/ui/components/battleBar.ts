@@ -35,6 +35,8 @@ export interface BattleBar {
   setInfo(button: HTMLElement): void;
   /** The charge meter (#67), 0 to 1, and a label for it. Null hides it. */
   setCharge(level: number | null, label?: string): void;
+  /** Lines toward the board's next turn (#83), 0 to 1, and a label for it. Null hides it. */
+  setTurn(level: number | null, label?: string): void;
   /** The enemy zaps you: a flash on the meter. */
   zap(): void;
   /** The armor shatters. */
@@ -99,12 +101,18 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
     el('span', { className: 'charge-track' }, [el('span', { className: 'charge-fill' })]),
     chargeLabel,
   ]);
+  const turnLabel = el('span', { className: 'charge-label' });
+  const turn = el('span', { className: 'turn-meter', hidden: true, ariaHidden: 'true' }, [
+    el('span', { className: 'charge-icon' }, withArt('🔃')),
+    el('span', { className: 'charge-track' }, [el('span', { className: 'charge-fill' })]),
+    turnLabel,
+  ]);
   const banner = el('div', { className: 'phase-banner', hidden: true });
   banner.setAttribute('aria-hidden', 'true');
   const nameRow = el('span', { className: 'battle-name-row' }, [enemyName, armor, fakes]);
   const enemySide = el('div', { className: 'battle-side enemy' }, [
     sprite,
-    el('div', { className: 'battle-info' }, [nameRow, enemyMeter.root, charge]),
+    el('div', { className: 'battle-info' }, [nameRow, enemyMeter.root, charge, turn]),
   ]);
   const shield = el('span', { className: 'shield', hidden: true });
   const playerSide = el('div', { className: 'battle-side player' }, [
@@ -183,6 +191,11 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
       chargeLabel.textContent = label;
       charge.style.setProperty('--charge', String(Math.min(1, level ?? 0)));
       charge.classList.toggle('high', (level ?? 0) >= 0.75);
+    },
+    setTurn(level, label = '') {
+      turn.hidden = level === null;
+      turnLabel.textContent = label;
+      turn.style.setProperty('--charge', String(Math.min(1, level ?? 0)));
     },
     zap() {
       playOnce(charge, 'zapped', 600);
