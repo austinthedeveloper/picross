@@ -14,6 +14,7 @@ import { attachKeyboard } from '../board/keyboard';
 import { solvedPanelContent } from '../components/endPanels';
 import { homeLink } from '../components/homeLink';
 import { el } from '../dom';
+import { haptic } from '../haptics';
 import { pause } from '../motion';
 import { playSound } from '../sound';
 
@@ -42,7 +43,11 @@ export function renderHowToPlay(app: HTMLElement): void {
 
   let tool: Tool = Cell.Filled;
   const toolButton = (t: Tool, label: string) =>
-    el('button', { className: 'toggle', textContent: label, onclick: () => setTool(t) });
+    el('button', {
+      className: 'toggle',
+      textContent: label,
+      onclick: () => (setTool(t), playSound('tool')),
+    });
   const fillBtn = toolButton(Cell.Filled, '■ Fill');
   const markBtn = toolButton(Cell.Marked, '✕ Mark');
   const setTool = (t: Tool) => {
@@ -135,19 +140,26 @@ export function renderHowToPlay(app: HTMLElement): void {
     if (completed.length && !game.solved) {
       completed.forEach(view.flashLine);
       playSound('line');
+      haptic('line');
     }
   };
+
+  /** Whether this stroke has buzzed yet, as on the play screen. */
+  let tapped = false;
 
   /** Applies a stroke up to the first move that contradicts the picture. */
   const play = (changes: Change[]) => {
     const wrong = changes.findIndex((change) => moveProblem(change));
     const { applied } = game.preview(wrong < 0 ? changes : changes.slice(0, wrong));
+    if (applied.length && !tapped) haptic('tap');
+    tapped = true;
     redraw();
     nudge.textContent = '';
     if (wrong >= 0) {
       nudge.textContent = NUDGES[moveProblem(changes[wrong])!];
       view.flashError(changes[wrong].index);
       playSound('error');
+      haptic('hit');
     } else if (applied.length) {
       const to = applied[applied.length - 1].to;
       playSound(to === Cell.Filled ? 'fill' : to === Cell.Marked ? 'mark' : 'erase');
@@ -156,6 +168,7 @@ export function renderHowToPlay(app: HTMLElement): void {
   };
 
   const commit = (changes: Change[]) => {
+    tapped = false;
     game.commit(changes);
     redraw();
     showStep();
@@ -169,6 +182,7 @@ export function renderHowToPlay(app: HTMLElement): void {
     onPreview: play,
     onCommit: commit,
     onCancel: (changes) => {
+      tapped = false;
       for (const { index, from } of changes) game.board.cells[index] = from;
       redraw();
     },

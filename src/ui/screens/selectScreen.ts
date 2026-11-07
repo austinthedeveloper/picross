@@ -20,6 +20,7 @@ import { createMuteButton } from '../components/muteButton';
 import { rankCard } from '../components/rankCard';
 import { el } from '../dom';
 import { formatTime } from '../format';
+import { haptic, hapticsSupported } from '../haptics';
 import { applyTheme } from '../theme';
 import { dailyCard } from './daily';
 import { muralSection } from './mural';
@@ -156,6 +157,8 @@ export function renderSelectScreen(app: HTMLElement): void {
     button.setAttribute('aria-pressed', String(pressed));
     return button;
   };
+  // A phone setting: only shown on a touch screen with some way to buzz.
+  const canBuzz = hapticsSupported() && matchMedia('(pointer: coarse)').matches;
   const modeButton = (mode: Mode, label: string, title: string) =>
     toggle(label, settings.mode === mode, () => (updateSettings({ mode }), rerender()), title);
 
@@ -183,6 +186,15 @@ export function renderSelectScreen(app: HTMLElement): void {
             applyTheme();
             rerender();
           }),
+          ...(canBuzz
+            ? [
+                toggle('📳 Haptics', settings.haptics, () => {
+                  updateSettings({ haptics: !settings.haptics });
+                  haptic('tap'); // turning them on buzzes, so you know they work
+                  rerender();
+                }),
+              ]
+            : []),
         ]),
       ]),
       dailyCard(),

@@ -45,6 +45,8 @@ export interface Settings {
   collapsedSections: string[];
   muted: boolean;
   highContrast: boolean;
+  /** Vibrates on taps, finished lines, and hits, where the phone can. Separate from mute. */
+  haptics: boolean;
 }
 
 const KEY = 'picross:settings';
@@ -57,6 +59,8 @@ const settings: Settings = readStore<Settings>(KEY, {
   // Sound starts off; the speaker button turns it on.
   muted: true,
   highContrast: false,
+  // Unlike sound, haptics start on: they're silent, so they never surprise anyone nearby.
+  haptics: true,
 });
 
 export function getSettings(): Readonly<Settings> {

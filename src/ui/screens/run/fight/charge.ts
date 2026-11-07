@@ -2,6 +2,7 @@ import { pickLiveLine } from '../../../../engine/charge';
 import { hasLine, lineKey, unionLines, type Line } from '../../../../engine/lines';
 import { bump, chargeUp, warmUpLines, ZAP_DAMAGE } from '../../../../game/battle';
 import { lineName } from '../../../format';
+import { haptic } from '../../../haptics';
 import { playSound } from '../../../sound';
 import type { FightContext } from './context';
 import { takeHit } from './hits';
@@ -18,6 +19,8 @@ export function createCharge(ctx: FightContext, onKnockout: () => void) {
   const zap = () => {
     if (ctx.finished || ctx.run()?.status !== 'active') return;
     ctx.bar.zap();
+    playSound('zap');
+    haptic('zap');
     const { name } = ctx.form();
     if (ctx.hitsOn) ctx.saveBattle(bump(ctx.battle(), 'zaps'));
     const message = ctx.hitsOn
@@ -75,18 +78,23 @@ export function createCharge(ctx: FightContext, onKnockout: () => void) {
     /** Shows the meter once the board is up, and after a phase, which may start the charge or fog the live line. */
     sync() {
       const line = aim();
-      if (line) ctx.bar.say(liveNow(line));
+      if (!line) return;
+      ctx.bar.say(liveNow(line));
+      playSound('live', 0.6); // after the phase's own sound
     },
     /** Lines you just finished for the first time move the meter. Returns the announcement. */
     finished(lines: Line[]): string {
       const limit = ctx.form().charge;
       if (!limit || !lines.length) return '';
+      const warming = Boolean(ctx.battle().warmUp);
       const { state, grounded, zapped } = chargeUp(ctx.battle(), lines, limit);
       ctx.saveBattle(state);
       if (grounded) playSound('phase');
       // Like ink and swaps, the zap lands outside the redraw that triggered it.
       if (zapped) window.setTimeout(zap, 0);
       const line = aim();
+      // A new live line sounds after the line chime, or after grounding or the zap.
+      if (line) playSound(warming ? 'charged' : 'live', grounded || zapped ? 0.5 : 0.15);
       return [grounded ? '⚡ Grounded! The charge drains away.' : '', liveNow(line)]
         .filter(Boolean)
         .join(' ');

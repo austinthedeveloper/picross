@@ -2,6 +2,7 @@ import { absorbHit } from '../../../../game/battle';
 import { damage } from '../../../../game/run';
 import { saveCurrentRun } from '../../../../game/runSave';
 import { el } from '../../../dom';
+import { playSound } from '../../../sound';
 import type { EndState } from '../../gameScreen';
 import type { FightContext } from './context';
 
@@ -21,6 +22,7 @@ export function takeHit(
     ctx.saveBattle(shielded.state);
     ctx.bar.setShield(shielded.state.shield ?? 0);
     ctx.bar.block();
+    playSound('block');
     return `${lead} ${ctx.form().name} attacks, but the patch kit blocks it.`;
   }
   const { name } = ctx.form();
@@ -29,6 +31,7 @@ export function takeHit(
   ctx.bar.setPlayerHp(run.hp, run.maxHp);
   ctx.bar.hitPlayer(amount);
   if (run.status === 'lost') {
+    playSound('knockout', 0.3); // after the hit's own sound
     onKnockout();
     return `${name} hits you for ${amount}. You're knocked out.`;
   }
