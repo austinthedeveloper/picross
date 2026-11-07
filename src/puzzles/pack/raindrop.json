@@ -1,0 +1,13 @@
+{
+  "id": "raindrop",
+  "name": "Raindrop",
+  "width": 5,
+  "height": 5,
+  "solution": [
+    "..#..",
+    ".###.",
+    "#####",
+    "#####",
+    ".###."
+  ]
+}
