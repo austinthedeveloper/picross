@@ -5,6 +5,7 @@ import { lineCount, noLines, type Line, type LineSet } from '../../../../engine/
 import { withArt } from '../../../art';
 import { el } from '../../../dom';
 import { lineName } from '../../../format';
+import { haptic } from '../../../haptics';
 import { playSound } from '../../../sound';
 import type { FightContext } from './context';
 import { takeHit } from './hits';
@@ -54,6 +55,8 @@ export function createCallOut(ctx: FightContext, checkPhase: CheckPhase, onChang
     } else if (ctx.hitsOn) {
       ctx.saveBattle(bump(result.state, 'wrongAccusations'));
       ctx.view?.setSuspects(result.state.suspects ?? noLines());
+      playSound('hit');
+      haptic('hit');
       message = takeHit(ctx, onChange, `${name} was honest!`);
     } else {
       ctx.view?.setSuspects(result.state.suspects ?? noLines());

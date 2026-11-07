@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import {
   getSettings,
   inListOrder,
@@ -61,5 +61,26 @@ describe('setSectionCollapsed', () => {
     expect(getSettings().collapsedSections).toEqual(['murals', 'size-5']);
     setSectionCollapsed('murals', false);
     expect(getSettings().collapsedSections).toEqual(['size-5']);
+  });
+});
+
+describe('haptics', () => {
+  // settings.ts reads storage once at import, so each load is a fresh module.
+  async function load() {
+    vi.resetModules();
+    return import('./settings');
+  }
+
+  it('starts on, even though sound starts off, and is remembered', async () => {
+    localStorage.clear();
+    const fresh = await load();
+    expect(fresh.getSettings()).toMatchObject({ haptics: true, muted: true });
+    fresh.updateSettings({ haptics: false });
+    expect((await load()).getSettings()).toMatchObject({ haptics: false, muted: true });
+  });
+
+  it('turns on for players whose settings were saved before it existed', async () => {
+    localStorage.setItem('picross:settings', JSON.stringify({ muted: false, highContrast: true }));
+    expect((await load()).getSettings()).toMatchObject({ haptics: true, muted: false });
   });
 });

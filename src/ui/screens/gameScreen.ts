@@ -16,6 +16,7 @@ import { createMuteButton } from '../components/muteButton';
 import { createZoomBar } from '../components/zoomBar';
 import { el } from '../dom';
 import { formatTime, lineName, plural } from '../format';
+import { haptic } from '../haptics';
 import { pause } from '../motion';
 import { playSound } from '../sound';
 
@@ -104,7 +105,7 @@ export function renderGameScreen(
   let moving = false;
   const toolButton = (t: Tool, label: string) => {
     const button = el('button', { className: 'toggle', textContent: label, title: label.slice(2) });
-    button.onclick = () => setTool(t);
+    button.onclick = () => (setTool(t), playSound('tool'));
     return button;
   };
   const fillBtn = toolButton(Cell.Filled, '■ Fill');
@@ -124,7 +125,7 @@ export function renderGameScreen(
     markBtn.setAttribute('aria-pressed', String(!moving && tool === Cell.Marked));
     moveBtn.setAttribute('aria-pressed', String(moving));
   };
-  moveBtn.onclick = () => setTool('move');
+  moveBtn.onclick = () => (setTool('move'), playSound('tool'));
 
   const undoBtn = el('button', { textContent: 'Undo', title: 'Undo (Ctrl+Z)' });
   const redoBtn = el('button', { textContent: 'Redo', title: 'Redo (Ctrl+Shift+Z)' });
@@ -224,15 +225,23 @@ export function renderGameScreen(
       announce(extra ? `${names}. ${extra}` : names);
       completed.forEach(view.flashLine);
       playSound('line');
+      haptic('line');
     }
   };
+
+  /** Whether this stroke has buzzed yet: it taps once as it starts, not for every cell. */
+  let tapped = false;
 
   /** Applies changes through the game; tells the input layer what was applied. */
   const play = (changes: Change[]) => {
     const { applied, mistake } = game.preview(changes);
+    if (!mistake && applied.length && !tapped) haptic('tap');
+    tapped = true;
     redraw();
     if (mistake) {
       playSound('error');
+      haptic('hit');
+      if (game.failed) playSound('knockout', 0.3);
       view.flashError(mistake.index);
       const message = session.onMistake?.();
       announce(
@@ -286,6 +295,7 @@ export function renderGameScreen(
 
   /** Syncs everything after a committed change. */
   function refresh() {
+    tapped = false; // every stroke, key, and hint ends here
     tick();
     persist();
     redraw();
@@ -322,6 +332,7 @@ export function renderGameScreen(
       refresh();
     },
     onCancel: (changes) => {
+      tapped = false;
       revertMove(game.board, changes);
       redraw();
     },
