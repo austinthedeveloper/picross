@@ -124,6 +124,11 @@ export interface BattleState {
   live?: Line;
   /** Lines finished toward the next zap (#67). */
   charged?: number;
+  /**
+   * Lines left to finish before the charge first goes live. Set once, when the
+   * charge first shows; 0 after that. Undefined in saves from before warm-ups.
+   */
+  warmUp?: number;
   /** Other lines finished toward the armor's next hit (#116). */
   armorLines?: number;
 }
@@ -379,8 +384,20 @@ export function heal(state: BattleState, maxHp: number): { state: BattleState; h
 /** HP a zap costs (#67). Fixed, so a charge stays pressure rather than a run-ender. */
 export const ZAP_DAMAGE = 2;
 
+/** Share of a board's lines you finish before a charge first goes live. */
+export const WARM_UP_SHARE = 0.25;
+
 /**
- * Lines you've just finished move the charge meter (#67). The live line among them
+ * How many lines the charge waits for before it first goes live: a quarter of the
+ * board, so the opening is yours and the first live line is one you've started on.
+ */
+export function warmUpLines(width: number, height: number): number {
+  return Math.max(1, Math.round((width + height) * WARM_UP_SHARE));
+}
+
+/**
+ * Lines you've just finished move the charge meter (#67). During the warm-up they
+ * count down to the first live line instead and can't zap. The live line among them
  * grounds it; otherwise each one charges it, and at `limit` the enemy zaps. Either
  * way the meter empties and the live line is cleared, ready for a new one.
  */
@@ -389,7 +406,13 @@ export function chargeUp(
   lines: Line[],
   limit: number,
 ): { state: BattleState; grounded: boolean; zapped: boolean } {
-  const { live } = state;
+  const { live, warmUp } = state;
+  if (!live && warmUp)
+    return {
+      state: { ...state, warmUp: Math.max(0, warmUp - lines.length) },
+      grounded: false,
+      zapped: false,
+    };
   if (!live) return { state, grounded: false, zapped: false };
   const grounded = lines.some((l) => l.kind === live.kind && l.index === live.index);
   const charged = grounded ? 0 : (state.charged ?? 0) + lines.length;

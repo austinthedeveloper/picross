@@ -278,11 +278,32 @@ test('bomb: still works at 1 HP, and a blast can land the finisher', async ({ pa
   expect(await meter(page, 'player-hp')).toBe(12);
 });
 
+test('electric eel: the charge warms up before any line goes live', async ({ page }) => {
+  await fight(page, 'deep-end', 0);
+  const eel = encounterSolution('electric-eel');
+  const charge = page.locator('.battle .charge');
+  await expect(charge).toBeVisible();
+  await expect(charge).toContainText('Warming up · 8 lines');
+  await expect(page.locator('.clue.live')).toHaveCount(0);
+
+  // Lines finished in the warm-up count down to the first live line and never zap.
+  await fillRow(page, eel, 0);
+  await expect(charge).toContainText(/Warming up · [1-7] lines?/);
+  for (let r = 1; r < eel.length; r++) {
+    if (await page.locator('.clue.live').count()) break;
+    await fillRow(page, eel, r);
+  }
+  await expect(page.locator('.clue.live')).toHaveCount(1);
+  await expect(charge).toContainText('5 left');
+  expect(await meter(page, 'player-hp')).toBe(14);
+});
+
 test('electric eel: thinking is free, other lines charge it, the live line grounds it', async ({
   page,
 }) => {
   await page.clock.install();
-  await fight(page, 'deep-end', 0);
+  // Past the warm-up, so a line is live from the start.
+  await fight(page, 'deep-end', 0, { battle: { enemyHp: 45, struck: [], warmUp: 0 } });
   const eel = encounterSolution('electric-eel');
   const charge = page.locator('.battle .charge');
   const level = () => charge.evaluate((e) => Number(e.style.getPropertyValue('--charge')));

@@ -17,6 +17,7 @@ import {
   heal,
   WEAK_POINT_DAMAGE,
   chargeUp,
+  warmUpLines,
   chip,
   clearFog,
   clearScramble,
@@ -346,6 +347,20 @@ describe('charge and ink', () => {
       expect(result).toMatchObject({ grounded: true, zapped: false });
       expect(result.state.charged).toBe(0);
       expect(result.state.live).toBeUndefined();
+    });
+
+    it('counts down the warm-up with no live line, and never zaps', () => {
+      const warming = { ...startBattle(eel), warmUp: 4 };
+      const result = chargeUp(warming, [other(0), other(1), other(2)], 2);
+      expect(result).toMatchObject({ grounded: false, zapped: false });
+      expect(result.state.warmUp).toBe(1);
+      expect(chargeUp(result.state, [other(3), other(4)], 2).state.warmUp).toBe(0);
+    });
+
+    it('warms up for a quarter of the board', () => {
+      expect(warmUpLines(15, 15)).toBe(8);
+      expect(warmUpLines(10, 10)).toBe(5);
+      expect(warmUpLines(1, 1)).toBe(1);
     });
 
     it('does nothing with no live line', () => {
