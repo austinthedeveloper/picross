@@ -1,0 +1,26 @@
+{
+  "id": "overtime-goblin",
+  "name": "Goblin",
+  "kind": "fight",
+  "puzzle": "sword",
+  "blurb": "The goblin is back for your lunch. It has learned to read your clues upside down.",
+  "enemy": {
+    "name": "Goblin",
+    "sprite": "goblin",
+    "hp": 30,
+    "attack": 2,
+    "scramble": {
+      "cols": [4, 6]
+    },
+    "fog": {
+      "cols": [5]
+    },
+    "phases": [
+      {
+        "at": 0.6,
+        "taunt": "It throws your lunch at the board.",
+        "ink": 3
+      }
+    ]
+  }
+}

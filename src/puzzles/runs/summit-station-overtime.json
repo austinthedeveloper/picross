@@ -1,0 +1,16 @@
+{
+  "id": "summit-station-overtime",
+  "name": "Summit Station: Overtime",
+  "hp": 18,
+  "encounters": [
+    "overtime-whiteout",
+    "overtime-falling-star",
+    "supply-cache",
+    "overtime-ice-mammoth",
+    "cocoa-break",
+    "overtime-yeti"
+  ],
+  "overtimeOf": "summit-station",
+  "requires": "summit-station",
+  "blurb": "Same mountain, worse weather. Hits on, no bomb, and the snow has been busy."
+}

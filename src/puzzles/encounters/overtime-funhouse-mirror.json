@@ -1,0 +1,39 @@
+{
+  "id": "overtime-funhouse-mirror",
+  "name": "Funhouse Mirror",
+  "kind": "fight",
+  "puzzle": "funhouse-mirror",
+  "blurb": "Someone polished it. Now it makes your clues look wrong from further away.",
+  "enemy": {
+    "name": "Funhouse Mirror",
+    "sprite": "funhouse-mirror",
+    "hp": 45,
+    "attack": 2,
+    "scramble": {
+      "rows": [4, 6],
+      "cols": [4, 3, 12]
+    },
+    "phases": [
+      {
+        "at": 0.8,
+        "taunt": "Is that really how you left it?",
+        "swap": true,
+        "ink": 4
+      },
+      {
+        "at": 0.6,
+        "name": "Warped Mirror",
+        "attack": 3,
+        "taunt": "Everything is fine. Look closer.",
+        "scramble": {
+          "cols": [10]
+        },
+        "scrambleCount": 1,
+        "swap": true
+      }
+    ],
+    "fog": {
+      "cols": [7]
+    }
+  }
+}
