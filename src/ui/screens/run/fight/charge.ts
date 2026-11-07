@@ -1,6 +1,6 @@
 import { pickLiveLine } from '../../../../engine/charge';
 import { hasLine, lineKey, unionLines, type Line } from '../../../../engine/lines';
-import { bump, chargeUp, ZAP_DAMAGE } from '../../../../game/battle';
+import { bump, chargeUp, warmUpLines, ZAP_DAMAGE } from '../../../../game/battle';
 import { lineName } from '../../../format';
 import { playSound } from '../../../sound';
 import type { FightContext } from './context';
@@ -10,7 +10,9 @@ import { takeHit } from './hits';
  * The charge meter (#67, the Electric Eel). One line is live ⚡. Finish it and you
  * ground the charge; finish `form().charge` other lines first and the enemy zaps you
  * (Hits-on runs). Either way another line goes live. It only moves when you finish a
- * line, never with time, because working a line out is the game.
+ * line, never with time, because working a line out is the game. It warms up first:
+ * no line is live until you've finished a quarter of the board, so the opening is
+ * free and the first live line is one you're already into.
  */
 export function createCharge(ctx: FightContext, onKnockout: () => void) {
   const zap = () => {
@@ -37,7 +39,19 @@ export function createCharge(ctx: FightContext, onKnockout: () => void) {
       ctx.view?.setLive(null);
       return null;
     }
-    const state = ctx.battle();
+    let state = ctx.battle();
+    // The first time the charge shows (fight start, or a phase that brings it), it warms up.
+    if (state.warmUp === undefined && !state.live) {
+      const { board } = ctx.controls.game;
+      state = { ...state, warmUp: warmUpLines(board.width, board.height) };
+      ctx.saveBattle(state);
+    }
+    if (state.warmUp) {
+      const n = state.warmUp;
+      ctx.bar.setCharge(0, `Warming up · ${n} ${n === 1 ? 'line' : 'lines'}`);
+      ctx.view?.setLive(null);
+      return null;
+    }
     const avoid = unionLines([state.fog, state.scramble, state.suspects]);
     const { live } = state;
     const stays =
