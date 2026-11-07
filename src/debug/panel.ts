@@ -56,7 +56,7 @@ function jumpTo(jobId: string, node: number) {
 }
 
 /**
- * Starts any fight, even one no job uses yet (the Weathervane, #83): an Endless run
+ * Starts any fight, even one only a boss fight or Overtime uses: an Endless run
  * whose only fight is this one, so it comes back after every break.
  */
 function fightAny(id: string) {

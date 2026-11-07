@@ -4,6 +4,8 @@ import { solve, solveLine, solveLineAnyOrder, Unknown, type Knowledge } from '..
 import { CHIP_DAMAGE, type Enemy } from '../game/battle';
 import { allScramble, allUnreadable } from './enemies';
 import {
+  bossFights,
+  bossFightsFor,
   getRun,
   overtimeFor,
   overtimeRuns,
@@ -99,6 +101,20 @@ describe('bundled runs', () => {
   });
 });
 
+describe('Boss fights', () => {
+  it('are one boss fight each, unlocked by a real job, and stay off the board', () => {
+    expect(bossFights.length).toBeGreaterThan(0);
+    for (const run of bossFights) {
+      expect(runs).not.toContain(run);
+      expect(getRun(run.bossOf!)).toBeDefined();
+      expect(run.requires).toBe(run.bossOf);
+      expect(bossFightsFor(run.bossOf!)).toContain(run);
+      expect(run.encounters).toHaveLength(1);
+      expect(run.encounters[0].boss).toBe(true);
+    }
+  });
+});
+
 describe('Overtime', () => {
   it('has a job of its own to replay, and stays off the board', () => {
     expect(overtimeRuns.length).toBeGreaterThan(0);
@@ -150,7 +166,9 @@ const phasePowersOf = (enemy: Enemy) =>
   (enemy.phases ?? []).flatMap((p) => [p.swap, p.ink, p.charge].filter(Boolean));
 
 describe('bundled fights', () => {
-  const fights = [...runs, ...overtimeRuns].flatMap((r) => r.encounters).filter((e) => e.enemy);
+  const fights = [...runs, ...overtimeRuns, ...bossFights]
+    .flatMap((r) => r.encounters)
+    .filter((e) => e.enemy);
 
   // Chip damage from every row and column should leave at least a third of the
   // enemy's HP for the finisher, so finishing the picture is the big hit.

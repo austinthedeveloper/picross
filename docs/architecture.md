@@ -221,6 +221,15 @@ solvable without guessing with every power applied, and weak points reachable ea
 
 The Night Shift is the pilot. Closing Time and the Curator are deliberately left out.
 
+### Boss fights
+
+A standalone boss fight is a one-encounter run file with `bossOf` and `requires` set to the
+job that unlocks it. Like Overtime it stays out of `runs` (no chapter, no Endless pool) and
+shows on that job's card once the job is cleared, under its own heading with a "Start boss
+fight" button. It plays in the player's chosen mode and saves results under its own id.
+The Weathervane (`weathervane-boss`, the board-turning foe from #83) is the first,
+unlocked by Summit Station.
+
 ### Difficulty ratings
 
 Each pack puzzle is rated (#112) from how many passes a line solver needs on its plain

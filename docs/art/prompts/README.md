@@ -22,6 +22,8 @@ copy one fenced block into the image generator as-is.
      added in chapters 7 to 9 (tier 1)
    - [09-enemies-chapters-7-9.md](09-enemies-chapters-7-9.md): fight sprites for the enemies
      added in chapters 7 to 9, including the boss phase forms (tier 1)
+   - [10-weathervane.md](10-weathervane.md): the Weathervane boss fight and its phase form
+     (tier 1, not generated yet)
 2. Generate 2 to 4 candidates per prompt. Square output, 1024×1024 or the generator's
    largest square. Transparent PNG if the tool supports it; otherwise a flat `#f6f3ec`
    background, which I can key out.

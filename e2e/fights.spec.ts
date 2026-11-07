@@ -398,7 +398,7 @@ test('power tips: explained once, and the ⓘ lists an enemy’s powers anytime'
 test('weathervane: the board turns a quarter clockwise, marks, clues and undo and all', async ({
   page,
 }) => {
-  // The Weathervane isn't in a job yet: an Endless run of just that fight. Row 1 is one
+  // An Endless run of just the Weathervane, so it can be seeded mid-fight. Row 1 is one
   // cell short, and the next finished line turns the board.
   const vane = encounterSolution('weathervane');
   const n = vane.length;

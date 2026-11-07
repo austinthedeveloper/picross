@@ -83,6 +83,11 @@ export interface RunFile {
    * shows on that job's card once it's cleared, and always plays with Hits on.
    */
   overtimeOf?: string;
+  /**
+   * The job that unlocks this standalone boss fight: one fight, outside the story. It
+   * stays off the jobs board's own list and shows on that job's card once it's cleared.
+   */
+  bossOf?: string;
 }
 
 export interface RunDef extends Omit<RunFile, 'encounters' | 'gadgets'> {
@@ -154,6 +159,7 @@ export function parseRun(
     ...(file.order !== undefined ? { order: file.order } : {}),
     ...(file.requires ? { requires: file.requires } : {}),
     ...(file.overtimeOf ? { overtimeOf: file.overtimeOf } : {}),
+    ...(file.bossOf ? { bossOf: file.bossOf } : {}),
   };
 }
 
@@ -192,11 +198,14 @@ for (const run of runsById.values()) {
   if (run.overtimeOf && !runsById.has(run.overtimeOf)) {
     throw new Error(`Invalid run "${run.id}": overtime of unknown job "${run.overtimeOf}"`);
   }
+  if (run.bossOf && !runsById.has(run.bossOf)) {
+    throw new Error(`Invalid run "${run.id}": boss fight of unknown job "${run.bossOf}"`);
+  }
 }
 
 /** Every job, in jobs-board order. */
 export const runs: RunDef[] = [...runsById.values()]
-  .filter((run) => !run.overtimeOf)
+  .filter((run) => !run.overtimeOf && !run.bossOf)
   .sort((a, b) => (a.order ?? 99) - (b.order ?? 99) || a.name.localeCompare(b.name));
 
 /** Harder replays of cleared jobs (#113). */
@@ -204,3 +213,9 @@ export const overtimeRuns: RunDef[] = [...runsById.values()].filter((run) => run
 
 /** A job's Overtime, if it has one. */
 export const overtimeFor = (job: string) => overtimeRuns.find((run) => run.overtimeOf === job);
+
+/** Standalone boss fights, each unlocked by clearing a job. */
+export const bossFights: RunDef[] = [...runsById.values()].filter((run) => run.bossOf);
+
+/** The boss fights a cleared job unlocks. */
+export const bossFightsFor = (job: string) => bossFights.filter((run) => run.bossOf === job);
