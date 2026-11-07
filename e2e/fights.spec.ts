@@ -11,6 +11,7 @@ import {
   seed,
   skipScene,
   solve,
+  solutionFromClues,
   press,
 } from './helpers';
 
@@ -392,4 +393,67 @@ test('power tips: explained once, and the ⓘ lists an enemy’s powers anytime'
   await expect(page.locator('.tip-card.powers')).toContainText('Fog.');
   await press(page, 'Close');
   await expect(tip).toBeHidden();
+});
+
+test('weathervane: the board turns a quarter clockwise, marks, clues and undo and all', async ({
+  page,
+}) => {
+  // The Weathervane isn't in a job yet: an Endless run of just that fight. Row 1 is one
+  // cell short, and the next finished line turns the board.
+  const vane = encounterSolution('weathervane');
+  const n = vane.length;
+  const missing = vane[0].indexOf('#');
+  const cells = [...vane.join('')]
+    .map((c, i) => (i < n && i !== missing && c === '#' ? '1' : '0'))
+    .join('');
+  await fight(page, 'endless', 0, {
+    mode: 'relaxed',
+    endless: { seed: 0, fights: ['weathervane'], digs: [], rests: [] },
+    battle: { enemyHp: 45, struck: [], turning: 5 },
+    board: { cells, elapsed: 0, mode: 'relaxed' },
+  });
+  const turnMeter = page.locator('.battle .turn-meter');
+  await expect(turnMeter).toContainText('Turns in 1 line');
+  await expect(page.locator('.tip-card')).toContainText('Turns. Every few lines');
+
+  // Row 1 lands in column 15, read top to bottom, and its clue goes with it.
+  await cell(page, missing).tap();
+  await expect.poll(() => announcements(page)).toContain('The board turns a quarter clockwise.');
+  const filled = [...vane[0]].flatMap((c, col) => (c === '#' ? [col * n + n - 1] : []));
+  const turned = Array.from({ length: n * n }, (_, i) => (filled.includes(i) ? '#' : '.'));
+  await expect.poll(() => boardState(page)).toEqual(turned);
+  await expect(page.locator('.col-clue').nth(n - 1)).toHaveText('2');
+  await expect(turnMeter).toContainText('Turns in 6 lines');
+
+  // Undo follows the cell you tapped to where it turned.
+  await press(page, 'Undo');
+  await expect(cell(page, missing * n + n - 1)).not.toHaveClass(/filled/);
+  await press(page, 'Redo');
+  await expect(cell(page, missing * n + n - 1)).toHaveClass(/filled/);
+
+  // A reload comes back turned.
+  await page.reload();
+  await expect(page.locator('.battle')).toBeVisible();
+  await expect.poll(() => boardState(page)).toEqual(turned);
+  await expect(page.locator('.col-clue').nth(n - 1)).toHaveText('2');
+  const turns = await page.evaluate(
+    () => JSON.parse(localStorage.getItem('picross:run')!).current.battle.turns,
+  );
+  expect(turns).toBe(1);
+
+  // Solve it from the clues on screen, a row at a time: the board keeps turning.
+  const done = () => page.locator('.end-panel:not([hidden])').isVisible();
+  for (let pass = 0; pass < 100 && !(await done()); pass++) {
+    const rows = await solutionFromClues(page);
+    const state = await boardState(page);
+    const wrong = [...Array(n * n).keys()].filter(
+      (i) => (rows[Math.floor(i / n)][i % n] === '#') !== (state[i] === '#'),
+    );
+    const r = Math.floor(wrong[0] / n);
+    for (const i of wrong.filter((i) => Math.floor(i / n) === r)) {
+      if (state[i] === 'x') await cell(page, i).tap();
+      await cell(page, i).tap();
+    }
+  }
+  await expect(page.locator('.end-panel:not([hidden]) .end-note')).toContainText('defeated');
 });

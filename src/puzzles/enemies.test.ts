@@ -1,4 +1,8 @@
 import { describe, expect, it } from 'vitest';
+import { deriveClues } from '../engine/clues';
+import { solve } from '../engine/solver';
+import { transformGrid } from '../engine/transform';
+import { CHIP_DAMAGE } from '../game/battle';
 import { POWERS } from '../ui/powers';
 import { enemyPowers, parseEnemy, phasePowers, startingPowers } from './enemies';
 import { parsePuzzle } from './format';
@@ -44,6 +48,7 @@ describe('enemy powers (#79)', () => {
     ['failed-clone', ['fog', 'swap']],
     ['reviewer-two', ['armor', 'fakes']],
     ['ostrander', ['scramble', 'fakes', 'swap', 'ink']],
+    ['weathervane', ['rotate']],
   ])('%s: %j', (id, powers) => {
     expect(powersOf(id)).toEqual(powers);
   });
@@ -86,5 +91,46 @@ describe('suspects (#64)', () => {
     [undefined, /include every fake/],
   ])('rejects %j', (suspects, error) => {
     expect(() => forger(suspects)).toThrow(error);
+  });
+});
+
+describe('turns (#83)', () => {
+  const fail = (msg: string): never => {
+    throw new Error(msg);
+  };
+  const square = parsePuzzle({ id: 's', name: 'S', width: 2, height: 2, solution: ['#.', '##'] });
+  const wide = parsePuzzle({ id: 'w', name: 'W', width: 3, height: 2, solution: ['#..', '###'] });
+  const vane = (data: object, puzzle = square) =>
+    parseEnemy({ name: 'V', hp: 10, attack: 1, ...data }, puzzle, fail);
+
+  it('turns every few lines, from the start or a phase', () => {
+    expect(vane({ rotate: 6 }).rotate).toBe(6);
+    expect(vane({ phases: [{ at: 0.5, rotate: 4 }] }).phases![0].rotate).toBe(4);
+    expect(phasePowers(vane({ phases: [{ at: 0.5, rotate: 4 }] }).phases![0])).toEqual(['rotate']);
+  });
+
+  it.each([
+    [{ rotate: 1 }, square, /at least 2 lines/],
+    [{ rotate: 6 }, wide, /square puzzle/],
+    [{ phases: [{ at: 0.5, rotate: 4 }] }, wide, /phase 1 rotate needs a square puzzle/],
+  ])('rejects %j', (data, puzzle, error) => {
+    expect(() => vane(data, puzzle)).toThrow(error);
+  });
+
+  describe('the Weathervane', () => {
+    const { puzzle, enemy } = getEncounter('weathervane')!;
+
+    it('leaves room for the finisher', () => {
+      expect((puzzle.width + puzzle.height) * CHIP_DAMAGE).toBeLessThanOrEqual((enemy!.hp * 2) / 3);
+    });
+
+    it('is lopsided, so every turn changes the board, and solvable in every turn', () => {
+      for (const turns of [1, 2, 3]) {
+        const turned = transformGrid(puzzle.solution, turns);
+        expect(turned.cells).not.toEqual(puzzle.solution.cells);
+        const { rows, cols } = deriveClues(turned);
+        expect(solve(turned.width, turned.height, { rows, cols }).status).toBe('unique');
+      }
+    });
   });
 });

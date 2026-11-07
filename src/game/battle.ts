@@ -1,6 +1,8 @@
+import { deriveClues } from '../engine/clues';
 import {
   copyLines,
   hasLine,
+  keyToLine,
   lineCount,
   lineKey,
   lineKeys,
@@ -10,6 +12,8 @@ import {
   type LineSet,
 } from '../engine/lines';
 import { washInk } from '../engine/ink';
+import { transformGrid, turnIndex, turnLine, turnLines } from '../engine/transform';
+import type { Puzzle } from '../puzzles/format';
 import type { GadgetEffect } from '../puzzles/gadgets';
 
 /** An enemy in a fight encounter (#27). */
@@ -40,6 +44,8 @@ export interface Enemy {
    * one of them is the live ⚡ line, which grounds the charge.
    */
   charge?: number;
+  /** Lines you finish before the board turns a quarter clockwise (#83). Square puzzles only. */
+  rotate?: number;
 }
 
 /**
@@ -82,6 +88,8 @@ export interface Phase {
   inkCount?: number;
   /** Starts or changes the charge meter: lines to fill it (#67). */
   charge?: number;
+  /** Starts or changes how many lines turn the board (#83). */
+  rotate?: number;
 }
 
 /** How this fight is going (#107). Rolls up into the run's tally when the fight is won. */
@@ -131,6 +139,13 @@ export interface BattleState {
   warmUp?: number;
   /** Other lines finished toward the armor's next hit (#116). */
   armorLines?: number;
+  /**
+   * Quarter turns clockwise the board has made (#83), 0 to 3. The saved board and
+   * every line and cell above are already turned; the puzzle is turned from this.
+   */
+  turns?: number;
+  /** Lines finished toward the board's next turn (#83). */
+  turning?: number;
 }
 
 /** Damage per weak-point line while armor is up. */
@@ -181,26 +196,33 @@ export function startBattle(enemy: Enemy): BattleState {
   return state;
 }
 
-/** The enemy as it is now: its name, sprite, attack, and charge speed after any phases. */
+/**
+ * The enemy as it is now: its name, sprite, attack, charge speed, and lines to a
+ * turn after any phases.
+ */
 export function currentForm(enemy: Enemy, state: BattleState) {
-  let { name, sprite, attack, charge } = enemy;
+  let { name, sprite, attack, charge, rotate } = enemy;
   for (const phase of (enemy.phases ?? []).slice(0, state.phase ?? 0)) {
     name = phase.name ?? name;
     sprite = phase.sprite ?? sprite;
     attack = phase.attack ?? attack;
     charge = phase.charge ?? charge;
+    rotate = phase.rotate ?? rotate;
   }
   if (enemy.armor && armorUp(state)) attack = enemy.armor.attack;
-  return { name, sprite, attack, charge, armored: armorUp(state) };
+  return { name, sprite, attack, charge, rotate, armored: armorUp(state) };
 }
 
 /**
  * Starts any phases the enemy's HP has fallen into. A phase's fog covers only
- * lines you haven't completed. Returns the phases that just started.
+ * lines you haven't completed. Returns the phases that just started. Phase pools
+ * are written for the board as drawn, so on a turned board (#83) they turn with
+ * it, which needs the board's `size`.
  */
 export function advancePhase(
   enemy: Enemy,
   state: BattleState,
+  size = 0,
 ): { state: BattleState; entered: Phase[] } {
   const phases = enemy.phases ?? [];
   const entered: Phase[] = [];
@@ -210,8 +232,9 @@ export function advancePhase(
     if (next.enemyHp > phase.at * enemy.hp) break;
     entered.push(phase);
     next = { ...next, phase: (next.phase ?? 0) + 1 };
-    next = addFromPool(next, 'fog', phase.fog, phase.fogCount);
-    next = addFromPool(next, 'scramble', phase.scramble, phase.scrambleCount);
+    const turned = (pool?: LineSet) => pool && turnLines(pool, size, state.turns ?? 0);
+    next = addFromPool(next, 'fog', turned(phase.fog), phase.fogCount);
+    next = addFromPool(next, 'scramble', turned(phase.scramble), phase.scrambleCount);
   }
   return { state: next, entered };
 }
@@ -420,6 +443,54 @@ export function chargeUp(
   if (grounded || zapped)
     return { state: { ...state, charged: 0, live: undefined }, grounded, zapped };
   return { state: { ...state, charged }, grounded, zapped };
+}
+
+/**
+ * Lines you've just finished move the board toward its next quarter turn (#83).
+ * Like the charge, it only moves when you finish a line, never with time.
+ */
+export function turnUp(state: BattleState, lines: readonly Line[]): BattleState {
+  if (!lines.length) return state;
+  return { ...state, turning: (state.turning ?? 0) + lines.length };
+}
+
+/**
+ * Whether the board is due to turn: `limit` lines finished since the last turn. It
+ * stays due until it turns, so a turn waiting on a stroke survives a reload.
+ */
+export const turnDue = (state: BattleState, limit: number | undefined) =>
+  Boolean(limit && (state.turning ?? 0) >= limit);
+
+/**
+ * The battle after the n×n board turns a quarter clockwise (#83): every line it
+ * marks and every cell it covers moves with the board, so fog, scrambles, weak
+ * points, forgeries, wipes, ink, the live line and struck lines stay on the same
+ * stretch of picture. The charge and armor counts don't change; the count to the
+ * next turn starts over.
+ */
+export function turnBattle(state: BattleState, n: number): BattleState {
+  const next: BattleState = {
+    ...state,
+    struck: state.struck.map((key) => {
+      const { kind, index } = turnLine(keyToLine(key), n);
+      return lineKey(kind, index);
+    }),
+    turns: ((state.turns ?? 0) + 1) % 4,
+    turning: 0,
+  };
+  for (const key of ['fog', 'scramble', 'armor', 'fakes', 'suspects', 'wiped'] as const) {
+    if (state[key]) next[key] = turnLines(state[key], n);
+  }
+  if (state.ink) next.ink = state.ink.map((i) => turnIndex(i, n));
+  if (state.live) next.live = turnLine(state.live, n);
+  return next;
+}
+
+/** The fight's puzzle as the board stands after `turns` quarter turns clockwise (#83). */
+export function turnedPuzzle(puzzle: Puzzle, turns = 0): Puzzle {
+  if (!turns) return puzzle;
+  const solution = transformGrid(puzzle.solution, turns);
+  return { ...puzzle, solution, clues: deriveClues(solution) };
 }
 
 /** The finisher: the solved picture deals whatever HP the enemy has left. */

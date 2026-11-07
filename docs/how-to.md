@@ -117,7 +117,10 @@ row or column counts from 1, as players do; the code counts from 0.
    the suite checks the puzzle is still solvable with every suspect unread. Sets of rows
    only or columns only work best. For a charge meter (the Eel), add `"charge": 5`
    (lines to fill it, 2 or more) to the enemy or a phase. For ink (the Cuttlefish), give a phase
-   `"ink": 4` (block size) and optionally `"inkCount": 2`.
+   `"ink": 4` (block size) and optionally `"inkCount": 2`. To turn the board (the
+   Weathervane), add `"rotate": 6` (lines per quarter turn, 2 or more) to the enemy or a
+   phase. Only square puzzles can turn, and a lopsided picture shows it best. Write every
+   line index as drawn: phase pools turn with the board.
    Phases trigger in order at decreasing `at` values. A phase's `fog` is a pool, and it fogs
    up to `fogCount` unsolved lines from it. Line damage is 1 per line and columns mostly
    finish late, so set `at` high (0.8–0.9) for a phase to land mid-solve. To find a fog

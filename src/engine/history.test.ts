@@ -47,3 +47,18 @@ describe('History', () => {
     expect(history.canUndo).toBe(false);
   });
 });
+
+describe('History.remap (#83)', () => {
+  it('moves recorded changes to new cells, so undo and redo follow them', () => {
+    const { board, history } = play(fillFirstTwo, markThird);
+    history.undo(board); // markThird waits to be redone
+    // Mirror the 3×1 board: cell i moves to 2 - i.
+    board.cells.reverse();
+    history.remap((i) => 2 - i);
+    history.undo(board);
+    expect(board.cells).toEqual([Cell.Empty, Cell.Empty, Cell.Empty]);
+    history.redo(board);
+    history.redo(board);
+    expect(board.cells).toEqual([Cell.Marked, Cell.Filled, Cell.Filled]);
+  });
+});
