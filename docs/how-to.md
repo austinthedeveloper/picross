@@ -316,7 +316,10 @@ Sounds are synthesized in `src/ui/sound.ts`, so there are no audio files.
    optionally a start offset `at`, a waveform `type`, and a peak `gain`. Keep gains around
    0.1 to 0.2.
 3. Call `playSound('<name>')` at the right moment, usually in `gameScreen.ts`. Muting is
-   handled for you.
+   handled for you. To follow another sound from the same moment rather than land on top
+   of it, pass a delay in seconds: `playSound('live', 0.5)`.
+4. If the moment should buzz the phone too, call `haptic('<kind>')` from `ui/haptics.ts`
+   (`tap`, `line`, `hit`, or `zap`). It has its own setting, separate from mute.
 
 ## Add a board effect or animation
 

@@ -62,7 +62,7 @@ src/
     dialogue.ts            Scene runner: current line or choices, advance, choose, flags
     progress.ts            Free-play saves, solve stats, totals (localStorage)
     runSave.ts             Current run, seen scenes, job stats (localStorage)
-    settings.ts            Mode, list filter/order, closed sections, mute, high contrast (localStorage)
+    settings.ts            Mode, list filter/order, closed sections, mute, high contrast, haptics (localStorage)
     daily.ts               Daily streak, best, and today's board (localStorage, #69)
     storage.ts             Safe localStorage JSON read/write
   ui/
@@ -70,6 +70,7 @@ src/
     format.ts              formatTime(), plural(), lineName()
     motion.ts              reducedMotion(), wait(), pause(), playOnce() for animations
     sound.ts               WebAudio-synthesized sound effects
+    haptics.ts             Vibration on taps, lines, hits, and zaps (and the iOS switch fallback)
     theme.ts               Applies the high-contrast theme
     screens/
       selectScreen.ts      Puzzle list, mode, settings, stats       (#/)
@@ -169,8 +170,8 @@ hint menu ─────▶ gameScreen useHint() ┘                    └─�
    the pointer moves, it calls `onPreview` with the newly covered cells.
 2. `gameScreen.play()` passes them to `Game.preview()`. That applies them right away (live
    drag feedback) and, in Hearts mode, turns a wrong fill into an X, costs a heart, and tells
-   the input layer to end the stroke. Sounds, error flashes, and line-complete effects
-   happen here too.
+   the input layer to end the stroke. Sounds, haptics (one tap per stroke), error flashes,
+   and line-complete effects happen here too.
 3. When the stroke ends, `Game.commit()` records the changes as one undoable move and
    rechecks whether the puzzle is solved.
 4. `refresh()` saves progress, updates the toolbar and hearts, and shows the solved or
@@ -183,14 +184,14 @@ rules stay identical across input methods.
 
 All saved data lives in `localStorage`, read once at startup and written on change:
 
-| Key                | Module                       | Contents                                                                                                                 |
-| ------------------ | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `picross:v1`       | `game/progress.ts`           | In-progress boards, per-puzzle stats, total solving time                                                                 |
-| `picross:run`      | `game/runSave.ts`            | The current run (with the current encounter's board) and seen scenes                                                     |
-| `picross:badges`   | `game/badges.ts`             | Earned badges: each one's best tier and the date you first earned it                                                     |
-| `picross:settings` | `game/settings.ts`           | `mode` (default for new runs), `listFilter`, `listOrder`, `listDifficulty`, `collapsedSections`, `muted`, `highContrast` |
-| `picross:daily`    | `game/daily.ts`              | Daily streak, best streak, solve count, and today's board                                                                |
-| `picross:editor`   | `ui/screens/editorScreen.ts` | The editor's current drawing                                                                                             |
+| Key                | Module                       | Contents                                                                                                                            |
+| ------------------ | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `picross:v1`       | `game/progress.ts`           | In-progress boards, per-puzzle stats, total solving time                                                                            |
+| `picross:run`      | `game/runSave.ts`            | The current run (with the current encounter's board) and seen scenes                                                                |
+| `picross:badges`   | `game/badges.ts`             | Earned badges: each one's best tier and the date you first earned it                                                                |
+| `picross:settings` | `game/settings.ts`           | `mode` (default for new runs), `listFilter`, `listOrder`, `listDifficulty`, `collapsedSections`, `muted`, `highContrast`, `haptics` |
+| `picross:daily`    | `game/daily.ts`              | Daily streak, best streak, solve count, and today's board                                                                           |
+| `picross:editor`   | `ui/screens/editorScreen.ts` | The editor's current drawing                                                                                                        |
 
 `game/saveMerge.ts` combines two copies of a save (#97), so cross-device sync never has to
 ask which one to keep. It's a pure function with one rule per kind of data: bests and

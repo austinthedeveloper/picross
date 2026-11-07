@@ -1,5 +1,7 @@
 import type { Line, LineSet } from '../../../../engine/lines';
 import { ARMOR_HIT_DAMAGE, ARMOR_HIT_LINES, armorHitsBack } from '../../../../game/battle';
+import { haptic } from '../../../haptics';
+import { playSound } from '../../../sound';
 import type { FightContext } from './context';
 import { takeHit } from './hits';
 
@@ -13,6 +15,10 @@ export function createArmorBack(ctx: FightContext, onKnockout: () => void) {
   const hit = () => {
     if (ctx.finished || ctx.run()?.status !== 'active') return;
     const { name } = ctx.form();
+    if (ctx.hitsOn) {
+      playSound('hit');
+      haptic('hit');
+    }
     const message = ctx.hitsOn
       ? takeHit(ctx, onKnockout, `🛡 ${name}'s armor hits back!`, ARMOR_HIT_DAMAGE)
       : `🛡 ${name}'s armor hits back. It fizzles in a Relaxed run.`;

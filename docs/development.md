@@ -38,12 +38,13 @@ npm run dev        # http://localhost:5173, hot reload
 Tests live next to their code as `*.test.ts` and run in jsdom, so `localStorage` and basic
 DOM work.
 
-| Area                | Tests                                                                         |
-| ------------------- | ----------------------------------------------------------------------------- |
-| `engine/`           | Grids and win check, clue derivation and dimming, undo history, solver        |
-| `puzzles/`          | File parsing and validation, export, pack size, pack uniqueness               |
-| `game/`             | Strokes, undo, reset, save/restore, clock, Hearts mode, hints, progress store |
-| `ui/format.test.ts` | Time formatting                                                               |
+| Area                 | Tests                                                                          |
+| -------------------- | ------------------------------------------------------------------------------ |
+| `engine/`            | Grids and win check, clue derivation and dimming, undo history, solver         |
+| `puzzles/`           | File parsing and validation, export, pack size, pack uniqueness                |
+| `game/`              | Strokes, undo, reset, save/restore, clock, Hearts mode, hints, progress store  |
+| `ui/format.test.ts`  | Time formatting                                                                |
+| `ui/haptics.test.ts` | Haptics: feature detection, patterns, the iOS switch fallback, the off setting |
 
 Put new rules in `engine/` or `game/` and test them there. The UI modules are thin and are
 checked in the browser instead.
