@@ -55,7 +55,7 @@ test.describe('free play', () => {
     await expect(cards).toHaveCount(total - 1);
     await expect(page.locator('.mural-card').first()).toBeVisible();
     await expect(page.locator('.size-section:not(.murals) .size-heading').first()).toContainText(
-      '1/4',
+      '1/14',
     );
   });
 
@@ -98,7 +98,7 @@ test.describe('free play', () => {
     await expect(small.locator('.card').first()).toBeHidden();
     await page.reload();
     await expect(small.locator('.card').first()).toBeHidden();
-    await expect(small).toContainText('0/4'); // the heading still counts them
+    await expect(small).toContainText('0/14'); // the heading still counts them
 
     await small.locator('summary').tap();
     await expect(small.locator('.card').first()).toBeVisible();

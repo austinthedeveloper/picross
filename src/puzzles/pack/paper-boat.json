@@ -1,0 +1,7 @@
+{
+  "id": "paper-boat",
+  "name": "Paper Boat",
+  "width": 5,
+  "height": 5,
+  "solution": ["..#..", "..##.", "..#..", "#####", ".###."]
+}
