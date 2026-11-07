@@ -345,8 +345,12 @@
   border-color: var(--accent);
 }
 
-/* The charge meter (#67): each finished line fills it toward a zap; the live line drains it. */
-.charge {
+/*
+ * The charge meter (#67): each finished line fills it toward a zap; the live line drains it.
+ * The turn meter (#83) looks the same: each finished line fills it toward the board turning.
+ */
+.charge,
+.turn-meter {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -354,7 +358,8 @@
   margin-top: 4px;
 }
 
-.charge[hidden] {
+.charge[hidden],
+.turn-meter[hidden] {
   display: none;
 }
 
@@ -387,6 +392,10 @@
 
 .charge.high .charge-fill {
   background: var(--spark-hot);
+}
+
+.turn-meter .charge-fill {
+  background: var(--ink);
 }
 
 .charge.zapped {

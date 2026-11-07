@@ -44,6 +44,13 @@ export class History {
     return true;
   }
 
+  /** Moves every recorded change to a new cell, e.g. when the board turns (#83). */
+  remap(index: (i: number) => number): void {
+    const move = (m: Move): Move => m.map((c) => ({ ...c, index: index(c.index) }));
+    this.past = this.past.map(move);
+    this.future = this.future.map(move);
+  }
+
   redo(board: Board): boolean {
     const move = this.future.pop();
     if (!move) return false;

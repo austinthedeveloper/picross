@@ -1,6 +1,6 @@
 import type { Blast } from '../../engine/blast';
 import { Cell, column, row, type Board } from '../../engine/board';
-import { satisfiedClues } from '../../engine/clues';
+import { satisfiedClues, type Clues } from '../../engine/clues';
 import {
   hasLine,
   lineKey,
@@ -59,6 +59,14 @@ export interface BoardView {
    * still play there. Cells in `washed` animate as the ink comes off.
    */
   setInk(cells: readonly number[], washed?: readonly number[]): void;
+  /**
+   * Shows new clues on the same board after it turns (#83). The next `update` takes
+   * finished lines as they stand without reporting them as new, and the caller puts
+   * back fog, scrambles, forgeries and the rest, which turned too.
+   */
+  setClues(clues: Clues): void;
+  /** Swings the board a quarter turn clockwise into place (#83). */
+  flashTurn(): void;
 }
 
 const STATE: Record<Cell, { className: string; label: string }> = {
@@ -106,7 +114,8 @@ let boardCount = 0;
  * row with its clues as the row header.
  */
 export function createBoardView(puzzle: Puzzle): BoardView {
-  const { width: w, height: h, clues } = puzzle;
+  const { width: w, height: h } = puzzle;
+  let { clues } = puzzle;
   const idPrefix = `board${++boardCount}`;
   const root = el('div', {
     className: 'board',
@@ -216,6 +225,14 @@ export function createBoardView(puzzle: Puzzle): BoardView {
     g.group.classList.toggle('scrambled', scrambled);
   };
 
+  /** Room for the longest clue each way, as shown. */
+  const fitClues = () => {
+    const longest = (count: number, kind: LineKind) =>
+      Math.max(1, ...Array.from({ length: count }, (_, i) => shown(kind, i).length));
+    root.style.setProperty('--rc', String(longest(h, 'row')));
+    root.style.setProperty('--cc', String(longest(w, 'col')));
+  };
+
   let cursor: HTMLElement | null = null;
   let first = true;
 
@@ -309,10 +326,7 @@ export function createBoardView(puzzle: Puzzle): BoardView {
       fakes = next;
       rowClues.forEach((g, r) => relabel.has(lineKey('row', r)) && setNumbers(g, shown('row', r)));
       colClues.forEach((g, c) => relabel.has(lineKey('col', c)) && setNumbers(g, shown('col', c)));
-      const longest = (count: number, kind: LineKind) =>
-        Math.max(1, ...Array.from({ length: count }, (_, i) => shown(kind, i).length));
-      root.style.setProperty('--rc', String(longest(h, 'row')));
-      root.style.setProperty('--cc', String(longest(w, 'col')));
+      fitClues();
       for (const { kind, index } of unmasked) {
         playOnce((kind === 'row' ? rowClues : colClues)[index].group, 'unmasked');
       }
@@ -338,6 +352,18 @@ export function createBoardView(puzzle: Puzzle): BoardView {
       inked = new Set(next);
       for (const i of inked) cells[i].classList.add('inked');
       for (const i of washed) playOnce(cells[i], 'washed');
+    },
+    setClues(next) {
+      clues = next;
+      rowClues.forEach((g, r) => setNumbers(g, shown('row', r)));
+      colClues.forEach((g, c) => setNumbers(g, shown('col', c)));
+      // In their real order until `setScramble` says otherwise.
+      for (const g of [...rowClues, ...colClues]) g.group.classList.remove('scrambled');
+      fitClues();
+      first = true;
+    },
+    flashTurn() {
+      playOnce(root, 'turned', 700);
     },
     pickClue(onPick) {
       picker = onPick;

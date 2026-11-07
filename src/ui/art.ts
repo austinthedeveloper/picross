@@ -50,6 +50,7 @@ const GLYPHS: Record<string, { glyph: string; label: string }> = {
   '👄': { glyph: 'swap', label: 'grin' },
   '🔍': { glyph: 'call-out', label: 'magnifying glass' },
   '🛡': { glyph: 'shield', label: 'shield' },
+  '🔃': { glyph: 'turn', label: 'turning arrows' },
 };
 const STICKERS: Record<string, { gadget: string; label: string }> = {
   '💣': { gadget: 'bomb', label: 'bomb' },

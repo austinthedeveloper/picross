@@ -87,7 +87,8 @@ export function renderRunEncounter(app: HTMLElement): (() => void) | undefined {
         };
       },
     };
-    return renderGameScreen(app, encounter.puzzle, session);
+    // A fight's board may have turned (#83), and its saved marks turned with it.
+    return renderGameScreen(app, fight?.puzzle ?? encounter.puzzle, session);
   };
 
   // An encounter's scene (e.g. the boss's entrance) plays when you first open it,

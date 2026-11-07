@@ -1,7 +1,8 @@
 import { bump, callOut, heal } from '../../../../game/battle';
-import { hasLine } from '../../../../engine/lines';
+import { hasLine, keyToLine, lineKey } from '../../../../engine/lines';
 import { fakeClues } from '../../../../engine/fakes';
 import { lineCount, noLines, type Line, type LineSet } from '../../../../engine/lines';
+import { turnClue, turnLines } from '../../../../engine/transform';
 import { withArt } from '../../../art';
 import { el } from '../../../dom';
 import { lineName } from '../../../format';
@@ -21,8 +22,21 @@ import type { CheckPhase } from './phases';
 export function createCallOut(ctx: FightContext, checkPhase: CheckPhase, onChange: () => void) {
   let picking = false;
   const fakes = () => ctx.battle().fakes ?? noLines();
-  const shown = (set: LineSet) =>
-    fakeClues(ctx.puzzle.width, ctx.puzzle.height, ctx.puzzle.clues, set);
+  /**
+   * The forgeries on show. They're forged from the clues as drawn and then turned
+   * with the board (#83), so a turn moves a forgery but never changes it.
+   */
+  const shown = (set: LineSet) => {
+    const { width, height, clues } = ctx.drawn;
+    const turns = ctx.battle().turns ?? 0;
+    const drawn = fakeClues(width, height, clues, turnLines(set, width, -turns));
+    return new Map(
+      [...drawn].map(([key, clue]) => {
+        const turned = turnClue(keyToLine(key), clue, width, turns);
+        return [lineKey(turned.line.kind, turned.line.index), turned.clue] as const;
+      }),
+    );
+  };
 
   const stopPicking = () => {
     picking = false;
@@ -81,7 +95,7 @@ export function createCallOut(ctx: FightContext, checkPhase: CheckPhase, onChang
   };
 
   return {
-    /** Shows the forgeries when the board first appears. */
+    /** Shows the forgeries when the board first appears, and again after it turns (#83). */
     show() {
       if (!ctx.battle().fakes) return;
       ctx.view?.setFakes(shown(fakes()));
