@@ -100,7 +100,7 @@ test.describe('job badges', () => {
     const card = page.locator('.job').first();
     await expect(card.locator('.job-badge')).toContainText('Invoiced a Bat');
     await expect(card.locator('.job-badge')).toContainText('Gold');
-    await expect(card.locator('.job-best')).toContainText('best');
+    await expect(card.locator(':scope > .job-best')).toContainText('best');
   });
 
   test('a run with a wrong fill earns silver', async ({ page }) => {
@@ -143,7 +143,9 @@ test.describe('job badges', () => {
     await expect(page.locator('.badges-earned')).toContainText('Bronze');
     await press(page, 'Jobs board');
     await skipScene(page);
-    await expect(page.locator('.job').first().locator('.job-best')).toHaveText('Cleared 1×');
+    await expect(page.locator('.job').first().locator(':scope > .job-best')).toHaveText(
+      'Cleared 1×',
+    );
   });
 });
 

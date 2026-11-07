@@ -1,0 +1,51 @@
+{
+  "id": "overtime-reviewer-two",
+  "name": "Reviewer Two",
+  "kind": "fight",
+  "puzzle": "marked-manuscript",
+  "blurb": "Reviewer Two has read your revisions. Reviewer Two has more comments.",
+  "enemy": {
+    "name": "Reviewer Two",
+    "sprite": "reviewer-two",
+    "hp": 45,
+    "attack": 2,
+    "armor": {
+      "weakPoints": {
+        "rows": [3],
+        "cols": [10]
+      },
+      "attack": 4
+    },
+    "fakes": {
+      "rows": [2, 11]
+    },
+    "suspects": {
+      "rows": [1, 2, 11]
+    },
+    "phases": [
+      {
+        "at": 0.8,
+        "taunt": "Red pen bleeds through the page.",
+        "ink": 4
+      },
+      {
+        "at": 0.65,
+        "taunt": "Please move section three to section five.",
+        "swap": true
+      },
+      {
+        "at": 0.5,
+        "name": "Reviewer Two, Revised",
+        "attack": 3,
+        "taunt": "A few minor changes. Start again.",
+        "charge": 6
+      }
+    ],
+    "fog": {
+      "rows": [13]
+    },
+    "scramble": {
+      "rows": [5, 7]
+    }
+  }
+}

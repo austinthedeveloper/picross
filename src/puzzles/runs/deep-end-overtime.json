@@ -1,0 +1,16 @@
+{
+  "id": "deep-end-overtime",
+  "name": "The Deep End: Overtime",
+  "hp": 16,
+  "encounters": [
+    "overtime-electric-eel",
+    "overtime-anglerfish",
+    "gift-shop",
+    "overtime-cuttlefish",
+    "lifeguard-chair",
+    "overtime-old-tess"
+  ],
+  "overtimeOf": "deep-end",
+  "requires": "deep-end",
+  "blurb": "Same aquarium, after feeding time. Hits on, no patch kit, and nobody fed them enough."
+}

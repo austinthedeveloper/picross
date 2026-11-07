@@ -1,0 +1,36 @@
+{
+  "id": "overtime-snapjaw",
+  "name": "Snapjaw",
+  "kind": "fight",
+  "puzzle": "flytrap",
+  "blurb": "Someone has been feeding it. It has stopped counting and started guessing.",
+  "enemy": {
+    "name": "Snapjaw",
+    "sprite": "snapjaw",
+    "hp": 45,
+    "attack": 2,
+    "charge": 5,
+    "phases": [
+      {
+        "at": 0.8,
+        "taunt": "Snap!",
+        "swap": true,
+        "ink": 4
+      },
+      {
+        "at": 0.55,
+        "name": "Ravenous Snapjaw",
+        "attack": 3,
+        "charge": 4,
+        "taunt": "Snap snap snap!",
+        "swap": true
+      }
+    ],
+    "fog": {
+      "rows": [9, 1]
+    },
+    "scramble": {
+      "cols": [1, 12]
+    }
+  }
+}

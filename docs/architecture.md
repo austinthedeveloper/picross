@@ -218,7 +218,9 @@ saves its results under its own id. Its fights are separate `overtime-*` encount
 with extra powers, so story versions never change, and tests hold them to the same rules:
 solvable without guessing with every power applied, and weak points reachable early.
 
-The Night Shift is the pilot. Closing Time and the Curator are deliberately left out.
+Every job has one except Closing Time, which is left out with the Curator on purpose. The
+Night Shift was the pilot. The powers each enemy gains are picked by hand and ramp in story
+order, so later jobs stack more of them on each enemy.
 
 ### Difficulty ratings
 

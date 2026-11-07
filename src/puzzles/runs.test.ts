@@ -110,8 +110,25 @@ describe('Overtime', () => {
     }
   });
 
-  it('starts as a pilot on the Night Shift, leaving the Curator out', () => {
-    expect(overtimeRuns.map((run) => run.overtimeOf)).toEqual(['night-shift']);
+  it('comes with every job but Closing Time, leaving the Curator out', () => {
+    const jobs = runs.map((run) => run.id).filter((id) => id !== 'closing-time');
+    expect(overtimeRuns.map((run) => run.overtimeOf).sort()).toEqual(jobs.sort());
+    for (const run of overtimeRuns) {
+      for (const e of run.encounters) expect(e.id).not.toMatch(/curator/);
+    }
+  });
+
+  it('follows its job node for node, on the same pictures', () => {
+    for (const run of overtimeRuns) {
+      const job = getRun(run.overtimeOf!)!;
+      expect(run.encounters.length, run.id).toBe(job.encounters.length);
+      run.encounters.forEach((e, i) => {
+        const story = job.encounters[i];
+        expect([story.id, `overtime-${story.id}`], run.id).toContain(e.id);
+        expect(e.puzzle, e.id).toBe(story.puzzle);
+        expect(e.kind, e.id).toBe(story.kind);
+      });
+    }
   });
 
   it("doesn't change the story version of the job", () => {
