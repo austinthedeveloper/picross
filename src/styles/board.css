@@ -17,7 +17,7 @@
     clamp(
         16px,
         min(
-          calc((100vw - 40px) / (var(--w) + var(--rc) * 0.7 + 0.5)),
+          calc((100vw - var(--board-inset, 40px)) / (var(--w) + var(--rc) * 0.7 + 0.5)),
           calc((100dvh - 190px) / (var(--h) + var(--cc) * 0.85 + 0.5))
         ),
         var(--cell-max, 40px)
@@ -34,6 +34,27 @@
   user-select: none;
   -webkit-user-select: none;
   touch-action: none;
+}
+
+/*
+ * Phones: the game board runs nearly edge to edge. The wrap reaches into the
+ * screen's 16px padding and the board keeps 2px, so 12px of the width is lost
+ * in all, not 40px.
+ */
+@media (max-width: 480px) {
+  .screen.game .board-wrap {
+    margin-inline: -12px;
+  }
+
+  .screen.game .board {
+    --board-inset: 12px;
+    padding-inline: 2px;
+  }
+}
+
+/* Move tool: one finger drags the zoomed board around instead of painting. */
+.board.panning .cell {
+  cursor: grab;
 }
 
 /* Touch: small grids get finger-sized cells; pinch or the zoom bar for large ones. */

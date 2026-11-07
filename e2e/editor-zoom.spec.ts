@@ -49,3 +49,41 @@ test('pinch zooms a 15×15 board without painting', async ({ page, context }) =>
   expect((await cell(page, 0).boundingBox())!.width).toBeGreaterThan(fit * 2);
   await expect(page.locator('.cell.filled, .cell.marked')).toHaveCount(0);
 });
+
+test('zoom buttons keep the board on screen, and Move drags it without painting', async ({
+  page,
+}) => {
+  await page.goto('/#/play/sailboat');
+  const move = page.getByRole('button', { name: 'Move', exact: true });
+  await expect(move).toBeHidden();
+  await page.getByRole('button', { name: 'Zoom in' }).tap();
+  await page.getByRole('button', { name: 'Zoom in' }).tap();
+  await expect(page.locator('.zoom-level')).toHaveText('200%');
+
+  // The zoomed board fits the screen, with the tools still below it.
+  const wrap = page.locator('.board-wrap');
+  const box = (await wrap.boundingBox())!;
+  expect(box.y).toBeGreaterThanOrEqual(0);
+  expect(box.y + box.height).toBeLessThanOrEqual(844);
+
+  await move.tap();
+  await expect(move).toHaveAttribute('aria-pressed', 'true');
+  const before = await wrap.evaluate((w) => [w.scrollLeft, w.scrollTop]);
+  const [x, y] = [box.x + box.width / 2, box.y + box.height / 2];
+  await page.mouse.move(x, y);
+  await page.mouse.down();
+  await page.mouse.move(x + 60, y + 60, { steps: 5 });
+  await page.mouse.up();
+  const after = await wrap.evaluate((w) => [w.scrollLeft, w.scrollTop]);
+  expect(after[0]).toBeLessThan(before[0]);
+  expect(after[1]).toBeLessThan(before[1]);
+  await expect(page.locator('.cell.filled, .cell.marked')).toHaveCount(0);
+
+  // Back to fit: Move goes away and Fill is the tool again.
+  await page.locator('.zoom-level').tap();
+  await expect(move).toBeHidden();
+  await expect(page.getByRole('button', { name: '■ Fill' })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
+});

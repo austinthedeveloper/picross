@@ -91,7 +91,17 @@ export function renderGameScreen(
   const timer = el('span', { className: 'timer', role: 'timer', ariaLabel: 'Time' });
 
   // Toolbar
+  // The board's scroll box and zoom, made first so the Move tool can switch panning.
+  const boardWrap = el('div', { className: 'board-wrap' }, [view.root]);
+  const zoom = attachZoom(boardWrap, view.root);
+  zoom.onChange((z) => {
+    moveBtn.hidden = z <= 1;
+    if (z <= 1 && moving) setTool(tool);
+  });
+
   let tool: Tool = Cell.Filled;
+  /** The Move tool, only offered while zoomed: one finger drags the board instead of painting. */
+  let moving = false;
   const toolButton = (t: Tool, label: string) => {
     const button = el('button', { className: 'toggle', textContent: label, title: label.slice(2) });
     button.onclick = () => setTool(t);
@@ -99,12 +109,22 @@ export function renderGameScreen(
   };
   const fillBtn = toolButton(Cell.Filled, '■ Fill');
   const markBtn = toolButton(Cell.Marked, '✕ Mark');
-  const setTool = (t: Tool) => {
-    tool = t;
-    fillBtn.setAttribute('aria-pressed', String(t === Cell.Filled));
-    markBtn.setAttribute('aria-pressed', String(t === Cell.Marked));
+  const moveBtn = el('button', {
+    className: 'toggle move-tool',
+    textContent: '✥',
+    title: 'Move the board',
+    ariaLabel: 'Move',
+    hidden: true,
+  });
+  const setTool = (t: Tool | 'move') => {
+    moving = t === 'move';
+    if (t !== 'move') tool = t;
+    zoom.setPanning(moving);
+    fillBtn.setAttribute('aria-pressed', String(!moving && tool === Cell.Filled));
+    markBtn.setAttribute('aria-pressed', String(!moving && tool === Cell.Marked));
+    moveBtn.setAttribute('aria-pressed', String(moving));
   };
-  setTool(Cell.Filled);
+  moveBtn.onclick = () => setTool('move');
 
   const undoBtn = el('button', { textContent: 'Undo', title: 'Undo (Ctrl+Z)' });
   const redoBtn = el('button', { textContent: 'Redo', title: 'Redo (Ctrl+Shift+Z)' });
@@ -119,15 +139,12 @@ export function renderGameScreen(
   ]);
 
   // Board, its controls, and end-of-game panels
-  const boardWrap = el('div', { className: 'board-wrap' }, [view.root]);
   const tools = el('div', { className: 'tools segmented', role: 'group', ariaLabel: 'Tool' }, [
     fillBtn,
     markBtn,
+    moveBtn,
   ]);
-  const boardControls = el('div', { className: 'board-controls' }, [
-    tools,
-    createZoomBar(attachZoom(boardWrap, view.root)),
-  ]);
+  const boardControls = el('div', { className: 'board-controls' }, [tools, createZoomBar(zoom)]);
   const solvedPanel = el('div', { className: 'end-panel', hidden: true });
   const failedPanel = createFailedPanel(() => (game.retry(), refresh()));
   const endedPanel = el('div', { className: 'end-panel failed', hidden: true });
@@ -298,7 +315,7 @@ export function renderGameScreen(
   attachInput(view.root, {
     board: game.board,
     getTool: () => tool,
-    enabled: () => !over(),
+    enabled: () => !over() && !moving,
     onPreview: play,
     onCommit: (changes) => {
       game.commit(changes);

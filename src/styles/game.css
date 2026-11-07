@@ -103,6 +103,24 @@
   background: var(--bg);
 }
 
+/* The Move tool only shows while the board is zoomed; Mark keeps the rounded end without it. */
+.tools .move-tool {
+  min-width: 44px;
+  justify-content: center;
+}
+
+.tools .move-tool[hidden] {
+  display: none;
+}
+
+.tools:has(.move-tool[hidden]) > button:nth-last-child(2) {
+  border-radius: 0 8px 8px 0;
+}
+
+.board-wrap.grabbing .cell {
+  cursor: grabbing;
+}
+
 .zoom-bar button {
   min-width: 44px;
   justify-content: center;
