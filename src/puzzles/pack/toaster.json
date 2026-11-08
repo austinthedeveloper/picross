@@ -1,0 +1,20 @@
+{
+  "id": "toaster",
+  "name": "Toaster",
+  "colors": {
+    "s": "stone",
+    "t": "wood",
+    "c": "brown",
+    "k": "graphite"
+  },
+  "layers": [
+    ["kkkkkk.", "kkkkkk.", "kkkkkk.", "kkkkkk.", "kkkkkk."],
+    ["ssssss.", "ssssss.", "ssssss.", "ssssss.", "ssssks."],
+    ["ssssss.", "ssssss.", "ssssssk", "ssssss.", "ssssss."],
+    ["ssssss.", "stttts.", "ssssss.", "stttts.", "ssssss."],
+    [".......", ".cccc..", ".......", ".cccc..", "......."]
+  ],
+  "hideRatio": 0.5,
+  "hide": "059268efdd77162c619802a7",
+  "passes": 3
+}

@@ -1,0 +1,19 @@
+{
+  "id": "rubber-duck",
+  "name": "Rubber Duck",
+  "colors": {
+    "y": "yellow",
+    "o": "orange",
+    "e": "graphite"
+  },
+  "layers": [
+    [".yyy.", "yyyyy", "yyyyy", ".yyy.", "....."],
+    ["yyyyy", "yyyyy", "yyyyy", "yyyyy", "....."],
+    ["..y..", ".yyy.", ".yyy.", ".yyy.", "....."],
+    [".....", ".yyy.", ".yyy.", ".yyy.", ".ooo."],
+    [".....", "..y..", ".yyy.", ".eye.", "....."]
+  ],
+  "hideRatio": 0.5,
+  "hide": "fcebb500805702a20b7",
+  "passes": 4
+}

@@ -1,0 +1,20 @@
+{
+  "id": "snail",
+  "name": "Snail",
+  "colors": {
+    "b": "cream",
+    "s": "orange",
+    "d": "brown",
+    "k": "graphite"
+  },
+  "layers": [
+    [".b.", ".b.", ".b.", ".b.", ".b.", ".b."],
+    ["...", "sss", "dsd", "...", ".b.", ".b."],
+    ["sss", "dsd", "dsd", "sss", "...", ".b."],
+    ["sss", "dsd", "dsd", "sss", "...", "k.k"],
+    ["...", "sss", "sss", "...", "...", "..."]
+  ],
+  "hideRatio": 0.5,
+  "hide": "bff44d9220692d13",
+  "passes": 3
+}
