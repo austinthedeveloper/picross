@@ -4,6 +4,15 @@ import path from 'node:path';
 import { pointOf } from '../src/engine/volume';
 import { parsePuzzle, type Puzzle } from '../src/puzzles/format';
 
+const PACK = path.join(import.meta.dirname, '../src/puzzles/pack');
+
+/** Pack puzzle ids, biggest block first. */
+export const PUZZLES_BY_SIZE = fs
+  .readdirSync(PACK)
+  .map((f) => parsePuzzle(JSON.parse(fs.readFileSync(path.join(PACK, f), 'utf8'))))
+  .sort((a, b) => b.solution.length - a.solution.length)
+  .map((p) => p.id);
+
 /** A pack puzzle, read from its file. */
 export function puzzle(id: string): Puzzle {
   const file = path.join(import.meta.dirname, '../src/puzzles/pack', `${id}.json`);

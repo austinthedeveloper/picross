@@ -66,9 +66,27 @@ switches to the shape's colors (`--vox-*` tokens) and gives it a turn.
 
 ## Screens
 
-`main.ts` is a hash router: `#/` the list (`selectScreen.ts`), `#/play/<id>` the play screen
-(`gameScreen.ts`, loaded on demand so three.js isn't in the first download) and
-`#/how-to-play`. The play screen returns a cleanup that saves the board.
+`main.ts` is a hash router. Screens with a block load on demand, so three.js isn't in the
+first download.
+
+| Route           | File              | What                                                 |
+| --------------- | ----------------- | ---------------------------------------------------- |
+| `#/`            | `selectScreen.ts` | The list, filters, settings; other screens add cards |
+| `#/play/<id>`   | `gameScreen.ts`   | Free play: saves, times, Next                        |
+| `#/tutorial`    | `tutorial.ts`     | The guided tutorial on a 3×2×2 block                 |
+| `#/how-to-play` | `howToPlay.ts`    | The rules                                            |
+
+### The play controller
+
+`ui/screens/play.ts` builds the play screen: header, toolbar (undo, redo, hint menu, reset,
+sound), a coach slot, the block, tools, views and peels, keyboard play and the end panel.
+Modes shape it through `PlayHooks`: `allow` can refuse a move (the tutorial keeps you on
+the lit row), `changed` hears about every change with the lines it finished, `orbited` and
+`peeled` report the camera, and `solved`/`failed` build the end panel. It returns a `Play`
+with the game, view, clock and slots, and a `cleanup()` that returns the time played.
+
+Faces: each state (`STATES` in `atlas.ts`) has its own texture of every clue and its own
+material; the mesh draws them as groups. A mode restyles faces with `view.styler`.
 
 In dev builds the play screen puts its `Game` and `BlockView` on `window.__game` and
 `window.__view`, for `npm run screenshot -- --js` and the console. Production drops it.

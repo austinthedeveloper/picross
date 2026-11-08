@@ -261,6 +261,8 @@ export class BlockView {
     this.faceCells = Int32Array.from(cells);
     this.faceAxes = axes;
     this.lastBuildMs = performance.now() - t0;
+    // For the performance test: how long the last rebuild took.
+    this.canvas.dataset.buildMs = this.lastBuildMs.toFixed(2);
     this.updateCursor();
     this.invalidate();
   }
