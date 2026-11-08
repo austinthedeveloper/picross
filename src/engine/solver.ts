@@ -10,7 +10,7 @@ export type Knowledge = typeof UNKNOWN | typeof FILLED | typeof EMPTY;
 /** Every arrangement of a line of `length` cubes that fits a clue, as bit masks. */
 const cache = new Map<string, Uint16Array>();
 function arrangements(length: number, clue: Clue | null): Uint16Array {
-  const key = clue ? `${length}:${clue.count}:${clue.pieces}` : `${length}:any`;
+  const key = clue ? `${length}:${clue.count}:${clue.pieces ?? '?'}` : `${length}:any`;
   let masks = cache.get(key);
   if (!masks) {
     const fits: number[] = [];
@@ -18,7 +18,9 @@ function arrangements(length: number, clue: Clue | null): Uint16Array {
       if (!clue) fits.push(m);
       else {
         const c = clueOfMask(m, length);
-        if (c.count === clue.count && c.pieces === clue.pieces) fits.push(m);
+        if (c.count === clue.count && (clue.pieces === null || c.pieces === clue.pieces)) {
+          fits.push(m);
+        }
       }
     }
     masks = Uint16Array.from(fits);

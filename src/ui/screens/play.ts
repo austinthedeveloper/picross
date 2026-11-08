@@ -14,7 +14,7 @@ import {
 import type { SavedBoard } from '../../game/progress';
 import { getSettings } from '../../game/settings';
 import type { Puzzle } from '../../puzzles/format';
-import { BlockView, type Peel } from '../board/blockView';
+import { BlockView, type Peel, type Pick } from '../board/blockView';
 import { attachInput } from '../board/input';
 import { createHintMenu } from '../components/hintMenu';
 import { homeLink } from '../components/homeLink';
@@ -57,6 +57,8 @@ export interface Change {
 export interface PlayHooks {
   /** Whether the player may use `tool` on `cell` now; false refuses it quietly. */
   allow?(tool: Tool, cell: number): boolean;
+  /** A press on a cube face; true takes it (no stroke). For calling out a forged clue. */
+  pick?(pick: Pick): boolean;
   changed?(change: Change): void;
   orbited?(): void;
   peeled?(axis: Axis, layers: number): void;
@@ -97,6 +99,8 @@ export interface Play {
   /** Lines with a shown clue whose leftover cubes match it. */
   doneLines(): Set<number>;
   setTool(tool: ToolChoice): void;
+  /** Stops play for good (knocked out): no more moves, the clock stops. */
+  lock(): void;
   /** Tears it down. Returns the clock's time (for saving). */
   cleanup(): number;
 }
@@ -110,6 +114,7 @@ export function createPlay(root: HTMLElement, opts: PlayOptions): Play {
   const game = new Game(puzzle, opts.mode, opts.saved);
   const clock = new Clock(game.elapsed);
   let tool: ToolChoice = 'break';
+  let locked = false;
 
   const view = new BlockView(puzzle, game.blocks);
   if (import.meta.env.DEV) Object.assign(window, { __game: game, __view: view });
@@ -326,21 +331,23 @@ export function createPlay(root: HTMLElement, opts: PlayOptions): Play {
   let lastOutcome: Outcome = 'none';
   const act = (pickTool: Tool, cell: number, axis: Axis) => {
     strokeHit = false;
-    if (hooks.allow && !hooks.allow(pickTool, cell)) return;
+    if (locked || (hooks.allow && !hooks.allow(pickTool, cell))) return;
     haptic('tap');
     lastOutcome = game.begin(pickTool, cell, axis);
     feedback(lastOutcome);
   };
 
   const detachInput = attachInput(view, {
-    acting: () => tool !== 'turn' && !game.over,
+    acting: () => tool !== 'turn' && !game.over && !locked,
     begin: (pick) => {
+      if (hooks.pick?.(pick)) return;
       view.setCursor(pick.cell);
       act(tool as Tool, pick.cell, pick.axis);
       view.rebuild();
       if (game.over) afterChange(lastOutcome);
     },
     extend: (pick) => {
+      if (locked) return;
       if (hooks.allow && !hooks.allow(tool as Tool, pick.cell)) return;
       const outcome = game.extend(pick.cell);
       if (outcome !== 'none') {
@@ -610,6 +617,13 @@ export function createPlay(root: HTMLElement, opts: PlayOptions): Play {
     showPanel,
     doneLines,
     setTool,
+    lock() {
+      locked = true;
+      clock.pause();
+      view.setCursor(null);
+      undo.disabled = redo.disabled = reset.disabled = true;
+      hintMenu.render(game.hintsLeft, false);
+    },
     cleanup() {
       window.clearInterval(tick);
       window.clearTimeout(litTimer);

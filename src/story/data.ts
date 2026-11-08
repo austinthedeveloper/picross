@@ -122,7 +122,7 @@ const chapterFiles = load<Record<string, unknown>>(
 );
 /** The 2D puzzles the story uses, for their `gadget`. */
 const runPuzzles = new Map(
-  load<{ id: string; gadget?: string }>(
+  load<{ id: string; gadget?: string; width: number; height: number }>(
     import.meta.glob('../puzzles/run/*.json', { eager: true }),
   ).map((p) => [p.id, p]),
 );
@@ -229,6 +229,10 @@ function parseEnemy(data: Record<string, unknown>, where: string): Enemy {
   return enemy;
 }
 
+function scaleEnemy(enemy: Enemy, puzzle: Puzzle, lines2d: number): Enemy {
+  return { ...enemy, hp: Math.max(1, Math.round((enemy.hp * puzzle.lines.length) / lines2d)) };
+}
+
 function parseEncounter(data: Record<string, unknown>): Encounter | null {
   const where = `encounter "${data.id}"`;
   unknownKeys('encounter', where, data);
@@ -245,7 +249,11 @@ function parseEncounter(data: Record<string, unknown>): Encounter | null {
   if (typeof data.scene === 'string' && !getScene(data.scene)) {
     storyIssues.push(`${where}: unknown scene "${data.scene}"`);
   }
-  const gadget = runPuzzles.get(String(data.puzzle))?.gadget;
+  const flat = runPuzzles.get(String(data.puzzle));
+  const gadget = flat?.gadget;
+  // A block has more lines than the 2D board, so enemies get HP in proportion: the same
+  // share of the fight goes by per line finished.
+  const lines2d = flat ? flat.width + flat.height : 30;
   return {
     id: String(data.id),
     name: String(data.name),
@@ -253,7 +261,13 @@ function parseEncounter(data: Record<string, unknown>): Encounter | null {
     puzzle,
     ...(data.blurb ? { blurb: String(data.blurb) } : {}),
     ...(kind === 'fight' && data.enemy
-      ? { enemy: parseEnemy(data.enemy as Record<string, unknown>, where) }
+      ? {
+          enemy: scaleEnemy(
+            parseEnemy(data.enemy as Record<string, unknown>, where),
+            puzzle,
+            lines2d,
+          ),
+        }
       : {}),
     ...(data.boss ? { boss: true } : {}),
     ...(typeof data.scene === 'string' ? { scene: data.scene } : {}),

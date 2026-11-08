@@ -63,6 +63,16 @@ describe('solver', () => {
     });
   });
 
+  it('uses just the count when the pieces are unknown', () => {
+    const known = new Uint8Array(5);
+    // 5 of 5: certain whatever the pieces.
+    expect(solveLine(line, { count: 5, pieces: null }, known)!.filled).toEqual([0, 1, 2, 3, 4]);
+    // 2 in one piece would say nothing either, but 2 in an unknown number says even less.
+    known[0] = FILLED;
+    known[4] = FILLED;
+    expect(solveLine(line, { count: 2, pieces: null }, known)!.empty).toEqual([1, 2, 3]);
+  });
+
   it('reports a contradiction', () => {
     const known = new Uint8Array([FILLED, FILLED, FILLED, UNKNOWN, UNKNOWN]);
     expect(solveLine(line, { count: 2, pieces: 1 }, known)).toBeNull();

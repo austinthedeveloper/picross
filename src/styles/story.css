@@ -1,7 +1,7 @@
 /* The story's pieces on this game's screens (the shared run.css styles the rest). */
 
 /* A fight, dig or rest header sits in the play screen's coach slot. */
-.coach .battle-bar,
+.coach .battle,
 .coach .dig,
 .coach .rest {
   margin: 0;
@@ -10,14 +10,48 @@
   background: none;
 }
 
-.coach .battle-bar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
 .enemy-sprite .art {
   width: 48px;
   height: 48px;
   image-rendering: pixelated;
+}
+
+.fight-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.fight-actions:empty {
+  display: none;
+}
+
+.call-out[aria-pressed='true'] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+/* Calling out: the block waits for a tap on a suspect face. */
+.coach.calling-out + .stage {
+  outline: 3px dashed var(--accent);
+  outline-offset: -3px;
+}
+
+.powers-info {
+  padding: 0 8px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+}
+
+/* On a narrow phone the two sides of the bar wrap instead of clipping. */
+.coach .battle-row {
+  flex-wrap: wrap;
+  row-gap: 6px;
+}
+
+.coach .battle-side {
+  min-width: 0;
 }

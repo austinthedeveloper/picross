@@ -1,3 +1,4 @@
+import { PAINTED } from '../../../game/game';
 import { getGadget } from '../../../puzzles/gadgets';
 import type { Encounter } from '../../../story/data';
 import { gadgetArt, iconArt } from '../../art';
@@ -25,6 +26,9 @@ export function digKind(encounter: Encounter): Kind {
     ]),
     attach(play) {
       play.screen.classList.add('dig-site');
+      // The block is earth until it's dug out; paint still shows, so you can mark finds.
+      play.view.styler = (cell) => (play.game.blocks[cell] === PAINTED ? null : 'dirt');
+      play.view.rebuild();
     },
     land() {
       find.replaceChildren(gadget ? gadgetArt(gadget.id) : '✨');

@@ -23,10 +23,54 @@ export function encounterPuzzle(encounterId: string): Puzzle {
   return parsePuzzle(JSON.parse(fs.readFileSync(file, 'utf8')));
 }
 
+/**
+ * Starts straight at one encounter of a job: seeds the run save, then opens the
+ * encounter (skipping its entrance scene if it has one).
+ */
+export async function runAt(
+  page: Page,
+  jobId: string,
+  node: number,
+  opts: { mode?: 'relaxed' | 'hearts'; hp?: number; gadgets?: string[] } = {},
+): Promise<void> {
+  const root = path.join(import.meta.dirname, '../src/puzzles');
+  const job = JSON.parse(fs.readFileSync(path.join(root, 'runs', `${jobId}.json`), 'utf8'));
+  const run = {
+    runId: jobId,
+    node,
+    hp: opts.hp ?? job.hp,
+    maxHp: job.hp,
+    gadgets: opts.gadgets ?? job.gadgets ?? [],
+    status: 'active',
+    mode: opts.mode ?? 'relaxed',
+    tally: { mistakes: 0, hintsUsed: 0, gadgetsUsed: 0 },
+  };
+  await page.goto('/');
+  await page.evaluate((save) => localStorage.setItem('picross3d:run', JSON.stringify(save)), {
+    current: run,
+    seenScenes: [],
+    seenTips: [],
+    jobs: {},
+  });
+  // Saves are read once when the app loads, so load it again with the run in place.
+  await page.goto('/#/story/play');
+  await page.reload();
+  await skipScene(page);
+  await page.locator('canvas.block-canvas').waitFor();
+}
+
+/** Lines of a puzzle with no cubes of the shape: breaking one finishes it. */
+export function emptyLines(p: Puzzle): number[][] {
+  return p.lines.filter((l) => l.cells.every((c) => !p.solution[c])).map((l) => l.cells);
+}
+
 /** Skips a scene if one is playing. */
 export async function skipScene(page: Page): Promise<void> {
   const skip = page.getByRole('button', { name: 'Skip ⏭' });
-  if (await skip.isVisible().catch(() => false)) await skip.click();
+  const canvas = page.locator('canvas.block-canvas');
+  // Whichever comes first: the block, or a scene to skip.
+  await expect(canvas.or(skip).first()).toBeVisible({ timeout: 30_000 });
+  if (await skip.isVisible()) await skip.click();
 }
 
 /** A pack puzzle, read from its file. */
