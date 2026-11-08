@@ -8,6 +8,7 @@ import {
   recordSolve,
   saveBoard,
 } from '../../game/progress';
+import { Clock } from '../../game/clock';
 import { getSettings } from '../../game/settings';
 import type { Puzzle } from '../../puzzles/format';
 import { nextPuzzle, PUZZLES } from '../../puzzles/index';
@@ -35,7 +36,7 @@ export function renderGameScreen(root: HTMLElement, puzzle: Puzzle): () => void 
   const number = puzzleNumber(PUZZLES.indexOf(puzzle));
   const solvedBefore = Boolean(getPuzzleStats(puzzle.id));
   let tool: ToolChoice = 'break';
-  let startedAt = performance.now();
+  const clock = new Clock(game.elapsed);
   let changed = false;
 
   const view = new BlockView(puzzle, game.blocks);
@@ -138,7 +139,7 @@ export function renderGameScreen(root: HTMLElement, puzzle: Puzzle): () => void 
 
   // --- State shown on screen -------------------------------------------------------
 
-  const elapsed = () => game.elapsed + (game.over ? 0 : performance.now() - startedAt);
+  const elapsed = () => clock.elapsed;
 
   function renderHud() {
     hearts.hidden = game.mode !== 'hearts';
@@ -408,7 +409,8 @@ export function renderGameScreen(root: HTMLElement, puzzle: Puzzle): () => void 
   }
 
   function finish() {
-    const time = elapsed();
+    clock.pause();
+    const time = clock.elapsed;
     game.elapsed = time;
     const best = recordSolve(puzzle.id, time);
     const stats = getPuzzleStats(puzzle.id)!;
@@ -449,6 +451,7 @@ export function renderGameScreen(root: HTMLElement, puzzle: Puzzle): () => void 
   }
 
   function fail() {
+    clock.pause();
     view.setCursor(null);
     playSound('strike', 0.2);
     panel.replaceChildren(
@@ -464,7 +467,7 @@ export function renderGameScreen(root: HTMLElement, puzzle: Puzzle): () => void 
           textContent: 'Retry',
           onclick: () => {
             game.retry();
-            startedAt = performance.now();
+            clock.reset();
             panel.hidden = true;
             clearSavedBoard(puzzle.id);
             done = doneLines();
@@ -485,12 +488,8 @@ export function renderGameScreen(root: HTMLElement, puzzle: Puzzle): () => void 
   // Pause the clock while the page is hidden.
   const visibility = () => {
     if (game.over) return;
-    if (document.hidden) {
-      game.elapsed = elapsed();
-      startedAt = performance.now();
-    } else {
-      startedAt = performance.now();
-    }
+    if (document.hidden) clock.pause();
+    else clock.resume();
   };
   document.addEventListener('visibilitychange', visibility);
 

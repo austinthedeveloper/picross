@@ -15,12 +15,19 @@ test('solving a puzzle reveals its name and records it', async ({ page }) => {
   const steps = puzzle('steps');
   await page.goto('/#/play/steps');
   await focusBlock(page);
-  await breakCubes(page, steps, extras(steps));
+  const cubes = extras(steps);
+  await breakCubes(page, steps, cubes.slice(0, -1));
+  // Long enough for the clock to pass a second, so a zero time would show.
+  await page.waitForTimeout(1200);
+  await breakCubes(page, steps, cubes.slice(-1));
   await expect(page.getByRole('heading', { name: 'Solved!' })).toBeVisible();
   await expect(page.locator('.end-name')).toHaveText('Steps');
+  await expect(page.locator('.end-note')).not.toHaveText(/^0:00/);
   await page.getByRole('link', { name: 'All puzzles' }).click();
   await expect(page.locator('.puzzle-card').first()).toContainText('Steps');
+  await expect(page.locator('.puzzle-card').first()).not.toContainText('0:00');
   await expect(page.locator('.stats')).toContainText('1/');
+  await expect(page.locator('.stats')).not.toContainText('0:00 played');
 });
 
 test('undo puts a broken cube back, and progress survives a reload', async ({ page }) => {
