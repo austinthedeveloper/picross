@@ -75,6 +75,11 @@ function route() {
   window.scrollTo(0, 0);
 }
 
+// Offline play and installing (public/sw.js), in production builds only.
+if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+  void navigator.serviceWorker.register('./sw.js').catch(() => {});
+}
+
 window.addEventListener('hashchange', route);
 // Save the board in progress when the tab closes.
 window.addEventListener('pagehide', () => cleanup?.());

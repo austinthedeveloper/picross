@@ -2,8 +2,9 @@
 
 A 3D picross puzzle game for the browser, built with Vite, TypeScript and three.js. It's the
 3D sibling of [Picross](https://github.com/austinthedeveloper/picross) (the 2D web game) and
-shares its look, sounds and settings. Play the current `main` at
-**https://austinthedeveloper.github.io/picross-3d/**.
+shares its look, sounds and settings. Play the latest release at
+**https://austinthedeveloper.github.io/picross-3d/**, or the current `main` at
+https://austinthedeveloper.github.io/picross-3d/dev/.
 
 Every puzzle is a block of cubes with a shape hidden inside. The number on a face counts the
 cubes of the shape in the line running into that face; a circle means they're in two pieces,
@@ -13,7 +14,10 @@ a square three or more. Break away everything that isn't the shape and it's reve
   banded Easy to Expert, with filters
 - A guided tutorial, and a hint menu that works out a line or checks for mistakes
 - An editor: draw a shape layer by layer, check it can be solved, play-test it, share a link
-- Story mode: the 2D game's ten chapters of jobs, scenes and bosses, on blocks
+- Story mode: the 2D game's ten chapters of jobs, scenes and bosses, on blocks, with every
+  enemy power rebuilt for a block
+- A daily puzzle with a streak, dioramas that fill in piece by piece, and badges
+- Installs to your home screen and plays offline
 - Break and Paint tools, drag strokes along a layer, turn and zoom with a drag or a pinch
 - Peel layers off either end of each axis to see inside; snap to front, side or top
 - Relaxed or Hearts mode, hints, undo/redo, a timer and best times, saved progress

@@ -14,6 +14,7 @@ on:
 
 permissions:
   contents: write
+  actions: write # to start the Pages deploy (a release made here doesn't trigger it)
 
 jobs:
   release:
@@ -52,3 +53,5 @@ jobs:
             gh release create "$TAG" picross-cubed-$TAG.zip* \
               --title "Picross Cubed $TAG" --notes-file "docs/releases/$TAG.md" --verify-tag
           fi
+      - name: Deploy the site
+        run: gh workflow run pages.yml --ref main

@@ -1,0 +1,66 @@
+name: Deploy the site
+
+# One GitHub Pages site, two builds:
+#   https://austinthedeveloper.github.io/picross-3d/      the latest release (production)
+#   https://austinthedeveloper.github.io/picross-3d/dev/  main, after CI passes
+# Runs when main gets a push (after CI), and after each release (release.yml starts it).
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Put the latest release at the root, main under /dev/
+        run: |
+          mkdir -p site
+          tag=$(gh release view --json tagName --jq .tagName 2>/dev/null || true)
+          if [ -n "$tag" ]; then
+            gh release download "$tag" --pattern "picross-cubed-$tag.zip" --dir "$RUNNER_TEMP"
+            unzip -q "$RUNNER_TEMP/picross-cubed-$tag.zip" -d "$RUNNER_TEMP/release"
+            cp -r "$RUNNER_TEMP/release/picross-cubed-$tag/." site/
+            echo "Root: $tag"
+          else
+            cp -r dist/. site/
+            echo "Root: main (no release yet)"
+          fi
+          mkdir -p site/dev
+          cp -r dist/. site/dev/
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
