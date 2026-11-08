@@ -1,0 +1,21 @@
+{
+  "id": "anglerfish",
+  "name": "Anglerfish",
+  "colors": {
+    "b": "blue",
+    "k": "graphite",
+    "w": "white",
+    "y": "yellow",
+    "t": "teal"
+  },
+  "layers": [
+    [".....", "..b..", ".bbb.", ".bbb.", ".....", "....."],
+    ["..t..", ".bbb.", "bbbbb", "bbbbb", ".www.", "....."],
+    ["..t..", "bbbbb", "bbbbb", "bbbbb", ".bbb.", "....."],
+    [".....", ".bbb.", ".bbb.", ".wbw.", ".....", "..y.."],
+    [".....", ".....", "..k..", "..k..", "..k..", "..k.."]
+  ],
+  "hideRatio": 0.45,
+  "hide": "33a067b5a6f940005f7021",
+  "passes": 6
+}

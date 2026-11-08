@@ -1,0 +1,51 @@
+# Chapter 3: Deep Water (deep-end).
+
+== eel "Electric Eel" hide=0.45
+g=green y=yellow k=graphite l=leaf
+llll. gggg. .y...
+l.... g.... y....
+lllll ggggg ...y.
+....l ....g ....y
+.llll .kggg ...y.
+
+== anglerfish "Anglerfish" hide=0.45
+b=blue k=graphite w=white y=yellow t=teal
+..... ..t.. ..t.. ..... .....
+..b.. .bbb. bbbbb .bbb. .....
+.bbb. bbbbb bbbbb .bbb. ..k..
+.bbb. bbbbb bbbbb .wbw. ..k..
+..... .www. .bbb. ..... ..k..
+..... ..... ..... ..y.. ..k..
+
+== starfish "Starfish" hide=0.45
+o=orange c=coral y=yellow
+..oo.. ......
+..oo.. ..cc..
+oooooo .cyyc.
+.oooo. ..yy..
+.o..o. .c..c.
+oo..oo ......
+
+== cuttlefish "Cuttlefish" hide=0.45
+p=pink u=purple w=white k=graphite c=coral
+.ppp. ..... ..... .....
+ppppp .uuu. .ucu. .....
+ppppp .uuu. .ucu. ..u..
+ppppp .uuu. .ucu. .uuu.
+.ppp. .uuu. wkukw .....
+.c.c. .ccc. ..... .....
+
+== life-ring "Life Ring" hide=0.45
+r=red w=white y=yellow
+.wwrr. ww..rr w....r r....w rr..ww .rrww.
+.wwrr. ww..rr y....r r....y rr..ww .rrww.
+
+== octopus "Old Tess" hide=0.5
+p=purple k=pink w=white g=graphite y=yellow
+k..k..k k..k..k ....... ....... ....... ....... .......
+.k.k.k. ....... ....... ..ppp.. ..ppp.. ..ppp.. .......
+..ppp.. ..ppp.. ..ppp.. .ppppp. .ppppp. .ppppp. ..ppp..
+kkpppkk k.ppp.k ..ppp.. .ppppp. .ppppp. .ppppp. ..pyp..
+..ppp.. ..ppp.. ..ppp.. .ppppp. .ppppp. .ppppp. ..ppp..
+.k.k.k. ....... ....... ..ppp.. ..wpw.. ..wpw.. .......
+k..k..k k..k..k ....... ....... ..g.g.. ....... .......
