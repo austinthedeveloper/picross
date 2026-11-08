@@ -7,7 +7,6 @@ import { clearedJobs, getJobStats } from './runSave';
 import { readStore, writeStore } from './storage';
 
 export const TIERS = ['Bronze', 'Silver', 'Gold'] as const;
-export type Tier = (typeof TIERS)[number];
 
 export interface Badge {
   id: string;

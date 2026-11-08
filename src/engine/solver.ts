@@ -5,7 +5,6 @@ import { allLines, type Dims, type Line, volume } from './volume';
 export const UNKNOWN = 0;
 export const FILLED = 1;
 export const EMPTY = 2;
-export type Knowledge = typeof UNKNOWN | typeof FILLED | typeof EMPTY;
 
 /** Every arrangement of a line of `length` cubes that fits a clue, as bit masks. */
 const cache = new Map<string, Uint16Array>();

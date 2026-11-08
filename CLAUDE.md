@@ -11,3 +11,7 @@ austinthedeveloper/picross) is its sibling and the reference for look and feel.
 - No raw hex colors outside `src/styles/tokens.css` and `src/styles/voxels.css`.
 - Puzzles and art are original. Genre mechanics are fine; don't copy another game's puzzles,
   names or look.
+- The 2D repo's `docs/shared-files.md` and `CLAUDE.md` say the same from its side: keep
+  shared files importing only other shared files.
+- Combining the two games is planned in `docs/combining.md`; keep both working on their own
+  until then.

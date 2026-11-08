@@ -1,7 +1,6 @@
 import './styles/tokens.css';
 import './styles/voxels.css';
 import './styles/base.css';
-import './styles/app.css';
 import './styles/game.css';
 import './styles/select.css';
 import './styles/editor.css';
