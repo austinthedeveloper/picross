@@ -1,0 +1,23 @@
+{
+  "id": "flytrap",
+  "name": "Snapjaw Flytrap",
+  "colors": {
+    "o": "orange",
+    "b": "brown",
+    "g": "green",
+    "k": "pink",
+    "w": "white",
+    "l": "leaf"
+  },
+  "layers": [
+    ["......", ".oooo.", ".oooo.", ".oooo.", "......"],
+    ["oooooo", "obbbbo", "obbbbo", "obbbbo", "oooooo"],
+    ["......", "....l.", "..gg..", ".l....", "......"],
+    ["......", ".gggg.", ".gkkg.", ".gkkg.", ".gggg."],
+    [".gggg.", ".gkkg.", "......", "......", ".w..w."],
+    [".gggg.", ".gkkg.", ".gkkg.", ".wggw.", "......"]
+  ],
+  "hideRatio": 0.5,
+  "hide": "2a80906450c5dbbe1af60cb2",
+  "passes": 4
+}
