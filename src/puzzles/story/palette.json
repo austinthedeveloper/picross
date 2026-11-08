@@ -1,0 +1,19 @@
+{
+  "id": "palette",
+  "name": "Forger's Palette",
+  "colors": {
+    "w": "wood",
+    "r": "red",
+    "b": "blue",
+    "y": "yellow",
+    "g": "green",
+    "k": "white"
+  },
+  "layers": [
+    [".wwww.", "wwwwww", "wwwwww", "w..www", ".wwww."],
+    [".rr.b.", ".....y", ".....y", "......", "..g.k."]
+  ],
+  "hideRatio": 0.45,
+  "hide": "14566d343b262",
+  "passes": 4
+}

@@ -1,0 +1,21 @@
+{
+  "id": "mimic-chest",
+  "name": "Mimic Chest",
+  "colors": {
+    "w": "wood",
+    "y": "yellow",
+    "t": "white",
+    "r": "red",
+    "b": "brown"
+  },
+  "layers": [
+    ["bbbbb", "bbbbb", "bbbbb", "bbbbb"],
+    ["bwwwb", "wwwww", "wwwww", "wwyww"],
+    ["bwwwb", "wrrrw", "wrrrw", "t.t.t"],
+    ["bwwwb", "wwwww", "wwwww", ".t.t."],
+    ["bbbbb", "wwwww", "wwyww", "....."]
+  ],
+  "hideRatio": 0.45,
+  "hide": "2720eb1e00f843fc0",
+  "passes": 4
+}

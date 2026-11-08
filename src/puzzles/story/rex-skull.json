@@ -1,0 +1,23 @@
+{
+  "id": "rex-skull",
+  "name": "Museum Rex",
+  "colors": {
+    "c": "cream",
+    "w": "white",
+    "g": "graphite",
+    "s": "stone",
+    "y": "yellow"
+  },
+  "layers": [
+    ["sssss", "sssss", "sssss", "sssss", "sssss", "sssss", "syyys"],
+    ["ccccc", "wwwww", "wwwww", "wwwww", "wwwww", ".www.", "....."],
+    ["ccccc", ".....", ".....", ".....", ".....", ".....", "....."],
+    ["ccccc", "wwwww", "wwwww", "wwwww", ".www.", ".www.", ".www."],
+    ["ccccc", "ccccc", "ccccc", "ccccc", ".ccc.", ".ccc.", ".ccc."],
+    ["ccccc", "ccccc", "gcccg", "ccccc", ".ccc.", ".ccc.", "....."],
+    ["ccccc", "ccccc", "ccccc", ".....", ".....", ".....", "....."]
+  ],
+  "hideRatio": 0.5,
+  "hide": "f74f020f70a209df8f7e40c48a0860",
+  "passes": 3
+}
