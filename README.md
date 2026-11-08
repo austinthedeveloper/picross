@@ -12,6 +12,7 @@ a square three or more. Break away everything that isn't the shape and it's reve
 - 37 handmade puzzles from 3×3×3 to 9×8×9, each checked to be solvable without guessing,
   banded Easy to Expert, with filters
 - A guided tutorial, and a hint menu that works out a line or checks for mistakes
+- An editor: draw a shape layer by layer, check it can be solved, play-test it, share a link
 - Break and Paint tools, drag strokes along a layer, turn and zoom with a drag or a pinch
 - Peel layers off either end of each axis to see inside; snap to front, side or top
 - Relaxed or Hearts mode, hints, undo/redo, a timer and best times, saved progress

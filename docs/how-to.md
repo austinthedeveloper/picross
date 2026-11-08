@@ -46,6 +46,15 @@ npm run puzzles -- --sheet src/puzzles/sheets/batch-1.txt
 Unchanged shapes keep their hidden clues. Sheets under `sheets/story/` export to
 `src/puzzles/story/` (story puzzles, named after the 2D puzzle their encounter uses).
 
+### In the browser: the editor
+
+`#/editor` (the Editor button on the list) draws a shape layer by layer with a live 3D
+preview, and checks it in a web worker as you go: solvable or not (outlining the cubes
+line logic can't work out), and with a slider for how many clues to hide. Play-test it,
+copy a share link (`#/p/<code>`, the puzzle deflated into the URL), or export the JSON and
+drop it in `src/puzzles/pack/` (then `npm run puzzles`). `src/puzzles/check.ts`,
+`draft.ts` and `share.ts` hold the logic, with tests.
+
 ## Difficulty
 
 `src/puzzles/difficulty.ts` bands puzzles by `passes`, up a band for blocks 9 or more on a
