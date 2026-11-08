@@ -31,6 +31,22 @@ describe('Game', () => {
     expect(game.extend(7)).toBe('broke');
   });
 
+  it('a hold carries a stroke straight through the block', () => {
+    // From the top face of cube 6 (top front left), the y line goes down through 2.
+    const game = new Game(puzzle, 'relaxed');
+    game.begin('break', 6, 'z');
+    // From the front face, the z line through 6 runs back to 4: 6 is empty, 4 is shape.
+    expect(game.extendLine()).toEqual(['broke']);
+    game.end();
+    expect(game.blocks[4]).toBe(BROKEN);
+    // Hearts stops at the shape, and a paint hold paints the whole line.
+    const hearts = new Game(puzzle, 'hearts');
+    hearts.begin('paint', 0, 'x');
+    expect(hearts.extendLine()).toEqual(['painted']);
+    hearts.end();
+    expect([hearts.blocks[0], hearts.blocks[1]]).toEqual([PAINTED, PAINTED]);
+  });
+
   it('protects painted cubes, and paint strokes unpaint what they start on', () => {
     const game = new Game(puzzle, 'relaxed');
     game.begin('paint', 0, 'y');

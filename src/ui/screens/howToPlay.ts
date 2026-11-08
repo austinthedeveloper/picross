@@ -25,6 +25,10 @@ const RULES: [string, string][] = [
     'Paint a cube you know is part of the shape. Painted cubes can’t be broken by accident. Paint it again to clear it.',
   ],
   [
+    'Whole lines',
+    'Hold on a cube to break or paint its whole line, straight through the block, the way its face looks. A 0 clears in one go. (Keys: Shift+X or Shift+Space.)',
+  ],
+  [
     'Turn and peel',
     'Drag empty space, or pick Turn, to look around. Peel layers off the side facing you to see inside.',
   ],
