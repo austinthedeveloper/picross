@@ -5,14 +5,23 @@
  */
 export interface Clue {
   count: number;
-  /** 0 or 1 piece shows plain, 2 a circle, and 3 means three or more (a square). */
-  pieces: 0 | 1 | 2 | 3;
+  /**
+   * 0 or 1 piece shows plain, 2 a circle, and 3 means three or more (a square). Null when
+   * only the count is known (a scrambled clue in a fight).
+   */
+  pieces: 0 | 1 | 2 | 3 | null;
 }
 
-export type ClueFrame = 'plain' | 'circle' | 'square';
+export type ClueFrame = 'plain' | 'circle' | 'square' | 'scrambled';
 
 export const clueFrame = (clue: Clue): ClueFrame =>
-  clue.pieces >= 3 ? 'square' : clue.pieces === 2 ? 'circle' : 'plain';
+  clue.pieces === null
+    ? 'scrambled'
+    : clue.pieces >= 3
+      ? 'square'
+      : clue.pieces === 2
+        ? 'circle'
+        : 'plain';
 
 /** The clue for a line of filled (true) and empty (false) cubes. */
 export function clueOf(filled: readonly boolean[]): Clue {
@@ -35,6 +44,7 @@ export function clueOfMask(mask: number, length: number): Clue {
 
 /** Read aloud: "3", "3 in 2 pieces", "5 in 3 or more pieces". */
 export function clueText(clue: Clue): string {
+  if (clue.pieces === null) return `${clue.count}, pieces scrambled`;
   if (clue.pieces <= 1) return String(clue.count);
   return `${clue.count} in ${clue.pieces === 2 ? '2' : '3 or more'} pieces`;
 }

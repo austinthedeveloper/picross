@@ -18,6 +18,7 @@ import {
   WebGLRenderer,
   type CanvasTexture,
 } from 'three';
+import type { Clue } from '../../engine/clues';
 import { indexOf, inside, lineIdAt, pointOf, type Axis, type Point } from '../../engine/volume';
 import { BROKEN, PAINTED } from '../../game/game';
 import type { Puzzle } from '../../puzzles/format';
@@ -107,6 +108,8 @@ export class BlockView {
   /** Lines whose clue faces look finished. */
   done = new Set<number>();
   styler: FaceStyler | null = null;
+  /** Lets a screen show a different clue for a line (a fight's fog, scrambles, forgeries). */
+  clueFor: ((line: number) => Clue | null) | null = null;
   private tween: { from: number[]; to: number[]; start: number; ms: number } | null = null;
   cursor: number | null = null;
   revealed = false;
@@ -237,7 +240,7 @@ export class BlockView {
                 : done
                   ? 'done'
                   : 'solid');
-          const [u0, v0, u1, v1] = faceUV(clues[line]);
+          const [u0, v0, u1, v1] = faceUV(this.clueFor ? this.clueFor(line) : clues[line]);
           uv.push(u0, v0, u1, v0, u1, v1, u0, v1);
           for (let k = 0; k < 4; k++) col.push(f.shade, f.shade, f.shade);
         }

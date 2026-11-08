@@ -10,32 +10,77 @@ import { token } from '../tokens';
  * - solid, painted: an ordinary cube and a painted one
  * - lit: a cube on a hinted line
  * - done, painted-done: a finished line's faces, with the clue faded back
+ * - fog: a fogged line's face, clue hidden under cloud
+ * - target, suspect, honest: armor's target lines, forged-clue suspects, cleared suspects
+ * - ink: a face splashed with ink (its clue and paint hidden)
+ * - live: the charge's live line; swapped: a layer the Mimic just wiped
+ * - dirt: a dig's earth
  */
-export const STATES = ['solid', 'painted', 'lit', 'done', 'painted-done'] as const;
+export const STATES = [
+  'solid',
+  'painted',
+  'lit',
+  'done',
+  'painted-done',
+  // Story fights (src/ui/screens/story/fight.ts):
+  'fog',
+  'target',
+  'suspect',
+  'honest',
+  'ink',
+  'live',
+  'swapped',
+  'dirt',
+] as const;
 export type FaceState = (typeof STATES)[number];
 
 const NUMBERS = MAX_LINE + 1;
 /** Faces per texture: a blank one for a hidden clue, then each frame's numbers. */
-const CELLS = 1 + 3 * NUMBERS;
+const CELLS = 1 + 4 * NUMBERS;
 const COLS = Math.ceil(Math.sqrt(CELLS));
 const ROWS = Math.ceil(CELLS / COLS);
 const SIZE = 128;
-const FRAMES = { plain: 0, circle: 1, square: 2 };
+const FRAMES = { plain: 0, circle: 1, square: 2, scrambled: 3 };
 
 interface Look {
   bg: string;
   ink: string;
-  /** The clue's opacity: finished lines fade back. */
+  /** The clue's opacity: finished lines fade back; fog and ink hide it. */
   alpha: number;
+  /** A small mark in the corner, for marked lines. */
+  mark?: string;
 }
 
 function look(state: FaceState): Look {
-  const painted = state === 'painted' || state === 'painted-done';
-  return {
-    bg: painted ? token('--cube-painted') : state === 'lit' ? token('--cube-lit') : token('--cube'),
-    ink: painted ? token('--accent-ink') : token('--ink'),
-    alpha: state === 'done' || state === 'painted-done' ? 0.32 : 1,
-  };
+  const base = { bg: token('--cube'), ink: token('--ink'), alpha: 1 };
+  switch (state) {
+    case 'painted':
+      return { bg: token('--cube-painted'), ink: token('--accent-ink'), alpha: 1 };
+    case 'painted-done':
+      return { bg: token('--cube-painted'), ink: token('--accent-ink'), alpha: 0.32 };
+    case 'lit':
+      return { ...base, bg: token('--cube-lit') };
+    case 'done':
+      return { ...base, alpha: 0.32 };
+    case 'fog':
+      return { bg: token('--backdrop'), ink: token('--muted'), alpha: 0, mark: '~' };
+    case 'target':
+      return { ...base, bg: token('--hl'), mark: '◎' };
+    case 'suspect':
+      return { ...base, mark: '?' };
+    case 'honest':
+      return { ...base, bg: token('--hl'), mark: '✓' };
+    case 'ink':
+      return { bg: token('--squid-ink'), ink: token('--squid-ink'), alpha: 0 };
+    case 'live':
+      return { ...base, bg: token('--spark') };
+    case 'swapped':
+      return { ...base, bg: token('--mischief'), ink: token('--accent-ink') };
+    case 'dirt':
+      return { bg: token('--dirt'), ink: token('--dug'), alpha: 1 };
+    default:
+      return base;
+  }
 }
 
 const slot = (clue: Clue | null) => (clue ? 1 + FRAMES[clueFrame(clue)] * NUMBERS + clue.count : 0);
@@ -57,7 +102,15 @@ function drawFace(g: CanvasRenderingContext2D, x: number, y: number, l: Look, cl
   g.strokeStyle = token('--cube-edge');
   g.lineWidth = 6;
   g.strokeRect(x + 3, y + 3, SIZE - 6, SIZE - 6);
-  if (!clue) return;
+  if (l.mark) {
+    g.globalAlpha = 1;
+    g.fillStyle = l.ink === l.bg ? token('--ink') : l.ink;
+    g.font = '700 30px Rubik, system-ui, sans-serif';
+    g.textAlign = 'left';
+    g.textBaseline = 'top';
+    g.fillText(l.mark, x + 12, y + 8);
+  }
+  if (!clue || l.alpha === 0) return;
   const cx = x + SIZE / 2;
   const cy = y + SIZE / 2;
   g.globalAlpha = l.alpha;
@@ -75,6 +128,13 @@ function drawFace(g: CanvasRenderingContext2D, x: number, y: number, l: Look, cl
     g.stroke();
   } else if (frame === 'square') {
     g.strokeRect(cx - 38, cy - 38, 76, 76);
+  } else if (frame === 'scrambled') {
+    // A broken ring: the count is right, the pieces are anyone's guess.
+    g.setLineDash([10, 9]);
+    g.beginPath();
+    g.arc(cx, cy, 40, 0, Math.PI * 2);
+    g.stroke();
+    g.setLineDash([]);
   }
   g.globalAlpha = 1;
 }
@@ -91,7 +151,7 @@ export function drawAtlas(state: FaceState, texture?: CanvasTexture): CanvasText
     drawFace(g, (s % COLS) * SIZE, Math.floor(s / COLS) * SIZE, l, clue);
   };
   draw(null);
-  for (const pieces of [1, 2, 3] as const) {
+  for (const pieces of [1, 2, 3, null] as const) {
     for (let count = 0; count < NUMBERS; count++) draw({ count, pieces });
   }
   const tex = texture ?? new CanvasTexture(canvas);
