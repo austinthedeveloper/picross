@@ -2,7 +2,8 @@
 
 A 3D picross puzzle game for the browser, built with Vite, TypeScript and three.js. It's the
 3D sibling of [Picross](https://github.com/austinthedeveloper/picross) (the 2D web game) and
-shares its look, sounds and settings.
+shares its look, sounds and settings. Play the current `main` at
+**https://austinthedeveloper.github.io/picross-3d/**.
 
 Every puzzle is a block of cubes with a shape hidden inside. The number on a face counts the
 cubes of the shape in the line running into that face; a circle means they're in two pieces,
