@@ -1,0 +1,18 @@
+{
+  "id": "heart",
+  "name": "Heart",
+  "colors": {
+    "r": "red"
+  },
+  "layers": [
+    ["...r...", "...r..."],
+    ["..rrr..", "..rrr.."],
+    [".rrrrr.", ".rrrrr."],
+    ["rrrrrrr", "rrrrrrr"],
+    ["rrrrrrr", "rrrrrrr"],
+    [".rr.rr.", ".rr.rr."]
+  ],
+  "hideRatio": 0.5,
+  "hide": "00310398eb5fd36f7",
+  "passes": 4
+}

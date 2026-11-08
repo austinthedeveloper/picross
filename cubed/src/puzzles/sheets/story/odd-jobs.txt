@@ -1,0 +1,34 @@
+# Chapter 1: Odd Jobs (first-job). Story puzzles, named after the 2D puzzle each encounter uses.
+
+== sword "Sword" hide=0.4
+s=stone y=yellow b=brown w=white
+... ... .y. ... ...
+.y. .b. yyy sss .w.
+... ... .y. ... ...
+
+== bomb-casing "Bomb Casing" hide=0.4
+g=graphite s=stone o=orange y=yellow
+..... .ggg. .ggg. ..... .....
+.ggg. ggggg ggggg .ggg. .....
+.ggg. ggggg ggggg .gsg. ..so.
+.ggg. ggggg ggggg .ggg. ...y.
+..... .ggg. .ggg. ..... .....
+
+== bat "Bat" hide=0.45
+p=purple g=graphite y=yellow
+g...g gg.gg gg.gg .....
+..p.. .gpg. .ppp. .p.p.
+..p.. ..p.. .ypy. .....
+
+== thermos "Thermos" hide=0.45
+r=red s=sky w=white g=graphite
+.ss.. .ss.. .ww.. .ss.. .....
+ssss. ssssg wwww. ssssg .rr..
+ssss. ssssg wwww. ssssg .rr..
+.ss.. .ss.. .ww.. .ss.. .....
+
+== wrench "Wrench of Science" hide=0.45
+s=stone t=teal r=red
+..t.. ..r.. ..r.. ..s.. sssss ss.ss
+.rrr. .rrr. .rrr. .rsr. sstss ss.ss
+..t.. ..r.. ..r.. ..s.. sssss ss.ss

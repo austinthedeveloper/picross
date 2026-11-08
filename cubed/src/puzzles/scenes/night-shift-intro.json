@@ -1,0 +1,85 @@
+{
+  "id": "night-shift-intro",
+  "backdrop": "museum",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "rook"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "dee"
+    },
+    "curator": {
+      "name": "Curator Ambrose",
+      "portrait": "curator"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "text": "Rook's phone rings at 11:58 p.m. It's a museum."
+        },
+        {
+          "who": "curator",
+          "text": "Mrs. Pell says you evicted her gremlin. I have a... similar situation."
+        },
+        {
+          "who": "rook",
+          "text": "We're experts in similar situations! What's the situation?"
+        },
+        {
+          "who": "curator",
+          "text": "After closing, the exhibits get up. The chest bites. The owl scrambles things. The beetle is mostly just large."
+        },
+        {
+          "who": "dee",
+          "text": "Scrambles things?"
+        },
+        {
+          "who": "curator",
+          "text": "Signs. Labels. Your little numbers, I imagine."
+        }
+      ],
+      "choices": [
+        {
+          "text": "How do they wake up?",
+          "next": "why"
+        },
+        {
+          "text": "We'll take it.",
+          "next": "go"
+        }
+      ]
+    },
+    "why": {
+      "lines": [
+        {
+          "who": "curator",
+          "text": "No idea. Certainly nothing to do with me."
+        },
+        {
+          "who": "dee",
+          "text": "That's exactly what someone it has to do with would say."
+        }
+      ],
+      "next": "go"
+    },
+    "go": {
+      "lines": [
+        {
+          "who": "rook",
+          "text": "Night shift rates are double, by the way."
+        },
+        {
+          "who": "curator",
+          "text": "Of course they are."
+        },
+        {
+          "text": "The museum doors creak open. Somewhere inside, something ticks."
+        }
+      ]
+    }
+  }
+}

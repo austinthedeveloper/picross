@@ -1,0 +1,76 @@
+/*
+ * Colors a solved shape can be (COLORS in src/puzzles/format.ts), as tokens beside
+ * tokens.css (which is shared with the 2D game, so it can't be edited here). Every color
+ * has a light, dark and high-contrast value. See docs/art-direction.md.
+ */
+
+:root {
+  --vox-graphite: #3a3e48;
+  --vox-stone: #9a968c;
+  --vox-white: #f4f1ea;
+  --vox-cream: #eadcb8;
+  --vox-wood: #b8875a;
+  --vox-brown: #7a5235;
+  --vox-red: #d9534f;
+  --vox-coral: #ee8a6e;
+  --vox-orange: #ec9338;
+  --vox-yellow: #ecc440;
+  --vox-leaf: #7fb04f;
+  --vox-green: #3f8f5a;
+  --vox-teal: #3d9e9a;
+  --vox-sky: #79b6e0;
+  --vox-blue: #3f6fb5;
+  --vox-purple: #7b5cc8;
+  --vox-pink: #e98bb0;
+  /* The block before it's solved: a cube face, its border, a painted face, a lit line. */
+  --cube: var(--cell-bg);
+  --cube-edge: var(--guide);
+  --cube-painted: var(--accent);
+  --cube-lit: var(--hl);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --vox-graphite: #555a66;
+    --vox-stone: #8a867d;
+    --vox-white: #d9d6cf;
+    --vox-cream: #cfc29f;
+    --vox-wood: #a0754c;
+    --vox-brown: #6c4a31;
+    --vox-red: #d4605c;
+    --vox-coral: #db7f66;
+    --vox-orange: #d88534;
+    --vox-yellow: #d7b23c;
+    --vox-leaf: #73a048;
+    --vox-green: #3f8758;
+    --vox-teal: #3a918d;
+    --vox-sky: #6aa3cb;
+    --vox-blue: #4a73b0;
+    --vox-purple: #7f66c2;
+    --vox-pink: #d27e9f;
+    --cube: #2a2d34;
+  }
+}
+
+/* High contrast keeps the shapes in color, but stronger, and the block black on white. */
+:root[data-contrast='high'] {
+  --vox-graphite: #000000;
+  --vox-stone: #6b6b6b;
+  --vox-white: #ffffff;
+  --vox-cream: #ffe9a8;
+  --vox-wood: #9a5a1c;
+  --vox-brown: #5a2d00;
+  --vox-red: #c00000;
+  --vox-coral: #ff5a36;
+  --vox-orange: #ff8000;
+  --vox-yellow: #ffd400;
+  --vox-leaf: #52a000;
+  --vox-green: #006b2e;
+  --vox-teal: #007a78;
+  --vox-sky: #3aa0ff;
+  --vox-blue: #0039b3;
+  --vox-purple: #6a00c8;
+  --vox-pink: #ff4fa0;
+  --cube: #ffffff;
+  --cube-edge: #000000;
+}

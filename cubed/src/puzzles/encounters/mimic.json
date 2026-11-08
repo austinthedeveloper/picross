@@ -1,0 +1,33 @@
+{
+  "id": "mimic",
+  "name": "Mimic",
+  "kind": "fight",
+  "puzzle": "mimic-chest",
+  "blurb": "A treasure chest in the gift shop. It's breathing.",
+  "enemy": {
+    "name": "Mimic",
+    "sprite": "mimic",
+    "hp": 45,
+    "attack": 2,
+    "phases": [
+      {
+        "at": 0.85,
+        "taunt": "Shell game!",
+        "swap": true
+      },
+      {
+        "at": 0.7,
+        "taunt": "Now you see it...",
+        "swap": true
+      },
+      {
+        "at": 0.55,
+        "name": "Hungry Mimic",
+        "sprite": "hungry-mimic",
+        "attack": 3,
+        "taunt": "Which row was it again?",
+        "swap": true
+      }
+    ]
+  }
+}

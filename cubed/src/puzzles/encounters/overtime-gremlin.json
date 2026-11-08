@@ -1,0 +1,54 @@
+{
+  "id": "overtime-gremlin",
+  "name": "Generator Gremlin",
+  "kind": "fight",
+  "boss": true,
+  "puzzle": "wrench",
+  "blurb": "The generator's been fixed. The thing living in it hasn't.",
+  "enemy": {
+    "name": "Generator Gremlin",
+    "sprite": "gremlin",
+    "hp": 45,
+    "attack": 2,
+    "fog": {
+      "rows": [3, 8, 10]
+    },
+    "phases": [
+      {
+        "at": 0.9,
+        "name": "Overcharged Gremlin",
+        "sprite": "overcharged-gremlin",
+        "attack": 3,
+        "taunt": "Lights out, tinkerer!",
+        "fog": {
+          "rows": [1, 7, 14, 4, 9]
+        },
+        "fogCount": 3
+      },
+      {
+        "at": 0.84,
+        "name": "Blackout Gremlin",
+        "sprite": "blackout-gremlin",
+        "attack": 4,
+        "taunt": "Who needs clues? Not you!",
+        "fog": {
+          "rows": [1, 7, 14, 4, 9]
+        },
+        "fogCount": 2,
+        "ink": 4
+      },
+      {
+        "at": 0.6,
+        "taunt": "It plugs itself into the mains.",
+        "charge": 6,
+        "scramble": {
+          "cols": [4]
+        },
+        "scrambleCount": 1
+      }
+    ],
+    "scramble": {
+      "cols": [3, 11]
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "id": "lost-suitcase",
+  "name": "Lost Suitcase",
+  "colors": {
+    "b": "brown",
+    "w": "wood",
+    "s": "stone",
+    "r": "red",
+    "y": "yellow"
+  },
+  "layers": [
+    ["sbwbbwbs", "bbwbbwbb", "bbwbbwbb", "sbwbbwbs"],
+    ["bbwbbwbb", "bbwbbwbb", "bbwbbwbb", "brwbbwbb"],
+    ["bbwbbwbb", "bbwbbwbb", "bbwbbwbb", "bywbywbb"],
+    ["bbwbbwbb", "bbwbbwbb", "bbwbbwbb", "bbwbbwrb"],
+    ["sbwbbwbs", "bbwbbwbb", "bbwbbwbb", "sbwyywbs"],
+    ["........", "..s..s..", "..s..s..", "........"],
+    ["........", "..wwww..", "..wwww..", "........"]
+  ],
+  "hideRatio": 0.5,
+  "hide": "6632a62c600996a426639ff9566ff",
+  "passes": 3
+}

@@ -1,0 +1,47 @@
+{
+  "id": "midway-intro",
+  "backdrop": "midway",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "rook"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "dee"
+    },
+    "bigsby": {
+      "name": "Bigsby",
+      "portrait": "bigsby"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "text": "The Midway at midnight. Every bulb is lit and the music is a little too slow."
+        },
+        {
+          "who": "bigsby",
+          "text": "Bigsby. I own this place. Owned. The Ringmaster's been running it since Tuesday."
+        },
+        {
+          "who": "rook",
+          "text": "Is the Ringmaster a problem?"
+        },
+        {
+          "who": "bigsby",
+          "text": "We never hired a ringmaster."
+        },
+        {
+          "who": "dee",
+          "text": "So the mirrors scramble, the fortune teller lies, and the strongman hits like a strongman."
+        },
+        {
+          "who": "rook",
+          "text": "Two tickets, please. Business expense."
+        }
+      ]
+    }
+  }
+}

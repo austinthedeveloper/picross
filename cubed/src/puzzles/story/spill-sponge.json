@@ -1,0 +1,21 @@
+{
+  "id": "spill-sponge",
+  "name": "Spill Sponge",
+  "colors": {
+    "y": "yellow",
+    "g": "green",
+    "o": "orange",
+    "w": "white",
+    "s": "sky"
+  },
+  "layers": [
+    ["yy.yyyyy", "yyyyyyyy", "yyyyyyyy", "yyyyyy.y", "........"],
+    ["yyyyyyyy", "yyyyyyyy", "yyyyyyyy", "y.yoyyoy", "........"],
+    ["yyyyyyyy", "yyyyyyyy", "yyyyyyyy", "yyyy.yyy", "........"],
+    ["gggggggg", "gggggggg", "gggggggg", "gggggggg", "....s..."],
+    ["........", "..w...w.", ".....s..", "........", ".s..w..."]
+  ],
+  "hideRatio": 0.5,
+  "hide": "ac30c0ff19c911c04236ed3e3d0",
+  "passes": 5
+}

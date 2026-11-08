@@ -1,0 +1,21 @@
+{
+  "id": "owl",
+  "name": "Clockwork Owl",
+  "colors": {
+    "o": "orange",
+    "b": "brown",
+    "w": "white",
+    "g": "graphite",
+    "y": "yellow"
+  },
+  "layers": [
+    [".ooo.", ".ooo.", ".ooo.", ".y.y."],
+    ["booob", "booob", "ooooo", ".byb."],
+    ["booob", "booob", "ooooo", "..y.."],
+    ["ooooo", "ooooo", "ogogo", ".w.w."],
+    ["booob", "booob", ".....", "....."]
+  ],
+  "hideRatio": 0.45,
+  "hide": "83e8f6c6655318a00",
+  "passes": 5
+}

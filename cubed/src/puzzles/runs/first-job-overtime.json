@@ -1,0 +1,15 @@
+{
+  "id": "first-job-overtime",
+  "name": "First Job: Overtime",
+  "hp": 12,
+  "encounters": [
+    "overtime-goblin",
+    "dig-site",
+    "overtime-fog-bat",
+    "tea-break",
+    "overtime-gremlin"
+  ],
+  "overtimeOf": "first-job",
+  "requires": "first-job",
+  "blurb": "Same workshop, later shift. Hits on, no patch kit, and the locals have been practicing."
+}

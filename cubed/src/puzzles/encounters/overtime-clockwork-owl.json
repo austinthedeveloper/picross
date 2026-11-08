@@ -1,0 +1,38 @@
+{
+  "id": "overtime-clockwork-owl",
+  "name": "Clockwork Owl",
+  "kind": "fight",
+  "puzzle": "owl",
+  "blurb": "Someone wound it tighter. It has started keeping its own time.",
+  "enemy": {
+    "name": "Clockwork Owl",
+    "sprite": "clockwork-owl",
+    "hp": 45,
+    "attack": 2,
+    "scramble": {
+      "rows": [5, 6, 7, 9, 11],
+      "cols": [3, 6, 9]
+    },
+    "phases": [
+      {
+        "at": 0.85,
+        "name": "Wound-up Owl",
+        "attack": 3,
+        "taunt": "Tick-tock, tinkerer!",
+        "scramble": {
+          "rows": [4, 8, 12],
+          "cols": [4, 10, 12]
+        },
+        "scrambleCount": 3
+      },
+      {
+        "at": 0.6,
+        "taunt": "Tick. Tock. Tick. Zap.",
+        "charge": 6
+      }
+    ],
+    "fog": {
+      "cols": [7]
+    }
+  }
+}

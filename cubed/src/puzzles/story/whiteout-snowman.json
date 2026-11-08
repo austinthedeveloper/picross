@@ -1,0 +1,22 @@
+{
+  "id": "whiteout-snowman",
+  "name": "Snowman",
+  "colors": {
+    "w": "white",
+    "s": "sky",
+    "b": "brown",
+    "o": "orange",
+    "k": "graphite"
+  },
+  "layers": [
+    ["......", ".wwww.", ".wwww.", ".wwww.", "......"],
+    [".wwww.", ".wwww.", "wwwwww", ".wwww.", ".wwsw."],
+    ["......", ".wwww.", ".wwww.", ".wwww.", "...s.."],
+    ["......", "......", "bssssb", "......", "......"],
+    ["......", "..ww..", "bwwwwb", "..ww..", "..o..."],
+    ["......", "..ww..", "b.ww.b", "..kk..", "......"]
+  ],
+  "hideRatio": 0.5,
+  "hide": "5c5144009c098c79908cdbdf",
+  "passes": 7
+}

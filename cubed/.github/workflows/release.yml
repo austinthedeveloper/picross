@@ -1,0 +1,57 @@
+name: Release
+
+# Pushing a v* tag builds it, checks it, and publishes a GitHub release with the built site
+# as a zip. The notes come from docs/releases/<tag>.md, which must exist, and the tag must
+# match the version in package.json. "Run workflow" redoes a release for an existing tag.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: An existing tag, like v0.1.0
+        required: true
+
+permissions:
+  contents: write
+  actions: write # to start the Pages deploy (a release made here doesn't trigger it)
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ inputs.tag || github.ref_name }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Check the tag, version and notes agree
+        run: |
+          version="v$(node -p "require('./package.json').version")"
+          [ "$TAG" = "$version" ] || { echo "::error::Tag $TAG but package.json says $version"; exit 1; }
+          [ -f "docs/releases/$TAG.md" ] || { echo "::error::No docs/releases/$TAG.md"; exit 1; }
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run check:shared
+      - run: npm test
+      - run: npm run build
+      - name: Package the site
+        run: |
+          cp -r dist "picross-cubed-$TAG"
+          zip -qr "picross-cubed-$TAG.zip" "picross-cubed-$TAG"
+          sha256sum "picross-cubed-$TAG.zip" > "picross-cubed-$TAG.zip.sha256"
+      - name: Publish the release
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" picross-cubed-$TAG.zip* --clobber
+          else
+            gh release create "$TAG" picross-cubed-$TAG.zip* \
+              --title "Picross Cubed $TAG" --notes-file "docs/releases/$TAG.md" --verify-tag
+          fi
+      - name: Deploy the site
+        run: gh workflow run pages.yml --ref main

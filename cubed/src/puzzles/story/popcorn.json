@@ -1,0 +1,22 @@
+{
+  "id": "popcorn",
+  "name": "Popcorn",
+  "colors": {
+    "r": "red",
+    "w": "white",
+    "c": "cream",
+    "y": "yellow"
+  },
+  "layers": [
+    [".......", ".rwrwr.", ".rwrwr.", ".rwrwr.", "......."],
+    [".......", ".rwrwr.", ".rwrwr.", ".rwrwr.", "......."],
+    ["wrwrwrw", "wrwrwrw", "wrwrwrw", "wrwrwrw", "wrwrwrw"],
+    ["wrwrwrw", "wrwrwrw", "wrwrwrw", "wrwrwrw", "wrwrwrw"],
+    ["wrwrwrw", "wrwrwrw", "wrwrwrw", "wrwrwrw", "wrwrwrw"],
+    [".ccccy.", "cyccccy", "ccycccc", "cccyccc", ".cccyc."],
+    [".......", ".c.c.c.", "..c.c..", ".y.c.c.", "......."]
+  ],
+  "hideRatio": 0.5,
+  "hide": "084022cb1f1c403f9779f1cef391d4",
+  "passes": 4
+}

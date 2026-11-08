@@ -1,0 +1,48 @@
+{
+  "id": "closing-time-outro",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "rook"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "dee"
+    },
+    "curator": {
+      "name": "Curator Ambrose",
+      "portrait": "curator"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "who": "dee",
+          "text": "Curator back in his case. For real this time. I watched Rook lock it.",
+          "if": "won"
+        },
+        {
+          "who": "rook",
+          "text": "And he paid the invoice. Clockwork people are very punctual.",
+          "if": "won"
+        },
+        {
+          "who": "dee",
+          "text": "He didn't make these keys, you know. The maker's mark isn't his.",
+          "if": "won"
+        },
+        {
+          "who": "rook",
+          "text": "That sounds like next week's problem.",
+          "if": "won"
+        },
+        {
+          "who": "rook",
+          "text": "He's re-labeled us. I'm 'Exhibit 41: Unpaid'.",
+          "if": "!won"
+        }
+      ]
+    }
+  }
+}

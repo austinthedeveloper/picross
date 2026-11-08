@@ -1,0 +1,323 @@
+/* Play screen: top bar, toolbar, the block, tools and peel, and the end panels. */
+
+.game .topbar h1 {
+  flex: 0 1 auto;
+}
+
+.size {
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.hearts {
+  margin-left: auto;
+  color: var(--accent);
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+}
+
+.hearts:not([hidden]) + .timer {
+  margin-left: 12px;
+}
+
+.timer {
+  margin-left: auto;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.actions {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.actions button {
+  min-width: 44px;
+  justify-content: center;
+}
+
+.actions .icon {
+  font-size: 1.2rem;
+  padding-block: 4px;
+}
+
+/* The block: as big as the screen allows, square on a phone, wider on a desk. */
+.stage {
+  position: relative;
+  height: min(68dvh, 120vw);
+  min-height: 280px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.block-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.block-canvas:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: -3px;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 12px 20px;
+  margin: 10px 0 6px;
+}
+
+.tools button {
+  min-height: 44px;
+}
+
+.peel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.peel-row {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.peel-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.peel .segmented button,
+.peel .step {
+  min-width: 44px;
+  min-height: 44px;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.peel .step {
+  font-size: 1.2rem;
+  padding: 0;
+}
+
+.peel input[type='range'] {
+  width: 120px;
+  accent-color: var(--accent);
+}
+
+/* Room for the longest label ("12 from bottom"), so it never pushes things around. */
+.peel-count {
+  width: 7.5em;
+  color: var(--muted);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+/* A mistake in hearts mode. */
+.shake .stage {
+  animation: shake 0.35s ease-in-out;
+}
+
+@keyframes shake {
+  25% {
+    transform: translateX(-6px);
+  }
+  75% {
+    transform: translateX(6px);
+  }
+}
+
+/* Solved and out-of-hearts panels */
+.end-panel {
+  margin: 14px auto 0;
+  max-width: 320px;
+  padding: 20px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: 0 8px 24px var(--shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  animation: pop 0.3s ease-out;
+}
+
+.end-panel[hidden] {
+  display: none;
+}
+
+.end-panel h2 {
+  margin: 0;
+  color: var(--accent);
+}
+
+.end-name {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.end-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.end-actions {
+  display: flex;
+  gap: 8px;
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+}
+
+/* Once it's over, the tools step back. */
+.game:has(.end-panel:not([hidden])) .controls,
+.game:has(.end-panel:not([hidden])) .help {
+  display: none;
+}
+
+/* Coach: the tutorial's instructions, and short notes like a mistake check's result. */
+.coach {
+  margin: 0 0 8px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.coach[hidden] {
+  display: none;
+}
+
+.coach p {
+  margin: 0;
+}
+
+.coach-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.coach-head .button {
+  padding: 4px 10px;
+  font-size: 0.8rem;
+}
+
+.coach-text {
+  line-height: 1.4;
+}
+
+.coach-nudge {
+  color: var(--accent);
+  font-size: 0.9rem;
+  min-height: 0;
+}
+
+.coach-nudge:not(:empty) {
+  margin-top: 6px !important;
+}
+
+.kicker {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Hint menu */
+.hint-menu {
+  position: relative;
+}
+
+.hint-menu summary {
+  list-style: none;
+}
+
+.hint-menu summary::-webkit-details-marker {
+  display: none;
+}
+
+.hint-menu.empty summary {
+  opacity: 0.4;
+}
+
+.hint-pop {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  z-index: 5;
+  width: 220px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px var(--shadow);
+}
+
+.hint-note {
+  margin: 0 0 4px;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.hint-menu.empty .hint-pop button {
+  display: none;
+}
+
+.views button {
+  min-height: 44px;
+  min-width: 44px;
+  justify-content: center;
+}
+
+/* Small phones (360px and under): the peel row slims down instead of overflowing. */
+@media (max-width: 380px) {
+  .peel-row {
+    gap: 6px;
+  }
+
+  .peel input[type='range'] {
+    width: 84px;
+  }
+
+  .peel-count {
+    width: 6.5em;
+    font-size: 0.8rem;
+  }
+}

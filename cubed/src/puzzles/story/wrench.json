@@ -1,0 +1,20 @@
+{
+  "id": "wrench",
+  "name": "Wrench of Science",
+  "colors": {
+    "s": "stone",
+    "t": "teal",
+    "r": "red"
+  },
+  "layers": [
+    ["..t..", ".rrr.", "..t.."],
+    ["..r..", ".rrr.", "..r.."],
+    ["..r..", ".rrr.", "..r.."],
+    ["..s..", ".rsr.", "..s.."],
+    ["sssss", "sstss", "sssss"],
+    ["ss.ss", "ss.ss", "ss.ss"]
+  ],
+  "hideRatio": 0.45,
+  "hide": "f14ed90603e94132",
+  "passes": 3
+}

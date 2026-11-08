@@ -1,0 +1,104 @@
+/*
+ * Theme tokens. Every color and font in the app comes from these. See
+ * docs/art-direction.md for the palette, what each color is for, and the type.
+ */
+
+:root {
+  --bg: #f6f3ec;
+  --surface: #ffffff;
+  --ink: #23262f;
+  --muted: #7a7e8a;
+  --line: #d6d2c8;
+  --backdrop: #e2ded3;
+  --guide: #8a8679;
+  --accent: #d9534f;
+  --accent-ink: #ffffff;
+  --ok: #2e8b57;
+  --hl: #fbefc9;
+  --cell-bg: #fffdf8;
+  --mark: #b0aa9c;
+  /* Dig encounters (#29) */
+  --dirt: #a9825a;
+  --dirt-speck: #8d6a45;
+  --dirt-line: #93704b;
+  --dug: #e8d8bd;
+  --metal: #3d4450;
+  /* Mechanics (#25): the charge meter and streaks, the Mimic's swaps, cuttlefish ink. */
+  --spark: #e0a800;
+  --spark-hot: #f07c00;
+  --mischief: #7b5cff;
+  --squid-ink: #2c2350;
+  /* Badge tiers (#108). Each also has a text label, so color is never the only signal. */
+  --bronze: #a8672f;
+  --silver: #7f8a96;
+  --gold: #c99a06;
+  --shadow: rgb(35 38 47 / 0.14);
+  --font-ui: 'Rubik', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color-scheme: light;
+  font-family: var(--font-ui);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #17181c;
+    --surface: #212329;
+    --ink: #e9e6de;
+    --muted: #8d909a;
+    --line: #353841;
+    --backdrop: #2c2e36;
+    --guide: #6c7080;
+    --accent: #e8716d;
+    --accent-ink: #17181c;
+    --ok: #5cc48a;
+    --hl: #2e2b20;
+    --cell-bg: #1c1e23;
+    --mark: #5d606b;
+    --dirt: #5e4630;
+    --dirt-speck: #4b3725;
+    --dirt-line: #6d543b;
+    --dug: #2e2a24;
+    --metal: #b9c2cf;
+    --spark: #f2c230;
+    --spark-hot: #ff9a3c;
+    --mischief: #9d86ff;
+    --squid-ink: #4b3d8f;
+    --bronze: #d08a4c;
+    --silver: #b4bdc8;
+    --gold: #f2c230;
+    --shadow: rgb(0 0 0 / 0.4);
+    color-scheme: dark;
+  }
+}
+
+/* High-contrast theme (settings toggle): pure black and white with strong lines. */
+:root[data-contrast='high'] {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --ink: #000000;
+  --muted: #000000;
+  --line: #000000;
+  /* Light gray, not black, so scenery never competes with the portraits. */
+  --backdrop: #d9d9d9;
+  --guide: #000000;
+  --accent: #c00000;
+  --accent-ink: #ffffff;
+  --ok: #006b2e;
+  --hl: #ffe14d;
+  --cell-bg: #ffffff;
+  --mark: #444444;
+  --dirt: #ffffff;
+  --dirt-speck: #ffffff;
+  --dirt-line: #000000;
+  --dug: #ffffff;
+  --metal: #000000;
+  --spark: #000000;
+  --spark-hot: #c00000;
+  --mischief: #c00000;
+  /* Gray, not black, so ink never reads as a filled cell. */
+  --squid-ink: #6b6b6b;
+  --bronze: #000000;
+  --silver: #000000;
+  --gold: #000000;
+  --shadow: rgb(0 0 0 / 0.35);
+  color-scheme: light;
+}

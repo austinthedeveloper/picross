@@ -1,0 +1,17 @@
+{
+  "id": "car",
+  "name": "Car",
+  "colors": {
+    "k": "graphite",
+    "r": "blue",
+    "s": "sky"
+  },
+  "layers": [
+    [".k..k.", "......", "......", ".k..k."],
+    ["rrrrrr", "rrrrrr", "rrrrrr", "rrrrrr"],
+    [".sss..", ".sss..", ".sss..", ".sss.."]
+  ],
+  "hideRatio": 0.5,
+  "hide": "07079dbf5530e0",
+  "passes": 4
+}

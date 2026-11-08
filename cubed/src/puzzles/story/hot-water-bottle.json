@@ -1,0 +1,22 @@
+{
+  "id": "hot-water-bottle",
+  "name": "Hot Water Bottle",
+  "colors": {
+    "r": "red",
+    "c": "coral",
+    "s": "stone",
+    "g": "graphite"
+  },
+  "layers": [
+    [".rrr.", ".rrr.", "....."],
+    ["ccccc", "ccccc", ".rrr."],
+    ["rrrrr", "rrrrr", ".ccc."],
+    ["ccccc", "ccccc", ".rrr."],
+    ["rrrrr", "rrrrr", ".ccc."],
+    [".ccc.", ".ccc.", "....."],
+    ["..s..", "..g..", "....."]
+  ],
+  "hideRatio": 0.5,
+  "hide": "6cff77410af26c0035",
+  "passes": 4
+}

@@ -1,0 +1,24 @@
+{
+  "id": "robot",
+  "name": "Robot",
+  "colors": {
+    "r": "graphite",
+    "g": "teal",
+    "y": "yellow",
+    "s": "stone",
+    "b": "graphite"
+  },
+  "layers": [
+    [".....", "rr.rr", "rr.rr"],
+    [".....", ".r.r.", "....."],
+    [".....", ".r.r.", "....."],
+    [".ggg.", "ggggg", ".ggg."],
+    [".ggg.", "ggggg", ".gyg."],
+    [".ggg.", "ggggg", ".ggg."],
+    [".....", "..s..", "....."],
+    [".sss.", ".sss.", ".bsb."]
+  ],
+  "hideRatio": 0.55,
+  "hide": "60960289111f3fc9fbe1",
+  "passes": 5
+}
