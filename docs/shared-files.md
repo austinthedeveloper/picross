@@ -4,18 +4,20 @@ This game is its own repo rather than part of a monorepo with the 2D game, so ea
 own docs, data and releases. The pieces worth sharing are copied in, unchanged, and the 2D
 game stays their owner.
 
-| File                                             | What it is                         |
-| ------------------------------------------------ | ---------------------------------- |
-| `src/styles/tokens.css`, `base.css`              | The palette, type and buttons      |
-| `src/ui/sound.ts`                                | The synthesized sound effects      |
-| `src/ui/haptics.ts` (and its test)               | Vibration, with the iOS fallback   |
-| `src/ui/theme.ts`                                | The high-contrast switch           |
-| `src/ui/dom.ts`, `motion.ts`                     | `el()` and the animation helpers   |
-| `src/ui/components/homeLink.ts`, `muteButton.ts` | The Home button and sound toggle   |
-| `src/game/storage.ts`                            | Safe localStorage reads and writes |
-| `src/engine/random.ts`                           | Seeded random numbers              |
+| File                                             | What it is                                                        |
+| ------------------------------------------------ | ----------------------------------------------------------------- |
+| `src/styles/tokens.css`, `base.css`              | The palette, type and buttons                                     |
+| `src/ui/sound.ts`                                | The synthesized sound effects                                     |
+| `src/ui/haptics.ts` (and its test)               | Vibration, with the iOS fallback                                  |
+| `src/ui/theme.ts`                                | The high-contrast switch                                          |
+| `src/ui/dom.ts`, `motion.ts`                     | `el()` and the animation helpers                                  |
+| `src/ui/components/homeLink.ts`, `muteButton.ts` | The Home button and sound toggle                                  |
+| `src/game/storage.ts`                            | Safe localStorage reads and writes                                |
+| `src/engine/random.ts`                           | Seeded random numbers                                             |
+| The story (see [Story mode](story.md))           | Scenes, the dialogue player, art, jobs and encounters, run styles |
 
-The list lives in `SHARED` in `scripts/sync-web.mjs`. They keep the same paths as in the 2D
+The list lives in `SHARED` in `scripts/sync-web.mjs`; a path ending in `/` shares a whole
+folder (files the web game deletes there are deleted here too). They keep the same paths as in the 2D
 game, so their imports work here: this repo has its own `src/game/settings.ts` with the
 settings they read (`muted`, `haptics`, `highContrast`).
 

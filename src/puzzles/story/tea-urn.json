@@ -1,0 +1,24 @@
+{
+  "id": "tea-urn",
+  "name": "Tea Urn",
+  "colors": {
+    "s": "stone",
+    "y": "yellow",
+    "g": "graphite",
+    "r": "red",
+    "w": "white"
+  },
+  "layers": [
+    ["g....g", ".gggg.", ".gggg.", ".gggg.", ".gggg.", "g....g", "......"],
+    ["..ss..", ".ssss.", "ssssss", "ssssss", ".ssss.", "..ss..", "..gg.."],
+    ["..yy..", ".yyyy.", "yyyyyy", "yyyyyy", ".yyyy.", "..yy..", "..gg.."],
+    ["..ss..", ".ssss.", "ssssss", "ssssss", ".ssss.", "..ss..", "..r..."],
+    ["..ss..", ".ssss.", "wsssss", "sssssw", ".ssss.", "..ss..", "......"],
+    ["..yy..", ".yyyy.", "yyyyyy", "yyyyyy", ".yyyy.", "..yy..", "......"],
+    ["......", "..ss..", ".ssss.", ".ssss.", "..ss..", "......", "......"],
+    ["......", "......", "..rr..", "..rr..", "......", "......", "......"]
+  ],
+  "hideRatio": 0.5,
+  "hide": "3e7fb78e70d0b481591fc724902803a027862",
+  "passes": 7
+}

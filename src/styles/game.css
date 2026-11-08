@@ -89,6 +89,8 @@
 
 .peel {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
   gap: 8px;
 }
@@ -109,7 +111,7 @@
 }
 
 .peel input[type='range'] {
-  width: 110px;
+  width: 96px;
   accent-color: var(--accent);
 }
 

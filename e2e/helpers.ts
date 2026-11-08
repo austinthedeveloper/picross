@@ -13,6 +13,22 @@ export const PUZZLES_BY_SIZE = fs
   .sort((a, b) => b.solution.length - a.solution.length)
   .map((p) => p.id);
 
+/** A story encounter's 3D puzzle, by encounter id (from the shared 2D encounter data). */
+export function encounterPuzzle(encounterId: string): Puzzle {
+  const root = path.join(import.meta.dirname, '../src/puzzles');
+  const enc = JSON.parse(
+    fs.readFileSync(path.join(root, 'encounters', `${encounterId}.json`), 'utf8'),
+  );
+  const file = path.join(root, 'story', `${enc.puzzle}.json`);
+  return parsePuzzle(JSON.parse(fs.readFileSync(file, 'utf8')));
+}
+
+/** Skips a scene if one is playing. */
+export async function skipScene(page: Page): Promise<void> {
+  const skip = page.getByRole('button', { name: 'Skip ⏭' });
+  if (await skip.isVisible().catch(() => false)) await skip.click();
+}
+
 /** A pack puzzle, read from its file. */
 export function puzzle(id: string): Puzzle {
   const file = path.join(import.meta.dirname, '../src/puzzles/pack', `${id}.json`);

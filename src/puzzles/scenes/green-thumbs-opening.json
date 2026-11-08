@@ -1,0 +1,43 @@
+{
+  "id": "green-thumbs-opening",
+  "backdrop": "office",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "rook"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "dee"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "text": "Chapter 4: Green Thumbs. The office. A towel is still drying on the radiator."
+        },
+        {
+          "who": "dee",
+          "text": "The botanical garden called. Their head gardener says the plants have stopped taking direction."
+        },
+        {
+          "who": "rook",
+          "text": "Plants don't take direction. That's what makes them plants."
+        },
+        {
+          "who": "dee",
+          "text": "One of them bit a school group."
+        },
+        {
+          "who": "rook",
+          "text": "Book it. Where did I put my lucky key?"
+        },
+        {
+          "who": "dee",
+          "text": "It is evidence. It lives in the jar. It has a label."
+        }
+      ]
+    }
+  }
+}

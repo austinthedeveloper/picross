@@ -1,0 +1,28 @@
+{
+  "id": "overtime-fog-bat",
+  "name": "Fog bat",
+  "kind": "fight",
+  "puzzle": "bat",
+  "blurb": "The bat has a cold. The fog is thicker, and it sneezes.",
+  "enemy": {
+    "name": "Fog bat",
+    "sprite": "fog-bat",
+    "hp": 30,
+    "attack": 2,
+    "fog": {
+      "rows": [3, 5, 6, 9],
+      "cols": []
+    },
+    "scramble": {
+      "rows": [2, 4],
+      "cols": [1, 8]
+    },
+    "phases": [
+      {
+        "at": 0.6,
+        "taunt": "Ah... ah... CHOO.",
+        "ink": 3
+      }
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "thermos",
+  "name": "Thermos",
+  "colors": {
+    "r": "red",
+    "s": "sky",
+    "w": "white",
+    "g": "graphite"
+  },
+  "layers": [
+    [".ss..", "ssss.", "ssss.", ".ss.."],
+    [".ss..", "ssssg", "ssssg", ".ss.."],
+    [".ww..", "wwww.", "wwww.", ".ww.."],
+    [".ss..", "ssssg", "ssssg", ".ss.."],
+    [".....", ".rr..", ".rr..", "....."]
+  ],
+  "hideRatio": 0.45,
+  "hide": "dc7c7ed14d1848200",
+  "passes": 4
+}

@@ -1,0 +1,32 @@
+{
+  "id": "cuttlefish",
+  "name": "Cuttlefish",
+  "kind": "fight",
+  "puzzle": "cuttlefish",
+  "blurb": "It changes color when it's upset. It's very upset.",
+  "enemy": {
+    "name": "Cuttlefish",
+    "sprite": "cuttlefish",
+    "hp": 45,
+    "attack": 2,
+    "phases": [
+      {
+        "at": 0.9,
+        "taunt": "Pfft!",
+        "ink": 4
+      },
+      {
+        "at": 0.75,
+        "taunt": "Pfft! Pfft!",
+        "ink": 4
+      },
+      {
+        "at": 0.6,
+        "name": "Inky Cuttlefish",
+        "attack": 3,
+        "taunt": "Lights out, little painter.",
+        "ink": 5
+      }
+    ]
+  }
+}

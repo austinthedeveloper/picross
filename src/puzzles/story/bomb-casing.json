@@ -1,0 +1,20 @@
+{
+  "id": "bomb-casing",
+  "name": "Bomb Casing",
+  "colors": {
+    "g": "graphite",
+    "s": "stone",
+    "o": "orange",
+    "y": "yellow"
+  },
+  "layers": [
+    [".....", ".ggg.", ".ggg.", ".ggg.", "....."],
+    [".ggg.", "ggggg", "ggggg", "ggggg", ".ggg."],
+    [".ggg.", "ggggg", "ggggg", "ggggg", ".ggg."],
+    [".....", ".ggg.", ".gsg.", ".ggg.", "....."],
+    [".....", ".....", "..so.", "...y.", "....."]
+  ],
+  "hideRatio": 0.4,
+  "hide": "0f05a69b20844e05955",
+  "passes": 4
+}

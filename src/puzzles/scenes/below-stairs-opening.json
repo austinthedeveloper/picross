@@ -1,0 +1,47 @@
+{
+  "id": "below-stairs-opening",
+  "backdrop": "office",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "rook"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "dee"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "text": "Chapter 8: Below Stairs. The office. A leaflet on the desk has a cartoon knight on it."
+        },
+        {
+          "who": "dee",
+          "text": "Castle Ambry. Daily tours, a gift shop, jousting on Sundays."
+        },
+        {
+          "who": "rook",
+          "text": "What's the problem?"
+        },
+        {
+          "who": "dee",
+          "text": "The tour used to go down one flight of stairs. Yesterday it went down nine. They have lost a school trip's packed lunches and a man called Dennis."
+        },
+        {
+          "who": "rook",
+          "text": "Who is Dennis?"
+        },
+        {
+          "who": "dee",
+          "text": "He plays Sir Dennis, in the jousting. He went down on Tuesday to look for the lunches."
+        },
+        {
+          "who": "rook",
+          "text": "I hope somebody told him the lunches are not worth it."
+        }
+      ]
+    }
+  }
+}

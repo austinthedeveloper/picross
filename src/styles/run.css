@@ -1,0 +1,356 @@
+/* Runs: the banner on the puzzle list, the run hub, the path map, and results. */
+
+.run-banner {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 2px 12px;
+  margin-bottom: 16px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--ink);
+  color: var(--bg);
+  text-decoration: none;
+}
+
+.run-banner-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.run-banner-meta {
+  grid-column: 1;
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+.run-banner-go {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  font-size: 1.4rem;
+}
+
+.run {
+  max-width: 520px;
+}
+
+.run-card {
+  padding: 20px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.run-card h2 {
+  margin: 0;
+}
+
+.run-card.results {
+  align-items: center;
+  text-align: center;
+}
+
+.run-card.won h2 {
+  color: var(--accent);
+}
+
+.run-meta {
+  margin: 0;
+  color: var(--muted);
+}
+
+.run-preview {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.run-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin-bottom: 20px;
+}
+
+.hp {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.hp-track {
+  width: 120px;
+  height: 10px;
+  border-radius: 5px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.hp-fill {
+  display: block;
+  height: 100%;
+  width: calc(var(--hp) * 100%);
+  background: var(--accent);
+}
+
+/* The path: nodes joined by a vertical line, the current one raised. */
+
+.run-path {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  position: relative;
+}
+
+.run-path::before {
+  content: '';
+  position: absolute;
+  /* Through the icon centers: body padding (8px) + border (1px) + half the icon (20px). */
+  left: 28px;
+  top: 20px;
+  bottom: 20px;
+  border-left: 3px dotted var(--guide);
+}
+
+.node-body {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px 10px 8px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: inherit;
+  text-decoration: none;
+}
+
+.node-icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--cell-bg);
+  border: 2px solid var(--guide);
+  font-size: 1.65rem;
+}
+
+.node-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.node-name {
+  font-weight: 700;
+}
+
+.node-kind,
+.node-blurb {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.node-blurb {
+  margin-top: 4px;
+}
+
+.node-status {
+  font-weight: 700;
+}
+
+/* Fade the contents, not the card, so the path line stays hidden behind it. */
+.node.cleared .node-body > * {
+  opacity: 0.6;
+}
+
+.node.cleared .node-icon {
+  border-color: var(--line);
+}
+
+.node.locked .node-body > * {
+  opacity: 0.45;
+}
+
+.node.current .node-body {
+  border: 2px solid var(--accent);
+  box-shadow: 0 6px 18px var(--shadow);
+}
+
+.node.current .node-status {
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.run-actions {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.abandon {
+  color: var(--muted);
+}
+
+.run-mode {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.run-card.results .run-mode {
+  align-items: center;
+}
+
+.run-mode-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* The crew's one-line sign-off on the results screen (#31). */
+.sign-off {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 4px 0;
+  text-align: left;
+}
+
+.sign-off-portrait {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 2px solid var(--ink);
+  background: var(--cell-bg);
+  font-size: 1.8rem;
+  overflow: hidden;
+}
+
+.sign-off figcaption {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 2px solid var(--ink);
+  background: var(--surface);
+}
+
+.sign-off strong {
+  color: var(--accent);
+}
+
+/* Boss (#42): a heavier map node. */
+.node.boss .node-icon {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 15%, var(--cell-bg));
+}
+
+.node.boss .node-name {
+  font-size: 1.1rem;
+}
+
+.node.boss.current .node-body {
+  border-width: 3px;
+}
+
+/* Jobs board (#47) */
+.jobs {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.run-card h3 {
+  margin: 0;
+}
+
+.job-blurb {
+  margin: 0;
+}
+
+.job-best {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.run-card.job.locked {
+  opacity: 0.6;
+}
+
+.job-best.none,
+.run-card.job.locked .job-best {
+  color: var(--muted);
+}
+
+/* Chapters (#23): jobs grouped under a story heading. */
+.chapters {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  margin-top: 24px;
+}
+
+.chapter-title {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.chapter-number {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.chapter-progress,
+.chapter-blurb {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.chapter-replay {
+  margin-top: 8px;
+}
+
+.chapter.locked {
+  padding: 16px 20px;
+  border-radius: 14px;
+  border: 2px dashed var(--line);
+  opacity: 0.75;
+}
+
+/* A cleared job's harder replay (#113) and any boss fight it unlocks, on its card. */
+.job-overtime,
+.job-boss-fight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+}

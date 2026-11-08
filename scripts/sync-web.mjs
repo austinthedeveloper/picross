@@ -4,20 +4,32 @@
  * and records them in shared.lock.json. The web game owns these files: edit them there,
  * then sync. See docs/shared-files.md.
  *
- *   npm run sync:web                     copy from ../picross (or --from DIR)
- *   npm run sync:web -- --check          fail if a shared file was edited here
+ *   npm run sync:web                         copy from ../picross (or --from DIR)
+ *   npm run sync:web -- --check              fail if a shared file was edited here
  *   npm run sync:web -- --check --from DIR   also say which files the web has changed since
  */
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
-import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import {
+  copyFileSync,
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const LOCK = join(ROOT, 'shared.lock.json');
 
-/** Same path in both repos. Each one only imports other shared files or ones this repo has too. */
+/**
+ * Same path in both repos. Each one only imports other shared files or ones this repo has
+ * too. A path ending in / is a folder: every file in it (not subfolders) is shared, and
+ * files the web game removes from it are removed here.
+ */
 export const SHARED = [
   'src/styles/tokens.css',
   'src/styles/base.css',
@@ -31,7 +43,48 @@ export const SHARED = [
   'src/ui/theme.ts',
   'src/ui/components/homeLink.ts',
   'src/ui/components/muteButton.ts',
+  // The story (docs/story.md): scenes and their runner, art, and the jobs' data.
+  'src/puzzles/backdrops.ts',
+  'src/puzzles/scenes.ts',
+  'src/puzzles/scenes.test.ts',
+  'src/puzzles/gadgets.ts',
+  'src/game/dialogue.ts',
+  'src/game/dialogue.test.ts',
+  'src/ui/art.ts',
+  'src/ui/art.test.ts',
+  'src/ui/components/backdrop.ts',
+  'src/ui/components/dialogue.ts',
+  'src/styles/art.css',
+  'src/styles/dialogue.css',
+  'src/styles/run.css',
+  'src/styles/fight.css',
+  'src/styles/dig.css',
+  'src/ui/screens/sceneScreen.ts',
+  'src/puzzles/backdrops/',
+  'src/puzzles/scenes/',
+  'src/puzzles/chapters/',
+  'src/puzzles/runs/',
+  'src/puzzles/encounters/',
+  'src/puzzles/run/',
+  'public/art/cast/',
+  'public/art/enemies/',
+  'public/art/gadgets/',
+  'public/art/icons/',
 ];
+
+const isShared = (f) => SHARED.some((e) => (e.endsWith('/') ? f.startsWith(e) : f === e));
+
+/** Every shared file under `dir`, with folders expanded. */
+function expand(dir) {
+  return SHARED.flatMap((entry) => {
+    if (!entry.endsWith('/')) return existsSync(join(dir, entry)) ? [entry] : [];
+    if (!existsSync(join(dir, entry))) return [];
+    return readdirSync(join(dir, entry), { withFileTypes: true })
+      .filter((d) => d.isFile() && !d.name.startsWith('.'))
+      .map((d) => entry + d.name)
+      .sort();
+  });
+}
 
 const args = process.argv.slice(2);
 const flag = (name) => args.includes(name);
@@ -54,37 +107,47 @@ function webCommit(dir) {
 function check(from) {
   if (!existsSync(LOCK)) throw new Error('No shared.lock.json; run npm run sync:web first.');
   const lock = JSON.parse(readFileSync(LOCK, 'utf8'));
-  const edited = SHARED.filter(
-    (f) => !existsSync(join(ROOT, f)) || sha(join(ROOT, f)) !== lock.files[f],
-  );
-  const unlisted = Object.keys(lock.files).filter((f) => !SHARED.includes(f));
-  let ok = edited.length === 0 && unlisted.length === 0;
-  for (const f of edited)
+  const locked = Object.keys(lock.files);
+  const here = expand(ROOT);
+  const edited = here.filter((f) => sha(join(ROOT, f)) !== lock.files[f]);
+  const missing = locked.filter((f) => !existsSync(join(ROOT, f)));
+  const unlisted = locked.filter((f) => !isShared(f));
+  for (const f of [...edited, ...missing]) {
     console.error(`edited here (make the change in the web game, then sync): ${f}`);
+  }
   for (const f of unlisted) console.error(`in the lock but not shared any more (sync again): ${f}`);
   if (from) {
-    const behind = SHARED.filter(
-      (f) => existsSync(join(from, f)) && sha(join(from, f)) !== lock.files[f],
-    );
+    const theirs = expand(from);
+    const behind = [
+      ...theirs.filter((f) => sha(join(from, f)) !== lock.files[f]),
+      ...locked.filter((f) => !theirs.includes(f)),
+    ];
     for (const f of behind) console.log(`changed in the web game since ${lock.commit}: ${f}`);
     if (behind.length === 0) console.log(`Up to date with the web game at ${webCommit(from)}.`);
   }
-  if (ok) console.log(`${SHARED.length} shared files match shared.lock.json (web ${lock.commit}).`);
+  const ok = edited.length + missing.length + unlisted.length === 0;
+  if (ok) console.log(`${here.length} shared files match shared.lock.json (web ${lock.commit}).`);
   return ok;
 }
 
 function sync(from) {
   const missing = SHARED.filter((f) => !existsSync(join(from, f)));
   if (missing.length) throw new Error(`Not in ${from}: ${missing.join(', ')}`);
+  const theirs = expand(from);
+  // Files the web game removed from a shared folder go here too.
+  const old = existsSync(LOCK) ? Object.keys(JSON.parse(readFileSync(LOCK, 'utf8')).files) : [];
+  for (const f of old) {
+    if (!theirs.includes(f) && existsSync(join(ROOT, f))) rmSync(join(ROOT, f));
+  }
   const files = {};
-  for (const f of SHARED) {
+  for (const f of theirs) {
     mkdirSync(dirname(join(ROOT, f)), { recursive: true });
     copyFileSync(join(from, f), join(ROOT, f));
     files[f] = sha(join(ROOT, f));
   }
   const lock = { source: 'austinthedeveloper/picross', commit: webCommit(from), files };
   writeFileSync(LOCK, JSON.stringify(lock, null, 2) + '\n');
-  console.log(`Copied ${SHARED.length} files from the web game at ${lock.commit}.`);
+  console.log(`Copied ${theirs.length} files from the web game at ${lock.commit}.`);
 }
 
 const from = option('--from') ?? (flag('--check') ? undefined : join(ROOT, '..', 'picross'));

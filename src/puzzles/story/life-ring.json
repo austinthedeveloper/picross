@@ -1,0 +1,20 @@
+{
+  "id": "life-ring",
+  "name": "Life Ring",
+  "colors": {
+    "r": "red",
+    "w": "white",
+    "y": "yellow"
+  },
+  "layers": [
+    [".wwrr.", ".wwrr."],
+    ["ww..rr", "ww..rr"],
+    ["w....r", "y....r"],
+    ["r....w", "r....y"],
+    ["rr..ww", "rr..ww"],
+    [".rrww.", ".rrww."]
+  ],
+  "hideRatio": 0.45,
+  "hide": "b85045aa8e30b9d",
+  "passes": 4
+}

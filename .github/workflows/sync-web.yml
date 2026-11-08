@@ -1,0 +1,141 @@
+name: Sync from the web game
+
+# Brings the 2D web game's shared files to this game: its story (scenes, jobs, encounters,
+# art), look and sounds (docs/story.md, docs/shared-files.md). Every day, by hand, or when
+# the web repo pings it:
+#
+# - Nothing changed: done.
+# - Everything syncs and passes the tests (including the story gate, story.test.ts): opens
+#   or updates one "Sync from the web game" PR on the branch sync/web.
+# - The tests fail (say the web game's story uses a power or field this game can't play,
+#   or an encounter with no 3D puzzle yet): opens or updates one "Web sync needs porting"
+#   issue with what failed, and changes nothing. It closes after a clean sync.
+on:
+  schedule:
+    - cron: '41 9 * * *'
+  workflow_dispatch:
+  repository_dispatch:
+    types: [web-updated]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: sync-web
+  cancel-in-progress: false
+
+env:
+  WEB_REPO: austinthedeveloper/picross
+  BRANCH: sync/web
+  PR_TITLE: Sync from the web game
+  ISSUE_TITLE: Web sync needs porting
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ env.WEB_REPO }}
+          ref: main
+          path: .web
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+
+      - name: Note the web commit
+        id: web
+        run: |
+          echo "sha=$(git -C .web rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+          echo "subject=$(git -C .web log -1 --format=%s)" >> "$GITHUB_OUTPUT"
+          echo ".web/" >> .git/info/exclude
+
+      - name: Sync
+        id: sync
+        run: |
+          node scripts/sync-web.mjs --from .web
+          if git diff --quiet && [ -z "$(git status --porcelain)" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Up to date with ${{ env.WEB_REPO }}@${{ steps.web.outputs.sha }}."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            git status --short | sed 's/^/    /' > "$RUNNER_TEMP/changes.txt"
+          fi
+
+      - name: Test
+        id: test
+        if: steps.sync.outputs.changed == 'true'
+        run: |
+          set -o pipefail
+          if npm test 2>&1 | tee "$RUNNER_TEMP/test.txt"; then
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: File what needs porting
+        if: steps.test.outputs.ok == 'false'
+        run: |
+          set -euo pipefail
+          {
+            echo "The sync from ${{ env.WEB_REPO }}@${{ steps.web.outputs.sha }} (${{ steps.web.outputs.subject }}) fails this game's tests."
+            echo
+            echo "Usually that's the story gate: something in the web game's story this game can't play yet, or an encounter without a 3D puzzle in \`src/puzzles/story/\`. Port it, then run **Sync from the web game** from the Actions tab."
+            echo
+            echo '```'
+            grep -E "FAIL|✗|×|Expected|Received|storyIssues|\+ |- " "$RUNNER_TEMP/test.txt" | head -60 || true
+            echo '```'
+            echo
+            echo "[Run log]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID)"
+          } > "$RUNNER_TEMP/issue.md"
+          number=$(gh issue list --state open --search "in:title \"$ISSUE_TITLE\"" --json number --jq '.[0].number // empty')
+          if [ -n "$number" ]; then
+            gh issue edit "$number" --body-file "$RUNNER_TEMP/issue.md"
+          else
+            gh label create sync --color 0e8a16 --description "Web game sync" 2>/dev/null || true
+            gh issue create --title "$ISSUE_TITLE" --label sync --body-file "$RUNNER_TEMP/issue.md"
+          fi
+          echo "::warning::The web game's changes need porting; filed as an issue."
+
+      - name: Close a stale porting issue
+        if: steps.test.outputs.ok == 'true' || steps.sync.outputs.changed == 'false'
+        run: |
+          number=$(gh issue list --state open --search "in:title \"$ISSUE_TITLE\"" --json number --jq '.[0].number // empty')
+          if [ -n "$number" ]; then
+            gh issue close "$number" --comment "Synced cleanly at ${{ env.WEB_REPO }}@${{ steps.web.outputs.sha }}."
+          fi
+
+      - name: Open or update the sync PR
+        if: steps.test.outputs.ok == 'true'
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$BRANCH"
+          git add -A
+          git commit -q -m "Sync from the web game at ${{ steps.web.outputs.sha }}" \
+            -m "${{ env.WEB_REPO }}@${{ steps.web.outputs.sha }}: ${{ steps.web.outputs.subject }}"
+          git push -f origin "$BRANCH"
+          {
+            echo "Synced from ${{ env.WEB_REPO }}@${{ steps.web.outputs.sha }} (${{ steps.web.outputs.subject }}) by \`npm run sync:web\`. The unit tests, including the story gate, passed."
+            echo
+            echo "Changed files:"
+            echo
+            cat "$RUNNER_TEMP/changes.txt"
+            echo
+            echo "A PR opened by Actions doesn't start CI on its own. To run the browser tests, close and reopen this PR, or push to the branch."
+          } > "$RUNNER_TEMP/pr.md"
+          number=$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number // empty')
+          if [ -n "$number" ]; then
+            gh pr edit "$number" --body-file "$RUNNER_TEMP/pr.md"
+          else
+            gh pr create --base main --head "$BRANCH" --title "$PR_TITLE" --body-file "$RUNNER_TEMP/pr.md"
+          fi

@@ -1,0 +1,21 @@
+{
+  "id": "marked-manuscript",
+  "name": "Marked Manuscript",
+  "colors": {
+    "w": "white",
+    "c": "cream",
+    "r": "red",
+    "g": "graphite",
+    "s": "stone"
+  },
+  "layers": [
+    ["cccccc..", "cccccc..", "cccccc..", "cccccc..", "cccccc..", "cccccc..", "cccccc.."],
+    [".wwwwww.", ".wwwwww.", ".wwwwww.", ".wwwwww.", ".wwwwww.", ".wwwwww.", ".wwwwww."],
+    ["cccccc..", "cccccc..", "cccccc..", "cccccc..", "cccccc..", "cccccc..", "cccccc.."],
+    ["swwwwww.", "swrwrrw.", ".wwwwww.", ".wrrwrw.", ".wwwwww.", ".rwwrrw.", ".wrwwww."],
+    ["........", "........", "........", "........", "........", ".srrrrrg", "........"]
+  ],
+  "hideRatio": 0.5,
+  "hide": "848201086f7fffd011d0001bceafce546",
+  "passes": 5
+}

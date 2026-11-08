@@ -1,0 +1,47 @@
+{
+  "id": "curator",
+  "name": "The Curator",
+  "kind": "fight",
+  "boss": true,
+  "puzzle": "pocket-watch",
+  "scene": "curator-return",
+  "blurb": "The curator's office. It's ticking.",
+  "enemy": {
+    "name": "Curator Ambrose",
+    "sprite": "curator",
+    "hp": 60,
+    "attack": 2,
+    "fog": {
+      "rows": [3, 9]
+    },
+    "phases": [
+      {
+        "at": 0.92,
+        "name": "Clockwork Curator",
+        "sprite": "clockwork-curator",
+        "attack": 3,
+        "taunt": "Exhibit hours are over.",
+        "fog": {
+          "rows": [7, 19]
+        },
+        "fogCount": 2
+      },
+      {
+        "at": 0.85,
+        "taunt": "Allow me to re-label that for you.",
+        "scramble": {
+          "cols": [8, 9, 11, 14]
+        },
+        "scrambleCount": 3
+      },
+      {
+        "at": 0.78,
+        "name": "Overwound Curator",
+        "sprite": "overwound-curator",
+        "attack": 4,
+        "taunt": "Rearranging the collection!",
+        "swap": true
+      }
+    ]
+  }
+}

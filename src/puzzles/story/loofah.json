@@ -1,0 +1,19 @@
+{
+  "id": "loofah",
+  "name": "Giant Loofah",
+  "colors": {
+    "c": "cream",
+    "y": "yellow",
+    "w": "wood",
+    "g": "green"
+  },
+  "layers": [
+    [".......", ".cyccy.", ".yccyc.", "......."],
+    [".yccyc.", "wccyccg", "wcyccyg", ".yccyc."],
+    [".cyccy.", "wyccycg", "wccyccg", ".cyccy."],
+    [".......", ".cyccy.", ".yccyc.", "......."]
+  ],
+  "hideRatio": 0.5,
+  "hide": "8a180cedf50d50efab",
+  "passes": 5
+}

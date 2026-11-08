@@ -1,0 +1,24 @@
+{
+  "id": "powder-keg",
+  "name": "Powder Keg",
+  "colors": {
+    "w": "wood",
+    "b": "brown",
+    "g": "graphite",
+    "o": "orange",
+    "r": "red"
+  },
+  "layers": [
+    [".......", "..www..", ".wwwww.", ".wwwww.", ".wwwww.", "..www..", "......."],
+    ["...g...", ".ggggg.", ".ggggg.", "ggggggg", ".ggggg.", ".ggggg.", "...g..."],
+    ["...w...", ".wwwww.", ".wwwww.", "wwwwwww", ".wwwww.", ".wwwww.", "...w..."],
+    ["..www..", ".wwwww.", "wwwwwww", "wwwwwww", "wwwwwww", ".wwwww.", "..rrr.."],
+    ["...w...", ".wwwww.", ".wwwww.", "wwwwwww", ".wwwww.", ".wwwww.", "...w..."],
+    ["...g...", ".ggggg.", ".ggggg.", "ggggggg", ".ggggg.", ".ggggg.", "...g..."],
+    [".......", "..wbw..", ".wwbww.", ".wwbww.", ".wwbww.", "..wbw..", "......."],
+    [".......", ".......", ".......", "...go..", "....o..", ".......", "......."]
+  ],
+  "hideRatio": 0.5,
+  "hide": "ce47efbfc3733c8c72311a3432727120006019d10",
+  "passes": 7
+}

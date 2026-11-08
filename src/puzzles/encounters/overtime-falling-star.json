@@ -1,0 +1,39 @@
+{
+  "id": "overtime-falling-star",
+  "name": "Falling Star",
+  "kind": "fight",
+  "puzzle": "comet",
+  "blurb": "It came down after all. The charts still disagree about where.",
+  "enemy": {
+    "name": "Falling Star",
+    "sprite": "falling-star",
+    "hp": 45,
+    "attack": 2,
+    "fakes": {
+      "rows": [0, 12]
+    },
+    "suspects": {
+      "rows": [0, 10, 11, 12]
+    },
+    "scramble": {
+      "rows": [7]
+    },
+    "phases": [
+      {
+        "at": 0.75,
+        "taunt": "Sparks shower off the tail.",
+        "ink": 4
+      },
+      {
+        "at": 0.5,
+        "name": "Blazing Star",
+        "attack": 3,
+        "taunt": "Make a wish. Make it quick.",
+        "charge": 5
+      }
+    ],
+    "fog": {
+      "rows": [5]
+    }
+  }
+}

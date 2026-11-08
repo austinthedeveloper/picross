@@ -1,0 +1,43 @@
+{
+  "id": "night-shift-outro",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "rook"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "dee"
+    },
+    "curator": {
+      "name": "Curator Ambrose",
+      "portrait": "curator"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "who": "dee",
+          "text": "Exhibits back on their stands, rex back in one piece. Mostly the right pieces.",
+          "if": "won"
+        },
+        {
+          "who": "dee",
+          "text": "No curator, though. Just this, still in the wall.",
+          "if": "won"
+        },
+        {
+          "who": "rook",
+          "text": "A brass key. It goes in a jar, as evidence. Also, I may have booked us a job at the aquarium. It's fine. Probably.",
+          "if": "won"
+        },
+        {
+          "who": "rook",
+          "text": "The good news is the beetle didn't eat us. The bad news is we're locked in.",
+          "if": "!won"
+        }
+      ]
+    }
+  }
+}

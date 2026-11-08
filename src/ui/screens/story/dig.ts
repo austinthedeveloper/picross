@@ -1,0 +1,39 @@
+import { getGadget } from '../../../puzzles/gadgets';
+import type { Encounter } from '../../../story/data';
+import { gadgetArt, iconArt } from '../../art';
+import { el } from '../../dom';
+import type { Kind } from './encounter';
+import { took } from './encounter';
+
+/**
+ * A dig: no enemy and no HP pressure. The block is earth; finishing it reveals the find,
+ * which becomes the puzzle's gadget.
+ */
+export function digKind(encounter: Encounter): Kind {
+  const gadget = encounter.gadget ? getGadget(encounter.gadget) : undefined;
+  const find = el('span', { className: 'dig-find', textContent: '?', ariaHidden: 'true' });
+  const status = el('span', {
+    className: 'dig-status',
+    textContent: 'Something is buried here. Take your time: mistakes don’t hurt.',
+  });
+  return {
+    mode: 'relaxed',
+    header: el('section', { className: 'dig', ariaLabel: 'Dig site' }, [
+      el('span', { className: 'dig-icon', ariaHidden: 'true' }, [iconArt('dig')]),
+      status,
+      find,
+    ]),
+    attach(play) {
+      play.screen.classList.add('dig-site');
+    },
+    land() {
+      find.replaceChildren(gadget ? gadgetArt(gadget.id) : '✨');
+      find.classList.add('found');
+      const name = encounter.puzzle.name.toLowerCase();
+      status.textContent = gadget
+        ? `You dug up a ${name}. It’s a ${gadget.name.toLowerCase()} now.`
+        : `You dug up a ${name}.`;
+    },
+    note: (game) => `${encounter.name} cleared in ${took(game)}`,
+  };
+}

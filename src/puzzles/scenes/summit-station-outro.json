@@ -1,0 +1,48 @@
+{
+  "id": "summit-station-outro",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "rook"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "dee"
+    },
+    "lund": {
+      "name": "Dr. Lund",
+      "portrait": "lund"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "who": "lund",
+          "text": "The charts add up. The comet's only a comet. I'm taking off one coat.",
+          "if": "won"
+        },
+        {
+          "who": "dee",
+          "text": "The yeti is asleep, the key is in the jar, and the towels were useful.",
+          "if": "won"
+        },
+        {
+          "who": "rook",
+          "text": "The towels were not useful.",
+          "if": "won"
+        },
+        {
+          "who": "dee",
+          "text": "The towels were useful.",
+          "if": "won"
+        },
+        {
+          "who": "rook",
+          "text": "I can't feel anything below the neck. Bill them for the neck, too.",
+          "if": "!won"
+        }
+      ]
+    }
+  }
+}

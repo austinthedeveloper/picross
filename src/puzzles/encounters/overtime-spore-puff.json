@@ -1,0 +1,43 @@
+{
+  "id": "overtime-spore-puff",
+  "name": "Spore Puff",
+  "kind": "fight",
+  "puzzle": "puffball",
+  "blurb": "It has been to seed. The seeds have been to seed.",
+  "enemy": {
+    "name": "Spore Puff",
+    "sprite": "spore-puff",
+    "hp": 45,
+    "attack": 2,
+    "fog": {
+      "cols": [3, 5, 6]
+    },
+    "phases": [
+      {
+        "at": 0.85,
+        "taunt": "Pfff.",
+        "ink": 4
+      },
+      {
+        "at": 0.65,
+        "name": "Bursting Puff",
+        "attack": 3,
+        "taunt": "PFFFFFF.",
+        "fog": {
+          "cols": [13, 14]
+        },
+        "fogCount": 2,
+        "ink": 4
+      },
+      {
+        "at": 0.45,
+        "taunt": "Static crackles through the spores.",
+        "charge": 6
+      }
+    ],
+    "scramble": {
+      "rows": [2],
+      "cols": [4, 9]
+    }
+  }
+}

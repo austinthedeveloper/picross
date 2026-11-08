@@ -1,0 +1,24 @@
+{
+  "id": "ringmaster",
+  "name": "The Ringmaster",
+  "colors": {
+    "g": "graphite",
+    "r": "red",
+    "c": "cream",
+    "w": "white",
+    "y": "yellow"
+  },
+  "layers": [
+    [".......", ".......", "..www..", "..www..", "..www..", ".r.y.r."],
+    [".......", ".ccccc.", ".ccccc.", ".ccccc.", ".ccccc.", "..ccc.."],
+    [".......", ".ccccc.", ".ccccc.", ".ccccc.", ".ccccc.", ".ggcgg."],
+    [".......", ".ccccc.", ".ccccc.", ".ccccc.", ".ccccc.", "..g.g.."],
+    ["ggggggg", "ggggggg", "ggggggg", "ggggggg", "ggggggg", "ggggggg"],
+    [".......", ".rrrrr.", ".rrrrr.", ".rrrrr.", ".rrrrr.", "...y..."],
+    [".......", ".ggggg.", ".ggggg.", ".ggggg.", ".ggggg.", "......."],
+    [".......", ".ggggg.", ".ggggg.", ".ggggg.", ".ggggg.", "......."]
+  ],
+  "hideRatio": 0.5,
+  "hide": "bcabefed0bea19847b2dd2085d24198cd8642",
+  "passes": 7
+}

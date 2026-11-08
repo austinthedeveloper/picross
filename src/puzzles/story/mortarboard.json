@@ -1,0 +1,124 @@
+{
+  "id": "mortarboard",
+  "name": "Mortarboard",
+  "colors": {
+    "g": "graphite",
+    "c": "cream",
+    "w": "white",
+    "y": "yellow",
+    "b": "blue"
+  },
+  "layers": [
+    [
+      "..........",
+      "..........",
+      "...wwww...",
+      "...wwww...",
+      "...wwww...",
+      "...wwww...",
+      "...wwww...",
+      "...wwww...",
+      "..........",
+      ".........."
+    ],
+    [
+      "..........",
+      "..........",
+      "..cccccc..",
+      "..cccccc..",
+      "..cccccc..",
+      "..cccccc..",
+      "..cccccc..",
+      "..cccccc..",
+      "..........",
+      ".........."
+    ],
+    [
+      "..........",
+      "..........",
+      "..cccccc..",
+      "..cccccc..",
+      "..cccccc..",
+      "..cccccc..",
+      "..cccccc..",
+      "..wwwwww..",
+      "..wwccww..",
+      ".........."
+    ],
+    [
+      "..........",
+      "..........",
+      "..cccccc..",
+      "..cccccc..",
+      "..cccccc..",
+      "..cccccc..",
+      "..cccccc..",
+      "..cccccc..",
+      "....cc....",
+      ".........."
+    ],
+    [
+      "..........",
+      "..........",
+      "..cccccc..",
+      "..cccccc..",
+      "..cccccc..",
+      "..cccccc..",
+      "..cccccc..",
+      "..cccccc..",
+      "..bbggbb..",
+      ".........y"
+    ],
+    [
+      "..........",
+      "..........",
+      "..cccccc..",
+      "..cccccc..",
+      "..cccccc..",
+      "..cccccc..",
+      "..cccccc..",
+      "..cccccc..",
+      "..........",
+      ".........y"
+    ],
+    [
+      "..........",
+      "..........",
+      "..gggggg..",
+      "..gggggg..",
+      "..gggggg..",
+      "..gggggg..",
+      "..gggggg..",
+      "..gggggg..",
+      "..........",
+      ".........y"
+    ],
+    [
+      "gggggggggg",
+      "gggggggggg",
+      "gggggggggg",
+      "gggggggggg",
+      "gggggggggg",
+      "gggggggggg",
+      "gggggggggg",
+      "gggggggggg",
+      "gggggggggg",
+      "gggggggggg"
+    ],
+    [
+      "..........",
+      "..........",
+      "..........",
+      "..........",
+      "....y.....",
+      ".....y....",
+      "......y...",
+      ".......y..",
+      "........y.",
+      ".........."
+    ]
+  ],
+  "hideRatio": 0.5,
+  "hide": "0f57b0a10a08c7d9882c1d9b0d3b6ec2b327d9326001443088140a8947ef0444328449",
+  "passes": 5
+}
