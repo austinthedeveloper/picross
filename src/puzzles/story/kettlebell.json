@@ -1,0 +1,22 @@
+{
+  "id": "kettlebell",
+  "name": "Kettlebell",
+  "colors": {
+    "g": "graphite",
+    "s": "stone",
+    "r": "red",
+    "y": "yellow"
+  },
+  "layers": [
+    [".......", "..ggg..", "..ggg..", "..ggg..", "......."],
+    ["..ggg..", ".ggggg.", ".ggggg.", ".ggggg.", "..gyg.."],
+    ["..rrr..", "rrrrrrr", "rrrrrrr", "rrrrrrr", "..yyy.."],
+    ["..ggg..", ".ggggg.", "ggggggg", ".ggggg.", "..gyg.."],
+    [".......", "..ggg..", ".sgggs.", "..ggg..", "......."],
+    [".......", ".......", ".s...s.", ".......", "......."],
+    [".......", ".......", ".sssss.", ".......", "......."]
+  ],
+  "hideRatio": 0.5,
+  "hide": "7925ee83e74e2084000d7e73814473",
+  "passes": 4
+}

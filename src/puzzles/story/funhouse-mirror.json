@@ -1,0 +1,22 @@
+{
+  "id": "funhouse-mirror",
+  "name": "Funhouse Mirror",
+  "colors": {
+    "y": "yellow",
+    "o": "orange",
+    "s": "sky",
+    "w": "white",
+    "p": "pink"
+  },
+  "layers": [
+    [".ooo.", ".ooo.", ".ooo."],
+    [".....", ".yyy.", "....."],
+    ["..s..", "ys.sy", "....."],
+    [".....", "y.s.y", ".www."],
+    ["..s..", "ys.sy", "....."],
+    [".....", "pyyyp", "....."]
+  ],
+  "hideRatio": 0.5,
+  "hide": "088842dbc5f24fb4",
+  "passes": 4
+}

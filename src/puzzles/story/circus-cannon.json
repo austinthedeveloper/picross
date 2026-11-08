@@ -1,0 +1,21 @@
+{
+  "id": "circus-cannon",
+  "name": "Circus Cannon",
+  "colors": {
+    "g": "graphite",
+    "r": "red",
+    "y": "yellow",
+    "w": "wood",
+    "b": "brown"
+  },
+  "layers": [
+    ["...b...", ".wwwww.", ".wwwww.", ".wwwww.", "...b..."],
+    ["..bwb..", ".......", "rryryrg", ".......", "..bwb.."],
+    ["...b...", "rryryrg", "yryryr.", "rryryrg", "...b..."],
+    [".......", "rryryrg", "gryryr.", "rryryrg", "......."],
+    [".......", ".......", "rryryrg", ".......", "......."]
+  ],
+  "hideRatio": 0.5,
+  "hide": "7b34931a25d07105a0dfb5d2",
+  "passes": 5
+}
