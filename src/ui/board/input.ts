@@ -12,7 +12,12 @@ export interface InputOptions {
   orbited?(): void;
   /** A double tap on empty space: reset the view. */
   reset?(): void;
+  /** A stroke held still on its first cube: carry it through the whole line. */
+  hold?(): void;
 }
+
+/** How long a press stays still to count as a hold. */
+const HOLD_MS = 450;
 
 const DOUBLE_TAP_MS = 320;
 /** How far a press can move and still count as a tap. */
@@ -34,6 +39,8 @@ export function attachInput(view: BlockView, opts: InputOptions): () => void {
   let pressAt = { x: 0, y: 0 };
   let moved = 0;
   let lastTap = 0;
+  let holdTimer = 0;
+  const cancelHold = () => window.clearTimeout(holdTimer);
 
   const twoFinger = () => {
     const [a, b] = [...pointers.values()];
@@ -44,6 +51,7 @@ export function attachInput(view: BlockView, opts: InputOptions): () => void {
     canvas.setPointerCapture(e.pointerId);
     pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
     if (pointers.size === 2) {
+      cancelHold();
       // A second finger: whatever the first started becomes a turn and pinch.
       if (mode === 'stroke') opts.end();
       mode = null;
@@ -59,6 +67,10 @@ export function attachInput(view: BlockView, opts: InputOptions): () => void {
       mode = 'stroke';
       lastCell = pick.cell;
       opts.begin(pick);
+      // Still after a moment, on the same cube: the whole line.
+      holdTimer = window.setTimeout(() => {
+        if (mode === 'stroke' && moved <= TAP_SLOP && lastCell === pick.cell) opts.hold?.();
+      }, HOLD_MS);
     } else {
       mode = 'turn';
     }
@@ -84,6 +96,8 @@ export function attachInput(view: BlockView, opts: InputOptions): () => void {
       moved = Math.max(moved, Math.hypot(e.clientX - pressAt.x, e.clientY - pressAt.y));
       if (moved > TAP_SLOP) opts.orbited?.();
     } else if (mode === 'stroke') {
+      moved = Math.max(moved, Math.hypot(e.clientX - pressAt.x, e.clientY - pressAt.y));
+      if (moved > TAP_SLOP) cancelHold();
       const pick = view.pick(e.clientX, e.clientY);
       if (pick && pick.cell !== lastCell) {
         lastCell = pick.cell;
@@ -94,6 +108,7 @@ export function attachInput(view: BlockView, opts: InputOptions): () => void {
 
   const up = (e: PointerEvent) => {
     pointers.delete(e.pointerId);
+    cancelHold();
     if (pointers.size < 2) pinch = null;
     if (pointers.size === 0) {
       if (mode === 'stroke') opts.end();
@@ -123,6 +138,7 @@ export function attachInput(view: BlockView, opts: InputOptions): () => void {
   canvas.addEventListener('wheel', wheel, { passive: false });
   canvas.addEventListener('contextmenu', menu);
   return () => {
+    cancelHold();
     canvas.removeEventListener('pointerdown', down);
     canvas.removeEventListener('pointermove', move);
     canvas.removeEventListener('pointerup', up);

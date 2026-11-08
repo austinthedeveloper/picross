@@ -106,3 +106,41 @@ test('how to play links to the first puzzle', async ({ page }) => {
   await page.getByRole('link', { name: 'Try the first puzzle' }).click();
   await expect(page).toHaveURL(/#\/play\/steps$/);
 });
+
+test('peel steppers step a layer at a time, and the slider stays put', async ({ page }) => {
+  await page.goto('/#/play/castle');
+  const slider = page.getByLabel('Layers peeled');
+  const before = await slider.boundingBox();
+  await page.getByRole('button', { name: 'Peel one layer more' }).click();
+  await expect(page.locator('.peel-count')).toHaveText('1 from top');
+  expect(await slider.boundingBox()).toEqual(before);
+  await page.getByRole('button', { name: 'Peel one layer more' }).click();
+  await expect(page.locator('.peel-count')).toHaveText('2 from top');
+  await page.getByRole('button', { name: 'Peel one layer fewer' }).click();
+  await page.getByRole('button', { name: 'Peel one layer fewer' }).click();
+  await expect(page.locator('.peel-count')).toHaveText('none');
+  await expect(page.getByRole('button', { name: 'Peel one layer fewer' })).toBeDisabled();
+});
+
+test('a whole line in one go: Shift+X, and Hearts still stops at the shape', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Hearts' }).click();
+  await page.goto('/#/play/steps');
+  await focusBlock(page);
+  // The cursor starts on the top front left cube; its vertical line is two empty cubes
+  // over one of the shape.
+  await page.keyboard.press('Shift+X');
+  await expect(page.getByLabel('Hearts')).toHaveText('♥♥♡');
+  await expect(page.getByRole('button', { name: 'Undo' })).toBeEnabled();
+});
+
+test('holding on a cube carries the stroke through its line', async ({ page }) => {
+  await page.goto('/#/play/castle');
+  const box = (await page.locator('canvas.block-canvas').boundingBox())!;
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.down();
+  await page.waitForTimeout(700);
+  await page.mouse.up();
+  // More than the one cube a tap breaks: undo takes the line back in one step.
+  await expect(page.getByRole('button', { name: 'Undo' })).toBeEnabled();
+});

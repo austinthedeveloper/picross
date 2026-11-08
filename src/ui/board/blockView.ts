@@ -113,6 +113,11 @@ export class BlockView {
   private tween: { from: number[]; to: number[]; start: number; ms: number } | null = null;
   cursor: number | null = null;
   revealed = false;
+  /** The blocks as last drawn, to spot cubes that just broke. */
+  private drawn: Uint8Array;
+  /** Cubes breaking right now: chips that fly apart, shrink and fade. */
+  private puffs: { mesh: Mesh; from: Vector3; to: Vector3; start: number }[] = [];
+  private puffGeometry = new BoxGeometry(1, 1, 1);
   /** How long the last rebuild took, in ms (for checking big blocks stay quick). */
   lastBuildMs = 0;
 
@@ -124,6 +129,7 @@ export class BlockView {
     this.renderer.outputColorSpace = SRGBColorSpace;
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.canvas = this.renderer.domElement;
+    this.drawn = Uint8Array.from(blocks);
     this.canvas.className = 'block-canvas';
     const anisotropy = this.renderer.capabilities.getMaxAnisotropy();
     this.atlases = STATES.map((state) => {
@@ -153,6 +159,7 @@ export class BlockView {
   setPuzzle(puzzle: Puzzle, blocks: Uint8Array): void {
     this.puzzle = puzzle;
     this.blocks = blocks;
+    this.drawn = Uint8Array.from(blocks);
     this.rebuild();
   }
 
@@ -196,6 +203,7 @@ export class BlockView {
   /** Rebuilds the mesh from the blocks. Cheap enough to call after every change. */
   rebuild(): void {
     const t0 = performance.now();
+    this.puffBroken();
     const { dims, clues } = this.puzzle;
     const pos: number[] = [];
     const uv: number[] = [];
@@ -374,6 +382,59 @@ export class BlockView {
     return { cell: this.faceCells[face], axis: this.faceAxes[face] };
   }
 
+  /** Starts a puff for each cube broken since the last draw. */
+  private puffBroken(): void {
+    const broke: number[] = [];
+    for (let i = 0; i < this.blocks.length; i++) {
+      if (this.blocks[i] === BROKEN && this.drawn[i] !== BROKEN) broke.push(i);
+    }
+    this.drawn = Uint8Array.from(this.blocks);
+    // A bomb or a reset can break a lot at once; a few cubes say it as well as many.
+    if (!broke.length || reducedMotion() || this.revealed) return;
+    const color = new Color(token('--cube-edge'));
+    const now = performance.now();
+    for (const cell of broke.slice(0, 12)) {
+      const center = this.center(pointOf(this.puzzle.dims, cell));
+      // Four chips from the cube's corners, flying out from its middle and a little up.
+      for (const [dx, dz] of [
+        [-1, -1],
+        [1, -1],
+        [-1, 1],
+        [1, 1],
+      ]) {
+        const from = center.clone().add(new Vector3(dx * 0.22, 0.1, dz * 0.22));
+        const to = center.clone().add(new Vector3(dx * 0.75, 0.55, dz * 0.75));
+        const mesh = new Mesh(
+          this.puffGeometry,
+          new MeshBasicMaterial({ color, transparent: true, opacity: 0.85 }),
+        );
+        mesh.position.copy(from);
+        mesh.scale.setScalar(0.38);
+        this.group.add(mesh);
+        this.puffs.push({ mesh, from, to, start: now });
+      }
+    }
+    this.invalidate();
+  }
+
+  /** Moves the puffs along; true while any are still going. */
+  private animatePuffs(now: number): boolean {
+    const PUFF_MS = 320;
+    this.puffs = this.puffs.filter((p) => {
+      const t = Math.min(1, (now - p.start) / PUFF_MS);
+      const ease = 1 - (1 - t) ** 2;
+      p.mesh.position.lerpVectors(p.from, p.to, ease);
+      p.mesh.scale.setScalar(0.38 * (1 - ease * 0.6));
+      p.mesh.rotation.set(ease * 0.8, ease * 1.1, 0);
+      (p.mesh.material as MeshBasicMaterial).opacity = 0.85 * (1 - t * t);
+      if (t < 1) return true;
+      this.group.remove(p.mesh);
+      (p.mesh.material as MeshBasicMaterial).dispose();
+      return false;
+    });
+    return this.puffs.length > 0;
+  }
+
   /** Shows the solved shape in its colors and gives it a turn. */
   reveal(): void {
     this.revealed = true;
@@ -414,6 +475,7 @@ export class BlockView {
         if (t < 1) this.invalidate();
         else this.tween = null;
       }
+      if (this.puffs.length && this.animatePuffs(now)) this.invalidate();
       if (now < this.spinUntil) {
         const left = (this.spinUntil - now) / 2400;
         this.yaw += 0.09 * Math.sin(left * Math.PI) + 0.004;
@@ -428,6 +490,8 @@ export class BlockView {
     cancelAnimationFrame(this.frame);
     this.resizeObserver.disconnect();
     this.mesh.geometry.dispose();
+    for (const p of this.puffs) (p.mesh.material as MeshBasicMaterial).dispose();
+    this.puffGeometry.dispose();
     for (const m of this.faceMaterials) m.dispose();
     this.colorMaterial.dispose();
     for (const t of this.atlases) t.dispose();

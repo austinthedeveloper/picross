@@ -1,5 +1,5 @@
 import { EMPTY, FILLED, nextStep, solve, UNKNOWN } from '../engine/solver';
-import { pointOf, type Axis, type Line } from '../engine/volume';
+import { lineIdAt, pointOf, type Axis, type Line } from '../engine/volume';
 import { isFilled, type Puzzle } from '../puzzles/format';
 import type { SavedBoard } from './progress';
 import type { Mode } from './settings';
@@ -44,6 +44,8 @@ interface Stroke {
   paintTo: Block;
   axis: Axis;
   layer: number;
+  /** The cube it started on. */
+  start: number;
   move: Move;
 }
 
@@ -126,7 +128,14 @@ export class Game {
   begin(tool: Tool, cell: number, axis: Axis): Outcome {
     if (this.over || this.blocks[cell] === BROKEN) return 'none';
     const paintTo = this.blocks[cell] === PAINTED ? SOLID : PAINTED;
-    this.stroke = { tool, paintTo, axis, layer: pointOf(this.puzzle.dims, cell)[axis], move: [] };
+    this.stroke = {
+      tool,
+      paintTo,
+      axis,
+      layer: pointOf(this.puzzle.dims, cell)[axis],
+      start: cell,
+      move: [],
+    };
     return this.extend(cell);
   }
 
@@ -135,6 +144,13 @@ export class Game {
     const s = this.stroke;
     if (!s || this.over) return 'none';
     if (pointOf(this.puzzle.dims, cell)[s.axis] !== s.layer) return 'none';
+    return this.extendAny(cell);
+  }
+
+  /** Applies the stroke's tool to a cube, wherever it is. */
+  private extendAny(cell: number): Outcome {
+    const s = this.stroke;
+    if (!s || this.over) return 'none';
     if (s.move.some((c) => c.index === cell)) return 'none';
     const from = this.blocks[cell] as Block;
     if (s.tool === 'paint') {
@@ -153,6 +169,32 @@ export class Game {
     }
     this.set(cell, BROKEN);
     return 'broke';
+  }
+
+  /**
+   * Carries the stroke straight through the block: the whole line its first cube's face
+   * looks along (a hold). A 0 clue breaks in one go; a full one paints in one go. Hearts
+   * mode still stops at the first cube of the shape.
+   */
+  extendLine(): Outcome[] {
+    const s = this.stroke;
+    if (!s || this.over) return [];
+    const { dims } = this.puzzle;
+    const line = this.puzzle.lines[lineIdAt(dims, s.axis, pointOf(dims, s.start))];
+    const outcomes: Outcome[] = [];
+    // Outward from the cube you're holding, so a strike stops nearest you.
+    const at = line.cells.indexOf(s.start);
+    const order = line.cells
+      .map((c, t) => ({ c, d: Math.abs(t - at) }))
+      .sort((a, b) => a.d - b.d)
+      .map((x) => x.c);
+    for (const cell of order) {
+      if (!this.stroke) break;
+      if (s.move.some((c) => c.index === cell)) continue;
+      const outcome = this.extendAny(cell);
+      if (outcome !== 'none') outcomes.push(outcome);
+    }
+    return outcomes;
   }
 
   end(): void {

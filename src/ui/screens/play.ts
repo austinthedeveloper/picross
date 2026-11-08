@@ -175,7 +175,11 @@ export function createPlay(root: HTMLElement, opts: PlayOptions): Play {
   peel.ariaLabel = 'Layers peeled';
   const flip = el('button', { textContent: '⇄', title: 'Peel from the other end' });
   flip.ariaLabel = 'Peel from the other end';
-  const peelLabel = el('span', { className: 'peel-count' });
+  const peelLabel = el('span', { className: 'peel-count', ariaLive: 'polite' });
+  const peelLess = el('button', { className: 'step', textContent: '−', title: 'One layer fewer' });
+  peelLess.ariaLabel = 'Peel one layer fewer';
+  const peelMore = el('button', { className: 'step', textContent: '+', title: 'One layer more' });
+  peelMore.ariaLabel = 'Peel one layer more';
 
   const status = el('p', { className: 'sr-only', role: 'status' });
   const coach = el('div', { className: 'coach', hidden: true });
@@ -200,23 +204,25 @@ export function createPlay(root: HTMLElement, opts: PlayOptions): Play {
     el('div', { className: 'controls' }, [
       el('div', { className: 'segmented tools', role: 'group', ariaLabel: 'Tool' }, toolButtons),
       el('div', { className: 'segmented views', role: 'group', ariaLabel: 'View' }, viewButtons),
+      // Two fixed rows, so nothing shifts under your finger as the label changes.
       el('div', { className: 'peel' }, [
-        el('span', { className: 'peel-label', textContent: 'Peel' }),
-        el('div', { className: 'segmented', role: 'group', ariaLabel: 'Peel axis' }, axisButtons),
-        peel,
-        flip,
-        peelLabel,
+        el('div', { className: 'peel-row' }, [
+          el('span', { className: 'peel-label', textContent: 'Peel' }),
+          el('div', { className: 'segmented', role: 'group', ariaLabel: 'Peel axis' }, axisButtons),
+          flip,
+        ]),
+        el('div', { className: 'peel-row' }, [peelLess, peel, peelMore, peelLabel]),
       ]),
     ]),
     el('p', {
       className: 'help',
       textContent:
-        'Drag empty space (or use Turn) to turn the block. Pinch or scroll to zoom. Double-tap empty space to reset the view.',
+        'Hold on a cube to break (or paint) its whole line, straight through. Drag empty space (or use Turn) to turn the block; pinch or scroll to zoom; double-tap empty space to reset the view.',
     }),
     el('p', {
       className: 'help keyboard',
       textContent:
-        'Keys: arrows move, PgUp/PgDn change layer, X breaks, Space paints, A/D/W/S turn, 1/2/3/0 views, Z/Y undo and redo.',
+        'Keys: arrows move, PgUp/PgDn change layer, X breaks, Space paints, Shift+X or Shift+Space for the whole line down, A/D/W/S turn, 1/2/3/0 views, Z/Y undo and redo.',
     }),
     status,
   ]);
@@ -241,6 +247,8 @@ export function createPlay(root: HTMLElement, opts: PlayOptions): Play {
     peel.value = String(p.layers);
     peelLabel.textContent = p.layers ? `${p.layers} from ${END_NAMES[peelAxis][p.from]}` : 'none';
     flip.disabled = max < 1;
+    peelLess.disabled = p.layers <= 0;
+    peelMore.disabled = p.layers >= max;
   }
 
   function setTool(next: ToolChoice) {
@@ -255,15 +263,21 @@ export function createPlay(root: HTMLElement, opts: PlayOptions): Play {
     hooks.orbited?.();
   }
 
-  peel.oninput = () => {
-    const layers = Number(peel.value);
+  function setPeelLayers(layers: number) {
     const current = view.peels[peelAxis];
     // Starting a peel takes it from the end facing you.
     const from = current.layers === 0 ? view.facingEnd(peelAxis) : current.from;
     view.setPeel(peelAxis, { from, layers });
     hooks.peeled?.(peelAxis, layers);
     renderHud();
+  }
+  peel.oninput = () => setPeelLayers(Number(peel.value));
+  const step = (by: number) => {
+    const max = puzzle.dims[peelAxis] - 1;
+    setPeelLayers(Math.max(0, Math.min(max, view.peels[peelAxis].layers + by)));
   };
+  peelLess.onclick = () => step(-1);
+  peelMore.onclick = () => step(1);
   flip.onclick = () => {
     const current = view.peels[peelAxis];
     view.setPeel(peelAxis, { ...current, from: current.from === 'high' ? 'low' : 'high' });
@@ -366,6 +380,16 @@ export function createPlay(root: HTMLElement, opts: PlayOptions): Play {
     },
     orbited: () => hooks.orbited?.(),
     reset: () => snap('start'),
+    hold: () => {
+      const outcomes = game.extendLine();
+      if (!outcomes.length) return;
+      haptic('line');
+      // One sound per kind, not one per cube.
+      for (const o of new Set(outcomes)) feedback(o);
+      lastOutcome = outcomes.includes('strike') ? 'strike' : outcomes[0];
+      view.rebuild();
+      if (game.over) afterChange(lastOutcome);
+    },
   });
 
   undo.onclick = () => {
@@ -456,8 +480,14 @@ export function createPlay(root: HTMLElement, opts: PlayOptions): Play {
     return true;
   }
 
-  const keyAct = (t: Tool) => {
+  /** The cursor cube, or with `line` its whole vertical line. */
+  const keyAct = (t: Tool, line = false) => {
     act(t, cursor, 'y');
+    if (line) {
+      const outcomes = game.extendLine();
+      for (const o of new Set(outcomes)) feedback(o);
+      if (outcomes.length) lastOutcome = outcomes.includes('strike') ? 'strike' : outcomes[0];
+    }
     game.end();
     afterChange(lastOutcome);
   };
@@ -496,7 +526,7 @@ export function createPlay(root: HTMLElement, opts: PlayOptions): Play {
       keyboardCursor = true;
       lastKeyTool = paintKeys.includes(key) ? 'paint' : 'break';
       view.setCursor(cursor);
-      keyAct(lastKeyTool);
+      keyAct(lastKeyTool, e.shiftKey);
       announce(describe(cursor));
       return;
     }
