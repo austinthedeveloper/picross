@@ -32,7 +32,7 @@ export function parseSheet(text: string): PuzzleFile[] {
       expectColors = true;
       return;
     }
-    if (!current) throw new Error(`${where}: expected a "== id \"Name\"" line first`);
+    if (!current) throw new Error(`${where}: expected a "== id "Name"" line first`);
     if (expectColors) {
       for (const pair of line.split(/\s+/)) {
         const [letter, color] = pair.split('=');
