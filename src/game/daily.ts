@@ -42,6 +42,11 @@ export function recordDaily(today: string, time: number): number {
 
 export const getDailyBoard = (date: string) => (data.board?.date === date ? data.board : undefined);
 
+export function clearDailyBoard(): void {
+  delete data.board;
+  persist();
+}
+
 export function saveDailyBoard(date: string, board: SavedBoard): void {
   data.board = { ...board, date };
   persist();

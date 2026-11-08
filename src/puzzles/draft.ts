@@ -77,8 +77,22 @@ export function fileToDraft(file: PuzzleFile): Draft {
     z: file.layers[0]?.length ?? 0,
     x: file.layers[0]?.[0]?.length ?? 0,
   };
-  if (!dims.x || !dims.y || !dims.z) throw new Error('That puzzle has no layers.');
-  const draft = { id: file.id, name: file.name, dims, cells: new Uint8Array(volume(dims)) };
+  if (!Array.isArray(file.layers) || !dims.x || !dims.y || !dims.z) {
+    throw new Error('That puzzle has no layers.');
+  }
+  if (Math.max(dims.x, dims.y, dims.z) > MAX_LINE) {
+    throw new Error(`It's bigger than ${MAX_LINE} cubes on a side.`);
+  }
+  const ragged = file.layers.some(
+    (layer) => layer.length !== dims.z || layer.some((row) => row.length !== dims.x),
+  );
+  if (ragged) throw new Error('Its layers and rows aren\u2019t all the same size.');
+  const draft = {
+    id: typeof file.id === 'string' && file.id ? file.id : 'my-puzzle',
+    name: typeof file.name === 'string' && file.name.trim() ? file.name.trim() : 'My puzzle',
+    dims,
+    cells: new Uint8Array(volume(dims)),
+  };
   file.layers.forEach((layer, y) =>
     layer.forEach((row, z) =>
       [...row].forEach((ch, x) => {

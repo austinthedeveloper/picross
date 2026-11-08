@@ -97,6 +97,13 @@ material; the mesh draws them as groups. A mode restyles faces with `view.styler
 In dev builds the play screen puts its `Game` and `BlockView` on `window.__game` and
 `window.__view`, for `npm run screenshot -- --js` and the console. Production drops it.
 
+## Saving
+
+Screens save through their cleanup when you leave them, and also register a save with
+`ui/lifecycle.ts`'s `onHide`, which `main.ts` runs whenever the page is hidden: a phone can
+close a backgrounded tab without the cleanup ever running. The router clears it on every
+route. Coming back from the browser's page cache draws the screen again.
+
 ## Offline
 
 `public/sw.js` caches every file the game loads and serves it from the cache, refreshing in

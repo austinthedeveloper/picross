@@ -46,12 +46,22 @@
   font-size: 0.85rem;
 }
 
-/* On a narrow phone the two sides of the bar wrap instead of clipping. */
-.coach .battle-row {
-  flex-wrap: wrap;
-  row-gap: 6px;
+/* The bar keeps the enemy left and you right; on a phone the meters slim down to fit. */
+.coach:has(.battle) {
+  padding: 8px 10px;
 }
 
 .coach .battle-side {
   min-width: 0;
+}
+
+@media (max-width: 480px) {
+  .coach .meter-track {
+    width: 56px;
+  }
+
+  .coach .enemy-sprite .art {
+    width: 40px;
+    height: 40px;
+  }
 }

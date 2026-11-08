@@ -190,6 +190,12 @@ export class Battle {
   }
 
   /** Clues as the solver should treat them now: suspects can't be trusted. */
+  /** The clues a player can trust right now (for hints): no fog, no suspects. */
+  hintClues(): (Clue | null)[] {
+    const finished = new Set(this.state.struck);
+    return this.trustedClues().map((c, i) => (finished.has(i) ? this.base[i] : c));
+  }
+
   private trustedClues(extra: { fog?: number[]; scramble?: number[]; suspects?: number[] } = {}) {
     const fog = new Set([...this.state.fog, ...(extra.fog ?? [])]);
     const scramble = new Set([...this.state.scramble, ...(extra.scramble ?? [])]);
@@ -285,7 +291,9 @@ export class Battle {
 
   /** A new live line for the charge: one with work left in it. */
   private pickLive(blocks: Uint8Array): number | null {
-    const finished = new Set(finishedLines(this.puzzle, blocks));
+    // Not a line that's already struck: finishing it again wouldn't count, so it could
+    // never ground the charge.
+    const finished = new Set([...finishedLines(this.puzzle, blocks), ...this.state.struck]);
     const open = this.puzzle.lines.filter(
       (l) => !finished.has(l.id) && l.cells.some((c) => blocks[c] === SOLID),
     );
@@ -350,7 +358,7 @@ export class Battle {
         const total = state.armorLines + others;
         state.armorLines = total % ARMOR_HIT_LINES;
         for (let n = 0; n < Math.floor(total / ARMOR_HIT_LINES); n++) {
-          events.push(...this.hit(ARMOR_HIT_DAMAGE, 'armor'));
+          events.push(...this.hit(this.enemy.armor?.attack ?? ARMOR_HIT_DAMAGE, 'armor'));
         }
       }
     } else {
@@ -410,9 +418,13 @@ export class Battle {
       state.phase++;
       const phase = phases[state.phase];
       events.push({ kind: 'phase', phase, index: state.phase });
-      if (phase.fog) state.fog.push(...this.pickLines(phase.fog, blocks, 'fog'));
-      if (phase.scramble)
-        state.scramble.push(...this.pickLines(phase.scramble, blocks, 'scramble'));
+      // The wipe first, so new fog and scrambles are checked against the board it leaves.
+      if (phase.swap) {
+        const swap = this.swap(blocks);
+        if (swap) events.push(swap);
+      }
+      if (phase.fog) state.fog.push(...this.pickMore(phase.fog, blocks, 'fog'));
+      if (phase.scramble) state.scramble.push(...this.pickMore(phase.scramble, blocks, 'scramble'));
       if (phase.charge) this.setCharge(phase.charge);
       if (phase.rotate) state.turn = { every: phase.rotate, meter: state.turn?.meter ?? 0 };
       if (phase.ink) {
@@ -424,12 +436,22 @@ export class Battle {
           }
         }
       }
-      if (phase.swap) {
-        const swap = this.swap(blocks);
-        if (swap) events.push(swap);
-      }
     }
     return events;
+  }
+
+  /**
+   * Lines for a phase's fog or scrambles: first ones that keep the block solvable from
+   * scratch (so undoing your work can't strand you), then, if that runs short, ones that
+   * keep it solvable from what's correctly on the board now.
+   */
+  private pickMore(count: number, blocks: Uint8Array, kind: 'fog' | 'scramble'): number[] {
+    const picked = this.pickLines(count, new Uint8Array(blocks.length), kind);
+    if (picked.length >= count) return picked;
+    this.state[kind].push(...picked);
+    const more = this.pickLines(count - picked.length, blocks, kind);
+    this.state[kind].splice(this.state[kind].length - picked.length, picked.length);
+    return [...picked, ...more];
   }
 
   /** Ink over a size×size patch of a layer, where you've done the most, outside finished lines. */

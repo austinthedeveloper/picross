@@ -229,3 +229,19 @@
   font-size: 0.85rem;
   color: var(--muted);
 }
+
+/* On a phone the title gets its own line, with Badges, Editor and How to play under it. */
+@media (max-width: 520px) {
+  .select .topbar {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .select .topbar h1 {
+    flex: 1 1 100%;
+  }
+
+  .select .topbar .button {
+    padding: 6px 12px;
+  }
+}

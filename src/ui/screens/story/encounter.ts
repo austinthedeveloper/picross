@@ -14,6 +14,7 @@ import { restHeal, type Encounter } from '../../../story/data';
 import { shapePicture } from '../../board/thumbnail';
 import { el } from '../../dom';
 import { formatTime } from '../../format';
+import { onHide } from '../../lifecycle';
 import { createPlay, type Play, type PlayHooks } from '../play';
 import { renderSceneScreen } from '../sceneScreen';
 import { digKind } from './dig';
@@ -108,9 +109,7 @@ export function renderEncounter(app: HTMLElement): (() => void) | undefined {
       ];
     }
 
-    return () => {
-      const elapsed = p.cleanup();
-      kind.dispose?.();
+    const persist = (elapsed: number) => {
       const { game } = p;
       const current = getCurrentRun();
       // Save the board to come back to, unless it's over (cleared, or the run was lost).
@@ -120,6 +119,12 @@ export function renderEncounter(app: HTMLElement): (() => void) | undefined {
       const battle = kind.save?.();
       if (battle) next = { ...next, battle };
       saveCurrentRun(next);
+    };
+    onHide(() => persist(p.clock.elapsed));
+    return () => {
+      const elapsed = p.cleanup();
+      kind.dispose?.();
+      persist(elapsed);
     };
   };
 

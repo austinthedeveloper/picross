@@ -192,6 +192,11 @@ export class BlockView {
     return false;
   }
 
+  /** Whether a cube is peeled away (out of sight and out of reach). */
+  isPeeled(cell: number): boolean {
+    return this.cutAway(pointOf(this.puzzle.dims, cell));
+  }
+
   private shown(p: Point): boolean {
     const d = this.puzzle.dims;
     if (!inside(d, p)) return false;

@@ -1,3 +1,4 @@
+import type { Clue } from '../engine/clues';
 import { EMPTY, FILLED, nextStep, solve, UNKNOWN } from '../engine/solver';
 import { lineIdAt, pointOf, type Axis, type Line } from '../engine/volume';
 import { isFilled, type Puzzle } from '../puzzles/format';
@@ -77,11 +78,15 @@ export class Game {
       this.elapsed = saved.elapsed ?? 0;
       this.hearts = saved.hearts ?? MAX_HEARTS;
       this.hintsUsed = saved.hintsUsed ?? 0;
+      this.strikes = saved.strikes ?? 0;
     }
   }
 
+  /** Every cube that isn't the shape broken, and none that is. */
   get solved(): boolean {
-    return this.puzzle.solution.every((c, i) => c !== 0 || this.blocks[i] === BROKEN);
+    return this.puzzle.solution.every((c, i) =>
+      c !== 0 ? this.blocks[i] !== BROKEN : this.blocks[i] === BROKEN,
+    );
   }
 
   /** Out of hearts in hearts mode. */
@@ -121,6 +126,7 @@ export class Game {
       ...(this.mode !== 'battle' ? { mode: this.mode } : {}),
       ...(this.mode === 'hearts' ? { hearts: this.hearts } : {}),
       ...(this.hintsUsed ? { hintsUsed: this.hintsUsed } : {}),
+      ...(this.strikes ? { strikes: this.strikes } : {}),
     };
   }
 
@@ -176,7 +182,7 @@ export class Game {
    * looks along (a hold). A 0 clue breaks in one go; a full one paints in one go. Hearts
    * mode still stops at the first cube of the shape.
    */
-  extendLine(): Outcome[] {
+  extendLine(allow: (cell: number) => boolean = () => true): Outcome[] {
     const s = this.stroke;
     if (!s || this.over) return [];
     const { dims } = this.puzzle;
@@ -191,6 +197,7 @@ export class Game {
     for (const cell of order) {
       if (!this.stroke) break;
       if (s.move.some((c) => c.index === cell)) continue;
+      if (!allow(cell)) continue;
       const outcome = this.extendAny(cell);
       if (outcome !== 'none') outcomes.push(outcome);
     }
@@ -208,6 +215,15 @@ export class Game {
   private set(cell: number, to: Block): void {
     this.stroke!.move.push({ index: cell, from: this.blocks[cell] as Block, to });
     this.blocks[cell] = to;
+  }
+
+  /**
+   * Forgets undo and redo. For changes made outside the history (a fight's wipe or bomb):
+   * going back past them would bring back what they changed.
+   */
+  clearHistory(): void {
+    this.past = [];
+    this.future = [];
   }
 
   undo(): Move | null {
@@ -253,7 +269,9 @@ export class Game {
    * Uses a hint: finds the line that proves the most from what's correctly on the board,
    * and breaks and paints what it proves. Returns that line (or null) and the move.
    */
-  hint(): { line: Line | null; move: Move } | null {
+  hint(
+    clues: readonly (Clue | null)[] = this.puzzle.clues,
+  ): { line: Line | null; move: Move } | null {
     if (this.hintsLeft <= 0 || this.over) return null;
     const move: Move = [];
     let line: Line | null = null;
@@ -264,7 +282,7 @@ export class Game {
       else if (b === PAINTED && filled) known[i] = FILLED;
     });
     const { puzzle } = this;
-    const step = nextStep(puzzle.dims, puzzle.clues, known, puzzle.lines);
+    const step = nextStep(puzzle.dims, clues, known, puzzle.lines);
     if (step) {
       line = step.line;
       for (const i of step.empty) {
@@ -278,7 +296,7 @@ export class Game {
       }
     } else {
       // Wrongly painted cubes can hide every step; fall back to the answer for one cube.
-      const solved = solve(puzzle.dims, puzzle.clues, undefined, puzzle.lines).known;
+      const solved = solve(puzzle.dims, clues, undefined, puzzle.lines).known;
       const i = this.blocks.findIndex((b, c) => b === SOLID && solved[c] !== UNKNOWN);
       if (i < 0) return null;
       move.push({ index: i, from: SOLID, to: isFilled(puzzle, i) ? PAINTED : BROKEN });

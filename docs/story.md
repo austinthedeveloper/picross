@@ -43,20 +43,21 @@ here verbatim, and this game fits them to blocks.
   checked with the solver from what's correctly on the board, so the block stays solvable.
 - **Powers on a block:**
 
-| Power     | On a block                                                                           |
-| --------- | ------------------------------------------------------------------------------------ |
-| Fog       | Lines' clue faces fogged over; finishing a line clears it                            |
-| Scramble  | A dashed ring: the count is right, the pieces unknown, until the line's finished     |
-| Armor     | ◎ target lines do triple damage; every 5 other lines it hits back for 2              |
-| Forgeries | `?` suspect lines, some forged (one off); finished honest ones get a ✓; 🔍 Call out  |
-| Charge    | After a warm-up, lines fill the ⚡ meter; the yellow live line grounds it; full zaps |
-| Ink       | Splashes over a patch of a layer hide clues and paint; finishing a line washes it    |
-| Swap      | The two lines with the most of your work wiped back to solid cubes                   |
-| Turn      | Every few lines the block turns a quarter under you and peels drop (on a block, a    |
-|           | turn is the same as walking round it, so it's your view that turns)                  |
+| Power     | On a block                                                                             |
+| --------- | -------------------------------------------------------------------------------------- |
+| Fog       | Lines' clue faces fogged over; finishing a line clears it                              |
+| Scramble  | A dashed ring: the count is right, the pieces unknown, until the line's finished       |
+| Armor     | ◎ target lines do triple damage; every 5 other lines it hits back (its armor's attack) |
+| Forgeries | `?` suspect lines, some forged (one off); finished honest ones get a ✓; 🔍 Call out    |
+| Charge    | After a warm-up, lines fill the ⚡ meter; the yellow live line grounds it; full zaps   |
+| Ink       | Splashes over a patch of a layer hide clues and paint; finishing a line washes it      |
+| Swap      | The two lines with the most of your work wiped back to solid cubes                     |
+| Turn      | Every few lines the block turns a quarter under you and peels drop (on a block, a      |
+|           | turn is the same as walking round it, so it's your view that turns)                    |
 
 - **Gadgets:** a bomb deals 2 and works out one line; a patch kit blocks the next hit; a
   sponge washes off all ink.
+- **Undo** can't go back past a wipe or a bomb (they're outside the history).
 - **Hits** (Hits on only): breaking a cube of the shape (the enemy's attack), armor, zaps,
   and accusing an honest clue. In Relaxed, an honest accusation heals the enemy instead.
 - **Tips:** a card the first time each power shows (`src/story/powers.ts`), and ⓘ lists them.

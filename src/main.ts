@@ -19,6 +19,7 @@ import { addListCard, renderSelectScreen } from './ui/screens/selectScreen';
 import { renderStoryScreen, storyCard } from './ui/screens/story/index';
 import { dailyCard } from './ui/screens/dailyCard';
 import { renderBadgesScreen } from './ui/screens/badgesScreen';
+import { onHide, saveNow } from './ui/lifecycle';
 import { applyTheme } from './ui/theme';
 
 applyTheme();
@@ -32,6 +33,7 @@ let routed = 0;
 function route() {
   cleanup?.();
   cleanup = undefined;
+  onHide(null);
   const visit = ++routed;
   const play = location.hash.match(/^#\/play\/([\w-]+)$/);
   const puzzle = play && getPuzzle(play[1]);
@@ -81,6 +83,17 @@ if (import.meta.env.PROD && 'serviceWorker' in navigator) {
 }
 
 window.addEventListener('hashchange', route);
-// Save the board in progress when the tab closes.
-window.addEventListener('pagehide', () => cleanup?.());
+// Save the board in progress when the tab closes, or goes into the background (a phone may
+// close it from there without warning).
+window.addEventListener('pagehide', () => {
+  cleanup?.();
+  cleanup = undefined;
+});
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) saveNow();
+});
+// Back from the browser's page cache: the screen was torn down on the way out, so draw it again.
+window.addEventListener('pageshow', (e) => {
+  if (e.persisted) route();
+});
 route();

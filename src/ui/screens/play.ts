@@ -1,4 +1,4 @@
-import { clueText } from '../../engine/clues';
+import { clueText, type Clue } from '../../engine/clues';
 import { dimsLabel, indexOf, inside, lineIdAt, pointOf, type Axis } from '../../engine/volume';
 import { Clock } from '../../game/clock';
 import {
@@ -22,6 +22,7 @@ import { createMuteButton } from '../components/muteButton';
 import { el } from '../dom';
 import { formatTime, plural } from '../format';
 import { haptic } from '../haptics';
+import { reducedMotion } from '../motion';
 import { playSound } from '../sound';
 
 export type ToolChoice = Tool | 'turn';
@@ -57,6 +58,10 @@ export interface Change {
 export interface PlayHooks {
   /** Whether the player may use `tool` on `cell` now; false refuses it quietly. */
   allow?(tool: Tool, cell: number): boolean;
+  /** The clues hints may reason from (a fight's, without fog or forgeries). */
+  hintClues?(): (Clue | null)[];
+  /** X or Space on the keyboard cursor's cube; true takes it (a call-out by keyboard). */
+  keyPick?(cell: number): boolean;
   /** A press on a cube face; true takes it (no stroke). For calling out a forged clue. */
   pick?(pick: Pick): boolean;
   changed?(change: Change): void;
@@ -235,10 +240,10 @@ export function createPlay(root: HTMLElement, opts: PlayOptions): Play {
     const h = Math.max(0, game.hearts);
     hearts.textContent = '♥'.repeat(h) + '♡'.repeat(MAX_HEARTS - h);
     timer.textContent = formatTime(clock.elapsed);
-    undo.disabled = !game.canUndo;
-    redo.disabled = !game.canRedo;
-    hintMenu.render(game.hintsLeft, game.hintsLeft > 0 && !game.over);
-    reset.disabled = game.over;
+    undo.disabled = locked || !game.canUndo;
+    redo.disabled = locked || !game.canRedo;
+    hintMenu.render(game.hintsLeft, game.hintsLeft > 0 && !game.over && !locked);
+    reset.disabled = locked || game.over;
     toolButtons.forEach((b, i) => b.setAttribute('aria-pressed', String(TOOLS[i].id === tool)));
     axisButtons.forEach((b, i) => b.setAttribute('aria-pressed', String('xyz'[i] === peelAxis)));
     const p = view.peels[peelAxis];
@@ -287,14 +292,24 @@ export function createPlay(root: HTMLElement, opts: PlayOptions): Play {
 
   // --- Finished lines ------------------------------------------------------------------
 
+  /** The clue a line shows (a fight can fog, scramble or forge it). */
+  const shownClue = (id: number) => (view.clueFor ? view.clueFor(id) : puzzle.clues[id]);
+
   const doneLines = () => {
     const done = new Set<number>();
     for (const line of puzzle.lines) {
-      const clue = puzzle.clues[line.id];
+      const clue = shownClue(line.id);
       if (!clue) continue;
       let left = 0;
-      for (const c of line.cells) if (game.blocks[c] !== BROKEN) left++;
-      if (left === clue.count) done.add(line.id);
+      let painted = 0;
+      for (const c of line.cells) {
+        if (game.blocks[c] !== BROKEN) left++;
+        if (game.blocks[c] === PAINTED) painted++;
+      }
+      // A line that's all shape has nothing to break: it's done once it's all painted, not
+      // before you've touched it.
+      const full = clue.count === line.cells.length;
+      if (full ? painted === clue.count : left === clue.count) done.add(line.id);
     }
     return done;
   };
@@ -317,16 +332,22 @@ export function createPlay(root: HTMLElement, opts: PlayOptions): Play {
       void screen.offsetWidth;
       screen.classList.add('shake');
       announce(
-        game.failed
-          ? 'Out of hearts.'
-          : `That cube is part of the shape. ${plural(game.hearts, 'heart')} left.`,
+        game.mode === 'battle'
+          ? 'That cube is part of the shape.'
+          : game.failed
+            ? 'Out of hearts.'
+            : `That cube is part of the shape. ${plural(game.hearts, 'heart')} left.`,
       );
     } else {
       playSound(outcome === 'broke' ? 'fill' : outcome === 'painted' ? 'mark' : 'erase');
     }
   }
 
+  /** Set once the end panel's up (solved, out of hearts), so it only happens once. */
+  let ended = false;
+
   function afterChange(outcome: Change['outcome']) {
+    if (ended) return;
     const now = doneLines();
     const newlyDone = [...now].filter((id) => !done.has(id));
     done = now;
@@ -343,17 +364,32 @@ export function createPlay(root: HTMLElement, opts: PlayOptions): Play {
   }
 
   let lastOutcome: Outcome = 'none';
+  /** Whether the current press started a stroke (a call-out tap doesn't). */
+  let stroked = false;
   const act = (pickTool: Tool, cell: number, axis: Axis) => {
     strokeHit = false;
-    if (locked || (hooks.allow && !hooks.allow(pickTool, cell))) return;
+    lastOutcome = 'none';
+    stroked = false;
+    if (locked || ended || game.over) return;
+    if (hooks.allow && !hooks.allow(pickTool, cell)) return;
     haptic('tap');
+    stroked = true;
     lastOutcome = game.begin(pickTool, cell, axis);
     feedback(lastOutcome);
+  };
+  /** Whether a whole-line stroke may touch a cube (the tutorial's rules). */
+  const allowCell = (cell: number) => !hooks.allow || hooks.allow(tool as Tool, cell);
+  const lineOutcome = (outcomes: Outcome[]) => {
+    // One sound per kind, not one per cube.
+    for (const o of new Set(outcomes)) feedback(o);
+    if (outcomes.length) lastOutcome = outcomes.includes('strike') ? 'strike' : outcomes[0];
   };
 
   const detachInput = attachInput(view, {
     acting: () => tool !== 'turn' && !game.over && !locked,
     begin: (pick) => {
+      lastOutcome = 'none';
+      stroked = false;
       if (hooks.pick?.(pick)) return;
       view.setCursor(pick.cell);
       act(tool as Tool, pick.cell, pick.axis);
@@ -373,7 +409,8 @@ export function createPlay(root: HTMLElement, opts: PlayOptions): Play {
     },
     end: () => {
       game.end();
-      afterChange(lastOutcome);
+      if (stroked) afterChange(lastOutcome);
+      stroked = false;
     },
     hover: (pick) => {
       if (!keyboardCursor) view.setCursor(pick?.cell ?? null);
@@ -381,30 +418,30 @@ export function createPlay(root: HTMLElement, opts: PlayOptions): Play {
     orbited: () => hooks.orbited?.(),
     reset: () => snap('start'),
     hold: () => {
-      const outcomes = game.extendLine();
+      if (!stroked || locked) return;
+      const outcomes = game.extendLine(allowCell);
       if (!outcomes.length) return;
       haptic('line');
-      // One sound per kind, not one per cube.
-      for (const o of new Set(outcomes)) feedback(o);
-      lastOutcome = outcomes.includes('strike') ? 'strike' : outcomes[0];
+      lineOutcome(outcomes);
       view.rebuild();
       if (game.over) afterChange(lastOutcome);
     },
   });
 
   undo.onclick = () => {
-    if (game.undo()) {
+    if (!locked && game.undo()) {
       playSound('erase');
       afterChange('undo');
     }
   };
   redo.onclick = () => {
-    if (game.redo()) {
+    if (!locked && game.redo()) {
       playSound('fill');
       afterChange('redo');
     }
   };
   reset.onclick = () => {
+    if (locked) return;
     game.reset();
     playSound('erase');
     afterChange('reset');
@@ -412,7 +449,8 @@ export function createPlay(root: HTMLElement, opts: PlayOptions): Play {
 
   let litTimer = 0;
   function useHint() {
-    const used = game.hint();
+    if (locked) return;
+    const used = game.hint(hooks.hintClues?.());
     if (!used) return;
     playSound('hint');
     window.clearTimeout(litTimer);
@@ -429,6 +467,7 @@ export function createPlay(root: HTMLElement, opts: PlayOptions): Play {
   }
 
   function useCheck() {
+    if (locked) return;
     const wrong = game.check();
     if (!wrong) return;
     playSound(wrong.length ? 'error' : 'hint');
@@ -462,7 +501,7 @@ export function createPlay(root: HTMLElement, opts: PlayOptions): Play {
     const clues = (['x', 'y', 'z'] as const)
       .map((a) => {
         const line = lineIdAt(puzzle.dims, a, p);
-        const clue = puzzle.clues[line];
+        const clue = shownClue(line);
         const text = clue ? clueText(clue) : 'hidden';
         return `${a} ${text}${done.has(line) ? ' done' : ''}`;
       })
@@ -482,12 +521,16 @@ export function createPlay(root: HTMLElement, opts: PlayOptions): Play {
 
   /** The cursor cube, or with `line` its whole vertical line. */
   const keyAct = (t: Tool, line = false) => {
-    act(t, cursor, 'y');
-    if (line) {
-      const outcomes = game.extendLine();
-      for (const o of new Set(outcomes)) feedback(o);
-      if (outcomes.length) lastOutcome = outcomes.includes('strike') ? 'strike' : outcomes[0];
+    if (game.over || locked || ended) return;
+    // A fight's call-out takes the key instead (X or Space on a suspect line).
+    if (hooks.keyPick?.(cursor)) return;
+    if (view.isPeeled(cursor)) {
+      announce('That cube is peeled away. Lower the peel to reach it.');
+      return;
     }
+    act(t, cursor, 'y');
+    if (!stroked) return;
+    if (line) lineOutcome(game.extendLine((c) => !hooks.allow || hooks.allow(t, c)));
     game.end();
     afterChange(lastOutcome);
   };
@@ -569,9 +612,13 @@ export function createPlay(root: HTMLElement, opts: PlayOptions): Play {
   function showPanel(content: Node[]) {
     panel.replaceChildren(...content);
     panel.hidden = false;
+    // On a phone it lands below the block: bring it into view.
+    panel.scrollIntoView({ block: 'nearest', behavior: reducedMotion() ? 'auto' : 'smooth' });
   }
 
   function finish() {
+    if (ended) return;
+    ended = true;
     clock.pause();
     game.elapsed = clock.elapsed;
     title.textContent = puzzle.name;
@@ -591,6 +638,7 @@ export function createPlay(root: HTMLElement, opts: PlayOptions): Play {
   }
 
   function retry() {
+    ended = false;
     game.retry();
     clock.reset();
     panel.hidden = true;
@@ -601,6 +649,8 @@ export function createPlay(root: HTMLElement, opts: PlayOptions): Play {
   }
 
   function fail() {
+    if (ended) return;
+    ended = true;
     clock.pause();
     view.setCursor(null);
     playSound('strike', 0.2);
@@ -626,7 +676,7 @@ export function createPlay(root: HTMLElement, opts: PlayOptions): Play {
   }, 500);
 
   const visibility = () => {
-    if (game.over) return;
+    if (game.over || locked) return;
     if (document.hidden) clock.pause();
     else clock.resume();
   };

@@ -154,3 +154,20 @@ describe('Battle', () => {
     expect(again.state.fog).toEqual(b.state.fog);
   });
 });
+
+describe('hints in a fight', () => {
+  it('reason only from clues the player can see and trust', () => {
+    const b = new Battle(
+      enemy({ fog: 4, fakes: { fakes: 1, suspects: 2 } }),
+      puzzle,
+      true,
+      undefined,
+      {
+        seed: 11,
+      },
+    );
+    const clues = b.hintClues();
+    for (const id of [...b.state.fog, ...b.state.suspects]) expect(clues[id]).toBeNull();
+    expect(solve(puzzle.dims, clues, undefined, puzzle.lines).solved).toBe(true);
+  });
+});
