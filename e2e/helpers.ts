@@ -52,9 +52,9 @@ export async function runAt(
     seenTips: [],
     jobs: {},
   });
-  // Saves are read once when the app loads, so load it again with the run in place.
-  await page.goto('/#/story/play');
-  await page.reload();
+  // Saves are read once when the app loads, so load it again with the run in place. A new
+  // query makes it a real page load (a bare hash change could redirect first).
+  await page.goto('/?seeded#/story/play');
   await skipScene(page);
   await page.locator('canvas.block-canvas').waitFor();
 }
