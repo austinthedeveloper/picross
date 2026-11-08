@@ -20,6 +20,14 @@ h3 {
   letter-spacing: 0.01em;
 }
 
+/*
+ * Buttons and links below get a display, which would otherwise beat the hidden attribute:
+ * hidden always hides.
+ */
+[hidden] {
+  display: none !important;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;

@@ -3,6 +3,7 @@ import { parsePuzzle } from './format';
 import { solve, solveLine, solveLineAnyOrder, Unknown, type Knowledge } from '../engine/solver';
 import { CHIP_DAMAGE, type Enemy } from '../game/battle';
 import { allScramble, allUnreadable } from './enemies';
+import { scenes } from './scenes';
 import {
   bossFights,
   bossFightsFor,
@@ -292,5 +293,16 @@ describe('rest stops', () => {
       const boss = job.encounters.findIndex((e) => e.boss);
       if (boss > 0) expect(job.encounters[boss - 1].kind).toBe('rest');
     }
+  });
+});
+
+describe('scenes the runs play', () => {
+  // Here rather than in backdrops.test.ts, which stays free of runs so the 3D game
+  // (picross-3d) can share it.
+  it('all have a backdrop, except outros', () => {
+    // A run's outro is only ever text on the results screen.
+    const outros = new Set(runs.map((run) => run.outro));
+    const bare = scenes.filter((scene) => !scene.backdrop && !outros.has(scene.id));
+    expect(bare.map((scene) => scene.id)).toEqual([]);
   });
 });
