@@ -1,8 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { breakCubes, encounterPuzzle, extras, focusBlock, shapeCubes } from './helpers';
 
-const FIRST_JOB = ['goblin', 'dig-site', 'fog-bat', 'tea-break', 'gremlin'];
-
 /** Plays the current encounter by breaking every cube that isn't the shape. */
 async function clearEncounter(page: Page, encounter: string) {
   await page.getByRole('link', { name: /current/ }).click();
