@@ -6,13 +6,12 @@
     "b": "brown",
     "g": "green",
     "k": "pink",
-    "w": "white",
-    "l": "leaf"
+    "w": "white"
   },
   "layers": [
     ["......", ".oooo.", ".oooo.", ".oooo.", "......"],
     ["oooooo", "obbbbo", "obbbbo", "obbbbo", "oooooo"],
-    ["......", "....l.", "..gg..", ".l....", "......"],
+    ["......", "....g.", "..gg..", ".g....", "......"],
     ["......", ".gggg.", ".gkkg.", ".gkkg.", ".gggg."],
     [".gggg.", ".gkkg.", "......", "......", ".w..w."],
     [".gggg.", ".gkkg.", ".gkkg.", ".wggw.", "......"]

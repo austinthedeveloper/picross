@@ -6,13 +6,12 @@
     "w": "wood",
     "s": "stone",
     "r": "red",
-    "k": "sky",
     "y": "yellow"
   },
   "layers": [
     ["sbwbbwbs", "bbwbbwbb", "bbwbbwbb", "sbwbbwbs"],
-    ["bbwbbwbb", "bbwbbwbb", "bbwbbwbb", "bkwbbwbb"],
-    ["bbwbbwbb", "bbwbbwbb", "bbwbbwbb", "bkwbywbb"],
+    ["bbwbbwbb", "bbwbbwbb", "bbwbbwbb", "brwbbwbb"],
+    ["bbwbbwbb", "bbwbbwbb", "bbwbbwbb", "bywbywbb"],
     ["bbwbbwbb", "bbwbbwbb", "bbwbbwbb", "bbwbbwrb"],
     ["sbwbbwbs", "bbwbbwbb", "bbwbbwbb", "sbwyywbs"],
     ["........", "..s..s..", "..s..s..", "........"],

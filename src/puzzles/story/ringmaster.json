@@ -6,13 +6,12 @@
     "r": "red",
     "c": "cream",
     "w": "white",
-    "y": "yellow",
-    "b": "brown"
+    "y": "yellow"
   },
   "layers": [
     [".......", ".......", "..www..", "..www..", "..www..", ".r.y.r."],
     [".......", ".ccccc.", ".ccccc.", ".ccccc.", ".ccccc.", "..ccc.."],
-    [".......", ".ccccc.", ".ccccc.", ".ccccc.", ".ccccc.", ".bbcbb."],
+    [".......", ".ccccc.", ".ccccc.", ".ccccc.", ".ccccc.", ".ggcgg."],
     [".......", ".ccccc.", ".ccccc.", ".ccccc.", ".ccccc.", "..g.g.."],
     ["ggggggg", "ggggggg", "ggggggg", "ggggggg", "ggggggg", "ggggggg"],
     [".......", ".rrrrr.", ".rrrrr.", ".rrrrr.", ".rrrrr.", "...y..."],

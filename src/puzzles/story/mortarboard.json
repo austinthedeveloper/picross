@@ -6,8 +6,7 @@
     "c": "cream",
     "w": "white",
     "y": "yellow",
-    "b": "blue",
-    "k": "pink"
+    "b": "blue"
   },
   "layers": [
     [
@@ -55,7 +54,7 @@
       "..cccccc..",
       "..cccccc..",
       "..cccccc..",
-      "....kk....",
+      "....cc....",
       ".........."
     ],
     [

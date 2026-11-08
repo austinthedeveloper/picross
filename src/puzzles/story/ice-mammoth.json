@@ -9,14 +9,14 @@
     "k": "graphite"
   },
   "layers": [
-    [".......", "w...w..", "......w", "w...w..", "......."],
-    [".......", "w...w.t", "......w", "w...w.t", "......."],
-    [".......", "bbbbbt.", "bbbbb.w", "bbbbbt.", "......."],
-    [".......", "bbbbbbb", "wbbbbbb", "bbbbbbb", "......."],
-    [".......", "bbbbbbk", "bbbbbbb", "bbbbbbk", "......."],
-    [".......", ".sss.bb", ".sss.bb", ".sss.bb", "......."]
+    ["w...w..", "......w", "w...w.."],
+    ["w...w.t", "......w", "w...w.t"],
+    ["bbbbbt.", "bbbbb.w", "bbbbbt."],
+    ["bbbbbbb", "wbbbbbb", "bbbbbbb"],
+    ["bbbbbbk", "bbbbbbb", "bbbbbbk"],
+    [".sss.bb", ".sss.bb", ".sss.bb"]
   ],
   "hideRatio": 0.5,
-  "hide": "74d84920005a70cf90799eeff75",
-  "passes": 5
+  "hide": "6a118252096fbadeea991",
+  "passes": 4
 }

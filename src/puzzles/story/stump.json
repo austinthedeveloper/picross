@@ -5,12 +5,11 @@
     "s": "stone",
     "w": "wood",
     "b": "brown",
-    "g": "graphite",
     "l": "leaf",
     "y": "yellow"
   },
   "layers": [
-    ["g.sgs..", ".gssss.", "sssssss", "gsssssg", "sssssss", ".ssssg.", "..sgs.g"],
+    ["b.sbs..", ".bssss.", "sssssss", "bsssssb", "sssssss", ".ssssb.", "..sbs.b"],
     ["..sss..", ".sssss.", "sssssss", "sssssss", "sssssss", ".sssss.", "..sss.."],
     ["..sss..", ".sssss.", "sssssss", "sssssss", "sssssss", ".sssss.", "..ysy.."],
     ["..sss..", ".swwws.", "swbbbws", "swbwbws", "swbbbws", ".swwws.", "..sss.."],

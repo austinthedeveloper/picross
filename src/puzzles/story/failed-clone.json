@@ -3,15 +3,14 @@
   "name": "Failed Clone",
   "colors": {
     "l": "leaf",
-    "g": "green",
     "p": "purple",
     "k": "pink",
     "w": "white",
     "b": "graphite"
   },
   "layers": [
-    ["........", "..gg....", "..gg.p..", "..gg.p..", "........"],
-    ["........", "..gg....", "..gg.p..", "..gg.p..", "........"],
+    ["........", "..ll....", "..ll.p..", "..ll.p..", "........"],
+    ["........", "..ll....", "..ll.p..", "..ll.p..", "........"],
     ["........", "lllllpp.", "lllllpp.", "lllllpp.", "........"],
     ["........", "lllllpp.", "lllllppk", "lllllpp.", "..k....."],
     ["........", "lllllll.", "lllllllk", "lllllll.", "....k..."],

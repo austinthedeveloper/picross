@@ -6,12 +6,11 @@
     "c": "cream",
     "g": "graphite",
     "y": "yellow",
-    "w": "white",
-    "r": "red"
+    "w": "white"
   },
   "layers": [
     [".......", "bbbbbbb", "bbbbbbb", "bbbbbbb", "bbbbbbb", "..byb.."],
-    [".......", "bbbbbbb", "bbbbbbb", "bbbbbbb", "bbbbbbb", "..brb.."],
+    [".......", "bbbbbbb", "bbbbbbb", "bbbbbbb", "bbbbbbb", "..byb.."],
     [".......", "..www..", "..www..", "..www..", "..www..", "......."],
     [".......", ".ccccc.", ".ccccc.", ".ccccc.", ".ccccc.", "...c..."],
     [".......", ".ccccc.", ".ccccc.", ".ccccc.", ".ccccc.", ".ggcgg."],

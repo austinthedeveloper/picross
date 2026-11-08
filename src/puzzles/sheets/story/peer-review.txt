@@ -1,19 +1,17 @@
 # Chapter 9: Peer Review (the-annex).
 
 == spark-hound "Spark Hound" hide=0.5
-o=orange y=yellow s=sky w=white k=graphite r=red
-........ ........ ........ ........ ........ ........ ........
+o=orange y=yellow s=sky w=white k=graphite
 .o...o.. .o...o.. .oyyyo.. .ooooo.. .....ooo .....ok. .....o..
-........ ........ .oyyyor. yoooooyy y.swsook yyws.oo. .y......
+........ ........ .oyyyos. yoooooyy y.swsook yyws.oo. .y......
 .o...o.. .o...o.. .oyyyo.. .ooooo.. .....ooo .....ok. .....o..
-........ ........ ........ ........ ........ ........ ........
 
 == failed-clone "Failed Clone" hide=0.5
-l=leaf g=green p=purple k=pink w=white b=graphite
+l=leaf p=purple k=pink w=white b=graphite
 ........ ........ ........ ........ ........ ........ .l...... ........
-..gg.... ..gg.... lllllpp. lllllpp. lllllll. lllllll. .lllll.. .lllll..
-..gg.p.. ..gg.p.. lllllpp. lllllppk lllllllk lllllllk .lllll.. .lllll..
-..gg.p.. ..gg.p.. lllllpp. lllllpp. lllllll. lllllll. .lllll.. .lllll..
+..ll.... ..ll.... lllllpp. lllllpp. lllllll. lllllll. .lllll.. .lllll..
+..ll.p.. ..ll.p.. lllllpp. lllllppk lllllllk lllllllk .lllll.. .lllll..
+..ll.p.. ..ll.p.. lllllpp. lllllpp. lllllll. lllllll. .lllll.. .lllll..
 ........ ........ ........ ..k..... ....k... ........ .lblbw.. .wlwll..
 
 == spill-sponge "Spill Sponge" hide=0.5
@@ -45,7 +43,7 @@ w=white r=red c=cream b=wood s=stone
 ....... ....... ....... ....... ...w... ..ccc.. ....... ....... .......
 
 == mortarboard "Mortarboard" hide=0.5
-g=graphite c=cream w=white y=yellow b=blue k=pink
+g=graphite c=cream w=white y=yellow b=blue
 .......... .......... .......... .......... .......... .......... .......... gggggggggg ..........
 .......... .......... .......... .......... .......... .......... .......... gggggggggg ..........
 ...wwww... ..cccccc.. ..cccccc.. ..cccccc.. ..cccccc.. ..cccccc.. ..gggggg.. gggggggggg ..........
@@ -54,5 +52,5 @@ g=graphite c=cream w=white y=yellow b=blue k=pink
 ...wwww... ..cccccc.. ..cccccc.. ..cccccc.. ..cccccc.. ..cccccc.. ..gggggg.. gggggggggg .....y....
 ...wwww... ..cccccc.. ..cccccc.. ..cccccc.. ..cccccc.. ..cccccc.. ..gggggg.. gggggggggg ......y...
 ...wwww... ..cccccc.. ..wwwwww.. ..cccccc.. ..cccccc.. ..cccccc.. ..gggggg.. gggggggggg .......y..
-.......... .......... ..wwccww.. ....kk.... ..bbggbb.. .......... .......... gggggggggg ........y.
+.......... .......... ..wwccww.. ....cc.... ..bbggbb.. .......... .......... gggggggggg ........y.
 .......... .......... .......... .......... .........y .........y .........y gggggggggg ..........

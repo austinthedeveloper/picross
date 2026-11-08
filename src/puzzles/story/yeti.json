@@ -6,20 +6,19 @@
     "s": "sky",
     "b": "blue",
     "k": "graphite",
-    "t": "stone",
-    "c": "cream"
+    "t": "stone"
   },
   "layers": [
-    ["........", ".ww..ww.", ".ww..ww.", ".ww..ww.", ".tt..tt.", ".tt..tt."],
-    ["........", ".ww..ww.", "tww..wwt", "tww..wwt", "tww..wwt", "........"],
-    ["........", "........", "w.wwww.w", "w.wwww.w", "........", "..wwww.."],
-    ["........", "..wwww..", "wwwwwwww", "wwwwwwww", "..wwww..", "..wbbw.."],
-    ["........", "..wwww..", "wwwwwwww", "wwwwwwww", "..wwww..", "........"],
-    ["........", "..wwww..", "..wwww..", "..wwww..", "..wwww..", "..cssc.."],
-    ["........", "..wwww..", "..wwww..", "..wwww..", "..wwww..", "..skks.."],
-    ["........", "..wwww..", ".twwwwt.", "..wwww..", "..wwww..", "........"]
+    [".ww..ww.", ".ww..ww.", ".ww..ww.", ".tt..tt.", ".tt..tt."],
+    [".ww..ww.", "tww..wwt", "tww..wwt", "tww..wwt", "........"],
+    ["........", "w.wwww.w", "w.wwww.w", "........", "..wwww.."],
+    ["..wwww..", "wwwwwwww", "wwwwwwww", "..wwww..", "..wbbw.."],
+    ["..wwww..", "wwwwwwww", "wwwwwwww", "..wwww..", "........"],
+    ["..wwww..", "..wwww..", "..wwww..", "..wwww..", "..wssw.."],
+    ["..wwww..", "..wwww..", "..wwww..", "..wwww..", "..skks.."],
+    ["..wwww..", ".twwwwt.", "..wwww..", "..wwww..", "........"]
   ],
   "hideRatio": 0.5,
-  "hide": "3da1c3bc3bc220001d203689c956dec2dfc2dfcf",
-  "passes": 5
+  "hide": "00a822a480418a20f6b2394c759a719ebcbc",
+  "passes": 6
 }

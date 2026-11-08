@@ -15,12 +15,12 @@ o=orange b=brown w=white g=graphite y=yellow
 .y.y. .byb. ..y.. .w.w. .....
 
 == palette "Forger's Palette" hide=0.45
-w=wood r=red b=blue y=yellow g=green k=white
+w=wood r=red b=blue y=yellow g=green
 .wwww. .rr.b.
 wwwwww .....y
 wwwwww .....y
 w..www ......
-.wwww. ..g.k.
+.wwww. ..g.b.
 
 == medic-kit "Antique Medic Kit" hide=0.45
 c=cream r=red b=brown g=graphite

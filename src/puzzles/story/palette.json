@@ -6,12 +6,11 @@
     "r": "red",
     "b": "blue",
     "y": "yellow",
-    "g": "green",
-    "k": "white"
+    "g": "green"
   },
   "layers": [
     [".wwww.", "wwwwww", "wwwwww", "w..www", ".wwww."],
-    [".rr.b.", ".....y", ".....y", "......", "..g.k."]
+    [".rr.b.", ".....y", ".....y", "......", "..g.b."]
   ],
   "hideRatio": 0.45,
   "hide": "14566d343b262",

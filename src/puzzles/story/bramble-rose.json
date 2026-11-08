@@ -6,29 +6,28 @@
     "k": "pink",
     "c": "coral",
     "g": "green",
-    "l": "leaf",
-    "b": "brown"
+    "l": "leaf"
   },
   "layers": [
     [
-      "bbbbbbbb",
-      "b...b..b",
-      "b...b..b",
-      "b..gg..b",
-      "b..gg..b",
-      "b..b...b",
-      "b..b...b",
-      "bbbbbbbb"
+      "gggggggg",
+      "g...g..g",
+      "g...g..g",
+      "g..gg..g",
+      "g..gg..g",
+      "g..g...g",
+      "g..g...g",
+      "gggggggg"
     ],
     [
-      "g...g..g",
+      "l...l..l",
       "........",
       "........",
-      "...gg..g",
-      "g..gg...",
+      "...gg..l",
+      "l..gg...",
       "........",
       "........",
-      "g..g...g"
+      "l..l...l"
     ],
     [
       "........",
