@@ -1,0 +1,20 @@
+{
+  "id": "medic-kit",
+  "name": "Antique Medic Kit",
+  "colors": {
+    "c": "cream",
+    "r": "red",
+    "b": "brown",
+    "g": "graphite"
+  },
+  "layers": [
+    ["bbbbbb", "bbbbbb", "bbbbbb", "bbbbbb"],
+    ["cccccc", "cccccc", "cccccc", "ccrrcc"],
+    ["cccccc", "cccccc", "cccccc", "crrrrc"],
+    ["bbbbbb", "bcrrcb", "bcrrcb", "bbbbbb"],
+    ["......", ".gggg.", ".g..g.", "......"]
+  ],
+  "hideRatio": 0.45,
+  "hide": "017d9cc775d6f802020",
+  "passes": 4
+}

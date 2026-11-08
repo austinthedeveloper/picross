@@ -1,0 +1,24 @@
+{
+  "id": "coal-golem",
+  "name": "Coal Golem",
+  "colors": {
+    "g": "graphite",
+    "s": "stone",
+    "o": "orange",
+    "r": "red",
+    "y": "yellow"
+  },
+  "layers": [
+    ["........", ".gg..gg.", ".gg..gg.", ".gg..gg.", "........"],
+    ["........", "ggg..ggg", "ggg..ggg", "gsg..gsg", "g......g"],
+    ["........", "sgg..ggs", "sgg..ggs", "sgg..ggs", "........"],
+    [".gggggg.", "sggggggs", "sggggggs", "sggggggs", ".ggoggg."],
+    [".gggggg.", "sggggggs", "sggggggs", "sggggggs", ".goggrg."],
+    [".gggggg.", "sggggggs", "sggggggs", "sggggggs", ".gggogg."],
+    ["........", "..gggg..", "..gggg..", "..gggg..", "...rr..."],
+    ["........", "..gggg..", "..gggg..", "..gggg..", "...yy..."]
+  ],
+  "hideRatio": 0.5,
+  "hide": "8d306e8816fb100020ba4545fedfcee74fdd",
+  "passes": 6
+}

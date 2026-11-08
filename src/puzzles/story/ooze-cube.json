@@ -1,0 +1,22 @@
+{
+  "id": "ooze-cube",
+  "name": "Ooze Cube",
+  "colors": {
+    "g": "green",
+    "l": "leaf",
+    "w": "white",
+    "y": "yellow",
+    "k": "graphite"
+  },
+  "layers": [
+    [".lllll.", "lllllll", "lllllll", "lllllll", "lllllll", "lllllll", ".lllll."],
+    [".......", ".ggggg.", ".gggggl", "lggggg.", ".ggggg.", ".gglgg.", "......."],
+    [".......", ".ggggg.", ".ggggg.", ".wgggg.", ".wgggg.", ".wgggy.", "......."],
+    [".......", ".ggggg.", ".ggggy.", ".ggggg.", ".ggggg.", ".ggggg.", "......."],
+    [".......", ".ggggg.", ".ggggg.", ".ggggg.", ".ggggg.", ".gkgkg.", "......."],
+    [".......", "..ggg..", ".ggggg.", ".ggggg.", ".ggggg.", "..ggg..", "......."]
+  ],
+  "hideRatio": 0.5,
+  "hide": "f7df4fb459858239b048a2000a2d866fa1",
+  "passes": 5
+}

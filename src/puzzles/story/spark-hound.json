@@ -1,0 +1,23 @@
+{
+  "id": "spark-hound",
+  "name": "Spark Hound",
+  "colors": {
+    "o": "orange",
+    "y": "yellow",
+    "s": "sky",
+    "w": "white",
+    "k": "graphite"
+  },
+  "layers": [
+    [".o...o..", "........", ".o...o.."],
+    [".o...o..", "........", ".o...o.."],
+    [".oyyyo..", ".oyyyos.", ".oyyyo.."],
+    [".ooooo..", "yoooooyy", ".ooooo.."],
+    [".....ooo", "y.swsook", ".....ooo"],
+    [".....ok.", "yyws.oo.", ".....ok."],
+    [".....o..", ".y......", ".....o.."]
+  ],
+  "hideRatio": 0.5,
+  "hide": "20868ad5170a64adf8f9eeaba0",
+  "passes": 4
+}

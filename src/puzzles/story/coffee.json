@@ -1,0 +1,21 @@
+{
+  "id": "coffee",
+  "name": "Coffee",
+  "colors": {
+    "w": "white",
+    "b": "brown",
+    "r": "coral",
+    "s": "stone"
+  },
+  "layers": [
+    [".ww...", "wwww..", "wwwwww", "wwww..", ".ww..."],
+    [".rr...", "rrrr..", "rrrr.w", "rrrr..", ".rr..."],
+    [".ww...", "wwww..", "wwww.w", "wwww..", ".ww..."],
+    [".ww...", "wbbw..", "wbbwww", "wbbw..", ".ww..."],
+    ["......", "..s...", ".s....", "......", "......"],
+    ["......", "......", "..s...", ".s....", "......"]
+  ],
+  "hideRatio": 0.45,
+  "hide": "04082204b863f67bb5ea474e",
+  "passes": 6
+}
