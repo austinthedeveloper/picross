@@ -10,6 +10,8 @@ import { el } from '../dom';
 import { formatTime, puzzleNumber } from '../format';
 import { hapticsSupported } from '../haptics';
 import { applyTheme } from '../theme';
+import { badgesLink } from './badgesScreen';
+import { dioramaSection } from './dioramaList';
 
 /** The list's sections, by the longest side of the block. */
 const SECTIONS = [
@@ -165,6 +167,7 @@ export function renderSelectScreen(root: HTMLElement): void {
     el('div', { className: 'screen select' }, [
       el('header', { className: 'topbar' }, [
         el('h1', { textContent: 'Picross Cubed' }),
+        badgesLink(),
         el('a', { className: 'button ghost', href: '#/editor', textContent: 'Editor' }),
         el('a', { className: 'button ghost', href: '#/how-to-play', textContent: 'How to play' }),
       ]),
@@ -222,7 +225,7 @@ export function renderSelectScreen(root: HTMLElement): void {
         difficulty,
       ]),
       ...(sections.length
-        ? sections
+        ? [...sections, ...[dioramaSection()].filter((s): s is HTMLElement => s !== null)]
         : [
             el('p', {
               className: 'empty-list',

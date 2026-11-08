@@ -16,7 +16,7 @@ describe('progress', () => {
     expect(p.recordSolve('mug', 60_000)).toBe(false);
     expect(p.recordSolve('mug', 50_000)).toBe(true);
     expect(p.recordSolve('mug', 70_000)).toBe(false);
-    expect(p.getPuzzleStats('mug')).toEqual({ solves: 3, bestTime: 50_000 });
+    expect(p.getPuzzleStats('mug')).toEqual({ solves: 3, bestTime: 50_000, clean: 3 });
     expect(p.getOverallStats()).toEqual({ solved: 1, solves: 3, totalTime: 180_000 });
   });
 

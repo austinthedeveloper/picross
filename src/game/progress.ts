@@ -16,12 +16,16 @@ export interface SavedBoard {
 export interface PuzzleStats {
   solves: number;
   bestTime: number;
+  /** Solves without a hint. */
+  clean?: number;
 }
 
 export interface SaveData {
   solved: Record<string, PuzzleStats>;
   boards: Record<string, SavedBoard>;
   totalTime: number;
+  /** Editor play-tests solved. */
+  playtests?: number;
 }
 
 const data: SaveData = readStore<SaveData>(KEY, { solved: {}, boards: {}, totalTime: 0 });
@@ -32,19 +36,33 @@ export function getPuzzleStats(id: string): PuzzleStats | undefined {
 }
 
 /** Records a solve. Returns true when it beats the previous best time. */
-export function recordSolve(id: string, time: number): boolean {
+export function recordSolve(id: string, time: number, hintsUsed = 0): boolean {
   const prev = data.solved[id];
   // v0.1.0 recorded 0:00 for solves in one sitting; that's no best at all.
   const prevBest = prev && prev.bestTime > 0 ? prev.bestTime : Infinity;
   data.solved[id] = {
     solves: (prev?.solves ?? 0) + 1,
     bestTime: Math.min(prevBest, time),
+    clean: (prev?.clean ?? 0) + (hintsUsed ? 0 : 1),
   };
   data.totalTime += time;
   delete data.boards[id];
   persist();
   return prevBest !== Infinity && time < prevBest;
 }
+
+/** Every puzzle id solved at least once. */
+export const solvedIds = () => Object.keys(data.solved);
+
+export const cleanSolves = () =>
+  Object.values(data.solved).filter((s) => (s.clean ?? 0) > 0).length;
+
+export function recordPlaytest(): void {
+  data.playtests = (data.playtests ?? 0) + 1;
+  persist();
+}
+
+export const playtests = () => data.playtests ?? 0;
 
 export function getOverallStats() {
   const all = Object.values(data.solved);

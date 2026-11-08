@@ -111,3 +111,14 @@ export function dioramas(): Diorama[] {
 
 export const getDiorama = (id: string) => dioramas().find((d) => d.id === id);
 export { indexOf };
+
+/** Every diorama's tile puzzle ids, without splitting them (cheap, for badges). */
+export function dioramaTileIds(): string[] {
+  return Object.values(files).flatMap((f) => {
+    const n =
+      (f.layers[0][0].length / f.tile.x) *
+      (f.layers.length / f.tile.y) *
+      (f.layers[0].length / f.tile.z);
+    return Array.from({ length: n }, (_, i) => `${f.id}-${i + 1}`);
+  });
+}

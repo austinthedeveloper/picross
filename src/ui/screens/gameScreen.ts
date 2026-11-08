@@ -29,7 +29,7 @@ export function renderGameScreen(root: HTMLElement, puzzle: Puzzle): () => void 
     hooks: {
       changed: () => (changed = true),
       solved(time) {
-        const best = recordSolve(puzzle.id, time);
+        const best = recordSolve(puzzle.id, time, play.game.hintsUsed);
         const stats = getPuzzleStats(puzzle.id)!;
         const next = nextPuzzle(puzzle.id);
         const extras = [
