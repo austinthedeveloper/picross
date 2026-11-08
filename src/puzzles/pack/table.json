@@ -1,0 +1,15 @@
+{
+  "id": "table",
+  "name": "Table",
+  "colors": {
+    "w": "wood"
+  },
+  "layers": [
+    ["w..w", "....", "....", "w..w"],
+    ["w..w", "....", "....", "w..w"],
+    ["wwww", "wwww", "wwww", "wwww"]
+  ],
+  "hideRatio": 0.4,
+  "hide": "e4a30a005f",
+  "passes": 4
+}

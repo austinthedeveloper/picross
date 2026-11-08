@@ -1,0 +1,90 @@
+/* The puzzle list, its settings and stats, and the how-to-play page. */
+
+.select .topbar h1 {
+  flex: 1;
+}
+
+.lede {
+  margin: 0 0 14px;
+  color: var(--muted);
+}
+
+.settings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.stats {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.list-section h2 {
+  margin: 22px 0 10px;
+  font-size: 1.05rem;
+}
+
+.list-section .count {
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.puzzle-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+  gap: 10px;
+}
+
+.puzzle-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.puzzle-card:hover {
+  border-color: var(--guide);
+}
+
+.thumb {
+  height: 96px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: var(--bg);
+}
+
+.card-name {
+  font-weight: 600;
+}
+
+.card-meta {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+/* How to play */
+
+.rules {
+  margin: 0 0 20px;
+}
+
+.rules dt {
+  font-weight: 700;
+  margin-top: 14px;
+}
+
+.rules dd {
+  margin: 4px 0 0;
+  color: var(--ink);
+  line-height: 1.45;
+}

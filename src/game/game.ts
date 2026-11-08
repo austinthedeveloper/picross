@@ -1,0 +1,244 @@
+import { EMPTY, FILLED, nextStep, solve, UNKNOWN } from '../engine/solver';
+import { pointOf, type Axis, type Line } from '../engine/volume';
+import { isFilled, type Puzzle } from '../puzzles/format';
+import type { SavedBoard } from './progress';
+import type { Mode } from './settings';
+
+/** A cube as the player sees it: still there, painted to keep it safe, or broken away. */
+export const SOLID = 0;
+export const PAINTED = 1;
+export const BROKEN = 2;
+export type Block = typeof SOLID | typeof PAINTED | typeof BROKEN;
+
+export const MAX_HEARTS = 3;
+export const MAX_HINTS = 3;
+
+export interface Change {
+  index: number;
+  from: Block;
+  to: Block;
+}
+/** One undoable action: a stroke, a hint, or a reset. */
+export type Move = Change[];
+
+export type Tool = 'break' | 'paint';
+
+/** What happened to one cube in a stroke. */
+export type Outcome = 'broke' | 'painted' | 'unpainted' | 'strike' | 'none';
+
+/**
+ * A stroke: one press, dragged across cubes. It keeps to the layer it started on, seen
+ * from the face it started on, so breaking a cube never lets the stroke fall through to
+ * the one behind it.
+ */
+interface Stroke {
+  tool: Tool;
+  /** Painting a painted cube starts an unpaint stroke, and the reverse. */
+  paintTo: Block;
+  axis: Axis;
+  layer: number;
+  move: Move;
+}
+
+/**
+ * A puzzle in play. How mistakes work: relaxed never checks what you break (the clues
+ * stop adding up, and undo puts it back); hearts refuses to break a cube of the shape,
+ * paints it instead, and costs a heart. Breaking every cube that isn't the shape solves it.
+ */
+export class Game {
+  readonly puzzle: Puzzle;
+  readonly blocks: Uint8Array;
+  mode: Mode;
+  hearts = MAX_HEARTS;
+  hintsUsed = 0;
+  /** Milliseconds played before this session's clock started. */
+  elapsed = 0;
+  private past: Move[] = [];
+  private future: Move[] = [];
+  private stroke: Stroke | null = null;
+
+  constructor(puzzle: Puzzle, mode: Mode, saved?: SavedBoard) {
+    this.puzzle = puzzle;
+    this.blocks = new Uint8Array(puzzle.solution.length);
+    this.mode = saved?.mode ?? mode;
+    if (saved && saved.blocks.length === this.blocks.length) {
+      [...saved.blocks].forEach((ch, i) => (this.blocks[i] = Number(ch) as Block));
+      this.elapsed = saved.elapsed ?? 0;
+      this.hearts = saved.hearts ?? MAX_HEARTS;
+      this.hintsUsed = saved.hintsUsed ?? 0;
+    }
+  }
+
+  get solved(): boolean {
+    return this.puzzle.solution.every((c, i) => c !== 0 || this.blocks[i] === BROKEN);
+  }
+
+  /** Out of hearts in hearts mode. */
+  get failed(): boolean {
+    return this.mode === 'hearts' && this.hearts <= 0;
+  }
+
+  get over(): boolean {
+    return this.solved || this.failed;
+  }
+
+  get canUndo(): boolean {
+    return this.past.length > 0 && !this.over;
+  }
+
+  get canRedo(): boolean {
+    return this.future.length > 0 && !this.over;
+  }
+
+  get hintsLeft(): number {
+    return MAX_HINTS - this.hintsUsed;
+  }
+
+  /** Cubes of the shape broken by mistake (only possible in relaxed). */
+  get mistakes(): number[] {
+    const out: number[] = [];
+    this.blocks.forEach((b, i) => {
+      if (b === BROKEN && isFilled(this.puzzle, i)) out.push(i);
+    });
+    return out;
+  }
+
+  save(): SavedBoard {
+    return {
+      blocks: this.blocks.join(''),
+      elapsed: this.elapsed,
+      mode: this.mode,
+      ...(this.mode === 'hearts' ? { hearts: this.hearts } : {}),
+      ...(this.hintsUsed ? { hintsUsed: this.hintsUsed } : {}),
+    };
+  }
+
+  /** Starts a stroke on `cell`, seen through a face facing along `axis`. */
+  begin(tool: Tool, cell: number, axis: Axis): Outcome {
+    if (this.over || this.blocks[cell] === BROKEN) return 'none';
+    const paintTo = this.blocks[cell] === PAINTED ? SOLID : PAINTED;
+    this.stroke = { tool, paintTo, axis, layer: pointOf(this.puzzle.dims, cell)[axis], move: [] };
+    return this.extend(cell);
+  }
+
+  /** Carries the stroke onto another cube, if it's on the stroke's layer. */
+  extend(cell: number): Outcome {
+    const s = this.stroke;
+    if (!s || this.over) return 'none';
+    if (pointOf(this.puzzle.dims, cell)[s.axis] !== s.layer) return 'none';
+    if (s.move.some((c) => c.index === cell)) return 'none';
+    const from = this.blocks[cell] as Block;
+    if (s.tool === 'paint') {
+      if (from === BROKEN || from === s.paintTo) return 'none';
+      this.set(cell, s.paintTo);
+      return s.paintTo === PAINTED ? 'painted' : 'unpainted';
+    }
+    if (from !== SOLID) return 'none';
+    if (this.mode === 'hearts' && isFilled(this.puzzle, cell)) {
+      // Not undoable: the paint stays as the mark of the mistake.
+      this.blocks[cell] = PAINTED;
+      this.hearts--;
+      this.end();
+      return 'strike';
+    }
+    this.set(cell, BROKEN);
+    return 'broke';
+  }
+
+  end(): void {
+    if (this.stroke?.move.length) {
+      this.past.push(this.stroke.move);
+      this.future = [];
+    }
+    this.stroke = null;
+  }
+
+  private set(cell: number, to: Block): void {
+    this.stroke!.move.push({ index: cell, from: this.blocks[cell] as Block, to });
+    this.blocks[cell] = to;
+  }
+
+  undo(): Move | null {
+    if (!this.canUndo) return null;
+    const move = this.past.pop()!;
+    for (const { index, from } of move) this.blocks[index] = from;
+    this.future.push(move);
+    return move;
+  }
+
+  redo(): Move | null {
+    if (!this.canRedo) return null;
+    const move = this.future.pop()!;
+    for (const { index, to } of move) this.blocks[index] = to;
+    this.past.push(move);
+    return move;
+  }
+
+  /** Puts every cube back. Undoable. */
+  reset(): void {
+    const move: Move = [];
+    this.blocks.forEach((b, i) => {
+      if (b !== SOLID) move.push({ index: i, from: b as Block, to: SOLID });
+    });
+    for (const { index } of move) this.blocks[index] = SOLID;
+    if (move.length) {
+      this.past.push(move);
+      this.future = [];
+    }
+  }
+
+  /** Starts over after running out of hearts. */
+  retry(): void {
+    this.blocks.fill(SOLID);
+    this.hearts = MAX_HEARTS;
+    this.hintsUsed = 0;
+    this.elapsed = 0;
+    this.past = [];
+    this.future = [];
+  }
+
+  /**
+   * Uses a hint. If something of the shape was broken by mistake, it puts the first one
+   * back, painted. Otherwise it finds the line that proves the most from what's on the
+   * board, and breaks and paints what it proves. Returns that line (or null) and the move.
+   */
+  hint(): { line: Line | null; move: Move } | null {
+    if (this.hintsLeft <= 0 || this.over) return null;
+    const move: Move = [];
+    let line: Line | null = null;
+    const wrong = this.mistakes;
+    if (wrong.length) {
+      move.push({ index: wrong[0], from: BROKEN, to: PAINTED });
+    } else {
+      const known = new Uint8Array(this.blocks.length);
+      this.blocks.forEach((b, i) => {
+        const filled = isFilled(this.puzzle, i);
+        if (b === BROKEN) known[i] = EMPTY;
+        else if (b === PAINTED && filled) known[i] = FILLED;
+      });
+      const { puzzle } = this;
+      const step = nextStep(puzzle.dims, puzzle.clues, known, puzzle.lines);
+      if (step) {
+        line = step.line;
+        for (const i of step.empty)
+          move.push({ index: i, from: this.blocks[i] as Block, to: BROKEN });
+        for (const i of step.filled) {
+          if (this.blocks[i] !== PAINTED)
+            move.push({ index: i, from: this.blocks[i] as Block, to: PAINTED });
+        }
+      } else {
+        // Wrongly painted cubes can hide every step; fall back to the answer for one cube.
+        const solved = solve(puzzle.dims, puzzle.clues, undefined, puzzle.lines).known;
+        const i = this.blocks.findIndex((b, c) => b === SOLID && solved[c] !== UNKNOWN);
+        if (i < 0) return null;
+        move.push({ index: i, from: SOLID, to: isFilled(puzzle, i) ? PAINTED : BROKEN });
+      }
+    }
+    if (!move.length) return null;
+    for (const { index, to } of move) this.blocks[index] = to;
+    this.past.push(move);
+    this.future = [];
+    this.hintsUsed++;
+    return { line, move };
+  }
+}

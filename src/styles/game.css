@@ -1,0 +1,190 @@
+/* Play screen: top bar, toolbar, the block, tools and peel, and the end panels. */
+
+.game .topbar h1 {
+  flex: 0 1 auto;
+}
+
+.size {
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.hearts {
+  margin-left: auto;
+  color: var(--accent);
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+}
+
+.hearts:not([hidden]) + .timer {
+  margin-left: 12px;
+}
+
+.timer {
+  margin-left: auto;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.actions {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.actions button {
+  min-width: 44px;
+  justify-content: center;
+}
+
+.actions .icon {
+  font-size: 1.2rem;
+  padding-block: 4px;
+}
+
+/* The block: as big as the screen allows, square on a phone, wider on a desk. */
+.stage {
+  position: relative;
+  height: min(68dvh, 120vw);
+  min-height: 280px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.block-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.block-canvas:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: -3px;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 12px 20px;
+  margin: 10px 0 6px;
+}
+
+.tools button {
+  min-height: 44px;
+}
+
+.peel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.peel-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.peel .segmented button {
+  min-width: 40px;
+  min-height: 44px;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.peel input[type='range'] {
+  width: 110px;
+  accent-color: var(--accent);
+}
+
+.peel-count {
+  min-width: 2.5em;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* A mistake in hearts mode. */
+.shake .stage {
+  animation: shake 0.35s ease-in-out;
+}
+
+@keyframes shake {
+  25% {
+    transform: translateX(-6px);
+  }
+  75% {
+    transform: translateX(6px);
+  }
+}
+
+/* Solved and out-of-hearts panels */
+.end-panel {
+  margin: 14px auto 0;
+  max-width: 320px;
+  padding: 20px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: 0 8px 24px var(--shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  animation: pop 0.3s ease-out;
+}
+
+.end-panel[hidden] {
+  display: none;
+}
+
+.end-panel h2 {
+  margin: 0;
+  color: var(--accent);
+}
+
+.end-name {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.end-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.end-actions {
+  display: flex;
+  gap: 8px;
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+}
+
+/* Once it's over, the tools step back. */
+.game:has(.end-panel:not([hidden])) .controls,
+.game:has(.end-panel:not([hidden])) .help {
+  display: none;
+}

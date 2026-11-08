@@ -1,0 +1,19 @@
+{
+  "id": "apple",
+  "name": "Apple",
+  "colors": {
+    "r": "red",
+    "b": "brown",
+    "l": "leaf"
+  },
+  "layers": [
+    [".....", ".rrr.", ".rrr.", ".rrr.", "....."],
+    [".rrr.", "rrrrr", "rrrrr", "rrrrr", ".rrr."],
+    [".rrr.", "rrrrr", "rrrrr", "rrrrr", ".rrr."],
+    [".....", ".rrr.", ".rrr.", ".rrr.", "....."],
+    [".....", ".....", "..bl.", ".....", "....."]
+  ],
+  "hideRatio": 0.5,
+  "hide": "4186848bb9ec0af1333",
+  "passes": 4
+}
