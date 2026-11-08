@@ -78,11 +78,15 @@ export class Game {
       this.elapsed = saved.elapsed ?? 0;
       this.hearts = saved.hearts ?? MAX_HEARTS;
       this.hintsUsed = saved.hintsUsed ?? 0;
+      this.strikes = saved.strikes ?? 0;
     }
   }
 
+  /** Every cube that isn't the shape broken, and none that is. */
   get solved(): boolean {
-    return this.puzzle.solution.every((c, i) => c !== 0 || this.blocks[i] === BROKEN);
+    return this.puzzle.solution.every((c, i) =>
+      c !== 0 ? this.blocks[i] !== BROKEN : this.blocks[i] === BROKEN,
+    );
   }
 
   /** Out of hearts in hearts mode. */
@@ -122,6 +126,7 @@ export class Game {
       ...(this.mode !== 'battle' ? { mode: this.mode } : {}),
       ...(this.mode === 'hearts' ? { hearts: this.hearts } : {}),
       ...(this.hintsUsed ? { hintsUsed: this.hintsUsed } : {}),
+      ...(this.strikes ? { strikes: this.strikes } : {}),
     };
   }
 
@@ -177,7 +182,7 @@ export class Game {
    * looks along (a hold). A 0 clue breaks in one go; a full one paints in one go. Hearts
    * mode still stops at the first cube of the shape.
    */
-  extendLine(): Outcome[] {
+  extendLine(allow: (cell: number) => boolean = () => true): Outcome[] {
     const s = this.stroke;
     if (!s || this.over) return [];
     const { dims } = this.puzzle;
@@ -192,6 +197,7 @@ export class Game {
     for (const cell of order) {
       if (!this.stroke) break;
       if (s.move.some((c) => c.index === cell)) continue;
+      if (!allow(cell)) continue;
       const outcome = this.extendAny(cell);
       if (outcome !== 'none') outcomes.push(outcome);
     }
@@ -209,6 +215,15 @@ export class Game {
   private set(cell: number, to: Block): void {
     this.stroke!.move.push({ index: cell, from: this.blocks[cell] as Block, to });
     this.blocks[cell] = to;
+  }
+
+  /**
+   * Forgets undo and redo. For changes made outside the history (a fight's wipe or bomb):
+   * going back past them would bring back what they changed.
+   */
+  clearHistory(): void {
+    this.past = [];
+    this.future = [];
   }
 
   undo(): Move | null {

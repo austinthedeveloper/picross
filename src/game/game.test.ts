@@ -15,6 +15,19 @@ const puzzle = parsePuzzle({
 // Cubes: bottom layer 0-3, top layer 4-7; the top front row (6, 7) isn't the shape.
 
 describe('Game', () => {
+  it('is not solved if the shape was broken too (relaxed)', () => {
+    const game = new Game(puzzle, 'relaxed');
+    game.begin('break', 0, 'y');
+    game.end();
+    game.begin('break', 6, 'y');
+    game.extend(7);
+    game.end();
+    expect(game.solved).toBe(false);
+    // Putting the shape's cube back (a check) solves it.
+    game.check();
+    expect(game.solved).toBe(true);
+  });
+
   it('is solved once everything that is not the shape is broken', () => {
     const game = new Game(puzzle, 'relaxed');
     expect(game.begin('break', 6, 'y')).toBe('broke');

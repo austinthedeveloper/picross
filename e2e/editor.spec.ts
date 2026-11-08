@@ -93,3 +93,17 @@ test('a broken share link says so', async ({ page }) => {
   await page.goto('/#/p/jnotapuzzle');
   await expect(page.getByRole('heading', { name: 'Can’t open that puzzle' })).toBeVisible();
 });
+
+test('the layer grid works from the keyboard', async ({ page }) => {
+  await page.goto('/#/editor');
+  const cells = page.locator('.ecell');
+  await cells.first().focus();
+  await page.keyboard.press('Space');
+  await expect(cells.first()).toHaveClass(/on/);
+  await page.keyboard.press('ArrowRight');
+  await page.keyboard.press('Enter');
+  await expect(cells.nth(1)).toHaveClass(/on/);
+  await expect(cells.nth(1)).toBeFocused();
+  await page.keyboard.press('Space');
+  await expect(cells.nth(1)).not.toHaveClass(/on/);
+});

@@ -37,6 +37,13 @@ function load(): { draft: Draft; ratio: number } {
   draft.name = s.name ?? draft.name;
   // Each cube is one character: 0 empty, else a code point from 'a' for COLORS[n].
   [...s.cells].forEach((ch, i) => (draft.cells[i] = ch === '0' ? 0 : ch.charCodeAt(0) - 96));
+  // A saved draft that can't be drawn (an old bug, a hand edit) starts fresh rather than
+  // breaking the editor for good.
+  try {
+    if (draft.cells.some(Boolean)) parsePuzzle(draftToFile(draft, { id: 'preview' }));
+  } catch {
+    return { draft: newDraft(), ratio: 0.5 };
+  }
   return { draft, ratio: s.ratio ?? 0.5 };
 }
 
@@ -108,7 +115,10 @@ export function renderEditorScreen(root: HTMLElement): () => void {
   up.ariaLabel = 'Layer up';
   const down = el('button', { textContent: '▼', title: 'Layer down' });
   down.ariaLabel = 'Layer down';
-  const grid = el('div', { className: 'editor-grid', role: 'grid' });
+  const grid = el('div', { className: 'editor-grid', role: 'group' });
+  grid.ariaLabel = 'Layer grid: arrow keys move, Space or Enter paints';
+  /** The cell the keyboard is on, within the layer (row × width + column). */
+  let focusAt = 0;
   const undo = el('button', { className: 'icon', textContent: '↶' });
   undo.ariaLabel = 'Undo';
   const redo = el('button', { className: 'icon', textContent: '↷' });
@@ -202,8 +212,14 @@ export function renderEditorScreen(root: HTMLElement): () => void {
         const i = indexOf(draft.dims, { x, y: layer, z });
         const below = layer > 0 ? draft.cells[indexOf(draft.dims, { x, y: layer - 1, z })] : 0;
         const c = draft.cells[i];
-        const cell = el('div', { className: `ecell${c ? ' on' : ''}${below ? ' below' : ''}` });
+        const cell = el('button', {
+          type: 'button',
+          className: `ecell${c ? ' on' : ''}${below ? ' below' : ''}`,
+        });
         cell.dataset.i = String(i);
+        cell.ariaLabel = `Row ${z + 1}, column ${x + 1}: ${c ? COLORS[c - 1] : 'empty'}${below ? ', cube below' : ''}`;
+        // One tab stop for the whole grid; arrows move within it.
+        cell.tabIndex = z * X + x === focusAt ? 0 : -1;
         if (c) cell.style.setProperty('--swatch', `var(--vox-${COLORS[c - 1]})`);
         if (unknown.has(i)) cell.classList.add('unknown');
         out.push(cell);
@@ -214,7 +230,10 @@ export function renderEditorScreen(root: HTMLElement): () => void {
 
   let unknown = new Set<number>();
   function render() {
+    const hadFocus = grid.contains(document.activeElement);
+    focusAt = Math.min(focusAt, draft.dims.x * draft.dims.z - 1);
     grid.replaceChildren(...cellsOfLayer());
+    if (hadFocus) (grid.children[focusAt] as HTMLElement | undefined)?.focus();
     layerLabel.textContent = `Layer ${layer + 1} of ${draft.dims.y}`;
     up.disabled = layer >= draft.dims.y - 1;
     down.disabled = layer <= 0;
@@ -263,6 +282,37 @@ export function renderEditorScreen(root: HTMLElement): () => void {
     if (painting === null) return;
     paintAt(document.elementFromPoint(e.clientX, e.clientY));
   };
+  // Keyboard: arrows move, Space or Enter paints the cell with the chosen color (or clears
+  // it if it's already that color), like a tap.
+  grid.onkeydown = (e) => {
+    const X = draft.dims.x;
+    const moves: Record<string, number> = {
+      ArrowLeft: -1,
+      ArrowRight: 1,
+      ArrowUp: -X,
+      ArrowDown: X,
+    };
+    if (!(e.key in moves)) return;
+    e.preventDefault();
+    const next = focusAt + moves[e.key];
+    const sameRow = Math.floor(next / X) === Math.floor(focusAt / X);
+    if (next < 0 || next >= X * draft.dims.z || (Math.abs(moves[e.key]) === 1 && !sameRow)) return;
+    focusAt = next;
+    [...grid.children].forEach((c, k) => ((c as HTMLElement).tabIndex = k === focusAt ? 0 : -1));
+    (grid.children[focusAt] as HTMLElement).focus();
+  };
+  grid.onclick = (e) => {
+    // Pointer taps paint on pointerdown; this is for Space and Enter (a click with no pointer).
+    if ((e as MouseEvent).detail !== 0) return;
+    const cell = (e.target as HTMLElement).closest('.ecell') as HTMLElement | null;
+    if (!cell) return;
+    const i = Number(cell.dataset.i);
+    focusAt = [...grid.children].indexOf(cell);
+    remember();
+    draft.cells[i] = draft.cells[i] === color && color !== 0 ? 0 : color;
+    playSound(draft.cells[i] ? 'fill' : 'erase');
+    changed();
+  };
   grid.onpointerup = grid.onpointercancel = () => {
     if (painting === null) return;
     painting = null;
@@ -303,6 +353,8 @@ export function renderEditorScreen(root: HTMLElement): () => void {
   name.oninput = () => {
     draft.name = name.value.trim() || 'My puzzle';
     save(draft, ratio);
+    // Shared links and exports carry the name, so check (and rebuild) again.
+    scheduleCheck();
   };
   sizeInputs.forEach((input) => {
     input.onchange = () => {
@@ -399,7 +451,11 @@ export function renderEditorScreen(root: HTMLElement): () => void {
   ioApply.onclick = () => {
     try {
       const next = fileToDraft(JSON.parse(io.value));
-      remember();
+      // A shape that won't preview is reported, not saved.
+      if (next.cells.some(Boolean)) parsePuzzle(draftToFile(next, { id: 'preview' }));
+      // A different block: undo can't go back across the import.
+      past = [];
+      future = [];
       draft = next;
       name.value = draft.name;
       sizeInputs.forEach(

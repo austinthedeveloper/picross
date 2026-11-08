@@ -13,6 +13,7 @@ import { nextPuzzle, PUZZLES } from '../../puzzles/index';
 import { shapePicture } from '../board/thumbnail';
 import { el } from '../dom';
 import { formatTime, plural, puzzleNumber } from '../format';
+import { onHide } from '../lifecycle';
 import { createPlay } from './play';
 
 /** Free play (#/play/<id>): saves as you go, records times, and offers the next puzzle. */
@@ -64,8 +65,7 @@ export function renderGameScreen(root: HTMLElement, puzzle: Puzzle): () => void 
     },
   });
 
-  return () => {
-    const elapsed = play.cleanup();
+  const persist = (elapsed: number) => {
     const { game } = play;
     if (game.over) {
       if (game.failed) clearSavedBoard(puzzle.id);
@@ -77,4 +77,6 @@ export function renderGameScreen(root: HTMLElement, puzzle: Puzzle): () => void 
       if (touched || elapsed > 5000) saveBoard(puzzle.id, game.save());
     }
   };
+  onHide(() => persist(play.clock.elapsed));
+  return () => persist(play.cleanup());
 }

@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { breakCubes, encounterPuzzle, extras, focusBlock, shapeCubes } from './helpers';
+import { breakCubes, encounterPuzzle, extras, focusBlock, runAt, shapeCubes } from './helpers';
 
 /** Plays the current encounter by breaking every cube that isn't the shape. */
 async function clearEncounter(page: Page, encounter: string) {
@@ -90,4 +90,16 @@ test('with Hits on, breaking the shape costs HP, and a reload resumes the encoun
   await page.getByRole('link', { name: '← Map' }).click();
   await expect(page.locator('.hp-label')).not.toHaveText('HP 12/12');
   await expect(page.locator('.node.current')).toContainText('Continue');
+});
+
+test('keys pressed after clearing an encounter do not clear the next one too', async ({ page }) => {
+  await runAt(page, 'first-job', 0);
+  const goblin = encounterPuzzle('goblin');
+  await focusBlock(page);
+  await breakCubes(page, goblin, extras(goblin));
+  await expect(page.locator('.end-panel h2')).toHaveText('Cleared!');
+  // The block still has focus: these used to finish the encounter again.
+  for (const key of ['x', ' ', 'Enter', 'f']) await page.keyboard.press(key);
+  await page.getByRole('link', { name: 'Back to map →' }).click();
+  await expect(page.locator('.node.current')).toContainText('Dig site');
 });

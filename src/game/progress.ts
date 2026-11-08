@@ -11,6 +11,8 @@ export interface SavedBoard {
   mode?: Mode;
   hearts?: number;
   hintsUsed?: number;
+  /** Breaks into the shape refused so far (hearts and fights). */
+  strikes?: number;
 }
 
 export interface PuzzleStats {

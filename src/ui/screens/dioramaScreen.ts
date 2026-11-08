@@ -1,4 +1,11 @@
-import { getPuzzleStats, recordSolve } from '../../game/progress';
+import { SOLID } from '../../game/game';
+import {
+  clearSavedBoard,
+  getPuzzleStats,
+  getSavedBoard,
+  recordSolve,
+  saveBoard,
+} from '../../game/progress';
 import { getSettings } from '../../game/settings';
 import { getDiorama } from '../../puzzles/dioramas';
 import { BlockView } from '../board/blockView';
@@ -9,6 +16,7 @@ import { el } from '../dom';
 import { formatTime } from '../format';
 import { picture, placed } from './dioramaList';
 import { playSound } from '../sound';
+import { onHide } from '../lifecycle';
 import { createPlay } from './play';
 
 /** A diorama (#/diorama/<id>): the scene so far, its pieces, and the finished scene to turn. */
@@ -97,12 +105,16 @@ export function renderDioramaTile(root: HTMLElement, id: string, n: number): () 
     href: `#/diorama/${d.id}`,
     textContent: `← ${d.name}`,
   });
+  const saved = getSavedBoard(tile.puzzle.id);
+  let changed = false;
   const play = createPlay(root, {
     puzzle: tile.puzzle,
     title: `Piece ${n}`,
     mode: getSettings().mode,
+    saved,
     back,
     hooks: {
+      changed: () => (changed = true),
       solved(time) {
         recordSolve(tile.puzzle.id, time, play.game.hintsUsed);
         const left = d.tiles.length - placed(d).length;
@@ -127,5 +139,17 @@ export function renderDioramaTile(root: HTMLElement, id: string, n: number): () 
       },
     },
   });
-  return () => void play.cleanup();
+  // A half-done piece is kept, like a free-play board.
+  const persist = (elapsed: number) => {
+    const { game } = play;
+    if (game.over) {
+      if (game.failed) clearSavedBoard(tile.puzzle.id);
+      return;
+    }
+    if (!(changed || saved)) return;
+    game.elapsed = elapsed;
+    if (game.blocks.some((b) => b !== SOLID)) saveBoard(tile.puzzle.id, game.save());
+  };
+  onHide(() => persist(play.clock.elapsed));
+  return () => persist(play.cleanup());
 }

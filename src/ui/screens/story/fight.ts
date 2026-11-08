@@ -357,6 +357,7 @@ export function fightKind(encounter: Encounter, state: RunState): Kind {
     playSound('tool');
     if (g.effect.kind === 'blast') {
       const { events } = battle.bomb(play.game.blocks);
+      play.game.clearHistory();
       playSound('finisher');
       say(`Bomb! −${g.effect.damage}, and a line worked out.`);
       handle(events);
@@ -374,7 +375,11 @@ export function fightKind(encounter: Encounter, state: RunState): Kind {
   callOut.onclick = () => {
     callingOut = !callingOut;
     play.coach.classList.toggle('calling-out', callingOut);
-    say(callingOut ? 'Tap a ? clue face to call it out.' : 'Call out cancelled.');
+    say(
+      callingOut
+        ? 'Tap a ? clue face to call it out, or press X on a cube its line runs through.'
+        : 'Call out cancelled.',
+    );
     render();
   };
 
@@ -383,6 +388,23 @@ export function fightKind(encounter: Encounter, state: RunState): Kind {
     header,
     hooks: {
       hintClues: () => battle.hintClues(),
+      keyPick(cell) {
+        if (!callingOut) return false;
+        callingOut = false;
+        play.coach.classList.remove('calling-out');
+        // The suspect line through the cursor's cube, if there is one.
+        const p = pointOf(encounter.puzzle.dims, cell);
+        const line = (['x', 'y', 'z'] as const)
+          .map((axis) => lineIdAt(encounter.puzzle.dims, axis, p))
+          .find((id) => battle.state.suspects.includes(id));
+        if (line === undefined) {
+          say('No ? clue runs through that cube. Call out cancelled.');
+          render();
+          return true;
+        }
+        handle(battle.callOut(line));
+        return true;
+      },
       pick(pick) {
         if (!callingOut) return false;
         callingOut = false;
@@ -406,8 +428,12 @@ export function fightKind(encounter: Encounter, state: RunState): Kind {
         const before = play.game.blocks.join('');
         events.push(...battle.update(play.game.blocks));
         handle(events);
-        // A swap changed the board under the player: redraw from the game.
-        if (play.game.blocks.join('') !== before) play.refresh();
+        // A swap changed the board under the player: redraw from the game. Undo can't go
+        // back past it, or it would bring back what was wiped.
+        if (play.game.blocks.join('') !== before) {
+          play.game.clearHistory();
+          play.refresh();
+        }
       },
     },
     attach(p) {

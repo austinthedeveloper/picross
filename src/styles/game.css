@@ -305,3 +305,19 @@
   min-width: 44px;
   justify-content: center;
 }
+
+/* Small phones (360px and under): the peel row slims down instead of overflowing. */
+@media (max-width: 380px) {
+  .peel-row {
+    gap: 6px;
+  }
+
+  .peel input[type='range'] {
+    width: 84px;
+  }
+
+  .peel-count {
+    width: 6.5em;
+    font-size: 0.8rem;
+  }
+}
