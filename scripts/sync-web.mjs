@@ -45,6 +45,7 @@ export const SHARED = [
   'src/ui/components/muteButton.ts',
   // The story (docs/story.md): scenes and their runner, art, and the jobs' data.
   'src/puzzles/backdrops.ts',
+  'src/puzzles/backdrops.test.ts',
   'src/puzzles/scenes.ts',
   'src/puzzles/scenes.test.ts',
   'src/puzzles/gadgets.ts',

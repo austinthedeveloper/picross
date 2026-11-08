@@ -21,6 +21,10 @@ folder (files the web game deletes there are deleted here too). They keep the sa
 game, so their imports work here: this repo has its own `src/game/settings.ts` with the
 settings they read (`muted`, `haptics`, `highContrast`).
 
+The 2D repo documents the same list from its side (`docs/shared-files.md` there) and keeps
+shared files importing only other shared files; that's why its backdrops test checks
+nothing about runs, so it can be shared here too.
+
 ## Updating
 
 With the 2D game checked out next to this repo (`../picross`):
