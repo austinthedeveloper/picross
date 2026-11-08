@@ -3,8 +3,8 @@
 A 3D picross puzzle game for the browser, built with Vite, TypeScript and three.js. It's the
 3D sibling of [Picross](https://github.com/austinthedeveloper/picross) (the 2D web game) and
 shares its look, sounds and settings. Play the latest release at
-**https://austinthedeveloper.github.io/picross-3d/**, or the current `main` at
-https://austinthedeveloper.github.io/picross-3d/dev/.
+the combined site (the Flat | Cubed switch, or `/3d/` on the 2D game's site). It used to be
+its own repo, austinthedeveloper/picross-3d, and now lives in `cubed/` of the 2D game's repo.
 
 Every puzzle is a block of cubes with a shape hidden inside. The number on a face counts the
 cubes of the shape in the line running into that face; a circle means they're in two pieces,
@@ -43,7 +43,7 @@ Then open http://localhost:5174 (the 2D game's dev server keeps 5173).
 | `npm run format`       | Format everything with Prettier                                       |
 | `npm run build`        | Type-check and build to `dist/`                                       |
 | `npm run puzzles`      | Check the pack and pick which clues new puzzles hide                  |
-| `npm run sync:web`     | Copy the shared files from the 2D game in `../picross`                |
+| `npm run sync:web`     | Copy the shared files from the 2D game (the repo root)                |
 | `npm run check:shared` | Fail if a shared file was edited here                                 |
 | `npm run screenshot`   | Screenshot a page of the running dev server                           |
 
@@ -54,7 +54,7 @@ Then open http://localhost:5174 (the 2D game's dev server keeps 5173).
 - [Shared files](docs/shared-files.md): what comes from the 2D game and how to update it
 - [Story mode](docs/story.md): how the 2D story is shared, fitted to blocks, and gated
 - [Roadmap](docs/roadmap.md): what's carried over from the 2D game so far, and what's next
-- [Combining with the 2D game](docs/combining.md): the plan for one game, with bosses that switch dimension
+- [Combining with the 2D game](../docs/combining.md): the plan for one game, with bosses that switch dimension
 
 The look follows the 2D game's [art direction](https://github.com/austinthedeveloper/picross/blob/main/docs/art-direction.md);
 the shape colors are in `src/styles/voxels.css`.

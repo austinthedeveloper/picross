@@ -1,9 +1,9 @@
 {
   "source": "austinthedeveloper/picross",
-  "commit": "5c29de1",
+  "commit": "f3904ed",
   "files": {
     "src/styles/tokens.css": "10bd1d871b387d45ba8a4e9d1118f81d0dba70f3628189bbdc1708a1007882df",
-    "src/styles/base.css": "77203534a4018ce0a35725cd841640f0c94ce28baea648f4332d8d456be4d93f",
+    "src/styles/base.css": "194b9a5065d2782166fe003ba63a90d53edaa479bc461554a24f96548085f78c",
     "src/engine/random.ts": "63cb138008819aeec841ee7f67c9d784c01203bfa99633546009a799ef4ad743",
     "src/game/storage.ts": "22526a8762a9a43f153d69bfbfd7a99933223978e2c32cd768c32e0488403e6e",
     "src/ui/dom.ts": "3c2b2327033c8b7298ba12a3a1adbf806aeb17c44da73db3f7fa3f2b7ff8421c",
@@ -14,6 +14,7 @@
     "src/ui/theme.ts": "f665156267a2462ef94f711cc8bc701482d5a9c94f45cdddfc9fbbe87e1231cd",
     "src/ui/components/homeLink.ts": "64c59b47283be5cbefc7627f1de0fccd4439855988b5adec87b4fb9ee9c66537",
     "src/ui/components/muteButton.ts": "6279668ba0192e0c4ca720d5ff89ba9ca4a920ad87fe8b71be93c4a44c90e148",
+    "src/ui/components/gameSwitch.ts": "f9ce504d5f62bb3327ff09e0ea13b09753f9f06880da268f92b9f2a038dae122",
     "src/puzzles/backdrops.ts": "48d859bf5f1c4f9f0e8de17d0c0c6f8a37b6c8568b16775dffa2430d0137dbba",
     "src/puzzles/backdrops.test.ts": "613b81fe916236f0635d9b75d7a4b278ca0ea7fb4b8567253c4310a2b701d7c6",
     "src/puzzles/scenes.ts": "e66c1c0cfaac68fae9f1ebcdd2bee13cc3b2353f4cea90e313e5e54640ef6234",

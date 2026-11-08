@@ -1,8 +1,8 @@
 # Files the 3D game shares
 
-[Picross Cubed](https://github.com/austinthedeveloper/picross-3d), the 3D game, copies
-these files from this repo verbatim (`npm run sync:web` there, and its daily "Sync from the
-web game" workflow). This repo owns them: a change here reaches the 3D game at its next sync.
+Picross Cubed, the 3D game in `cubed/`, copies these files from this repo's `src/` and
+`public/` verbatim (`npm -w cubed run sync:web`). This repo's root owns them: after changing
+one, sync and commit the copies; CI (`npm run check:cubed`) fails if they differ.
 
 | What       | Files                                                                                                                                                                                                                           |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -20,4 +20,4 @@ check lives in `runs.test.ts`.
 
 **The story gate:** the 3D game reads the jobs and encounters for blocks and fails its tests
 when the story uses a field, power or kind it can't play yet, or an encounter without a 3D
-puzzle. Its sync workflow then opens a "Web sync needs porting" issue there instead of a PR.
+puzzle (`cubed/src/story/story.test.ts`). Run `npm test` after a story change.

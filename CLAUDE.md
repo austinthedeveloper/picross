@@ -5,8 +5,10 @@ The 2D nonogram web game (Vite + TypeScript, no UI framework). Start with
 
 ## Sibling projects read from this repo
 
-- **Picross Cubed** (`../picross-3d`, austinthedeveloper/picross-3d), the 3D game, copies
-  some files from here verbatim with `npm run sync:web` and a daily sync workflow. The list
+- **Picross Cubed**, the 3D game, lives in `cubed/` (an npm workspace; it used to be
+  austinthedeveloper/picross-3d). It has its own `CLAUDE.md` and docs, and copies some files
+  from this repo's `src/` verbatim with `npm -w cubed run sync:web`; CI checks the copies
+  match (`npm run check:cubed`). The list
   is `SHARED` in its `scripts/sync-web.mjs` (also in `docs/shared-files.md` here): the
   tokens and base styles, sound, haptics, theme, `dom`, `motion`, `storage`, `random`, the
   Home and mute buttons, the story (scenes and backdrops with their loaders and tests,
@@ -18,9 +20,11 @@ The 2D nonogram web game (Vite + TypeScript, no UI framework). Start with
 - **The SNES demake** (`../snes/picross-snes`) imports the pack, art and story with
   `make import`.
 
-The plan for combining the 2D and 3D games into one is `docs/combining.md` in picross-3d.
+The plan for combining the 2D and 3D games is `docs/combining.md`; the story ideas for it are `docs/story-combined.md`.
 
 ## Working here
 
-- Before a PR: `npm run lint`, `npm test`, `npm run build`, and `npm run e2e` for UI changes.
+- Before a PR: `npm run lint`, `npm run check:cubed`, `npm test` (both games), `npm run build`
+  (both: Cubed lands in `dist/3d`), and `npm run e2e` / `npm run e2e:cubed` for UI changes.
+- Changing a shared file: run `npm -w cubed run sync:web` and commit the copies too.
 - Stacked PRs: retarget each to `main` before merging it (see docs/development.md).

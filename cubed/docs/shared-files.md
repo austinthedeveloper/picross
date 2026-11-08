@@ -27,11 +27,11 @@ nothing about runs, so it can be shared here too.
 
 ## Updating
 
-With the 2D game checked out next to this repo (`../picross`):
+This game lives in `cubed/` inside the 2D game's repo, which owns the shared files. From `cubed/` (or with `npm -w cubed run …` from the root):
 
 ```bash
 npm run sync:web                              # copy them and update shared.lock.json
-npm run check:shared -- --from ../picross     # just say what's changed there
+npm run check:shared -- --from ..            # just say what's changed at the root
 ```
 
 Then run the tests and commit the copies with `shared.lock.json`, which records the 2D

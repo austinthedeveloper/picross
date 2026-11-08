@@ -4,7 +4,7 @@
  * and records them in shared.lock.json. The web game owns these files: edit them there,
  * then sync. See docs/shared-files.md.
  *
- *   npm run sync:web                         copy from ../picross (or --from DIR)
+ *   npm run sync:web                         copy from the repo root (or --from DIR)
  *   npm run sync:web -- --check              fail if a shared file was edited here
  *   npm run sync:web -- --check --from DIR   also say which files the web has changed since
  */
@@ -43,6 +43,7 @@ export const SHARED = [
   'src/ui/theme.ts',
   'src/ui/components/homeLink.ts',
   'src/ui/components/muteButton.ts',
+  'src/ui/components/gameSwitch.ts',
   // The story (docs/story.md): scenes and their runner, art, and the jobs' data.
   'src/puzzles/backdrops.ts',
   'src/puzzles/backdrops.test.ts',
@@ -151,7 +152,8 @@ function sync(from) {
   console.log(`Copied ${theirs.length} files from the web game at ${lock.commit}.`);
 }
 
-const from = option('--from') ?? (flag('--check') ? undefined : join(ROOT, '..', 'picross'));
+// The 2D game is this repo's root (cubed/ lives inside it).
+const from = option('--from') ?? (flag('--check') ? undefined : join(ROOT, '..'));
 try {
   if (flag('--check')) process.exit(check(from && resolve(from)) ? 0 : 1);
   sync(resolve(from));

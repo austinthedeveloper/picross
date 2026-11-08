@@ -77,9 +77,8 @@ here verbatim, and this game fits them to blocks.
 Anything the 2D story uses that this game can't play goes into `storyIssues` instead of
 breaking the app: an unknown field, an unknown kind, scene or gadget, or an encounter with
 no 3D puzzle. `src/story/story.test.ts` fails while there are any. That's the compatibility
-gate: the daily **Sync from the web game** workflow (`.github/workflows/sync-web.yml`) runs
-the sync and the tests, and opens a PR when they pass or a "Web sync needs porting" issue
-listing what failed.
+gate. This game lives in the 2D game's repo, so the root's `npm test` runs it with every
+change: a story change that this game can't play fails CI right there.
 
 When the 2D game adds something:
 

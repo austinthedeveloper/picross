@@ -4,6 +4,25 @@ The plan for one game with both: free play in 2D and 3D, one story, and fights t
 dimension, like a boss that's a 2D board until it pulls the picture into a block halfway
 through. Nothing here is built yet. The 3D game gets tightened up first; this starts after.
 
+## Progress
+
+**Step 1 is done, in a lighter form than planned.** Picross Cubed came into this repo with
+its history (a subtree merge) as `cubed/`, an npm workspace, rather than both games moving
+into `apps/` and `packages/`. The 2D game stays at the root, so nothing that reads it
+(the SNES demake's `make import`, its docs, its deploys) has to change yet.
+
+- One install (`npm ci`), one CI, one site: `npm run build` builds Flat at the root of
+  `dist/` and Cubed into `dist/3d/` (`scripts/build-cubed.mjs`); GitHub Pages and the Azure
+  site serve both.
+- **Flat | Cubed:** a switch at the top of both home screens moves between the games and
+  remembers the last one, so the site opens on it.
+- `cubed/` still keeps its own copies of the shared files, now synced from this repo's root
+  and checked in CI (`npm run check:cubed`). Removing the copies is step 2.
+- The story ideas for the combined game are in [story-combined.md](story-combined.md).
+
+The steps below still apply, with `cubed/` standing in for `packages/block` and
+`packages/play-block` until the code is split into packages.
+
 ## Where things stand
 
 |                      | 2D ([picross](https://github.com/austinthedeveloper/picross)) | 3D (this repo)                                                          |
@@ -26,9 +45,10 @@ have a `mug`).
 
 ## Where it lives
 
-**The 2D repo becomes the home**, as a monorepo. It has the history, the story, the issues,
+**The 2D repo is the home**, as a monorepo. It has the history, the story, the issues,
 the Azure production site and the SNES demake's import pipeline (`make import` reads
-`../../picross`). The 3D code moves in; this repo is archived with a pointer.
+`../../picross`). The 3D code moved in as `cubed/` (step 1); the picross-3d repo is to be
+archived with a pointer.
 
 npm workspaces, no new build tool:
 

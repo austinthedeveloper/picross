@@ -1,4 +1,5 @@
 import { dimsLabel } from '../../engine/volume';
+import { gameSwitch } from '../components/gameSwitch';
 import { getOverallStats, getPuzzleStats, getSavedBoard } from '../../game/progress';
 import { getSettings, updateSettings, type ListFilter, type Mode } from '../../game/settings';
 import { BANDS, difficultyOf } from '../../puzzles/difficulty';
@@ -165,6 +166,8 @@ export function renderSelectScreen(root: HTMLElement): void {
 
   root.replaceChildren(
     el('div', { className: 'screen select' }, [
+      // On the combined site (built by the repo root), the switch back to Flat.
+      ...(import.meta.env.VITE_COMBINED === '1' ? [gameSwitch('cubed')] : []),
       el('header', { className: 'topbar' }, [
         el('h1', { textContent: 'Picross Cubed' }),
         badgesLink(),
