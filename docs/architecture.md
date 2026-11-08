@@ -69,14 +69,18 @@ switches to the shape's colors (`--vox-*` tokens) and gives it a turn.
 `main.ts` is a hash router. Screens with a block load on demand, so three.js isn't in the
 first download.
 
-| Route           | File                     | What                                                           |
-| --------------- | ------------------------ | -------------------------------------------------------------- |
-| `#/`            | `selectScreen.ts`        | The list, filters, settings; other screens add cards           |
-| `#/play/<id>`   | `gameScreen.ts`          | Free play: saves, times, Next                                  |
-| `#/tutorial`    | `tutorial.ts`            | The guided tutorial on a 3×2×2 block                           |
-| `#/how-to-play` | `howToPlay.ts`           | The rules                                                      |
-| `#/editor`      | `editor/editorScreen.ts` | Draw, check and share puzzles (checks run in `checkWorker.ts`) |
-| `#/p/<code>`    | `sharedScreen.ts`        | A shared puzzle; `/test` for the editor's play-test            |
+| Route                                     | File                                           | What                                                           |
+| ----------------------------------------- | ---------------------------------------------- | -------------------------------------------------------------- |
+| `#/`                                      | `selectScreen.ts`                              | The list, filters, settings; other screens add cards           |
+| `#/play/<id>`                             | `gameScreen.ts`                                | Free play: saves, times, Next                                  |
+| `#/tutorial`                              | `tutorial.ts`                                  | The guided tutorial on a 3×2×2 block                           |
+| `#/how-to-play`                           | `howToPlay.ts`                                 | The rules                                                      |
+| `#/editor`                                | `editor/editorScreen.ts`                       | Draw, check and share puzzles (checks run in `checkWorker.ts`) |
+| `#/p/<code>`                              | `sharedScreen.ts`                              | A shared puzzle; `/test` for the editor's play-test            |
+| `#/daily`                                 | `dailyScreen.ts` (`dailyCard.ts` for the list) | Today's puzzle and streak                                      |
+| `#/badges`                                | `badgesScreen.ts`                              | Badges, worked out from saves (`game/badges.ts`)               |
+| `#/diorama/<id>[/<n>]`                    | `dioramaScreen.ts` (`dioramaList.ts`)          | A diorama and its pieces                                       |
+| `#/story`, `#/story/play`, `#/scene/<id>` | `story/*`                                      | Story mode (see story.md)                                      |
 
 ### The play controller
 
@@ -92,3 +96,13 @@ material; the mesh draws them as groups. A mode restyles faces with `view.styler
 
 In dev builds the play screen puts its `Game` and `BlockView` on `window.__game` and
 `window.__view`, for `npm run screenshot -- --js` and the console. Production drops it.
+
+## Offline
+
+`public/sw.js` caches every file the game loads and serves it from the cache, refreshing in
+the background (so updates show on the next launch). `main.ts` registers it in production
+builds. `public/manifest.webmanifest` and `public/icons/` (made by `node scripts/icons.mjs`)
+make it installable. Browser tests block service workers except `e2e/offline.spec.ts`.
+
+Keep three.js out of the first download: screens with a block are loaded on demand, and
+the list's cards (daily, story, dioramas) live in modules that don't import the view.

@@ -1,32 +1,19 @@
 # Roadmap
 
-What this game has carried over from the 2D game so far, and what's left. The 2D game is
-the reference for how each should feel.
+v1.0 brings over everything the 2D game has: free play, an editor, the daily puzzle,
+dioramas (its murals), badges, and the whole story with every enemy power. The backlog
+lives on GitHub: the [project board](https://github.com/users/austinthedeveloper/projects/8)
+and [milestones](https://github.com/austinthedeveloper/picross-3d/milestones).
 
-## In
+## Still open
 
-- Free play: the list by size, best times, progress saved mid-puzzle, names kept secret
-  until solved
-- Relaxed and Hearts modes, three hints, undo/redo, reset, a timer that pauses when hidden
-- The look: tokens, type and buttons (shared), sound effects and haptics (shared), high
-  contrast, light and dark
-- Keyboard play and screen-reader descriptions
-- How to play (the rules, then the first puzzle)
-- Unit tests, a solvability check for every puzzle, phone-sized browser tests, CI
+- **Real-device pass** (#49): [the checklist](device-checklist.md), on a real iPhone and
+  Android phone
+- **Endless mode**, which the 2D game has and this one doesn't yet
+- **More puzzles and dioramas**, toward 10×10×10, as sheets
 
-## Next
+## How releases work
 
-The backlog lives on GitHub: the [project board](https://github.com/users/austinthedeveloper/projects/8)
-and [milestones](https://github.com/austinthedeveloper/picross-3d/milestones). Epics (label
-`epic`) group user stories (label `story`):
-
-| Milestone              | Epics                                                          |
-| ---------------------- | -------------------------------------------------------------- |
-| v0.2 Free play+        | Free play, bigger and better (#1); Puzzle editor (#10)         |
-| v0.3 Story foundations | Story mode, structure (#14); scenes and the story import (#20) |
-| v0.4 Fights            | Story mode, fights (#24)                                       |
-| v0.5 Story content     | Story content (#37)                                            |
-| v1.0 Launch            | Extras and launch (#42)                                        |
-
-Story mode follows the 2D game, which stays the source of truth for the story: an import
-with a compatibility gate and a daily sync, like the SNES demake's.
+- Bump `version` in `package.json`, add `docs/releases/vX.Y.Z.md`, merge, then tag `vX.Y.Z`
+  on `main` and push the tag. `release.yml` checks, builds, publishes the release with the
+  site zipped, and redeploys the site with it at the root.

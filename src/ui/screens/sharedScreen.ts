@@ -1,3 +1,4 @@
+import { recordPlaytest } from '../../game/progress';
 import { getSettings } from '../../game/settings';
 import { decodeShare } from '../../puzzles/share';
 import { shapePicture } from '../board/thumbnail';
@@ -28,26 +29,29 @@ export function renderSharedScreen(root: HTMLElement, code: string, test: boolea
         mode: getSettings().mode,
         back: test ? toEditor : homeLink(),
         hooks: {
-          solved: (time) => [
-            el('h2', { textContent: 'Solved!' }),
-            shapePicture(puzzle, 120),
-            el('p', { className: 'end-name', textContent: puzzle.name }),
-            el('p', { className: 'end-note', textContent: formatTime(time) }),
-            el('div', { className: 'end-actions' }, [
-              test
-                ? el('a', {
-                    className: 'button primary',
-                    href: '#/editor',
-                    textContent: 'Back to the editor',
-                  })
-                : el('a', {
-                    className: 'button primary',
-                    href: '#/editor',
-                    textContent: 'Make your own',
-                  }),
-              el('a', { className: 'button ghost', href: '#/', textContent: 'All puzzles' }),
-            ]),
-          ],
+          solved: (time) => {
+            if (test) recordPlaytest();
+            return [
+              el('h2', { textContent: 'Solved!' }),
+              shapePicture(puzzle, 120),
+              el('p', { className: 'end-name', textContent: puzzle.name }),
+              el('p', { className: 'end-note', textContent: formatTime(time) }),
+              el('div', { className: 'end-actions' }, [
+                test
+                  ? el('a', {
+                      className: 'button primary',
+                      href: '#/editor',
+                      textContent: 'Back to the editor',
+                    })
+                  : el('a', {
+                      className: 'button primary',
+                      href: '#/editor',
+                      textContent: 'Make your own',
+                    }),
+                el('a', { className: 'button ghost', href: '#/', textContent: 'All puzzles' }),
+              ]),
+            ];
+          },
         },
       });
       cleanup = () => play.cleanup();

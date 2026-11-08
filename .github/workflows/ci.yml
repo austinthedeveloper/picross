@@ -7,8 +7,6 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -29,10 +27,6 @@ jobs:
       - run: npm run check:shared
       - run: npm test
       - run: npm run build
-      - uses: actions/upload-pages-artifact@v3
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        with:
-          path: dist
 
   # Browser tests against the production build on a phone-sized screen (e2e/).
   e2e:
@@ -52,14 +46,3 @@ jobs:
           name: playwright-report
           path: playwright-report
           retention-days: 7
-
-  deploy:
-    needs: [check, e2e]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4

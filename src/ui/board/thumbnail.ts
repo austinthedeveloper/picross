@@ -34,9 +34,17 @@ function frame(d: Dims, px: number) {
   return { canvas, g, s };
 }
 
-/** The solved shape as a small isometric picture, in its colors. */
-export function shapePicture(puzzle: Puzzle, px = 96): HTMLCanvasElement {
-  const { dims, solution, palette } = puzzle;
+/**
+ * The solved shape as a small isometric picture, in its colors. `only` limits it to some
+ * cubes (a diorama's placed pieces).
+ */
+export function shapePicture(
+  puzzle: Puzzle,
+  px = 96,
+  only?: (cell: number) => boolean,
+): HTMLCanvasElement {
+  const { dims, palette } = puzzle;
+  const solution = only ? puzzle.solution.map((c, i) => (only(i) ? c : 0)) : puzzle.solution;
   const { canvas, g, s } = frame(dims, px);
   const colors = palette.map((name) => token(`--vox-${name}`));
   const cubes = [...solution.keys()]

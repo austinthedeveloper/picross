@@ -20,6 +20,8 @@ export default defineConfig({
     reducedMotion: 'reduce',
     channel: process.env.CI ? undefined : 'chrome',
     trace: 'retain-on-failure',
+    // The offline cache would hold pages between tests; e2e/offline.spec.ts turns it on.
+    serviceWorkers: 'block',
   },
   webServer: {
     command: 'npm run build && npx vite preview --port 4175 --strictPort',

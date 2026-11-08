@@ -17,9 +17,12 @@ import { getScene } from './puzzles/scenes';
 import { renderSceneScreen } from './ui/screens/sceneScreen';
 import { addListCard, renderSelectScreen } from './ui/screens/selectScreen';
 import { renderStoryScreen, storyCard } from './ui/screens/story/index';
+import { dailyCard } from './ui/screens/dailyCard';
+import { renderBadgesScreen } from './ui/screens/badgesScreen';
 import { applyTheme } from './ui/theme';
 
 applyTheme();
+addListCard(dailyCard);
 addListCard(storyCard);
 
 const app = document.querySelector<HTMLDivElement>('#app')!;
@@ -34,6 +37,7 @@ function route() {
   const puzzle = play && getPuzzle(play[1]);
   const sceneMatch = location.hash.match(/^#\/scene\/([\w-]+)$/);
   const scene = sceneMatch && getScene(sceneMatch[1]);
+  const diorama = location.hash.match(/^#\/diorama\/([\w-]+)(?:\/(\d+))?$/);
   const shared = location.hash.match(/^#\/p\/([\w-]+)(\/test)?$/);
   // Screens with a block bring in three.js, so the list doesn't wait for it.
   const lazy = <M>(load: Promise<M>, render: (m: M) => (() => void) | void) =>
@@ -44,6 +48,16 @@ function route() {
     lazy(import('./ui/screens/gameScreen'), (m) => m.renderGameScreen(app, puzzle));
   } else if (location.hash === '#/tutorial') {
     lazy(import('./ui/screens/tutorial'), (m) => m.renderTutorial(app));
+  } else if (location.hash === '#/daily') {
+    lazy(import('./ui/screens/dailyScreen'), (m) => m.renderDailyScreen(app));
+  } else if (location.hash === '#/badges') {
+    renderBadgesScreen(app);
+  } else if (diorama) {
+    lazy(import('./ui/screens/dioramaScreen'), (m) =>
+      diorama[2]
+        ? m.renderDioramaTile(app, diorama[1], Number(diorama[2]))
+        : m.renderDioramaScreen(app, diorama[1]),
+    );
   } else if (location.hash === '#/story') {
     cleanup = renderStoryScreen(app);
   } else if (location.hash === '#/story/play') {
@@ -59,6 +73,11 @@ function route() {
   } else if (location.hash === '#/how-to-play') renderHowToPlay(app);
   else renderSelectScreen(app);
   window.scrollTo(0, 0);
+}
+
+// Offline play and installing (public/sw.js), in production builds only.
+if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+  void navigator.serviceWorker.register('./sw.js').catch(() => {});
 }
 
 window.addEventListener('hashchange', route);

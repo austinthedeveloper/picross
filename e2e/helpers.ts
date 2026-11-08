@@ -3,6 +3,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pointOf } from '../src/engine/volume';
 import { parsePuzzle, type Puzzle } from '../src/puzzles/format';
+import { hashString } from '../src/puzzles/hide';
+import { turnPuzzle } from '../src/puzzles/transform';
 
 const PACK = path.join(import.meta.dirname, '../src/puzzles/pack');
 
@@ -71,6 +73,29 @@ export async function skipScene(page: Page): Promise<void> {
   // Whichever comes first: the block, or a scene to skip.
   await expect(canvas.or(skip).first()).toBeVisible({ timeout: 30_000 });
   if (await skip.isVisible()) await skip.click();
+}
+
+/** The daily puzzle for a date, built the way src/puzzles/daily.ts builds it. */
+export function dailyFor(key: string): Puzzle {
+  const files = fs
+    .readdirSync(PACK)
+    .map((f) => JSON.parse(fs.readFileSync(path.join(PACK, f), 'utf8')));
+  const longest = (p: Puzzle) => Math.max(p.dims.x, p.dims.y, p.dims.z);
+  const volume = (p: Puzzle) => p.solution.length;
+  const pool = files
+    .map((f) => ({ f, p: parsePuzzle(f) }))
+    .sort(
+      (a, b) =>
+        longest(a.p) - longest(b.p) ||
+        volume(a.p) - volume(b.p) ||
+        a.p.passes - b.p.passes ||
+        a.p.name.localeCompare(b.p.name),
+    )
+    .filter(({ p }) => longest(p) >= 4);
+  const { f, p } = pool[hashString(`daily:${key}`) % pool.length];
+  const h = hashString(`turn:${key}`);
+  const turn = { quarters: (h % 4) as 0 | 1 | 2 | 3, mirror: Boolean((h >> 2) & 1) };
+  return parsePuzzle(turnPuzzle(f, p, turn));
 }
 
 /** A pack puzzle, read from its file. */
