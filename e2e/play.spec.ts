@@ -22,7 +22,7 @@ test('solving a puzzle reveals its name and records it', async ({ page }) => {
   await breakCubes(page, steps, cubes.slice(-1));
   await expect(page.getByRole('heading', { name: 'Solved!' })).toBeVisible();
   await expect(page.locator('.end-name')).toHaveText('Steps');
-  await expect(page.locator('.end-note')).not.toHaveText(/^0:00/);
+  await expect(page.locator('.end-note').first()).not.toHaveText(/^0:00/);
   await page.getByRole('link', { name: 'All puzzles' }).click();
   await expect(page.locator('.puzzle-card').first()).toContainText('Steps');
   await expect(page.locator('.puzzle-card').first()).not.toContainText('0:00');
@@ -61,16 +61,48 @@ test('hearts mode costs a heart for breaking the shape, and three end it', async
   await expect(page.getByLabel('Hearts')).toHaveText('♥♥♥');
 });
 
-test('a hint works something out', async ({ page }) => {
+test('a hint works out a line, and a check puts back a mistake', async ({ page }) => {
+  const mug = puzzle('mug');
   await page.goto('/#/play/mug');
-  await page.getByRole('button', { name: /Hint 3/ }).click();
-  await expect(page.getByRole('button', { name: /Hint 2/ })).toBeVisible();
+  await page.getByText('💡 Hint 3').click();
+  await page.getByRole('button', { name: 'Work out a line' }).click();
+  await expect(page.getByText('💡 Hint 2')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Undo' })).toBeEnabled();
+  // Break a cube of the shape (relaxed lets you), then check.
+  await focusBlock(page);
+  const unbroken = shapeCubes(mug).filter((c) => c !== 0);
+  await breakCubes(page, mug, unbroken.slice(-1));
+  await page.getByText('💡 Hint 2').click();
+  await page.getByRole('button', { name: 'Check for mistakes' }).click();
+  await expect(page.locator('.coach')).toContainText('Put back');
+  await expect(page.getByText('💡 Hint 1')).toBeVisible();
+});
+
+test('the list filters by status and difficulty', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Done', exact: true }).click();
+  await expect(page.getByText('No puzzles match')).toBeVisible();
+  await page.getByRole('button', { name: 'All', exact: true }).click();
+  await page.getByLabel('Difficulty').selectOption('easy');
+  const bands = await page.locator('.card-band').allTextContents();
+  expect(bands.length).toBeGreaterThan(0);
+  expect(new Set(bands)).toEqual(new Set(['Easy']));
+});
+
+test('the view snaps and peels from either end', async ({ page }) => {
+  await page.goto('/#/play/castle');
+  await page.getByRole('button', { name: 'Top', exact: true }).click();
+  await page.getByRole('button', { name: 'Peel along Y' }).click();
+  await page.getByLabel('Layers peeled').fill('2');
+  await expect(page.locator('.peel-count')).toHaveText('2 from top');
+  await page.getByRole('button', { name: 'Peel from the other end' }).click();
+  await expect(page.locator('.peel-count')).toHaveText('2 from bottom');
 });
 
 test('how to play links to the first puzzle', async ({ page }) => {
   await page.goto('/#/how-to-play');
   await expect(page.getByText('Circles and squares')).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Guided tutorial' })).toBeVisible();
   await page.getByRole('link', { name: 'Try the first puzzle' }).click();
   await expect(page).toHaveURL(/#\/play\/steps$/);
 });

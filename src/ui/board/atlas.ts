@@ -3,27 +3,46 @@ import { clueFrame, type Clue } from '../../engine/clues';
 import { MAX_LINE } from '../../engine/solver';
 import { token } from '../tokens';
 
-/** How a cube face looks: an ordinary cube, a painted one, or one on a lit (hinted) line. */
-export type FaceState = 'solid' | 'painted' | 'lit';
-const STATES: FaceState[] = ['solid', 'painted', 'lit'];
+/**
+ * How a cube face looks. Each state has its own texture of every clue, so adding a state
+ * (a story power's look, say) never crowds the others.
+ *
+ * - solid, painted: an ordinary cube and a painted one
+ * - lit: a cube on a hinted line
+ * - done, painted-done: a finished line's faces, with the clue faded back
+ */
+export const STATES = ['solid', 'painted', 'lit', 'done', 'painted-done'] as const;
+export type FaceState = (typeof STATES)[number];
 
 const NUMBERS = MAX_LINE + 1;
-/** Faces per state: a blank one for a hidden clue, then each frame's numbers. */
-const PER_STATE = 1 + 3 * NUMBERS;
-const COLS = 16;
-const ROWS = Math.ceil((STATES.length * PER_STATE) / COLS);
+/** Faces per texture: a blank one for a hidden clue, then each frame's numbers. */
+const CELLS = 1 + 3 * NUMBERS;
+const COLS = Math.ceil(Math.sqrt(CELLS));
+const ROWS = Math.ceil(CELLS / COLS);
 const SIZE = 128;
-
 const FRAMES = { plain: 0, circle: 1, square: 2 };
 
-function slot(state: FaceState, clue: Clue | null): number {
-  const k = clue ? 1 + FRAMES[clueFrame(clue)] * NUMBERS + clue.count : 0;
-  return STATES.indexOf(state) * PER_STATE + k;
+interface Look {
+  bg: string;
+  ink: string;
+  /** The clue's opacity: finished lines fade back. */
+  alpha: number;
 }
 
-/** The texture rectangle for a face: u0, v0 (bottom left), u1, v1 (top right). */
-export function faceUV(state: FaceState, clue: Clue | null): [number, number, number, number] {
-  const s = slot(state, clue);
+function look(state: FaceState): Look {
+  const painted = state === 'painted' || state === 'painted-done';
+  return {
+    bg: painted ? token('--cube-painted') : state === 'lit' ? token('--cube-lit') : token('--cube'),
+    ink: painted ? token('--accent-ink') : token('--ink'),
+    alpha: state === 'done' || state === 'painted-done' ? 0.32 : 1,
+  };
+}
+
+const slot = (clue: Clue | null) => (clue ? 1 + FRAMES[clueFrame(clue)] * NUMBERS + clue.count : 0);
+
+/** The texture rectangle for a face's clue: u0, v0 (bottom left), u1, v1 (top right). */
+export function faceUV(clue: Clue | null): [number, number, number, number] {
+  const s = slot(clue);
   const col = s % COLS;
   const row = Math.floor(s / COLS);
   // Half a texel in, so neighbouring faces never bleed in.
@@ -32,16 +51,8 @@ export function faceUV(state: FaceState, clue: Clue | null): [number, number, nu
   return [col / COLS + eu, 1 - (row + 1) / ROWS + ev, (col + 1) / COLS - eu, 1 - row / ROWS - ev];
 }
 
-function drawFace(
-  g: CanvasRenderingContext2D,
-  x: number,
-  y: number,
-  state: FaceState,
-  clue: Clue | null,
-) {
-  const bg = { solid: token('--cube'), painted: token('--cube-painted'), lit: token('--cube-lit') };
-  const ink = state === 'painted' ? token('--accent-ink') : token('--ink');
-  g.fillStyle = bg[state];
+function drawFace(g: CanvasRenderingContext2D, x: number, y: number, l: Look, clue: Clue | null) {
+  g.fillStyle = l.bg;
   g.fillRect(x, y, SIZE, SIZE);
   g.strokeStyle = token('--cube-edge');
   g.lineWidth = 6;
@@ -49,8 +60,9 @@ function drawFace(
   if (!clue) return;
   const cx = x + SIZE / 2;
   const cy = y + SIZE / 2;
-  g.fillStyle = ink;
-  g.strokeStyle = ink;
+  g.globalAlpha = l.alpha;
+  g.fillStyle = l.ink;
+  g.strokeStyle = l.ink;
   g.font = `700 ${clue.count >= 10 ? 52 : 64}px Rubik, system-ui, sans-serif`;
   g.textAlign = 'center';
   g.textBaseline = 'middle';
@@ -64,24 +76,24 @@ function drawFace(
   } else if (frame === 'square') {
     g.strokeRect(cx - 38, cy - 38, 76, 76);
   }
+  g.globalAlpha = 1;
 }
 
-/** Draws every face onto one canvas texture. Call again when the theme changes. */
-export function drawAtlas(texture?: CanvasTexture): CanvasTexture {
+/** Draws one state's texture of every clue face. Call again when the theme changes. */
+export function drawAtlas(state: FaceState, texture?: CanvasTexture): CanvasTexture {
   const canvas = (texture?.image as HTMLCanvasElement) ?? document.createElement('canvas');
   canvas.width = COLS * SIZE;
   canvas.height = ROWS * SIZE;
   const g = canvas.getContext('2d')!;
-  STATES.forEach((state) => {
-    const draw = (clue: Clue | null) => {
-      const s = slot(state, clue);
-      drawFace(g, (s % COLS) * SIZE, Math.floor(s / COLS) * SIZE, state, clue);
-    };
-    draw(null);
-    for (const pieces of [1, 2, 3] as const) {
-      for (let count = 0; count < NUMBERS; count++) draw({ count, pieces });
-    }
-  });
+  const l = look(state);
+  const draw = (clue: Clue | null) => {
+    const s = slot(clue);
+    drawFace(g, (s % COLS) * SIZE, Math.floor(s / COLS) * SIZE, l, clue);
+  };
+  draw(null);
+  for (const pieces of [1, 2, 3] as const) {
+    for (let count = 0; count < NUMBERS; count++) draw({ count, pieces });
+  }
   const tex = texture ?? new CanvasTexture(canvas);
   tex.colorSpace = SRGBColorSpace;
   tex.needsUpdate = true;

@@ -48,11 +48,14 @@ export function renderHowToPlay(root: HTMLElement): void {
           el('dd', { textContent: text }),
         ]),
       ),
-      el('a', {
-        className: 'button primary',
-        href: `#/play/${first.id}`,
-        textContent: 'Try the first puzzle',
-      }),
+      el('div', { className: 'end-actions' }, [
+        el('a', { className: 'button ghost', href: '#/tutorial', textContent: 'Guided tutorial' }),
+        el('a', {
+          className: 'button primary',
+          href: `#/play/${first.id}`,
+          textContent: 'Try the first puzzle',
+        }),
+      ]),
     ]),
   );
 }

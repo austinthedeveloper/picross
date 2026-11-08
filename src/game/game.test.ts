@@ -66,13 +66,27 @@ describe('Game', () => {
     expect(game.begin('break', 6, 'y')).toBe('none');
   });
 
-  it('lets relaxed break the shape, and a hint puts it back', () => {
+  it('lets relaxed break the shape, and a check puts it back', () => {
     const game = new Game(puzzle, 'relaxed');
     game.begin('break', 0, 'y');
     game.end();
     expect(game.mistakes).toEqual([0]);
-    game.hint();
+    expect(game.check()).toEqual([0]);
     expect(game.blocks[0]).toBe(PAINTED);
+    expect(game.hintsLeft).toBe(MAX_HINTS - 1);
+    // A clean board still costs the hint, and finds nothing.
+    expect(game.check()).toEqual([]);
+    expect(game.hintsLeft).toBe(MAX_HINTS - 2);
+  });
+
+  it("gives hints from what's right on the board, ignoring mistakes", () => {
+    const game = new Game(puzzle, 'relaxed');
+    game.begin('break', 0, 'y');
+    game.end();
+    const hint = game.hint()!;
+    for (const { index, to } of hint.move) {
+      expect(to === PAINTED).toBe(puzzle.solution[index] !== 0);
+    }
   });
 
   it('gives hints that move toward the answer, up to the limit', () => {

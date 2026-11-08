@@ -198,41 +198,38 @@ export class Game {
   }
 
   /**
-   * Uses a hint. If something of the shape was broken by mistake, it puts the first one
-   * back, painted. Otherwise it finds the line that proves the most from what's on the
-   * board, and breaks and paints what it proves. Returns that line (or null) and the move.
+   * Uses a hint: finds the line that proves the most from what's correctly on the board,
+   * and breaks and paints what it proves. Returns that line (or null) and the move.
    */
   hint(): { line: Line | null; move: Move } | null {
     if (this.hintsLeft <= 0 || this.over) return null;
     const move: Move = [];
     let line: Line | null = null;
-    const wrong = this.mistakes;
-    if (wrong.length) {
-      move.push({ index: wrong[0], from: BROKEN, to: PAINTED });
-    } else {
-      const known = new Uint8Array(this.blocks.length);
-      this.blocks.forEach((b, i) => {
-        const filled = isFilled(this.puzzle, i);
-        if (b === BROKEN) known[i] = EMPTY;
-        else if (b === PAINTED && filled) known[i] = FILLED;
-      });
-      const { puzzle } = this;
-      const step = nextStep(puzzle.dims, puzzle.clues, known, puzzle.lines);
-      if (step) {
-        line = step.line;
-        for (const i of step.empty)
+    const known = new Uint8Array(this.blocks.length);
+    this.blocks.forEach((b, i) => {
+      const filled = isFilled(this.puzzle, i);
+      if (b === BROKEN && !filled) known[i] = EMPTY;
+      else if (b === PAINTED && filled) known[i] = FILLED;
+    });
+    const { puzzle } = this;
+    const step = nextStep(puzzle.dims, puzzle.clues, known, puzzle.lines);
+    if (step) {
+      line = step.line;
+      for (const i of step.empty) {
+        if (this.blocks[i] !== BROKEN)
           move.push({ index: i, from: this.blocks[i] as Block, to: BROKEN });
-        for (const i of step.filled) {
-          if (this.blocks[i] !== PAINTED)
-            move.push({ index: i, from: this.blocks[i] as Block, to: PAINTED });
-        }
-      } else {
-        // Wrongly painted cubes can hide every step; fall back to the answer for one cube.
-        const solved = solve(puzzle.dims, puzzle.clues, undefined, puzzle.lines).known;
-        const i = this.blocks.findIndex((b, c) => b === SOLID && solved[c] !== UNKNOWN);
-        if (i < 0) return null;
-        move.push({ index: i, from: SOLID, to: isFilled(puzzle, i) ? PAINTED : BROKEN });
       }
+      for (const i of step.filled) {
+        if (this.blocks[i] !== PAINTED) {
+          move.push({ index: i, from: this.blocks[i] as Block, to: PAINTED });
+        }
+      }
+    } else {
+      // Wrongly painted cubes can hide every step; fall back to the answer for one cube.
+      const solved = solve(puzzle.dims, puzzle.clues, undefined, puzzle.lines).known;
+      const i = this.blocks.findIndex((b, c) => b === SOLID && solved[c] !== UNKNOWN);
+      if (i < 0) return null;
+      move.push({ index: i, from: SOLID, to: isFilled(puzzle, i) ? PAINTED : BROKEN });
     }
     if (!move.length) return null;
     for (const { index, to } of move) this.blocks[index] = to;
@@ -240,5 +237,22 @@ export class Game {
     this.future = [];
     this.hintsUsed++;
     return { line, move };
+  }
+
+  /**
+   * Uses a hint to check for mistakes: puts back (painted) every cube of the shape that
+   * was broken. Returns those cubes, or null if no hint could be used.
+   */
+  check(): number[] | null {
+    if (this.hintsLeft <= 0 || this.over) return null;
+    const wrong = this.mistakes;
+    this.hintsUsed++;
+    if (wrong.length) {
+      const move: Move = wrong.map((index) => ({ index, from: BROKEN, to: PAINTED }));
+      for (const { index } of move) this.blocks[index] = PAINTED;
+      this.past.push(move);
+      this.future = [];
+    }
+    return wrong;
   }
 }

@@ -88,3 +88,72 @@
   color: var(--ink);
   line-height: 1.45;
 }
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.difficulty-filter {
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.empty-list {
+  color: var(--muted);
+  margin-top: 24px;
+}
+
+.card-band {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.band-hard,
+.band-expert {
+  color: var(--accent);
+}
+
+/* Cards at the top of the list: the tutorial offer, the story, the daily puzzle. */
+.feature-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+  margin: 0 0 12px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.feature-card p {
+  margin: 2px 0 0;
+}
+
+.feature-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.kicker {
+  margin: 0;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  font-weight: 600;
+}

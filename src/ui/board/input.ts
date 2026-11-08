@@ -8,7 +8,15 @@ export interface InputOptions {
   end(): void;
   /** The pointer is over a cube (or not), for the cursor outline on a mouse. */
   hover(pick: Pick | null): void;
+  /** The player turned the block. */
+  orbited?(): void;
+  /** A double tap on empty space: reset the view. */
+  reset?(): void;
 }
+
+const DOUBLE_TAP_MS = 320;
+/** How far a press can move and still count as a tap. */
+const TAP_SLOP = 8;
 
 const TURN_SPEED = 0.008;
 
@@ -23,6 +31,9 @@ export function attachInput(view: BlockView, opts: InputOptions): () => void {
   let mode: 'stroke' | 'turn' | null = null;
   let pinch: { dist: number; zoom: number; x: number; y: number } | null = null;
   let lastCell = -1;
+  let pressAt = { x: 0, y: 0 };
+  let moved = 0;
+  let lastTap = 0;
 
   const twoFinger = () => {
     const [a, b] = [...pointers.values()];
@@ -41,6 +52,8 @@ export function attachInput(view: BlockView, opts: InputOptions): () => void {
       return;
     }
     if (pointers.size > 2) return;
+    pressAt = { x: e.clientX, y: e.clientY };
+    moved = 0;
     const pick = e.button === 0 && opts.acting() ? view.pick(e.clientX, e.clientY) : null;
     if (pick) {
       mode = 'stroke';
@@ -68,6 +81,8 @@ export function attachInput(view: BlockView, opts: InputOptions): () => void {
       pinch.y = f.y;
     } else if (mode === 'turn') {
       view.orbit(-dx * TURN_SPEED, dy * TURN_SPEED);
+      moved = Math.max(moved, Math.hypot(e.clientX - pressAt.x, e.clientY - pressAt.y));
+      if (moved > TAP_SLOP) opts.orbited?.();
     } else if (mode === 'stroke') {
       const pick = view.pick(e.clientX, e.clientY);
       if (pick && pick.cell !== lastCell) {
@@ -82,6 +97,13 @@ export function attachInput(view: BlockView, opts: InputOptions): () => void {
     if (pointers.size < 2) pinch = null;
     if (pointers.size === 0) {
       if (mode === 'stroke') opts.end();
+      if (mode === 'turn' && moved <= TAP_SLOP) {
+        // A tap on empty space; two in a row reset the view.
+        if (e.timeStamp - lastTap < DOUBLE_TAP_MS) {
+          opts.reset?.();
+          lastTap = 0;
+        } else lastTap = e.timeStamp;
+      }
       mode = null;
     }
   };
