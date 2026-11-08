@@ -1,0 +1,20 @@
+{
+  "id": "sword",
+  "name": "Sword",
+  "colors": {
+    "s": "stone",
+    "y": "yellow",
+    "b": "brown",
+    "w": "white"
+  },
+  "layers": [
+    ["...", ".y.", "..."],
+    ["...", ".b.", "..."],
+    [".y.", "yyy", ".y."],
+    ["...", "sss", "..."],
+    ["...", ".w.", "..."]
+  ],
+  "hideRatio": 0.4,
+  "hide": "2c1040ab37",
+  "passes": 4
+}
