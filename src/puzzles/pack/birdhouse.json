@@ -1,0 +1,22 @@
+{
+  "id": "birdhouse",
+  "name": "Birdhouse",
+  "colors": {
+    "w": "wood",
+    "c": "yellow",
+    "r": "red",
+    "k": "graphite"
+  },
+  "layers": [
+    [".....", ".....", "..w..", ".....", ".....", "....."],
+    [".....", ".....", "..w..", ".....", ".....", "....."],
+    ["ccccc", "ccccc", "ccccc", "ccccc", "ccccc", "..w.."],
+    ["ccccc", "ccccc", "ccccc", "ccccc", "cckcc", "....."],
+    ["ccccc", "ccccc", "ccccc", "ccccc", "ccccc", "....."],
+    ["rrrrr", "rrrrr", "rrrrr", "rrrrr", "rrrrr", "rrrrr"],
+    [".rrr.", ".rrr.", ".rrr.", ".rrr.", ".rrr.", ".rrr."]
+  ],
+  "hideRatio": 0.5,
+  "hide": "010bd7fdcfb2db734afe2124200",
+  "passes": 4
+}

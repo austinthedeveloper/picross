@@ -34,6 +34,23 @@ To pick the hidden clues again after editing a shape or its ratio:
 The list sorts by the block's longest side (Small up to 4, Medium up to 6, Large beyond),
 then size, then `passes`.
 
+### Many at once: sheets
+
+For a batch, draw them in one sheet (`src/puzzles/sheets/*.txt`, format at the top of
+`src/puzzles/sheet.ts`: layers side by side, one line per row) and export it:
+
+```bash
+npm run puzzles -- --sheet src/puzzles/sheets/batch-1.txt
+```
+
+Unchanged shapes keep their hidden clues. Sheets under `sheets/story/` export to
+`src/puzzles/story/` (story puzzles, named after the 2D puzzle their encounter uses).
+
+## Difficulty
+
+`src/puzzles/difficulty.ts` bands puzzles by `passes`, up a band for blocks 9 or more on a
+side. `npm run puzzles` keeps `passes` current; the pack test fails if it isn't.
+
 ## Add a shape color
 
 Add the name to `COLORS` in `src/puzzles/format.ts` and a `--vox-<name>` token to all three

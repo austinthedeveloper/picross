@@ -1,0 +1,20 @@
+{
+  "id": "toolbox",
+  "name": "Toolbox",
+  "colors": {
+    "r": "red",
+    "k": "graphite",
+    "s": "stone"
+  },
+  "layers": [
+    ["rrrrrrrr", "rrrrrrrr", "rrrrrrrr", "rrrrrrrr", "rrrrrrrr"],
+    ["rrrrrrrr", "rrrrrrrr", "rrrrrrrr", "rrrrrrrr", "rrrrrrrr"],
+    ["kkkkkkkk", "kkkkkkkk", "kkkkkkkk", "kkkkkkkk", "kskkkksk"],
+    ["rrrrrrrr", "rrrrrrrr", "rrrrrrrr", "rrrrrrrr", "rsrrrrsr"],
+    ["........", "........", "..k..k..", "........", "........"],
+    ["........", "........", "..kkkk..", "........", "........"]
+  ],
+  "hideRatio": 0.55,
+  "hide": "1201126040093cfbffbfb7cffeecb2",
+  "passes": 4
+}

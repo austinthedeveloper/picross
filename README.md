@@ -9,9 +9,11 @@ Every puzzle is a block of cubes with a shape hidden inside. The number on a fac
 cubes of the shape in the line running into that face; a circle means they're in two pieces,
 a square three or more. Break away everything that isn't the shape and it's revealed in color.
 
-- 17 handmade puzzles from 3×3×3 to 7×5×7, each checked to be solvable without guessing
+- 37 handmade puzzles from 3×3×3 to 9×8×9, each checked to be solvable without guessing,
+  banded Easy to Expert, with filters
+- A guided tutorial, and a hint menu that works out a line or checks for mistakes
 - Break and Paint tools, drag strokes along a layer, turn and zoom with a drag or a pinch
-- Peel layers off the side facing you to see inside
+- Peel layers off either end of each axis to see inside; snap to front, side or top
 - Relaxed or Hearts mode, hints, undo/redo, a timer and best times, saved progress
 - Keyboard play, screen-reader descriptions of each cube, high contrast, haptics
 

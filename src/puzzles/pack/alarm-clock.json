@@ -1,0 +1,22 @@
+{
+  "id": "alarm-clock",
+  "name": "Alarm Clock",
+  "colors": {
+    "r": "red",
+    "f": "cream",
+    "k": "graphite",
+    "y": "yellow"
+  },
+  "layers": [
+    [".....", "k...k", "....."],
+    [".rrr.", ".rrr.", ".rrr."],
+    ["rrrrr", "rrrrr", "rfffr"],
+    ["rrrrr", "rrrrr", "rfkkr"],
+    ["rrrrr", "rrrrr", "rfkfr"],
+    [".rrr.", ".rrr.", ".rrr."],
+    [".....", "yy.yy", "....."]
+  ],
+  "hideRatio": 0.5,
+  "hide": "f4a4518e20ae7dab86",
+  "passes": 5
+}

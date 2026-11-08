@@ -20,11 +20,15 @@ function route() {
   const visit = ++routed;
   const play = location.hash.match(/^#\/play\/([\w-]+)$/);
   const puzzle = play && getPuzzle(play[1]);
-  if (puzzle) {
-    // The play screen brings in three.js, so the list doesn't wait for it.
-    void import('./ui/screens/gameScreen').then(({ renderGameScreen }) => {
-      if (visit === routed) cleanup = renderGameScreen(app, puzzle);
+  // Screens with a block bring in three.js, so the list doesn't wait for it.
+  const lazy = <M>(load: Promise<M>, render: (m: M) => (() => void) | void) =>
+    void load.then((m) => {
+      if (visit === routed) cleanup = render(m) ?? undefined;
     });
+  if (puzzle) {
+    lazy(import('./ui/screens/gameScreen'), (m) => m.renderGameScreen(app, puzzle));
+  } else if (location.hash === '#/tutorial') {
+    lazy(import('./ui/screens/tutorial'), (m) => m.renderTutorial(app));
   } else if (location.hash === '#/how-to-play') renderHowToPlay(app);
   else renderSelectScreen(app);
   window.scrollTo(0, 0);

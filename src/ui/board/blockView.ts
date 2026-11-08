@@ -23,7 +23,7 @@ import { BROKEN, PAINTED } from '../../game/game';
 import type { Puzzle } from '../../puzzles/format';
 import { reducedMotion } from '../motion';
 import { token } from '../tokens';
-import { drawAtlas, faceUV, type FaceState } from './atlas';
+import { drawAtlas, faceUV, STATES, type FaceState } from './atlas';
 
 interface FaceDef {
   axis: Axis;
@@ -45,18 +45,31 @@ const FACES: FaceDef[] = [
   { axis: 'x', sign: -1, n: [-1, 0, 0], r: [0, 0, 1], u: [0, 1, 0], shade: 0.84 },
 ];
 
-/** Layers peeled off one side of the block, to see inside. */
-export interface Cut {
-  axis: Axis;
-  /** How many layers are hidden, counted from the side facing the camera. */
+/** Layers peeled off one end of an axis, to see inside. Each axis has its own. */
+export interface Peel {
+  /** Which end: low (left, bottom, back) or high (right, top, front). */
+  from: 'low' | 'high';
   layers: number;
 }
+
+/**
+ * Lets a screen restyle faces: given a face's cube, axis and line, a state to draw
+ * instead of the ordinary one, or null for the ordinary one.
+ */
+export type FaceStyler = (cell: number, axis: Axis, line: number) => FaceState | null;
 
 export interface Pick {
   cell: number;
   /** The axis of the face that was hit (the line its clue belongs to). */
   axis: Axis;
 }
+
+const CORNERS: [number, number][] = [
+  [-1, -1],
+  [1, -1],
+  [1, 1],
+  [-1, 1],
+];
 
 const MIN_PITCH = -1.2;
 const MAX_PITCH = 1.35;
@@ -72,9 +85,10 @@ export class BlockView {
   private camera = new PerspectiveCamera(35, 1, 0.1, 200);
   private group = new Group();
   private mesh: Mesh;
-  private faceMaterial: MeshBasicMaterial;
+  /** One material per face state, each with its own clue texture. */
+  private faceMaterials: MeshBasicMaterial[];
   private colorMaterial = new MeshBasicMaterial({ vertexColors: true });
-  private atlas: CanvasTexture;
+  private atlases: CanvasTexture[];
   private cursorBox: LineSegments;
   private faceCells: Int32Array = new Int32Array(0);
   private faceAxes: Axis[] = [];
@@ -84,10 +98,20 @@ export class BlockView {
   yaw = -0.6;
   pitch = 0.5;
   zoom = 1;
-  cut: Cut | null = null;
+  peels: Record<Axis, Peel> = {
+    x: { from: 'high', layers: 0 },
+    y: { from: 'high', layers: 0 },
+    z: { from: 'high', layers: 0 },
+  };
   lit = new Set<number>();
+  /** Lines whose clue faces look finished. */
+  done = new Set<number>();
+  styler: FaceStyler | null = null;
+  private tween: { from: number[]; to: number[]; start: number; ms: number } | null = null;
   cursor: number | null = null;
   revealed = false;
+  /** How long the last rebuild took, in ms (for checking big blocks stay quick). */
+  lastBuildMs = 0;
 
   constructor(
     private puzzle: Puzzle,
@@ -98,10 +122,16 @@ export class BlockView {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.canvas = this.renderer.domElement;
     this.canvas.className = 'block-canvas';
-    this.atlas = drawAtlas();
-    this.atlas.anisotropy = this.renderer.capabilities.getMaxAnisotropy();
-    this.faceMaterial = new MeshBasicMaterial({ map: this.atlas, vertexColors: true });
-    this.mesh = new Mesh(new BufferGeometry(), this.faceMaterial);
+    const anisotropy = this.renderer.capabilities.getMaxAnisotropy();
+    this.atlases = STATES.map((state) => {
+      const tex = drawAtlas(state);
+      tex.anisotropy = anisotropy;
+      return tex;
+    });
+    this.faceMaterials = this.atlases.map(
+      (map) => new MeshBasicMaterial({ map, vertexColors: true }),
+    );
+    this.mesh = new Mesh(new BufferGeometry(), this.faceMaterials);
     this.cursorBox = new LineSegments(
       new EdgesGeometry(new BoxGeometry(1.06, 1.06, 1.06)),
       new LineBasicMaterial({ depthTest: false, transparent: true }),
@@ -118,7 +148,7 @@ export class BlockView {
 
   /** Re-reads the theme's colors (after a theme or contrast change). */
   applyTheme(): void {
-    drawAtlas(this.atlas);
+    STATES.forEach((state, i) => drawAtlas(state, this.atlases[i]));
     (this.cursorBox.material as LineBasicMaterial).color = new Color(token('--accent'));
     this.rebuild();
   }
@@ -128,19 +158,21 @@ export class BlockView {
     return new Vector3(p.x - d.x / 2 + 0.5, p.y - d.y / 2 + 0.5, p.z - d.z / 2 + 0.5);
   }
 
-  /** Which side of the block the camera is on, along an axis. */
-  private cameraSide(axis: Axis): 1 | -1 {
-    if (axis === 'y') return 1;
+  /** The end of an axis facing the camera. */
+  facingEnd(axis: Axis): Peel['from'] {
     const v = this.cameraOffset();
-    return (axis === 'x' ? v.x : v.z) >= 0 ? 1 : -1;
+    return v[axis] >= 0 ? 'high' : 'low';
   }
 
-  /** Whether a cube is hidden by the cut. */
+  /** Whether a cube is peeled away. */
   private cutAway(p: Point): boolean {
-    if (!this.cut || !this.cut.layers) return false;
-    const { axis, layers } = this.cut;
-    const n = this.puzzle.dims[axis];
-    return this.cameraSide(axis) === 1 ? p[axis] >= n - layers : p[axis] < layers;
+    for (const axis of ['x', 'y', 'z'] as const) {
+      const { from, layers } = this.peels[axis];
+      if (!layers) continue;
+      const n = this.puzzle.dims[axis];
+      if (from === 'high' ? p[axis] >= n - layers : p[axis] < layers) return true;
+    }
+    return false;
   }
 
   private shown(p: Point): boolean {
@@ -153,13 +185,13 @@ export class BlockView {
 
   /** Rebuilds the mesh from the blocks. Cheap enough to call after every change. */
   rebuild(): void {
+    const t0 = performance.now();
     const { dims, clues } = this.puzzle;
     const pos: number[] = [];
     const uv: number[] = [];
     const col: number[] = [];
-    const index: number[] = [];
-    const cells: number[] = [];
-    const axes: Axis[] = [];
+    // Faces are drawn grouped by state (one material each); picking needs that order.
+    const byState: { base: number; cell: number; axis: Axis }[][] = STATES.map(() => []);
     const litCells = new Set<number>();
     for (const id of this.lit) for (const c of this.puzzle.lines[id].cells) litCells.add(c);
     const palette = this.puzzle.palette.map((name) => new Color(token(`--vox-${name}`)));
@@ -171,44 +203,66 @@ export class BlockView {
         const q = { ...p, [f.axis]: p[f.axis] + f.sign };
         if (this.shown(q)) continue;
         const base = pos.length / 3;
-        const corners: [number, number][] = [
-          [-1, -1],
-          [1, -1],
-          [1, 1],
-          [-1, 1],
-        ];
-        for (const [a, b] of corners) {
-          for (let k = 0; k < 3; k++)
+        for (const [a, b] of CORNERS) {
+          for (let k = 0; k < 3; k++) {
             pos.push(c.getComponent(k) + (f.n[k] + a * f.r[k] + b * f.u[k]) / 2);
+          }
         }
+        let state: FaceState = 'solid';
         if (this.revealed) {
           const color = palette[this.puzzle.solution[i] - 1];
-          for (let k = 0; k < 4; k++)
+          for (let k = 0; k < 4; k++) {
             col.push(color.r * f.shade, color.g * f.shade, color.b * f.shade);
+          }
           uv.push(0, 0, 0, 0, 0, 0, 0, 0);
         } else {
-          const state: FaceState =
-            this.blocks[i] === PAINTED ? 'painted' : litCells.has(i) ? 'lit' : 'solid';
-          const [u0, v0, u1, v1] = faceUV(state, clues[lineIdAt(dims, f.axis, p)]);
+          const line = lineIdAt(dims, f.axis, p);
+          const painted = this.blocks[i] === PAINTED;
+          const done = this.done.has(line);
+          state =
+            this.styler?.(i, f.axis, line) ??
+            (litCells.has(i)
+              ? 'lit'
+              : painted
+                ? done
+                  ? 'painted-done'
+                  : 'painted'
+                : done
+                  ? 'done'
+                  : 'solid');
+          const [u0, v0, u1, v1] = faceUV(clues[line]);
           uv.push(u0, v0, u1, v0, u1, v1, u0, v1);
           for (let k = 0; k < 4; k++) col.push(f.shade, f.shade, f.shade);
         }
-        index.push(base, base + 1, base + 2, base, base + 2, base + 3);
-        cells.push(i);
-        axes.push(f.axis);
+        byState[STATES.indexOf(state)].push({ base, cell: i, axis: f.axis });
       }
     }
     const geometry = new BufferGeometry();
     geometry.setAttribute('position', new BufferAttribute(new Float32Array(pos), 3));
     geometry.setAttribute('uv', new BufferAttribute(new Float32Array(uv), 2));
     geometry.setAttribute('color', new BufferAttribute(new Float32Array(col), 3));
+    const index: number[] = [];
+    const cells: number[] = [];
+    const axes: Axis[] = [];
+    byState.forEach((faces, material) => {
+      const start = index.length;
+      for (const { base, cell, axis } of faces) {
+        index.push(base, base + 1, base + 2, base, base + 2, base + 3);
+        cells.push(cell);
+        axes.push(axis);
+      }
+      if (faces.length) geometry.addGroup(start, index.length - start, material);
+    });
     geometry.setIndex(index);
     geometry.computeBoundingSphere();
     this.mesh.geometry.dispose();
     this.mesh.geometry = geometry;
-    this.mesh.material = this.revealed ? this.colorMaterial : this.faceMaterial;
+    this.mesh.material = this.revealed ? this.colorMaterial : this.faceMaterials;
     this.faceCells = Int32Array.from(cells);
     this.faceAxes = axes;
+    this.lastBuildMs = performance.now() - t0;
+    // For the performance test: how long the last rebuild took.
+    this.canvas.dataset.buildMs = this.lastBuildMs.toFixed(2);
     this.updateCursor();
     this.invalidate();
   }
@@ -242,13 +296,31 @@ export class BlockView {
     );
   }
 
-  /** Turns the camera around the block. Rebuilds if that changes which side a cut peels. */
+  /** Turns the camera around the block. */
   orbit(dYaw: number, dPitch: number): void {
-    const sides = this.cut ? this.cameraSide(this.cut.axis) : 0;
+    this.tween = null;
     this.yaw += dYaw;
     this.pitch = Math.max(MIN_PITCH, Math.min(MAX_PITCH, this.pitch + dPitch));
-    if (this.cut && this.cameraSide(this.cut.axis) !== sides) this.rebuild();
-    else this.invalidate();
+    this.invalidate();
+  }
+
+  /** Moves the camera to a view, animated unless the player prefers reduced motion. */
+  animateTo(yaw: number, pitch: number, zoom = this.zoom): void {
+    // Take the short way round.
+    const turn = Math.PI * 2;
+    const target = this.yaw + ((((yaw - this.yaw) % turn) + turn * 1.5) % turn) - turn / 2;
+    if (reducedMotion()) {
+      [this.yaw, this.pitch, this.zoom] = [target, pitch, zoom];
+      this.tween = null;
+    } else {
+      this.tween = {
+        from: [this.yaw, this.pitch, this.zoom],
+        to: [target, pitch, zoom],
+        start: performance.now(),
+        ms: 350,
+      };
+    }
+    this.invalidate();
   }
 
   setZoom(zoom: number): void {
@@ -256,8 +328,8 @@ export class BlockView {
     this.invalidate();
   }
 
-  setCut(cut: Cut | null): void {
-    this.cut = cut;
+  setPeel(axis: Axis, peel: Peel): void {
+    this.peels[axis] = peel;
     this.rebuild();
   }
 
@@ -296,7 +368,7 @@ export class BlockView {
   reveal(): void {
     this.revealed = true;
     this.lit.clear();
-    this.cut = null;
+    for (const axis of ['x', 'y', 'z'] as const) this.peels[axis].layers = 0;
     this.rebuild();
     if (!reducedMotion()) this.spinUntil = performance.now() + 2400;
     this.invalidate();
@@ -322,6 +394,16 @@ export class BlockView {
     if (this.frame) return;
     this.frame = requestAnimationFrame((now) => {
       this.frame = 0;
+      if (this.tween) {
+        const t = Math.min(1, (now - this.tween.start) / this.tween.ms);
+        const ease = 1 - (1 - t) ** 3;
+        const [yaw, pitch, zoom] = this.tween.from.map(
+          (f, k) => f + (this.tween!.to[k] - f) * ease,
+        );
+        [this.yaw, this.pitch, this.zoom] = [yaw, pitch, zoom];
+        if (t < 1) this.invalidate();
+        else this.tween = null;
+      }
       if (now < this.spinUntil) {
         const left = (this.spinUntil - now) / 2400;
         this.yaw += 0.09 * Math.sin(left * Math.PI) + 0.004;
@@ -336,9 +418,9 @@ export class BlockView {
     cancelAnimationFrame(this.frame);
     this.resizeObserver.disconnect();
     this.mesh.geometry.dispose();
-    this.faceMaterial.dispose();
+    for (const m of this.faceMaterials) m.dispose();
     this.colorMaterial.dispose();
-    this.atlas.dispose();
+    for (const t of this.atlases) t.dispose();
     this.renderer.dispose();
   }
 }

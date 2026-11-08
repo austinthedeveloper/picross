@@ -188,3 +188,104 @@
 .game:has(.end-panel:not([hidden])) .help {
   display: none;
 }
+
+/* Coach: the tutorial's instructions, and short notes like a mistake check's result. */
+.coach {
+  margin: 0 0 8px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.coach[hidden] {
+  display: none;
+}
+
+.coach p {
+  margin: 0;
+}
+
+.coach-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.coach-head .button {
+  padding: 4px 10px;
+  font-size: 0.8rem;
+}
+
+.coach-text {
+  line-height: 1.4;
+}
+
+.coach-nudge {
+  color: var(--accent);
+  font-size: 0.9rem;
+  min-height: 0;
+}
+
+.coach-nudge:not(:empty) {
+  margin-top: 6px !important;
+}
+
+.kicker {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Hint menu */
+.hint-menu {
+  position: relative;
+}
+
+.hint-menu summary {
+  list-style: none;
+}
+
+.hint-menu summary::-webkit-details-marker {
+  display: none;
+}
+
+.hint-menu.empty summary {
+  opacity: 0.4;
+}
+
+.hint-pop {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  z-index: 5;
+  width: 220px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px var(--shadow);
+}
+
+.hint-note {
+  margin: 0 0 4px;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.hint-menu.empty .hint-pop button {
+  display: none;
+}
+
+.views button {
+  min-height: 44px;
+  min-width: 44px;
+  justify-content: center;
+}

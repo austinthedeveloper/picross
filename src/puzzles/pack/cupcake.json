@@ -1,0 +1,21 @@
+{
+  "id": "cupcake",
+  "name": "Cupcake",
+  "colors": {
+    "p": "sky",
+    "q": "white",
+    "f": "pink",
+    "s": "yellow",
+    "c": "red"
+  },
+  "layers": [
+    [".....", ".pqp.", ".qpq.", ".pqp.", "....."],
+    [".qpq.", "qpqpq", "pqpqp", "qpqpq", ".qpq."],
+    [".fff.", "fffff", "sffff", "fffff", ".ffs."],
+    [".....", ".ffs.", ".fff.", ".sff.", "....."],
+    [".....", ".....", "..c..", ".....", "....."]
+  ],
+  "hideRatio": 0.5,
+  "hide": "31d8b04889c96a141d7",
+  "passes": 5
+}
