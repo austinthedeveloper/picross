@@ -1,0 +1,11 @@
+{
+  "id": "popcorn-stand",
+  "name": "Popcorn stand",
+  "kind": "rest",
+  "puzzle": "popcorn",
+  "blurb": "Nobody is minding it. Nobody is charging for it. Eat fast.",
+  "rest": {
+    "seconds": 90,
+    "heal": 4
+  }
+}

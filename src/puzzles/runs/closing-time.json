@@ -1,0 +1,12 @@
+{
+  "id": "closing-time",
+  "name": "Closing Time",
+  "hp": 18,
+  "encounters": ["tin-soldier", "dusty-exhibit", "break-room", "curator"],
+  "order": 10,
+  "requires": "the-annex",
+  "gadgets": ["bomb"],
+  "blurb": "A private viewing at the museum, by invitation only. Bring the keys.",
+  "intro": "closing-time-intro",
+  "outro": "closing-time-outro"
+}

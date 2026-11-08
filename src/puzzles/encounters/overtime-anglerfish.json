@@ -1,0 +1,38 @@
+{
+  "id": "overtime-anglerfish",
+  "name": "Anglerfish",
+  "kind": "fight",
+  "puzzle": "anglerfish",
+  "blurb": "The little light is brighter now. The rest of the tank is darker.",
+  "enemy": {
+    "name": "Anglerfish",
+    "sprite": "anglerfish",
+    "hp": 45,
+    "attack": 2,
+    "fog": {
+      "cols": [6, 7, 10, 11, 13]
+    },
+    "phases": [
+      {
+        "at": 0.8,
+        "name": "Hungry Anglerfish",
+        "attack": 3,
+        "taunt": "Come closer. Look at the pretty light.",
+        "fog": {
+          "cols": [14, 1, 8]
+        },
+        "fogCount": 2,
+        "ink": 4
+      },
+      {
+        "at": 0.5,
+        "taunt": "The pretty light starts to hum.",
+        "charge": 6
+      }
+    ],
+    "scramble": {
+      "rows": [8],
+      "cols": [4]
+    }
+  }
+}
