@@ -54,6 +54,7 @@ Then open http://localhost:5174 (the 2D game's dev server keeps 5173).
 - [Shared files](docs/shared-files.md): what comes from the 2D game and how to update it
 - [Story mode](docs/story.md): how the 2D story is shared, fitted to blocks, and gated
 - [Roadmap](docs/roadmap.md): what's carried over from the 2D game so far, and what's next
+- [Combining with the 2D game](docs/combining.md): the plan for one game, with bosses that switch dimension
 
 The look follows the 2D game's [art direction](https://github.com/austinthedeveloper/picross/blob/main/docs/art-direction.md);
 the shape colors are in `src/styles/voxels.css`.
