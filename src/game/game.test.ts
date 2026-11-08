@@ -101,6 +101,13 @@ describe('Game', () => {
     expect(game.hint()).toBeNull();
   });
 
+  it('refuses breaks into the shape in battle, without hearts', () => {
+    const game = new Game(puzzle, 'battle');
+    for (const cell of [0, 1, 2, 3]) expect(game.begin('break', cell, 'y')).toBe('strike');
+    expect(game.strikes).toBe(4);
+    expect(game.failed).toBe(false);
+  });
+
   it('saves and restores', () => {
     const game = new Game(puzzle, 'hearts');
     game.begin('break', 6, 'y');

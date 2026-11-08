@@ -1,0 +1,23 @@
+/* The story's pieces on this game's screens (the shared run.css styles the rest). */
+
+/* A fight, dig or rest header sits in the play screen's coach slot. */
+.coach .battle-bar,
+.coach .dig,
+.coach .rest {
+  margin: 0;
+  border: none;
+  padding: 0;
+  background: none;
+}
+
+.coach .battle-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.enemy-sprite .art {
+  width: 48px;
+  height: 48px;
+  image-rendering: pixelated;
+}

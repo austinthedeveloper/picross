@@ -1,9 +1,18 @@
 import { clueText } from '../../engine/clues';
 import { dimsLabel, indexOf, inside, lineIdAt, pointOf, type Axis } from '../../engine/volume';
 import { Clock } from '../../game/clock';
-import { BROKEN, Game, MAX_HEARTS, PAINTED, SOLID, type Outcome, type Tool } from '../../game/game';
+import {
+  BROKEN,
+  Game,
+  MAX_HEARTS,
+  PAINTED,
+  SOLID,
+  type Outcome,
+  type Tool,
+  type GameMode,
+} from '../../game/game';
 import type { SavedBoard } from '../../game/progress';
-import { getSettings, type Mode } from '../../game/settings';
+import { getSettings } from '../../game/settings';
 import type { Puzzle } from '../../puzzles/format';
 import { BlockView, type Peel } from '../board/blockView';
 import { attachInput } from '../board/input';
@@ -61,7 +70,7 @@ export interface PlayOptions {
   puzzle: Puzzle;
   /** The heading: the puzzle's name, or its number before it's solved. */
   title: string;
-  mode: Mode;
+  mode: GameMode;
   saved?: SavedBoard;
   hints?: boolean;
   hooks?: PlayHooks;

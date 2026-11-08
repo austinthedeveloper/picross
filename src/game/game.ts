@@ -4,6 +4,13 @@ import { isFilled, type Puzzle } from '../puzzles/format';
 import type { SavedBoard } from './progress';
 import type { Mode } from './settings';
 
+/**
+ * How mistakes work. Relaxed never checks; hearts refuses a break into the shape, paints
+ * the cube and costs one of three hearts; battle (story fights with Hits on) does the same
+ * but has no hearts: the fight decides what a mistake costs.
+ */
+export type GameMode = Mode | 'battle';
+
 /** A cube as the player sees it: still there, painted to keep it safe, or broken away. */
 export const SOLID = 0;
 export const PAINTED = 1;
@@ -48,19 +55,21 @@ interface Stroke {
 export class Game {
   readonly puzzle: Puzzle;
   readonly blocks: Uint8Array;
-  mode: Mode;
+  mode: GameMode;
   hearts = MAX_HEARTS;
   hintsUsed = 0;
+  /** Breaks into the shape this game refused (hearts and battle). */
+  strikes = 0;
   /** Milliseconds played before this session's clock started. */
   elapsed = 0;
   private past: Move[] = [];
   private future: Move[] = [];
   private stroke: Stroke | null = null;
 
-  constructor(puzzle: Puzzle, mode: Mode, saved?: SavedBoard) {
+  constructor(puzzle: Puzzle, mode: GameMode, saved?: SavedBoard) {
     this.puzzle = puzzle;
     this.blocks = new Uint8Array(puzzle.solution.length);
-    this.mode = saved?.mode ?? mode;
+    this.mode = mode === 'battle' ? mode : (saved?.mode ?? mode);
     if (saved && saved.blocks.length === this.blocks.length) {
       [...saved.blocks].forEach((ch, i) => (this.blocks[i] = Number(ch) as Block));
       this.elapsed = saved.elapsed ?? 0;
@@ -107,7 +116,7 @@ export class Game {
     return {
       blocks: this.blocks.join(''),
       elapsed: this.elapsed,
-      mode: this.mode,
+      ...(this.mode !== 'battle' ? { mode: this.mode } : {}),
       ...(this.mode === 'hearts' ? { hearts: this.hearts } : {}),
       ...(this.hintsUsed ? { hintsUsed: this.hintsUsed } : {}),
     };
@@ -134,10 +143,11 @@ export class Game {
       return s.paintTo === PAINTED ? 'painted' : 'unpainted';
     }
     if (from !== SOLID) return 'none';
-    if (this.mode === 'hearts' && isFilled(this.puzzle, cell)) {
+    if (this.mode !== 'relaxed' && isFilled(this.puzzle, cell)) {
       // Not undoable: the paint stays as the mark of the mistake.
       this.blocks[cell] = PAINTED;
-      this.hearts--;
+      if (this.mode === 'hearts') this.hearts--;
+      this.strikes++;
       this.end();
       return 'strike';
     }
