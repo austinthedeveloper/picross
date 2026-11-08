@@ -61,6 +61,16 @@ here verbatim, and this game fits them to blocks.
   and accusing an honest clue. In Relaxed, an honest accusation heals the enemy instead.
 - **Tips:** a card the first time each power shows (`src/story/powers.ts`), and ⓘ lists them.
 
+## Tests
+
+- `src/story/story.test.ts`: the gate, and that every chapter, job and encounter loads
+- `src/game/battle.test.ts`: the fight rules
+- `e2e/story.spec.ts`: the whole First Job by hand, and a Hits-on hit and resume
+- `e2e/fights.spec.ts`: one test per power or system
+- `e2e/chapters.spec.ts`: every chapter from its opening through each job to its boss,
+  with each encounter seeded one cube short of solved (so it checks the flow quickly),
+  and that cleared jobs offer their Overtime and boss fights
+
 ## The gate
 
 Anything the 2D story uses that this game can't play goes into `storyIssues` instead of
