@@ -75,9 +75,16 @@ export function renderEditorScreen(root: HTMLElement): () => void {
     hover: () => {},
     reset: () => view.animateTo(-0.6, 0.5, 1),
   });
+  // Until there's a shape, the preview says how to start instead of showing the stand-in.
+  const previewHint = el('p', {
+    className: 'preview-hint',
+    textContent: 'Your shape appears here as you draw. Pick a color and tap the grid below.',
+  });
   const refreshPreview = () => {
     const p = empty() ? stand : previewPuzzle();
     view.setPuzzle(p, new Uint8Array(p.solution.length));
+    view.canvas.hidden = empty();
+    previewHint.hidden = !empty();
   };
   refreshPreview();
 
@@ -157,7 +164,7 @@ export function renderEditorScreen(root: HTMLElement): () => void {
         ]),
       ]),
       el('div', { className: 'editor-main' }, [
-        el('div', { className: 'stage preview' }, [view.canvas]),
+        el('div', { className: 'stage preview' }, [view.canvas, previewHint]),
         el('div', { className: 'editor-draw' }, [
           el('div', { className: 'layer-bar' }, [
             down,

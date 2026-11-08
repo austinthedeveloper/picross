@@ -382,6 +382,7 @@ export function fightKind(encounter: Encounter, state: RunState): Kind {
     mode: hitsOn ? 'battle' : 'relaxed',
     header,
     hooks: {
+      hintClues: () => battle.hintClues(),
       pick(pick) {
         if (!callingOut) return false;
         callingOut = false;

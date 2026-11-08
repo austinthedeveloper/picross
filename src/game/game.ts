@@ -1,3 +1,4 @@
+import type { Clue } from '../engine/clues';
 import { EMPTY, FILLED, nextStep, solve, UNKNOWN } from '../engine/solver';
 import { lineIdAt, pointOf, type Axis, type Line } from '../engine/volume';
 import { isFilled, type Puzzle } from '../puzzles/format';
@@ -253,7 +254,9 @@ export class Game {
    * Uses a hint: finds the line that proves the most from what's correctly on the board,
    * and breaks and paints what it proves. Returns that line (or null) and the move.
    */
-  hint(): { line: Line | null; move: Move } | null {
+  hint(
+    clues: readonly (Clue | null)[] = this.puzzle.clues,
+  ): { line: Line | null; move: Move } | null {
     if (this.hintsLeft <= 0 || this.over) return null;
     const move: Move = [];
     let line: Line | null = null;
@@ -264,7 +267,7 @@ export class Game {
       else if (b === PAINTED && filled) known[i] = FILLED;
     });
     const { puzzle } = this;
-    const step = nextStep(puzzle.dims, puzzle.clues, known, puzzle.lines);
+    const step = nextStep(puzzle.dims, clues, known, puzzle.lines);
     if (step) {
       line = step.line;
       for (const i of step.empty) {
@@ -278,7 +281,7 @@ export class Game {
       }
     } else {
       // Wrongly painted cubes can hide every step; fall back to the answer for one cube.
-      const solved = solve(puzzle.dims, puzzle.clues, undefined, puzzle.lines).known;
+      const solved = solve(puzzle.dims, clues, undefined, puzzle.lines).known;
       const i = this.blocks.findIndex((b, c) => b === SOLID && solved[c] !== UNKNOWN);
       if (i < 0) return null;
       move.push({ index: i, from: SOLID, to: isFilled(puzzle, i) ? PAINTED : BROKEN });

@@ -190,6 +190,12 @@ export class Battle {
   }
 
   /** Clues as the solver should treat them now: suspects can't be trusted. */
+  /** The clues a player can trust right now (for hints): no fog, no suspects. */
+  hintClues(): (Clue | null)[] {
+    const finished = new Set(this.state.struck);
+    return this.trustedClues().map((c, i) => (finished.has(i) ? this.base[i] : c));
+  }
+
   private trustedClues(extra: { fog?: number[]; scramble?: number[]; suspects?: number[] } = {}) {
     const fog = new Set([...this.state.fog, ...(extra.fog ?? [])]);
     const scramble = new Set([...this.state.scramble, ...(extra.scramble ?? [])]);

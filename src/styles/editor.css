@@ -155,3 +155,13 @@
   background: var(--surface);
   color: var(--ink);
 }
+
+.preview-hint {
+  margin: 0;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  text-align: center;
+  color: var(--muted);
+}

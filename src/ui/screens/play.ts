@@ -1,4 +1,4 @@
-import { clueText } from '../../engine/clues';
+import { clueText, type Clue } from '../../engine/clues';
 import { dimsLabel, indexOf, inside, lineIdAt, pointOf, type Axis } from '../../engine/volume';
 import { Clock } from '../../game/clock';
 import {
@@ -57,6 +57,8 @@ export interface Change {
 export interface PlayHooks {
   /** Whether the player may use `tool` on `cell` now; false refuses it quietly. */
   allow?(tool: Tool, cell: number): boolean;
+  /** The clues hints may reason from (a fight's, without fog or forgeries). */
+  hintClues?(): (Clue | null)[];
   /** A press on a cube face; true takes it (no stroke). For calling out a forged clue. */
   pick?(pick: Pick): boolean;
   changed?(change: Change): void;
@@ -293,8 +295,15 @@ export function createPlay(root: HTMLElement, opts: PlayOptions): Play {
       const clue = puzzle.clues[line.id];
       if (!clue) continue;
       let left = 0;
-      for (const c of line.cells) if (game.blocks[c] !== BROKEN) left++;
-      if (left === clue.count) done.add(line.id);
+      let painted = 0;
+      for (const c of line.cells) {
+        if (game.blocks[c] !== BROKEN) left++;
+        if (game.blocks[c] === PAINTED) painted++;
+      }
+      // A line that's all shape has nothing to break: it's done once it's all painted, not
+      // before you've touched it.
+      const full = clue.count === line.cells.length;
+      if (full ? painted === clue.count : left === clue.count) done.add(line.id);
     }
     return done;
   };
@@ -412,7 +421,7 @@ export function createPlay(root: HTMLElement, opts: PlayOptions): Play {
 
   let litTimer = 0;
   function useHint() {
-    const used = game.hint();
+    const used = game.hint(hooks.hintClues?.());
     if (!used) return;
     playSound('hint');
     window.clearTimeout(litTimer);
