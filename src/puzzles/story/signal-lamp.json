@@ -1,0 +1,23 @@
+{
+  "id": "signal-lamp",
+  "name": "Signal Lamp",
+  "colors": {
+    "g": "graphite",
+    "r": "red",
+    "l": "green",
+    "s": "stone"
+  },
+  "layers": [
+    ["ggggg", "ggggg", "ggggg", "ggggg", "ggggg"],
+    [".....", ".ggg.", ".ggg.", ".ggg.", "..s.."],
+    [".....", ".ggg.", "lgggl", ".ggg.", "..r.."],
+    [".....", ".ggg.", "lgggl", ".ggg.", "..r.."],
+    [".....", ".ggg.", ".ggg.", ".ggg.", "..s.."],
+    [".....", ".sss.", ".sss.", ".sss.", "....."],
+    [".....", ".....", ".g.g.", ".....", "....."],
+    [".....", ".....", ".ggg.", ".....", "....."]
+  ],
+  "hideRatio": 0.5,
+  "hide": "003ef8f312a61a01ea7f4d3d931",
+  "passes": 3
+}
