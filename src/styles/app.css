@@ -1,0 +1,6 @@
+/* App-wide rules this game adds beside the shared base.css. */
+
+/* base.css gives buttons a display, which would beat the hidden attribute. */
+[hidden] {
+  display: none !important;
+}
