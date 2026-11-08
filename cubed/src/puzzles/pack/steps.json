@@ -1,0 +1,15 @@
+{
+  "id": "steps",
+  "name": "Steps",
+  "colors": {
+    "s": "stone"
+  },
+  "layers": [
+    ["sss", "sss", "sss"],
+    ["sss", "sss", "..."],
+    ["sss", "...", "..."]
+  ],
+  "hideRatio": 0.3,
+  "hide": "0145503",
+  "passes": 2
+}

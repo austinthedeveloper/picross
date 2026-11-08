@@ -28,6 +28,43 @@ h3 {
   display: none !important;
 }
 
+/* Flat | Cubed: the switch between the two games, at the top of each home screen. */
+.game-switch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 4px;
+  margin-bottom: 14px;
+  border-radius: 12px;
+  background: var(--backdrop);
+}
+
+.game-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 9px;
+  color: var(--muted);
+  text-decoration: none;
+  line-height: 1.2;
+}
+
+.game-option[aria-current='page'] {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 1px 3px var(--shadow);
+}
+
+.game-label {
+  font-weight: 700;
+}
+
+.game-hint {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
 .sr-only {
   position: absolute;
   width: 1px;

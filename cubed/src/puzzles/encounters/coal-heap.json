@@ -1,0 +1,31 @@
+{
+  "id": "coal-heap",
+  "name": "Coal Heap",
+  "kind": "fight",
+  "puzzle": "coal-golem",
+  "blurb": "The stationmaster calls it Gerald. Aim for the cracks, and mind your clean work.",
+  "enemy": {
+    "name": "Gerald",
+    "sprite": "coal-heap",
+    "hp": 45,
+    "attack": 2,
+    "armor": {
+      "weakPoints": { "rows": [7], "cols": [5, 11] },
+      "attack": 4
+    },
+    "phases": [
+      {
+        "at": 0.75,
+        "taunt": "Soot gets on everything.",
+        "ink": 4
+      },
+      {
+        "at": 0.5,
+        "name": "Stoked Gerald",
+        "attack": 3,
+        "taunt": "Gerald would like a word. The word is coal.",
+        "ink": 5
+      }
+    ]
+  }
+}

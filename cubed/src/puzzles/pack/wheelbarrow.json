@@ -1,0 +1,19 @@
+{
+  "id": "wheelbarrow",
+  "name": "Wheelbarrow",
+  "colors": {
+    "g": "green",
+    "k": "graphite",
+    "s": "stone",
+    "w": "wood"
+  },
+  "layers": [
+    [".....", "w...w", ".....", ".....", ".....", "..k..", "....."],
+    [".....", "w...w", ".ggg.", ".ggg.", "..k..", "..s..", "..k.."],
+    [".....", "ggggg", "ggggg", "ggggg", "ggggg", "..k..", "....."],
+    ["w...w", "ggggg", "g...g", "g...g", "ggggg", ".....", "....."]
+  ],
+  "hideRatio": 0.55,
+  "hide": "9d88f783acf77c9088002",
+  "passes": 9
+}

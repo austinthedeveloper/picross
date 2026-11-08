@@ -1,0 +1,24 @@
+{
+  "id": "inspector",
+  "name": "Inspector",
+  "colors": {
+    "b": "blue",
+    "c": "cream",
+    "g": "graphite",
+    "y": "yellow",
+    "w": "white"
+  },
+  "layers": [
+    [".......", "bbbbbbb", "bbbbbbb", "bbbbbbb", "bbbbbbb", "..byb.."],
+    [".......", "bbbbbbb", "bbbbbbb", "bbbbbbb", "bbbbbbb", "..byb.."],
+    [".......", "..www..", "..www..", "..www..", "..www..", "......."],
+    [".......", ".ccccc.", ".ccccc.", ".ccccc.", ".ccccc.", "...c..."],
+    [".......", ".ccccc.", ".ccccc.", ".ccccc.", ".ccccc.", ".ggcgg."],
+    [".......", ".ccccc.", ".ccccc.", ".ccccc.", ".ccccc.", "..g.g.."],
+    [".......", ".bbbbb.", ".bbbbb.", ".bbbbb.", ".bbbbb.", ".ggggg."],
+    ["bbbbbbb", "bbbbbbb", "bbbbbbb", "bbbbbbb", "bbbbbbb", "...y..."]
+  ],
+  "hideRatio": 0.5,
+  "hide": "0cba02a8fc405a28590e7d7f108d91e109212",
+  "passes": 6
+}

@@ -1,0 +1,18 @@
+{
+  "id": "house",
+  "name": "House",
+  "colors": {
+    "w": "cream",
+    "r": "red"
+  },
+  "layers": [
+    ["wwwww", "w...w", "w...w", "w...w", "ww.ww"],
+    ["wwwww", "w...w", "w...w", "w...w", "ww.ww"],
+    ["rrrrr", "rrrrr", "rrrrr", "rrrrr", "rrrrr"],
+    [".....", "rrrrr", "rrrrr", "rrrrr", "....."],
+    [".....", ".....", "rrrrr", ".....", "....."]
+  ],
+  "hideRatio": 0.5,
+  "hide": "10e79b574f914990811",
+  "passes": 6
+}

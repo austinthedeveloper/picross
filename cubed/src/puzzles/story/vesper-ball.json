@@ -1,0 +1,22 @@
+{
+  "id": "vesper-ball",
+  "name": "Crystal Ball",
+  "colors": {
+    "s": "sky",
+    "p": "purple",
+    "w": "white",
+    "y": "yellow",
+    "k": "pink"
+  },
+  "layers": [
+    ["..yy..", ".pyyp.", "yyyyyy", "yyyyyy", ".pyyp.", "..yy.."],
+    ["..yy..", ".yyyy.", "yyyyyy", "yyyyyy", ".yyyy.", "..yy.."],
+    ["......", ".ssss.", ".ssss.", ".ssss.", ".ssss.", "......"],
+    ["..ss..", ".ssss.", "ssssss", "ssssss", ".ksss.", "..sw.."],
+    ["......", ".ssss.", ".ssss.", ".ssss.", ".sssk.", "......"],
+    ["......", "..ww..", ".wwww.", ".wwww.", "..ww..", "......"]
+  ],
+  "hideRatio": 0.5,
+  "hide": "da43c96df8289ff16e087781600",
+  "passes": 4
+}

@@ -1,0 +1,42 @@
+{
+  "id": "overtime-signal-box",
+  "name": "Signal Box",
+  "kind": "fight",
+  "puzzle": "signal-lamp",
+  "blurb": "Still showing red. It has found some new colors since you left.",
+  "enemy": {
+    "name": "Signal Box",
+    "sprite": "signal-box",
+    "hp": 45,
+    "attack": 2,
+    "fog": {
+      "rows": [1, 13, 2]
+    },
+    "scramble": {
+      "rows": [3],
+      "cols": [6, 7, 4]
+    },
+    "phases": [
+      {
+        "at": 0.75,
+        "name": "Crossed Signals",
+        "attack": 3,
+        "taunt": "The lamp goes from red to something else.",
+        "fog": {
+          "rows": [8, 9]
+        },
+        "fogCount": 2,
+        "scramble": {
+          "cols": [10, 8]
+        },
+        "scrambleCount": 2
+      },
+      {
+        "at": 0.55,
+        "taunt": "The points clunk over. Sparks fly.",
+        "charge": 6,
+        "ink": 4
+      }
+    ]
+  }
+}

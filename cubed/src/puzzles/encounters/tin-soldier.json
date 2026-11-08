@@ -1,0 +1,39 @@
+{
+  "id": "tin-soldier",
+  "name": "Tin Soldier",
+  "kind": "fight",
+  "puzzle": "tin-soldier",
+  "blurb": "Exhibit 12: Toy Soldier, c. 1890. Life-size as of this evening.",
+  "enemy": {
+    "name": "Tin Soldier",
+    "sprite": "tin-soldier",
+    "hp": 45,
+    "attack": 2,
+    "armor": {
+      "weakPoints": { "rows": [8, 10], "cols": [7] },
+      "attack": 4
+    },
+    "fog": {
+      "rows": [2, 3]
+    },
+    "scramble": {
+      "cols": [4, 5, 6]
+    },
+    "phases": [
+      {
+        "at": 0.7,
+        "name": "Overwound Soldier",
+        "attack": 3,
+        "taunt": "Halt! Who goes there? Halt!",
+        "fog": {
+          "rows": [10, 11]
+        },
+        "fogCount": 2,
+        "scramble": {
+          "cols": [8, 9]
+        },
+        "scrambleCount": 2
+      }
+    ]
+  }
+}

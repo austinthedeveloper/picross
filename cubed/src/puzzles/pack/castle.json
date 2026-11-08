@@ -1,0 +1,17 @@
+{
+  "id": "castle",
+  "name": "Castle",
+  "colors": {
+    "s": "stone"
+  },
+  "layers": [
+    ["sssssss", "ss...ss", "s.....s", "s.....s", "s.....s", "ss...ss", "sss.sss"],
+    ["sssssss", "ss...ss", "s.....s", "s.....s", "s.....s", "ss...ss", "sss.sss"],
+    ["sssssss", "ss...ss", "s.....s", "s.....s", "s.....s", "ss...ss", "sssssss"],
+    ["ss...ss", "ss...ss", ".......", ".......", ".......", "ss...ss", "ss...ss"],
+    ["s.....s", ".......", ".......", ".......", ".......", ".......", "s.....s"]
+  ],
+  "hideRatio": 0.55,
+  "hide": "0cfe7f9180e1d27dae338e341805e3",
+  "passes": 4
+}

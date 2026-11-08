@@ -1,0 +1,19 @@
+{
+  "id": "beetle",
+  "name": "Armored Beetle",
+  "colors": {
+    "t": "teal",
+    "g": "graphite",
+    "b": "blue",
+    "y": "yellow"
+  },
+  "layers": [
+    ["..tt..", "gttttg", ".tttt.", "gttttg", "..tt..", "gggggg"],
+    ["..tt..", ".tttt.", "tttttt", ".tttt.", "..tt..", ".yggy."],
+    ["......", ".tbbt.", ".tbbt.", ".tbbt.", "......", "..gg.."],
+    ["......", "......", "..bb..", "......", "......", "......"]
+  ],
+  "hideRatio": 0.45,
+  "hide": "49a038dac6cc0189237c6",
+  "passes": 5
+}

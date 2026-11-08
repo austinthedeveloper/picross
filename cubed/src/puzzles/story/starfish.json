@@ -1,0 +1,16 @@
+{
+  "id": "starfish",
+  "name": "Starfish",
+  "colors": {
+    "o": "orange",
+    "c": "coral",
+    "y": "yellow"
+  },
+  "layers": [
+    ["..oo..", "..oo..", "oooooo", ".oooo.", ".o..o.", "oo..oo"],
+    ["......", "..cc..", ".cyyc.", "..yy..", ".c..c.", "......"]
+  ],
+  "hideRatio": 0.45,
+  "hide": "c17b3b3a016cc12",
+  "passes": 4
+}

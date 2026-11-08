@@ -25,6 +25,9 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run lint
+      # Picross Cubed's copies of shared files match this repo's (cubed/docs/shared-files.md).
+      - run: npm run check:cubed
+      # Both games' unit tests, then both built: the 3D game lands in dist/3d.
       - run: npm test
       - run: npm run build
       - run: npm run check:bundle
@@ -48,11 +51,14 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - run: npm run e2e
+      - run: npm run e2e:cubed
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: playwright-report
-          path: playwright-report
+          path: |
+            playwright-report
+            cubed/playwright-report
           retention-days: 7
 
   deploy:

@@ -1,0 +1,103 @@
+{
+  "id": "doghouse",
+  "name": "Doghouse",
+  "colors": {
+    "w": "wood",
+    "r": "red",
+    "k": "graphite",
+    "b": "blue"
+  },
+  "layers": [
+    [
+      ".wwwwwww.",
+      ".wwwwwww.",
+      ".wwwwwww.",
+      ".wwwwwww.",
+      ".wwwwwww.",
+      ".wwkkkww.",
+      ".ww...ww.",
+      ".........",
+      "......bb."
+    ],
+    [
+      ".wwwwwww.",
+      ".wwwwwww.",
+      ".wwwwwww.",
+      ".wwwwwww.",
+      ".wwwwwww.",
+      ".wwkkkww.",
+      ".ww...ww.",
+      ".........",
+      "........."
+    ],
+    [
+      ".wwwwwww.",
+      ".wwwwwww.",
+      ".wwwwwww.",
+      ".wwwwwww.",
+      ".wwwwwww.",
+      ".wwkkkww.",
+      ".ww...ww.",
+      ".........",
+      "........."
+    ],
+    [
+      ".wwwwwww.",
+      ".wwwwwww.",
+      ".wwwwwww.",
+      ".wwwwwww.",
+      ".wwwwwww.",
+      ".wwwkwww.",
+      ".www.www.",
+      ".........",
+      "........."
+    ],
+    [
+      "rrrrrrrrr",
+      "rrrrrrrrr",
+      "rrrrrrrrr",
+      "rrrrrrrrr",
+      "rrrrrrrrr",
+      "rrrrrrrrr",
+      "rrrrrrrrr",
+      "rrrrrrrrr",
+      "........."
+    ],
+    [
+      ".rrrrrrr.",
+      ".rrrrrrr.",
+      ".rrrrrrr.",
+      ".rrrrrrr.",
+      ".rrrrrrr.",
+      ".rrrrrrr.",
+      ".rrrrrrr.",
+      ".rrrrrrr.",
+      "........."
+    ],
+    [
+      "..rrrrr..",
+      "..rrrrr..",
+      "..rrrrr..",
+      "..rrrrr..",
+      "..rrrrr..",
+      "..rrrrr..",
+      "..rrrrr..",
+      "..rrrrr..",
+      "........."
+    ],
+    [
+      "...rrr...",
+      "...rrr...",
+      "...rrr...",
+      "...rrr...",
+      "...rrr...",
+      "...rrr...",
+      "...rrr...",
+      "...rrr...",
+      "........."
+    ]
+  ],
+  "hideRatio": 0.6,
+  "hide": "081010a00106097225019543863d6c13310037817dff5fecdd039c070",
+  "passes": 5
+}

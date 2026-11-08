@@ -1,0 +1,16 @@
+{
+  "id": "mug",
+  "name": "Mug",
+  "colors": {
+    "b": "sky"
+  },
+  "layers": [
+    ["bbb..", "bbb..", "bbb.."],
+    ["bbb..", "b.bbb", "bbb.."],
+    ["bbb..", "b.b.b", "bbb.."],
+    ["bbb..", "b.bbb", "bbb.."]
+  ],
+  "hideRatio": 0.4,
+  "hide": "98106e98d181",
+  "passes": 3
+}

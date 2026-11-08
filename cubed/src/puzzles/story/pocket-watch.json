@@ -1,0 +1,26 @@
+{
+  "id": "pocket-watch",
+  "name": "Curator's Pocket Watch",
+  "colors": {
+    "y": "yellow",
+    "o": "orange",
+    "g": "graphite",
+    "r": "red",
+    "c": "cream"
+  },
+  "layers": [
+    ["...ooo...", "...yyy...", "...yyy...", "........."],
+    [".ooooooo.", ".yyyyyyy.", ".yycgcyy.", "........."],
+    [".ooooooo.", ".yyyyyyy.", ".ycccccy.", "........."],
+    ["ooooooooo", "yyyyyyyyy", "ycccccccy", "........."],
+    ["ooooooooo", "yyyyyyyyy", "ygcccccgy", "....rgg.."],
+    ["ooooooooo", "yyyyyyyyy", "ycccccccy", "....g...."],
+    [".ooooooo.", ".yyyyyyy.", ".ycccccy.", "....g...."],
+    [".ooooooo.", ".yyyyyyy.", ".yycgcyy.", "........."],
+    ["...ooo...", "...yyy...", "...yyy...", "........."],
+    ["....y....", "...yoy...", "....y....", "........."]
+  ],
+  "hideRatio": 0.5,
+  "hide": "caeefe6ed2840c40902c243b76ec48d3972dc6be33",
+  "passes": 4
+}

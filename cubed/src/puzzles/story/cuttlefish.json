@@ -1,0 +1,20 @@
+{
+  "id": "cuttlefish",
+  "name": "Cuttlefish",
+  "colors": {
+    "p": "pink",
+    "u": "purple",
+    "w": "white",
+    "k": "graphite",
+    "c": "coral"
+  },
+  "layers": [
+    [".ppp.", "ppppp", "ppppp", "ppppp", ".ppp.", ".c.c."],
+    [".....", ".uuu.", ".uuu.", ".uuu.", ".uuu.", ".ccc."],
+    [".....", ".ucu.", ".ucu.", ".ucu.", "wkukw", "....."],
+    [".....", ".....", "..u..", ".uuu.", ".....", "....."]
+  ],
+  "hideRatio": 0.45,
+  "hide": "0d7380e0da70be301d2",
+  "passes": 4
+}

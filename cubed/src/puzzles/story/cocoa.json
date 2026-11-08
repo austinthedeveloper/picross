@@ -1,0 +1,23 @@
+{
+  "id": "cocoa",
+  "name": "Cocoa",
+  "colors": {
+    "r": "red",
+    "w": "white",
+    "b": "brown",
+    "k": "pink",
+    "s": "stone"
+  },
+  "layers": [
+    [".rrr...", "rrrrr..", "rrrrr..", "rrrrr..", ".rrr..."],
+    [".rrr...", "rrrrr..", "rrrrrrr", "rrrrr..", ".rrr..."],
+    [".www...", "wwwww..", "wwwww.r", "wwwww..", ".www..."],
+    [".rrr...", "rrrrr..", "rrrrrrr", "rrrrr..", ".rrr..."],
+    [".rrr...", "rbbbr..", "rbbbr..", "rbbbr..", ".rrr..."],
+    [".......", "...w...", ".wk....", "..wk...", "......."],
+    [".......", ".s.....", "...s...", ".......", "......."]
+  ],
+  "hideRatio": 0.5,
+  "hide": "205348e3acd9270ab16d96ca271855",
+  "passes": 7
+}

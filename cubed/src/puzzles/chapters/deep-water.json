@@ -1,0 +1,8 @@
+{
+  "id": "deep-water",
+  "title": "Deep Water",
+  "order": 3,
+  "blurb": "The jobs get wetter. Rook still hasn't learned to swim.",
+  "jobs": ["deep-end"],
+  "opening": "deep-water-opening"
+}

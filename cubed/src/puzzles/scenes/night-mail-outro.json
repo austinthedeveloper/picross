@@ -1,0 +1,43 @@
+{
+  "id": "night-mail-outro",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "rook"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "dee"
+    },
+    "pim": {
+      "name": "Stationmaster Pim",
+      "portrait": "pim"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "who": "pim",
+          "text": "The 11:59 has arrived at platform one. Forty years late. I have filled in the form.",
+          "if": "won"
+        },
+        {
+          "who": "dee",
+          "text": "Key's in the jar. The mail sacks are on the platform, addressed to people who moved away years ago.",
+          "if": "won"
+        },
+        {
+          "who": "rook",
+          "text": "I delivered one. It was a birthday card. They were very surprised.",
+          "if": "won"
+        },
+        {
+          "who": "rook",
+          "text": "We've been fined for traveling without a ticket. We weren't even on the train.",
+          "if": "!won"
+        }
+      ]
+    }
+  }
+}

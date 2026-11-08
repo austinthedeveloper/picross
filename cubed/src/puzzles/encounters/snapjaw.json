@@ -1,0 +1,29 @@
+{
+  "id": "snapjaw",
+  "name": "Snapjaw",
+  "kind": "fight",
+  "puzzle": "flytrap",
+  "blurb": "A flytrap the size of a wheelbarrow. It has started counting.",
+  "enemy": {
+    "name": "Snapjaw",
+    "sprite": "snapjaw",
+    "hp": 45,
+    "attack": 2,
+    "charge": 5,
+    "phases": [
+      {
+        "at": 0.8,
+        "taunt": "Snap!",
+        "swap": true
+      },
+      {
+        "at": 0.55,
+        "name": "Ravenous Snapjaw",
+        "attack": 3,
+        "charge": 4,
+        "taunt": "Snap snap snap!",
+        "swap": true
+      }
+    ]
+  }
+}

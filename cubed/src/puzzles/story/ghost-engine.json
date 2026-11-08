@@ -1,0 +1,136 @@
+{
+  "id": "ghost-engine",
+  "name": "Ghost Engine",
+  "colors": {
+    "p": "purple",
+    "t": "teal",
+    "g": "graphite",
+    "y": "yellow",
+    "w": "white"
+  },
+  "layers": [
+    [
+      ".gggggg.",
+      "tggggggt",
+      "tggggggt",
+      ".gggggg.",
+      "tggggggt",
+      "tggggggt",
+      ".gggggg.",
+      "tggggggt",
+      "tggggggt",
+      ".tttttt."
+    ],
+    [
+      ".gggggg.",
+      "tggggggt",
+      "tggggggt",
+      ".gggggg.",
+      "tggggggt",
+      "tggggggt",
+      ".gggggg.",
+      "tggggggt",
+      "tggggggt",
+      ".tttttt."
+    ],
+    [
+      "pppppppp",
+      "pppppppp",
+      "pppppppp",
+      "...pp...",
+      "...pp...",
+      "...tt...",
+      "...pp...",
+      "...pp...",
+      "...pp...",
+      "...tt..."
+    ],
+    [
+      "pppppppp",
+      "pppppppp",
+      "pppppppp",
+      "..pppp..",
+      "..pppp..",
+      "..tttt..",
+      "..pppp..",
+      "..pppp..",
+      "..pppp..",
+      "..tttt.."
+    ],
+    [
+      "pppppppp",
+      "pppppppp",
+      "pppppppp",
+      ".pppppp.",
+      ".pppppp.",
+      ".tttttt.",
+      ".pppppp.",
+      ".pppppp.",
+      ".pppppp.",
+      ".ttyytt."
+    ],
+    [
+      "pppppppp",
+      ".pppppp.",
+      "pppppppp",
+      "..pppp..",
+      "..pppp..",
+      "..tttt..",
+      "..pppp..",
+      "..pppp..",
+      "..pppp..",
+      "..tyyt.."
+    ],
+    [
+      "pppppppp",
+      ".pppppp.",
+      "pppppppp",
+      "...pp...",
+      "...pp...",
+      "...tt...",
+      "...pp...",
+      "...pp...",
+      "...pp...",
+      "...tt..."
+    ],
+    [
+      "pppppppp",
+      "pppppppp",
+      "pppppppp",
+      "........",
+      "........",
+      "........",
+      "........",
+      "...gg...",
+      "........",
+      "........"
+    ],
+    [
+      "tttttttt",
+      "tttttttt",
+      "tttttttt",
+      "........",
+      "........",
+      "........",
+      "........",
+      "...gg...",
+      "........",
+      "........"
+    ],
+    [
+      "........",
+      "........",
+      "........",
+      "........",
+      "........",
+      "........",
+      "...www..",
+      "..wppw..",
+      "..www...",
+      "........"
+    ]
+  ],
+  "hideRatio": 0.5,
+  "hide": "ef72fbc051404080c241c4812495c2495a2ff8044d74300202259db84385d4a83",
+  "passes": 4
+}

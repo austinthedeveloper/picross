@@ -1,0 +1,13 @@
+{
+  "id": "goblin",
+  "name": "Goblin",
+  "kind": "fight",
+  "puzzle": "sword",
+  "blurb": "A goblin is guarding the workshop's back door. It wants your lunch.",
+  "enemy": {
+    "name": "Goblin",
+    "sprite": "goblin",
+    "hp": 30,
+    "attack": 2
+  }
+}

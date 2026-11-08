@@ -1,0 +1,44 @@
+{
+  "id": "overtime-failed-clone",
+  "name": "Failed Clone",
+  "kind": "fight",
+  "puzzle": "failed-clone",
+  "blurb": "Attempt 43 copied the instructions too. It did not read them.",
+  "enemy": {
+    "name": "Failed Clone",
+    "sprite": "failed-clone",
+    "hp": 45,
+    "attack": 2,
+    "fog": {
+      "cols": [6, 11]
+    },
+    "phases": [
+      {
+        "at": 0.85,
+        "taunt": "It copies your work. Into the wrong place.",
+        "swap": true
+      },
+      {
+        "at": 0.7,
+        "taunt": "It copies the spill on the floor. Onto your work.",
+        "ink": 4
+      },
+      {
+        "at": 0.5,
+        "name": "Attempt 42",
+        "attack": 3,
+        "taunt": "Hello. I am also you.",
+        "fog": {
+          "cols": [14]
+        },
+        "fogCount": 1,
+        "swap": true,
+        "charge": 6
+      }
+    ],
+    "scramble": {
+      "rows": [2, 11],
+      "cols": [8]
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "id": "eel",
+  "name": "Electric Eel",
+  "colors": {
+    "g": "green",
+    "y": "yellow",
+    "k": "graphite",
+    "l": "leaf"
+  },
+  "layers": [
+    ["llll.", "l....", "lllll", "....l", ".llll"],
+    ["gggg.", "g....", "ggggg", "....g", ".kggg"],
+    [".y...", "y....", "...y.", "....y", "...y."]
+  ],
+  "hideRatio": 0.45,
+  "hide": "9341031baf0cb1",
+  "passes": 7
+}

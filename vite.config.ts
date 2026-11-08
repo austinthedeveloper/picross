@@ -7,6 +7,6 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     // Agent worktrees under .claude/ are separate checkouts; don't run their tests.
-    exclude: ['**/node_modules/**', '**/dist/**', '.claude/**', 'e2e/**'],
+    exclude: ['**/node_modules/**', '**/dist/**', '.claude/**', 'e2e/**', 'cubed/**'],
   },
 });

@@ -98,6 +98,17 @@ on a real phone.
 To start from a clean slate, clear the site's local storage in devtools (Application →
 Local Storage).
 
+## The 3D game (`cubed/`)
+
+Picross Cubed is an npm workspace in `cubed/` with its own docs (`cubed/docs/`). From the
+root: `npm run dev:cubed` (http://localhost:5174), `npm run test:cubed`,
+`npm run e2e:cubed`. `npm test` and `npm run build` cover both games; the build puts Cubed
+in `dist/3d` (and `dist-dev/3d`), where the Flat | Cubed switch links to it. In dev, the
+switch links between the two dev servers.
+
+Cubed copies some of this repo's files (`docs/shared-files.md`). After changing one, run
+`npm -w cubed run sync:web` and commit the copies; CI runs `npm run check:cubed`.
+
 ## CI and deploys
 
 `.github/workflows/ci.yml` runs on every pull request and every push to `main`:

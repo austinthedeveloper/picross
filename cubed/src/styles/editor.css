@@ -1,0 +1,169 @@
+/* The puzzle editor. */
+
+.editor-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.editor-meta input[type='text'] {
+  font: inherit;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.size-input {
+  width: 3.4em;
+  font: inherit;
+  padding: 6px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.editor-main {
+  display: grid;
+  gap: 12px;
+}
+
+@media (min-width: 760px) {
+  .editor-main {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+.stage.preview {
+  height: min(48dvh, 90vw);
+  min-height: 240px;
+}
+
+.layer-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.layer-label {
+  font-weight: 600;
+  min-width: 7.5em;
+  text-align: center;
+}
+
+.editor-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), 1fr);
+  gap: 2px;
+  max-width: 420px;
+  touch-action: none;
+  user-select: none;
+}
+
+.ecell {
+  aspect-ratio: 1;
+  padding: 0;
+  font: inherit;
+  border-radius: 3px;
+  background: var(--cell-bg);
+  border: 1px solid var(--line);
+  cursor: pointer;
+}
+
+/* A cube on the layer below shows faintly, to draw on top of it. */
+.ecell.below {
+  background: var(--backdrop);
+}
+
+.ecell.on {
+  background: var(--swatch);
+  border-color: var(--guide);
+}
+
+.ecell.unknown {
+  outline: 3px solid var(--accent);
+  outline-offset: -3px;
+}
+
+.swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.swatch {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  justify-content: center;
+  background: var(--swatch, var(--surface));
+}
+
+.swatch[aria-pressed='true'] {
+  outline: 3px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.editor-check {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.verdict {
+  margin: 0;
+  font-weight: 600;
+}
+
+.verdict.ok {
+  color: var(--ok);
+}
+
+.verdict.bad {
+  color: var(--accent);
+}
+
+.ratio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ratio input {
+  accent-color: var(--accent);
+}
+
+.editor-check .end-actions {
+  flex-wrap: wrap;
+}
+
+.editor-io {
+  font:
+    0.8rem ui-monospace,
+    monospace;
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.preview-hint {
+  margin: 0;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  text-align: center;
+  color: var(--muted);
+}

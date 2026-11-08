@@ -1,0 +1,18 @@
+{
+  "id": "bat",
+  "name": "Bat",
+  "colors": {
+    "p": "purple",
+    "g": "graphite",
+    "y": "yellow"
+  },
+  "layers": [
+    ["g...g", "..p..", "..p.."],
+    ["gg.gg", ".gpg.", "..p.."],
+    ["gg.gg", ".ppp.", ".ypy."],
+    [".....", ".p.p.", "....."]
+  ],
+  "hideRatio": 0.45,
+  "hide": "0819faf91186",
+  "passes": 3
+}

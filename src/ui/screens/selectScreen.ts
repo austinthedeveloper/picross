@@ -1,4 +1,5 @@
 import { randomUnsolved } from '../../game/pickPuzzle';
+import { gameSwitch } from '../components/gameSwitch';
 import { getOverallStats, getPuzzleStats, getSavedBoard } from '../../game/progress';
 import {
   getSettings,
@@ -177,6 +178,7 @@ export function renderSelectScreen(app: HTMLElement): void {
 
   app.replaceChildren(
     el('main', { className: 'screen select' }, [
+      gameSwitch('flat'),
       el('header', { className: 'topbar' }, [
         el('h1', { textContent: 'Picross' }),
         el('div', { className: 'settings' }, [

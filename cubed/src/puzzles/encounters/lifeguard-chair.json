@@ -1,0 +1,11 @@
+{
+  "id": "lifeguard-chair",
+  "name": "Lifeguard chair",
+  "kind": "rest",
+  "puzzle": "life-ring",
+  "blurb": "Sit down. Dry off. Don't look at the big tank.",
+  "rest": {
+    "seconds": 90,
+    "heal": 4
+  }
+}

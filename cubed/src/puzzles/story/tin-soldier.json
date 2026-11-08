@@ -1,0 +1,25 @@
+{
+  "id": "tin-soldier",
+  "name": "Tin Soldier",
+  "colors": {
+    "r": "red",
+    "g": "graphite",
+    "c": "cream",
+    "w": "white",
+    "y": "yellow"
+  },
+  "layers": [
+    ["......", "......", ".gggg.", ".gggg.", ".gggg."],
+    ["......", "......", ".wwww.", ".wwww.", "......"],
+    ["......", "......", "cwwwwc", "cwwwwc", "......"],
+    ["..y...", ".rrrr.", "rrrrrr", "rrrrrr", ".rywr."],
+    ["...y..", ".ryyr.", "rrrrrr", "rrrrrr", ".rwwr."],
+    ["..yy..", ".rrrr.", "yrrrry", "yrrrry", ".wrrw."],
+    ["......", "......", "..cc..", "..cc..", "..cc.."],
+    ["......", "......", "..gg..", "..gg..", "..yy.."],
+    ["......", "......", "..gg..", "..gg..", "..gg.."]
+  ],
+  "hideRatio": 0.5,
+  "hide": "84e34f2bb7f06802009fbc5ef7e067850",
+  "passes": 5
+}

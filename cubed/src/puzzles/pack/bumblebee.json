@@ -1,0 +1,18 @@
+{
+  "id": "bumblebee",
+  "name": "Bumblebee",
+  "colors": {
+    "y": "yellow",
+    "k": "graphite",
+    "w": "white"
+  },
+  "layers": [
+    ["..k..", ".yyy.", ".kkk.", ".yyy.", "..k.."],
+    [".kkk.", ".yyy.", ".kkk.", ".yyy.", ".wkw."],
+    ["..k..", ".yyy.", ".kkk.", ".yyy.", "..k.."],
+    [".....", "w...w", "ww.ww", ".....", "....."]
+  ],
+  "hideRatio": 0.5,
+  "hide": "06d1adf7dfd130020",
+  "passes": 5
+}

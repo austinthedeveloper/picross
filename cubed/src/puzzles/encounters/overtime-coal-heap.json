@@ -1,0 +1,46 @@
+{
+  "id": "overtime-coal-heap",
+  "name": "Coal Heap",
+  "kind": "fight",
+  "puzzle": "coal-golem",
+  "blurb": "Gerald has been stoked. Gerald is warm. Gerald is sparking slightly.",
+  "enemy": {
+    "name": "Gerald",
+    "sprite": "coal-heap",
+    "hp": 45,
+    "attack": 2,
+    "armor": {
+      "weakPoints": {
+        "rows": [7],
+        "cols": [5, 11]
+      },
+      "attack": 4
+    },
+    "phases": [
+      {
+        "at": 0.85,
+        "taunt": "Gerald crackles.",
+        "charge": 6
+      },
+      {
+        "at": 0.75,
+        "taunt": "Soot gets on everything.",
+        "ink": 4
+      },
+      {
+        "at": 0.5,
+        "name": "Stoked Gerald",
+        "attack": 3,
+        "taunt": "Gerald would like a word. The word is coal.",
+        "ink": 5,
+        "swap": true
+      }
+    ],
+    "fog": {
+      "cols": [0, 14, 1]
+    },
+    "scramble": {
+      "rows": [2, 9, 10]
+    }
+  }
+}

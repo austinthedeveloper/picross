@@ -1,0 +1,16 @@
+{
+  "id": "midway-overtime",
+  "name": "The Midway: Overtime",
+  "hp": 18,
+  "encounters": [
+    "overtime-funhouse-mirror",
+    "overtime-madame-vesper",
+    "prop-wagon",
+    "overtime-great-bruno",
+    "popcorn-stand",
+    "overtime-ringmaster"
+  ],
+  "overtimeOf": "midway",
+  "requires": "midway",
+  "blurb": "Same carnival, last show of the night. Hits on, no patch kit, and the acts have new tricks."
+}

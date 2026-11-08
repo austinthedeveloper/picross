@@ -14,6 +14,17 @@ Fill cells so each row and column matches its clue numbers, and a pixel picture 
 - Clue feedback, animations and sound, a high-contrast theme, and screen-reader support
 - A puzzle editor for making new puzzles
 
+## Two games, one site
+
+This repo holds both games, with a **Flat | Cubed** switch at the top of each home screen:
+
+- **Flat** is the 2D game, at the site's root (this folder's `src/`).
+- **Cubed** ([Picross Cubed](cubed/README.md)) is the 3D game, under `/3d/` (the `cubed/`
+  workspace, with its own docs).
+
+They're being combined into one game: [the plan](docs/combining.md), and
+[the story ideas](docs/story-combined.md).
+
 ## Quick start
 
 Requires Node 20+.
@@ -29,6 +40,7 @@ Then open http://localhost:5173.
 | ------------------------------ | --------------------------------------------------------------------- |
 | `npm run dev`                  | Dev server with hot reload and the debug tools                        |
 | `npm run dev:prod`             | Dev server without the debug tools                                    |
+| `npm run dev:cubed`            | The 3D game's dev server, at http://localhost:5174                    |
 | `npm test`                     | Unit tests (Vitest), including the puzzle pack uniqueness check       |
 | `npm run test:watch`           | Tests in watch mode                                                   |
 | `npm run check:puzzles`        | Only the puzzle pack uniqueness check                                 |

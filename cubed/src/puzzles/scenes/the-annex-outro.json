@@ -1,0 +1,43 @@
+{
+  "id": "the-annex-outro",
+  "cast": {
+    "rook": {
+      "name": "Rook",
+      "portrait": "rook"
+    },
+    "dee": {
+      "name": "Dee",
+      "portrait": "dee"
+    },
+    "priya": {
+      "name": "Priya",
+      "portrait": "priya"
+    }
+  },
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "who": "priya",
+          "text": "The Annex is back on the map, and they say I can graduate. I don't know what to do with myself.",
+          "if": "won"
+        },
+        {
+          "who": "dee",
+          "text": "Another key for the jar. That's a lot of keys, Rook. And the jar has started making a noise.",
+          "if": "won"
+        },
+        {
+          "who": "rook",
+          "text": "That's probably just the jar.",
+          "if": "won"
+        },
+        {
+          "who": "rook",
+          "text": "Our invoice came back with comments. So did we.",
+          "if": "!won"
+        }
+      ]
+    }
+  }
+}

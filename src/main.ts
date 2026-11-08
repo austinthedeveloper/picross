@@ -22,6 +22,7 @@ import { renderMuralScreen, renderMuralTile } from './ui/screens/mural';
 import { renderGameScreen } from './ui/screens/gameScreen';
 import { renderRunEncounter, renderRunScreen } from './ui/screens/run';
 import { renderSceneScreen } from './ui/screens/sceneScreen';
+import { gameHref, lastGame } from './ui/components/gameSwitch';
 import { renderSelectScreen } from './ui/screens/selectScreen';
 import { applyTheme } from './ui/theme';
 
@@ -36,6 +37,10 @@ if (import.meta.env.VITE_DEBUG === '1') {
 
 const app = document.querySelector<HTMLDivElement>('#app')!;
 let cleanup: (() => void) | undefined;
+
+// The site opens on whichever game you played last (the Flat | Cubed switch remembers).
+const leaving = (!location.hash || location.hash === '#/') && lastGame() === 'cubed';
+if (leaving) location.replace(gameHref('cubed', 'flat'));
 
 function route() {
   cleanup?.();
@@ -73,4 +78,4 @@ function route() {
 }
 
 window.addEventListener('hashchange', route);
-route();
+if (!leaving) route();

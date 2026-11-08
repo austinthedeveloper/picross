@@ -1,0 +1,60 @@
+{
+  "id": "yeti",
+  "name": "The Yeti",
+  "kind": "fight",
+  "boss": true,
+  "puzzle": "yeti",
+  "scene": "yeti-reveal",
+  "blurb": "The ridge above the station. There are footprints going up. None come back.",
+  "enemy": {
+    "name": "The Yeti",
+    "sprite": "yeti",
+    "hp": 60,
+    "attack": 2,
+    "fog": {
+      "rows": [3, 16]
+    },
+    "scramble": {
+      "cols": [0, 2]
+    },
+    "phases": [
+      {
+        "at": 0.92,
+        "name": "Angry Yeti",
+        "attack": 3,
+        "taunt": "HRRRM.",
+        "fog": {
+          "rows": [8]
+        },
+        "fogCount": 1
+      },
+      {
+        "at": 0.85,
+        "taunt": "It shakes off a snowdrift.",
+        "ink": 4
+      },
+      {
+        "at": 0.78,
+        "taunt": "HRRRRRM?",
+        "scramble": {
+          "cols": [6, 8]
+        },
+        "scrambleCount": 2
+      },
+      {
+        "at": 0.65,
+        "name": "Avalanche Yeti",
+        "sprite": "avalanche-yeti",
+        "attack": 4,
+        "charge": 6,
+        "taunt": "The whole ridge is moving."
+      },
+      {
+        "at": 0.45,
+        "taunt": "HRRRRRRRRRM!",
+        "ink": 5,
+        "inkCount": 2
+      }
+    ]
+  }
+}

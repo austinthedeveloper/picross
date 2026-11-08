@@ -1,0 +1,247 @@
+/* The puzzle list, its settings and stats, and the how-to-play page. */
+
+.select .topbar h1 {
+  flex: 1;
+}
+
+.lede {
+  margin: 0 0 14px;
+  color: var(--muted);
+}
+
+.settings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.stats {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.list-section h2 {
+  margin: 22px 0 10px;
+  font-size: 1.05rem;
+}
+
+.list-section .count {
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.puzzle-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+  gap: 10px;
+}
+
+.puzzle-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.puzzle-card:hover {
+  border-color: var(--guide);
+}
+
+.thumb {
+  height: 96px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: var(--bg);
+}
+
+.card-name {
+  font-weight: 600;
+}
+
+.card-meta {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+/* How to play */
+
+.rules {
+  margin: 0 0 20px;
+}
+
+.rules dt {
+  font-weight: 700;
+  margin-top: 14px;
+}
+
+.rules dd {
+  margin: 4px 0 0;
+  color: var(--ink);
+  line-height: 1.45;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.difficulty-filter {
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.empty-list {
+  color: var(--muted);
+  margin-top: 24px;
+}
+
+.card-band {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.band-hard,
+.band-expert {
+  color: var(--accent);
+}
+
+/* Cards at the top of the list: the tutorial offer, the story, the daily puzzle. */
+.feature-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+  margin: 0 0 12px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.feature-card p {
+  margin: 2px 0 0;
+}
+
+.feature-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.kicker {
+  margin: 0;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Badges */
+.badge-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.badge-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.badge-row.locked {
+  opacity: 0.6;
+}
+
+.badge-icon {
+  font-size: 1.6rem;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 3px solid var(--line);
+}
+
+.tier-0 .badge-icon {
+  border-color: var(--bronze);
+}
+
+.tier-1 .badge-icon {
+  border-color: var(--silver);
+}
+
+.tier-2 .badge-icon {
+  border-color: var(--gold);
+}
+
+.badge-text {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+  align-items: baseline;
+}
+
+.badge-tier {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.badge-new {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.badge-how {
+  flex-basis: 100%;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* On a phone the title gets its own line, with Badges, Editor and How to play under it. */
+@media (max-width: 520px) {
+  .select .topbar {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .select .topbar h1 {
+    flex: 1 1 100%;
+  }
+
+  .select .topbar .button {
+    padding: 6px 12px;
+  }
+}

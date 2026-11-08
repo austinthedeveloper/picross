@@ -1,0 +1,60 @@
+{
+  "id": "overtime-mother-bramble",
+  "name": "Mother Bramble",
+  "kind": "fight",
+  "boss": true,
+  "puzzle": "bramble-rose",
+  "blurb": "The center dome again. She's been pruned, and she's been planning.",
+  "enemy": {
+    "name": "Mother Bramble",
+    "sprite": "mother-bramble",
+    "hp": 60,
+    "attack": 2,
+    "fog": {
+      "rows": [2, 6]
+    },
+    "phases": [
+      {
+        "at": 0.9,
+        "taunt": "Hold still, little gardeners.",
+        "ink": 4
+      },
+      {
+        "at": 0.82,
+        "name": "Thorned Bramble",
+        "attack": 3,
+        "taunt": "Every spring you prune me. Every spring I remember.",
+        "fog": {
+          "rows": [8, 10]
+        },
+        "fogCount": 2
+      },
+      {
+        "at": 0.7,
+        "taunt": "Let me rearrange your beds.",
+        "swap": true
+      },
+      {
+        "at": 0.6,
+        "taunt": "The roots find the sprinkler wiring.",
+        "charge": 6,
+        "scramble": {
+          "cols": [10]
+        },
+        "scrambleCount": 1
+      },
+      {
+        "at": 0.5,
+        "name": "Mother Bramble in Bloom",
+        "sprite": "mother-bramble-in-bloom",
+        "attack": 4,
+        "taunt": "Snip, snip, snip.",
+        "ink": 5,
+        "inkCount": 2
+      }
+    ],
+    "scramble": {
+      "cols": [12, 5]
+    }
+  }
+}
