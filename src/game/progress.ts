@@ -34,14 +34,16 @@ export function getPuzzleStats(id: string): PuzzleStats | undefined {
 /** Records a solve. Returns true when it beats the previous best time. */
 export function recordSolve(id: string, time: number): boolean {
   const prev = data.solved[id];
+  // v0.1.0 recorded 0:00 for solves in one sitting; that's no best at all.
+  const prevBest = prev && prev.bestTime > 0 ? prev.bestTime : Infinity;
   data.solved[id] = {
     solves: (prev?.solves ?? 0) + 1,
-    bestTime: Math.min(prev?.bestTime ?? Infinity, time),
+    bestTime: Math.min(prevBest, time),
   };
   data.totalTime += time;
   delete data.boards[id];
   persist();
-  return Boolean(prev) && time < prev.bestTime;
+  return prevBest !== Infinity && time < prevBest;
 }
 
 export function getOverallStats() {
