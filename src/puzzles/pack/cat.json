@@ -1,0 +1,23 @@
+{
+  "id": "cat",
+  "name": "Cat",
+  "colors": {
+    "o": "orange",
+    "w": "white",
+    "k": "graphite",
+    "p": "pink"
+  },
+  "layers": [
+    [".ooo.o", "oooooo", "oooooo", "oooooo", "owwwoo", ".w.w.."],
+    [".ooo..", "ooooo.", "ooooo.", "ooooo.", "owwwo.", "......"],
+    [".ooo..", "ooooo.", "ooooo.", "ooooo.", "owwwo.", "......"],
+    ["......", ".ooo..", ".ooo..", ".ooo..", "......", "......"],
+    ["......", "ooooo.", "ooooo.", "ooooo.", "oopoo.", "......"],
+    ["......", "ooooo.", "ooooo.", "ooooo.", "okoko.", "......"],
+    ["......", ".ooo..", "ooooo.", "ooooo.", "ooooo.", "......"],
+    ["......", "......", "......", "o...o.", "......", "......"]
+  ],
+  "hideRatio": 0.55,
+  "hide": "49160c6dbda0f03cc30e02dc33730c0bc",
+  "passes": 4
+}

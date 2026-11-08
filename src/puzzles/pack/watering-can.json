@@ -1,0 +1,21 @@
+{
+  "id": "watering-can",
+  "name": "Watering Can",
+  "colors": {
+    "g": "leaf",
+    "k": "stone",
+    "y": "yellow"
+  },
+  "layers": [
+    [".ggg....", "ggggg...", "ggggg...", "ggggg...", ".ggg...."],
+    [".ggg....", "ggggg...", "gggggg..", "ggggg...", ".ggg...."],
+    [".ggg....", "ggggg...", "ggggggg.", "ggggg...", ".ggg...."],
+    [".ggg....", "ggggg..y", "ggggg.gy", "ggggg..y", ".ggg...."],
+    ["........", ".......y", "kggg...y", ".......y", "........"],
+    ["........", "........", "k..k....", "........", "........"],
+    ["........", "........", "kkkk....", "........", "........"]
+  ],
+  "hideRatio": 0.6,
+  "hide": "7a9e086408026921a3f4964c87be95977",
+  "passes": 6
+}

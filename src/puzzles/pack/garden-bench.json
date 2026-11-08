@@ -1,0 +1,19 @@
+{
+  "id": "garden-bench",
+  "name": "Garden Bench",
+  "colors": {
+    "w": "wood",
+    "g": "green"
+  },
+  "layers": [
+    ["..........", "g........g", "..........", "g........g"],
+    ["..........", "g........g", "..........", "g........g"],
+    ["g........g", "wwwwwwwwww", "wwwwwwwwww", "wwwwwwwwww"],
+    ["gwwwwwwwwg", "g........g", "g........g", "g........g"],
+    ["g..w..w..g", "..........", "..........", ".........."],
+    ["gwwwwwwwwg", "..........", "..........", ".........."]
+  ],
+  "hideRatio": 0.6,
+  "hide": "aa10cae4605fb704ebafa1b9f7048fa",
+  "passes": 5
+}

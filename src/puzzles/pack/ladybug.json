@@ -1,0 +1,17 @@
+{
+  "id": "ladybug",
+  "name": "Ladybug",
+  "colors": {
+    "r": "red",
+    "k": "graphite",
+    "w": "white"
+  },
+  "layers": [
+    [".rrr.", "rrrrr", "rrrrr", "rkrkr", ".kkk."],
+    [".rkr.", "rrkrk", "krkrr", "rrkrr", ".wkw."],
+    [".....", ".kkr.", ".rkk.", ".....", "....."]
+  ],
+  "hideRatio": 0.5,
+  "hide": "772c5cce710067",
+  "passes": 4
+}

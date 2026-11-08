@@ -1,0 +1,20 @@
+{
+  "id": "armchair",
+  "name": "Armchair",
+  "colors": {
+    "r": "red",
+    "c": "cream",
+    "w": "brown"
+  },
+  "layers": [
+    ["w......w", "........", "........", "........", "........", "........", "w......w"],
+    ["rrrrrrrr", "rrrrrrrr", "rrrrrrrr", "rrrrrrrr", "rrrrrrrr", "rrrrrrrr", "rrrrrrrr"],
+    ["rrrrrrrr", "rccccccr", "rccccccr", "rccccccr", "rccccccr", "rccccccr", "rccccccr"],
+    ["rrrrrrrr", "rccccccr", "r......r", "r......r", "r......r", "r......r", "r......r"],
+    ["rrrrrrrr", ".cccccc.", "........", "........", "........", "........", "........"],
+    [".rrrrrr.", ".cccccc.", "........", "........", "........", "........", "........"]
+  ],
+  "hideRatio": 0.55,
+  "hide": "0182011800ebeffff90acf3084f5ff3616bf1",
+  "passes": 5
+}
