@@ -1,0 +1,23 @@
+{
+  "id": "sentry-halberd",
+  "name": "Sentry Halberd",
+  "colors": {
+    "s": "stone",
+    "o": "orange",
+    "g": "graphite",
+    "w": "wood"
+  },
+  "layers": [
+    ["ggggg", "ggggg", "ggggg"],
+    ["..w..", ".www.", "..w.."],
+    [".....", "..ss.", "....."],
+    [".....", "..sos", "....."],
+    [".....", "ossso", "....."],
+    ["..g..", ".sgss", "..g.."],
+    [".....", "..s..", "....."],
+    [".....", "..s..", "....."]
+  ],
+  "hideRatio": 0.5,
+  "hide": "fdbd62048205b6c855f6",
+  "passes": 4
+}
