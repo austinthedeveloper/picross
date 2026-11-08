@@ -165,6 +165,7 @@ export function renderSelectScreen(root: HTMLElement): void {
     el('div', { className: 'screen select' }, [
       el('header', { className: 'topbar' }, [
         el('h1', { textContent: 'Picross Cubed' }),
+        el('a', { className: 'button ghost', href: '#/editor', textContent: 'Editor' }),
         el('a', { className: 'button ghost', href: '#/how-to-play', textContent: 'How to play' }),
       ]),
       el('p', {

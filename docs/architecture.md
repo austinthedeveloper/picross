@@ -69,12 +69,14 @@ switches to the shape's colors (`--vox-*` tokens) and gives it a turn.
 `main.ts` is a hash router. Screens with a block load on demand, so three.js isn't in the
 first download.
 
-| Route           | File              | What                                                 |
-| --------------- | ----------------- | ---------------------------------------------------- |
-| `#/`            | `selectScreen.ts` | The list, filters, settings; other screens add cards |
-| `#/play/<id>`   | `gameScreen.ts`   | Free play: saves, times, Next                        |
-| `#/tutorial`    | `tutorial.ts`     | The guided tutorial on a 3×2×2 block                 |
-| `#/how-to-play` | `howToPlay.ts`    | The rules                                            |
+| Route           | File                     | What                                                           |
+| --------------- | ------------------------ | -------------------------------------------------------------- |
+| `#/`            | `selectScreen.ts`        | The list, filters, settings; other screens add cards           |
+| `#/play/<id>`   | `gameScreen.ts`          | Free play: saves, times, Next                                  |
+| `#/tutorial`    | `tutorial.ts`            | The guided tutorial on a 3×2×2 block                           |
+| `#/how-to-play` | `howToPlay.ts`           | The rules                                                      |
+| `#/editor`      | `editor/editorScreen.ts` | Draw, check and share puzzles (checks run in `checkWorker.ts`) |
+| `#/p/<code>`    | `sharedScreen.ts`        | A shared puzzle; `/test` for the editor's play-test            |
 
 ### The play controller
 

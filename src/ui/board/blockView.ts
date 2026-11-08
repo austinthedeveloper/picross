@@ -146,6 +146,13 @@ export class BlockView {
     this.resizeObserver.observe(this.canvas);
   }
 
+  /** Shows a different puzzle (the editor's preview, as the shape changes). */
+  setPuzzle(puzzle: Puzzle, blocks: Uint8Array): void {
+    this.puzzle = puzzle;
+    this.blocks = blocks;
+    this.rebuild();
+  }
+
   /** Re-reads the theme's colors (after a theme or contrast change). */
   applyTheme(): void {
     STATES.forEach((state, i) => drawAtlas(state, this.atlases[i]));
