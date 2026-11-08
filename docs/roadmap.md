@@ -12,6 +12,11 @@ and [milestones](https://github.com/austinthedeveloper/picross-3d/milestones).
 - **Endless mode**, which the 2D game has and this one doesn't yet
 - **More puzzles and dioramas**, toward 10×10×10, as sheets
 
+## After that
+
+[Combining with the 2D game](combining.md): one game with both, bosses that switch from a
+2D board to a block mid-fight, in the 2D repo as a monorepo.
+
 ## How releases work
 
 - Bump `version` in `package.json`, add `docs/releases/vX.Y.Z.md`, merge, then tag `vX.Y.Z`
