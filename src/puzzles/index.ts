@@ -18,6 +18,21 @@ export const PUZZLES: Puzzle[] = Object.values(files)
 
 const byId = new Map(PUZZLES.map((p) => [p.id, p]));
 
+const storyFiles = import.meta.glob<PuzzleFile>('./story/*.json', {
+  eager: true,
+  import: 'default',
+});
+
+/**
+ * Story puzzles: one per 2D puzzle a story encounter uses, with the same id, so the
+ * imported story finds its 3D puzzle by the 2D one's id. Not in the free-play list.
+ */
+export const STORY_PUZZLES: Puzzle[] = Object.values(storyFiles).map(parsePuzzle);
+const storyById = new Map(STORY_PUZZLES.map((p) => [p.id, p]));
+
+/** The 3D puzzle for a story encounter's (2D) puzzle id. */
+export const getStoryPuzzle = (id: string) => storyById.get(id);
+
 export const getPuzzle = (id: string) => byId.get(id);
 
 /** The puzzle after this one in the list, if any. */

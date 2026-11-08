@@ -6,11 +6,12 @@
  *   npm run puzzles -- mug     pick again for just these ids
  *   npm run puzzles -- --sheet src/puzzles/sheets/kitchen.txt
  *                              export a sheet's puzzles to the pack first (new or changed
- *                              shapes get new hidden clues), then check everything
+ *                              shapes get new hidden clues), then check everything. Sheets
+ *                              in src/puzzles/sheets/story/ export to src/puzzles/story/.
  *
  * A puzzle has to be solvable without guessing from the clues it shows. See docs/how-to.md.
  */
-import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { solve } from '../src/engine/solver';
 import { dimsLabel } from '../src/engine/volume';
@@ -18,7 +19,9 @@ import { encodeHidden, parsePuzzle, type PuzzleFile } from '../src/puzzles/forma
 import { chooseHidden } from '../src/puzzles/hide';
 import { parseSheet } from '../src/puzzles/sheet';
 
-const DIR = join(import.meta.dirname, '../src/puzzles/pack');
+const PUZZLES = join(import.meta.dirname, '../src/puzzles');
+/** Free-play puzzles, and story puzzles (named after the 2D puzzle their encounter uses). */
+const DIRS = ['pack', 'story'].map((d) => join(PUZZLES, d)).filter((d) => existsSync(d));
 const args = process.argv.slice(2);
 const all = args.includes('--all');
 const sheetAt = args.indexOf('--sheet');
@@ -29,7 +32,10 @@ let failed = 0;
 // Export a sheet: write each puzzle's file, keeping its hidden clues if the shape is unchanged.
 if (sheetPath) {
   for (const entry of parseSheet(readFileSync(sheetPath, 'utf8'))) {
-    const path = join(DIR, `${entry.id}.json`);
+    // Sheets under sheets/story/ are story puzzles.
+    const dir = join(PUZZLES, sheetPath!.includes('/story/') ? 'story' : 'pack');
+    mkdirSync(dir, { recursive: true });
+    const path = join(dir, `${entry.id}.json`);
     const old: PuzzleFile | undefined = existsSync(path)
       ? JSON.parse(readFileSync(path, 'utf8'))
       : undefined;
@@ -50,10 +56,13 @@ if (sheetPath) {
   }
 }
 
-for (const name of readdirSync(DIR)
-  .filter((f) => f.endsWith('.json'))
-  .sort()) {
-  const path = join(DIR, name);
+const files = DIRS.flatMap((dir) =>
+  readdirSync(dir)
+    .filter((f) => f.endsWith('.json'))
+    .sort()
+    .map((f) => join(dir, f)),
+);
+for (const path of files) {
   const file = JSON.parse(readFileSync(path, 'utf8')) as PuzzleFile;
   const redo = all || only.includes(file.id) || (!only.length && file.hide === undefined);
   let puzzle = parsePuzzle({ ...file, hide: redo ? undefined : file.hide });
