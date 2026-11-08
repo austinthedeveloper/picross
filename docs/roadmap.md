@@ -16,12 +16,17 @@ the reference for how each should feel.
 
 ## Next
 
-- **More puzzles**, toward 10×10×10, and themed batches like the 2D game's sheets
-- **An editor** for drawing shapes layer by layer, with the solvability check built in
-- **A guided tutorial** on a real block, like the 2D game's how-to-play
-- **Daily puzzle** with a streak
-- **Badges** and overall stats
-- **Story mode**: the 2D game's jobs and fights, once its story settles there. Fights would
-  need 3D versions of the enemy powers (fog on faces, turning the block, scrambled clues)
-- **Deploys**: GitHub Pages for main (in `ci.yml`, once the repo has Pages on), and a
-  production site for releases like the 2D game's Azure one
+The backlog lives on GitHub: the [project board](https://github.com/users/austinthedeveloper/projects/8)
+and [milestones](https://github.com/austinthedeveloper/picross-3d/milestones). Epics (label
+`epic`) group user stories (label `story`):
+
+| Milestone              | Epics                                                          |
+| ---------------------- | -------------------------------------------------------------- |
+| v0.2 Free play+        | Free play, bigger and better (#1); Puzzle editor (#10)         |
+| v0.3 Story foundations | Story mode, structure (#14); scenes and the story import (#20) |
+| v0.4 Fights            | Story mode, fights (#24)                                       |
+| v0.5 Story content     | Story content (#37)                                            |
+| v1.0 Launch            | Extras and launch (#42)                                        |
+
+Story mode follows the 2D game, which stays the source of truth for the story: an import
+with a compatibility gate and a daily sync, like the SNES demake's.
