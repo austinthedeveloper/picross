@@ -1,0 +1,23 @@
+{
+  "id": "rex-skull",
+  "name": "Fossil Skull",
+  "colors": {
+    "b": "brown",
+    "c": "cream",
+    "k": "graphite",
+    "w": "white"
+  },
+  "layers": [
+    ["............", "...kkkkk....", "...kkkkk....", "............"],
+    ["............", "cccccccccc..", "cccccccccc..", "............"],
+    ["............", "cc.w.w.w.w..", "cc.w.w.w.w..", "............"],
+    ["............", "ccw.w.w.w.w.", "ccw.w.w.w.w.", "............"],
+    ["cccccccccccc", "cccccccccccc", "cccccccccccc", "cccccccccccc"],
+    ["cc..ccc.cccc", "cc..ccc.cccc", "cc..ccc.cccc", "cc..ccc.cccc"],
+    ["cc..ccccccc.", "cc..ccccccc.", "cc..ccccccc.", "cc..ccccccc."],
+    [".ccbccb.....", ".cbccbc.....", ".bccbcc.....", ".ccbccb....."]
+  ],
+  "hideRatio": 0.6,
+  "hide": "93b7a095040600a3494263d8bf00c1080bd3ff63118a",
+  "passes": 8
+}

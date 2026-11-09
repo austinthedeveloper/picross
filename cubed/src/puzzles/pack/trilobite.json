@@ -1,0 +1,54 @@
+{
+  "id": "trilobite",
+  "name": "Trilobite",
+  "colors": {
+    "b": "brown",
+    "c": "cream",
+    "k": "graphite",
+    "s": "stone"
+  },
+  "layers": [
+    [
+      ".sssss.",
+      "bbbbbbb",
+      "sssssss",
+      "bbbbbbb",
+      "sssssss",
+      "bbbbbbb",
+      ".sssss.",
+      ".bbbbb.",
+      "..sss..",
+      "..bbb..",
+      "...s..."
+    ],
+    [
+      ".sssss.",
+      ".sscss.",
+      ".sscss.",
+      "...c...",
+      "...c...",
+      "...c...",
+      "...c...",
+      "...c...",
+      "...c...",
+      "...c...",
+      "......."
+    ],
+    [
+      ".......",
+      ".k...k.",
+      ".......",
+      ".......",
+      ".......",
+      ".......",
+      ".......",
+      ".......",
+      ".......",
+      ".......",
+      "......."
+    ]
+  ],
+  "hideRatio": 0.55,
+  "hide": "35ff9792364f9f3bf3ea94bbdf0b000c0",
+  "passes": 4
+}
