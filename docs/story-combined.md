@@ -31,6 +31,11 @@ it: they fix strange broken things. First they diagram what's wrong, then they r
 
 ## Idea 1: bosses that switch dimension
 
+**Built for the Curator** (phases only, no flip meter yet): it unfolds into a block at 60%
+and folds back flat at 30%, with no new powers. HP carries as a share, each board keeps
+its own progress, and solving either board finishes the fight. The unfold is a short
+animation of the new board for now, not the picture lifting off the grid.
+
 A boss phase can change the board, and switch back later:
 
 ```

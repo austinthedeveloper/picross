@@ -1,6 +1,6 @@
 {
   "source": "austinthedeveloper/picross",
-  "commit": "f3904ed",
+  "commit": "69746dc",
   "files": {
     "src/styles/tokens.css": "10bd1d871b387d45ba8a4e9d1118f81d0dba70f3628189bbdc1708a1007882df",
     "src/styles/base.css": "194b9a5065d2782166fe003ba63a90d53edaa479bc461554a24f96548085f78c",
@@ -125,7 +125,7 @@
     "src/puzzles/encounters/clockwork-owl.json": "6307605fe3ea813f3ca6132c3c17f4eb4af7517c9532691399a29bf25eee6507",
     "src/puzzles/encounters/coal-heap.json": "e1c3f2473f2df0410936c3e95ad6271611ac2483ae249cd9ae41f14eba78623c",
     "src/puzzles/encounters/cocoa-break.json": "30396f4687253dc7ced10c6bf00f9b467063cae6ea6f0ad7a18b0e1dc7e2aa6f",
-    "src/puzzles/encounters/curator.json": "fd03c2f402fa25a96d36566ead870e32287af9fa922cfec37ed9a92a34985a4f",
+    "src/puzzles/encounters/curator.json": "162bbac6a5ad2aa680f7c877d5e663e49d35fd3d106d37daed9d4e8b31f67e55",
     "src/puzzles/encounters/cuttlefish.json": "e1754d5e3dfb53e6a1aebd432c520a85741d55186739b58b3c3b6dbdd8eca3d0",
     "src/puzzles/encounters/dig-site.json": "760892d0f92c45e2832583890731f3b3966bbe3d4639333b3c5f2651789be521",
     "src/puzzles/encounters/dusty-exhibit.json": "be3ede5bf750cdafab6b5e72ce1264126f34ed5404e1c7f60753e5c7bbed033e",

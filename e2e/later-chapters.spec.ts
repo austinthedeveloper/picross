@@ -1,5 +1,13 @@
 import { expect, test } from '@playwright/test';
-import { encounterSolution, press, seed, skipScene, solve } from './helpers';
+import {
+  breakBlock,
+  encounterSolution,
+  press,
+  savedPhase,
+  seed,
+  skipScene,
+  solve,
+} from './helpers';
 
 const won = { plays: 1, wins: 1, bestHp: 10 };
 
@@ -123,8 +131,20 @@ JOBS.forEach(({ job, opening, nodes, gadget, signOff }, i) => {
       await page.locator('.node.current .node-body').tap();
       await skipScene(page);
       if (id === boss) await expect(page.locator('.cell')).toHaveCount(400);
-      if (id === 'curator') await expect(page.locator('.clue.fogged')).toHaveCount(2);
-      await solve(page, encounterSolution(id));
+      if (id === 'curator') {
+        // The Curator unfolds into a block at 60% and folds back flat at 30%.
+        await expect(page.locator('.clue.fogged')).toHaveCount(2);
+        const name = page.locator('.battle-name').first();
+        await solve(page, encounterSolution(id), async () => (await savedPhase(page)) >= 4);
+        await expect(page.locator('canvas.block-canvas')).toBeVisible();
+        await expect(name).toHaveText('Unfolded Curator');
+        await breakBlock(page, id, async () => (await savedPhase(page)) >= 5);
+        if (!(await page.locator('.end-panel:not([hidden])').isVisible())) {
+          await expect(page.locator('.board')).toBeVisible();
+          await expect(name).toHaveText('Overwound Curator');
+          await solve(page, encounterSolution(id));
+        }
+      } else await solve(page, encounterSolution(id));
       if (id === gadget.at)
         await expect(page.locator('.end-panel:not([hidden])')).toContainText(gadget.name);
       await press(page, id === boss ? 'See results' : 'Back to map');

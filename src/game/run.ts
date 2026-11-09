@@ -37,6 +37,12 @@ export interface RunState {
   board?: SavedBoard;
   /** The current fight's progress, if the current encounter is a fight. */
   battle?: BattleState;
+  /**
+   * The current fight's block, when its boss switches to 3D: the block's saved board and
+   * its battle, kept apart from the flat ones so each board keeps its own progress. Only
+   * the 3D game reads what's inside.
+   */
+  block?: BlockProgress;
   /** Set once the finished run's result is saved to the job stats (#47). */
   recorded?: boolean;
   /** An endless run's seed and pools (#68); its encounters are generated from them. */
@@ -104,6 +110,20 @@ export function withBoard(state: RunState, board: SavedBoard | null): RunState {
   return next;
 }
 
+/** A fight's block: its board and battle, as the 3D game saves them. */
+export interface BlockProgress {
+  board?: unknown;
+  battle?: unknown;
+}
+
+/** Saves (or clears) the current fight's block. */
+export function withBlock(state: RunState, block: BlockProgress | null): RunState {
+  const next = { ...state };
+  if (block) next.block = block;
+  else delete next.block;
+  return next;
+}
+
 /** Applies damage; the run is lost at 0 HP. */
 export function damage(state: RunState, amount: number): RunState {
   if (state.status !== 'active' || amount <= 0) return state;
@@ -125,6 +145,6 @@ export function heal(state: RunState, amount: number): RunState {
 export function completeEncounter(state: RunState, length: number): RunState {
   if (state.status !== 'active') return state;
   const node = state.node + 1;
-  const cleared = withBattle(withBoard(state, null), null);
+  const cleared = withBlock(withBattle(withBoard(state, null), null), null);
   return { ...cleared, node, status: node >= length ? 'won' : 'active' };
 }

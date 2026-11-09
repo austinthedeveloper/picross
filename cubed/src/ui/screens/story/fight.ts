@@ -45,22 +45,71 @@ function floatNumber(host: HTMLElement, text: string, className: string) {
 }
 
 /**
+ * What a fight needs from the run it's in: your HP, gadgets and seen tips. This game's
+ * story run by default; the 2D story passes its own when a boss turns into a block there.
+ */
+export interface FightRun {
+  /** Your HP and gadgets, or null once the run isn't active. */
+  get(): { hp: number; maxHp: number; gadgets: string[] } | null;
+  /** Takes HP; returns true if that knocked you out. */
+  hurt(amount: number): boolean;
+  /** Uses up the gadget at `index` in `get().gadgets`. */
+  spendGadget(index: number, id: string): void;
+  tipSeen(power: string): boolean;
+  markTip(power: string): void;
+}
+
+/** This game's own story run. */
+export const storyRun: FightRun = {
+  get() {
+    const run = getCurrentRun();
+    return run?.status === 'active' ? run : null;
+  },
+  hurt(amount) {
+    const run = getCurrentRun();
+    if (run?.status !== 'active') return false;
+    const next = damage(run, amount);
+    saveCurrentRun(next);
+    return next.status === 'lost';
+  },
+  spendGadget(index, id) {
+    const run = getCurrentRun();
+    if (run) saveCurrentRun(removeGadget(run, run.gadgets[index] ?? id));
+  },
+  tipSeen: hasSeenTip,
+  markTip: markTipSeen,
+};
+
+export interface FightOptions {
+  run?: FightRun;
+  /** A battle already set up, instead of a new one. */
+  battle?: Battle;
+  /** Enemy HP carried over from the other board: phases it has fallen into start here. */
+  carry?: number;
+  /** Where the knocked-out panel leads. Default: this game's story map. */
+  home?: string;
+  /** After each update that started a phase: a boss can change board here. */
+  phased?(battle: Battle): void;
+}
+
+/**
  * A fight on a block (docs/story.md): finishing lines chips the enemy, the solved shape
  * finishes it, and its powers fight back. With Hits on, breaking a cube of the shape lets
  * it hit you; in Relaxed nothing can hurt you.
  */
-export function fightKind(encounter: Encounter, state: RunState): Kind {
+export function fightKind(
+  encounter: Encounter,
+  state: Pick<RunState, 'mode' | 'battle'>,
+  opts: FightOptions = {},
+): Kind {
   const enemy = encounter.enemy!;
   const hitsOn = state.mode === 'hearts';
-  const battle = new Battle(
-    enemy,
-    encounter.puzzle,
-    hitsOn,
-    state.battle as BattleState | undefined,
-    {
+  const link = opts.run ?? storyRun;
+  const battle =
+    opts.battle ??
+    new Battle(enemy, encounter.puzzle, hitsOn, state.battle as BattleState | undefined, {
       seed: hashString(encounter.id),
-    },
-  );
+    });
   let play: Play;
   let knockedOut = false;
   let callingOut = false;
@@ -133,7 +182,7 @@ export function fightKind(encounter: Encounter, state: RunState): Kind {
     name.textContent = now.name;
     sprite.replaceChildren(enemyArt(now.sprite));
     enemyHp.set(s.enemyHp, s.maxHp);
-    const run = getCurrentRun();
+    const run = link.get();
     if (run) playerHp.set(run.hp, run.maxHp);
     armor.hidden = !s.targets.length;
     armor.replaceChildren(...withArt(`🛡 ${s.targets.length}🎯 ${s.armorLines}/${ARMOR_HIT_LINES}`));
@@ -159,9 +208,8 @@ export function fightKind(encounter: Encounter, state: RunState): Kind {
   }
 
   function renderTray() {
-    const run = getCurrentRun();
     tray.replaceChildren(
-      ...(run?.gadgets ?? []).flatMap((id, i) => {
+      ...(link.get()?.gadgets ?? []).flatMap((id, i) => {
         const g = getGadget(id);
         if (!g) return [];
         const b = el('button', { className: 'gadget', title: `${g.name}: ${g.description}` }, [
@@ -185,7 +233,7 @@ export function fightKind(encounter: Encounter, state: RunState): Kind {
     ]);
   }
   function nextTip() {
-    const power = battle.powers.find((p) => POWERS[p] && !hasSeenTip(p));
+    const power = battle.powers.find((p) => POWERS[p] && !link.tipSeen(p));
     if (!power) {
       tipSlot.hidden = true;
       return;
@@ -193,7 +241,7 @@ export function fightKind(encounter: Encounter, state: RunState): Kind {
     tipSlot.hidden = false;
     tipSlot.replaceChildren(
       tipCard(power, () => {
-        markTipSeen(power);
+        link.markTip(power);
         nextTip();
       }),
     );
@@ -229,14 +277,12 @@ export function fightKind(encounter: Encounter, state: RunState): Kind {
 
   // --- What happens --------------------------------------------------------------------
   function hurt(amount: number) {
-    const run = getCurrentRun();
-    if (!run || run.status !== 'active') return;
-    const next = damage(run, amount);
-    saveCurrentRun(next);
+    if (!link.get()) return;
+    const out = link.hurt(amount);
     floatNumber(header, `−${amount}`, 'player');
     playSound('hit', 0.05);
     haptic('hit');
-    if (next.status === 'lost') knockOut();
+    if (out) knockOut();
   }
 
   function knockOut() {
@@ -251,13 +297,18 @@ export function fightKind(encounter: Encounter, state: RunState): Kind {
         textContent: `${battle.current.name} got the better of you.`,
       }),
       el('div', { className: 'end-actions' }, [
-        el('a', { className: 'button primary', href: '#/story', textContent: 'See results →' }),
+        el('a', {
+          className: 'button primary',
+          href: opts.home ?? '#/story',
+          textContent: 'See results →',
+        }),
       ]),
     ]);
   }
 
   function handle(events: BattleEvent[]) {
     let rebuild = false;
+    const phased = events.some((e) => e.kind === 'phase');
     for (const e of events) {
       switch (e.kind) {
         case 'chip':
@@ -332,6 +383,7 @@ export function fightKind(encounter: Encounter, state: RunState): Kind {
     }
     if (rebuild) play.view.rebuild();
     render();
+    if (phased && !knockedOut) opts.phased?.(battle);
   }
 
   // Faces: ink over everything; then paint as usual; then the marked lines.
@@ -351,9 +403,8 @@ export function fightKind(encounter: Encounter, state: RunState): Kind {
   // --- Gadgets and calling out ---------------------------------------------------------
   function useGadget(id: string, index: number) {
     const g = getGadget(id);
-    const run = getCurrentRun();
-    if (!g || !run || play.game.over || knockedOut) return;
-    saveCurrentRun(removeGadget(run, run.gadgets[index] ?? id));
+    if (!g || !link.get() || play.game.over || knockedOut) return;
+    link.spendGadget(index, id);
     playSound('tool');
     if (g.effect.kind === 'blast') {
       const { events } = battle.bomb(play.game.blocks);
@@ -440,8 +491,10 @@ export function fightKind(encounter: Encounter, state: RunState): Kind {
       play = p;
       play.view.clueFor = (line) => battle.clueFor(line);
       play.view.styler = styler;
-      // Lines already finished when the fight starts (or resumes) count from here.
-      handle(battle.update(play.game.blocks));
+      // Phases carried over from the other board start first; then lines already finished
+      // when the fight starts (or resumes) count from here.
+      const carried = opts.carry === undefined ? [] : battle.carry(opts.carry, play.game.blocks);
+      handle([...carried, ...battle.update(play.game.blocks)]);
       play.view.rebuild();
       nextTip();
       render();

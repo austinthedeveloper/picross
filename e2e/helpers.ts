@@ -1,3 +1,4 @@
+import { encounterPuzzle, extras, focusBlock, moveTo } from '../cubed/e2e/helpers';
 import { expect, type BrowserContext, type Page } from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -113,22 +114,52 @@ export async function fillRow(page: Page, rows: string[], r: number) {
  * Sets every cell to the answer, erasing wrong fills too, and repeats while
  * the end panel isn't showing (enemies like the Mimic move rows mid-solve).
  */
-export async function solve(page: Page, rows: string[]) {
+/**
+ * Fills a board to match `rows`, retapping until it's solved. With `stop`, it gives up as
+ * soon as that's true (checked before every tap): a fight that moves to a block, say.
+ */
+export async function solve(page: Page, rows: string[], stop?: () => Promise<boolean>) {
   const n = rows[0].length;
   const done = () => page.locator('.end-panel:not([hidden])').isVisible();
+  const tap = async (i: number) => {
+    if (stop && (await stop())) return false;
+    await cell(page, i).tap();
+    return true;
+  };
   for (let pass = 0; pass < 8 && !(await done()); pass++) {
     const state = await boardState(page);
     for (let i = 0; i < n * n; i++) {
       const want = rows[Math.floor(i / n)][i % n];
-      if (state[i] === '#' && want === '.') await cell(page, i).tap();
-      else if (want === '#' && state[i] !== '#') {
-        if (state[i] === 'x') await cell(page, i).tap();
-        await cell(page, i).tap();
+      if (state[i] === '#' && want === '.') {
+        if (!(await tap(i))) return;
+      } else if (want === '#' && state[i] !== '#') {
+        if (state[i] === 'x' && !(await tap(i))) return;
+        if (!(await tap(i))) return;
       }
       if (i % n === n - 1 && (await done())) return;
     }
   }
   await expect(page.locator('.end-panel:not([hidden])')).toBeVisible();
+}
+
+/** The phase the saved fight is in (how many of the enemy's phases have started). */
+export const savedPhase = (page: Page) =>
+  page.evaluate(
+    () => JSON.parse(localStorage.getItem('picross:run') ?? '{}').current?.battle?.phase ?? 0,
+  );
+
+/**
+ * Breaks a story block's extra cubes with the keyboard (the 3D game's helpers), until it's
+ * solved or `stop` is true.
+ */
+export async function breakBlock(page: Page, encounterId: string, stop: () => Promise<boolean>) {
+  const p = encounterPuzzle(encounterId);
+  await focusBlock(page);
+  for (const cube of extras(p)) {
+    if ((await stop()) || (await page.locator('.end-panel:not([hidden])').isVisible())) return;
+    await moveTo(page, p, cube);
+    await page.keyboard.press('x');
+  }
 }
 
 /** Skips a scene if one is playing. */
