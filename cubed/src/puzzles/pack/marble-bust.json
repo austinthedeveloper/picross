@@ -1,0 +1,26 @@
+{
+  "id": "marble-bust",
+  "name": "Marble Bust",
+  "colors": {
+    "c": "cream",
+    "k": "graphite",
+    "w": "white",
+    "y": "yellow"
+  },
+  "layers": [
+    [".kkkkk.", ".kkkkk.", ".kkkkk.", ".kkkkk.", ".kkkkk."],
+    [".kkkkk.", ".kkkkk.", ".kkkkk.", ".kkkkk.", ".kkkkk."],
+    [".yyyyy.", ".yyyyy.", ".yyyyy.", ".yyyyy.", ".yyyyy."],
+    [".......", "..www..", ".wwwww.", "..www..", "......."],
+    ["...w...", ".wwwww.", "wwwwwww", ".wwwww.", "...w..."],
+    [".......", "..www..", ".wwwww.", "..www..", "......."],
+    [".......", "...w...", "..www..", "...w...", "......."],
+    [".......", "..www..", "..www..", "..www..", "......."],
+    ["...w...", "..www..", ".wwwww.", "..www..", "...w..."],
+    ["...c...", "..ccc..", ".ccccc.", "..www..", "...w..."],
+    [".......", "..ccc..", "..ccc..", "..www..", "......."]
+  ],
+  "hideRatio": 0.55,
+  "hide": "fb054c27df9a1614e02000019d6eff3ae4622f99d7",
+  "passes": 10
+}

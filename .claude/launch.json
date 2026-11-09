@@ -8,6 +8,12 @@
       "port": 5173
     },
     {
+      "name": "cubed",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["-w", "cubed", "run", "dev", "--", "--port", "5174", "--strictPort"],
+      "port": 5174
+    },
+    {
       "name": "script-review",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "script-review"],

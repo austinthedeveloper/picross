@@ -1,0 +1,24 @@
+{
+  "id": "test-tubes",
+  "name": "Test Tube Rack",
+  "colors": {
+    "b": "brown",
+    "g": "sky",
+    "l": "green",
+    "p": "purple",
+    "r": "red",
+    "w": "wood"
+  },
+  "layers": [
+    ["wwwwwwwwwww", "wwwwwwwwwww", "wwwwwwwwwww", "wwwwwwwwwww", "wwwwwwwwwww"],
+    ["...........", "b.........b", "b.r..l..p.b", "b.........b", "..........."],
+    ["...........", "b.........b", "b.r..l..p.b", "b.........b", "..........."],
+    ["...........", "wwwwwwwwwww", "wwrwwlwwgww", "wwwwwwwwwww", "..........."],
+    ["...........", "b.........b", "b.g..l..g.b", "b.........b", "..........."],
+    ["...........", "...........", "..g..g..g..", "...........", "..........."],
+    ["...........", "...........", "..g..g..g..", "...........", "..........."]
+  ],
+  "hideRatio": 0.55,
+  "hide": "0a3cc0342048ff82580800dff5caaf598ae7ffe566",
+  "passes": 5
+}

@@ -1,0 +1,21 @@
+{
+  "id": "slime",
+  "name": "Slime",
+  "colors": {
+    "g": "green",
+    "k": "graphite",
+    "l": "leaf",
+    "w": "white"
+  },
+  "layers": [
+    ["..llll..", ".llllll.", "llllllll", "llllllll", "llllllll", ".llllll.", "..llll.."],
+    ["...gg...", ".gggggg.", "gggggggg", "gggggggg", "gggggggg", ".gggggg.", "...gg..."],
+    ["........", "..gggg..", ".gggggg.", ".gggggg.", ".gggggg.", "..wggw..", "........"],
+    ["........", "...gg...", "..gggg..", ".gggggg.", "..kggk..", "...gg...", "........"],
+    ["........", "........", "...gg...", "...gg...", "...gg...", "........", "........"],
+    ["........", "........", "........", ".l......", "........", "........", "........"]
+  ],
+  "hideRatio": 0.55,
+  "hide": "3008b00fea45777d7fed7b6fb8c9204890020",
+  "passes": 5
+}

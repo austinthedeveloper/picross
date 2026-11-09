@@ -1,0 +1,24 @@
+{
+  "id": "jack-o-lantern",
+  "name": "Jack-o'-Lantern",
+  "colors": {
+    "c": "coral",
+    "g": "green",
+    "o": "orange",
+    "y": "yellow"
+  },
+  "layers": [
+    [".........", ".........", "...ooo...", "...ooo...", "...ooo...", ".........", "........."],
+    ["....o....", "..coooc..", ".ocoooco.", ".ocoooco.", ".ocoooco.", "..yoooy..", "....y...."],
+    ["..coooc..", ".ocoooco.", ".ocoooco.", "oocooocoo", ".ocoooco.", ".ycooocy.", "..yyoyy.."],
+    ["..coooc..", ".ocoooco.", "oocooocoo", "oocooocoo", "oocooocoo", ".ocoooco.", "..coyoc.."],
+    ["..coooc..", ".ocoooco.", ".ocoooco.", "oocooocoo", ".ocoooco.", ".ocoooco.", "..yyoyy.."],
+    ["....o....", "..coooc..", ".ocoooco.", ".ocoooco.", ".ocoooco.", "..cyoyc..", "....o...."],
+    [".........", ".........", "...ooo...", "...ooo...", "...ooo...", ".........", "........."],
+    [".........", ".........", ".........", "....g....", ".........", ".........", "........."],
+    [".........", ".........", ".........", "....gg...", ".........", ".........", "........."]
+  ],
+  "hideRatio": 0.6,
+  "hide": "472973d41014df4bf28010430000101c8e7f0f04ffe7e7f58db7",
+  "passes": 7
+}

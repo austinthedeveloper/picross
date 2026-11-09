@@ -1,0 +1,69 @@
+{
+  "id": "pyramid",
+  "name": "Pyramid",
+  "colors": {
+    "c": "cream",
+    "k": "graphite",
+    "y": "yellow"
+  },
+  "layers": [
+    [
+      "ccccccccc",
+      "ccccccccc",
+      "ccccccccc",
+      "ccccccccc",
+      "ccccccccc",
+      "ccccccccc",
+      "ccccccccc",
+      "ccccccccc",
+      "cccckcccc"
+    ],
+    [
+      ".........",
+      ".yyyyyyy.",
+      ".yyyyyyy.",
+      ".yyyyyyy.",
+      ".yyyyyyy.",
+      ".yyyyyyy.",
+      ".yyyyyyy.",
+      ".yyykyyy.",
+      "........."
+    ],
+    [
+      ".........",
+      ".........",
+      "..ccccc..",
+      "..ccccc..",
+      "..ccccc..",
+      "..ccccc..",
+      "..ccccc..",
+      ".........",
+      "........."
+    ],
+    [
+      ".........",
+      ".........",
+      ".........",
+      "...yyy...",
+      "...yyy...",
+      "...yyy...",
+      ".........",
+      ".........",
+      "........."
+    ],
+    [
+      ".........",
+      ".........",
+      ".........",
+      ".........",
+      "....y....",
+      ".........",
+      ".........",
+      ".........",
+      "........."
+    ]
+  ],
+  "hideRatio": 0.5,
+  "hide": "7d08268d6bc674eaefaa45df794bbe21004b5598215",
+  "passes": 4
+}

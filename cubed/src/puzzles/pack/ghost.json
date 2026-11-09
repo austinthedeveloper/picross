@@ -1,0 +1,23 @@
+{
+  "id": "ghost",
+  "name": "Ghost",
+  "colors": {
+    "k": "graphite",
+    "w": "white"
+  },
+  "layers": [
+    ["..w......", ".w.w.w.w.", ".w.www.w.", ".w.w.w.w.", "......w.."],
+    ["..wwwww..", ".wwwwwww.", ".wwwwwww.", ".wwwwwww.", "..wwwww.."],
+    ["..wwwww..", ".wwwwwww.", ".wwwwwww.", ".wwwwwww.", "..wwwww.."],
+    ["..wwwww..", ".wwwwwww.", ".wwwwwww.", ".wwwwwww.", "..wwwww.."],
+    ["..wwwww..", ".wwwwwww.", ".wwwwwww.", ".wwwwwww.", "..wwkww.."],
+    ["..wwwww..", ".wwwwwww.", "wwwwwwwww", ".wwwwwww.", "..wwwww.."],
+    ["...www...", "..wwwww..", ".wwwwwww.", "..wwwww..", "...kwk..."],
+    ["...www...", "..wwwww..", ".wwwwwww.", "..wwwww..", "...kwk..."],
+    [".........", "..wwwww..", "..wwwww..", "..wwwww..", "........."],
+    [".........", "...www...", "..wwwww..", "...www...", "........."]
+  ],
+  "hideRatio": 0.6,
+  "hide": "14849a5c51ad815008a8d8a885fbba75f8cfb32c7e8c351",
+  "passes": 10
+}
