@@ -4,16 +4,31 @@ import path from 'node:path';
 import { parseDiorama, type DioramaFile } from '../src/puzzles/diorama';
 import { breakCubes, dailyFor, extras, focusBlock } from './helpers';
 
+/** November's daily puzzle for a day, and how many cubes it takes to break. */
+const novemberDaily = (day: number) => {
+  const puzzle = dailyFor(`2026-11-${String(day).padStart(2, '0')}`);
+  return { puzzle, breaks: extras(puzzle).length };
+};
+
+// Two days in a row whose blocks break quickest, so the test stays short as the pack grows
+// (which day gets which puzzle shifts with every puzzle added).
+const firstDay = Array.from({ length: 29 }, (_, i) => i + 1).reduce((best, day) =>
+  novemberDaily(day).breaks + novemberDaily(day + 1).breaks <
+  novemberDaily(best).breaks + novemberDaily(best + 1).breaks
+    ? day
+    : best,
+);
+
 test('the daily puzzle: one block a day, and a streak across days', async ({ page }) => {
   for (const [day, streak] of [
-    [8, '1 day in a row'],
-    [9, '2 days in a row'],
+    [firstDay, '1 day in a row'],
+    [firstDay + 1, '2 days in a row'],
   ] as const) {
     await page.clock.setFixedTime(new Date(2026, 10, day, 12));
     await page.goto(`/?day=${day}`);
     await expect(page.locator('.daily-card')).toContainText(`Daily · Nov ${day}`);
     await page.locator('.daily-card').click();
-    const puzzle = dailyFor(`2026-11-0${day}`);
+    const { puzzle } = novemberDaily(day);
     await focusBlock(page);
     await breakCubes(page, puzzle, extras(puzzle));
     await expect(page.locator('.end-note')).toContainText(streak);
