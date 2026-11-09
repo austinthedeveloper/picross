@@ -23,6 +23,11 @@ export default defineConfig({
     // The offline cache would hold pages between tests; e2e/offline.spec.ts turns it on.
     serviceWorkers: 'block',
   },
+  projects: [
+    { name: 'main', testIgnore: /perf\.spec\.ts/ },
+    // Timing tests run alone after the rest, so other tests don't share the CPU they time.
+    { name: 'perf', testMatch: /perf\.spec\.ts/, dependencies: ['main'] },
+  ],
   webServer: {
     command: 'npm run build && npx vite preview --port 4175 --strictPort',
     url: 'http://localhost:4175/',

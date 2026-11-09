@@ -67,14 +67,31 @@ test('a diorama fills in piece by piece, then turns in 3D', async ({ page }) => 
     fs.readFileSync(path.join(import.meta.dirname, '../src/puzzles/dioramas/park.json'), 'utf8'),
   ) as DioramaFile;
   const park = parseDiorama(file);
+  // Breaking every piece by keyboard is slow on CI's software rendering, so the pieces with
+  // the most to break start out placed; the test places one piece and finishes with another.
+  const [first, last, ...placed] = [...park.tiles].sort(
+    (a, b) => extras(a.puzzle).length - extras(b.puzzle).length,
+  );
   await page.goto('/');
+  await page.evaluate(
+    (ids) => {
+      const solved = Object.fromEntries(
+        ids.map((id) => [id, { solves: 1, bestTime: 60000, clean: 1 }]),
+      );
+      localStorage.setItem('picross3d:v1', JSON.stringify({ solved, boards: {}, totalTime: 0 }));
+    },
+    placed.map((tile) => `park-${tile.index + 1}`),
+  );
+  await page.reload();
   await page.locator('.dioramas .puzzle-card').filter({ hasText: 'Park' }).click();
-  await expect(page.locator('.stats')).toContainText(`0 of ${park.tiles.length} pieces`);
-  for (const tile of park.tiles) {
+  await expect(page.locator('.stats')).toContainText(
+    `${placed.length} of ${park.tiles.length} pieces`,
+  );
+  for (const tile of [first, last]) {
     await page.goto(`/#/diorama/park/${tile.index + 1}`);
     await focusBlock(page);
     await breakCubes(page, tile.puzzle, extras(tile.puzzle));
-    await expect(page.locator('.end-panel h2')).toHaveText(/Placed!|Finished!/);
+    await expect(page.locator('.end-panel h2')).toHaveText(tile === last ? 'Finished!' : 'Placed!');
   }
   await page.getByRole('link', { name: 'See it' }).click();
   await expect(page.locator('.stats')).toContainText('Finished!');
