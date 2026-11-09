@@ -1,5 +1,13 @@
 import { badgeNote, earnFromFight } from '../../../game/badges';
-import { addGadget, addToTally, completeEncounter, heal, withBoard } from '../../../game/run';
+import { boardAt, switchesBoard, withBlockCounts } from '../../../game/battle';
+import {
+  addGadget,
+  addToTally,
+  completeEncounter,
+  heal,
+  withBattle,
+  withBoard,
+} from '../../../game/run';
 import { getCurrentRun, saveCurrentRun } from '../../../game/runSave';
 import { ENDLESS_HEAL } from '../../../puzzles/endless';
 import { restHeal } from '../../../puzzles/runs';
@@ -25,14 +33,59 @@ export function renderRunEncounter(app: HTMLElement): (() => void) | undefined {
   const encounter = def.encounters[state.node];
   const length = def.endless ? Infinity : def.encounters.length;
 
-  const play = (): (() => void) => {
-    const fight = encounter.enemy ? fightHooks(encounter.enemy, encounter.puzzle) : null;
+  // A boss that switches board (docs/story-combined.md) fights on the 3D game's block for
+  // some phases. Endless runs build their own encounters, so they stay flat.
+  const switching = Boolean(encounter.enemy && switchesBoard(encounter.enemy) && !def.endless);
+
+  /** Clears the encounter: rewards, badges, healing and the note for the solved panel. */
+  function clear(game: { hintsUsed: number; elapsed: number }, fightNote?: string) {
+    let current = getCurrentRun() ?? state;
+    // What happened on the block counts toward the fight too.
+    if (current.battle && current.block?.battle) {
+      current = withBattle(current, withBlockCounts(current.battle, current.block.battle));
+    }
+    // Fight badges read the battle, which clearing the encounter throws away (#110).
+    const badges = encounter.enemy ? earnFromFight(current, encounter.id, encounter.enemy) : [];
+    let next = addToTally(
+      completeEncounter(current, length),
+      current.battle?.counts,
+      game.hintsUsed,
+    );
+    const reward = encounter.puzzle.gadget ? getGadget(encounter.puzzle.gadget) : undefined;
+    if (reward) next = addGadget(next, reward.id);
+    // Endless (#68) gives a little HP back after each fight; a rest stop (#77)
+    // heals more if you beat its clock.
+    const before = next.hp;
+    if (def.endless && encounter.enemy) next = heal(next, ENDLESS_HEAL);
+    if (encounter.rest) next = heal(next, restHeal(encounter.rest, game.elapsed));
+    const healed = next.hp - before;
+    saveCurrentRun(next);
+    const time = formatTime(game.elapsed);
+    const got =
+      (reward ? ` · You got ${reward.icon} ${reward.name}!` : '') +
+      (healed ? ` · +${healed} HP` : '') +
+      (badges.length ? ` · ${badgeNote(badges)}` : '');
+    const note =
+      (fightNote ??
+        (encounter.rest
+          ? `${restHeal(encounter.rest, game.elapsed) === encounter.rest.heal ? 'Rested' : 'Too slow for a full rest'} · ${time}`
+          : `${encounter.name} cleared in ${time}`)) +
+      got +
+      (encounter.rest && !healed ? ' · already at full HP' : '');
+    return { note, last: next.status === 'won' };
+  }
+
+  /** The flat board; `canSwitch` false keeps it flat whatever its phases say. */
+  const playFlat = (canSwitch = switching): (() => void) => {
+    const fight = encounter.enemy
+      ? fightHooks(encounter.enemy, encounter.puzzle, canSwitch ? switchBoard : undefined)
+      : null;
     const session: PlaySession = {
       back: { href: '#/run', label: '← Map' },
       title: encounter.name,
       // In Hearts runs, fights check fills so the enemy can hit back. Digs never do.
       mode: fight && state.mode === 'hearts' ? 'battle' : 'relaxed',
-      saved: state.board,
+      saved: (getCurrentRun() ?? state).board,
       ...(fight
         ? fight.hooks
         : encounter.rest
@@ -44,39 +97,14 @@ export function renderRunEncounter(app: HTMLElement): (() => void) | undefined {
       },
       complete(game) {
         const finisher = fight?.land();
-        const current = getCurrentRun() ?? state;
-        // Fight badges read the battle, which clearing the encounter throws away (#110).
-        const badges =
-          fight && encounter.enemy ? earnFromFight(current, encounter.id, encounter.enemy) : [];
-        let next = addToTally(
-          completeEncounter(current, length),
-          current.battle?.counts,
-          game.hintsUsed,
+        const { note, last } = clear(
+          game,
+          fight
+            ? `${fight.name()} defeated! Finisher −${finisher} · ${formatTime(game.elapsed)}`
+            : undefined,
         );
-        const reward = encounter.puzzle.gadget ? getGadget(encounter.puzzle.gadget) : undefined;
-        if (reward) next = addGadget(next, reward.id);
-        // Endless (#68) gives a little HP back after each fight; a rest stop (#77)
-        // heals more if you beat its clock.
-        const before = next.hp;
-        if (def.endless && fight) next = heal(next, ENDLESS_HEAL);
-        if (encounter.rest) next = heal(next, restHeal(encounter.rest, game.elapsed));
-        const healed = next.hp - before;
-        saveCurrentRun(next);
-        const last = next.status === 'won';
-        const time = formatTime(game.elapsed);
-        const got =
-          (reward ? ` · You got ${reward.icon} ${reward.name}!` : '') +
-          (healed ? ` · +${healed} HP` : '') +
-          (badges.length ? ` · ${badgeNote(badges)}` : '');
         return {
-          note:
-            (fight
-              ? `${fight.name()} defeated! Finisher −${finisher} · ${time}`
-              : encounter.rest
-                ? `${restHeal(encounter.rest, game.elapsed) === encounter.rest.heal ? 'Rested' : 'Too slow for a full rest'} · ${time}`
-                : `${encounter.name} cleared in ${time}`) +
-            got +
-            (encounter.rest && !healed ? ' · already at full HP' : ''),
+          note,
           actions: [
             el('a', {
               className: 'button primary',
@@ -91,10 +119,53 @@ export function renderRunEncounter(app: HTMLElement): (() => void) | undefined {
     return renderGameScreen(app, fight?.puzzle ?? encounter.puzzle, session);
   };
 
+  const playBlock = (): (() => void) => {
+    let stopped = false;
+    let stopBlock: (() => void) | null = null;
+    void import('./blockFight').then(({ renderBlockFight }) => {
+      if (stopped) return;
+      stopBlock =
+        renderBlockFight(app, {
+          encounterId: encounter.id,
+          title: encounter.name,
+          enemy: encounter.enemy!,
+          size: encounter.puzzle.width,
+          onFlat: switchBoard,
+          clear,
+        }) ?? playFlat(false);
+    });
+    return () => {
+      stopped = true;
+      stopBlock?.();
+    };
+  };
+
+  const play = (): (() => void) => {
+    const phase = (getCurrentRun() ?? state).battle?.phase;
+    return switching && boardAt(encounter.enemy!, phase) === 'block' ? playBlock() : playFlat();
+  };
+
+  let stop: () => void = () => {};
+  let left = false;
+  /** Moves the fight to the board its phase says, with the new board unfolding in. */
+  function switchBoard() {
+    // A switch waits out the phase banner; by then you may have gone back to the map.
+    if (left) return;
+    stop();
+    app.classList.add('board-switch');
+    window.setTimeout(() => app.classList.remove('board-switch'), 600);
+    stop = play();
+  }
+
   // An encounter's scene (e.g. the boss's entrance) plays when you first open it,
   // before any progress is saved; resuming mid-fight skips it.
   const scene = encounter.scene ? getScene(encounter.scene) : undefined;
-  if (!scene || state.board || state.battle) return play();
-  let stop = renderSceneScreen(app, scene, { onEnd: () => (stop = play()) });
-  return () => stop();
+  stop =
+    !scene || state.board || state.battle || state.block
+      ? play()
+      : renderSceneScreen(app, scene, { onEnd: () => (stop = play()) });
+  return () => {
+    left = true;
+    stop();
+  };
 }

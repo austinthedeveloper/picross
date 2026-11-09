@@ -134,3 +134,29 @@ describe('turns (#83)', () => {
     });
   });
 });
+
+describe('board-changing phases', () => {
+  const puzzle = parsePuzzle({
+    id: 'p',
+    name: 'P',
+    width: 3,
+    height: 3,
+    solution: ['##.', '.#.', '###'],
+  });
+  const fail = (msg: string): never => {
+    throw new Error(msg);
+  };
+  const boss = (phase: object) =>
+    parseEnemy({ name: 'B', hp: 10, attack: 1, phases: [{ at: 0.5, ...phase }] }, puzzle, fail);
+
+  it('reads which board a phase moves to', () => {
+    expect(boss({ board: 'block' }).phases![0].board).toBe('block');
+    expect(boss({}).phases![0].board).toBeUndefined();
+  });
+
+  it("rejects other boards, and swaps or ink that would land on the board that's going", () => {
+    expect(() => boss({ board: 'cube' })).toThrow('board must be');
+    expect(() => boss({ board: 'block', swap: true })).toThrow("can't swap");
+    expect(() => boss({ board: 'flat', ink: 2 })).toThrow("can't swap");
+  });
+});

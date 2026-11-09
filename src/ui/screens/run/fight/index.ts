@@ -25,8 +25,8 @@ import { createTurner } from './turns';
  * meter, turns, gadgets, hits, and the finisher. This wires them into the play
  * session's hooks.
  */
-export function fightHooks(enemy: Enemy, puzzle: Puzzle) {
-  const ctx = createFightContext(enemy, puzzle);
+export function fightHooks(enemy: Enemy, puzzle: Puzzle, onBlock?: () => void) {
+  const ctx = createFightContext(enemy, puzzle, onBlock);
   const swapper = createSwapper(ctx);
   const inker = createInker(ctx);
   const tips = createTips(ctx);

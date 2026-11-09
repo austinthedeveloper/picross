@@ -46,6 +46,9 @@ describe('buildPages', () => {
       // This phase doesn't change form, so it keeps the one before.
       ['Clockwork Curator', 'art/enemies/clockwork-curator.png', 'At 85% HP'],
       ['Overwound Curator', 'art/enemies/overwound-curator.png', 'At 78% HP'],
+      // Switching board (it unfolds into a block, then folds back) keeps its look.
+      ['Unfolded Curator', 'art/enemies/overwound-curator.png', 'At 60% HP'],
+      ['Overwound Curator', 'art/enemies/overwound-curator.png', 'At 30% HP'],
     ]);
   });
 });

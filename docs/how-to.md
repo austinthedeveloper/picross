@@ -121,6 +121,10 @@ row or column counts from 1, as players do; the code counts from 0.
    Weathervane), add `"rotate": 6` (lines per quarter turn, 2 or more) to the enemy or a
    phase. Only square puzzles can turn, and a lopsided picture shows it best. Write every
    line index as drawn: phase pools turn with the board.
+   To switch board (the Curator), give a phase `"board": "block"` to move the fight onto
+   the encounter's 3D puzzle in `cubed/src/puzzles/story/`, and a later one
+   `"board": "flat"` to bring it back. Keep the boss's other powers light, and don't put a
+   swap or ink on a switching phase. Run `npm -w cubed run sync:web` after.
    Phases trigger in order at decreasing `at` values. A phase's `fog` is a pool, and it fogs
    up to `fogCount` unsolved lines from it. Line damage is 1 per line and columns mostly
    finish late, so set `at` high (0.8–0.9) for a phase to land mid-solve. To find a fog

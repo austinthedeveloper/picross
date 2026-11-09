@@ -86,3 +86,14 @@ When the 2D game adds something:
 2. A new enemy field or power: read it in `parseEnemy` and play it in the fight
    (`src/game/battle.ts`, `src/ui/screens/story/fight.ts`), then add it to `KNOWN`.
 3. A new scene, backdrop or line: nothing to do; it's shared.
+
+A phase's `board` (a boss that switches between a flat board and a block in the 2D story)
+is read and ignored: here every fight is on a block already.
+
+### Used by the 2D story
+
+A switching boss's block phases in the 2D story run this game's fight screen
+(`fightKind`), its `Battle` and its play screen, loaded from `cubed/` on demand. So
+`fightKind` takes its run through a `FightRun` (this game's story run by default), can be
+handed a `Battle` and HP to `carry` over, and calls `phased` after a phase starts. Keep
+those working when changing the fight; the root's `e2e/switching-boss.spec.ts` covers them.

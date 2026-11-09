@@ -407,6 +407,16 @@ export class Battle {
     return events;
   }
 
+  /**
+   * Picks up a fight carried over from the other board (a boss that switches dimension):
+   * sets the enemy's HP, then starts the phases it has fallen into, picking their powers on
+   * this block. Lines already struck here stay struck.
+   */
+  carry(enemyHp: number, blocks: Uint8Array): BattleEvent[] {
+    this.state.enemyHp = Math.max(1, Math.min(this.state.maxHp, Math.round(enemyHp)));
+    return this.phases(blocks);
+  }
+
   private phases(blocks: Uint8Array): BattleEvent[] {
     const { state } = this;
     const events: BattleEvent[] = [];

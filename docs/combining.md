@@ -20,6 +20,13 @@ into `apps/` and `packages/`. The 2D game stays at the root, so nothing that rea
   and checked in CI (`npm run check:cubed`). Removing the copies is step 2.
 - The story ideas for the combined game are in [story-combined.md](story-combined.md).
 
+**Step 7 has a first boss, ahead of steps 2–6.** The Curator unfolds into a block at 60%
+and folds back flat at 30%, in the 2D story. Rather than wait for `FightBoard`, the 2D
+story opens the 3D game's own fight screen (from `cubed/`, loaded on demand) for the
+block phases, and carries HP and phases between the two battles. Each game's screen
+styles apply only on its board. Details are in [architecture.md](architecture.md)
+("Switching board").
+
 The steps below still apply, with `cubed/` standing in for `packages/block` and
 `packages/play-block` until the code is split into packages.
 

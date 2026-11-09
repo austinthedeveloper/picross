@@ -90,6 +90,41 @@ export interface Phase {
   charge?: number;
   /** Starts or changes how many lines turn the board (#83). */
   rotate?: number;
+  /**
+   * Moves the fight to the other board: a block (the encounter's 3D puzzle) or back to the
+   * flat grid. Each board keeps its own progress; HP and phases carry over.
+   */
+  board?: Board;
+}
+
+/** The two boards a fight can be on. */
+export type Board = 'flat' | 'block';
+
+/** The board a fight is on once `phases` of the enemy's phases have started. */
+export function boardAt(enemy: Pick<Enemy, 'phases'>, phases = 0): Board {
+  let board: Board = 'flat';
+  for (const phase of (enemy.phases ?? []).slice(0, phases)) board = phase.board ?? board;
+  return board;
+}
+
+/** Whether any phase moves the fight onto a block. */
+export const switchesBoard = (enemy: Pick<Enemy, 'phases'>) =>
+  (enemy.phases ?? []).some((p) => p.board === 'block');
+
+/**
+ * Enemy HP on a board with `maxHp`, carried from a share of it on the other board, so that
+ * exactly `phases` phases have started (the two boards scale HP differently, and rounding
+ * mustn't skip or repeat a phase).
+ */
+export function carryHp(
+  share: number,
+  maxHp: number,
+  phases: readonly Pick<Phase, 'at'>[],
+  started: number,
+): number {
+  let hp = Math.ceil(share * maxHp);
+  if (started > 0) hp = Math.min(hp, Math.floor(phases[started - 1].at * maxHp));
+  return Math.max(1, Math.min(maxHp, hp));
 }
 
 /** How this fight is going (#107). Rolls up into the run's tally when the fight is won. */
@@ -298,6 +333,23 @@ export function clearInk(
 }
 
 /** Adds one to a fight's count. */
+/**
+ * Adds what happened on the fight's block (a boss that switches board) to its counts, so
+ * badges and the run's tally see the whole fight. The 3D game counts every mistake where
+ * this one counts wrong fills; they mean the same.
+ */
+export function withBlockCounts(state: BattleState, block: unknown): BattleState {
+  const more = (block as { counts?: Record<string, number> } | undefined)?.counts;
+  if (!more) return state;
+  const counts = { ...state.counts };
+  const add = (key: keyof FightCounts, n = 0) => (counts[key] = (counts[key] ?? 0) + n);
+  add('wrongFills', more.mistakes);
+  add('zaps', more.zaps);
+  add('wrongAccusations', more.wrongAccusations);
+  add('gadgetsUsed', more.gadgetsUsed);
+  return { ...state, counts };
+}
+
 export function bump(state: BattleState, key: keyof FightCounts): BattleState {
   return { ...state, counts: { ...state.counts, [key]: (state.counts?.[key] ?? 0) + 1 } };
 }

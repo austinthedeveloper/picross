@@ -102,12 +102,20 @@ export function parseEnemy(data: unknown, puzzle: Puzzle, fail: (msg: string) =>
       if (phase.inkCount !== undefined && phase.ink === undefined) {
         fail(`phase ${i + 1} has inkCount but no ink`);
       }
+      if (phase.board !== undefined && phase.board !== 'flat' && phase.board !== 'block') {
+        fail(`phase ${i + 1} board must be "flat" or "block"`);
+      }
+      // Swaps and ink land on the board that's about to go, so a switching phase can't have them.
+      if (phase.board !== undefined && (phase.swap || phase.ink !== undefined)) {
+        fail(`phase ${i + 1} changes board, so it can't swap or splash ink`);
+      }
       return {
         at: at!,
         ...(phase.name ? { name: phase.name } : {}),
         ...(phase.sprite ? { sprite: phase.sprite } : {}),
         ...(phase.attack !== undefined ? { attack: phase.attack } : {}),
         ...(phase.taunt ? { taunt: phase.taunt } : {}),
+        ...(phase.board ? { board: phase.board } : {}),
         ...(phase.fog !== undefined ? { fog: parseFog(phase.fog) } : {}),
         ...(phase.fogCount !== undefined ? { fogCount: phase.fogCount } : {}),
         ...(phase.swap === true ? { swap: true } : {}),

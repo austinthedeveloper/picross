@@ -159,6 +159,9 @@ const KNOWN = {
     'inkCount',
     'charge',
     'rotate',
+    // Which board the phase plays on in the 2D story (a boss that switches dimension).
+    // Here every fight is on a block, so it's read and ignored.
+    'board',
   ],
   run: [
     'id',
@@ -281,6 +284,9 @@ for (const file of encounterFiles) {
   const e = parseEncounter(file);
   if (e) encounters.set(e.id, e);
 }
+
+/** An encounter by id, fitted to a block. */
+export const getEncounter = (id: string) => encounters.get(id);
 
 function parseJob(data: Record<string, unknown>): Job | null {
   const where = `job "${data.id}"`;

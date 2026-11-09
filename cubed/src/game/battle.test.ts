@@ -171,3 +171,26 @@ describe('hints in a fight', () => {
     expect(solve(puzzle.dims, clues, undefined, puzzle.lines).solved).toBe(true);
   });
 });
+
+describe('carrying a fight over from the flat board', () => {
+  const phases = [{ at: 0.9, fog: 2 }, { at: 0.6 }, { at: 0.3 }];
+
+  it('sets the HP and starts the phases it has fallen into, with their powers', () => {
+    const b = new Battle(enemy({ hp: 100, phases }), puzzle, true, undefined, { seed: 3 });
+    const events = b.carry(55, blank());
+    expect(b.state.enemyHp).toBe(55);
+    expect(b.state.phase).toBe(1);
+    expect(kinds(events).filter((k) => k === 'phase')).toHaveLength(2);
+    expect(b.state.fog.length).toBeGreaterThan(0);
+  });
+
+  it('keeps what was already struck and never sets HP outside 1 to max', () => {
+    const b = new Battle(enemy({ hp: 100, phases }), puzzle, true, undefined, { seed: 3 });
+    b.state.struck = [0, 1];
+    b.carry(0, blank());
+    expect(b.state.enemyHp).toBe(1);
+    expect(b.state.struck).toEqual([0, 1]);
+    b.carry(500, blank());
+    expect(b.state.enemyHp).toBe(100);
+  });
+});

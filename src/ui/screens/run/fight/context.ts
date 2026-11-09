@@ -1,4 +1,5 @@
 import {
+  boardAt,
   currentForm,
   startBattle,
   turnedPuzzle,
@@ -38,7 +39,13 @@ export interface FightContext {
   finished: boolean;
 }
 
-export function createFightContext(enemy: Enemy, puzzle: Puzzle): FightContext {
+export function createFightContext(
+  enemy: Enemy,
+  puzzle: Puzzle,
+  /** Called once a phase moves the fight onto a block (a boss that switches board). */
+  onBlock: () => void = () => {},
+): FightContext {
+  let leaving = false;
   const run = (): RunState => getCurrentRun()!;
   const battle = () => run().battle ?? startBattle(enemy);
   const ctx: FightContext = {
@@ -50,7 +57,16 @@ export function createFightContext(enemy: Enemy, puzzle: Puzzle): FightContext {
     run,
     battle,
     form: () => currentForm(enemy, battle()),
-    saveBattle: (state) => saveCurrentRun(withBattle(run(), state)),
+    saveBattle(state) {
+      saveCurrentRun(withBattle(run(), state));
+      // After the current handler finishes, so it doesn't draw on a board that's gone.
+      if (!leaving && !ctx.finished && boardAt(enemy, state.phase) === 'block') {
+        leaving = true;
+        window.setTimeout(() => {
+          if (!ctx.finished) onBlock();
+        }, 0);
+      }
+    },
     view: null,
     controls: null,
     finished: false,

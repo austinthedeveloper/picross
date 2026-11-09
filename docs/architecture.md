@@ -668,6 +668,37 @@ turns every 6 lines, then every 4 from 60% HP. No job uses it yet: start it from
 debug panel's **Fight anyone**, which plays any fight as an Endless run of just that
 fight.
 
+### Switching board (the Curator)
+
+A phase with `"board": "block"` moves the fight onto a block: the encounter's 3D puzzle
+from Picross Cubed (`cubed/src/puzzles/story/`), played with the 3D game's own fight screen.
+A later phase with `"board": "flat"` brings it back. The plan and the story ideas behind it
+are in [story-combined.md](story-combined.md).
+
+- **Which board:** `boardAt(enemy, phase)` in `game/battle.ts` reads the latest phase that
+  names one; the encounter (`ui/screens/run/encounter.ts`) opens that board, and switches
+  when a phase changes it. The block screen (`ui/screens/run/blockFight.ts`) loads on
+  demand with three.js, so the first download doesn't grow.
+- **What carries:** the enemy's HP as a share (a block has more lines, so more HP;
+  `carryHp` rounds so exactly the phases already started have started on the new board),
+  the phases, with their fog and scrambles picked again on the new board, and the patch
+  kit. Your HP and gadgets are the run's, so they're shared anyway.
+- **What doesn't:** each board keeps its own progress. The flat board and its battle stay
+  in `RunState.board` and `battle`; the block's are in `RunState.block`, saved in the 3D
+  game's format. Going back finds a board as you left it. When the fight's won, the
+  block's counts (mistakes, zaps, wrong accusations, gadgets) are added to the battle's
+  (`withBlockCounts`), so badges and the tally see the whole fight.
+- **Rules:** a switching phase can't swap or splash ink (they'd land on the board that's
+  going). Solving either board finishes the fight. Endless runs stay flat. A test checks
+  every switching boss has a block whose phases match.
+- **Styles:** both games use some of the same class names for different screens, so each
+  game's own screen styles apply only on its board: `scripts/scopeByBoard.ts` (a PostCSS
+  step in `vite.config.ts`) scopes them under `<html data-board="block">` or its absence,
+  wrapped in `:where()` so nothing's specificity changes. The block screen sets the
+  attribute while it's up.
+- **Other games:** Cubed alone plays every fight on a block and ignores `board`; the SNES
+  import ignores it too and plays the whole fight flat.
+
 ### The Deep End (Chapter 3)
 
 `runs/deep-end.json` (#67) unlocks after the Night Shift, with 16 HP and a patch kit:
