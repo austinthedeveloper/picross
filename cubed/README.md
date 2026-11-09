@@ -10,8 +10,9 @@ Every puzzle is a block of cubes with a shape hidden inside. The number on a fac
 cubes of the shape in the line running into that face; a circle means they're in two pieces,
 a square three or more. Break away everything that isn't the shape and it's revealed in color.
 
-- 37 handmade puzzles from 3×3×3 to 9×8×9, each checked to be solvable without guessing,
-  banded Easy to Expert, with filters
+- 70 handmade puzzles from 3×3×3 up to 14 cubes long, each checked to be solvable without
+  guessing, banded Easy to Expert, with filters. Themed sets: around the house and garden,
+  the dungeon, the evil lab, the museum after hours, deep water and haunted
 - A guided tutorial, and a hint menu that works out a line or checks for mistakes
 - An editor: draw a shape layer by layer, check it can be solved, play-test it, share a link
 - Story mode: the 2D game's ten chapters of jobs, scenes and bosses, on blocks, with every

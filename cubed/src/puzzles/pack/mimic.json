@@ -1,0 +1,116 @@
+{
+  "id": "mimic",
+  "name": "Mimic",
+  "colors": {
+    "b": "brown",
+    "k": "graphite",
+    "r": "red",
+    "t": "white",
+    "w": "wood",
+    "y": "yellow"
+  },
+  "layers": [
+    [
+      ".........",
+      ".........",
+      "bwwwwwwwb",
+      "bwwwwwwwb",
+      "bwwwwwwwb",
+      "bwwwwwwwb",
+      "bwwwwwwwb",
+      "bwwwwwwwb",
+      "........."
+    ],
+    [
+      ".........",
+      ".........",
+      "bwwwwwwwb",
+      "bwwwwwwwb",
+      "bwwwwwwwb",
+      "bwwwwwwwb",
+      "bwwwwwwwb",
+      "bwwwwwwwb",
+      "........."
+    ],
+    [
+      ".........",
+      ".........",
+      "bwwwwwwwb",
+      "bwwwwwwwb",
+      "bwwwwwwwb",
+      "bwwwwwwwb",
+      "bwwwwwwwb",
+      "bwwwwwwwb",
+      "........."
+    ],
+    [
+      "bwwwwwwwb",
+      "bwwwwwwwb",
+      "bwwwwwwwb",
+      "bwwwwwwwb",
+      "bwwwwwwwb",
+      "bwwwwwwwb",
+      "bwwwwwwwb",
+      "bwwwwwwwb",
+      "....r...."
+    ],
+    [
+      "bwwwwwwwb",
+      "bwwwwwwwb",
+      ".........",
+      "...rrr...",
+      "...rrr...",
+      "...rrr...",
+      "...rrr...",
+      ".t.trt.t.",
+      "........."
+    ],
+    [
+      "bwwwwwwwb",
+      "bwwwwwwwb",
+      "..k...k..",
+      ".........",
+      ".........",
+      ".........",
+      ".........",
+      ".........",
+      "........."
+    ],
+    [
+      "bwwwwwwwb",
+      "bwwwwwwwb",
+      "..y...y..",
+      ".........",
+      ".........",
+      ".........",
+      ".........",
+      ".........",
+      "........."
+    ],
+    [
+      "bwwwwwwwb",
+      "bwwwwwwwb",
+      ".t.t.t.t.",
+      ".........",
+      ".........",
+      ".........",
+      ".........",
+      ".........",
+      "........."
+    ],
+    [
+      "bwwwwwwwb",
+      "bwwwwwwwb",
+      ".........",
+      ".........",
+      ".........",
+      ".........",
+      ".........",
+      ".........",
+      "........."
+    ]
+  ],
+  "hideRatio": 0.55,
+  "hide": "908c008c102715f899df02c42560143020572b2bd9fa8ffbcb946a5294614",
+  "passes": 5
+}

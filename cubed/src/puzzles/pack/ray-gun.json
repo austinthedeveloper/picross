@@ -1,0 +1,23 @@
+{
+  "id": "ray-gun",
+  "name": "Ray Gun",
+  "colors": {
+    "b": "brown",
+    "k": "graphite",
+    "r": "red",
+    "s": "stone",
+    "t": "teal"
+  },
+  "layers": [
+    ["...........", ".bb........", ".bb........", "..........."],
+    ["...........", ".bb........", ".bb........", "..........."],
+    ["...........", ".bbk.......", ".bb........", "..........."],
+    ["...r.r.r...", ".bbr.r.r.t.", ".bbr.r.r.t.", "...r.r.r..."],
+    ["...r.r.r...", "sssrsrsrstt", "sssrsrsrstt", "...r.r.r..."],
+    ["...r.r.r...", "sssrsrsrstt", "sssrsrsrstt", "...r.r.r..."],
+    ["...r.r.r...", "...r.r.r.t.", "...r.r.r.t.", "...r.r.r..."]
+  ],
+  "hideRatio": 0.55,
+  "hide": "809809d2afdea9210d779bf351ae2f5fe20210",
+  "passes": 6
+}

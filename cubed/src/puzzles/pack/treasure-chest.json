@@ -1,0 +1,21 @@
+{
+  "id": "treasure-chest",
+  "name": "Treasure Chest",
+  "colors": {
+    "b": "brown",
+    "w": "wood",
+    "y": "yellow"
+  },
+  "layers": [
+    ["bbbbbbbbb", "bbbbbbbbb", "bbbbbbbbb", "bbbbbbbbb", "bbbbbbbbb", "bbbbbbbbb", "........."],
+    ["wbwwwwwbw", "wbwwwwwbw", "wbwwwwwbw", "wbwwwwwbw", "wbwwwwwbw", "wbwwwwwbw", "........."],
+    ["wbwwwwwbw", "wbwwwwwbw", "wbwwwwwbw", "wbwwwwwbw", "wbwwwwwbw", "wbwwwwwbw", "........."],
+    ["wbwwwwwbw", "wbwwwwwbw", "wbwwwwwbw", "wbwwwwwbw", "wbwwwwwbw", "wbwwwwwbw", "....y...."],
+    ["wbwwwwwbw", "wbwwwwwbw", "wbwwwwwbw", "wbwwwwwbw", "wbwwwwwbw", "wbwwwwwbw", "....y...."],
+    ["wbwwwwwbw", "wbwwwwwbw", "wbwwwwwbw", "wbwwwwwbw", "wbwwwwwbw", "wbwwwwwbw", "........."],
+    [".........", "wbwwwwwbw", "wbwwwwwbw", "wbwwwwwbw", "wbwwwwwbw", ".........", "........."]
+  ],
+  "hideRatio": 0.55,
+  "hide": "79be5e259b080080210ff504063dd73b4fdebdfbfaf1",
+  "passes": 3
+}

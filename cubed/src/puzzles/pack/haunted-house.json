@@ -1,0 +1,136 @@
+{
+  "id": "haunted-house",
+  "name": "Haunted House",
+  "colors": {
+    "b": "brown",
+    "k": "graphite",
+    "p": "purple",
+    "s": "stone",
+    "y": "yellow"
+  },
+  "layers": [
+    [
+      "...pppppppp",
+      "...pppppppp",
+      "...pppppppp",
+      "...pppppppp",
+      "ppppppppppp",
+      "ppppppppppp",
+      "ppppppbbppp",
+      "...sss..sss"
+    ],
+    [
+      "...pppppppp",
+      "...pppppppp",
+      "...pppppppp",
+      "...pppppppp",
+      "ppppppppppp",
+      "ppppppppppp",
+      "ppppppbbppp",
+      "..........."
+    ],
+    [
+      "...pppppppp",
+      "...pppppppp",
+      "...pppppppp",
+      "...pppppppp",
+      "ppppppppppp",
+      "ppppppppppp",
+      "ppppppppppp",
+      "..........."
+    ],
+    [
+      "...pppppppp",
+      "...pppppppp",
+      "...pppppppp",
+      "...pppppppp",
+      "ppppppppppp",
+      "ppppppppppp",
+      "pyppyyppyyp",
+      "..........."
+    ],
+    [
+      "...pppppppp",
+      "...pppppppp",
+      "...pppppppp",
+      "...pppppppp",
+      "ppppppppppp",
+      "ppppppppppp",
+      "ppppppppppp",
+      "..........."
+    ],
+    [
+      "...pppppppp",
+      "...pppppppp",
+      "...pppppppp",
+      "...pppppppp",
+      "ppppppppppp",
+      "ppppppppppp",
+      "ppppppppppp",
+      "..........."
+    ],
+    [
+      "...kkkkkkkk",
+      "...kkkkkkkk",
+      "...kkkkkkkk",
+      "...kkkkkkkk",
+      "pppkkkkkkkk",
+      "pppkkkkkkkk",
+      "pypkkkkkkkk",
+      "..........."
+    ],
+    [
+      "...........",
+      "...kkkkkkkk",
+      "...kkkkkkkk",
+      "...kkkkkkkk",
+      "pppkkkkkkkk",
+      "pppkkkkkkkk",
+      "ppp........",
+      "..........."
+    ],
+    [
+      "...........",
+      ".........b.",
+      "...kkkkkkkk",
+      "...kkkkkkkk",
+      "pppkkkkkkkk",
+      "ppp........",
+      "ppp........",
+      "..........."
+    ],
+    [
+      "...........",
+      ".........b.",
+      "...........",
+      "...kkkkkkkk",
+      "kkk........",
+      "kkk........",
+      "kkk........",
+      "..........."
+    ],
+    [
+      "...........",
+      ".........b.",
+      "...........",
+      "...........",
+      "...........",
+      ".k.........",
+      "...........",
+      "..........."
+    ],
+    [
+      "...........",
+      "...........",
+      "...........",
+      "...........",
+      "...........",
+      ".k.........",
+      "...........",
+      "..........."
+    ]
+  ],
+  "hideRatio": 0.65,
+  "hide": "f702838a0097008d9294802e352b2dff2189b4c0bc14ba0083f815841ff728cff9040a10c8d7201",
+  "passes": 5
+}

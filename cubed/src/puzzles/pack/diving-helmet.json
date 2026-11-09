@@ -1,0 +1,23 @@
+{
+  "id": "diving-helmet",
+  "name": "Diving Helmet",
+  "colors": {
+    "k": "graphite",
+    "o": "orange",
+    "s": "sky",
+    "y": "yellow"
+  },
+  "layers": [
+    ["..yyy..", ".yyyyy.", "yyyyyyy", "yyyyyyy", "yyyyyyy", ".yyyyy.", "..yyy.."],
+    ["..yky..", ".yyyyy.", "yyyyyyy", "kyyyyyk", "yyyyyyy", ".yyyyy.", "..yky.."],
+    [".......", "...o...", "..ooo..", ".ooooo.", "..ooo..", "...o...", "......."],
+    [".......", ".ooooo.", ".ooooo.", ".ooooo.", ".ooooo.", ".ossso.", "......."],
+    ["..ooo..", ".ooooo.", "ooooooo", "sooooos", "ooooooo", ".ooooo.", "..sks.."],
+    ["..ooo..", ".ooooo.", "ooooooo", "ooooooo", "ooooooo", ".ooooo.", "..sss.."],
+    [".......", ".ooooo.", ".ooooo.", ".ooooo.", ".ooooo.", ".ooooo.", "......."],
+    [".......", "...o...", "..ooo..", ".ooooo.", "..ooo..", "...o...", "......."]
+  ],
+  "hideRatio": 0.55,
+  "hide": "80062c78378bcddd9c802c78b8fdd111060c46030",
+  "passes": 6
+}

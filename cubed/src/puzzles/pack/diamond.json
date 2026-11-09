@@ -1,0 +1,21 @@
+{
+  "id": "diamond",
+  "name": "Diamond on a Cushion",
+  "colors": {
+    "d": "sky",
+    "r": "red",
+    "w": "white",
+    "y": "yellow"
+  },
+  "layers": [
+    ["yrrrrry", "rrrrrrr", "rrrrrrr", "rrrrrrr", "rrrrrrr", "rrrrrrr", "yrrrrry"],
+    ["rrrrrrr", "rrrrrrr", "rrrrrrr", "rrrrrrr", "rrrrrrr", "rrrrrrr", "rrrrrrr"],
+    [".......", ".......", "...d...", "..ddd..", "...d...", ".......", "......."],
+    ["...d...", "..ddd..", ".ddddd.", "ddddddd", ".ddddd.", "..ddd..", "...d..."],
+    ["..ddd..", ".ddddd.", "ddddddd", "ddddddd", "ddddddd", ".ddddd.", "..ddd.."],
+    [".......", "...d...", "..ddw..", ".ddwdd.", "..wdd..", "...d...", "......."]
+  ],
+  "hideRatio": 0.55,
+  "hide": "048ba07c1adfdd26598c44b5223200a460",
+  "passes": 8
+}

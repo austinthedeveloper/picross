@@ -1,0 +1,31 @@
+{
+  "id": "grandfather-clock",
+  "name": "Grandfather Clock",
+  "colors": {
+    "b": "brown",
+    "c": "cream",
+    "k": "graphite",
+    "w": "wood",
+    "y": "yellow"
+  },
+  "layers": [
+    ["bbbbb", "bbbbb", "bbbbb", "bbbbb"],
+    ["bbbbb", "bbbbb", "bbbbb", "bbbbb"],
+    ["bbbbb", "bbbbb", "bbbbb", "bbbbb"],
+    [".www.", ".www.", ".www.", "....."],
+    [".www.", ".www.", ".wkw.", "....."],
+    [".www.", ".www.", ".wyw.", "....."],
+    [".www.", ".www.", ".wyw.", "....."],
+    [".www.", ".www.", ".www.", "....."],
+    [".www.", ".www.", ".www.", "....."],
+    ["wwwww", "wwwww", "wwwww", "wwwww"],
+    ["wwwww", "wwwww", "wwwww", "wcccw"],
+    ["wwwww", "wwwww", "wwwww", "wckkw"],
+    ["wwwww", "wwwww", "wwwww", "wckcw"],
+    [".bbb.", ".bbb.", ".bbb.", "....."],
+    [".....", "..y..", ".....", "....."]
+  ],
+  "hideRatio": 0.6,
+  "hide": "7c877606722f6e835406c4e46c8f3eca770c1c4",
+  "passes": 4
+}

@@ -1,0 +1,22 @@
+{
+  "id": "skull",
+  "name": "Skull",
+  "colors": {
+    "c": "cream",
+    "k": "graphite",
+    "w": "white"
+  },
+  "layers": [
+    [".......", ".......", ".wwwww.", ".wwwww.", ".wwwww.", ".wwwww.", "......."],
+    [".......", ".......", ".wwwww.", ".wwwww.", ".wwwww.", ".ckckc.", "......."],
+    [".......", ".......", ".wwwww.", ".wwwww.", ".wwwww.", ".wwkww.", "......."],
+    [".......", ".wwwww.", ".wwwww.", ".wwwww.", ".wwwww.", ".kkwkk.", "......."],
+    ["..www..", ".wwwww.", "wwwwwww", "wwwwwww", "wwwwwww", ".kwwwk.", "..kwk.."],
+    ["..www..", ".wwwww.", "wwwwwww", "wwwwwww", "wwwwwww", ".wwwww.", "..www.."],
+    [".......", ".wwwww.", ".wwwww.", ".wwwww.", ".wwwww.", ".wwwww.", "......."],
+    [".......", ".......", "..www..", "..www..", "..www..", ".......", "......."]
+  ],
+  "hideRatio": 0.55,
+  "hide": "dfe65ba40250ea02d30ad0632a1229bc52f8be610",
+  "passes": 4
+}
