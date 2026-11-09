@@ -49,6 +49,9 @@ Then open http://localhost:5174 (the 2D game's dev server keeps 5173).
 | `npm run check:shared` | Fail if a shared file was edited here                                 |
 | `npm run screenshot`   | Screenshot a page of the running dev server                           |
 
+The timing test (`e2e/perf.spec.ts`) runs alone after the other browser tests, so they don't
+share its CPU. To run just it: `npx playwright test perf.spec.ts --no-deps`.
+
 ## Docs
 
 - [Architecture](docs/architecture.md): the layers, the files, and how a stroke flows
