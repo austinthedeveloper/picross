@@ -1,0 +1,37 @@
+{
+  "id": "footprint",
+  "name": "Footprint",
+  "colors": {
+    "b": "brown",
+    "s": "stone"
+  },
+  "layers": [
+    [
+      "sssssssss",
+      "sssssssss",
+      "sssssssss",
+      "sssssssss",
+      "sssssssss",
+      "sssssssss",
+      "sssssssss",
+      "sssssssss",
+      "sssssssss",
+      "sssssssss"
+    ],
+    [
+      "bbbbbbbbb",
+      "bbbb.bbbb",
+      "b.bb.bb.b",
+      "bb.b.b.bb",
+      "bb.....bb",
+      "bbb...bbb",
+      "bbbb.bbbb",
+      "bbbb.bbbb",
+      "bbbbbbbbb",
+      "bbbbbbbbb"
+    ]
+  ],
+  "hideRatio": 0.5,
+  "hide": "9a52384ae731307bd87a377ebd770088",
+  "passes": 5
+}

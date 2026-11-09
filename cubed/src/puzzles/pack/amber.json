@@ -1,0 +1,21 @@
+{
+  "id": "amber",
+  "name": "Amber",
+  "colors": {
+    "k": "graphite",
+    "o": "orange",
+    "y": "yellow"
+  },
+  "layers": [
+    ["........", "........", "..ooyo..", "........", "........"],
+    ["........", ".ooyooo.", ".ooyooo.", ".okyoko.", "........"],
+    ["...oo...", ".oyoooy.", "ooyoooyo", ".oyoooy.", "...kk..."],
+    ["..oooy..", ".yoooyo.", "oyoooyoo", ".yoooyo.", "..kkkk.."],
+    ["...oy...", ".oooyoo.", "yoooyooo", ".kooyok.", "...kk..."],
+    ["........", ".ooyooo.", ".ooyooo.", ".ookooo.", "........"],
+    ["........", "........", "..yooo..", "........", "........"]
+  ],
+  "hideRatio": 0.55,
+  "hide": "a8c20a08e9d006e0833df916af4fff5c4",
+  "passes": 5
+}

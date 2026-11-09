@@ -1,0 +1,70 @@
+{
+  "id": "dig-site",
+  "name": "Dig Site",
+  "colors": {
+    "b": "brown",
+    "c": "cream",
+    "k": "graphite",
+    "s": "stone",
+    "w": "wood"
+  },
+  "layers": [
+    [
+      "bbbbbbbbbbbb",
+      "bbbbbbbbbbbb",
+      "bbbbbbbbbbbb",
+      "bbbbbbbbbbbb",
+      "bbbbbbbbbbbb",
+      "bbbbbbbbbbbb",
+      "bbbbbbbbbbbb"
+    ],
+    [
+      "sbbbbsbbbbsb",
+      "bbsbbbbsbbbb",
+      "bbbbsbbbbsbb",
+      "bsbbbbsbbbbs",
+      "bbbsbbbbsbbb",
+      "sbbbbsbbbbsb",
+      "bbsbbbbsbbbb"
+    ],
+    [
+      "...c.c.c....",
+      "....ccc.....",
+      ".cc......cc.",
+      ".cccccccccc.",
+      ".cc......cc.",
+      "....ccc.....",
+      "...c.c.c...w"
+    ],
+    [
+      "............",
+      "............",
+      "............",
+      ".c........c.",
+      "............",
+      "............",
+      "...........w"
+    ],
+    [
+      "............",
+      "............",
+      "............",
+      "............",
+      "............",
+      "............",
+      "...........w"
+    ],
+    [
+      "............",
+      "............",
+      "............",
+      "............",
+      "............",
+      "............",
+      "..........kk"
+    ]
+  ],
+  "hideRatio": 0.55,
+  "hide": "0a82c00e31cbb7556ddf8de18f84c8135b34406107a2228aa1",
+  "passes": 7
+}
