@@ -59,6 +59,11 @@
   background: var(--surface);
   border: 1px solid var(--line);
   overflow: hidden;
+  /* Holding a cube clears its line; on iOS a hold would also select text and pop up
+     Copy / Look Up. */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
 }
 
 .block-canvas {
