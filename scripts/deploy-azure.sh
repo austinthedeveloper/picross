@@ -27,11 +27,12 @@ if [[ -d "$dist/assets" ]]; then
     --content-cache-control 'public, max-age=31536000, immutable'
 fi
 
-# 2. Everything else (index.html, favicon, ...) is always revalidated.
-find "$dist" -maxdepth 1 -type f | while read -r file; do
+# 2. Everything else (index.html, the art, icons, 3d/ for Cubed's old links, ...) is always
+#    revalidated. Not .vite/, the build's manifest for npm run check:budget.
+find "$dist" -type f -not -path "$dist/assets/*" -not -path "$dist/.vite/*" | while read -r file; do
   az storage blob upload \
     --account-name "$account" --auth-mode "$auth" \
-    --container-name '$web' --name "$(basename "$file")" --file "$file" \
+    --container-name '$web' --name "${file#"$dist"/}" --file "$file" \
     --overwrite --only-show-errors --output none \
     --content-cache-control 'no-cache'
 done
