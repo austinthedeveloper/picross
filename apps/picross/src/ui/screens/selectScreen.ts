@@ -131,7 +131,7 @@ export function renderSelectScreen(app: HTMLElement): void {
       }),
       // Both boards' puzzles in one place, with size filters (#153).
       el('a', {
-        className: 'how-to-link free-play-link',
+        className: 'free-play-link',
         href: freePlayHref('flat'),
         textContent: 'Free play: Flat and Cubed puzzles in one list →',
       }),
