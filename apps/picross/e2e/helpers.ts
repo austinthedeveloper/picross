@@ -147,10 +147,15 @@ export async function solve(page: Page, rows: string[], stop?: () => Promise<boo
   await expect(page.locator('.end-panel:not([hidden])')).toBeVisible();
 }
 
-/** The phase the saved fight is in (how many of the enemy's phases have started). */
+/**
+ * The phase the saved fight is in (how many of the enemy's phases have started), from the
+ * flat board's battle (#169: a fight saves an entry per board).
+ */
 export const savedPhase = (page: Page) =>
   page.evaluate(
-    () => JSON.parse(localStorage.getItem('picross:run') ?? '{}').current?.battle?.phase ?? 0,
+    () =>
+      JSON.parse(localStorage.getItem('picross:run') ?? '{}').current?.fight?.boards?.flat?.battle
+        ?.phase ?? 0,
   );
 
 /**
