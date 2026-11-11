@@ -9,13 +9,13 @@
       #/cubed/…, so old links and bookmarks come on to the same screen: /3d/#/play/mug opens
       ../#/cubed/play/mug, and /3d/ opens Cubed's list. Servers never see the hash, so this
       page does it (GitHub Pages and Azure can't redirect). Scenes were both games' already,
-      and the daily is now (#156).
+      and the daily (#156) and the badges (#157) are now.
       /3d/sw.js retires Cubed's old offline worker.
     -->
     <script>
       (function () {
         var path = location.hash.replace(/^#/, '');
-        var to = /^\/(scene\/|daily$)/.test(path)
+        var to = /^\/(scene\/|daily$|badges$)/.test(path)
           ? '#' + path
           : /^\/./.test(path)
             ? '#/cubed' + path

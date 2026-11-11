@@ -17,7 +17,8 @@ const block = (page: Page) => expect(page.locator('canvas.block-canvas')).toBeVi
 const LINKS: [string, string, (page: Page) => Promise<void>][] = [
   ['/3d/', '#/cubed', heading('Picross Cubed')],
   ['/3d/#/', '#/cubed', heading('Picross Cubed')],
-  ['/3d/index.html#/badges', '#/cubed/badges', heading('Badges')],
+  // One badge shelf for both boards now (#157).
+  ['/3d/index.html#/badges', '#/badges', heading('Badges')],
   ['/3d/?day=3#/play/steps', '#/cubed/play/steps', block],
   ['/3d/#/play/steps', '#/cubed/play/steps', block],
   ['/3d/#/tutorial', '#/cubed/tutorial', block],
@@ -29,7 +30,7 @@ const LINKS: [string, string, (page: Page) => Promise<void>][] = [
     (page) =>
       expect(page.locator('canvas.block-canvas').or(page.locator('.board')).first()).toBeVisible(),
   ],
-  ['/3d/#/badges', '#/cubed/badges', heading('Badges')],
+  ['/3d/#/badges', '#/badges', heading('Badges')],
   ['/3d/#/diorama/park', '#/cubed/diorama/park', heading('Park')],
   ['/3d/#/diorama/park/1', '#/cubed/diorama/park/1', block],
   [

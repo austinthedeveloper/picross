@@ -11,12 +11,18 @@
  *                              in sheets/story/ export to the story puzzles (puzzles/story/).
  *
  * A puzzle has to be solvable without guessing from the clues it shows. See docs/cubed/how-to.md.
+ *
+ * Then it writes src/puzzles/catalog.json: each pack puzzle's longest side and the diorama
+ * pieces' ids, which the 2D game's screens count (rank and badges, #157) without loading the
+ * pack. src/puzzles/catalog.test.ts fails when it's out of date.
  */
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { solve } from '../src/engine/solver';
 import { dimsLabel } from '../src/engine/volume';
-import { encodeHidden, parsePuzzle, type PuzzleFile } from '../src/puzzles/format';
+import { buildCatalog, tileIdsOf } from '../src/puzzles/catalog';
+import type { DioramaFile } from '../src/puzzles/diorama';
+import { encodeHidden, parsePuzzle, type Puzzle, type PuzzleFile } from '../src/puzzles/format';
 import { chooseHidden } from '../src/puzzles/hide';
 import { parseSheet } from '../src/puzzles/sheet';
 
@@ -29,6 +35,8 @@ const sheetAt = args.indexOf('--sheet');
 const sheetPath = sheetAt >= 0 ? args[sheetAt + 1] : undefined;
 const only = args.filter((a, i) => !a.startsWith('--') && i !== sheetAt + 1);
 let failed = 0;
+/** The free-play puzzles, for the catalog. */
+const pack: Puzzle[] = [];
 
 // Export a sheet: write each puzzle's file, keeping its hidden clues if the shape is unchanged.
 if (sheetPath) {
@@ -83,6 +91,7 @@ for (const path of files) {
     file.passes = result.passes;
     writeFileSync(path, JSON.stringify(file, null, 2) + '\n');
   }
+  if (path.startsWith(join(PUZZLES, 'pack'))) pack.push(puzzle);
   const shown = puzzle.clues.filter(Boolean).length;
   const status = result.solved ? '✓' : '✗';
   if (!result.solved) failed++;
@@ -90,5 +99,17 @@ for (const path of files) {
     `${status} ${file.id.padEnd(12)} ${dimsLabel(puzzle.dims).padEnd(8)} ` +
       `${shown}/${puzzle.lines.length} clues shown, ${result.passes} passes${redo ? ' (new)' : ''}`,
   );
+}
+
+// The catalog, from the pack as it is now (a puzzle that failed above isn't in it).
+const dioramaDir = join(PUZZLES, 'dioramas');
+const tiles = readdirSync(dioramaDir)
+  .filter((f) => f.endsWith('.json'))
+  .flatMap((f) => tileIdsOf(JSON.parse(readFileSync(join(dioramaDir, f), 'utf8')) as DioramaFile));
+const catalogPath = join(PUZZLES, 'catalog.json');
+const catalog = JSON.stringify(buildCatalog(pack, tiles), null, 2) + '\n';
+if (!existsSync(catalogPath) || readFileSync(catalogPath, 'utf8') !== catalog) {
+  writeFileSync(catalogPath, catalog);
+  console.log(`  wrote catalog.json (${pack.length} puzzles, ${tiles.length} diorama pieces)`);
 }
 process.exit(failed ? 1 : 0);

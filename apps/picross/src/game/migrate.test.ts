@@ -59,7 +59,7 @@ describe.each(NAMES)('%s', (name) => {
 
   it('merges once, then writes its marker', () => {
     seed(before);
-    expect(migrate(localStorage, NOW)).toEqual([1, 2]);
+    expect(migrate(localStorage, NOW)).toEqual([1, 2, 3]);
     expect(read(MARKER_KEY)).toEqual({ version: SAVE_FORMAT, mergedAt: NOW });
   });
 
@@ -68,6 +68,13 @@ describe.each(NAMES)('%s', (name) => {
     migrate(localStorage, NOW);
     for (const [key, text] of Object.entries(before)) {
       if (key === 'picross:run' || key === 'picross:settings') continue;
+      // Step 3 only adds what's been seen to the badges (#157), which the old game ignores.
+      if (key === 'picross:badges') {
+        const { seen, ...rest } = read(key);
+        expect(seen, key).toBeDefined();
+        expect(rest, key).toEqual(JSON.parse(text));
+        continue;
+      }
       expect(localStorage.getItem(key), key).toBe(text);
     }
     expect(read(BACKUP_KEY)).toEqual({
@@ -250,8 +257,8 @@ describe('the dailies (#156)', () => {
       'picross3d:daily': JSON.stringify(cubed),
       [MARKER_KEY]: JSON.stringify({ version: 1, mergedAt: 5 }),
     });
-    expect(migrate(localStorage, NOW)).toEqual([2]);
-    expect(read(MARKER_KEY)).toEqual({ version: 2, mergedAt: 5 });
+    expect(migrate(localStorage, NOW)).toEqual([2, 3]);
+    expect(read(MARKER_KEY)).toEqual({ version: 3, mergedAt: 5 });
     expect(read(DAILY_KEY)).toMatchObject({ lastSolved: '2026-11-12', streak: 3, solves: 3 });
     // Both old keys stay as they were, for a rollback.
     expect(read('picross:daily')).toEqual(flat);
@@ -266,7 +273,51 @@ describe('the dailies (#156)', () => {
     migrate(localStorage, NOW);
     const once = snapshot();
     localStorage.setItem(MARKER_KEY, JSON.stringify({ version: 1, mergedAt: 5 }));
-    expect(migrate(localStorage, NOW)).toEqual([2]);
+    expect(migrate(localStorage, NOW)).toEqual([2, 3]);
+    expect(snapshot()).toEqual(once);
+  });
+});
+
+describe('the badges seen (#157)', () => {
+  it('are on the keys the badges read', () => {
+    expect(KEYS.badges).toBe('picross:badges');
+    expect(KEYS.cubedBadges).toBe('picross3d:badges');
+  });
+
+  it("carry Cubed's tiers seen over as block- badges, and count the 2D game's as seen", () => {
+    seed(raw('both'));
+    migrate(localStorage, NOW);
+    // Cubed's shelf last showed No Peeking, Big Blocks and Odd Jobber at bronze (tier 0).
+    expect(read('picross:badges').seen).toEqual({
+      'invoiced-a-bat': 3,
+      'toolbox-shut': 1,
+      'block-clean': 1,
+      'block-big': 1,
+      'block-story': 1,
+    });
+  });
+
+  it('leave a Cubed-only save its tiers seen, with nothing earned yet', () => {
+    seed(raw('cubed-only'));
+    migrate(localStorage, NOW);
+    expect(read('picross:badges')).toEqual({ earned: {}, seen: { 'block-story': 1 } });
+  });
+
+  it('run for a save that had steps 1 and 2, and never lower a level seen', () => {
+    seed({
+      'picross3d:badges': JSON.stringify({ tiers: { solver: 2, clean: 0, daily: -1 } }),
+      'picross:badges': JSON.stringify({
+        earned: { 'block-clean': { tier: 'gold' } },
+        seen: { 'block-solver': 1, 'block-clean': 3 },
+      }),
+      [MARKER_KEY]: JSON.stringify({ version: 2, mergedAt: 5 }),
+    });
+    expect(migrate(localStorage, NOW)).toEqual([3]);
+    expect(read('picross:badges').seen).toEqual({ 'block-solver': 3, 'block-clean': 3 });
+    // Again, as if cut short before the marker: the same.
+    const once = snapshot();
+    localStorage.setItem(MARKER_KEY, JSON.stringify({ version: 2, mergedAt: 5 }));
+    expect(migrate(localStorage, NOW)).toEqual([3]);
     expect(snapshot()).toEqual(once);
   });
 });
@@ -285,7 +336,7 @@ describe('the runner', () => {
   it('writes only its marker and an empty copy for a new player', () => {
     migrate(localStorage, NOW);
     expect(snapshot()).toEqual({
-      [MARKER_KEY]: JSON.stringify({ version: 2, mergedAt: NOW }),
+      [MARKER_KEY]: JSON.stringify({ version: 3, mergedAt: NOW }),
       [BACKUP_KEY]: JSON.stringify({ 'picross:run': null, 'picross:settings': null }),
     });
   });

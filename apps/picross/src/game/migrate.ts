@@ -1,11 +1,14 @@
 import {
+  mergeBadgesSeen,
   mergeDailies,
   mergeLegacy,
   type CubedSaves,
   type FlatSaves,
+  type LegacyCubedBadges,
   type LegacyCubedDaily,
   type LegacyFlatDaily,
 } from './legacyMerge';
+import type { BadgeSave } from './badges';
 
 /**
  * Save migrations, run once at startup before anything reads a save. The store modules read
@@ -39,6 +42,9 @@ export const KEYS = {
   flatDaily: 'picross:daily',
   cubedDaily: 'picross3d:daily',
   daily: 'picross:daily2',
+  /** Step 3's: Cubed's badge tiers seen, and the one badge save (`game/badges.ts`). */
+  cubedBadges: 'picross3d:badges',
+  badges: 'picross:badges',
 } as const;
 
 /** The marker: the last step run, and when the first one ran. */
@@ -124,9 +130,25 @@ function mergeTheDailies(store: KeyValue): void {
   if (merged) store.setItem(KEYS.daily, JSON.stringify(merged));
 }
 
+/**
+ * Step 3 (#157): one badge shelf. Cubed's badges are earned into `picross:badges` like the
+ * 2D game's (as `block-<id>`, by `syncBadges` at startup), so all this carries over is what
+ * each player has already seen: the tiers in `picross3d:badges`, which stays as it was, and
+ * the 2D game's badges, which it showed as they were earned. Only `seen` changes, and only
+ * upward, so running it again changes nothing.
+ */
+function carryBadgesSeen(store: KeyValue): void {
+  const merged = mergeBadgesSeen(
+    readJson<BadgeSave>(store, KEYS.badges),
+    readJson<LegacyCubedBadges>(store, KEYS.cubedBadges),
+  );
+  if (merged) store.setItem(KEYS.badges, JSON.stringify(merged));
+}
+
 const STEPS: Step[] = [
   { version: 1, run: mergeTheGames },
   { version: 2, run: mergeTheDailies },
+  { version: 3, run: carryBadgesSeen },
 ];
 
 /** The version a save is at once every step has run. */

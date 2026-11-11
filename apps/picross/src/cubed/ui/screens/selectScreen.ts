@@ -11,7 +11,7 @@ import { el } from '@picross/shared/ui/dom';
 import { formatTime, puzzleNumber } from '@picross/play-block/ui/format';
 import { hapticsSupported } from '@picross/shared/ui/haptics';
 import { applyTheme } from '@picross/shared/ui/theme';
-import { badgesLink } from './badgesScreen';
+import { badgesLink } from '../../../ui/components/badge';
 import { dioramaSection } from './dioramaList';
 import { cubedHref } from '../../href';
 

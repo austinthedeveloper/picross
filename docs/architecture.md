@@ -166,8 +166,8 @@ apps/
       cubed/               Picross Cubed, the 3D game (#/cubed/…; docs/cubed/), loaded on demand
         routes.ts          Its routes, from #/cubed on; hands over its settings while they're up
         href.ts            cubedHref(): every link between its screens
-        game/              Views of the one save (progress, settings, runSave), its daily and badges
-        ui/screens/        The list, free play, tutorial, how to play, shared puzzles, daily, dioramas, badges
+        game/              Views of the one save (progress, settings, runSave) and its daily
+        ui/screens/        The list, free play, tutorial, how to play, shared puzzles, daily, dioramas
           story/           Story screens: jobs board, path map, encounters, digs, rests, results
         styles/select.css  The list
     e2e/                   Playwright browser tests (see docs/development.md)
@@ -407,14 +407,14 @@ the save merge (#155) the 2D game and Picross Cubed share one save:
 | `picross:v2`       | `game/progress.ts`           | Both games' free play, by qualified id (`grid:mug`, `block:mug`): per-puzzle stats (`clean` solves for Cubed), in-progress boards, time played per dimension (`time.grid`, `time.block`), Cubed's editor play-tests |
 | `picross:run`      | `game/runSave.ts`            | The 2D run in progress (`current`, with the current encounter's board), Cubed's (`block.current`, its own RunState), the scenes and tips seen, and job stats from both (`wonOn`: the boards a job's been won on)    |
 | `picross:settings` | `game/settings.ts`           | `mode` (default for new runs), `listFilter`, `listOrder`, `listDifficulty`, `collapsedSections`, `muted`, `highContrast`, `haptics`, and Cubed's `dimDone` and `cubedTutorialDone`, and `freePlayTab` (#153)        |
-| `picross:badges`   | `game/badges.ts`             | Earned badges: each one's best tier and the date you first earned it                                                                                                                                                |
+| `picross:badges`   | `game/badges.ts`             | Both games' earned badges (Cubed's as `block-<id>`, #157): each one's best tier and the date first earned, and `seen`, how far each had got when the shelf was last open                                            |
 | `picross:daily2`   | `game/daily.ts`              | The one daily (#156): every day solved (`days`: its board, and best time if kept), the streak as of `lastSolved`, the best streak, the solve count, and today's board (with its board, `dimension`)                 |
 | `picross:editor`   | `ui/screens/editorScreen.ts` | The editor's current drawing                                                                                                                                                                                        |
 | `picross:game`     | `gameSwitch.ts` (shared)     | The Flat \| Cubed switch's last pick                                                                                                                                                                                |
 | `picross:save`     | `game/migrate.ts`            | `{ version, mergedAt }`: the migrations run so far                                                                                                                                                                  |
 | `picross:premerge` | `game/migrate.ts`            | The text of `picross:run` and `picross:settings` from before the merge rewrote them                                                                                                                                 |
 | `picross:daily`    | (old)                        | The 2D game's daily before #156; read only by the migration                                                                                                                                                         |
-| `picross3d:badges` | `cubed/game/badges.ts`       | The Cubed badge tiers already seen, apart until #157                                                                                                                                                                |
+| `picross3d:badges` | (old)                        | Cubed's badge tiers seen before #157; read only by the migration                                                                                                                                                    |
 
 Cubed's `cubed/game/progress.ts`, `runSave.ts`, `settings.ts` and `daily.ts` are views of the
 first three and the daily on the `block` side (`progressFor('block')`, `block` in the run save, `tutorialDone` read
@@ -439,7 +439,7 @@ real play in `game/fixtures/legacy/`):
 - **Settings:** `picross3d:settings` into `picross:settings`. A setting both games have takes
   the 2D game's value where its key had one, and Cubed's otherwise. `picross:game` becomes
   `freePlayTab`.
-- **Not yet:** badges are recounted across both in #157.
+- **Badges** are step 3's (below).
 
 Step 2 (#156) merges the two dailies into the one daily, `picross:daily2`, with
 `mergeDailies` in `legacyMerge.ts`. It runs for a save step 1 already merged too, which has
@@ -458,6 +458,13 @@ played both dailies on their old keys since:
 - **A board in progress** comes along only if the one daily would open it: the 2D game's,
   for a Flat day after its last solve. Cubed's never does, since Cubed's days have new
   puzzles now.
+
+Step 3 (#157) carries over the badges each player has already seen, so the one shelf doesn't
+mark them "New!": Cubed's tiers seen (`picross3d:badges`) as `block-<id>` levels in
+`picross:badges.seen`, and every 2D badge already earned. Levels seen only go up, so it's safe
+to run again. Cubed's badges themselves aren't copied: `syncBadges` earns them from the merged
+saves at startup, at the tier Cubed showed or better (`badgeRecount.test.ts` checks the
+fixtures).
 
 Like step 1's, it reads only keys nothing else writes, and writes a new key, so it's safe to
 run again and `picross:daily` and `picross3d:daily` stay for a rollback.
@@ -522,11 +529,40 @@ leaves them out.
 **Rank** (#106) measures how much you've solved. `game/rank.ts` works it out from existing
 solves, so it's never stored and old saves need no migration: each pack puzzle counts once
 by size, plus mural tiles and dailies. Time and mode never count. Thresholds in
-`puzzles/ranks.ts` stay fixed, so new puzzles can't lower anyone's rank.
+`puzzles/ranks.ts` stay fixed, so new puzzles can't lower anyone's rank. Both packs count
+(#157): a block by its longest side, a diorama piece like a mural tile.
+
+**The 3D pack's catalog.** Rank and the badges are on the first screen, and the 3D pack (every
+block's layers and clues) isn't in the first download (`npm run check:budget`). So
+`npm -w packages/block run puzzles` also writes `packages/block/src/puzzles/catalog.json`:
+each pack puzzle's longest side, and the diorama pieces' ids (about 1.9 kB, 0.7 kB
+gzipped). `catalog.test.ts` there fails when it's out of date, like `ratings.json`'s test.
 
 **Badges** (#108) record how you did something, which can't be worked out afterward, so
 they're saved when earned. `puzzles/badges.ts` is the catalog and `game/badges.ts` holds
-the rules. Tiers only go up, and a badge keeps the date it was first earned.
+the rules. Tiers only go up, and a badge keeps the date it was first earned: `earn` skips
+an award at or below what's saved, so nobody ever loses a badge or a tier.
+
+- **One shelf for both boards** (#157), at `#/badges`, grouped: the story (job badges by
+  chapter, then Odd Jobber and Overtime), Free play · Flat, Free play · Cubed, Daily,
+  Endless, Know-how, Bad days, and Both boards. `#/cubed/badges` moves there.
+- **Count badges** (`kind: 'count'`) have steps: three for bronze, silver and gold, or one
+  for a badge without tiers. `countOf` works each count out from both boards' saves.
+  Cubed's nine badges are count badges with `block-` in front of their old ids, worked out
+  as Cubed did (its "Regular" is now "Clocking In", since the 2D game has a Regular).
+  The story ones count the 2D game's chapters and jobs, which a test checks are the ones
+  Cubed plays. The Flat board got three of its own (Square Deal, Wall to Wall, Signed in
+  the Corner), and both boards three (Fifty-Fifty, Second Opinion from `JobStats.wonOn`,
+  Flat-Packed from the pictures in both packs).
+- **New:** `seen` in the save holds each badge's level (`badgeLevel`: 1 earned or bronze,
+  2 silver, 3 gold) as of the last time the shelf was open. A badge further on shows "New!"
+  there, and the links to the shelf count them ("Badges (2 new)"). Opening the shelf marks
+  them seen. Migration step 3 sets `seen` from Cubed's `picross3d:badges` and the 2D
+  badges already earned (the 2D game showed each as it was earned).
+- **When they're earned:** `syncBadges` at startup and when the shelf opens (no date, for
+  older saves and anything a screen didn't award); `earnFromStats` after a solve on either
+  board, a daily, a Cubed run and a play-test (dated, and said on the end panel), and
+  `earnFromRun` / `earnFromFight` in the 2D game's story.
 
 - **How a run went** (#107): a fight keeps its counts in `BattleState.counts`, which roll
   into `RunState.tally` when the fight is won. Count each thing at its cause rather than

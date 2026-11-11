@@ -6,6 +6,7 @@ import {
   saveBoard,
 } from '../../game/progress';
 import { nextUnsolved } from '../../game/pickPuzzle';
+import { badgeNote, earnFromStats } from '../../game/badges';
 import { currentPoints, rankUpNote } from '../../game/rank';
 import { getSettings } from '../../game/settings';
 import type { Puzzle } from '@picross/grid/puzzles/format';
@@ -36,6 +37,8 @@ export function freePlaySession(puzzle: Puzzle): PlaySession {
       if (game.hintsUsed) note += ` · ${plural(game.hintsUsed, 'hint')}`;
       const rankUp = rankUpNote(pointsBefore);
       if (rankUp) note += ` · ${rankUp}`;
+      const badges = badgeNote(earnFromStats());
+      if (badges) note += ` · ${badges}`;
 
       const next = nextUnsolved(puzzles, puzzle.id, (id) => Boolean(getPuzzleStats(id)));
       const actions = [allPuzzlesLink()];

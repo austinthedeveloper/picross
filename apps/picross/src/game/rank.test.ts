@@ -1,8 +1,9 @@
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { blockCatalog } from '@picross/block/puzzles/catalog';
 import { murals } from '@picross/grid/puzzles/murals';
 import { puzzles } from '@picross/grid/puzzles/index';
 import { DAILY_POINTS, puzzlePoints, ranks, TILE_POINTS } from '../puzzles/ranks';
-import { countPoints, rankProgress, rankUpNote } from './rank';
+import { blockPack, countPoints, rankProgress, rankUpNote } from './rank';
 
 const sized = (id: string, size: number) => ({ id, width: size, height: size });
 
@@ -62,5 +63,37 @@ describe('rankUpNote', () => {
     expect(rankUpNote(9, 12)).toBe('New rank: Tinkerer!');
     expect(rankUpNote(10, 13)).toBe('');
     expect(rankUpNote(12, 12)).toBe('');
+  });
+});
+
+describe('both boards (#157)', () => {
+  beforeEach(() => localStorage.clear());
+
+  it("count Cubed's pack by each block's longest side, and diorama pieces like tiles", async () => {
+    const [small] = blockPack.filter((p) => p.width <= 5);
+    const [mid] = blockPack.filter((p) => p.width > 5);
+    const solved = Object.fromEntries(
+      [
+        `block:${small.id}`,
+        `block:${mid.id}`,
+        `block:${blockCatalog.dioramaTiles[0]}`,
+        'grid:heart',
+      ].map((id) => [id, { solves: 1, bestTime: 9 }]),
+    );
+    localStorage.setItem('picross:v2', JSON.stringify({ solved, boards: {}, time: {} }));
+    vi.resetModules();
+    const { currentPoints } = await import('./rank');
+    const heart = puzzles.find((p) => p.id === 'heart')!;
+    expect(currentPoints()).toBe(
+      puzzlePoints(heart.width) + puzzlePoints(small.width) + puzzlePoints(mid.width) + TILE_POINTS,
+    );
+  });
+
+  it('leaves room below the top rank for both packs', () => {
+    const tiles = murals.flatMap((m) => m.tiles);
+    const blocks = blockCatalog.dioramaTiles.map((id) => ({ id }));
+    const total =
+      countPoints(puzzles, tiles, () => true, 0) + countPoints(blockPack, blocks, () => true, 0);
+    expect(total).toBeGreaterThan(ranks.at(-1)!.points);
   });
 });

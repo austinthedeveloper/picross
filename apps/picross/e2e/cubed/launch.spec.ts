@@ -56,7 +56,9 @@ test("the daily on a Cubed day: a block, on yesterday's Flat streak", async ({ p
   await expect(card).toContainText('Replay');
 });
 
-test('badges list every badge with its next step, and count new ones', async ({ page }) => {
+test("Cubed's badges are on the one shelf, with their next step, and count new ones", async ({
+  page,
+}) => {
   await page.goto('/#/cubed');
   await expect(page.getByRole('link', { name: 'Badges', exact: true })).toBeVisible();
   // A solve earns progress toward Block Breaker; five earn bronze.
@@ -75,11 +77,16 @@ test('badges list every badge with its next step, and count new ones', async ({ 
   await page.reload();
   await expect(page.getByRole('link', { name: /Badges \(\d+ new\)/ })).toBeVisible();
   await page.getByRole('link', { name: /Badges/ }).click();
-  const breaker = page.locator('.badge-row').filter({ hasText: 'Block Breaker' });
+  // The one shelf (#157), off Cubed's board.
+  await expect(page).toHaveURL(/#\/badges$/);
+  await expect(page.locator('html')).not.toHaveAttribute('data-board', 'block');
+  const shelf = page.getByRole('region', { name: 'Free play · Cubed' });
+  const breaker = shelf.locator('.badge-card').filter({ hasText: 'Block Breaker' });
   await expect(breaker).toContainText('Bronze');
   await expect(breaker).toContainText('New!');
   await expect(breaker).toContainText('Silver at 15 (5 so far)');
-  await page.getByRole('link', { name: 'Home' }).click();
+  // Seen now: back on Cubed's list, nothing's new.
+  await page.goto('/#/cubed');
   await expect(page.getByRole('link', { name: 'Badges', exact: true })).toBeVisible();
 });
 

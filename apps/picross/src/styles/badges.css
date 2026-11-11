@@ -57,6 +57,12 @@
   font-weight: 700;
 }
 
+.badge-new {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
 .badge-tier.none {
   font-weight: 400;
   color: var(--muted);

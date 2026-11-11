@@ -7,7 +7,8 @@
  * Picross Cubed, the 3D game, is one entry: everything under `#/cubed/…`, loaded with one
  * `import('./cubed/routes')`, so neither its screens nor three.js are in the first download
  * (`npm run check:budget` checks). `#/scene/<id>` is both games', and so is `#/daily`, which
- * opens Cubed's daily screen the same way on a Cubed day (#156).
+ * opens Cubed's daily screen the same way on a Cubed day (#156). `#/badges` is both games' shelf
+ * (#157).
  */
 import { getPuzzle } from '@picross/grid/puzzles/index';
 import { getMural } from '@picross/grid/puzzles/murals';
@@ -51,8 +52,9 @@ export interface Route<T = unknown> {
  * leaves no step in the history.
  */
 const MOVED: Record<string, string> = {
-  // Cubed's daily (#156): one daily for both boards now.
+  // Cubed's daily (#156) and badges (#157): one of each for both boards now.
   '#/cubed/daily': '#/daily',
+  '#/cubed/badges': '#/badges',
 };
 
 /** Where `hash` goes now: itself, unless it's an old link. */
