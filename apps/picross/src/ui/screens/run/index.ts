@@ -1,10 +1,9 @@
 import { hasSeenScene, markSceneSeen } from '../../../game/runSave';
 import { chapters } from '../../../puzzles/chapters';
-import { runs } from '../../../puzzles/runs';
 import { getScene } from '@picross/story/puzzles/scenes';
 import { el } from '@picross/shared/ui/dom';
 import { renderSceneScreen } from '@picross/story/ui/screens/sceneScreen';
-import { chapterOpen, jobsBoard, unlocked } from './jobsBoard';
+import { chapterOpen, jobsBoard } from './jobsBoard';
 import { pathMap } from './pathMap';
 import { results } from './results';
 import { loadRun, type Hub } from './shared';
@@ -51,28 +50,4 @@ export function renderRunScreen(app: HTMLElement): () => void {
       : results(hub, run.state, run.def);
   app.replaceChildren(el('main', { className: 'screen run' }, body));
   return () => stopScene?.();
-}
-
-/** One line for the puzzle list: start or continue a run. */
-export function runBanner(): HTMLElement {
-  const run = loadRun();
-  const active = run?.state.status === 'active';
-  const open = runs.filter(unlocked).length;
-  return el('a', { className: 'run-banner', href: '#/run' }, [
-    el('span', {
-      className: 'run-banner-title',
-      textContent: active ? 'Continue run' : 'Pick a job',
-    }),
-    el('span', {
-      className: 'run-banner-meta',
-      textContent: active
-        ? `${run!.def.name} · ${
-            run!.def.endless
-              ? `depth ${run!.state.node + 1}`
-              : `encounter ${run!.state.node + 1} of ${run!.def.encounters.length}`
-          } · HP ${run!.state.hp}/${run!.state.maxHp}`
-        : `${open} of ${runs.length} jobs open`,
-    }),
-    el('span', { className: 'run-banner-go', ariaHidden: 'true', textContent: '→' }),
-  ]);
 }

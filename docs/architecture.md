@@ -106,8 +106,9 @@ apps/
         badges.ts          The badge catalog (#108)
         ids.test.ts        Every id in both games, qualified (grid:mug, block:mug), and the clashes
       game/                Game state and saves, no DOM (Game itself is in packages/grid)
-        battle.ts          Enemy and BattleState: chip, finisher, gadgets, phases, armor, call-outs, boardAt
-        fight.ts           gridStep: a 2D fight's rules in one headless step, with events (#163)
+        battle.ts          Enemy and BattleState (the 2D save), boardAt, carryHp; the rules' helpers, over the story battle
+        battleCodec.ts     The 2D save ↔ the story battle's FightState, sparse and in place (#166)
+        fight.ts           gridStep: one step of a 2D fight on the story battle, with the screen's events (#163)
         fightTrace.ts      A fight played headless through gridStep, for the tests only (#163)
         fightTraces.test.ts Golden traces of every 2D fight (#163)
         run.ts             RunState and its pure transitions
@@ -116,6 +117,7 @@ apps/
         settings.ts        Both games' settings: mode, list filter/order, mute, haptics, dimDone… (localStorage)
         daily.ts           The one daily (#156): days solved, streak, best, today's board (localStorage)
         badges.ts          Badge rules and the earned badges (#108)
+        fightBadges.ts     What a fight earns (fightAwards, earnFromFight): it reads the battle, so it's the run's
         rank.ts            Rank, worked out from solves (#106)
         saveMerge.ts       Merges two copies of a save (#97)
         migrate.ts         Save migrations, first thing at startup: the two games' saves (#155), their dailies (#156)
@@ -133,8 +135,9 @@ apps/
           editorScreen.ts    Puzzle authoring tool                   (#/editor)
           badges.ts          The badge shelf                         (#/badges)
           settings.ts        Both games' settings (#154)             (#/settings)
-          run/               Runs                                    (#/run, #/run/play)
-            index.ts         Run hub router and the puzzle-list banner
+          run/               Runs, loaded on demand with the fight engine (#/run, #/run/play)
+            index.ts         Run hub router
+            banner.ts        The puzzle list's run banner (in the first download: reads only the save)
             shared.ts        Hub type, loadRun, mode picker, start buttons
             jobsBoard.ts     Jobs board (#47), grouped into chapters (#23)
             pathMap.ts       Path map, HP, gadget inventory
@@ -229,9 +232,9 @@ packages/
       fight/
         board.ts           FightBoard: what a fight needs of a board (#164)
         fightBoardContract.ts  The tests every FightBoard passes (each board's tests run them)
-        battle.ts          StoryBattle and FightState: one battle over any board (#166)
+        battle.ts          StoryBattle and FightState: one battle over any board, in either order (#166)
         rules.ts           FightRules: where the boards' fights differ; BLOCK_RULES, GRID_RULES
-        battle.test.ts     Each rule's other value, and powers from a pool
+        battle.test.ts     Each rule's other value, powers from a pool, and the grid's order
       puzzles/
         runs.ts            Reads and checks encounters and jobs; each game passes its puzzle and enemy
         chapters.ts        Reads and checks chapters: jobs grouped into story chapters (#23)
@@ -597,7 +600,9 @@ an award at or below what's saved, so nobody ever loses a badge or a tier.
 - **When they're earned:** `syncBadges` at startup and when the shelf opens (no date, for
   older saves and anything a screen didn't award); `earnFromStats` after a solve on either
   board, a daily, a Cubed run and a play-test (dated, and said on the end panel), and
-  `earnFromRun` / `earnFromFight` in the 2D game's story.
+  `earnFromRun` / `earnFromFight` in the 2D game's story. `earnFromFight` is in
+  `game/fightBadges.ts`, apart from the rest, because it reads the fight's battle: only the
+  run screens use it, and they load with the fight engine (`import()`, `routes.ts`).
 
 - **How a run went** (#107): a fight keeps its counts in `BattleState.counts`, which roll
   into `RunState.tally` when the fight is won. Count each thing at its cause rather than
@@ -932,9 +937,9 @@ jobs you've played, fixed at the start, so a reload plays the same order.
 
 ## Fights
 
-A fight encounter has an `enemy` (`name`, `sprite`, `hp`, `attack`). The rules live in
-`game/battle.ts`, and `gridStep` in `game/fight.ts` runs them in order (see "The fight
-step" below):
+A fight encounter has an `enemy` (`name`, `sprite`, `hp`, `attack`). The rules are the
+story's one battle (`StoryBattle`, see "One battle" below), which `gridStep` in
+`game/fight.ts` plays a step at a time (see "The fight step"):
 
 - **Chip damage.** Each newly completed row or column deals `CHIP_DAMAGE` (1). Each line
   counts once, even if it's broken and completed again, and chip damage never takes the
@@ -953,37 +958,39 @@ up) is saved in `RunState.battle`, so a reload resumes mid-fight.
 
 ### The fight step
 
-`gridStep(enemy, puzzle, state, input)` (`game/fight.ts`, #163) is a 2D fight's rules in
-one pure step, with no DOM, sound or timers. `input` is what just happened: lines the board
-reports finished (their shown clue just became satisfied; a forged one doesn't count
-until it's called out), a mistake, a call-out, a gadget, or an effect that waited. It
-returns the new battle and a list of events in the order the screen shows them. For lines
-that's what they clear (fog, ink, wipe marks, suspects, scrambles), then the armor's
-cracks, the phases they start, one `chip`, and then the armor's, the turn's and the
-charge's meters. The fight screen's hooks (`ui/screens/run/fight/`) keep only the
-rendering, sound, haptics and timing: each asks `ctx.step`, saves the state, and shows the
-events. They save at `chip`, as the screen always has, so a board switch still queues
-after a phase's own timers.
+`gridStep(enemy, puzzle, state, input)` (`game/fight.ts`, #163) is a 2D fight's rules in one
+pure step, with no DOM, sound or timers. It plays the step on the story's battle with
+`GRID_RULES` (#166): it decodes the saved battle, calls the battle's step for the input,
+encodes the state back in the 2D save's shape (`game/battleCodec.ts`, see "One battle") and
+puts the battle's events in the order the screen shows them. `input` is what just happened:
+lines the board reports finished (their shown clue just became satisfied; a forged one
+doesn't count until it's called out), a mistake, a call-out, a gadget, or an effect that
+waited. It returns the new battle and a list of events in the order the screen shows them.
+For lines that's what they clear (fog, ink, wipe marks, suspects, scrambles), then the
+armor's cracks, the phases they start, one `chip`, and then the armor's, the turn's and the
+charge's meters. The fight screen's hooks (`ui/screens/run/fight/`) keep only the rendering,
+sound, haptics and timing: each asks `ctx.step`, saves the state, and shows the events. They
+save at `chip`, as the screen always has, so a board switch still queues after a phase's own
+timers.
 
 Some effects wait, and come back as `Later` events: swaps and turns until no stroke is in
 progress; ink, zaps, the armor's hits and a bomb's blast until the redraw is over; and
 after every phase, the charge aims again and the turn's count shows. When one is due the
 hooks call `gridStep` again with the input of the same kind (`swap`, `ink`, `zap`, …).
 
-The picks that depend on the board go through the grid's `FightBoard` (#164): the live
-line, a swap, ink, a bomb's spot, the charge's warm-up and a turn (`turnBattle` takes the
-board's turn). `FightBoard<C>` (`packages/story/src/fight/board.ts`) is what a fight needs
-from any board: its lines by id (a grid's rows, then its columns), each line's clue, the
-lines finished now, whether it's solvable with some clues hidden, and those picks. Every
-method that may draw takes the battle's generator, so a block's draws stay in order.
-`gridFightBoard(puzzle, game)` (`packages/grid/src/game/fightBoard.ts`) wraps the 2D
-helpers in `engine/`, all deterministic; `lineId` and `lineAt` turn a row or column into an
-id and back. The block's is `blockFightBoard` (`packages/block/src/game/fightBoard.ts`,
-#165): the block `Battle`'s own picks, lifted out with their draws in the same order, so the
-block traces and fight ratings didn't move. `fightBoardContract` (in the story) is the tests
-any board must pass; the grid's test runs it on four puzzles and the block's on five. The
-block's fights now run on one battle over this interface (see "One battle" below); the 2D
-game's move onto it next.
+The picks that depend on the board go through the grid's `FightBoard` (#164): the live line,
+a swap, ink, a bomb's spot, the charge's warm-up and a turn. `FightBoard<C>`
+(`packages/story/src/fight/board.ts`) is what a fight needs from any board: its lines by id
+(a grid's rows, then its columns), each line's clue, the lines finished now, whether it's
+solvable with some clues hidden, and those picks. Every method that may draw takes the
+battle's generator, so a block's draws stay in order. `gridFightBoard(puzzle, game)`
+(`packages/grid/src/game/fightBoard.ts`) wraps the 2D helpers in `engine/`, all
+deterministic; `lineId` and `lineAt` turn a row or column into an id and back. The block's
+is `blockFightBoard` (`packages/block/src/game/fightBoard.ts`, #165): the block `Battle`'s
+own picks, lifted out with their draws in the same order, so the block traces and fight
+ratings didn't move. `fightBoardContract` (in the story) is the tests any board must pass;
+the grid's test runs it on four puzzles and the block's on five. Both games' fights run on
+one battle over this interface (see "One battle" below).
 
 Two tests hold it:
 
@@ -1002,38 +1009,62 @@ Two tests hold it:
 ### One battle
 
 `StoryBattle` (`packages/story/src/fight/battle.ts`, #166) is a fight written once over
-`FightBoard`: HP, phases, armor, the charge, turns, shields, call-outs and gadgets. It came
-out of Cubed's `Battle`, which is now `class Battle extends StoryBattle` with the same
-constructor and constants, on the block's board, so the block's saves, golden traces and
-fight ratings didn't move. It asks the board (`BattleBoard.at(marks)`, a `FightBoard` with
-the marks on it) for everything about lines, and draws from its one seeded generator in
-the order Cubed always has.
+`FightBoard`: HP, phases, armor, the charge, turns, shields, call-outs and gadgets. Both
+games' fights run on it:
+
+- **Cubed:** `class Battle extends StoryBattle` with `BLOCK_RULES`, the same constructor
+  and constants, on the block's board, so the block's saves, golden traces and fight
+  ratings didn't move. It draws from its one seeded generator in the order Cubed always
+  has.
+- **The 2D game:** `gridStep` (`game/fight.ts`) with `GRID_RULES` on the grid's board
+  (`gridFightBoard`, the board in play as the marks). The helpers in `game/battle.ts`
+  (`chip`, `advancePhase`, `currentForm`, `chargeUp`, `turnBattle` and the rest) are each
+  one step of the battle on the 2D save, so `battle.test.ts`, the board switch and the
+  fight ratings run on it too. The hooks harness, the golden traces and
+  `fight-ratings.json` didn't move.
+
+The battle asks the board (`BattleBoard.at(marks)`, a `FightBoard` with the marks on it)
+for everything about lines.
 
 - **State:** `FightState<C>`, plain data saved with the run: Cubed's `BattleState`, plus
-  optional fields for the 2D game (`turn.turns`, `counts.bombsUsed`, `counts.spongesUsed`).
-  Phases count Cubed's way (`phase` is the last one's index, -1 for none) and wrong fills
-  are `mistakes`; the 2D save keeps its own shape, and its codec will translate.
+  optional fields for the 2D game (`turn.turns`, `counts.bombsUsed`, `counts.spongesUsed`,
+  and a charge without `warmUp` until it first shows on a grid). Phases count Cubed's way
+  (`phase` is the last one's index, -1 for none) and wrong fills are `mistakes`.
+- **The 2D codec:** the 2D save (`RunState.battle`) keeps its shape, so saved runs load as
+  they are. `game/battleCodec.ts` decodes it to a `FightState` (lines as ids, rows then
+  columns; phases and counts renamed; the enemy's HP as `maxHp`) and encodes the battle
+  back onto the save it came from: only fields that changed are written, a field a fight
+  never used stays out, new fields go where the 2D game always put them (the harness checks
+  the saved battle's key order), and a step that changes nothing gives the same object back.
+  `fightEnemy` turns a 2D enemy's `LineSet`s into pools, a phase's turned with the board.
+- **The grid's order:** the steps at the end of `StoryBattle`, one public method per rule.
+  `finished(lines, marks)` takes the lines the board reports as they finish (a refilled
+  line comes again, to lift its wipe mark), where a block's `update` polls; `accuse`, `use`
+  (a gadget, its damage from the gadget's effect) and `damage` start phases too; and what
+  would change the board under a stroke comes as `due` events (`GridEvent`) for the caller
+  to land at its moment (`landSwap`, `landTurn`, `landInk`, `landZap`, `landHitBack`,
+  `landBlast`). The caller wipes and reveals the board itself, after it saves.
 - **Power lines:** a `LinePick`. A block's enemy gives counts (`{ count }`), picked at
   runtime and checked with the solver; a 2D enemy names pools (`{ pool, count? }`), in
   priority order and proven offline (the fairness test in `runs.test.ts`).
 - **Rules:** a `FightRules` profile (`rules.ts`) holds every place the boards' fights
   differ, each documented with what each board does and why:
 
-| Rule            | Block (`BLOCK_RULES`)                          | Grid (`GRID_RULES`, #166's second half)                        |
-| --------------- | ---------------------------------------------- | -------------------------------------------------------------- |
-| `fakesCount`    | a forged line you finish counts (by the truth) | it counts once called out (its shown clue lies)                |
-| `armorHitBack`  | the armor's attack (4)                         | `ARMOR_HIT_DAMAGE` (2)                                         |
-| `armoredAttack` | the enemy's attack, armor or not               | the armor's attack while it's up                               |
-| `liveSkips`     | struck lines                                   | struck lines and any you can't read (fog, scramble, 🎭)        |
-| `countRelaxed`  | mistakes and zaps count in Relaxed             | only with Hits on                                              |
-| `gadgetKinds`   | `gadgetsUsed` only                             | bombs and sponges counted apart too                            |
-| `wipeMarks`     | cleared on the next update                     | kept until the line is finished again                          |
-| `order`         | wash, chip/armor, charge, turn, phases         | clear, chip, phases, armor, turn, charge, with waits (not yet) |
+| Rule            | Block (`BLOCK_RULES`)                          | Grid (`GRID_RULES`)                                     |
+| --------------- | ---------------------------------------------- | ------------------------------------------------------- |
+| `fakesCount`    | a forged line you finish counts (by the truth) | it counts once called out (its shown clue lies)         |
+| `armorHitBack`  | the armor's attack (4)                         | `ARMOR_HIT_DAMAGE` (2)                                  |
+| `armoredAttack` | the enemy's attack, armor or not               | the armor's attack while it's up                        |
+| `liveSkips`     | struck lines                                   | struck lines and any you can't read (fog, scramble, 🎭) |
+| `countRelaxed`  | mistakes and zaps count in Relaxed             | only with Hits on                                       |
+| `gadgetKinds`   | `gadgetsUsed` only                             | bombs and sponges counted apart too                     |
+| `wipeMarks`     | cleared on the next update                     | kept until the line is finished again                   |
+| `order`         | wash, chip/armor, charge, turn, phases         | clear, chip, phases, armor, turn, charge, with waits    |
 
 The rest is the board's (the warm-up, which line goes live, ink, a swap, a bomb's cells)
 behind `FightBoard`. Unifying a rule is a change to how fights play, and shows up as a diff
 in the golden traces and `fight-ratings.json`. `packages/story/src/fight/battle.test.ts`
-plays each rule's grid value and powers from a pool on a block.
+plays each rule's grid value, powers from a pool and the grid's order on a block.
 
 ### Fog (the fog bat)
 
@@ -1102,10 +1133,10 @@ start:
 
 - **Mistakes:** in Hits-on runs, cracking it early softens the enemy's hits (4 → 2).
 - **It hits back** (#116): every `ARMOR_HIT_LINES` (5) other lines you finish while it's up
-  cost `ARMOR_HIT_DAMAGE` (2), or fizzle in a Relaxed run (`armorHitsBack`, run by
-  `gridStep`; `run/fight/armorBack.ts` shows it). Lines deal no damage under armor, so
-  without this, leaving the weak points until last skips the enemy's phases for free. The
-  count is in lines, not time.
+  cost `ARMOR_HIT_DAMAGE` (2), or fizzle in a Relaxed run (the battle's `armorMeter`, which
+  `armorHitsBack` runs on the save; `run/fight/armorBack.ts` shows it). Lines deal no damage
+  under armor, so without this, leaving the weak points until last skips the enemy's phases
+  for free. The count is in lines, not time.
 
 Because of that, weak points have to be reachable early. A test in `runs.test.ts` holds
 every armored fight to it: each weak point must be solvable within the first two passes of
@@ -1199,13 +1230,14 @@ finishing move ends the fight before the meter is checked, so it can't knock you
 
 ### Ink (the Cuttlefish and Old Tess)
 
-A phase with `ink: <size>` (and optionally `inkCount`) splashes that many size×size
-blocks of ink. `pickInk` (`engine/ink.ts`) puts each block where it hides the most of
-your marks, skipping cells already inked and lines you've completed. It's deterministic.
-Inked cells (`BattleState.ink`, saved) hide whether they're filled or marked, but you can
-still play them, and mistakes still count. Completing a row or column washes the ink out
-of it (`clearInk`, run by `gridStep`). The 🧽 **Sponge** gadget (`effect: { kind: 'wash' }`)
-wipes it all. Ink only hides your marks, never clues, so it doesn't affect solvability.
+A phase with `ink: <size>` (and optionally `inkCount`) splashes that many size×size blocks
+of ink. `pickInk` (`engine/ink.ts`) puts each block where it hides the most of your marks,
+skipping cells already inked and lines you've completed. It's deterministic. Inked cells
+(`BattleState.ink`, saved) hide whether they're filled or marked, but you can still play
+them, and mistakes still count. Completing a row or column washes the ink out of it (the
+battle's `washLines`; `clearInk` on the save). The 🧽 **Sponge** gadget
+(`effect: { kind: 'wash' }`) wipes it all. Ink only hides your marks, never clues, so it
+doesn't affect solvability.
 
 ### Turns (the Weathervane)
 

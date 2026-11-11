@@ -1,5 +1,6 @@
 import { random, shuffled } from '@picross/shared/engine/random';
-import type { BoardKind, FightBoard, Hidden } from './board';
+import type { GadgetEffect } from '../puzzles/gadgets';
+import type { BoardKind, BoardTurn, FightBoard, Hidden } from './board';
 import type { FightRules } from './rules';
 
 /**
@@ -13,8 +14,12 @@ import type { FightRules } from './rules';
  *
  * It grew out of Cubed's `Battle` (`@picross/block/game/battle`), which is now this with
  * `BLOCK_RULES`, unchanged: the same draws from the same generator, in the same order, so a
- * block fight's saves and golden traces didn't move. The 2D game moves onto it next, with
- * `GRID_RULES`.
+ * block fight's saves and golden traces didn't move. The 2D game's fights run on it too,
+ * with `GRID_RULES`, through `gridStep` (`apps/picross/src/game/fight.ts`) and a codec that
+ * keeps the 2D save's shape. The two boards take a stroke's effects in different orders
+ * (`FightRules.order`): `update` and the rest of the block's API play the block's, and the
+ * grid's order is the section at the end, one public step per rule, which `finished` runs
+ * in order (the 2D game's `game/battle.ts` helpers are each one of them).
  *
  * Lines and cells are numbers, as on the board: a line is its id, a cell its index. `C` is
  * the board's clue, `M` its marks (what the battle hands the board: a block's cubes), and
@@ -116,7 +121,12 @@ export interface FightState<C> {
   fakes: number[];
   /** The forged clue shown for each fake line. */
   forged: Record<number, C>;
-  charge?: { every: number; meter: number; live: number | null; warmUp: number };
+  /**
+   * The charge's meter. `warmUp` is the lines left before a line first goes live; a block
+   * sets it with the charge, a grid when the charge first shows (`aim`), so a grid's charge
+   * that hasn't shown yet leaves it out.
+   */
+  charge?: { every: number; meter: number; live: number | null; warmUp?: number };
   /**
    * The turn's meter. `turns` is the quarter turns a board that turns its lines has made,
    * 0 to 3 (a grid's, once it plays here); a block turns only its camera and leaves it out.
@@ -142,13 +152,41 @@ export type FightEvent<P extends FightPhase = FightPhase> =
   | { kind: 'grounded' }
   | { kind: 'live'; line: number }
   | { kind: 'turn' }
-  | { kind: 'phase'; phase: P; index: number }
+  /** In the grid's order, with the lines the phase just fogged and scrambled. */
+  | { kind: 'phase'; phase: P; index: number; fogged?: number[]; scrambled?: number[] }
   | { kind: 'swap'; lines: number[]; wiped: number[] }
   | { kind: 'ink'; cells: number[] }
   | { kind: 'washed'; cells: number[] }
   | { kind: 'caught'; line: number; amount: number }
   | { kind: 'honest'; line: number }
   | { kind: 'healed'; amount: number };
+
+/**
+ * What the grid's order says besides (`order: 'grid'`): what lines lift, the meters, the
+ * charge's aim, and the effects that wait for the caller.
+ */
+export type GridEvent<P extends FightPhase = FightPhase> =
+  | FightEvent<P>
+  /** Finished lines lifted these: fog, wipe marks, 🎭 suspects (they were honest), scrambles. */
+  | { kind: 'cleared'; power: 'fog' | 'swapped' | 'suspects' | 'scramble'; lines: number[] }
+  /** Armor targets finished (`broke` once none are left). */
+  | { kind: 'cracked'; lines: number[]; broke: boolean }
+  /** The armor's meter after lines that weren't targets (`others` of them). */
+  | { kind: 'armor-meter'; lines: number; hits: number; others: number }
+  | { kind: 'turn-meter'; meter: number; every: number }
+  /** The charge after it aims: `every` is null when the enemy doesn't charge (or no board). */
+  | {
+      kind: 'charge';
+      every: number | null;
+      warmUp: number;
+      meter: number;
+      live: number | null;
+      /** Whether it just picked the live line (rather than keeping it). */
+      picked: boolean;
+    }
+  /** An effect that waits for the caller to land it (`landSwap`, `landInk`, …). */
+  | { kind: 'due'; power: 'swap' | 'turn' | 'zap' | 'armor' | 'blast' }
+  | { kind: 'due'; power: 'ink'; size: number; count?: number };
 
 /** What a battle needs to know of its board. */
 export interface BattleBoard<C, M> {
@@ -213,7 +251,11 @@ export class StoryBattle<C, M, E extends FightEnemy = FightEnemy> {
     if (enemy.fog) this.state.fog = this.pickLines(enemy.fog, marks, 'fog');
     if (enemy.scramble) this.state.scramble = this.pickLines(enemy.scramble, marks, 'scramble');
     if (enemy.armor) this.state.targets = this.pickTargets(enemy.armor.targets);
-    if (enemy.charge) this.setCharge(enemy.charge);
+    if (enemy.charge) {
+      // A grid's charge warms up when it first shows (`aim`), not before.
+      if (rules.order === 'grid') this.state.charge = { every: enemy.charge, meter: 0, live: null };
+      else this.setCharge(enemy.charge);
+    }
     if (enemy.rotate) this.state.turn = { every: enemy.rotate, meter: 0 };
   }
 
@@ -221,17 +263,19 @@ export class StoryBattle<C, M, E extends FightEnemy = FightEnemy> {
 
   /** The enemy as it is now, after any phases. */
   get current() {
-    let { name, sprite, attack } = this.enemy;
+    let { name, sprite, attack, charge, rotate } = this.enemy;
     for (const phase of (this.enemy.phases ?? []).slice(0, this.state.phase + 1)) {
       name = phase.name ?? name;
       sprite = phase.sprite ?? sprite;
       attack = phase.attack ?? attack;
+      charge = phase.charge ?? charge;
+      rotate = phase.rotate ?? rotate;
     }
     const armored = this.state.targets.length > 0;
     if (armored && this.enemy.armor && this.rules.armoredAttack === 'armor') {
       attack = this.enemy.armor.attack;
     }
-    return { name, sprite, attack, armored };
+    return { name, sprite, attack, charge, rotate, armored };
   }
 
   /** The clue a line shows in this fight. Finishing a line clears fog and scrambles. */
@@ -332,11 +376,15 @@ export class StoryBattle<C, M, E extends FightEnemy = FightEnemy> {
     }
     this.state.suspects = picked;
     const lying = pickOf(fakes);
-    // A count of fakes is the first suspects, leaving at least one honest.
+    // A count of fakes is the first suspects, leaving at least one honest. A pool is the
+    // enemy's word, proven offline (its loader checks every fake is a suspect).
     this.state.fakes =
       'pool' in lying
-        ? this.fromPool(lying, []).filter((id) => picked.includes(id))
+        ? this.fromPool(lying, [])
         : picked.slice(0, Math.min(lying.count, Math.max(0, picked.length - 1)));
+    // A grid shows its own forgeries (the 2D board view forges them from the clues as
+    // drawn), so it keeps none here.
+    if (this.rules.order === 'grid') return;
     for (const id of this.state.fakes) this.state.forged[id] = this.fakeClue(id);
   }
 
@@ -363,12 +411,17 @@ export class StoryBattle<C, M, E extends FightEnemy = FightEnemy> {
   // --- Turns of the fight -------------------------------------------------------------
 
   private hit(amount: number, cause: HitCause): FightEvent<PhaseOf<E>>[] {
-    if (!this.hitsOn || amount <= 0) return [];
-    if (this.state.shield > 0) {
-      this.state.shield--;
-      return [{ kind: 'blocked', cause }];
-    }
+    // A grid lands a hit of nothing too (a patch kit still takes it).
+    if (!this.hitsOn || (amount <= 0 && this.rules.order === 'block')) return [];
+    if (this.absorb()) return [{ kind: 'blocked', cause }];
     return [{ kind: 'hit', amount, cause }];
+  }
+
+  /** A patch kit takes a hit, if one's up. */
+  absorb(): boolean {
+    if (this.state.shield <= 0) return false;
+    this.state.shield--;
+    return true;
   }
 
   /** Whether a mistake or zap goes in the counts. */
@@ -389,6 +442,8 @@ export class StoryBattle<C, M, E extends FightEnemy = FightEnemy> {
    */
   update(marks: M): FightEvent<PhaseOf<E>>[] {
     const { state, rules } = this;
+    // A grid's board reports the lines that just finished, which polling can't tell.
+    if (rules.order === 'grid') throw new Error('A grid reports its lines: use finished()');
     const events: FightEvent<PhaseOf<E>>[] = [];
     const board = this.board.at(marks);
     const finished = board.finishedLines();
@@ -442,8 +497,9 @@ export class StoryBattle<C, M, E extends FightEnemy = FightEnemy> {
     // The charge: a warm-up, then each line fills the meter unless it's the live line.
     const charge = state.charge;
     if (charge) {
-      if (charge.warmUp > 0) {
-        charge.warmUp = Math.max(0, charge.warmUp - fresh.length);
+      const warmUp = charge.warmUp ?? 0;
+      if (warmUp > 0) {
+        charge.warmUp = Math.max(0, warmUp - fresh.length);
       } else if (charge.live !== null && fresh.includes(charge.live)) {
         charge.meter = 0;
         charge.live = null;
@@ -525,7 +581,7 @@ export class StoryBattle<C, M, E extends FightEnemy = FightEnemy> {
    * you), then, if that runs short, ones that keep it solvable from what's right on the
    * board now.
    */
-  private pickMore(lines: PowerLines, marks: M, kind: 'fog' | 'scramble'): number[] {
+  private pickMore(lines: PowerLines, marks: M | undefined, kind: 'fog' | 'scramble'): number[] {
     const pick = pickOf(lines);
     if ('pool' in pick) return this.pickLines(pick, marks, kind);
     const picked = this.pickLines(pick, undefined, kind);
@@ -555,24 +611,46 @@ export class StoryBattle<C, M, E extends FightEnemy = FightEnemy> {
     return { kind: 'swap', lines: this.state.swapped, wiped: swap.cells };
   }
 
-  /** Accuse a suspect line of being forged. */
+  /**
+   * Accuse a suspect line of being forged: a forgery is unmasked for call-out damage; an
+   * honest one lets the enemy hit, or in a Relaxed fight heal. A line that isn't a suspect
+   * does nothing. (On a grid, `accuse`, which may start phases.)
+   */
   callOut(line: number): FightEvent<PhaseOf<E>>[] {
     const { state } = this;
     if (!state.suspects.includes(line)) return [];
-    state.suspects = state.suspects.filter((id) => id !== line);
-    if (state.fakes.includes(line)) {
-      state.fakes = state.fakes.filter((id) => id !== line);
-      delete state.forged[line];
-      const before = state.enemyHp;
-      state.enemyHp = Math.max(1, state.enemyHp - CALL_OUT_DAMAGE);
-      return [{ kind: 'caught', line, amount: before - state.enemyHp }];
-    }
+    const { caught, dealt } = this.unmask(line);
+    if (caught) return [{ kind: 'caught', line, amount: dealt }];
     state.counts.wrongAccusations++;
     const events: FightEvent<PhaseOf<E>>[] = [{ kind: 'honest', line }];
     if (this.hitsOn) return [...events, ...this.hit(this.current.attack, 'accusation')];
+    return [...events, { kind: 'healed', amount: this.heal() }];
+  }
+
+  /**
+   * The verdict on an accused line: a forgery comes off (fakes and suspects) for call-out
+   * damage, never below 1 HP; an honest suspect loses its 🎭, since you paid for the answer.
+   */
+  unmask(line: number): { caught: boolean; dealt: number } {
+    const { state } = this;
+    if (!state.fakes.includes(line)) {
+      if (state.suspects.includes(line))
+        state.suspects = state.suspects.filter((id) => id !== line);
+      return { caught: false, dealt: 0 };
+    }
+    state.suspects = state.suspects.filter((id) => id !== line);
+    state.fakes = state.fakes.filter((id) => id !== line);
+    delete state.forged[line];
     const before = state.enemyHp;
-    state.enemyHp = Math.min(state.maxHp, state.enemyHp + FALSE_ACCUSATION_HEAL);
-    return [...events, { kind: 'healed', amount: state.enemyHp - before }];
+    state.enemyHp = Math.max(1, state.enemyHp - CALL_OUT_DAMAGE);
+    return { caught: true, dealt: before - state.enemyHp };
+  }
+
+  /** An honest clue accused in a Relaxed fight: the enemy touches up, to its max. Returns the HP. */
+  heal(): number {
+    const before = this.state.enemyHp;
+    this.state.enemyHp = Math.min(this.state.maxHp, before + FALSE_ACCUSATION_HEAL);
+    return this.state.enemyHp - before;
   }
 
   /** A suspect line you've finished whose clue was honest: it lights up. */
@@ -645,5 +723,353 @@ export class StoryBattle<C, M, E extends FightEnemy = FightEnemy> {
       ...(has('swap') ? ['swap'] : []),
       ...(e.rotate || has('rotate') ? ['rotate'] : []),
     ];
+  }
+
+  // --- The grid's order (`order: 'grid'`) ----------------------------------------------
+  //
+  // The 2D game's fight, step by step (`FightRules.order` has the whole of it). `finished`
+  // runs the steps for lines in order; the rest are what a call-out, a gadget or the
+  // debug panel does, and the effects that wait (`due`), landed when the caller says. Each
+  // step is public so the 2D game's helpers (`game/battle.ts`) can each be one.
+
+  /**
+   * Lines that just finished, as a grid's board reports them: their shown clue satisfied,
+   * and they weren't a moment ago, so a line you refill after a swap comes again (it lifts
+   * its wipe mark, but has struck already). A forged line doesn't count until it's called
+   * out. `marks` is the board now, which the charge aims from; without it the charge hides.
+   */
+  finished(reported: readonly number[], marks?: M): GridEvent<PhaseOf<E>>[] {
+    const { state, rules } = this;
+    const events: GridEvent<PhaseOf<E>>[] = [];
+    const lines = reported.filter((id) => rules.fakesCount || !state.fakes.includes(id));
+    // A refilled line has already counted, so it can't move a meter again.
+    const fresh = lines.filter((id) => !state.struck.includes(id));
+    const targets = [...state.targets];
+
+    for (const power of ['fog', 'swapped', 'suspects'] as const) {
+      const cleared = this.clear(power, lines);
+      if (cleared.length) events.push({ kind: 'cleared', power, lines: cleared });
+    }
+    const washed = this.washLines(lines);
+    if (washed.length) events.push({ kind: 'washed', cells: washed });
+    const unscrambled = this.clear('scramble', lines);
+    if (unscrambled.length) events.push({ kind: 'cleared', power: 'scramble', lines: unscrambled });
+
+    const chipped = this.chip(lines);
+    if (chipped.cracked.length || chipped.broke) {
+      events.push({ kind: 'cracked', lines: chipped.cracked, broke: chipped.broke });
+    }
+    // Every report chips, if only for nothing (the screen saves here).
+    events.push({ kind: 'chip', amount: chipped.dealt, lines: [...lines] });
+    events.push(...this.startPhases(marks));
+
+    if (this.enemy.armor && fresh.length) {
+      const { hits, others } = this.armorMeter(fresh, targets);
+      events.push({ kind: 'armor-meter', lines: state.armorLines, hits, others });
+      for (let n = 0; n < hits; n++) events.push({ kind: 'due', power: 'armor' });
+    }
+    const { rotate, charge } = this.current;
+    if (rotate && fresh.length) {
+      this.turnMeter(fresh);
+      events.push({ kind: 'turn-meter', meter: state.turn!.meter, every: rotate });
+      events.push({ kind: 'due', power: 'turn' });
+    }
+    if (charge && fresh.length) {
+      const { grounded, zapped } = this.chargeMeter(fresh, charge);
+      if (grounded) events.push({ kind: 'grounded' });
+      if (zapped) events.push({ kind: 'due', power: 'zap' });
+      events.push(...this.aim(marks));
+    }
+    return events;
+  }
+
+  /** Lifts a power from finished lines. Returns the lines it lifted, in its own order. */
+  clear(power: 'fog' | 'swapped' | 'suspects' | 'scramble', lines: readonly number[]): number[] {
+    const before = this.state[power];
+    const cleared = before.filter((id) => lines.includes(id));
+    if (cleared.length) this.state[power] = before.filter((id) => !lines.includes(id));
+    return cleared;
+  }
+
+  /** Washes the ink off finished lines. Returns the cells washed. */
+  washLines(lines: readonly number[]): number[] {
+    const board = this.blank;
+    const inLine = (c: number) => lines.some((id) => board.lines[id].cells.includes(c));
+    return this.washOut(inLine);
+  }
+
+  /** Washes the ink out of these cells (a bomb's blast). Returns the cells washed. */
+  washCells(cells: readonly number[]): number[] {
+    return this.washOut((c) => cells.includes(c));
+  }
+
+  private washOut(washes: (cell: number) => boolean): number[] {
+    const washed = this.state.ink.filter(washes);
+    if (washed.length) this.state.ink = this.state.ink.filter((c) => !washes(c));
+    return washed;
+  }
+
+  /**
+   * Chip damage for finished lines that haven't struck yet, never below 1 HP. With armor
+   * up only its targets hurt (triple), and each one cracks it.
+   */
+  chip(lines: readonly number[]): { dealt: number; cracked: number[]; broke: boolean } {
+    const { state } = this;
+    const fresh = [...new Set(lines)].filter((id) => !state.struck.includes(id));
+    if (!fresh.length) return { dealt: 0, cracked: [], broke: false };
+    state.struck.push(...fresh);
+    let damage = fresh.length * CHIP_DAMAGE;
+    let cracked: number[] = [];
+    let broke = false;
+    if (state.targets.length) {
+      cracked = fresh.filter((id) => state.targets.includes(id));
+      damage = cracked.length * TARGET_DAMAGE;
+      state.targets = state.targets.filter((id) => !cracked.includes(id));
+      broke = !state.targets.length;
+    }
+    const before = state.enemyHp;
+    state.enemyHp = Math.max(1, before - damage);
+    return { dealt: before - state.enemyHp, cracked, broke };
+  }
+
+  /**
+   * Starts any phases the HP has fallen into, taking their fog and scrambles now and
+   * setting the charge and the turn going. Their swap and ink are `due`.
+   */
+  startPhases(marks?: M): GridEvent<PhaseOf<E>>[] {
+    const { state } = this;
+    const events: GridEvent<PhaseOf<E>>[] = [];
+    const phases: PhaseOf<E>[] = this.enemy.phases ?? [];
+    while (
+      state.phase + 1 < phases.length &&
+      state.enemyHp <= phases[state.phase + 1].at * state.maxHp
+    ) {
+      state.phase++;
+      const phase = phases[state.phase];
+      const fogged = phase.fog ? this.pickMore(phase.fog, marks, 'fog') : [];
+      state.fog.push(...fogged);
+      const scrambled = phase.scramble ? this.pickMore(phase.scramble, marks, 'scramble') : [];
+      state.scramble.push(...scrambled);
+      if (phase.charge) {
+        state.charge = { ...(state.charge ?? { meter: 0, live: null }), every: phase.charge };
+      }
+      if (phase.rotate) state.turn = { ...(state.turn ?? { meter: 0 }), every: phase.rotate };
+      events.push({ kind: 'phase', phase, index: state.phase, fogged, scrambled });
+      if (phase.swap) events.push({ kind: 'due', power: 'swap' });
+      if (phase.ink)
+        events.push({ kind: 'due', power: 'ink', size: phase.ink, count: phase.inkCount });
+    }
+    return events;
+  }
+
+  /**
+   * The armor's meter: lines that weren't targets (`before` they landed) move it, and every
+   * `ARMOR_HIT_LINES` of them it hits back. Once the armor's broken it stops.
+   */
+  armorMeter(
+    fresh: readonly number[],
+    before: readonly number[],
+  ): { hits: number; others: number } {
+    const { state } = this;
+    if (!state.targets.length) {
+      state.armorLines = 0;
+      return { hits: 0, others: 0 };
+    }
+    const others = fresh.filter((id) => !before.includes(id)).length;
+    if (!others) return { hits: 0, others };
+    const total = state.armorLines + others;
+    state.armorLines = total % ARMOR_HIT_LINES;
+    return { hits: Math.floor(total / ARMOR_HIT_LINES), others };
+  }
+
+  /** Lines finished move the board toward its next quarter turn. */
+  turnMeter(fresh: readonly number[]): void {
+    if (!fresh.length) return;
+    const turn = (this.state.turn ??= { every: this.current.rotate ?? 0, meter: 0 });
+    turn.meter += fresh.length;
+  }
+
+  /** Whether the board is due to turn. It stays due until it turns. */
+  get turnDue(): boolean {
+    const every = this.current.rotate;
+    return Boolean(every && (this.state.turn?.meter ?? 0) >= every);
+  }
+
+  /**
+   * The charge's meter: during the warm-up, lines count it down; after, the live line among
+   * them grounds it, and otherwise each one charges it toward a zap at `every`. Either way
+   * the meter empties and the live line goes, for `aim` to pick another.
+   */
+  chargeMeter(
+    fresh: readonly number[],
+    every = this.current.charge ?? 0,
+  ): { grounded: boolean; zapped: boolean } {
+    const charge = this.state.charge;
+    const none = { grounded: false, zapped: false };
+    if (!charge) return none;
+    if (charge.live === null) {
+      if (charge.warmUp) charge.warmUp = Math.max(0, charge.warmUp - fresh.length);
+      return none;
+    }
+    const grounded = fresh.includes(charge.live);
+    charge.meter = grounded ? 0 : charge.meter + fresh.length;
+    const zapped = charge.meter >= every;
+    if (grounded || zapped) {
+      charge.meter = 0;
+      charge.live = null;
+    }
+    return { grounded, zapped };
+  }
+
+  /**
+   * The charge makes sure a line you can read is live: the first time it shows it warms
+   * up; after that it keeps the live line unless it's finished or hidden, and otherwise
+   * picks another on `marks`.
+   */
+  aim(marks?: M): GridEvent<PhaseOf<E>>[] {
+    const every = this.current.charge;
+    if (!every || marks === undefined) {
+      return [{ kind: 'charge', every: null, warmUp: 0, meter: 0, live: null, picked: false }];
+    }
+    const { state } = this;
+    const board = this.board.at(marks);
+    const charge = (state.charge ??= { every, meter: 0, live: null });
+    if (charge.warmUp === undefined && charge.live === null) charge.warmUp = board.warmUpLines();
+    if (charge.warmUp) {
+      return [
+        { kind: 'charge', every, warmUp: charge.warmUp, meter: 0, live: null, picked: false },
+      ];
+    }
+    const unreadable = new Set([...state.fog, ...state.scramble, ...state.suspects]);
+    const { live } = charge;
+    const stays = live !== null && !unreadable.has(live) && !state.struck.includes(live);
+    if (!stays) charge.live = this.pickLive(marks);
+    const { meter } = charge;
+    return [{ kind: 'charge', every, warmUp: 0, meter, live: charge.live, picked: !stays }];
+  }
+
+  /** A call-out (`callOut`); a forgery caught may start phases. */
+  accuse(line: number): GridEvent<PhaseOf<E>>[] {
+    const events: GridEvent<PhaseOf<E>>[] = this.callOut(line);
+    return events.some((e) => e.kind === 'caught') ? [...events, ...this.startPhases()] : events;
+  }
+
+  /** A gadget, counted, its effect now and any phases its damage starts; a bomb's blast is due. */
+  use(effect: GadgetEffect): GridEvent<PhaseOf<E>>[] {
+    const kind = { blast: 'bombsUsed', wash: 'spongesUsed', shield: undefined } as const;
+    this.gadget(kind[effect.kind]);
+    const ink = this.state.ink;
+    const dealt = this.applyGadget(effect);
+    const events: GridEvent<PhaseOf<E>>[] = [];
+    if (effect.kind === 'blast') events.push({ kind: 'chip', amount: dealt, lines: [] });
+    if (effect.kind === 'wash' && ink.length) events.push({ kind: 'washed', cells: ink });
+    events.push(...this.startPhases());
+    if (effect.kind === 'blast') events.push({ kind: 'due', power: 'blast' });
+    return events;
+  }
+
+  /** A gadget's effect, uncounted: a shield, a sponge, or damage (never below 1 HP). Returns the damage. */
+  applyGadget(effect: GadgetEffect): number {
+    if (effect.kind === 'shield') this.state.shield += effect.hits;
+    else if (effect.kind === 'wash') this.state.ink = [];
+    else return this.strike(effect.damage);
+    return 0;
+  }
+
+  /** Damage from outside the board (the debug panel), never below 1 HP, then any phases. */
+  damage(amount: number): GridEvent<PhaseOf<E>>[] {
+    const dealt = this.strike(amount);
+    return [{ kind: 'chip', amount: dealt, lines: [] }, ...this.startPhases()];
+  }
+
+  private strike(amount: number): number {
+    const before = this.state.enemyHp;
+    this.state.enemyHp = Math.max(1, before - amount);
+    return before - this.state.enemyHp;
+  }
+
+  /** The turn lands, if it's due: the board turns a quarter (when it can). */
+  landTurn(): GridEvent<PhaseOf<E>>[] {
+    const turn = this.turnDue ? this.blank.turn() : null;
+    if (!turn) return [];
+    this.applyTurn(turn);
+    return [{ kind: 'turn' }];
+  }
+
+  /**
+   * The board turned: every line and cell the battle marks moves with it (struck lines,
+   * fog, scrambles, targets, forgeries, suspects, wipe marks, ink, the live line), so they
+   * stay on the same stretch of picture. The count to the next turn starts over.
+   */
+  applyTurn(turn: BoardTurn): void {
+    const { state } = this;
+    const line = (id: number) => turn.line(id);
+    state.struck = state.struck.map(line);
+    for (const key of ['fog', 'scramble', 'targets', 'fakes', 'suspects', 'swapped'] as const) {
+      state[key] = state[key].map(line);
+    }
+    state.forged = Object.fromEntries(
+      Object.entries(state.forged).map(([id, clue]) => [line(Number(id)), clue]),
+    );
+    state.ink = state.ink.map((c) => turn.cell(c));
+    if (state.charge && state.charge.live !== null) state.charge.live = line(state.charge.live);
+    const t = (state.turn ??= { every: this.current.rotate ?? 0, meter: 0 });
+    t.turns = ((t.turns ?? 0) + 1) % 4;
+    t.meter = 0;
+  }
+
+  /**
+   * One of the Mimic's swaps lands: two lines with the most of your work, marked until
+   * they're refilled. The caller wipes `wiped` from the board, after it saves (so the lines
+   * it re-opens don't count as new).
+   */
+  landSwap(marks: M): GridEvent<PhaseOf<E>>[] {
+    const swap = this.board.at(marks).pickSwap(new Set(this.state.struck));
+    if (!swap) return [];
+    this.markSwapped(swap.lines);
+    return [{ kind: 'swap', lines: swap.lines, wiped: swap.cells }];
+  }
+
+  /** Marks lines the Mimic just wiped. */
+  markSwapped(lines: readonly number[]): void {
+    this.state.swapped = [...new Set([...this.state.swapped, ...lines])];
+  }
+
+  /** A phase's ink lands: `count` patches `size` across. */
+  landInk(marks: M, size: number, count = 1): GridEvent<PhaseOf<E>>[] {
+    const events: GridEvent<PhaseOf<E>>[] = [];
+    for (let n = 0; n < count; n++) {
+      const cells = this.splash(size, marks);
+      if (cells.length) {
+        this.state.ink.push(...cells);
+        events.push({ kind: 'ink', cells });
+      }
+    }
+    return events;
+  }
+
+  /** The charge's zap lands (it fizzles in a Relaxed fight). */
+  landZap(): GridEvent<PhaseOf<E>>[] {
+    if (this.counted()) this.state.counts.zaps++;
+    return this.hit(ZAP_DAMAGE, 'zap');
+  }
+
+  /** The armor's hit back lands. */
+  landHitBack(): GridEvent<PhaseOf<E>>[] {
+    const back =
+      this.rules.armorHitBack === 'armor'
+        ? (this.enemy.armor?.attack ?? ARMOR_HIT_DAMAGE)
+        : ARMOR_HIT_DAMAGE;
+    return this.hit(back, 'armor');
+  }
+
+  /**
+   * A bomb's blast lands: the cells it works out for you (none when nothing's left), and the
+   * ink it washes out of them. The caller reveals the cells. `rng` picks the spot.
+   */
+  landBlast(marks: M, rng = this.rng): { events: GridEvent<PhaseOf<E>>[]; cells: number[] } {
+    const cells = this.board.at(marks).blast(new Set(this.state.struck), rng);
+    const washed = cells.length ? this.washCells(cells) : [];
+    return { events: washed.length ? [{ kind: 'washed', cells: washed }] : [], cells };
   }
 }

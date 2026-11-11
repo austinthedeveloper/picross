@@ -131,8 +131,10 @@ blank one; `scrambled(clue)` is what a scrambled clue shows), Hits on or off, an
 restarts from the seed and the lines struck.
 
 - **`FightState<C>`** is plain data, saved with the run: Cubed's `BattleState` field for
-  field, plus optional ones the 2D game will need (`turn.turns`, `counts.bombsUsed` and
-  `spongesUsed`), so a block fight saved before #166 loads as it is.
+  field, plus optional ones the 2D game needs (`turn.turns`, `counts.bombsUsed` and
+  `spongesUsed`, and a charge with no `warmUp` until it first shows on a grid), so a block
+  fight saved before #166 loads as it is. The 2D game saves its own shape and translates
+  (its `game/battleCodec.ts`).
 - **A power's lines** are a `LinePick`: a `count`, which the battle picks at runtime among
   lines that keep the board solvable (a block's enemies, and a plain number means this), or
   a `pool` in priority order, proven fair offline, of which it takes the first `count` not
@@ -142,15 +144,24 @@ restarts from the seed and the lines struck.
   the enemy hits for while it's armored, which lines the charge can't go live on, whether a
   Relaxed fight counts mistakes and zaps, whether bombs and sponges are counted apart, how
   long the Mimic's wipe marks last, and the order a stroke's effects land. Each field says
-  what each board does and why. `BLOCK_RULES` is Cubed's fight exactly; `GRID_RULES` has
-  the 2D game's values for all but the order, which waits for the 2D game to move onto the
-  battle (#166's second half). What's the board's (the warm-up, which line goes live, ink,
-  a swap, a bomb) stays behind `FightBoard`.
+  what each board does and why. `BLOCK_RULES` is Cubed's fight exactly, `GRID_RULES` the
+  2D game's. What's the board's (the warm-up, which line goes live, ink, a swap, a bomb)
+  stays behind `FightBoard`.
+- **The two orders.** The block's is `update(marks)`, which polls the board for finished
+  lines, with `callOut`, `bomb`, `shieldUp`, `wash` and `carry`. The grid's is the section
+  at the end of the class, one public step per rule (`chip`, `clear`, `startPhases`,
+  `armorMeter`, `chargeMeter`, `aim`, `applyTurn`, …), which `finished(lines, marks)` runs
+  in order for the lines a grid's board reports. `accuse`, `use` and `damage` start phases
+  as a grid does, and what waits comes back as `due` events (`GridEvent`) for the caller to
+  land: `landSwap`, `landTurn`, `landInk`, `landZap`, `landHitBack`, `landBlast`. On a
+  grid, `update` throws: only the board can say a line was refilled.
 
-`@picross/block/game/battle`'s `Battle` is `StoryBattle` with `BLOCK_RULES` on the block's
-board, so Cubed's golden traces (`battleTraces.test.ts`) and battle tests are its tests.
-`src/fight/battle.test.ts` here checks the rest on a block: each rule's other value, and
-powers from a pool.
+Both games' fights run on it. `@picross/block/game/battle`'s `Battle` is `StoryBattle` with
+`BLOCK_RULES` on the block's board, so Cubed's golden traces (`battleTraces.test.ts`) and
+battle tests are its tests. The 2D game plays it with `GRID_RULES` through `gridStep`
+(`apps/picross/src/game/fight.ts`), so its hooks harness, golden traces and `battle.test.ts`
+are too. `src/fight/battle.test.ts` here checks the rest on a block: each rule's other
+value, powers from a pool, and the grid's order.
 
 ## Tests
 

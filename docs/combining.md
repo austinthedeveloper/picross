@@ -106,6 +106,20 @@ story and the art; three.js and the block screens are cached with the first bloc
 opens. A new version waits until the player is off a board, then offers "A new version is
 ready · Reload". Details are in [architecture.md](architecture.md#offline-and-updates).
 
+**Step 5 is done** (milestone M6, #163): one fight engine, `StoryBattle` in
+`packages/story`, plays both games' fights.
+
+- **#168: a snapshot first.** `fight-ratings.json` holds every story, Overtime and boss
+  fight's solver numbers on each board, and golden traces play every fight on each board,
+  step by step, so a change to how any fight plays shows up as a diff.
+- **#164 and #165: `FightBoard`.** What a fight needs of a board, with the grid's and the
+  block's, and one set of tests any board passes.
+- **#166: one battle.** Cubed's `Battle` became `StoryBattle` over `FightBoard`, with the
+  ways the two games' fights differ as a `FightRules` profile (`BLOCK_RULES`,
+  `GRID_RULES`, the order a stroke's effects land among them). Then the 2D game's
+  `gridStep` moved onto it, through a codec that keeps the 2D save's shape. Both games'
+  fight tests run against it unchanged, and no snapshot moved.
+
 **Step 7 has a first boss, ahead of steps 4 to 6.** The Curator unfolds into a block at 60%
 and folds back flat at 30%, in the 2D story. Rather than wait for `FightBoard`, the 2D
 story opens the 3D game's own fight screen (from `packages/play-block`, loaded on demand)
@@ -119,7 +133,7 @@ screen styles apply only on its board. Details are in [architecture.md](architec
 | -------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
 | Puzzle core          | `packages/grid`: grid, run clues, line solver, the pack, murals                                                    | `packages/block`: block, count-and-pieces clues, line solver, the pack, dioramas      |
 | Play screen          | `packages/play-grid`: DOM grid (`boardView.ts`), `PlaySession` hooks                                               | `packages/play-block`: three.js (`blockView.ts`), `PlayHooks` in `ui/screens/play.ts` |
-| Fights               | `apps/picross/src/game/battle.ts`, run by `gridStep` (`fight.ts`), over rows and columns                           | `packages/block/src/game/battle.ts`, over lines on three axes, same rules             |
+| Fights               | `StoryBattle` (`packages/story`) with `GRID_RULES`, run by `gridStep` (`game/fight.ts`)                            | `StoryBattle` with `BLOCK_RULES`, as `Battle` in `packages/block`                     |
 | Story                | `packages/story`: scenes, chapters, jobs, encounters, read with 2D puzzles                                         | The same package, read with a 3D puzzle per encounter (`packages/block`)              |
 | Saves and settings   | One save: `picross:v2`, `picross:run`, `picross:settings` (#155), `picross:daily2` (#156), `picross:badges` (#157) | The same, through views (`cubed/game/`)                                               |
 | Look, sound, haptics | `packages/shared`, imported by both                                                                                | The same                                                                              |
@@ -128,8 +142,9 @@ Both are built in four layers: engine (pure logic) → puzzles (content) → gam
 saves) → ui (the only layer that touches the page). The packages follow those layers, so
 step 4 is a merge of two apps, not a rewrite.
 
-What's left in the way: two sets of saves and settings, two home screens and lists (step 4),
-and two battle engines (step 5). Puzzle ids clash too (both packs have a `mug`), which #224's
+What's left in the way: two home screens (step 4, #152). The saves and settings are one
+(#155). The battle engine is one (step 5), though a boss that switches board still keeps a battle
+per board (#169, #170). Puzzle ids clash too (both packs have a `mug`), which #224's
 qualified ids are for.
 
 ## Where it lives
@@ -269,7 +284,7 @@ Each step ships, with both games playable throughout.
    picross-3d repo is archived. (Begun: Cubed's screens are under `#/cubed`, and `/3d/`
    redirects.)
 5. **Fights over `FightBoard`.** One `Battle` for both engines; the 2D and 3D fight tests
-   both run against it unchanged.
+   both run against it unchanged. (Done: #168, #164, #165, #166.)
 6. **Encounters in either dimension.** `block` on encounters, naming the 3D story puzzles; a job
    can mix 2D and 3D encounters.
 7. **Dimension-switching bosses.** `board` on phases, the transition, saving the board kind;

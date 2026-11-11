@@ -9,7 +9,8 @@
  * (`npm run check:budget` checks). `#/scene/<id>` is both games', and so is `#/daily`, which
  * opens Cubed's daily screen the same way on a Cubed day (#156). `#/badges` is both games' shelf
  * (#157). Free play (#153) is both games' too: `#/free/flat` and `#/free/cubed`, a tab each,
- * and `#/free` the last tab used. `#/settings` is both games' settings (#154).
+ * and `#/free` the last tab used. `#/settings` is both games' settings (#154). The 2D game's
+ * run and its fights (`#/run…`) load with `import()` too, and the fight engine with them.
  */
 import { getPuzzle } from '@picross/grid/puzzles/index';
 import { getMural } from '@picross/grid/puzzles/murals';
@@ -26,7 +27,6 @@ import { renderHowToPlay } from './ui/screens/howToPlay';
 import { renderMuralScreen, renderMuralTile } from './ui/screens/mural';
 import { renderFreePlay } from './ui/screens/freePlay';
 import { freePlaySession } from './ui/screens/freePlaySession';
-import { renderRunEncounter, renderRunScreen } from './ui/screens/run';
 import { renderSelectScreen } from './ui/screens/selectScreen';
 
 /** What a screen leaves for the router: a cleanup to run before the next screen, if any. */
@@ -67,6 +67,12 @@ export const movedTo = (hash: string): string =>
 
 /** Cubed's chunk: its screens, its list and pack, and its styles (not three.js). */
 const loadCubed = () => import('./cubed/routes');
+/**
+ * The 2D game's run: its hub, its fights, and the fight engine they play on (the story's
+ * battle, the grid's codec and step). Fights happen only in a run, so none of it is in the
+ * first download; the list's run banner (ui/screens/run/banner.ts) reads only the save.
+ */
+const loadRun = () => import('./ui/screens/run');
 
 /** A route, typed by what its `match` finds. */
 const route = <T>(r: Route<T>): Route => r as Route;
@@ -101,8 +107,15 @@ export const ROUTES: Route[] = [
     render: (app, _, lazy) => lazy(loadCubed(), (m) => m.renderCubed(app, '/daily', lazy)),
   }),
   route({ match: is('#/daily'), render: (app) => renderDailyScreen(app) }),
-  route({ match: is('#/run'), render: (app) => renderRunScreen(app) }),
-  route({ match: is('#/run/play'), render: (app) => renderRunEncounter(app) }),
+  // The story's run (#/run) and its fights (#/run/play): the fight engine loads with them.
+  route({
+    match: is('#/run'),
+    render: (app, _, lazy) => lazy(loadRun(), (m) => m.renderRunScreen(app)),
+  }),
+  route({
+    match: is('#/run/play'),
+    render: (app, _, lazy) => lazy(loadRun(), (m) => m.renderRunEncounter(app)),
+  }),
   route({ match: is('#/badges'), render: (app) => renderBadgesScreen(app) }),
   route({
     match: is('#/settings'),

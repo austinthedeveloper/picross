@@ -1,5 +1,6 @@
-import { badgeNote, earnFromFight } from '../../../game/badges';
+import { badgeNote } from '../../../game/badges';
 import { boardAt, switchesBoard, withBlockCounts } from '../../../game/battle';
+import { earnFromFight } from '../../../game/fightBadges';
 import {
   addGadget,
   addToTally,

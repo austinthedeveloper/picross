@@ -5,13 +5,13 @@ import { bump, startBattle, type Enemy } from './battle';
 import {
   badgeCount,
   badgeNote,
-  fightAwards,
   getEarned,
   nextTierHint,
   runAwards,
   runTier,
   statsAwards,
 } from './badges';
+import { fightAwards } from './fightBadges';
 import { addToTally, startRun, withBattle, type RunState } from './run';
 import type { JobStats } from './runSave';
 
