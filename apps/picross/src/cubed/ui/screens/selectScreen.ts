@@ -14,6 +14,8 @@ import { applyTheme } from '@picross/shared/ui/theme';
 import { badgesLink } from '../../../ui/components/badge';
 import { dioramaSection } from './dioramaList';
 import { cubedHref } from '../../href';
+import { freePlayHref, type Candidate, type SizeBand } from '../../../game/freePlay';
+import { lazyThumbs } from '../../../ui/components/lazyThumb';
 
 /** The list's sections, by the longest side of the block. */
 const SECTIONS = [
@@ -34,11 +36,13 @@ export function addListCard(card: () => HTMLElement | null): void {
   extraCards.push(card);
 }
 
-function card(puzzle: Puzzle, index: number): HTMLElement {
+function card(puzzle: Puzzle, index: number, fill: ReturnType<typeof lazyThumbs>): HTMLElement {
   const stats = getPuzzleStats(puzzle.id);
   const saved = getSavedBoard(puzzle.id);
   const band = difficultyOf(puzzle);
-  const picture = stats ? shapePicture(puzzle, 88) : blockOutline(puzzle.dims, 88);
+  const thumb = fill(el('div', { className: 'thumb' }), () =>
+    stats ? shapePicture(puzzle, 88) : blockOutline(puzzle.dims, 88),
+  );
   const meta = stats
     ? `${dimsLabel(puzzle.dims)} · ${formatTime(stats.bestTime)}`
     : saved
@@ -48,7 +52,7 @@ function card(puzzle: Puzzle, index: number): HTMLElement {
     'a',
     { className: `puzzle-card${stats ? ' solved' : ''}`, href: cubedHref(`/play/${puzzle.id}`) },
     [
-      el('div', { className: 'thumb' }, [picture]),
+      thumb,
       el('span', {
         className: 'card-name',
         textContent: stats ? puzzle.name : puzzleNumber(index),
@@ -116,34 +120,77 @@ function tutorialCard(): HTMLElement | null {
   ]);
 }
 
-/** The puzzle list, settings and stats (#/cubed). */
-export function renderSelectScreen(root: HTMLElement): void {
-  const rerender = () => renderSelectScreen(root);
-  const stats = getOverallStats();
-  const shows = (p: Puzzle) => {
-    const { listFilter: f, listDifficulty: d } = getSettings();
-    const solved = Boolean(getPuzzleStats(p.id));
-    return (f === 'all' || (f === 'done') === solved) && (d === 'any' || difficultyOf(p).id === d);
-  };
+/** Each puzzle's place in the pack, which an unsolved card shows as its number. */
+const INDEX = new Map(PUZZLES.map((p, i) => [p.id, i]));
+const solved = (p: Puzzle) => Boolean(getPuzzleStats(p.id));
+/** Past the list's difficulty filter (Cubed's view of it shows Flat's insane as expert). */
+const rated = (p: Puzzle) => {
+  const d = getSettings().listDifficulty;
+  return d === 'any' || difficultyOf(p).id === d;
+};
 
-  const sections = SECTIONS.map((section, s) => {
+/** Each section's puzzles, past the size filter (free play's: `size`, #153). */
+function bySection(size: SizeBand) {
+  return SECTIONS.flatMap((section, s) => {
+    if (size !== 'any' && size !== section.id) return [];
     const min = s ? SECTIONS[s - 1].max : 0;
-    const all = PUZZLES.filter((p) => longest(p) > min && longest(p) <= section.max);
-    const shown = all.filter(shows);
-    if (!shown.length) return null;
-    const solved = all.filter((p) => getPuzzleStats(p.id)).length;
+    return [{ section, all: PUZZLES.filter((p) => longest(p) > min && longest(p) <= section.max) }];
+  });
+}
+
+/**
+ * The list: its sections by size, then the dioramas, or a line saying nothing matches.
+ * The home list shows every size; free play's Cubed tab passes its size filter.
+ */
+export function puzzleList(size: SizeBand = 'any'): HTMLElement[] {
+  const filter = getSettings().listFilter;
+  const fill = lazyThumbs();
+  const sections = bySection(size).flatMap(({ section, all }) => {
+    const shown = all.filter(
+      (p) => rated(p) && (filter === 'all' || (filter === 'done') === solved(p)),
+    );
+    if (!shown.length) return [];
     return el('section', { className: 'list-section' }, [
       el('h2', {}, [
         section.title,
-        el('span', { className: 'count', textContent: ` ${solved}/${all.length}` }),
+        el('span', {
+          className: 'count',
+          textContent: ` ${all.filter(solved).length}/${all.length}`,
+        }),
       ]),
       el(
         'div',
         { className: 'puzzle-grid' },
-        shown.map((p) => card(p, PUZZLES.indexOf(p))),
+        shown.map((p) => card(p, INDEX.get(p.id)!, fill)),
       ),
     ]);
-  }).filter((s): s is HTMLElement => s !== null);
+  });
+  if (!sections.length) {
+    return [
+      el('p', { className: 'empty-list', textContent: 'No puzzles match. Try another filter.' }),
+    ];
+  }
+  // Dioramas aren't one size, so a size filter leaves them out.
+  const dioramas = size === 'any' ? dioramaSection() : null;
+  return dioramas ? [...sections, dioramas] : sections;
+}
+
+/** The unsolved puzzles past the difficulty and size filters, in the list's order (#153). */
+export function unsolvedPuzzles(size: SizeBand): Candidate[] {
+  return bySection(size).flatMap(({ all }) =>
+    all
+      .filter((p) => rated(p) && !solved(p))
+      .map((p) => ({
+        href: cubedHref(`/play/${p.id}`),
+        band: BANDS.findIndex((b) => b.id === difficultyOf(p).id),
+      })),
+  );
+}
+
+/** The puzzle list, settings and stats (#/cubed). */
+export function renderSelectScreen(root: HTMLElement): void {
+  const rerender = () => renderSelectScreen(root);
+  const stats = getOverallStats();
 
   const modes: { id: Mode; label: string; title: string }[] = [
     { id: 'relaxed', label: 'Relaxed', title: 'Nothing is checked as you go' },
@@ -171,6 +218,12 @@ export function renderSelectScreen(root: HTMLElement): void {
       el('header', { className: 'topbar' }, [
         el('h1', { textContent: 'Picross Cubed' }),
         badgesLink(),
+        // Both boards' puzzles in one place, with size filters (#153).
+        el('a', {
+          className: 'button ghost',
+          href: freePlayHref('cubed'),
+          textContent: 'Free play',
+        }),
         el('a', { className: 'button ghost', href: cubedHref('/editor'), textContent: 'Editor' }),
         el('a', {
           className: 'button ghost',
@@ -231,14 +284,7 @@ export function renderSelectScreen(root: HTMLElement): void {
         ),
         difficulty,
       ]),
-      ...(sections.length
-        ? [...sections, ...[dioramaSection()].filter((s): s is HTMLElement => s !== null)]
-        : [
-            el('p', {
-              className: 'empty-list',
-              textContent: 'No puzzles match. Try another filter.',
-            }),
-          ]),
+      ...puzzleList(),
     ]),
   );
 }

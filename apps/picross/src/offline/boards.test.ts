@@ -34,6 +34,10 @@ describe('isBoardRoute', () => {
     // #/daily and #/badges).
     '#/cubed/daily',
     '#/cubed/badges',
+    // Free play's tabs (#153): lists, so an update can reload there.
+    '#/free',
+    '#/free/flat',
+    '#/free/cubed',
     // Look-alikes.
     '#/play/',
     '#/dailyx',

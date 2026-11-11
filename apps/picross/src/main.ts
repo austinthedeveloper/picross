@@ -18,6 +18,7 @@ import '@picross/shared/styles/art.css';
 import './styles/badges.css';
 import '@picross/play-block/styles/story.css';
 import './styles/switch.css';
+import './styles/freePlay.css';
 import { syncBadges } from './game/badges';
 import { gameHref, lastGame } from '@picross/shared/ui/components/gameSwitch';
 import { applyTheme } from '@picross/shared/ui/theme';

@@ -1,6 +1,7 @@
 import type { Mode } from '@picross/grid/game/game';
 import type { Difficulty } from '@picross/grid/puzzles/difficulty';
 import type { GameKind } from '@picross/shared/ui/components/gameSwitch';
+import type { SizeBand } from './freePlay';
 import { readStore, writeStore } from '@picross/shared/game/storage';
 
 // Relaxed or hearts: the mode new puzzles start in. The game (packages/grid) defines them.
@@ -55,6 +56,10 @@ export interface Settings {
   cubedTutorialDone: boolean;
   /** Which free-play list opens (#153): the last game played, from `picross:game`. */
   freePlayTab: GameKind;
+  /** Free play's size filter, on either tab (#153). The home lists group by size instead. */
+  listSize: SizeBand;
+  /** Free play's Next unsolved and Surprise me pick from both boards, not just the tab's. */
+  pickBoth: boolean;
 }
 
 /**
@@ -77,6 +82,8 @@ const settings: Settings = readStore<Settings>(KEY, {
   dimDone: true,
   cubedTutorialDone: false,
   freePlayTab: 'flat',
+  listSize: 'any',
+  pickBoth: false,
 });
 
 export function getSettings(): Readonly<Settings> {

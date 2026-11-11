@@ -8,11 +8,14 @@
  * `import('./cubed/routes')`, so neither its screens nor three.js are in the first download
  * (`npm run check:budget` checks). `#/scene/<id>` is both games', and so is `#/daily`, which
  * opens Cubed's daily screen the same way on a Cubed day (#156). `#/badges` is both games' shelf
- * (#157).
+ * (#157). Free play (#153) is both games' too: `#/free/flat` and `#/free/cubed`, a tab each,
+ * and `#/free` the last tab used.
  */
 import { getPuzzle } from '@picross/grid/puzzles/index';
 import { getMural } from '@picross/grid/puzzles/murals';
 import { getScene } from '@picross/story/puzzles/scenes';
+import { freePlayHref } from './game/freePlay';
+import { getSettings } from './game/settings';
 import { dailyDimension, dateKey } from '@picross/shared/puzzles/days';
 import { renderGameScreen } from '@picross/play-grid/ui/screens/gameScreen';
 import { renderSceneScreen } from '@picross/story/ui/screens/sceneScreen';
@@ -21,6 +24,7 @@ import { renderDailyScreen } from './ui/screens/daily';
 import { renderEditorScreen } from './ui/screens/editorScreen';
 import { renderHowToPlay } from './ui/screens/howToPlay';
 import { renderMuralScreen, renderMuralTile } from './ui/screens/mural';
+import { renderFreePlay } from './ui/screens/freePlay';
 import { freePlaySession } from './ui/screens/freePlaySession';
 import { renderRunEncounter, renderRunScreen } from './ui/screens/run';
 import { renderSelectScreen } from './ui/screens/selectScreen';
@@ -57,8 +61,12 @@ const MOVED: Record<string, string> = {
   '#/cubed/badges': '#/badges',
 };
 
-/** Where `hash` goes now: itself, unless it's an old link. */
-export const movedTo = (hash: string): string => MOVED[hash] ?? hash;
+/** Where `hash` goes now: itself, unless it's an old link, or `#/free` (its last tab, #153). */
+export const movedTo = (hash: string): string =>
+  hash === '#/free' ? freePlayHref(getSettings().freePlayTab) : (MOVED[hash] ?? hash);
+
+/** Cubed's chunk: its screens, its list and pack, and its styles (not three.js). */
+const loadCubed = () => import('./cubed/routes');
 
 /** A route, typed by what its `match` finds. */
 const route = <T>(r: Route<T>): Route => r as Route;
@@ -90,8 +98,7 @@ export const ROUTES: Route[] = [
   route({
     game: 'cubed',
     match: (h) => h === '#/daily' && dailyDimension(dateKey()) === 'block',
-    render: (app, _, lazy) =>
-      lazy(import('./cubed/routes'), (m) => m.renderCubed(app, '/daily', lazy)),
+    render: (app, _, lazy) => lazy(loadCubed(), (m) => m.renderCubed(app, '/daily', lazy)),
   }),
   route({ match: is('#/daily'), render: (app) => renderDailyScreen(app) }),
   route({ match: is('#/run'), render: (app) => renderRunScreen(app) }),
@@ -99,12 +106,21 @@ export const ROUTES: Route[] = [
   route({ match: is('#/badges'), render: (app) => renderBadgesScreen(app) }),
   route({ match: is('#/how-to-play'), render: (app) => renderHowToPlay(app) }),
   route({ match: is('#/editor'), render: (app) => renderEditorScreen(app) }),
+  // Free play (#153): a tab per board. The Cubed tab is Cubed's list, so it's Cubed's route.
+  route({
+    match: is('#/free/flat'),
+    render: (app, _, lazy) => renderFreePlay(app, 'flat', loadCubed, lazy),
+  }),
+  route({
+    game: 'cubed',
+    match: is('#/free/cubed'),
+    render: (app, _, lazy) => renderFreePlay(app, 'cubed', loadCubed, lazy),
+  }),
   route({
     // Picross Cubed: #/cubed is its list, #/cubed/play/<id> a puzzle, and so on (cubed/routes.ts).
     game: 'cubed',
     match: (h) => /^#\/cubed(\/.*)?$/.exec(h),
-    render: (app, [, path = '/'], lazy) =>
-      lazy(import('./cubed/routes'), (m) => m.renderCubed(app, path, lazy)),
+    render: (app, [, path = '/'], lazy) => lazy(loadCubed(), (m) => m.renderCubed(app, path, lazy)),
   }),
   // Anything else: the puzzle list.
   route({ match: () => true, render: (app) => renderSelectScreen(app) }),

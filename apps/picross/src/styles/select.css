@@ -133,7 +133,9 @@
   margin-bottom: 16px;
 }
 
-.how-to-link {
+/* How to play, and free play (#153), under the run banner. */
+.how-to-link,
+.free-play-link {
   display: block;
   margin-bottom: 12px;
   color: var(--accent);

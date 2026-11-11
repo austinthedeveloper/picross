@@ -1,22 +1,17 @@
 import { randomUnsolved } from '../../game/pickPuzzle';
 import { gameSwitch } from '@picross/shared/ui/components/gameSwitch';
-import { getOverallStats, getPuzzleStats, getSavedBoard } from '../../game/progress';
+import { freePlayHref } from '../../game/freePlay';
+import { getOverallStats, getPuzzleStats } from '../../game/progress';
 import {
   getSettings,
-  inListOrder,
-  inPuzzleOrder,
-  passesFilter,
   updateSettings,
   type DifficultyFilter,
   type ListFilter,
   type ListOrder,
   type Mode,
 } from '../../game/settings';
-import { DIFFICULTIES, puzzleDifficulty, puzzlePasses } from '@picross/grid/puzzles/difficulty';
+import { DIFFICULTIES } from '@picross/grid/puzzles/difficulty';
 import { puzzles } from '@picross/grid/puzzles/index';
-import type { Puzzle } from '@picross/grid/puzzles/format';
-import { createPicture } from '@picross/play-grid/ui/board/picture';
-import { listSection } from '../components/listSection';
 import { createMuteButton } from '@picross/shared/ui/components/muteButton';
 import { rankCard } from '../components/rankCard';
 import { el } from '@picross/shared/ui/dom';
@@ -24,7 +19,7 @@ import { formatTime } from '@picross/play-grid/ui/format';
 import { haptic, hapticsSupported } from '@picross/shared/ui/haptics';
 import { applyTheme } from '@picross/shared/ui/theme';
 import { dailyCard } from './daily';
-import { muralSection } from './mural';
+import { puzzleList } from './puzzleList';
 import { runBanner } from './run';
 
 const FILTERS: [ListFilter, string][] = [
@@ -40,79 +35,10 @@ const ORDERS: [ListOrder, string][] = [
   ['hardest', 'Hardest first'],
 ];
 
-const EMPTY_LIST: Record<ListFilter, string> = {
-  all: '',
-  todo: 'You’ve completed everything. Well done.',
-  done: 'Nothing completed yet. Pick a puzzle and get going.',
-};
-
 const MODE_HINTS: Record<Mode, string> = {
   relaxed: 'No checking. Solve at your own pace.',
   hearts: 'Wrong fills cost a heart. Three and you start over.',
 };
-
-/** One puzzle card. The picture and name stay hidden until it's solved. */
-function puzzleCard(p: Puzzle, number: number): HTMLElement {
-  const stats = getPuzzleStats(p.id);
-  const difficulty = puzzleDifficulty(p.id);
-  const status = stats
-    ? `✓ ${formatTime(stats.bestTime)}`
-    : getSavedBoard(p.id)
-      ? 'In progress'
-      : 'Unsolved';
-  const thumb = stats
-    ? createPicture(p.solution, Math.floor(60 / Math.max(p.width, p.height)))
-    : el('span', { className: 'thumb-unknown', textContent: '?' });
-  return el('a', { className: `card${stats ? ' solved' : ''}`, href: `#/play/${p.id}` }, [
-    el('div', { className: 'thumb' }, [thumb]),
-    el('div', { className: 'card-name', textContent: stats ? p.name : `No. ${number}` }),
-    el('div', { className: 'card-meta' }, [
-      el('span', { className: 'card-size' }, [
-        `${p.width}×${p.height} · `,
-        el('span', {
-          className: `difficulty ${difficulty.id}`,
-          textContent: difficulty.label,
-        }),
-      ]),
-      el('span', { className: 'status', textContent: status }),
-    ]),
-  ]);
-}
-
-/**
- * The puzzle list grouped by size. Cards keep their pack-wide number whatever
- * the order, and the headings count the whole size whatever the filter hides.
- */
-function sizeSections(
-  filter: ListFilter,
-  order: ListOrder,
-  difficulty: DifficultyFilter,
-): HTMLElement[] {
-  const sizes = [...new Set(puzzles.map((p) => p.width))].sort((a, b) => a - b);
-  return inListOrder(order, sizes).flatMap((size) => {
-    const group = puzzles.filter((p) => p.width === size);
-    const solved = group.filter((p) => getPuzzleStats(p.id)).length;
-    const shown = group.filter(
-      (p) =>
-        passesFilter(filter, Boolean(getPuzzleStats(p.id))) &&
-        (difficulty === 'any' || puzzleDifficulty(p.id).id === difficulty),
-    );
-    if (!shown.length) return [];
-    return listSection({
-      id: `size-${size}`,
-      label: `${size}×${size} puzzles`,
-      heading: `${size}×${size}`,
-      count: `${solved}/${group.length}`,
-      content: el(
-        'div',
-        { className: 'cards' },
-        inPuzzleOrder(order, shown, (p) => puzzlePasses(p.id)).map((p) =>
-          puzzleCard(p, puzzles.indexOf(p) + 1),
-        ),
-      ),
-    });
-  });
-}
 
 /** Shows only one difficulty of puzzle (#112). */
 function difficultySelect(current: DifficultyFilter, rerender: () => void): HTMLSelectElement {
@@ -172,9 +98,6 @@ export function renderSelectScreen(app: HTMLElement): void {
   const filter = settings.listFilter;
   const order = settings.listOrder;
   const difficulty = settings.listDifficulty;
-  // Murals aren't rated, so a difficulty filter leaves them out.
-  const murals = difficulty === 'any' ? muralSection(filter, order) : null;
-  const list = [murals, ...sizeSections(filter, order, difficulty)].flatMap((s) => s ?? []);
 
   app.replaceChildren(
     el('main', { className: 'screen select' }, [
@@ -205,6 +128,12 @@ export function renderSelectScreen(app: HTMLElement): void {
         className: 'how-to-link',
         href: '#/how-to-play',
         textContent: overall.solves ? 'How to play →' : 'New to picross? Learn it in a minute →',
+      }),
+      // Both boards' puzzles in one place, with size filters (#153).
+      el('a', {
+        className: 'free-play-link',
+        href: freePlayHref('flat'),
+        textContent: 'Free play: Flat and Cubed puzzles in one list →',
       }),
       el('div', { className: 'mode-row' }, [
         el('div', { className: 'segmented', role: 'group', ariaLabel: 'Mode' }, [
@@ -250,15 +179,8 @@ export function renderSelectScreen(app: HTMLElement): void {
           difficultySelect(difficulty, rerender),
         ]),
       ]),
-      ...(list.length
-        ? list
-        : [
-            el('p', {
-              className: 'empty-list',
-              textContent:
-                difficulty === 'any' ? EMPTY_LIST[filter] : 'No puzzles match those filters.',
-            }),
-          ]),
+      // The home list shows every size: free play (#/free/flat) is where sizes filter.
+      ...puzzleList({ filter, order, difficulty, size: 'any' }),
       el('footer', { className: 'footer' }, [
         el('a', { href: '#/editor', textContent: 'Make your own puzzle →' }),
       ]),

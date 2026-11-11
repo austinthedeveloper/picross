@@ -416,6 +416,8 @@ the save merge (#155) the 2D game and Picross Cubed share one save:
 | `picross:daily`    | (old)                        | The 2D game's daily before #156; read only by the migration                                                                                                                                                         |
 | `picross3d:badges` | (old)                        | Cubed's badge tiers seen before #157; read only by the migration                                                                                                                                                    |
 
+Free play's size filter and its Both boards toggle are `listSize` and `pickBoth` there too.
+
 Cubed's `cubed/game/progress.ts`, `runSave.ts`, `settings.ts` and `daily.ts` are views of the
 first three and the daily on the `block` side (`progressFor('block')`, `block` in the run save, `tutorialDone` read
 from `cubedTutorialDone`), so Cubed's screens didn't change. A job is the same job on either
@@ -593,6 +595,9 @@ draws. A new screen is one entry. Hash routing works on GitHub Pages without ser
 | `#/daily`          | Today's daily (#69, #156): `renderDailyScreen` on a Flat day, Cubed's daily screen on a Cubed day |
 | `#/mural/<id>`     | `renderMuralScreen`: a mural's tiles, or the finished picture (#24)                               |
 | `#/mural/<id>/<n>` | `renderMuralTile`: tile n of a mural                                                              |
+| `#/free/flat`      | `renderFreePlay`: free play's Flat tab, the 2D pack (#153, [The puzzle list](#the-puzzle-list))   |
+| `#/free/cubed`     | `renderFreePlay`: free play's Cubed tab, Cubed's list (a Cubed route)                             |
+| `#/free`           | Free play's last tab (`freePlayTab`): `main.ts` swaps the hash (`movedTo`)                        |
 | `#/cubed/…`        | Picross Cubed (`cubed/routes.ts`; its routes are in [docs/cubed/](cubed/architecture.md#screens)) |
 
 Each screen replaces `#app`'s children. A screen that adds global listeners or timers
@@ -696,6 +701,9 @@ Both games' styles are in the app, and some class names mean different things in
 board (`scripts/scopeByBoard.ts`): Cubed's under `<html data-board="block">`, which the
 router sets on `#/cubed/…`, and this game's without it. The shared ones (tokens, base, run,
 fight, dig, dialogue, art) apply everywhere. See [Switching board](#switching-board-the-curator).
+A screen both games show is unscoped too: free play's tabs, filters and pickers
+(`styles/freePlay.css`) look the same on the Flat tab and on the Cubed tab, where
+`data-board="block"` is up.
 
 ## Play sessions: free play vs. runs
 
@@ -770,6 +778,36 @@ The All / Not completed / Completed filter is `listFilter` in the settings, so i
 a visit to a puzzle. A puzzle in progress counts as not completed, and so does a mural until
 its last tile is solved. A size with nothing to show disappears; its heading's count always
 covers the whole size.
+
+`puzzleList.ts` draws the list (murals, then the sizes) for both the home list and free play's
+Flat tab. Thumbnails of solved puzzles draw when their card nears the screen
+(`components/lazyThumb.ts`, an `IntersectionObserver`; cards have a fixed-height `.thumb`, so
+nothing moves when one draws). Cubed's list does the same, outlines and all.
+
+**Free play** (#153, `ui/screens/freePlay.ts`) is both packs in one screen, a tab each:
+`#/free/flat` is the 2D pack with its murals, `#/free/cubed` Cubed's list with its dioramas
+(`cubed/ui/screens/selectScreen.ts`, through `freePlayList` and `freePlayPicks` in
+`cubed/routes.ts`, so it loads with Cubed's chunk, without three.js). `#/free` opens the tab
+used last (`freePlayTab`). Only one tab draws at a time, and the Cubed tab is a Cubed route,
+so its cards keep Cubed's styles. Both home lists link to their tab; the home menu (#152) is
+to make free play the way in.
+
+- **Shared filters:** All / Unsolved / Solved (`listFilter`), size (`listSize`: small, medium, large,
+  huge: Flat's 5×5 to 20×20, Cubed's sections by the block's longest side) and difficulty
+  (`listDifficulty`; Flat's insane shows as Cubed's expert on the Cubed tab). Flat's list also
+  sorts (`listOrder`). Neither pack has themes as data yet, so there's no theme filter. A size
+  filter leaves the murals and dioramas out, and a difficulty filter the murals (as on the
+  home lists, which keep every size).
+- **Next unsolved** opens the tab's first unsolved puzzle in list order, past the size and
+  difficulty filters; **Surprise me** any of them. **Both boards** (`pickBoth`) picks from
+  both: Next unsolved takes the easier of the two tabs' next (this tab's on a tie), Surprise
+  me any unsolved puzzle on either (`game/freePlay.ts`). On the Flat tab that loads Cubed's
+  chunk.
+- **Performance:** the 600-odd cards (523 + 85) draw one tab at a time, the cards off screen
+  skip layout and paint (`content-visibility: auto`), and thumbnails draw lazily. In a
+  production build at phone size, the Flat tab's first draw takes about 20 ms to paint (under
+  100 ms with the CPU slowed 4×); the Cubed tab's about 90 ms the first time (most of it
+  loading Cubed's chunk, as `#/cubed` does) and about 10 ms after.
 
 ## How to play
 
