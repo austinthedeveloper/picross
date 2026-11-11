@@ -32,9 +32,11 @@ async function seedNearlySolved(page: Page, encounter: string): Promise<number> 
   const lines = puzzle.lines.map((l) => l.id);
   await page.evaluate(
     ({ blocks, lines }) => {
-      const save = JSON.parse(localStorage.getItem('picross3d:run')!);
-      save.current.board = { blocks };
-      save.current.battle = {
+      // Cubed's run is `block` in the one run save (#155).
+      const save = JSON.parse(localStorage.getItem('picross:run')!);
+      const current = save.block.current;
+      current.board = { blocks };
+      current.battle = {
         enemyHp: 1,
         maxHp: 1,
         phase: 99,
@@ -52,7 +54,7 @@ async function seedNearlySolved(page: Page, encounter: string): Promise<number> 
         seed: 1,
         counts: { mistakes: 0, zaps: 0, wrongAccusations: 0, gadgetsUsed: 0 },
       };
-      localStorage.setItem('picross3d:run', JSON.stringify(save));
+      localStorage.setItem('picross:run', JSON.stringify(save));
     },
     { blocks, lines },
   );
@@ -74,9 +76,10 @@ for (const chapter of chapters) {
     await page.evaluate(
       ({ jobs, seen }) =>
         localStorage.setItem(
-          'picross3d:run',
+          'picross:run',
           JSON.stringify({
             current: null,
+            block: { current: null },
             seenScenes: seen,
             seenTips: ['fog', 'scramble', 'armor', 'fakes', 'charge', 'ink', 'swap', 'rotate'],
             jobs: Object.fromEntries(jobs.map((j: string) => [j, { plays: 1, wins: 1 }])),

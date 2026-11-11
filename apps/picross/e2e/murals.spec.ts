@@ -41,9 +41,10 @@ test('a mural fills in tile by tile, then shows the whole picture', async ({ pag
   // first: it would save its copy of progress over this.)
   await page.goto('/#/');
   await page.evaluate(() => {
-    const save = JSON.parse(localStorage.getItem('picross:v1')!);
-    for (const id of ['whale-2', 'whale-3']) save.solved[id] = { solves: 1, bestTime: 1000 };
-    localStorage.setItem('picross:v1', JSON.stringify(save));
+    const save = JSON.parse(localStorage.getItem('picross:v2')!);
+    for (const id of ['whale-2', 'whale-3'])
+      save.solved[`grid:${id}`] = { solves: 1, bestTime: 1000 };
+    localStorage.setItem('picross:v2', JSON.stringify(save));
   });
   await page.reload();
   await page.goto('/#/mural/whale/4');

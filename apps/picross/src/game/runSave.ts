@@ -1,7 +1,14 @@
 import type { RunState } from './run';
+import type { Dimension } from '@picross/shared/puzzles/ids';
 import { readStore, writeStore } from '@picross/shared/game/storage';
 
-const KEY = 'picross:run';
+/**
+ * Both games' story (#155): the 2D game's run, Cubed's beside it (`block`), and what they
+ * share, the scenes and tips seen and the job stats. The first-launch merge (`migrate.ts`)
+ * moved Cubed's `picross3d:run` in.
+ */
+export const RUN_KEY = 'picross:run';
+const KEY = RUN_KEY;
 
 /** How you've done on a job (#47). */
 export interface JobStats {
@@ -16,6 +23,21 @@ export interface JobStats {
   bestHp?: number;
   /** Endless mode (#68): the most encounters cleared in one run. */
   bestDepth?: number;
+  /**
+   * The boards it's been won on (#155), for "won on both" (#157). Wins from before the
+   * merge count for the game they were in.
+   */
+  wonOn?: Dimension[];
+}
+
+/**
+ * Cubed's run in progress, as Cubed saves it (`cubed/game/run.ts`'s RunState; this module
+ * doesn't read it). Either game's run can be continued while the other waits.
+ */
+export interface BlockRunSave {
+  current: object | null;
+  /** When `current` last changed (see `RunSave.currentUpdatedAt`). */
+  currentUpdatedAt?: number;
 }
 
 export interface RunSave {
@@ -30,7 +52,10 @@ export interface RunSave {
   seenScenes: string[];
   /** Enemy powers whose tip card you've dismissed (#79). Missing in older saves. */
   seenTips?: string[];
+  /** Job stats from both games: a job is the same job on either board. */
   jobs: Record<string, JobStats>;
+  /** Cubed's run. Missing until Cubed's story is played, or from before the merge. */
+  block?: BlockRunSave;
 }
 
 const data = readStore<RunSave>(KEY, { current: null, seenScenes: [], jobs: {} });
@@ -88,6 +113,7 @@ export function recordRunResult(run: RunState): RunState {
   }
   const won = run.status === 'won';
   const next: JobStats = { ...prev, plays: prev.plays + 1, wins: prev.wins + (won ? 1 : 0) };
+  if (won) next.wonOn = withWin(prev, 'grid');
   if (won && run.mode === 'hearts') {
     // A first Hits-on win starts the best fresh: an older one may be from a Relaxed run.
     next.bestHp = Math.max(prev.hitsOnWins ? (prev.bestHp ?? 0) : 0, run.hp);
@@ -96,6 +122,33 @@ export function recordRunResult(run: RunState): RunState {
   data.jobs[run.runId] = next;
   return save({ ...run, recorded: true });
 }
+
+/** A job's boards with `dim` added. */
+export const withWin = (stats: JobStats, dim: Dimension): Dimension[] =>
+  [...new Set([...(stats.wonOn ?? []), dim])].sort();
+
+/** Cubed's run in progress or just finished, if any (Cubed's view: cubed/game/runSave.ts). */
+export const getBlockRun = (): object | null => data.block?.current ?? null;
+
+/** Saves Cubed's run (or clears it with null), dated like the 2D game's. */
+export function saveBlockRun(state: object | null): void {
+  const block = data.block ?? { current: null };
+  if (JSON.stringify(state) !== JSON.stringify(block.current)) block.currentUpdatedAt = Date.now();
+  data.block = { ...block, current: state };
+  writeStore(KEY, data);
+}
+
+/** Replaces a job's stats (Cubed records its own runs: cubed/game/runSave.ts). */
+export function setJobStats(id: string, stats: JobStats): void {
+  data.jobs[id] = stats;
+  writeStore(KEY, data);
+}
+
+/** Every job won at least once, on either board. */
+export const clearedJobs = () =>
+  Object.entries(data.jobs)
+    .filter(([, s]) => s.wins > 0)
+    .map(([id]) => id);
 
 function save(recorded: RunState): RunState {
   saveCurrentRun(recorded);

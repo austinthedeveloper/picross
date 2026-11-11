@@ -36,7 +36,33 @@ describe('run saves', () => {
     let run = completeEncounter(startRun('job', 6, 'hearts'), 1);
     run = saves.recordRunResult(run);
     saves.recordRunResult(run);
-    expect(saves.getJobStats('job')).toEqual({ plays: 1, wins: 1, hitsOnWins: 1, bestHp: 6 });
+    expect(saves.getJobStats('job')).toEqual({
+      plays: 1,
+      wins: 1,
+      hitsOnWins: 1,
+      bestHp: 6,
+      wonOn: ['block'],
+    });
     expect(saves.clearedJobs()).toEqual(['job']);
+  });
+
+  it('live in the one run save, beside the 2D run (#155)', async () => {
+    localStorage.clear();
+    vi.resetModules();
+    const saves = await import('./runSave');
+    const flat = await import('../../game/runSave');
+    const run = startRun('job', 6, 'relaxed');
+    saves.saveCurrentRun(run);
+    expect(flat.getCurrentRun()).toBeNull();
+    const stored = JSON.parse(localStorage.getItem('picross:run')!);
+    expect(stored.block.current).toEqual(run);
+    expect(typeof stored.block.currentUpdatedAt).toBe('number');
+    expect(localStorage.getItem('picross3d:run')).toBeNull();
+    // A job won on both boards says so, and keeps the 2D game's fields.
+    const flatRun = (await import('../../game/run')).startRun('job', 10);
+    flat.recordRunResult({ ...flatRun, status: 'won' });
+    expect(saves.getCurrentRun()).toEqual(run);
+    saves.recordRunResult(completeEncounter(run, 1));
+    expect(saves.getJobStats('job')).toMatchObject({ plays: 2, wins: 2, wonOn: ['block', 'grid'] });
   });
 });

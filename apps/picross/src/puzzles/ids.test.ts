@@ -113,7 +113,8 @@ describe('ids in both packs', () => {
 
   it('four 2D run puzzles are also in the 3D free-play pack, so block: names two puzzles', () => {
     // A 3D story puzzle and a 3D free-play puzzle with the same id: `block:bat` alone can't
-    // say which. Nothing reads a qualified id yet; when one does, it needs telling apart.
+    // say which. In the save (`picross:v2`, #155) it's always the pack's: story boards live in
+    // the run, never in free play (game/migrate.test.ts checks the saves from real play).
     expect(
       both(
         blockStory.map((p) => p.id),

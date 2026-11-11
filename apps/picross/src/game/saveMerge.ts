@@ -2,8 +2,19 @@ import { dayNumber } from '../puzzles/daily';
 import type { Tier } from '../puzzles/badges';
 import type { BadgeSave, Earned } from './badges';
 import type { DailySave } from './daily';
-import type { PuzzleStats, SavedBoard, SaveData } from './progress';
-import type { JobStats, RunSave } from './runSave';
+import {
+  combine,
+  either,
+  higher,
+  lower,
+  mergeBestHp,
+  mergeRecord,
+  present,
+  union,
+  unknownFields,
+} from './merging';
+import type { BlockSavedBoard, PuzzleStats, SavedBoard, SaveData } from './progress';
+import type { BlockRunSave, JobStats, RunSave } from './runSave';
 
 /**
  * Combines two copies of a save (#97), so nobody has to answer "which save do you
@@ -11,7 +22,9 @@ import type { JobStats, RunSave } from './runSave';
  * `mergeSaves(a, b)` equals `mergeSaves(b, a)`, and merging a save with itself
  * changes nothing. Lists that act as sets come back sorted.
  *
- * Settings and the editor's drawing aren't here: they belong to one device.
+ * Settings and the editor's drawing aren't here: they belong to one device. Since the
+ * first-launch merge (#155) `progress` and `run` hold both games' (`picross:v2`, and
+ * Cubed's run as `run.block`); the dailies and Cubed's badges join with #156 and #157.
  */
 export interface SaveBundle {
   version: number;
@@ -21,78 +34,26 @@ export interface SaveBundle {
   badges?: BadgeSave;
 }
 
-export const SAVE_VERSION = 1;
+/** 2: progress is `picross:v2` (qualified ids, time per dimension), and runs have `block`. */
+export const SAVE_VERSION = 2;
 
-type Loose = Record<string, unknown>;
-
-/** JSON with sorted keys, so two copies of the same data always compare equal. */
-function stable(value: unknown): string {
-  return JSON.stringify(value, (_, v: unknown) =>
-    v && typeof v === 'object' && !Array.isArray(v)
-      ? Object.fromEntries(Object.entries(v).sort(([x], [y]) => x.localeCompare(y)))
-      : v,
-  );
-}
-
-/** Whichever side, chosen the same way however they're ordered. */
-const either = <T>(a: T, b: T): T => (stable(a) >= stable(b) ? a : b);
-
-/** One side if only one has it, and a merge if both do. */
-function combine<T>(a: T | undefined, b: T | undefined, merge: (a: T, b: T) => T): T | undefined {
-  if (a === undefined) return b;
-  return b === undefined ? a : merge(a, b);
-}
-
-const higher = (a: number | undefined, b: number | undefined) => combine(a, b, Math.max);
-const lower = (a: number | undefined, b: number | undefined) => combine(a, b, Math.min);
-const union = (a: string[] | undefined, b: string[] | undefined) =>
-  combine(a, b, (x, y) => [...new Set([...x, ...y])].sort());
-
-/** Drops missing fields, so merging doesn't add `undefined` keys a save never had. */
-const present = <T extends object>(value: T): T =>
-  Object.fromEntries(Object.entries(value).filter(([, v]) => v !== undefined)) as T;
-
-/**
- * The fields a rule doesn't know about, kept from both sides, so an older client
- * can't delete newer data. Rules then write their own fields over these.
- */
-function unknownFields(a: object, b: object): Loose {
-  const x = a as Loose;
-  const y = b as Loose;
-  const out: Loose = {};
-  for (const key of new Set([...Object.keys(x), ...Object.keys(y)])) {
-    out[key] = combine(x[key], y[key], either);
-  }
-  return out;
-}
-
-function mergeRecord<T>(
-  a: Record<string, T> | undefined,
-  b: Record<string, T> | undefined,
-  merge: (a: T, b: T) => T,
-): Record<string, T> | undefined {
-  return combine(a, b, (x, y) => {
-    const out: Record<string, T> = {};
-    for (const key of new Set([...Object.keys(x), ...Object.keys(y)])) {
-      out[key] = combine(x[key], y[key], merge)!;
-    }
-    return out;
+const mergeStats = (a: PuzzleStats, b: PuzzleStats): PuzzleStats =>
+  present({
+    ...unknownFields(a, b),
+    solves: Math.max(a.solves, b.solves),
+    bestTime: Math.min(a.bestTime, b.bestTime),
+    clean: higher(a.clean, b.clean),
   });
-}
 
-const mergeStats = (a: PuzzleStats, b: PuzzleStats): PuzzleStats => ({
-  ...unknownFields(a, b),
-  solves: Math.max(a.solves, b.solves),
-  bestTime: Math.min(a.bestTime, b.bestTime),
-});
+type AnyBoard = SavedBoard | BlockSavedBoard;
 
-const laterBoard = (a: SavedBoard, b: SavedBoard): SavedBoard => {
+const laterBoard = <B extends AnyBoard>(a: B, b: B): B => {
   const [x, y] = [a.elapsed ?? 0, b.elapsed ?? 0];
   return x === y ? either(a, b) : x > y ? a : b;
 };
 
-function mergeBoards(a: SaveData, b: SaveData): Record<string, SavedBoard> {
-  const out: Record<string, SavedBoard> = {};
+function mergeBoards(a: SaveData, b: SaveData): Record<string, AnyBoard> {
+  const out: Record<string, AnyBoard> = {};
   const [boardsA, boardsB] = [a.boards ?? {}, b.boards ?? {}];
   for (const id of new Set([...Object.keys(boardsA), ...Object.keys(boardsB)])) {
     const [solvesA, solvesB] = [a.solved?.[id]?.solves ?? 0, b.solved?.[id]?.solves ?? 0];
@@ -111,16 +72,9 @@ const mergeProgress = (a: SaveData, b: SaveData): SaveData => ({
   ...(unknownFields(a, b) as object),
   solved: mergeRecord(a.solved, b.solved, mergeStats) ?? {},
   boards: mergeBoards(a, b),
-  totalTime: Math.max(a.totalTime ?? 0, b.totalTime ?? 0),
+  time: mergeRecord(a.time, b.time, Math.max) ?? {},
+  ...present({ playtests: higher(a.playtests, b.playtests) }),
 });
-
-/** An older save's best HP may be from a Relaxed run, so a Hits-on side's best beats it. */
-function mergeBestHp(a: JobStats, b: JobStats): number | undefined {
-  const trusted = [a, b].filter((job) => job.hitsOnWins);
-  return (trusted.length ? trusted : [a, b])
-    .map((job) => job.bestHp)
-    .reduce((x, y) => higher(x, y));
-}
 
 const mergeJob = (a: JobStats, b: JobStats): JobStats =>
   present({
@@ -130,19 +84,40 @@ const mergeJob = (a: JobStats, b: JobStats): JobStats =>
     hitsOnWins: higher(a.hitsOnWins, b.hitsOnWins),
     bestHp: mergeBestHp(a, b),
     bestDepth: higher(a.bestDepth, b.bestDepth),
+    wonOn: union(a.wonOn, b.wonOn),
   });
 
-function mergeRun(a: RunSave, b: RunSave): RunSave {
+/**
+ * A run is taken whole from whichever side changed it last. On a tie only the runs are
+ * compared, so the rest of the save can't change which one wins.
+ */
+function newerRun<R extends { current: unknown; currentUpdatedAt?: number }>(a: R, b: R): R {
   const [atA, atB] = [a.currentUpdatedAt ?? 0, b.currentUpdatedAt ?? 0];
-  // The run is taken whole: two half-runs blended together would be neither.
-  const newer = atA === atB ? either(a, b) : atA > atB ? a : b;
+  if (atA !== atB) return atA > atB ? a : b;
+  return either(a.current, b.current) === a.current ? a : b;
+}
+
+const mergeBlockRun = (a: BlockRunSave, b: BlockRunSave): BlockRunSave => {
+  const newer = newerRun(a, b);
   return present({
     ...unknownFields(a, b),
     current: newer.current,
-    currentUpdatedAt: newer.currentUpdatedAt,
+    currentUpdatedAt: higher(a.currentUpdatedAt, b.currentUpdatedAt),
+  });
+};
+
+function mergeRun(a: RunSave, b: RunSave): RunSave {
+  // The run is taken whole: two half-runs blended together would be neither. Each game's
+  // run goes by its own date.
+  const newer = newerRun(a, b);
+  return present({
+    ...unknownFields(a, b),
+    current: newer.current,
+    currentUpdatedAt: higher(a.currentUpdatedAt, b.currentUpdatedAt),
     seenScenes: union(a.seenScenes, b.seenScenes) ?? [],
     seenTips: union(a.seenTips, b.seenTips),
     jobs: mergeRecord(a.jobs, b.jobs, mergeJob) ?? {},
+    block: combine(a.block, b.block, mergeBlockRun),
   });
 }
 

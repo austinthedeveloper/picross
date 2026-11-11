@@ -1,5 +1,6 @@
 import type { Mode } from '@picross/grid/game/game';
 import type { Difficulty } from '@picross/grid/puzzles/difficulty';
+import type { GameKind } from '@picross/shared/ui/components/gameSwitch';
 import { readStore, writeStore } from '@picross/shared/game/storage';
 
 // Relaxed or hearts: the mode new puzzles start in. The game (packages/grid) defines them.
@@ -48,9 +49,20 @@ export interface Settings {
   highContrast: boolean;
   /** Vibrates on taps, finished lines, and hits, where the phone can. Separate from mute. */
   haptics: boolean;
+  /** Fade the clues of finished lines, on a block (Cubed's setting, #155). */
+  dimDone: boolean;
+  /** Cubed's guided tutorial was finished or skipped. */
+  cubedTutorialDone: boolean;
+  /** Which free-play list opens (#153): the last game played, from `picross:game`. */
+  freePlayTab: GameKind;
 }
 
-const KEY = 'picross:settings';
+/**
+ * Both games' settings (#154, #155). The first-launch merge (`migrate.ts`) moved Cubed's
+ * `picross3d:settings` in; Cubed's routes read them through `cubed/game/settings.ts`.
+ */
+export const SETTINGS_KEY = 'picross:settings';
+const KEY = SETTINGS_KEY;
 const settings: Settings = readStore<Settings>(KEY, {
   mode: 'relaxed',
   listFilter: 'all',
@@ -62,6 +74,9 @@ const settings: Settings = readStore<Settings>(KEY, {
   highContrast: false,
   // Unlike sound, haptics start on: they're silent, so they never surprise anyone nearby.
   haptics: true,
+  dimDone: true,
+  cubedTutorialDone: false,
+  freePlayTab: 'flat',
 });
 
 export function getSettings(): Readonly<Settings> {

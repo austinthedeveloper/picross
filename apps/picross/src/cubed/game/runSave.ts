@@ -1,75 +1,52 @@
 import type { RunState } from './run';
-import { readStore, writeStore } from '@picross/shared/game/storage';
+import {
+  clearedJobs,
+  getBlockRun,
+  getJobStats,
+  hasSeenScene,
+  hasSeenTip,
+  markSceneSeen,
+  markTipSeen,
+  saveBlockRun,
+  setJobStats,
+  withWin,
+  type JobStats,
+} from '../../game/runSave';
 
-// Its own key, apart from the 2D game's story saves.
-const KEY = 'picross3d:run';
+/**
+ * Cubed's story save: a view of the one run save (`game/runSave.ts`, `picross:run`). Cubed's
+ * run is its own (`block` there), so a 2D run and a Cubed run can both wait to be continued;
+ * the scenes and tips seen and the job stats are both games'. Before #155 it had its own
+ * key, `picross3d:run`.
+ */
 
-export interface JobStats {
-  plays: number;
-  wins: number;
-  /** Wins with Hits on. */
-  hitsOnWins?: number;
-  /** Most HP left at the end of a Hits-on win. */
-  bestHp?: number;
-}
+export type { JobStats };
+export { clearedJobs, getJobStats, hasSeenScene, hasSeenTip, markSceneSeen, markTipSeen };
 
-export interface RunSave {
-  current: RunState | null;
-  /** Scene ids already played, so intros play automatically only once. */
-  seenScenes: string[];
-  /** Enemy powers whose tip card has been seen. */
-  seenTips: string[];
-  jobs: Record<string, JobStats>;
-}
-
-const data = readStore<RunSave>(KEY, { current: null, seenScenes: [], seenTips: [], jobs: {} });
-const persist = () => writeStore(KEY, data);
-
-export const getCurrentRun = (): RunState | null => data.current;
+export const getCurrentRun = (): RunState | null => getBlockRun() as RunState | null;
 
 export function saveCurrentRun(state: RunState | null): void {
-  data.current = state;
-  persist();
+  saveBlockRun(state);
 }
-
-export const hasSeenScene = (id: string) => data.seenScenes.includes(id);
-
-export function markSceneSeen(id: string): void {
-  if (!data.seenScenes.includes(id)) data.seenScenes.push(id);
-  persist();
-}
-
-export const hasSeenTip = (power: string) => data.seenTips.includes(power);
-
-export function markTipSeen(power: string): void {
-  if (!data.seenTips.includes(power)) data.seenTips.push(power);
-  persist();
-}
-
-export const getJobStats = (id: string): JobStats | undefined => data.jobs[id];
 
 /** Records a finished run in its job's stats, once. Returns the run marked recorded. */
 export function recordRunResult(run: RunState): RunState {
   if (run.status === 'active' || run.recorded) return run;
-  const prev = data.jobs[run.runId] ?? { plays: 0, wins: 0 };
+  const prev = getJobStats(run.runId) ?? { plays: 0, wins: 0 };
   const won = run.status === 'won';
   const hitsOn = won && run.mode === 'hearts';
-  data.jobs[run.runId] = {
+  setJobStats(run.runId, {
+    // The 2D game's fields (its best depth, the boards won on) stay.
+    ...prev,
     plays: prev.plays + 1,
     wins: prev.wins + (won ? 1 : 0),
     ...(prev.hitsOnWins || hitsOn ? { hitsOnWins: (prev.hitsOnWins ?? 0) + (hitsOn ? 1 : 0) } : {}),
     ...(prev.bestHp !== undefined || hitsOn
       ? { bestHp: Math.max(prev.bestHp ?? 0, hitsOn ? run.hp : 0) }
       : {}),
-  };
+    ...(won ? { wonOn: withWin(prev, 'block') } : {}),
+  });
   const recorded = { ...run, recorded: true };
-  data.current = recorded;
-  persist();
+  saveCurrentRun(recorded);
   return recorded;
 }
-
-/** Every job won at least once. */
-export const clearedJobs = () =>
-  Object.entries(data.jobs)
-    .filter(([, s]) => s.wins > 0)
-    .map(([id]) => id);
