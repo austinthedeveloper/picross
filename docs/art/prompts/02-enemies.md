@@ -1,6 +1,6 @@
 # Tier 1: Enemy sprites
 
-Shown at ~38 px in the battle bar (`src/ui/components/battleBar.ts`), where the sprite
+Shown at ~38 px in the battle bar (`packages/story/src/ui/components/battleBar.ts`), where the sprite
 flinches, lunges, and falls over grayscale when defeated (CSS handles that; the art is one
 static pose). The finisher animation aims the solved picture at it. Replaces `sprite` in
 `src/puzzles/encounters/*.json`, including each boss phase's `sprite`.

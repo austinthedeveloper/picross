@@ -1,16 +1,36 @@
-import type { Enemy } from '../../game/battle';
 import { enemyArt, preloadArt, withArt } from '@picross/shared/ui/art';
 import { el } from '@picross/shared/ui/dom';
 import { playOnce } from '@picross/shared/ui/motion';
+
+/**
+ * The battle bar (#171): the enemy and you, your HP and its, its powers' meters, the tip
+ * slot, the gadget tray and the phase banner. One bar for both boards: the 2D fight drives
+ * it through its mechanics' modules, Cubed's fight screen (`play-block`'s `story/fight.ts`)
+ * from the battle's state and events. A boss that switches board keeps the one bar on
+ * screen, handed from board to board (`apps/picross/src/ui/screens/run/encounter.ts`).
+ * Its styles are shared's `fight.css`.
+ */
+
+/** The enemy as the bar first shows it. */
+export interface BarEnemy {
+  name: string;
+  sprite: string;
+  /** Its HP on the board the bar opens on (`setEnemyHp` can change the max). */
+  hp: number;
+  phases?: readonly { sprite?: string }[];
+}
 
 export interface BattleBar {
   root: HTMLElement;
   /** The enemy's sprite, for aiming the finisher animation. */
   sprite: HTMLElement;
-  setEnemyHp(hp: number): void;
+  /** The enemy's HP, out of `max` (the last max given, or its HP, if left out). */
+  setEnemyHp(hp: number, max?: number): void;
   setPlayerHp(hp: number, max: number): void;
   /** Shows damage dealt to the enemy: a floating number and a flinch. */
   hitEnemy(amount: number): void;
+  /** Shows the enemy recovering HP (an honest clue accused in a Relaxed run). */
+  healEnemy(amount: number): void;
   /** Shows the enemy hitting the player: a lunge, a red flash, and a floating number. */
   hitPlayer(amount: number): void;
   /** The enemy keels over. */
@@ -31,7 +51,7 @@ export interface BattleBar {
   setFakes(count: number): void;
   /** Shows a tip card or the powers list under the HP (#79), or clears it with null. */
   setTip(content: HTMLElement | null): void;
-  /** Puts the ⓘ powers button after the enemy's name (#79). */
+  /** Puts the ⓘ powers button after the enemy's name (#79), in place of any before it. */
   setInfo(button: HTMLElement): void;
   /** The charge meter (#67), 0 to 1, and a label for it. Null hides it. */
   setCharge(level: number | null, label?: string): void;
@@ -74,7 +94,7 @@ function floatNumber(host: HTMLElement, text: string, className: string) {
 }
 
 /** Enemy and player HP shown above the board during a fight. */
-export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
+export function createBattleBar(enemy: BarEnemy, enemyHp: number): BattleBar {
   const sprite = el('span', { className: 'enemy-sprite' }, [enemyArt(enemy.sprite)]);
   sprite.setAttribute('aria-hidden', 'true');
   preloadArt(
@@ -131,16 +151,24 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
     banner,
     live,
   ]);
-  enemyMeter.set(enemyHp, enemy.hp);
+  let maxHp = enemy.hp;
+  let infoButton: HTMLElement | null = null;
+  enemyMeter.set(enemyHp, maxHp);
 
   return {
     root,
     sprite,
-    setEnemyHp: (hp) => enemyMeter.set(hp, enemy.hp),
+    setEnemyHp(hp, max = maxHp) {
+      maxHp = max;
+      enemyMeter.set(hp, max);
+    },
     setPlayerHp: (hp, max) => playerMeter.set(hp, max),
     hitEnemy(amount) {
       playOnce(sprite, 'flinch', 700);
       floatNumber(enemySide, `−${amount}`, 'to-enemy');
+    },
+    healEnemy(amount) {
+      floatNumber(enemySide, `+${amount}`, 'to-enemy heal');
     },
     hitPlayer(amount) {
       playOnce(sprite, 'lunge', 700);
@@ -184,6 +212,8 @@ export function createBattleBar(enemy: Enemy, enemyHp: number): BattleBar {
       tipSlot.hidden = !content;
     },
     setInfo(button) {
+      if (infoButton && infoButton !== button) infoButton.remove();
+      infoButton = button;
       enemyName.after(button);
     },
     setCharge(level, label = '') {

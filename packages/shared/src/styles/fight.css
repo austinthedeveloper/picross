@@ -150,6 +150,11 @@
   right: 0;
 }
 
+/* The enemy recovering (an honest clue accused in a Relaxed run). */
+.float-number.heal {
+  color: var(--ok);
+}
+
 @keyframes float-up {
   to {
     transform: translateY(-26px);

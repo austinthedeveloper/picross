@@ -7,6 +7,7 @@ import { ENDLESS_HEAL } from '../../../puzzles/endless';
 import { restHeal } from '../../../puzzles/runs';
 import { getGadget } from '@picross/story/puzzles/gadgets';
 import { getScene } from '@picross/story/puzzles/scenes';
+import { createBattleBar } from '@picross/story/ui/components/battleBar';
 import { el } from '@picross/shared/ui/dom';
 import { formatTime } from '@picross/shared/ui/format';
 import { renderGameScreen, type PlaySession } from '@picross/play-grid/ui/screens/gameScreen';
@@ -30,6 +31,14 @@ export function renderRunEncounter(app: HTMLElement): (() => void) | undefined {
   // A boss that switches board (docs/story-combined.md) fights on the 3D game's block for
   // some phases. Endless runs build their own encounters, so they stay flat.
   const switching = Boolean(encounter.enemy && switchesBoard(encounter.enemy) && !def.endless);
+  // Its one battle bar, with the gadget tray, stays on screen from board to board (#171):
+  // each board's fight drives it while it's up.
+  const bar = switching
+    ? createBattleBar(
+        encounter.enemy!,
+        (getCurrentRun() ?? state).battle?.enemyHp ?? encounter.enemy!.hp,
+      )
+    : undefined;
 
   /** Clears the encounter: rewards, badges, healing and the note for the solved panel. */
   function clear(game: { hintsUsed: number; elapsed: number }, fightNote?: string) {
@@ -70,7 +79,7 @@ export function renderRunEncounter(app: HTMLElement): (() => void) | undefined {
   /** The flat board; `canSwitch` false keeps it flat whatever its phases say. */
   const playFlat = (canSwitch = switching): (() => void) => {
     const fight = encounter.enemy
-      ? fightHooks(encounter.enemy, encounter.puzzle, canSwitch ? switchBoard : undefined)
+      ? fightHooks(encounter.enemy, encounter.puzzle, canSwitch ? switchBoard : undefined, bar)
       : null;
     const session: PlaySession = {
       back: { href: '#/run', label: '← Map' },
@@ -114,6 +123,8 @@ export function renderRunEncounter(app: HTMLElement): (() => void) | undefined {
   const playBlock = (): (() => void) => {
     let stopped = false;
     let stopBlock: (() => void) | null = null;
+    // While the block loads (three.js and all), the bar holds the screen.
+    if (bar) app.replaceChildren(el('main', { className: 'screen run-switching' }, [bar.root]));
     void import('./blockFight').then(({ renderBlockFight }) => {
       if (stopped) return;
       stopBlock =
@@ -123,6 +134,7 @@ export function renderRunEncounter(app: HTMLElement): (() => void) | undefined {
           enemy: encounter.enemy!,
           size: encounter.puzzle.width,
           onFlat: switchBoard,
+          bar,
           clear,
         }) ?? playFlat(false);
     });

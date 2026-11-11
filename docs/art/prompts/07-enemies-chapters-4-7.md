@@ -2,7 +2,7 @@
 
 The enemies that arrived after [02-enemies.md](02-enemies.md), plus Museum Rex, the new Night
 Shift boss. Same slot as that file: ~38 px in the battle bar
-(`src/ui/components/battleBar.ts`), where the sprite flinches, lunges, and falls over
+(`packages/story/src/ui/components/battleBar.ts`), where the sprite flinches, lunges, and falls over
 grayscale when defeated (CSS handles that; the art is one static pose). Replaces `sprite` in
 `src/puzzles/encounters/*.json`, including each boss phase's `sprite`. The sprite's art id is
 the prompt id without `enemy-`.

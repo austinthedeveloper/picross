@@ -16,18 +16,6 @@
   image-rendering: pixelated;
 }
 
-.fight-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  margin-top: 8px;
-}
-
-.fight-actions:empty {
-  display: none;
-}
-
 .call-out[aria-pressed='true'] {
   background: var(--accent);
   border-color: var(--accent);

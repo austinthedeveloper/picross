@@ -2,7 +2,7 @@
 
 The enemies from End of the Line, Below Stairs, and Peer Review. Same slot as
 [07-enemies-chapters-4-7.md](07-enemies-chapters-4-7.md): ~38 px in the battle bar
-(`src/ui/components/battleBar.ts`), where the sprite flinches, lunges, and falls over grayscale
+(`packages/story/src/ui/components/battleBar.ts`), where the sprite flinches, lunges, and falls over grayscale
 when defeated (CSS handles that; the art is one static pose). Replaces `sprite` in
 `src/puzzles/encounters/*.json`. The sprite's art id is the prompt id without `enemy-`. The
 emoji stay until each file exists, because `src/ui/art.test.ts` fails on a plain id with no
