@@ -53,5 +53,5 @@ root) writes `hide` and `passes` into `src/puzzles/pack/` and `story/`, and expo
 ## Tests
 
 `npm test` at the root runs this package's tests (`tsc --noEmit && vitest run`), with the
-pack check; `npm run test:block` runs just these. The story's gate, which reports what
-`src/story/data.ts` can't play yet, is `packages/story/src/boards.test.ts`.
+pack check; `npm run test:block` runs just these. The story's gate, which fails if
+`src/story/data.ts` can't play an encounter or power, is `packages/story/src/boards.test.ts`.

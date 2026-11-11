@@ -26,7 +26,7 @@ history (a subtree merge) as `cubed/`. Then:
 - **#223 (#146): `packages/story`.** The story lives once and is read and checked once for
   both games; each game passes in its own puzzle and enemy per encounter. The story gate is
   a test there (`boards.test.ts`) that reports, for every encounter and power, the boards
-  that can play it, and fails only on broken data.
+  that can play it, and fails only on broken data (#167 made it a hard check).
 
 Two more pieces of M4 prepare for step 4:
 
@@ -119,6 +119,13 @@ ready · Reload". Details are in [architecture.md](architecture.md#offline-and-u
   `GRID_RULES`, the order a stroke's effects land among them). Then the 2D game's
   `gridStep` moved onto it, through a codec that keeps the 2D save's shape. Both games'
   fight tests run against it unchanged, and no snapshot moved.
+- **#167: every power on both boards.** A parity test (`apps/picross/src/game/powers.test.ts`)
+  plays every power, the bomb and the board switch on a small grid and a small block through
+  the one battle, each with its board's rules. The story's gate is a hard check again: every
+  encounter and power plays on both boards, or `npm test` fails. Each power's tip has a
+  version for each board (`packages/story/src/fight/tips.ts`), and a power met on one board
+  isn't explained again on the other unless it works differently there (scrambles, ink,
+  swaps, turns), when a short note shows instead.
 
 **#169: run saves remember the board.** A fight saves as one `fight` on the run, an
 entry per board it has used (`flat`, `block`), each board's marks and battle as that board
@@ -289,7 +296,7 @@ Each step ships, with both games playable throughout.
    picross-3d repo is archived. (Begun: Cubed's screens are under `#/cubed`, and `/3d/`
    redirects.)
 5. **Fights over `FightBoard`.** One `Battle` for both engines; the 2D and 3D fight tests
-   both run against it unchanged. (Done: #168, #164, #165, #166.)
+   both run against it unchanged. (Done: #168, #164, #165, #166, #167.)
 6. **Encounters in either dimension.** `block` on encounters, naming the 3D story puzzles; a job
    can mix 2D and 3D encounters.
 7. **Dimension-switching bosses.** `board` on phases, the transition, saving the board kind;

@@ -78,7 +78,8 @@ Node, with no DOM at all.
 
 Every package also has `src/imports.test.ts`, which fails on an import its rule doesn't
 allow (see the package map). The story's gate (`packages/story/src/boards.test.ts`) prints
-which boards can play each encounter and power, and fails only on broken data.
+which boards can play each encounter and power, and fails if any can't be played on both
+(#167).
 
 Put new rules in `engine/` or `game/` and test them there. The UI modules are thin and are
 checked in the browser instead.

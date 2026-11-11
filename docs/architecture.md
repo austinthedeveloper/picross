@@ -126,7 +126,7 @@ apps/
         merging.ts         The pieces both merges are built from
         pickPuzzle.ts      The next unsolved puzzle (#114)
       ui/
-        powers.ts          A one-line tip per enemy power (#79)
+        powers.ts          Each enemy power's tip on the flat board (#79; the text is the story's fight/tips.ts)
         screens/
           selectScreen.ts    Puzzle list, mode, stats, Settings link  (#/)
           freePlaySession.ts Free-play PlaySession: saves, best times, "Next" (#/play/<id>)
@@ -228,7 +228,7 @@ packages/
     src/
       imports.test.ts      Imports only shared (pure outside ui/); never an app or a board package
       story.test.ts        The whole story reads, with no board
-      boards.test.ts       The gate: the boards that can play each encounter and power
+      boards.test.ts       The gate: every encounter and power plays on both boards, or it fails (#167)
       game/dialogue.ts     Scene runner: current line or choices, advance, choose, flags
       fight/
         board.ts           FightBoard: what a fight needs of a board (#164)
@@ -237,6 +237,7 @@ packages/
         rules.ts           FightRules: where the boards' fights differ; BLOCK_RULES, GRID_RULES
         save.ts            FightSave: a fight as both games' runs save it, an entry per board (#169)
         battle.test.ts     Each rule's other value, powers from a pool, and the grid's order
+        tips.ts            Power tips on both boards: each power's tip for each, notes, tipToShow (#167)
       puzzles/
         runs.ts            Reads and checks encounters and jobs; each game passes its puzzle and enemy
         chapters.ts        Reads and checks chapters: jobs grouped into story chapters (#23)
@@ -311,7 +312,7 @@ packages/
       engine/              volume.ts (the block and its lines), clues.ts, solver.ts
       game/                game.ts (Game, Mode, SavedBoard), battle.ts (Battle: StoryBattle on a block), clock.ts;
                            battleTraces.test.ts (golden traces of every fight, #168)
-      story/               data.ts (the story fitted to blocks, storyIssues), powers.ts (tips)
+      story/               data.ts (the story fitted to blocks, storyIssues), powers.ts (the block's tips)
       puzzles/
         format.ts          The block puzzle format and COLORS
         index.ts           Loads the pack
@@ -1080,6 +1081,18 @@ behind `FightBoard`. Unifying a rule is a change to how fights play, and shows u
 in the golden traces and `fight-ratings.json`. `packages/story/src/fight/battle.test.ts`
 plays each rule's grid value, powers from a pool and the grid's order on a block.
 
+### Every power on both boards
+
+Every power runs on either board (#167). `apps/picross/src/game/powers.test.ts`, the parity
+test, plays each one on a small grid (5×5) and a small block (3×3×3) through `StoryBattle`,
+each board with its own rules and its own order (a grid reports its lines and lands what
+waits; a block polls), with the same enemy on both, every power a count of lines: fog,
+scrambles, armor and its hit back, swaps, forged clues and call-outs, the charge and its
+live line, ink, turns, the bomb and the board switch. Each power's section below says what
+it does on a block. The story's gate (`packages/story/src/boards.test.ts`) is a hard check
+again: it fails if an encounter or a power can't be played on either board, or a power has
+no tip for each (see "Power tips"), and it still prints its report.
+
 ### Fog (the fog bat)
 
 An enemy can list `fog: { rows }` or `fog: { cols }`: clues hidden behind a cloudy "?" when
@@ -1090,6 +1103,11 @@ fogged row and a fogged column would hide the cell where they cross from both of
 lines, so neither could ever be finished. `solve(width, height, clues, fog)` plays it out
 the same way, and a test requires every fogged fight to come out `unique`. The fog bat
 fogs rows 4, 6, 7, and 10, including both full-width rows.
+
+**On a block**, fog covers clue faces on lines along any axis, so it isn't limited to one
+direction. The enemy gives a count, and the battle picks that many lines when the fog
+lands, keeping the block solvable from what's right on it. A finished line shows its
+clue, since it's struck, though its fog stays in `fog`.
 
 ### Bosses and phases
 
@@ -1121,6 +1139,11 @@ dim only when the whole line is done, since dimming one would give away its plac
 fog, it clears when you complete the line. Unlike fog, rows and columns can both be
 scrambled, because a scrambled clue still says something about every cell. Validation
 rejects lines whose runs have only one order (for example `2 2`).
+
+**On a block**, a clue has a count and a number of pieces, so a scrambled one keeps its
+count and loses its pieces: a dashed ring that could be one piece or several. A count of 0
+or 1, or a full line, has only one frame and can't be scrambled (`canScramble`). Because it
+reads differently, its tip has a note for each board.
 
 The solver handles scrambled lines with `solveLineAnyOrder`, which tries every distinct
 order (`runOrders`) and keeps only what they all agree on.
@@ -1157,6 +1180,11 @@ every armored fight to it: each weak point must be solvable within the first two
 a line solver, reading only the clues the player can read at the start. Pick weak points
 that meet this when adding an armored enemy.
 
+**On a block**, the targets (◎) are lines with some of the shape in them, on any axis,
+picked when the fight starts. It hits back for the armor's own attack (4) rather than 2,
+and a mistake while it's up hits for the enemy's attack, armor or not (`armorHitBack` and
+`armoredAttack` in "One battle").
+
 ### Swaps (the Mimic)
 
 A phase can set `"swap": true`. When it starts, the Mimic swaps two of your rows or two
@@ -1179,6 +1207,11 @@ of your columns and wipes them clean (#48, #78).
 The Night Shift run (`runs/night-shift.json`, #46) starts with the Mimic, a 15×15 chest
 with teeth that swaps at 85%, 70%, and 55% HP and turns Hungry (attack 3) on the last.
 
+**On a block**, the swap takes the two unfinished lines with the most of your work, along
+any axes (lines, not layers), and wipes them back to solid cubes. They flash purple until
+the next change to the block (`wipeMarks`), and the swap lands at once, before the phase's
+fog and scrambles are picked. Its tip has a note for each board.
+
 ### Forged clues (the Forger)
 
 An enemy can have `fakes: { rows, cols }` and `suspects: { rows, cols }`.
@@ -1200,6 +1233,11 @@ An enemy can have `fakes: { rows, cols }` and `suspects: { rows, cols }`.
 **Solvability.** The test suite solves each enemy's puzzle with every suspect treated as fog (`allUnreadable`). If that's unique, every suspect can be settled from its crossing lines, and every forgery contradicts the real picture.
 
 **The Forger** (`encounters/forger.json`) is the third Night Shift node: a 15×15 palette. Rows 4, 8 and 14 are forged, and rows 3 and 7 are honest suspects (only two decoy pairs keep the palette solvable). It turns Master Forger (attack 3) at half HP. Its scene (`forger-intro`) and its power tip teach the rule.
+
+**On a block**, suspects show a ? and a forgery is a count one more or one fewer, with a
+number of pieces that could be true. A block's lines finish by the truth, so a forged line
+you finish counts at once (`fakesCount`); call-outs deal and heal the same as on the flat
+board.
 
 ### The Curator (Closing Time boss)
 
@@ -1242,6 +1280,10 @@ qualifies, no line is live and the meter waits. Each line charges only once, so 
 a wiped line doesn't count. `BattleState.live` and `charged` are saved with the run. A
 finishing move ends the fight before the meter is checked, so it can't knock you out.
 
+**On a block**, the warm-up is 15% of the block's lines (it has far more of them), any
+open line can go live (picked with the fight's seeded generator), and the zap lands as
+soon as the meter fills. Mistakes and zaps are counted in Relaxed fights too.
+
 ### Ink (the Cuttlefish and Old Tess)
 
 A phase with `ink: <size>` (and optionally `inkCount`) splashes that many size×size blocks
@@ -1252,6 +1294,10 @@ them, and mistakes still count. Completing a row or column washes the ink out of
 battle's `washLines`; `clearInk` on the save). The 🧽 **Sponge** gadget
 (`effect: { kind: 'wash' }`) wipes it all. Ink only hides your marks, never clues, so it
 doesn't affect solvability.
+
+**On a block**, each splash is a size×size patch of one layer, around a cube you've
+painted, hiding the clues and paint on those cubes. Finishing a line through it and the
+Sponge wash it the same way. Its tip has a note for each board.
 
 ### Turns (the Weathervane)
 
@@ -1285,6 +1331,10 @@ The **Weathervane** (`encounters/weathervane.json`) is a 15×15 rooster weatherv
 turns every 6 lines, then every 4 from 60% HP. No job uses it yet: start it from the
 debug panel's **Fight anyone**, which plays any fight as an Endless run of just that
 fight.
+
+**On a block**, only the camera turns: the block swings a quarter under you and your peels
+drop, but no line, clue or mark moves (the block's `FightBoard.turn()` is null, and the
+battle keeps no `turns`). The meter counts the same. Its tip has a note for each board.
 
 ### Switching board (the Curator)
 
@@ -1326,6 +1376,8 @@ are in [story-combined.md](story-combined.md).
   on Cubed's routes.
 - **Other games:** Cubed's story plays every fight on a block and ignores `board`; the SNES
   import ignores it too and plays the whole fight flat.
+- **Both ways:** the parity test switches a boss from a grid to a block and back, and from
+  a block to a grid and back, at the same share of HP with the same phases started.
 
 ### The Deep End (Chapter 3)
 
@@ -1428,16 +1480,47 @@ give a thin drawing some solid areas to start from.
 ## Power tips
 
 Each enemy power (fog, scramble, armor, fakes, charge, ink, swap, rotate) gets a one-line
-explanation in `ui/powers.ts` (#79). `puzzles/enemies.ts` works out which powers an
+explanation (#79), with a version for each board (#167): `POWER_TIPS` in
+`packages/story/src/fight/tips.ts`. `ui/powers.ts` is the flat board's, and
+`@picross/block/story/powers` the block's. `puzzles/enemies.ts` works out which powers an
 enemy has: `startingPowers` for the start, `phasePowers` for what a phase brings in,
 and `enemyPowers` for all of them.
 
 `run/fight/tips.ts` queues a tip card in the battle bar the first time you meet each
 power. That happens when the fight opens, or when the phase that brings the power
-begins (`createPhases` reports it). "Got it" saves the power as seen (`seenTips` in
-`picross:run`), so each tip appears once ever. The ⓘ after the enemy's name swaps the
-card for a list of all the enemy's powers. The tests check that every power any enemy
-has comes with a tip, so a new power needs an entry in `POWERS`.
+begins (`createPhases` reports it). On a block, play-block's fight screen shows the same
+cards for the block. "Got it" saves the power as seen (`seenTips` in the run's save), so
+each tip appears once ever. The ⓘ after the enemy's name swaps the card for a list of all
+the enemy's powers.
+
+**Seen on one board, seen on both.** `tipToShow(power, board, seen, home)` decides the card,
+and both boards' screens use it. A power you've met on one board isn't explained again on
+the other, unless it works differently there: scrambles (a grid's runs out of order, a
+block's pieces gone), ink (a square of cells, a patch of a layer), swaps (two rows or
+columns, two lines on any axes) and turns (the board turns, or only the camera). Those
+have a `note` for each board, a short "On a block, …" or "On a flat board, …" line, shown
+once when you've already had the full tip on the other board.
+
+- **Keys:** a seen tip is saved by the power's name (`fog`: its idea has been explained),
+  and for a power with a note by `<power>:<board>` too (`rotate:flat`, `rotate:block`) for
+  each board it's been explained on. Both games save the same keys, so when their saves
+  merge (#155) the union means the same.
+- **Older saves** have only the name: those were seen on the board of the game that saved
+  them (`home`). The first-launch merge (#155) put both games' names in the one
+  `picross:run`, so each game reads a bare name as seen on its own board, `flat` in the 2D
+  game and `block` in Cubed, and records that board beside the note's key when the note is
+  seen. play-block's `FightRun` says which with `home` (`block` by default). The 2D game's
+  block fight (the Curator's, `run/blockFight.ts`) doesn't pass `home: 'flat'` yet, so it
+  takes an older name as seen on a block, as it did before notes.
+
+The tests check that every power any enemy has comes with a tip (`enemies.test.ts`), that
+every power has a tip for each board and a note for each where it works differently
+(`fight/tips.test.ts`), and the story's gate checks every power it finds has both. A new
+power needs an entry in `POWER_TIPS`. The script review site (`npm run script-review`)
+shows every tip and note under "Power tips": `power/<id>` (the flat tip, the key it always
+had), `power/<id>/block`, and `power/<id>/note/flat` and `power/<id>/note/block`. Its
+export (`npm run script-review:export`) writes them with the rest, and applying a version
+edits `tips.ts`.
 
 ## Digs
 
@@ -1481,6 +1564,8 @@ patch kit). The catalog in `packages/story`'s `puzzles/gadgets.ts` describes eac
   a hint, without spending one or counting as a mistake. The result goes straight into
   the saved board, so a reload can't re-roll it. Lines it finishes count as usual, and it
   washes ink out of its area.
+  On a block, the blast works out the cubes of one open line that aren't right yet, for
+  the same 2 damage (`BOMB_DAMAGE`).
 - `{ kind: 'shield', hits }` blocks that many enemy hits (`absorbHit` in `battle.ts`).
 - `{ kind: 'wash' }` wipes all the ink off the board.
 
