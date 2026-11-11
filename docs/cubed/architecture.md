@@ -14,7 +14,7 @@ it:
 | Engine  | `packages/block/src/engine/`                             | No                   | The block, lines and clues, and the line solver           |
 | Puzzles | `packages/block/src/puzzles/`                            | No                   | The puzzle file format, clue hiding, the pack, dioramas   |
 | Game    | `packages/block/src/{game,story}/`                       | No                   | A puzzle in play (strokes, hearts, hints), battles, story |
-|         | `apps/picross/src/cubed/game/`                           | No (uses storage)    | Views of the one save; runs, the daily streak, badges     |
+|         | `apps/picross/src/cubed/game/`                           | No (uses storage)    | Views of the one save; runs, the daily streak             |
 | UI      | `packages/play-block/src/`, `apps/picross/src/cubed/ui/` | Yes                  | The 3D view, input, the play screen; Cubed's screens      |
 
 `@picross/block` (`packages/block`) has no three.js and no screens: a test and a lint rule
@@ -70,9 +70,13 @@ since the save merge (#155): `game/progress.ts`, `runSave.ts` and `settings.ts` 
 of `picross:v2` (the `block:` ids), `picross:run` (Cubed's run is its `block`) and
 `picross:settings` (`dimDone`, `cubedTutorialDone`), so the screens didn't change. Since
 #156 `game/daily.ts` is a view of the one daily (`picross:daily2`): one daily for both
-games, on Cubed's board every other day, with one streak. The badge tiers seen
-(`picross3d:badges`) keep their key until #157. The old `picross3d:v1`, `picross3d:run`,
-`picross3d:settings` and `picross3d:daily` stay for a rollback, read only by the migration
+games, on Cubed's board every other day, with one streak. Since #157 its badges are on the
+one shelf (`#/badges`, `picross:badges`): earned and saved like the 2D game's, as
+`block-<id>`, instead of worked out from the saves on every look, with the tiers seen carried
+over from `picross3d:badges`. Its solve screens say what a solve earned ("Badge earned: Block
+Breaker (Bronze)!", and a new rank) with `ui/screens/earned.ts`. The old `picross3d:v1`,
+`picross3d:run`, `picross3d:settings`, `picross3d:daily` and `picross3d:badges` stay for a
+rollback, read only by the migration
 (see
 [State and persistence](../architecture.md#state-and-persistence)).
 
@@ -108,7 +112,7 @@ first download or Cubed's list. Every link between them goes through `cubedHref(
 | `#/cubed/editor`                      | `editor/editorScreen.ts`                       | Draw, check and share puzzles (checks run in `checkWorker.ts`) |
 | `#/cubed/p/<code>`                    | `sharedScreen.ts`                              | A shared puzzle; `/test` for the editor's play-test            |
 | `#/daily` (on a Cubed day)            | `dailyScreen.ts` (`dailyCard.ts` for the list) | Today's puzzle and streak; `#/cubed/daily` moves here (#156)   |
-| `#/cubed/badges`                      | `badgesScreen.ts`                              | Badges, worked out from saves (`game/badges.ts`)               |
+| `#/badges`                            | the app's `ui/screens/badges.ts`               | The one badge shelf; `#/cubed/badges` moves here (#157)        |
 | `#/cubed/diorama/<id>[/<n>]`          | `dioramaScreen.ts` (`dioramaList.ts`)          | A diorama and its pieces                                       |
 | `#/cubed/story`, `#/cubed/story/play` | `story/*`                                      | Story mode (see [story.md](story.md))                          |
 

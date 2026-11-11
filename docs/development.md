@@ -121,7 +121,7 @@ HTML report (`apps/picross/playwright-report`) when something fails. To debug a 
 | `editor-zoom.spec.ts`    | Editor uniqueness check and export, pinch zoom                                                                                                        |
 | `overtime.spec.ts`       | Overtime: hidden until its job is cleared, always Hits on, and every job's can be finished                                                            |
 | `boss-fights.spec.ts`    | Standalone boss fights: the Weathervane waits for Summit Station, then plays from its card                                                            |
-| `badges.spec.ts`         | Rank and badges: the ladder, rank-ups, and job badges by tier                                                                                         |
+| `badges.spec.ts`         | Rank and badges: the ladder, rank-ups, job badges by tier, and the one shelf for both boards (#157)                                                   |
 | `switching-boss.spec.ts` | The Curator unfolding into a block and folding back flat                                                                                              |
 | `games.spec.ts`          | The Flat \| Cubed switch, and a 3D puzzle under `#/cubed`                                                                                             |
 | `offline.spec.ts`        | Installable; offline free play on both boards and a story fight in each; a new version waiting off the board; Cubed's old `/3d/` worker retiring      |
