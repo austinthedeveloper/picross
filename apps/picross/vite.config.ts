@@ -6,8 +6,9 @@ import { scopeByBoard } from './scripts/scopeByBoard';
 export default defineConfig({
   // Relative base so the build works from the GitHub Pages project path.
   base: './',
-  // The site is built at the repo root: Flat in dist/, Cubed beside it in dist/3d/.
-  build: { outDir: '../../dist', emptyOutDir: true },
+  // The site is built at the repo root: Flat in dist/, Cubed beside it in dist/3d/. The
+  // manifest (.vite/manifest.json) is for npm run check:budget (#148).
+  build: { outDir: '../../dist', emptyOutDir: true, manifest: true },
   // The shared art (packages/shared/public) is served and built beside public/.
   plugins: [sharedPublic()],
   // Each game's screen styles apply only on its board (a boss that switches to a block).

@@ -12,6 +12,7 @@
     "build": "npm -w apps/picross run build && node scripts/build-cubed.mjs dist",
     "build:dev": "npm -w apps/picross run build:dev && node scripts/build-cubed.mjs dist-dev",
     "check:bundle": "sh scripts/check-prod-bundle.sh",
+    "check:budget": "node scripts/check-bundle-budget.mjs",
     "preview": "npm -w apps/picross run preview --",
     "lint": "eslint . && prettier --check .",
     "format": "prettier --write .",
