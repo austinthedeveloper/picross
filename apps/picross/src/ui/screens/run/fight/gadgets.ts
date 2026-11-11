@@ -2,11 +2,11 @@ import { blastSize, pickBlast } from '../../../../engine/blast';
 import { blastInk, bump, useGadget, type BattleState } from '../../../../game/battle';
 import { removeGadget, withBattle } from '../../../../game/run';
 import { saveCurrentRun } from '../../../../game/runSave';
-import { getGadget, type Gadget } from '../../../../puzzles/gadgets';
-import { gadgetArt } from '../../../art';
-import { el } from '../../../dom';
+import { getGadget, type Gadget } from '@picross/shared/puzzles/gadgets';
+import { gadgetArt } from '@picross/shared/ui/art';
+import { el } from '@picross/shared/ui/dom';
 import { plural } from '../../../format';
-import { playSound } from '../../../sound';
+import { playSound } from '@picross/shared/ui/sound';
 import type { FightContext } from './context';
 import type { CheckPhase } from './phases';
 

@@ -1,5 +1,5 @@
 import type { Difficulty } from '../puzzles/difficulty';
-import { readStore, writeStore } from './storage';
+import { readStore, writeStore } from '@picross/shared/game/storage';
 
 /** Relaxed never checks fills; hearts mode costs a heart for each wrong fill. */
 export type Mode = 'relaxed' | 'hearts';

@@ -12,11 +12,11 @@ import { createBoardView } from '../board/boardView';
 import { attachInput, type Tool } from '../board/input';
 import { attachKeyboard } from '../board/keyboard';
 import { solvedPanelContent } from '../components/endPanels';
-import { homeLink } from '../components/homeLink';
-import { el } from '../dom';
-import { haptic } from '../haptics';
-import { pause } from '../motion';
-import { playSound } from '../sound';
+import { homeLink } from '@picross/shared/ui/components/homeLink';
+import { el } from '@picross/shared/ui/dom';
+import { haptic } from '@picross/shared/ui/haptics';
+import { pause } from '@picross/shared/ui/motion';
+import { playSound } from '@picross/shared/ui/sound';
 
 const NUDGES = {
   'stays-empty': 'That cell stays empty in this picture. Try the highlighted line.',

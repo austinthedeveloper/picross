@@ -1,7 +1,7 @@
 import { newBadgeLine, tierLabel, type NewBadge } from '../../game/badges';
 import { pictureOf, type Badge, type Tier } from '../../puzzles/badges';
 import { createPicture } from '../board/picture';
-import { el } from '../dom';
+import { el } from '@picross/shared/ui/dom';
 
 const PIXEL = 3;
 

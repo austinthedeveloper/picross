@@ -1,7 +1,7 @@
 import type { Enemy } from '../../game/battle';
-import { enemyArt, preloadArt, withArt } from '../art';
-import { el } from '../dom';
-import { playOnce } from '../motion';
+import { enemyArt, preloadArt, withArt } from '@picross/shared/ui/art';
+import { el } from '@picross/shared/ui/dom';
+import { playOnce } from '@picross/shared/ui/motion';
 
 export interface BattleBar {
   root: HTMLElement;

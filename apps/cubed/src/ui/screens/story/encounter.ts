@@ -8,15 +8,15 @@ import {
   type RunState,
 } from '../../../game/run';
 import { getCurrentRun, saveCurrentRun } from '../../../game/runSave';
-import { getGadget } from '../../../puzzles/gadgets';
-import { getScene } from '../../../puzzles/scenes';
+import { getGadget } from '@picross/shared/puzzles/gadgets';
+import { getScene } from '@picross/shared/puzzles/scenes';
 import { restHeal, type Encounter } from '../../../story/data';
 import { shapePicture } from '../../board/thumbnail';
-import { el } from '../../dom';
+import { el } from '@picross/shared/ui/dom';
 import { formatTime } from '../../format';
 import { onHide } from '../../lifecycle';
 import { createPlay, type Play, type PlayHooks } from '../play';
-import { renderSceneScreen } from '../sceneScreen';
+import { renderSceneScreen } from '@picross/shared/ui/screens/sceneScreen';
 import { digKind } from './dig';
 import { fightKind } from './fight';
 import { restKind } from './rest';

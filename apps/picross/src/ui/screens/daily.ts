@@ -11,7 +11,7 @@ import { getSettings } from '../../game/settings';
 import { dailyFor, dateKey, previousDay, type Daily } from '../../puzzles/daily';
 import { createPicture } from '../board/picture';
 import { allPuzzlesLink } from '../components/endPanels';
-import { el } from '../dom';
+import { el } from '@picross/shared/ui/dom';
 import { formatTime, plural } from '../format';
 import { renderGameScreen, type PlaySession } from './gameScreen';
 

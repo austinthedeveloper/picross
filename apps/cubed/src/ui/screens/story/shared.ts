@@ -3,8 +3,8 @@ import { getCurrentRun, getJobStats, hasSeenScene, saveCurrentRun } from '../../
 import { getSettings, updateSettings, type Mode } from '../../../game/settings';
 import { dimsLabel } from '../../../engine/volume';
 import { getJob, type Encounter, type Job } from '../../../story/data';
-import { iconArt } from '../../art';
-import { el } from '../../dom';
+import { iconArt } from '@picross/shared/ui/art';
+import { el } from '@picross/shared/ui/dom';
 
 /** What the story screens share: where to draw, how to redraw, how to play a scene. */
 export interface Hub {

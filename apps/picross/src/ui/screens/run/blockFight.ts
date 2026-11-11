@@ -16,7 +16,7 @@ import { fightKind, type FightRun } from '../../../../../cubed/src/ui/screens/st
 import { advancePhase, boardAt, carryHp, startBattle, type Enemy } from '../../../game/battle';
 import { damage, removeGadget, withBattle, withBlock } from '../../../game/run';
 import { getCurrentRun, hasSeenTip, markTipSeen, saveCurrentRun } from '../../../game/runSave';
-import { el } from '../../dom';
+import { el } from '@picross/shared/ui/dom';
 
 export interface BlockFightOptions {
   encounterId: string;

@@ -1,7 +1,7 @@
 import { hasSeenTip, markTipSeen } from '../../../../game/runSave';
 import { enemyPowers, phasePowers, startingPowers, type Power } from '../../../../puzzles/enemies';
-import { el } from '../../../dom';
-import { withArt } from '../../../art';
+import { el } from '@picross/shared/ui/dom';
+import { withArt } from '@picross/shared/ui/art';
 import { POWERS } from '../../../powers';
 import type { FightContext } from './context';
 

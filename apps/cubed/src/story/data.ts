@@ -1,10 +1,14 @@
-import { getGadget } from '../puzzles/gadgets';
+import { getGadget } from '@picross/shared/puzzles/gadgets';
 import type { Puzzle } from '../puzzles/format';
 import { getStoryPuzzle } from '../puzzles/index';
-import { getScene } from '../puzzles/scenes';
+import { getScene } from '@picross/shared/puzzles/scenes';
+import { chapterFiles as chapterModules } from '@picross/shared/puzzles/files/chapters';
+import { encounterFiles as encounterModules } from '@picross/shared/puzzles/files/encounters';
+import { runPuzzleFiles } from '@picross/shared/puzzles/files/runPuzzles';
+import { runFiles as runModules } from '@picross/shared/puzzles/files/runs';
 
 /**
- * The story, read from the 2D game's data (shared verbatim by `npm run sync:web`) and
+ * The story, read from the shared data (packages/shared, the 2D game's story) and
  * fitted to blocks. The 2D game's enemies name the exact rows and columns their powers
  * hit; a block has different lines, so here each power keeps only its size ("fog over 5
  * lines"), and the fight picks lines on the block (src/game/battle.ts).
@@ -111,20 +115,15 @@ export const storyIssues: string[] = [];
 const load = <T>(files: Record<string, unknown>) =>
   Object.values(files).map((m) => (m as { default: T }).default);
 
-const encounterFiles = load<Record<string, unknown>>(
-  import.meta.glob('../puzzles/encounters/*.json', { eager: true }),
-);
-const runFiles = load<Record<string, unknown>>(
-  import.meta.glob('../puzzles/runs/*.json', { eager: true }),
-);
-const chapterFiles = load<Record<string, unknown>>(
-  import.meta.glob('../puzzles/chapters/*.json', { eager: true }),
-);
+const encounterFiles = load<Record<string, unknown>>(encounterModules);
+const runFiles = load<Record<string, unknown>>(runModules);
+const chapterFiles = load<Record<string, unknown>>(chapterModules);
 /** The 2D puzzles the story uses, for their `gadget`. */
 const runPuzzles = new Map(
-  load<{ id: string; gadget?: string; width: number; height: number }>(
-    import.meta.glob('../puzzles/run/*.json', { eager: true }),
-  ).map((p) => [p.id, p]),
+  load<{ id: string; gadget?: string; width: number; height: number }>(runPuzzleFiles).map((p) => [
+    p.id,
+    p,
+  ]),
 );
 
 /** Fields this game reads; anything else in the 2D data is reported. */

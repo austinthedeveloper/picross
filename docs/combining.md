@@ -9,16 +9,19 @@ through. Nothing here is built yet. The 3D game gets tightened up first; this st
 **Step 1 is done.** Picross Cubed came into this repo with its history (a subtree merge)
 as `cubed/`, an npm workspace. Then both games moved into `apps/` (#142): the 2D game into
 `apps/picross/` and Cubed into `apps/cubed/`, with the root as the workspace root.
-`packages/` comes with the next stories (#141). The SNES demake's `make import` now reads
-the 2D game from `apps/picross/` ([shared-files.md](shared-files.md)).
+The SNES demake's `make import` reads the pack from `apps/picross/`.
 
 - One install (`npm ci`), one CI, one site: `npm run build` builds Flat at the root of
   `dist/` and Cubed into `dist/3d/` (`scripts/build-cubed.mjs`); GitHub Pages and the Azure
   site serve both.
 - **Flat | Cubed:** a switch at the top of both home screens moves between the games and
   remembers the last one, so the site opens on it.
-- `apps/cubed/` still keeps its own copies of the shared files, now synced from `apps/picross/`
-  and checked in CI (`npm run check:cubed`). Removing the copies is step 2.
+- **Step 2 is done** (#143): the files Cubed used to copy are one package,
+  `packages/shared` (`@picross/shared`, [README](../packages/shared/README.md)), which both
+  games import. The sync script, `shared.lock.json` and `check:cubed` are gone. Every
+  shared file went in, story data included; the story and its loaders move out to their
+  own `packages/story` in #146. The SNES demake reads the story and art from
+  `packages/shared/`.
 - The story ideas for the combined game are in [story-combined.md](story-combined.md).
 
 **Step 7 has a first boss, ahead of steps 2–6.** The Curator unfolds into a block at 60%
@@ -167,8 +170,9 @@ Each step ships, with both games playable throughout.
 1. **Monorepo skeleton in the 2D repo.** Workspaces; the 2D app moves into `apps/picross`
    unchanged, and its unit tests, browser tests, CI, Pages and Azure deploys pass as before.
    The SNES `make import` paths update.
-2. **Shared package.** Today's shared files become `packages/shared`, imported by the 2D
-   app; this repo's sync script switches to copying from there (until step 4).
+2. **Shared package.** Today's shared files become `packages/shared`, imported by both
+   apps; the sync script goes. (Done, #143; the story splits out into `packages/story` in
+   #146.)
 3. **3D packages.** `packages/block` and `packages/play-block` from this repo; the 3D game
    runs as a second app (`apps/picross-3d`) in the monorepo with its tests and site.
 4. **One app.** A menu over both: free play 2D and 3D, one daily (alternating, or both), one

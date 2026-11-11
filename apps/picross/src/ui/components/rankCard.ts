@@ -1,6 +1,6 @@
 import { badgeCount } from '../../game/badges';
 import { currentPoints, rankProgress } from '../../game/rank';
-import { el } from '../dom';
+import { el } from '@picross/shared/ui/dom';
 import { plural } from '../format';
 
 /** Your free-play rank (#106) and the way to your badges (#109), for the puzzle list. */

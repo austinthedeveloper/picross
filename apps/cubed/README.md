@@ -36,18 +36,16 @@ npm run dev
 
 Then open http://localhost:5174 (the 2D game's dev server keeps 5173).
 
-| Command                | What it does                                                          |
-| ---------------------- | --------------------------------------------------------------------- |
-| `npm run dev`          | Dev server with hot reload                                            |
-| `npm test`             | Unit tests (Vitest), including the solvability check for every puzzle |
-| `npm run e2e`          | Browser tests (Playwright, phone-sized) against the production build  |
-| `npm run lint`         | ESLint plus a Prettier format check                                   |
-| `npm run format`       | Format everything with Prettier                                       |
-| `npm run build`        | Type-check and build to `dist/`                                       |
-| `npm run puzzles`      | Check the pack and pick which clues new puzzles hide                  |
-| `npm run sync:web`     | Copy the shared files from the 2D game (`apps/picross`)               |
-| `npm run check:shared` | Fail if a shared file was edited here                                 |
-| `npm run screenshot`   | Screenshot a page of the running dev server                           |
+| Command              | What it does                                                          |
+| -------------------- | --------------------------------------------------------------------- |
+| `npm run dev`        | Dev server with hot reload                                            |
+| `npm test`           | Unit tests (Vitest), including the solvability check for every puzzle |
+| `npm run e2e`        | Browser tests (Playwright, phone-sized) against the production build  |
+| `npm run lint`       | ESLint plus a Prettier format check                                   |
+| `npm run format`     | Format everything with Prettier                                       |
+| `npm run build`      | Type-check and build to `dist/`                                       |
+| `npm run puzzles`    | Check the pack and pick which clues new puzzles hide                  |
+| `npm run screenshot` | Screenshot a page of the running dev server                           |
 
 The timing test (`e2e/perf.spec.ts`) runs alone after the other browser tests, so they don't
 share its CPU. To run just it: `npx playwright test perf.spec.ts --no-deps`.
@@ -56,7 +54,7 @@ share its CPU. To run just it: `npx playwright test perf.spec.ts --no-deps`.
 
 - [Architecture](docs/architecture.md): the layers, the files, and how a stroke flows
 - [How-to guides](docs/how-to.md): add a puzzle, a color, a sound
-- [Shared files](docs/shared-files.md): what comes from the 2D game and how to update it
+- [Shared package](../../packages/shared/README.md): the code, styles, story and art shared with the 2D game
 - [Story mode](docs/story.md): how the 2D story is shared, fitted to blocks, and gated
 - [Roadmap](docs/roadmap.md): what's carried over from the 2D game so far, and what's next
 - [Combining with the 2D game](../../docs/combining.md): the plan for one game, with bosses that switch dimension

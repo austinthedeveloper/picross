@@ -10,8 +10,8 @@ import {
   type LineSet,
 } from '../../engine/lines';
 import type { Puzzle } from '../../puzzles/format';
-import { el } from '../dom';
-import { playOnce } from '../motion';
+import { el } from '@picross/shared/ui/dom';
+import { playOnce } from '@picross/shared/ui/motion';
 
 export type { Line };
 

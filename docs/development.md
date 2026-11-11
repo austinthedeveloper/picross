@@ -112,8 +112,9 @@ root: `npm run dev:cubed` (http://localhost:5174), `npm run test:cubed`,
 in `dist/3d` (and `dist-dev/3d`), where the Flat | Cubed switch links to it. In dev, the
 switch links between the two dev servers.
 
-Cubed copies some of this repo's files (`docs/shared-files.md`). After changing one, run
-`npm -w apps/cubed run sync:web` and commit the copies; CI runs `npm run check:cubed`.
+Both games import `packages/shared` (`@picross/shared`; see its
+[README](../packages/shared/README.md)), so a change there is in both at once. `npm test`
+runs its tests first (`npm run test:shared` runs just them).
 
 ## CI and deploys
 

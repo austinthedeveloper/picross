@@ -11,11 +11,11 @@ import { getDiorama } from '../../puzzles/dioramas';
 import { BlockView } from '../board/blockView';
 import { attachInput } from '../board/input';
 import { blockOutline, shapePicture } from '../board/thumbnail';
-import { homeLink } from '../components/homeLink';
-import { el } from '../dom';
+import { homeLink } from '@picross/shared/ui/components/homeLink';
+import { el } from '@picross/shared/ui/dom';
 import { formatTime } from '../format';
 import { picture, placed } from './dioramaList';
-import { playSound } from '../sound';
+import { playSound } from '@picross/shared/ui/sound';
 import { onHide } from '../lifecycle';
 import { createPlay } from './play';
 

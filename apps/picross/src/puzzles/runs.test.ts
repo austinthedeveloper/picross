@@ -3,7 +3,7 @@ import { parsePuzzle } from './format';
 import { solve, solveLine, solveLineAnyOrder, Unknown, type Knowledge } from '../engine/solver';
 import { CHIP_DAMAGE, type Enemy } from '../game/battle';
 import { allScramble, allUnreadable } from './enemies';
-import { scenes } from './scenes';
+import { scenes } from '@picross/shared/puzzles/scenes';
 import {
   bossFights,
   bossFightsFor,

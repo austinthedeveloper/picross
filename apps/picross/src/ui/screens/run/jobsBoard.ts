@@ -4,10 +4,10 @@ import { jobBadgeFor } from '../../../puzzles/badges';
 import { chapters, type Chapter } from '../../../puzzles/chapters';
 import { ENDLESS_GADGETS, ENDLESS_HP, ENDLESS_ID, ENDLESS_HEAL } from '../../../puzzles/endless';
 import { bossFightsFor, getRun, overtimeFor, type RunDef } from '../../../puzzles/runs';
-import { withArt } from '../../art';
+import { withArt } from '@picross/shared/ui/art';
 import { badgeIcon, tierTag } from '../../components/badge';
-import { homeLink } from '../../components/homeLink';
-import { el } from '../../dom';
+import { homeLink } from '@picross/shared/ui/components/homeLink';
+import { el } from '@picross/shared/ui/dom';
 import { modePicker, newRunButton, nodeIcon, type Hub } from './shared';
 
 /** A job you can start: everything without `requires`, plus jobs whose requirement you've won. */

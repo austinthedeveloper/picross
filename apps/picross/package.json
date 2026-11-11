@@ -20,5 +20,8 @@
     "script-review:export": "vite-node scripts/script-review.ts export",
     "rate:puzzles": "vite-node scripts/rate-puzzles.ts",
     "e2e": "playwright test"
+  },
+  "dependencies": {
+    "@picross/shared": "*"
   }
 }

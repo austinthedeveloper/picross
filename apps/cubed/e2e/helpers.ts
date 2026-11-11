@@ -7,6 +7,8 @@ import { hashString } from '../src/puzzles/hide';
 import { turnPuzzle } from '../src/puzzles/transform';
 
 const PACK = path.join(import.meta.dirname, '../src/puzzles/pack');
+/** The story's data (encounters, jobs), in the shared package. */
+const STORY = path.join(import.meta.dirname, '../../../packages/shared/src/puzzles');
 
 /** Pack puzzle ids, biggest block first. */
 export const PUZZLES_BY_SIZE = fs
@@ -17,11 +19,10 @@ export const PUZZLES_BY_SIZE = fs
 
 /** A story encounter's 3D puzzle, by encounter id (from the shared 2D encounter data). */
 export function encounterPuzzle(encounterId: string): Puzzle {
-  const root = path.join(import.meta.dirname, '../src/puzzles');
   const enc = JSON.parse(
-    fs.readFileSync(path.join(root, 'encounters', `${encounterId}.json`), 'utf8'),
+    fs.readFileSync(path.join(STORY, 'encounters', `${encounterId}.json`), 'utf8'),
   );
-  const file = path.join(root, 'story', `${enc.puzzle}.json`);
+  const file = path.join(import.meta.dirname, '../src/puzzles/story', `${enc.puzzle}.json`);
   return parsePuzzle(JSON.parse(fs.readFileSync(file, 'utf8')));
 }
 
@@ -35,8 +36,7 @@ export async function runAt(
   node: number,
   opts: { mode?: 'relaxed' | 'hearts'; hp?: number; gadgets?: string[] } = {},
 ): Promise<void> {
-  const root = path.join(import.meta.dirname, '../src/puzzles');
-  const job = JSON.parse(fs.readFileSync(path.join(root, 'runs', `${jobId}.json`), 'utf8'));
+  const job = JSON.parse(fs.readFileSync(path.join(STORY, 'runs', `${jobId}.json`), 'utf8'));
   const run = {
     runId: jobId,
     node,

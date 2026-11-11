@@ -9,7 +9,8 @@ import { encounterPuzzle, extras, moveTo, focusBlock } from './helpers';
  * the test checks the flow, not hundreds of keypresses; the fight is seeded past its
  * phases, so the last break always solves it.
  */
-const ROOT = path.join(import.meta.dirname, '../src/puzzles');
+// The story's chapters and jobs, in the shared package.
+const ROOT = path.join(import.meta.dirname, '../../../packages/shared/src/puzzles');
 const read = (dir: string, id: string) =>
   JSON.parse(fs.readFileSync(path.join(ROOT, dir, `${id}.json`), 'utf8'));
 const chapters = fs

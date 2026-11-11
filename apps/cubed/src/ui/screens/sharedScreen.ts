@@ -2,8 +2,8 @@ import { recordPlaytest } from '../../game/progress';
 import { getSettings } from '../../game/settings';
 import { decodeShare } from '../../puzzles/share';
 import { shapePicture } from '../board/thumbnail';
-import { homeLink } from '../components/homeLink';
-import { el } from '../dom';
+import { homeLink } from '@picross/shared/ui/components/homeLink';
+import { el } from '@picross/shared/ui/dom';
 import { formatTime } from '../format';
 import { createPlay } from './play';
 

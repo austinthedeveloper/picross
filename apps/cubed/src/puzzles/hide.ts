@@ -1,4 +1,4 @@
-import { shuffled } from '../engine/random';
+import { shuffled } from '@picross/shared/engine/random';
 import { solve } from '../engine/solver';
 import type { Clue } from '../engine/clues';
 import type { Puzzle } from './format';

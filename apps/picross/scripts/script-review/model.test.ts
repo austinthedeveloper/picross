@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { chapters } from '../../src/puzzles/chapters';
-import { scenes, type Scene } from '../../src/puzzles/scenes';
+import { scenes, type Scene } from '@picross/shared/puzzles/scenes';
 import { buildPages, buildTargets, isItem, sceneEntries, type Item } from './model';
 import { escapeHtml } from './render';
 

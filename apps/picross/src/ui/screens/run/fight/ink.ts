@@ -1,5 +1,5 @@
 import { pickInk } from '../../../../engine/ink';
-import { playSound } from '../../../sound';
+import { playSound } from '@picross/shared/ui/sound';
 import type { FightContext } from './context';
 
 /**

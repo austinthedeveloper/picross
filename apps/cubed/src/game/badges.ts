@@ -4,7 +4,7 @@ import { chapters, jobs } from '../story/data';
 import { bestStreak } from './daily';
 import { cleanSolves, playtests, solvedIds } from './progress';
 import { clearedJobs, getJobStats } from './runSave';
-import { readStore, writeStore } from './storage';
+import { readStore, writeStore } from '@picross/shared/game/storage';
 
 export const TIERS = ['Bronze', 'Silver', 'Gold'] as const;
 

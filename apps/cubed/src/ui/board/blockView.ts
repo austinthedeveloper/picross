@@ -22,7 +22,7 @@ import type { Clue } from '../../engine/clues';
 import { indexOf, inside, lineIdAt, pointOf, type Axis, type Point } from '../../engine/volume';
 import { BROKEN, PAINTED } from '../../game/game';
 import type { Puzzle } from '../../puzzles/format';
-import { reducedMotion } from '../motion';
+import { reducedMotion } from '@picross/shared/ui/motion';
 import { token } from '../tokens';
 import { drawAtlas, faceUV, STATES, type FaceState } from './atlas';
 

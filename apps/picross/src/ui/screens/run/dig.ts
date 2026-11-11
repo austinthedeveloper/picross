@@ -1,8 +1,8 @@
 import type { Puzzle } from '../../../puzzles/format';
-import { getGadget } from '../../../puzzles/gadgets';
-import { gadgetArt, iconArt } from '../../art';
-import { el } from '../../dom';
-import { pause } from '../../motion';
+import { getGadget } from '@picross/shared/puzzles/gadgets';
+import { gadgetArt, iconArt } from '@picross/shared/ui/art';
+import { el } from '@picross/shared/ui/dom';
+import { pause } from '@picross/shared/ui/motion';
 import type { PlaySession } from '../gameScreen';
 
 /**

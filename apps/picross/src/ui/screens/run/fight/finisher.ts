@@ -1,6 +1,6 @@
 import { createPicture } from '../../../board/picture';
-import { pause, reducedMotion } from '../../../motion';
-import { playSound } from '../../../sound';
+import { pause, reducedMotion } from '@picross/shared/ui/motion';
+import { playSound } from '@picross/shared/ui/sound';
 import type { FightContext } from './context';
 
 /** The solved picture flies from the board at the enemy and lands the finisher. */

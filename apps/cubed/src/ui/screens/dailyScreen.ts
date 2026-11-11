@@ -3,7 +3,7 @@ import { clearDailyBoard, getDailyBoard, recordDaily, saveDailyBoard } from '../
 import { getSettings } from '../../game/settings';
 import { dailyPuzzle, dateKey } from '../../puzzles/daily';
 import { shapePicture } from '../board/thumbnail';
-import { el } from '../dom';
+import { el } from '@picross/shared/ui/dom';
 import { formatTime, plural } from '../format';
 import { onHide } from '../lifecycle';
 import { createPlay } from './play';

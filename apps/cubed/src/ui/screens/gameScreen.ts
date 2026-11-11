@@ -11,7 +11,7 @@ import { difficultyOf } from '../../puzzles/difficulty';
 import type { Puzzle } from '../../puzzles/format';
 import { nextPuzzle, PUZZLES } from '../../puzzles/index';
 import { shapePicture } from '../board/thumbnail';
-import { el } from '../dom';
+import { el } from '@picross/shared/ui/dom';
 import { formatTime, plural, puzzleNumber } from '../format';
 import { onHide } from '../lifecycle';
 import { createPlay } from './play';

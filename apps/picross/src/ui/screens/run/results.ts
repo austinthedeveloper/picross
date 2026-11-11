@@ -1,13 +1,13 @@
 import { earnFromRun, type NewBadge } from '../../../game/badges';
-import { advance, currentStep, startDialogue } from '../../../game/dialogue';
+import { advance, currentStep, startDialogue } from '@picross/shared/game/dialogue';
 import type { RunState } from '../../../game/run';
 import { getJobStats, recordRunResult, saveCurrentRun } from '../../../game/runSave';
 import type { RunDef } from '../../../puzzles/runs';
-import { getScene } from '../../../puzzles/scenes';
-import { portraitArt, withArt } from '../../art';
+import { getScene } from '@picross/shared/puzzles/scenes';
+import { portraitArt, withArt } from '@picross/shared/ui/art';
 import { earnedBadges } from '../../components/badge';
-import { homeLink } from '../../components/homeLink';
-import { el } from '../../dom';
+import { homeLink } from '@picross/shared/ui/components/homeLink';
+import { el } from '@picross/shared/ui/dom';
 import { modePicker, newRunButton, type Hub } from './shared';
 
 /** The run's sign-off for a win or a loss: the lines its outro scene plays for that flag. */

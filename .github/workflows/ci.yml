@@ -25,9 +25,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run lint
-      # Picross Cubed's copies of shared files match this repo's (apps/cubed/docs/shared-files.md).
-      - run: npm run check:cubed
-      # Both games' unit tests, then both built: the 3D game lands in dist/3d.
+      # The shared package's and both games' unit tests, then both built: the 3D game lands in dist/3d.
       - run: npm test
       - run: npm run build
       - run: npm run check:bundle

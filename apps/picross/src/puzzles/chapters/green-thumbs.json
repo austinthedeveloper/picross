@@ -1,8 +1,0 @@
-{
-  "id": "green-thumbs",
-  "title": "Green Thumbs",
-  "order": 4,
-  "blurb": "Everything in here wants to eat you. Politely, at first.",
-  "jobs": ["glasshouse"],
-  "opening": "green-thumbs-opening"
-}

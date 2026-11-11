@@ -1,16 +1,16 @@
 import { dimsLabel } from '../../engine/volume';
-import { gameSwitch } from '../components/gameSwitch';
+import { gameSwitch } from '@picross/shared/ui/components/gameSwitch';
 import { getOverallStats, getPuzzleStats, getSavedBoard } from '../../game/progress';
 import { getSettings, updateSettings, type ListFilter, type Mode } from '../../game/settings';
 import { BANDS, difficultyOf } from '../../puzzles/difficulty';
 import type { Puzzle } from '../../puzzles/format';
 import { PUZZLES } from '../../puzzles/index';
 import { blockOutline, shapePicture } from '../board/thumbnail';
-import { createMuteButton } from '../components/muteButton';
-import { el } from '../dom';
+import { createMuteButton } from '@picross/shared/ui/components/muteButton';
+import { el } from '@picross/shared/ui/dom';
 import { formatTime, puzzleNumber } from '../format';
-import { hapticsSupported } from '../haptics';
-import { applyTheme } from '../theme';
+import { hapticsSupported } from '@picross/shared/ui/haptics';
+import { applyTheme } from '@picross/shared/ui/theme';
 import { badgesLink } from './badgesScreen';
 import { dioramaSection } from './dioramaList';
 

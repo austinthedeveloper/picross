@@ -11,12 +11,12 @@ import {
 import { getCurrentRun, saveCurrentRun } from '../../../game/runSave';
 import { ENDLESS_HEAL } from '../../../puzzles/endless';
 import { restHeal } from '../../../puzzles/runs';
-import { getGadget } from '../../../puzzles/gadgets';
-import { getScene } from '../../../puzzles/scenes';
-import { el } from '../../dom';
+import { getGadget } from '@picross/shared/puzzles/gadgets';
+import { getScene } from '@picross/shared/puzzles/scenes';
+import { el } from '@picross/shared/ui/dom';
 import { formatTime } from '../../format';
 import { renderGameScreen, type PlaySession } from '../gameScreen';
-import { renderSceneScreen } from '../sceneScreen';
+import { renderSceneScreen } from '@picross/shared/ui/screens/sceneScreen';
 import { digHooks } from './dig';
 import { fightHooks } from './fight/index';
 import { restHooks } from './rest';

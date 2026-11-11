@@ -2,8 +2,10 @@ import { getPuzzle } from './index';
 import type { Enemy } from '../game/battle';
 import { parseEnemy } from './enemies';
 import type { Puzzle } from './format';
-import { getGadget } from './gadgets';
-import { getScene } from './scenes';
+import { getGadget } from '@picross/shared/puzzles/gadgets';
+import { getScene } from '@picross/shared/puzzles/scenes';
+import { encounterFiles } from '@picross/shared/puzzles/files/encounters';
+import { runFiles } from '@picross/shared/puzzles/files/runs';
 
 /** What kind of node an encounter is: fights (#27), digs (#29), and rest stops (#77). */
 export type EncounterKind = 'fight' | 'dig' | 'rest';
@@ -162,11 +164,6 @@ export function parseRun(
     ...(file.bossOf ? { bossOf: file.bossOf } : {}),
   };
 }
-
-const encounterFiles = import.meta.glob<{ default: unknown }>('./encounters/*.json', {
-  eager: true,
-});
-const runFiles = import.meta.glob<{ default: unknown }>('./runs/*.json', { eager: true });
 
 const encountersById = new Map<string, Encounter>();
 for (const mod of Object.values(encounterFiles)) {

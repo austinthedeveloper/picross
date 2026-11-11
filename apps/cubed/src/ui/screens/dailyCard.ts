@@ -1,6 +1,6 @@
 import { currentStreak, solvedOn } from '../../game/daily';
 import { dateKey } from '../../puzzles/daily';
-import { el } from '../dom';
+import { el } from '@picross/shared/ui/dom';
 import { formatTime, plural } from '../format';
 
 export const prettyDate = (key: string) => {

@@ -1,25 +1,25 @@
-import './styles/tokens.css';
+import '@picross/shared/styles/tokens.css';
 // The 3D game's styles, for a boss that switches to a block. Each game's own screen styles
 // apply only on its board (scripts/scopeByBoard.ts); this order matches both games' own.
 import '../../cubed/src/styles/voxels.css';
-import './styles/base.css';
+import '@picross/shared/styles/base.css';
 import './styles/board.css';
 import './styles/game.css';
 import '../../cubed/src/styles/game.css';
 import './styles/select.css';
 import './styles/editor.css';
-import './styles/run.css';
-import './styles/fight.css';
-import './styles/dig.css';
-import './styles/dialogue.css';
-import './styles/art.css';
+import '@picross/shared/styles/run.css';
+import '@picross/shared/styles/fight.css';
+import '@picross/shared/styles/dig.css';
+import '@picross/shared/styles/dialogue.css';
+import '@picross/shared/styles/art.css';
 import './styles/badges.css';
 import '../../cubed/src/styles/story.css';
 import './styles/switch.css';
 import { syncBadges } from './game/badges';
 import { getPuzzle } from './puzzles/index';
 import { getMural } from './puzzles/murals';
-import { getScene } from './puzzles/scenes';
+import { getScene } from '@picross/shared/puzzles/scenes';
 import { renderBadgesScreen } from './ui/screens/badges';
 import { renderDailyScreen } from './ui/screens/daily';
 import { renderEditorScreen } from './ui/screens/editorScreen';
@@ -27,11 +27,15 @@ import { renderHowToPlay } from './ui/screens/howToPlay';
 import { renderMuralScreen, renderMuralTile } from './ui/screens/mural';
 import { renderGameScreen } from './ui/screens/gameScreen';
 import { renderRunEncounter, renderRunScreen } from './ui/screens/run';
-import { renderSceneScreen } from './ui/screens/sceneScreen';
-import { gameHref, lastGame } from './ui/components/gameSwitch';
+import { renderSceneScreen } from '@picross/shared/ui/screens/sceneScreen';
+import { gameHref, lastGame } from '@picross/shared/ui/components/gameSwitch';
 import { renderSelectScreen } from './ui/screens/selectScreen';
-import { applyTheme } from './ui/theme';
+import { applyTheme } from '@picross/shared/ui/theme';
+import { providePrefs } from '@picross/shared/game/prefs';
+import { getSettings, updateSettings } from './game/settings';
 
+// Shared code (sound, haptics, the theme, the mute button) reads this game's settings.
+providePrefs({ get: getSettings, update: updateSettings });
 applyTheme();
 // Older saves have already earned some badges, so nobody starts from zero (#108).
 syncBadges();

@@ -1,5 +1,5 @@
 import type { SavedBoard } from './progress';
-import { readStore, writeStore } from './storage';
+import { readStore, writeStore } from '@picross/shared/game/storage';
 
 const KEY = 'picross:daily';
 

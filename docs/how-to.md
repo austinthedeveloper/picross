@@ -127,7 +127,7 @@ row or column counts from 1, as players do; the code counts from 0.
    To switch board (the Curator), give a phase `"board": "block"` to move the fight onto
    the encounter's 3D puzzle in `apps/cubed/src/puzzles/story/`, and a later one
    `"board": "flat"` to bring it back. Keep the boss's other powers light, and don't put a
-   swap or ink on a switching phase. Run `npm -w apps/cubed run sync:web` after.
+   swap or ink on a switching phase. Run `npm test` after: Cubed's story gate checks it.
    Phases trigger in order at decreasing `at` values. A phase's `fog` is a pool, and it fogs
    up to `fogCount` unsolved lines from it. Line damage is 1 per line and columns mostly
    finish late, so set `at` high (0.8–0.9) for a phase to land mid-solve. To find a fog

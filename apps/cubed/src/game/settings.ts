@@ -1,4 +1,4 @@
-import { readStore, writeStore } from './storage';
+import { readStore, writeStore } from '@picross/shared/game/storage';
 
 /** Relaxed never checks what you break; hearts mode costs a heart for breaking a cube of the shape. */
 export type Mode = 'relaxed' | 'hearts';

@@ -17,13 +17,13 @@ import type { Puzzle } from '../../puzzles/format';
 import { BlockView, type Peel, type Pick } from '../board/blockView';
 import { attachInput } from '../board/input';
 import { createHintMenu } from '../components/hintMenu';
-import { homeLink } from '../components/homeLink';
-import { createMuteButton } from '../components/muteButton';
-import { el } from '../dom';
+import { homeLink } from '@picross/shared/ui/components/homeLink';
+import { createMuteButton } from '@picross/shared/ui/components/muteButton';
+import { el } from '@picross/shared/ui/dom';
 import { formatTime, plural } from '../format';
-import { haptic } from '../haptics';
-import { reducedMotion } from '../motion';
-import { playSound } from '../sound';
+import { haptic } from '@picross/shared/ui/haptics';
+import { reducedMotion } from '@picross/shared/ui/motion';
+import { playSound } from '@picross/shared/ui/sound';
 
 export type ToolChoice = Tool | 'turn';
 

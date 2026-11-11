@@ -1,5 +1,5 @@
 import { getSettings, setSectionCollapsed } from '../../game/settings';
-import { el } from '../dom';
+import { el } from '@picross/shared/ui/dom';
 
 interface ListSection {
   /** Remembers this section's open state between visits. */

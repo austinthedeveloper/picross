@@ -1,5 +1,5 @@
 import { deriveClues } from '../engine/clues';
-import { shuffled } from '../engine/random';
+import { shuffled } from '@picross/shared/engine/random';
 import { TRANSFORMS, transformGrid } from '../engine/transform';
 import type { Puzzle } from './format';
 import { packInOrder } from './index';

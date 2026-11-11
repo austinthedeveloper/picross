@@ -1,6 +1,6 @@
 import { PUZZLES } from '../../puzzles/index';
-import { homeLink } from '../components/homeLink';
-import { el } from '../dom';
+import { homeLink } from '@picross/shared/ui/components/homeLink';
+import { el } from '@picross/shared/ui/dom';
 
 const RULES: [string, string][] = [
   [

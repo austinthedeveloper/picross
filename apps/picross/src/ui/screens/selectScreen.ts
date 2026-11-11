@@ -1,5 +1,5 @@
 import { randomUnsolved } from '../../game/pickPuzzle';
-import { gameSwitch } from '../components/gameSwitch';
+import { gameSwitch } from '@picross/shared/ui/components/gameSwitch';
 import { getOverallStats, getPuzzleStats, getSavedBoard } from '../../game/progress';
 import {
   getSettings,
@@ -17,12 +17,12 @@ import { puzzles } from '../../puzzles/index';
 import type { Puzzle } from '../../puzzles/format';
 import { createPicture } from '../board/picture';
 import { listSection } from '../components/listSection';
-import { createMuteButton } from '../components/muteButton';
+import { createMuteButton } from '@picross/shared/ui/components/muteButton';
 import { rankCard } from '../components/rankCard';
-import { el } from '../dom';
+import { el } from '@picross/shared/ui/dom';
 import { formatTime } from '../format';
-import { haptic, hapticsSupported } from '../haptics';
-import { applyTheme } from '../theme';
+import { haptic, hapticsSupported } from '@picross/shared/ui/haptics';
+import { applyTheme } from '@picross/shared/ui/theme';
 import { dailyCard } from './daily';
 import { muralSection } from './mural';
 import { runBanner } from './run';

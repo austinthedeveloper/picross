@@ -14,7 +14,7 @@ import {
 import { washInk } from '../engine/ink';
 import { transformGrid, turnIndex, turnLine, turnLines } from '../engine/transform';
 import type { Puzzle } from '../puzzles/format';
-import type { GadgetEffect } from '../puzzles/gadgets';
+import type { GadgetEffect } from '@picross/shared/puzzles/gadgets';
 
 /** An enemy in a fight encounter (#27). */
 export interface Enemy {

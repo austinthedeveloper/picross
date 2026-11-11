@@ -1,11 +1,11 @@
-import { advance, currentStep, startDialogue } from '../../../game/dialogue';
+import { advance, currentStep, startDialogue } from '@picross/shared/game/dialogue';
 import type { RunState } from '../../../game/run';
 import { recordRunResult, saveCurrentRun } from '../../../game/runSave';
-import { getScene } from '../../../puzzles/scenes';
+import { getScene } from '@picross/shared/puzzles/scenes';
 import type { Job } from '../../../story/data';
-import { portraitArt, withArt } from '../../art';
-import { homeLink } from '../../components/homeLink';
-import { el } from '../../dom';
+import { portraitArt, withArt } from '@picross/shared/ui/art';
+import { homeLink } from '@picross/shared/ui/components/homeLink';
+import { el } from '@picross/shared/ui/dom';
 import { modePicker, newRunButton, type Hub } from './shared';
 
 /** The job's sign-off for a win or a loss: the lines its outro plays for that flag. */

@@ -1,4 +1,4 @@
-import { shuffled } from '../engine/random';
+import { shuffled } from '@picross/shared/engine/random';
 import type { Enemy } from '../game/battle';
 import type { RunState } from '../game/run';
 import { getEncounter, type Encounter, type RunDef } from './runs';

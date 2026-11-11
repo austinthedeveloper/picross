@@ -1,7 +1,7 @@
 import { Cell, createBoard, type Solution } from '../../engine/board';
 import { deriveClues } from '../../engine/clues';
 import { checkSolution, Unknown } from '../../engine/solver';
-import { readStore, writeStore } from '../../game/storage';
+import { readStore, writeStore } from '@picross/shared/game/storage';
 import {
   parsePuzzle,
   slugify,
@@ -10,8 +10,8 @@ import {
   type Puzzle,
 } from '../../puzzles/format';
 import { createBoardView } from '../board/boardView';
-import { homeLink } from '../components/homeLink';
-import { el } from '../dom';
+import { homeLink } from '@picross/shared/ui/components/homeLink';
+import { el } from '@picross/shared/ui/dom';
 import { attachInput } from '../board/input';
 
 const MIN_SIZE = 2;
