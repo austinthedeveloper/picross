@@ -805,9 +805,9 @@ to make free play the way in.
   chunk.
 - **Performance:** the 600-odd cards (523 + 85) draw one tab at a time, the cards off screen
   skip layout and paint (`content-visibility: auto`), and thumbnails draw lazily. In a
-  production build at phone size, the Flat tab's first draw takes about 20 ms to paint (75 ms
-  with the CPU slowed 4×); the Cubed tab's about 90 ms the first time (most of it loading
-  Cubed's chunk, as `#/cubed` does) and 15 ms after.
+  production build at phone size, the Flat tab's first draw takes about 20 ms to paint (under
+  100 ms with the CPU slowed 4×); the Cubed tab's about 90 ms the first time (most of it
+  loading Cubed's chunk, as `#/cubed` does) and about 10 ms after.
 
 ## How to play
 
