@@ -52,13 +52,18 @@ share its CPU. To run just it: `npx playwright test perf.spec.ts --no-deps`.
 
 ## Docs
 
-- [Architecture](docs/architecture.md): the layers, the files, and how a stroke flows
-- [How-to guides](docs/how-to.md): add a puzzle, a color, a sound
-- [Shared package](../../packages/shared/README.md): the code, styles, story and art shared with the 2D game
+The docs are in the repo root's `docs/`. Start with its
+[package map](../../docs/architecture.md#package-map): where every file lives and what it
+may import.
+
+- [Architecture](../../docs/cubed/architecture.md): the layers, the block, the view, the screens
+- [How-to guides](../../docs/cubed/how-to.md): add a puzzle, a color, a sound
+- [Shared package](../../packages/shared/README.md): the code, styles and art shared with the 2D game, and the [story package](../../packages/story/README.md)
 - [Block](../../packages/block/README.md) and [play-block](../../packages/play-block/README.md) packages: this game's puzzle rules and data, and its three.js view and screens
-- [Story mode](docs/story.md): how the 2D story is shared, fitted to blocks, and gated
-- [Roadmap](docs/roadmap.md): what's carried over from the 2D game so far, and what's next
+- [Story mode](../../docs/cubed/story.md): how the 2D story is shared, fitted to blocks, and gated
+- [Roadmap](../../docs/cubed/roadmap.md): what's carried over from the 2D game so far, and what's next
+- [Real-device checklist](../../docs/cubed/device-checklist.md) and [release notes](../../docs/cubed/releases/)
 - [Combining with the 2D game](../../docs/combining.md): the plan for one game, with bosses that switch dimension
 
-The look follows the 2D game's [art direction](https://github.com/austinthedeveloper/picross/blob/main/docs/art-direction.md);
+The look follows the 2D game's [art direction](../../docs/art-direction.md);
 the shape colors are in `packages/play-block/src/styles/voxels.css`.

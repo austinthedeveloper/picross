@@ -1,7 +1,9 @@
-# How-to guides
+# Picross Cubed: how-to guides
 
-The puzzles and their checks are in `packages/block` at the repo root; run the `npm run`
-commands below from `apps/cubed` (or as `npm -w apps/cubed run …` from the root).
+Recipes for the 3D game. The 2D game's are in [how-to.md](../how-to.md).
+
+The puzzles and their checks are in `packages/block`; run the `npm run` commands below from
+`apps/cubed` (or as `npm -w apps/cubed run …` from the root).
 
 ## Add a puzzle
 
@@ -29,7 +31,8 @@ commands below from `apps/cubed` (or as `npm -w apps/cubed run …` from the roo
    clue shown, hides about `hideRatio` of the clues (keeping it solvable), and writes
    `hide` and `passes` into the file. If it says the shape can't be solved, change the
    shape: usually a hollow or a long solid run that no line pins down.
-3. Run `npm test`. The pack test checks every puzzle solves from the clues it shows.
+3. Run `npm run test:block` from the root. The pack test (`packages/block/src/puzzles/pack.test.ts`)
+   checks every puzzle solves from the clues it shows.
 
 To pick the hidden clues again after editing a shape or its ratio:
 `npm run puzzles -- <id>` (or `--all`).
@@ -71,10 +74,10 @@ blocks of `packages/play-block/src/styles/voxels.css` (light, dark, high contras
 ## Add a sound or change the base styles
 
 `src/ui/sound.ts`, `src/styles/tokens.css` and `src/styles/base.css` are shared with the 2D
-game, in `packages/shared` at the repo root (see its [README](../../../packages/shared/README.md)):
+game, in `packages/shared` at the repo root (see its [README](../../packages/shared/README.md)):
 a change there is in both games. Styles for a block go in `packages/play-block/src/styles/`
 (`game.css`, `voxels.css`, `story.css`, `editor.css`; the 2D game uses the first three for
-its block fights), and styles for this app's list in `src/styles/select.css`.
+its block fights), and styles for Cubed's list in `apps/cubed/src/styles/select.css`.
 
 ## See a change
 

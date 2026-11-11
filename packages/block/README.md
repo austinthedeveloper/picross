@@ -46,7 +46,7 @@ for three.js), and `eslint.config.js` says the same with `no-restricted-imports`
 Cubed's `npm run puzzles` (`apps/cubed/scripts/puzzles.ts`) writes `hide` and `passes`
 into `src/puzzles/pack/` and `story/` here, and exports sheets: from `apps/cubed`,
 `npm run puzzles -- --sheet ../../packages/block/src/puzzles/sheets/<name>.txt`. See
-Cubed's [how-to](../../apps/cubed/docs/how-to.md).
+Cubed's [how-to](../../docs/cubed/how-to.md).
 
 ## Tests
 

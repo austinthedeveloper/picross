@@ -23,7 +23,7 @@ import {
  *
  * Anything the story uses that this game can't play yet (an encounter with no 3D puzzle, a
  * field it doesn't read) is collected in `storyIssues` and left out, instead of failing the
- * whole app. packages/story's `boards.test.ts` reports them (docs/story.md).
+ * whole app. packages/story's `boards.test.ts` reports them (docs/cubed/story.md).
  */
 
 export {

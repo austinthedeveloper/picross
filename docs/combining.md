@@ -2,100 +2,103 @@
 
 The plan for one game with both: free play in 2D and 3D, one story, and fights that change
 dimension, like a boss that's a 2D board until it pulls the picture into a block halfway
-through. Nothing here is built yet. The 3D game gets tightened up first; this starts after.
+through. Steps 1 to 3 are done: both games live in this repo and share their code as
+packages. Steps 4 and on are still the plan.
 
 ## Progress
 
-**Step 1 is done.** Picross Cubed came into this repo with its history (a subtree merge)
-as `cubed/`, an npm workspace. Then both games moved into `apps/` (#142): the 2D game into
-`apps/picross/` and Cubed into `apps/cubed/`, with the root as the workspace root.
-The SNES demake's `make import` reads the pack from `apps/picross/`.
+**Steps 1 to 3 are done** (milestone M4, #141). Picross Cubed came into this repo with its
+history (a subtree merge) as `cubed/`. Then:
 
-- One install (`npm ci`), one CI, one site: `npm run build` builds Flat at the root of
-  `dist/` and Cubed into `dist/3d/` (`scripts/build-cubed.mjs`); GitHub Pages and the Azure
-  site serve both.
-- **Flat | Cubed:** a switch at the top of both home screens moves between the games and
-  remembers the last one, so the site opens on it.
-- **Step 2 is done** (#143): the files Cubed used to copy are one package,
-  `packages/shared` (`@picross/shared`, [README](../packages/shared/README.md)), which both
-  games import. The sync script, `shared.lock.json` and `check:cubed` are gone. Every
-  shared file went in, story data included; the story then moved out to its own package
-  (#146, below). The SNES demake reads the art from `packages/shared/public/art/`.
-- **The 2D packages are done** (#144), alongside step 3's 3D ones: `packages/grid`
-  (`@picross/grid`: the engine, the puzzle format, the pack, murals and `Game`, with no
-  DOM; [README](../packages/grid/README.md)) and `packages/play-grid`
-  (`@picross/play-grid`: the board view, input, the play screen and its `PlaySession`
-  hooks, `board.css` and `game.css`; [README](../packages/play-grid/README.md)). The 2D
-  game imports both. The SNES demake reads the pack from `packages/grid/src/puzzles/`.
-- **Step 3 is done: the 3D game's code is two packages** (#145): `packages/block` (`@picross/block`: the
-  block, clues, solver, puzzle format, pack, dioramas, Game, Battle and the 3D story loader;
-  no three.js) and `packages/play-block` (`@picross/play-block`: the three.js view, input,
-  the play, fight and editor screens and their styles). Cubed and the Curator's block
-  phases both import them; neither app imports the other.
-- **The story is one package** (#146): `packages/story` (`@picross/story`,
-  [README](../packages/story/README.md)) holds the chapters, jobs, encounters, run
-  puzzles, scenes, backdrops, gadgets, dialogue and the scene player, and reads and checks
-  them once for both games; each game passes in its own puzzle and enemy per encounter.
-  The story gate is now a test there (`boards.test.ts`) that reports, for every encounter
-  and power, the boards that can play it, and fails only on broken data. The SNES demake
-  reads the story from `packages/story/src/puzzles/`. **M4's packaging (steps 1–3) is
-  complete.**
-- The story ideas for the combined game are in [story-combined.md](story-combined.md).
+- **#219 (#142): `apps/`.** The 2D game moved into `apps/picross/` and Cubed into
+  `apps/cubed/`, with the root as the workspace root. One install (`npm ci`), one CI, one
+  site: `npm run build` builds Flat at the root of `dist/` and Cubed into `dist/3d/`
+  (`scripts/build-cubed.mjs`), and GitHub Pages and the Azure site serve both. A **Flat |
+  Cubed** switch at the top of both home screens moves between the games and remembers the
+  last one.
+- **#220 (#143): `packages/shared`.** The files Cubed used to copy became one package that
+  both games import. The sync script, `shared.lock.json` and `check:cubed` are gone.
+- **#221 (#144): `packages/grid` and `packages/play-grid`.** The 2D engine, format, pack,
+  murals and `Game` (no DOM), and the 2D board view and play screen.
+- **#222 (#145): `packages/block` and `packages/play-block`.** The 3D rules and data (no
+  three.js), and the three.js view and screens. Cubed and the Curator's block phases both
+  import them; neither app imports the other.
+- **#223 (#146): `packages/story`.** The story lives once and is read and checked once for
+  both games; each game passes in its own puzzle and enemy per encounter. The story gate is
+  a test there (`boards.test.ts`) that reports, for every encounter and power, the boards
+  that can play it, and fails only on broken data.
 
-**Step 7 has a first boss, ahead of steps 2–6.** The Curator unfolds into a block at 60%
+Two more pieces of M4 prepare for step 4:
+
+- **#224 (#147): puzzle ids with a dimension.** `packages/shared/src/puzzles/ids.ts`
+  qualifies an id (`qualify('grid', 'mug')` is `grid:mug`) and parses one back. Nothing
+  reads qualified ids yet. A test in the 2D app lists the ids both packs share (46 in free
+  play), so a new clash shows up in review. Content files and save keys don't change; save
+  keys move in #155.
+- **#225 (#148): a bundle budget.** `npm run check:budget` fails CI if three.js reaches
+  either game's first download, or if the entry JS or CSS grows more than 10% over
+  `scripts/bundle-budget.json` (see [development.md](development.md#ci-and-deploys)).
+
+The SNES demake's `make import` reads the pack from `packages/grid/src/puzzles/`, the
+story from `packages/story/src/puzzles/` and the art from `packages/shared/public/art/`.
+Where every package lives and what it may import is the package map in
+[architecture.md](architecture.md#package-map). The story ideas for the combined game are
+in [story-combined.md](story-combined.md).
+
+**Step 7 has a first boss, ahead of steps 4 to 6.** The Curator unfolds into a block at 60%
 and folds back flat at 30%, in the 2D story. Rather than wait for `FightBoard`, the 2D
-story opens the 3D game's own fight screen (from `packages/play-block`, loaded on demand) for the
-block phases, and carries HP and phases between the two battles. Each game's screen
-styles apply only on its board. Details are in [architecture.md](architecture.md)
+story opens the 3D game's own fight screen (from `packages/play-block`, loaded on demand)
+for the block phases, and carries HP and phases between the two battles. Each game's
+screen styles apply only on its board. Details are in [architecture.md](architecture.md)
 ("Switching board").
-
-The steps below still apply; `packages/block` and `packages/play-block` now exist (#145).
 
 ## Where things stand
 
-|                      | 2D ([picross](https://github.com/austinthedeveloper/picross)) | 3D (this repo)                                                          |
-| -------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| Puzzle core          | Grid, run clues, line solver (`src/engine/`)                  | Block, count-and-pieces clues, line solver (`src/engine/`)              |
-| Play screen          | DOM grid (`ui/board/boardView.ts`), `PlaySession` hooks       | three.js (`ui/board/blockView.ts`), `PlayHooks` in `ui/screens/play.ts` |
-| Fights               | `game/battle.ts` over rows and columns                        | `game/battle.ts` over lines on three axes, same rules                   |
-| Story data           | `packages/story`: scenes, chapters, jobs, encounters          | The same package, plus a 3D puzzle per encounter (`packages/block`)     |
-| Saves                | `picross:*` keys                                              | `picross3d:*` keys                                                      |
-| Look, sound, haptics | Owns them                                                     | Shared verbatim                                                         |
+|                      | Flat (`apps/picross`)                                                      | Cubed (`apps/cubed`)                                                                  |
+| -------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| Puzzle core          | `packages/grid`: grid, run clues, line solver, the pack, murals            | `packages/block`: block, count-and-pieces clues, line solver, the pack, dioramas      |
+| Play screen          | `packages/play-grid`: DOM grid (`boardView.ts`), `PlaySession` hooks       | `packages/play-block`: three.js (`blockView.ts`), `PlayHooks` in `ui/screens/play.ts` |
+| Fights               | `apps/picross/src/game/battle.ts`, over rows and columns                   | `packages/block/src/game/battle.ts`, over lines on three axes, same rules             |
+| Story                | `packages/story`: scenes, chapters, jobs, encounters, read with 2D puzzles | The same package, read with a 3D puzzle per encounter (`packages/block`)              |
+| Saves and settings   | The app: `picross:*` keys                                                  | The app: `picross3d:*` keys                                                           |
+| Look, sound, haptics | `packages/shared`, imported by both                                        | The same                                                                              |
 
 Both are built in four layers: engine (pure logic) → puzzles (content) → game (rules and
-saves) → ui (the only layer that touches the page). That's what makes combining a move
-rather than a rewrite.
+saves) → ui (the only layer that touches the page). The packages follow those layers, so
+step 4 is a merge of two apps, not a rewrite.
 
-What's in the way is that the two repos use the same file paths for different code: 322
-paths exist in both, and the logic among them differs (`engine/solver.ts`, `game/game.ts`,
-`game/battle.ts`, `game/settings.ts`, `main.ts`, the pack). Even puzzle ids clash (both packs
-have a `mug`).
+What's left in the way: two routers, two sets of saves and settings, two lists (step 4),
+and two battle engines (step 5). Puzzle ids clash too (both packs have a `mug`), which #224's
+qualified ids are for.
 
 ## Where it lives
 
 **The 2D repo is the home**, as a monorepo. It has the history, the story, the issues,
 the Azure production site and the SNES demake's import pipeline (`make import` reads
-`../../picross`). The 3D code moved in as `cubed/`, now `apps/cubed/` (step 1); the picross-3d repo is to be
-archived with a pointer.
+`../../picross`). The 3D code moved in as `cubed/`, now `apps/cubed/` (step 1); the
+picross-3d repo is to be archived with a pointer.
 
-npm workspaces, no new build tool:
+npm workspaces, no new build tool. The packages are in place (the
+[package map](architecture.md#package-map) has today's layout); what's left changes the
+apps and the story:
 
 ```
 packages/
-  shared/      tokens, base styles, sound, haptics, dom, storage, random, theme, art,
-               scenes + dialogue, backdrops, gadgets: today's shared files, now imported
-  story/       chapters, jobs, encounters (data + loader), runs and run saves, and the
-               fight rules written once against a board interface (below)
-  grid/        the 2D engine: grid, clues, solver, transforms, 2D puzzle format and pack
-  block/       the 3D engine: volume, clues, solver, block puzzle format, pack, dioramas
-  play-grid/   the 2D play screen and its board view
-  play-block/  the 3D play screen (play controller, three.js view, input, editor)
+  shared/      tokens, styles, sound, haptics, dom, storage, random, theme, art, ids (done)
+  story/       chapters, jobs, encounters, scenes, the scene player (done); later the runs,
+               run saves and the fight rules, written once against a board interface (below)
+  grid/        the 2D rules and data: engine, format, pack, murals, Game (done)
+  play-grid/   the 2D play screen and its board view (done)
+  block/       the 3D rules and data: volume, solver, format, pack, dioramas, Battle (done)
+  play-block/  the 3D play screen: play controller, three.js view, input, editor (done)
 apps/
   picross/     the one game: the menu, routes, free play, daily, badges, story screens
+               (step 4; apps/cubed goes then)
 ```
 
-Puzzle ids get a dimension prefix where they meet (`grid:mug`, `block:mug`); content files
-stay where they are, so the 2D game's puzzle sheets and the SNES import keep working.
+Puzzle ids get a dimension prefix where they meet (`grid:mug`, `block:mug`; the helper came
+in #224). Content files stay where they are, so the 2D game's puzzle sheets and the SNES
+import keep working.
 
 ## The board interface (what makes mixed fights possible)
 
@@ -129,7 +132,7 @@ on the 2D board) becomes part of starting a fight on any board.
 ### Encounters in either dimension
 
 An encounter names its board: today's `puzzle` stays a 2D grid; a new `block` field names a
-3D one. The story's 3D puzzles (`src/puzzles/story/*.json` here) move in as the `block`
+3D one. The story's 3D puzzles (`packages/block/src/puzzles/story/*.json`) become the `block`
 versions of the encounters they were drawn for, so every encounter can be played either way
 and a job can mix them.
 
@@ -186,18 +189,21 @@ Each step ships, with both games playable throughout.
 
 1. **Monorepo skeleton in the 2D repo.** Workspaces; the 2D app moves into `apps/picross`
    unchanged, and its unit tests, browser tests, CI, Pages and Azure deploys pass as before.
-   The SNES `make import` paths update.
+   The SNES `make import` paths update. (Done: #219.)
 2. **Shared package.** Today's shared files become `packages/shared`, imported by both
-   apps; the sync script goes. (Done, #143; the story split out into `packages/story` in
-   #146.)
-3. **3D packages.** `packages/block` and `packages/play-block` from this repo; the 3D game
-   runs as a second app (`apps/picross-3d`) in the monorepo with its tests and site.
+   apps; the sync script goes. (Done: #220; the story split out into `packages/story` in
+   #223.)
+3. **Packages for each board.** `packages/block` and `packages/play-block` from the 3D game,
+   and `packages/grid` and `packages/play-grid` from the 2D one; Cubed runs as a second app
+   (`apps/cubed`) with its tests and site. (Done: #221, #222.) Then the story package
+   (#223), qualified puzzle ids (#224) and a bundle budget (#225).
 4. **One app.** A menu over both: free play 2D and 3D, one daily (alternating, or both), one
    settings screen, badges across both, the editor in both dimensions. Saves merge (above).
-   The 3D site redirects to the combined one; this repo is archived.
+   `apps/cubed` folds into `apps/picross`, `/3d/` redirects to the combined game, and the
+   picross-3d repo is archived.
 5. **Fights over `FightBoard`.** One `Battle` for both engines; the 2D and 3D fight tests
    both run against it unchanged.
-6. **Encounters in either dimension.** `block` on encounters; story puzzles move in; a job
+6. **Encounters in either dimension.** `block` on encounters, naming the 3D story puzzles; a job
    can mix 2D and 3D encounters.
 7. **Dimension-switching bosses.** `board` on phases, the transition, saving the board kind;
    then pick the first bosses to switch (the Curator is the obvious one).
@@ -208,7 +214,7 @@ Each step ships, with both games playable throughout.
 - **The 2D app's browser tests** are the safety net for steps 1–4: they must pass unchanged
   before anything moves on.
 - **Bundle size:** three.js stays out of the first download (screens with a block load on
-  demand), as it does here.
+  demand). `npm run check:budget` fails CI if it doesn't (#225).
 - **Difficulty:** a boss that switches mid-fight is harder by design; per the 2D game's
   calibration, the Curator stays the ceiling before Insane, so a switching boss keeps its
   other powers lighter.
