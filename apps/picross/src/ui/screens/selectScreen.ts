@@ -12,12 +12,10 @@ import {
 } from '../../game/settings';
 import { DIFFICULTIES } from '@picross/grid/puzzles/difficulty';
 import { puzzles } from '@picross/grid/puzzles/index';
-import { createMuteButton } from '@picross/shared/ui/components/muteButton';
 import { rankCard } from '../components/rankCard';
+import { settingsLink } from '../components/settingsLink';
 import { el } from '@picross/shared/ui/dom';
 import { formatTime } from '@picross/play-grid/ui/format';
-import { haptic, hapticsSupported } from '@picross/shared/ui/haptics';
-import { applyTheme } from '@picross/shared/ui/theme';
 import { dailyCard } from './daily';
 import { puzzleList } from './puzzleList';
 import { runBanner } from './run';
@@ -84,8 +82,6 @@ export function renderSelectScreen(app: HTMLElement): void {
     button.setAttribute('aria-pressed', String(pressed));
     return button;
   };
-  // A phone setting: only shown on a touch screen with some way to buzz.
-  const canBuzz = hapticsSupported() && matchMedia('(pointer: coarse)').matches;
   const modeButton = (mode: Mode, label: string, title: string) =>
     toggle(label, settings.mode === mode, () => (updateSettings({ mode }), rerender()), title);
 
@@ -104,23 +100,8 @@ export function renderSelectScreen(app: HTMLElement): void {
       gameSwitch('flat'),
       el('header', { className: 'topbar' }, [
         el('h1', { textContent: 'Picross' }),
-        el('div', { className: 'settings' }, [
-          createMuteButton(),
-          toggle('◐ High contrast', settings.highContrast, () => {
-            updateSettings({ highContrast: !settings.highContrast });
-            applyTheme();
-            rerender();
-          }),
-          ...(canBuzz
-            ? [
-                toggle('📳 Haptics', settings.haptics, () => {
-                  updateSettings({ haptics: !settings.haptics });
-                  haptic('tap'); // turning them on buzzes, so you know they work
-                  rerender();
-                }),
-              ]
-            : []),
-        ]),
+        // Sound, high contrast and haptics are on the settings screen (#154).
+        el('div', { className: 'settings' }, [settingsLink()]),
       ]),
       dailyCard(),
       runBanner(),

@@ -331,6 +331,8 @@ export function createPlay(root: HTMLElement, opts: PlayOptions): Play {
   let done = doneLines();
   const showDone = () => {
     view.done = getPlayPrefs().dimDone ? done : new Set();
+    // How many clues show faded, for the browser tests (the faces are drawn on the canvas).
+    view.canvas.dataset.faded = String(view.done.size);
   };
   showDone();
 

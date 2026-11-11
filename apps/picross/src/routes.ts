@@ -9,7 +9,7 @@
  * (`npm run check:budget` checks). `#/scene/<id>` is both games', and so is `#/daily`, which
  * opens Cubed's daily screen the same way on a Cubed day (#156). `#/badges` is both games' shelf
  * (#157). Free play (#153) is both games' too: `#/free/flat` and `#/free/cubed`, a tab each,
- * and `#/free` the last tab used.
+ * and `#/free` the last tab used. `#/settings` is both games' settings (#154).
  */
 import { getPuzzle } from '@picross/grid/puzzles/index';
 import { getMural } from '@picross/grid/puzzles/murals';
@@ -104,6 +104,11 @@ export const ROUTES: Route[] = [
   route({ match: is('#/run'), render: (app) => renderRunScreen(app) }),
   route({ match: is('#/run/play'), render: (app) => renderRunEncounter(app) }),
   route({ match: is('#/badges'), render: (app) => renderBadgesScreen(app) }),
+  route({
+    match: is('#/settings'),
+    render: (app, _, lazy) =>
+      lazy(import('./ui/screens/settings'), (m) => m.renderSettingsScreen(app)),
+  }),
   route({ match: is('#/how-to-play'), render: (app) => renderHowToPlay(app) }),
   route({ match: is('#/editor'), render: (app) => renderEditorScreen(app) }),
   // Free play (#153): a tab per board. The Cubed tab is Cubed's list, so it's Cubed's route.

@@ -378,4 +378,18 @@ describe('the runner', () => {
     expect(imports(daysSource)).toEqual([]);
     expect(imports(mergingSource)).toEqual([]);
   });
+
+  it("is the only code that reads Cubed's old settings key (#154)", () => {
+    // Every module in the app and the packages, tests aside: which name the key in code?
+    const sources = import.meta.glob<string>(['../**/*.ts', '../../../../packages/*/src/**/*.ts'], {
+      query: '?raw',
+      import: 'default',
+      eager: true,
+    });
+    const readers = Object.entries(sources)
+      .filter(([file]) => !file.endsWith('.test.ts'))
+      .filter(([, source]) => /['"]picross3d:settings['"]/.test(source))
+      .map(([file]) => file);
+    expect(readers).toEqual(['./migrate.ts']);
+  });
 });

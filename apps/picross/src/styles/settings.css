@@ -1,0 +1,163 @@
+/*
+ * The settings screen (#/settings, #154). Both games', so not scoped to a board
+ * (scripts/scopeByBoard.ts); its class names are its own.
+ */
+
+.settings-screen {
+  max-width: 640px;
+}
+
+.settings-group {
+  margin-bottom: 24px;
+}
+
+.settings-group h2 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+
+.settings-rows {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.setting {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  margin: 0;
+  padding: 10px 14px;
+  border: 0;
+  cursor: pointer;
+}
+
+.setting + .setting,
+.setting + .settings-note {
+  border-top: 1px solid var(--line);
+}
+
+div.setting {
+  cursor: default;
+}
+
+.setting-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.setting-label {
+  font-weight: 700;
+}
+
+.setting-hint {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.setting .button {
+  flex: none;
+  min-height: 44px;
+}
+
+/* An on/off switch: a native checkbox (role="switch"), so Space toggles it. */
+.switch {
+  flex: none;
+  position: relative;
+  width: 48px;
+  height: 28px;
+  margin: 0;
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  background: var(--backdrop);
+  appearance: none;
+  cursor: pointer;
+}
+
+.switch::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--muted);
+  box-shadow: 0 1px 2px var(--shadow);
+  transition: transform 0.15s ease;
+}
+
+.switch:checked {
+  border-color: var(--ink);
+  background: var(--ink);
+}
+
+.switch:checked::before {
+  background: var(--bg);
+  transform: translateX(20px);
+}
+
+/* The state in words too, so the knob's place is never the only sign. */
+.switch-state {
+  flex: none;
+  min-width: 2em;
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-align: right;
+}
+
+.mode-setting {
+  display: block;
+  cursor: default;
+}
+
+.mode-setting legend {
+  float: left;
+  width: 100%;
+  padding: 0;
+}
+
+.mode-setting > .setting-hint {
+  clear: both;
+  margin: 2px 0 8px;
+}
+
+.mode-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 8px;
+}
+
+.mode-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.mode-option:has(:checked) {
+  border: 2px solid var(--ink);
+  padding: 9px 11px;
+}
+
+.mode-option input {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 1px 0 0;
+  accent-color: var(--ink);
+}
+
+.settings-note {
+  margin: 0;
+  padding: 12px 14px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
