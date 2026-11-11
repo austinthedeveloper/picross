@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Cleans the approved art candidates in docs/art/incoming into apps/picross/public/art.
+"""Cleans the approved art candidates in docs/art/incoming into packages/shared/public/art.
 
 For each pick: thresholds the alpha, snaps every pixel to the colors its prompt
 allows (which also removes texture, smudges and specks), trims it, and downscales
@@ -21,7 +21,7 @@ from scipy import ndimage
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / "docs/art/incoming"
-OUTPUT = ROOT / "apps/picross/public/art"
+OUTPUT = ROOT / "packages/shared/public/art"
 
 # The palette, from apps/picross/src/styles/tokens.css (light theme).
 GRAPHITE = "#23262f"
