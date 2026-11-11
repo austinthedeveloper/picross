@@ -18,6 +18,7 @@ The paths under `src/` are the ones these files had in both games, so
 | Look     | `src/styles/tokens.css`, `base.css`; `run.css`, `fight.css`, `dig.css`, `dialogue.css`, `art.css`                                |
 | Feel     | `src/ui/sound.ts`, `haptics.ts`, `theme.ts`, `dom.ts`, `motion.ts`; `src/game/prefs.ts` (below)                                  |
 | Plumbing | `src/game/storage.ts`, `src/engine/random.ts`, `src/ui/components/homeLink.ts`, `muteButton.ts`, `gameSwitch.ts`                 |
+| Ids      | `src/puzzles/ids.ts`: `qualify` and `parseId`, puzzle ids with a dimension (below)                                               |
 | Art      | `src/ui/art.ts` (portraits, sprites, gadgets and power glyphs, with emoji stand-ins); `public/art/{cast,enemies,gadgets,icons}/` |
 
 The story's data, loaders, dialogue and scene player moved to `packages/story` (#146).
@@ -64,6 +65,32 @@ haptics on, normal contrast.
 The 2D game also runs the 3D fight screen (from `packages/play-block`) for the Curator's
 block phases. There's one copy of this package in the page, so that screen plays sounds
 with the 2D game's settings.
+
+## Puzzle ids with a dimension: `qualify`, `parseId`
+
+Both packs have a `mug` (and 45 more ids besides). Where the two games meet (one list, one
+save, one daily), an id says which game it's from, with `src/puzzles/ids.ts` (#147):
+
+```ts
+import { parseId, qualify, type Dimension } from '@picross/shared/puzzles/ids';
+qualify('grid', 'mug'); // 'grid:mug': the 2D puzzle
+qualify('block', 'mug'); // 'block:mug': the 3D one
+parseId('block:mug'); // { dimension: 'block', id: 'mug' }
+```
+
+`Dimension` is `'grid' | 'block'`, and `QualifiedId` the `grid:…` or `block:…` string.
+`parseId` throws on a bare id (`mug`): where code reads qualified ids, a missing prefix is the
+bug, so it doesn't guess. Code holding a bare id knows its game and calls `qualify`. It also
+throws on an unknown dimension or an empty id, and both functions refuse an id with a `:` in
+it, so every id round-trips.
+
+Content files don't change: a puzzle file keeps `"id": "mug"`, so the sheets, the SNES import
+and share links keep working, and the prefix is added where a pack meets the other. Saves keep
+bare ids until the save merge (#155). `apps/picross/src/puzzles/ids.test.ts` round-trips every
+id in both packs and lists the ids they share, so a new clash shows up in review. The 3D
+story puzzles share their 2D run puzzles' ids on purpose, and four of them (`anglerfish`,
+`bat`, `octopus`, `rex-skull`) are also in the 3D free-play pack, so `block:bat` alone
+doesn't yet say which.
 
 ## Art: `sharedPublic()`
 
