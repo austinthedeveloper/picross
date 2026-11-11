@@ -1,8 +1,0 @@
-{
-  "id": "after-hours",
-  "title": "After Hours",
-  "order": 2,
-  "blurb": "Word gets around. Mostly to people with haunted things.",
-  "jobs": ["night-shift"],
-  "opening": "after-hours-opening"
-}

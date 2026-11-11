@@ -1,9 +1,0 @@
-{
-  "id": "weathervane-boss",
-  "name": "The Weathervane",
-  "hp": 10,
-  "encounters": ["weathervane"],
-  "bossOf": "summit-station",
-  "requires": "summit-station",
-  "blurb": "Something on the observatory roof is still spinning after the storm. One fight, and the board won't sit still."
-}

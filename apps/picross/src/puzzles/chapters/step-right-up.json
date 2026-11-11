@@ -1,8 +1,0 @@
-{
-  "id": "step-right-up",
-  "title": "Step Right Up",
-  "order": 5,
-  "blurb": "The show must go on. Nobody can remember why.",
-  "jobs": ["midway"],
-  "opening": "step-right-up-opening"
-}

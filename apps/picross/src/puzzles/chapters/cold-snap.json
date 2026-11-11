@@ -1,8 +1,0 @@
-{
-  "id": "cold-snap",
-  "title": "Cold Snap",
-  "order": 6,
-  "blurb": "The air gets thin. The bill does not.",
-  "jobs": ["summit-station"],
-  "opening": "cold-snap-opening"
-}

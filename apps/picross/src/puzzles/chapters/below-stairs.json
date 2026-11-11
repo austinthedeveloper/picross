@@ -1,8 +1,0 @@
-{
-  "id": "below-stairs",
-  "title": "Below Stairs",
-  "order": 8,
-  "blurb": "Tours daily. Gift shop. Do not go past the gift shop.",
-  "jobs": ["undercroft"],
-  "opening": "below-stairs-opening"
-}

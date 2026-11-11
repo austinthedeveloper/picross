@@ -1,8 +1,0 @@
-{
-  "id": "peer-review",
-  "title": "Peer Review",
-  "order": 9,
-  "blurb": "The results are in. Nobody will say whose they are.",
-  "jobs": ["the-annex"],
-  "opening": "peer-review-opening"
-}

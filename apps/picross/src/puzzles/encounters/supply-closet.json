@@ -1,7 +1,0 @@
-{
-  "id": "supply-closet",
-  "name": "Supply Closet",
-  "kind": "dig",
-  "puzzle": "spill-sponge",
-  "blurb": "Labeled SPILLS ONLY. Considering the state of this building, that covers it."
-}

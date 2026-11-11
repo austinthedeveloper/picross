@@ -1,8 +1,0 @@
-{
-  "id": "wound-up",
-  "title": "Wound Up",
-  "order": 10,
-  "blurb": "The jar is ticking.",
-  "jobs": ["closing-time"],
-  "opening": "wound-up-opening"
-}
