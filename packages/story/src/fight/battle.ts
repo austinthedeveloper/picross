@@ -170,6 +170,8 @@ type PhaseOf<E extends FightEnemy> = NonNullable<E['phases']>[number];
 export class StoryBattle<C, M, E extends FightEnemy = FightEnemy> {
   readonly state: FightState<C>;
   protected rng: () => number;
+  /** The blank board, kept: clues, lines and forgeries don't depend on the marks. */
+  private blankBoard: FightBoard<C> | undefined;
 
   constructor(
     readonly enemy: E,
@@ -235,13 +237,18 @@ export class StoryBattle<C, M, E extends FightEnemy = FightEnemy> {
   /** The clue a line shows in this fight. Finishing a line clears fog and scrambles. */
   clueFor(line: number): C | null {
     const { state } = this;
-    const truth = this.board.at().clue(line);
+    const truth = this.blank.clue(line);
     const finished = state.struck.includes(line);
     if (state.fakes.includes(line)) return state.forged[line];
     if (finished) return truth;
     if (state.fog.includes(line)) return null;
     if (state.scramble.includes(line) && truth) return this.board.scrambled(truth);
     return truth;
+  }
+
+  /** The board with nothing on it, for what doesn't depend on the marks (never wiped or revealed). */
+  protected get blank(): FightBoard<C> {
+    return (this.blankBoard ??= this.board.at());
   }
 
   /** The clues hidden now, and `extra` (a pick being tried). */
@@ -264,7 +271,7 @@ export class StoryBattle<C, M, E extends FightEnemy = FightEnemy> {
   /** Lines with a clue, nothing hidden and not finished, in a random order. */
   private candidates(skip: number[] = []): number[] {
     const { state } = this;
-    const board = this.board.at();
+    const board = this.blank;
     const taken = new Set([
       ...state.fog,
       ...state.scramble,
@@ -305,7 +312,7 @@ export class StoryBattle<C, M, E extends FightEnemy = FightEnemy> {
     const pick = pickOf(lines);
     if ('pool' in pick) return this.fromPool(pick, []);
     // Targets are lines with some of the picture in them, so finishing one takes work.
-    const board = this.board.at();
+    const board = this.blank;
     return this.candidates()
       .filter((id) => board.hasShape(id))
       .slice(0, Math.max(1, pick.count));
@@ -335,11 +342,11 @@ export class StoryBattle<C, M, E extends FightEnemy = FightEnemy> {
 
   /** A convincing wrong clue, as the board makes one. */
   private fakeClue(line: number): C {
-    return this.board.at().fakeClue(line, this.rng);
+    return this.blank.fakeClue(line, this.rng);
   }
 
   private setCharge(every: number): void {
-    const warmUp = this.state.charge?.warmUp ?? this.board.at().warmUpLines();
+    const warmUp = this.state.charge?.warmUp ?? this.blank.warmUpLines();
     this.state.charge = { every, meter: 0, live: this.state.charge?.live ?? null, warmUp };
   }
 
