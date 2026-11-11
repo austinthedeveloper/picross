@@ -185,21 +185,27 @@ test('installable, and it plays offline: both boards and a story fight on each',
     await expect(page.locator('.battle')).toBeVisible();
     await expect(page.locator('.cell').first()).toBeVisible();
 
-    await page.evaluate((run) => localStorage.setItem('picross3d:run', JSON.stringify(run)), {
-      current: {
-        runId: 'first-job',
-        node: 0,
-        hp: 12,
-        maxHp: 12,
-        gadgets: [],
-        status: 'active',
-        mode: 'relaxed',
-        tally: { mistakes: 0, hintsUsed: 0, gadgetsUsed: 0 },
+    // Cubed's run lives in the one run save, under `block` (#155). It's seeded before the
+    // page's scripts run: leaving the 2D fight saves that run over anything written now.
+    await page.addInitScript(
+      (block) => {
+        if (location.search !== '?cubed-fight') return;
+        const save = JSON.parse(localStorage.getItem('picross:run') ?? '{}');
+        localStorage.setItem('picross:run', JSON.stringify({ ...save, block }));
       },
-      seenScenes: [],
-      seenTips: [],
-      jobs: {},
-    });
+      {
+        current: {
+          runId: 'first-job',
+          node: 0,
+          hp: 12,
+          maxHp: 12,
+          gadgets: [],
+          status: 'active',
+          mode: 'relaxed',
+          tally: { mistakes: 0, hintsUsed: 0, gadgetsUsed: 0 },
+        },
+      },
+    );
     await page.goto(`${base}/?cubed-fight#/cubed/story/play`);
     await cubed.skipScene(page);
     await expect(page.locator('canvas.block-canvas')).toBeVisible();
