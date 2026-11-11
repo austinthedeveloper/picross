@@ -115,7 +115,7 @@ HTML report (`apps/picross/playwright-report`) when something fails. To debug a 
 | `later-chapters.spec.ts` | Every job from the Glasshouse to Closing Time, each from its chapter opening to its boss                                                              |
 | `deep-end.spec.ts`       | The whole Deep End from the chapter 3 opening to Old Tess                                                                                             |
 | `endless.spec.ts`        | Endless mode: unlocking, healing after a fight, the map moving on, best depth                                                                         |
-| `daily.spec.ts`          | The daily puzzle and its streak across days (fixed clock; solved from the clues on screen)                                                            |
+| `daily.spec.ts`          | The one daily (#156): a Flat day then a Cubed day, one streak over both, and the old `#/cubed/daily` link (fixed clock; Flat solved from the clues)   |
 | `murals.spec.ts`         | A mural filling in tile by tile, the last tile, and the finished picture                                                                              |
 | `debug.spec.ts`          | The debug tools, against a dev build (project `dev`, port 4174)                                                                                       |
 | `editor-zoom.spec.ts`    | Editor uniqueness check and export, pinch zoom                                                                                                        |
