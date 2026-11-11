@@ -30,7 +30,8 @@ import type { BoardKind, FightBoard } from '@picross/story/fight/board';
 import { BLOCK_RULES, GRID_RULES, type FightRules } from '@picross/story/fight/rules';
 import { POWER_TIPS } from '@picross/story/fight/tips';
 import { getGadget } from '@picross/story/puzzles/gadgets';
-import { boardAt, carryHp, turnedPuzzle } from './battle';
+import { boardAt } from '@picross/story/fight/switch';
+import { turnedPuzzle } from './battle';
 
 /**
  * Every power on both boards (#167): each one runs on a small grid and a small block
@@ -660,17 +661,17 @@ const POWERS: Record<string, (side: Side) => void> = {
     expect(moved.phase.board).toBe(other.kind);
     expect(boardAt({ phases }, here.state.phase + 1)).toBe(other.kind);
 
-    // The other board picks the fight up at the same share of HP, with the same phases started.
+    // The other board takes the fight over (#170): the same share of HP, with the same
+    // phases started, the patch kit and the one set of counts.
+    here.state.shield = 1;
+    here.state.counts.mistakes = 2;
     const maxHp = Math.round((20 * other.lines) / GRID_SIDE.lines);
-    const share = here.state.enemyHp / here.state.maxHp;
     const there = other.start(boss, { maxHp });
-    const hp = carryHp(share, maxHp, phases, here.state.phase + 1);
-    if (other.kind === 'block') there.battle.carry(hp, new Uint8Array(BLOCK.solution.length));
-    else {
-      there.state.enemyHp = hp;
-      there.battle.startPhases();
-    }
+    const marks = other.kind === 'block' ? new Uint8Array(BLOCK.solution.length) : undefined;
+    there.battle.enterBoard(here.state, marks as never);
     expect(there.state.phase).toBe(here.state.phase);
+    expect(there.state.shield).toBe(1);
+    expect(there.state.counts.mistakes).toBe(2);
     expect(there.state.enemyHp / maxHp).toBeLessThanOrEqual(0.6);
     expect(there.state.enemyHp / maxHp).toBeGreaterThan(0.3);
     expect(there.battle.current.name).toBe('Moved');

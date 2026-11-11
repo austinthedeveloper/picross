@@ -4,8 +4,10 @@
  * (packages/play-block), run here against this game's run. This module loads on demand,
  * so three.js stays out of the first download.
  *
- * HP and phases carry between the boards as a share of the enemy's HP (the boards scale HP
- * differently); each board keeps its own progress, so going back finds it as you left it.
+ * It's one fight across the boards (#170, `@picross/story/fight/switch`): the block's battle
+ * takes it over from the flat one (`enterBoard`: the same share of HP, the patch kit, the
+ * counts, then the phases), and hands it back the same way (`enterFlat`). Each board keeps
+ * its own progress, so going back finds it as you left it.
  */
 import { Battle, type BattleState as BlockBattle } from '@picross/block/game/battle';
 import { hashString } from '@picross/block/puzzles/hide';
@@ -14,7 +16,8 @@ import { shapePicture } from '@picross/play-block/ui/board/thumbnail';
 import { createPlay, type Play } from '@picross/play-block/ui/screens/play';
 import { fightKind, type FightRun } from '@picross/play-block/ui/screens/story/fight';
 import { providePlayPrefs } from '@picross/play-block/ui/prefs';
-import { advancePhase, boardAt, carryHp, startBattle, type Enemy } from '../../../game/battle';
+import { boardAt } from '@picross/story/fight/switch';
+import { enterFlat, handOver, startBattle, takeCounts, type Enemy } from '../../../game/battle';
 import { damage, removeGadget, withBattle, withBlock } from '../../../game/run';
 import { getCurrentRun, hasSeenTip, markTipSeen, saveCurrentRun } from '../../../game/runSave';
 import { getSettings } from '../../../game/settings';
@@ -78,18 +81,9 @@ export function renderBlockFight(app: HTMLElement, opts: BlockFightOptions): (()
   const battle = new Battle(encounter.enemy, encounter.puzzle, state.mode === 'hearts', saved, {
     seed: hashString(encounter.id),
   });
-  // Coming over from the flat board (rather than reloading mid-block), the block picks up
-  // the flat board's HP share, phases and patch kit.
-  let carry: number | undefined;
-  if (!saved || saved.phase + 1 < started) {
-    carry = carryHp(
-      flat.enemyHp / opts.enemy.hp,
-      battle.state.maxHp,
-      encounter.enemy.phases ?? [],
-      started,
-    );
-    battle.state.shield = flat.shield ?? 0;
-  }
+  // Coming over from the flat board (rather than reloading mid-block), the block takes the
+  // fight over once it's on screen.
+  const enter = !saved || saved.phase + 1 < started ? handOver(opts.enemy, flat) : undefined;
 
   let leaving = false;
   /** Once a phase says the fight is flat again: carries it back and leaves the block. */
@@ -99,20 +93,11 @@ export function renderBlockFight(app: HTMLElement, opts: BlockFightOptions): (()
     play.lock();
     const current = getCurrentRun();
     if (current?.status !== 'active') return;
+    // The flat board takes the fight back, and the phases from the block start there too
+    // (their fog and scrambles land on it), so the run says it's flat before the screen
+    // changes.
     const back = current.battle ?? startBattle(opts.enemy);
-    const enemyHp = carryHp(
-      b.state.enemyHp / b.state.maxHp,
-      opts.enemy.hp,
-      opts.enemy.phases ?? [],
-      b.state.phase + 1,
-    );
-    // The phases from the block start on the flat board too (its fog and scrambles land
-    // there), so the run says it's flat again before the screen changes.
-    const flatNow = advancePhase(
-      opts.enemy,
-      { ...back, enemyHp, shield: b.state.shield },
-      opts.size,
-    ).state;
+    const flatNow = enterFlat(opts.enemy, back, b.state, opts.size).state;
     saveCurrentRun(
       withBattle(withBlock(current, { board: play.game.save(), battle: b.state }), flatNow),
     );
@@ -128,7 +113,7 @@ export function renderBlockFight(app: HTMLElement, opts: BlockFightOptions): (()
     {
       run,
       battle,
-      carry,
+      enter,
       home: '#/run',
       phased: foldBack,
     },
@@ -147,6 +132,13 @@ export function renderBlockFight(app: HTMLElement, opts: BlockFightOptions): (()
       ...kind.hooks,
       solved: () => {
         kind.land?.();
+        // The fight ended here, so its counts are the block's: the run's tally and badges
+        // read them from the flat battle.
+        const current = getCurrentRun();
+        if (current?.status === 'active') {
+          const flatNow = takeCounts(current.battle ?? startBattle(opts.enemy), battle.state);
+          saveCurrentRun(withBattle(current, flatNow));
+        }
         const { note, last } = opts.clear(play.game, kind.note(play.game));
         return [
           el('h2', { textContent: 'Boss down!' }),

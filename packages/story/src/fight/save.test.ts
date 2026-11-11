@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { FIGHT_SAVE, fightBoards, packFight } from './save';
+import { FIGHT_SAVE, fightBoards, packFight, readFight } from './save';
 
 describe('a fight save (#169)', () => {
   it('has an entry for each board with progress, flat first, as given', () => {
@@ -21,10 +21,14 @@ describe('a fight save (#169)', () => {
     );
   });
 
-  it('reads back only a save of this version', () => {
+  it('reads back a save of this version or the last, and nothing else', () => {
     const save = packFight({ block: { battle: { enemyHp: 1 } } });
+    expect(save!.v).toBe(3);
     expect(fightBoards(JSON.parse(JSON.stringify(save)))).toEqual(save!.boards);
-    for (const other of [undefined, null, 7, {}, { v: 1, boards: {} }, { v: 3, boards: {} }]) {
+    // Version 2 (#169) is the same shape; its block counted only its own (#170).
+    const old = { v: 2, boards: { flat: { battle: { enemyHp: 2 } } } };
+    expect(readFight(old)).toEqual(old);
+    for (const other of [undefined, null, 7, {}, { v: 1, boards: {} }, { v: 4, boards: {} }]) {
       expect(fightBoards(other)).toBeUndefined();
     }
   });

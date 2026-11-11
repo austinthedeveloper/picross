@@ -12,13 +12,15 @@ import {
   FALSE_ACCUSATION_HEAL,
   TARGET_DAMAGE,
   ZAP_DAMAGE,
+  type HandOver,
 } from '@picross/story/fight/battle';
-import type { BoardTurn } from '@picross/story/fight/board';
+import type { BoardKind, BoardTurn } from '@picross/story/fight/board';
 import { GRID_RULES } from '@picross/story/fight/rules';
 import type { GadgetEffect } from '@picross/story/puzzles/gadgets';
 import {
   ANY_HEIGHT,
   NO_BOARD,
+  decode,
   encode,
   fightEnemy,
   idOf,
@@ -121,35 +123,11 @@ export interface Phase {
   board?: Board;
 }
 
-/** The two boards a fight can be on. */
-export type Board = 'flat' | 'block';
-
-/** The board a fight is on once `phases` of the enemy's phases have started. */
-export function boardAt(enemy: Pick<Enemy, 'phases'>, phases = 0): Board {
-  let board: Board = 'flat';
-  for (const phase of (enemy.phases ?? []).slice(0, phases)) board = phase.board ?? board;
-  return board;
-}
-
-/** Whether any phase moves the fight onto a block. */
-export const switchesBoard = (enemy: Pick<Enemy, 'phases'>) =>
-  (enemy.phases ?? []).some((p) => p.board === 'block');
-
 /**
- * Enemy HP on a board with `maxHp`, carried from a share of it on the other board, so that
- * exactly `phases` phases have started (the two boards scale HP differently, and rounding
- * mustn't skip or repeat a phase).
+ * The two boards a fight can be on. Which one a fight is on is `boardAt`, and the switch
+ * is the story's (`@picross/story/fight/switch`).
  */
-export function carryHp(
-  share: number,
-  maxHp: number,
-  phases: readonly Pick<Phase, 'at'>[],
-  started: number,
-): number {
-  let hp = Math.ceil(share * maxHp);
-  if (started > 0) hp = Math.min(hp, Math.floor(phases[started - 1].at * maxHp));
-  return Math.max(1, Math.min(maxHp, hp));
-}
+export type Board = BoardKind;
 
 /** How this fight is going (#107). Rolls up into the run's tally when the fight is won. */
 export interface FightCounts {
@@ -262,23 +240,58 @@ export function advancePhase(
   state: BattleState,
   size = 0,
 ): { state: BattleState; entered: Phase[] } {
-  const { state: next, result } = onBattle(
-    enemy,
-    state,
-    { size },
-    (b) => b.startPhases(),
-    (events) => {
-      const order: Plan['order'] & string[] = ['phase'];
-      for (const e of events) {
-        if (e.kind !== 'phase') continue;
-        if (e.phase.fog) order.push('fog');
-        if (e.phase.scramble) order.push('scramble');
-      }
-      return { order, touch: order.slice(1) };
-    },
-  );
+  return phasesOn(enemy, state, size, (b) => b.startPhases());
+}
+
+/** Starts phases (`start`) on the 2D save, writing what they took as the 2D game did. */
+function phasesOn(
+  enemy: Enemy,
+  state: BattleState,
+  size: number,
+  start: (battle: GridBattle) => ReturnType<GridBattle['startPhases']>,
+): { state: BattleState; entered: Phase[] } {
+  const { state: next, result } = onBattle(enemy, state, { size }, start, (events) => {
+    const order: Plan['order'] & string[] = ['phase'];
+    for (const e of events) {
+      if (e.kind !== 'phase') continue;
+      if (e.phase.fog) order.push('fog');
+      if (e.phase.scramble) order.push('scramble');
+    }
+    return { order, touch: order.slice(1) };
+  });
   const entered = result.flatMap((e) => (e.kind === 'phase' ? [enemy.phases![e.index]] : []));
   return { state: next, entered };
+}
+
+/**
+ * The fight's own part of a 2D battle (HP, phases, patch kit, counts), for the block to
+ * take over when a boss switches board (`StoryBattle.enterBoard`, #170).
+ */
+export function handOver(enemy: Pick<Enemy, 'hp'>, state: BattleState): HandOver {
+  const { enemyHp, maxHp, phase, shield, counts } = decode(state, enemy, ANY_HEIGHT);
+  return { enemyHp, maxHp, phase, shield, counts };
+}
+
+/**
+ * Back on the flat board, taking the fight over from the block (`from`, #170): its share of
+ * HP, patch kit and counts, then the phases it reached start here (their fog and scrambles
+ * land on this board). `size` turns phase pools with a turned board, as `advancePhase`.
+ */
+export function enterFlat(
+  enemy: Enemy,
+  state: BattleState,
+  from: HandOver,
+  size = 0,
+): { state: BattleState; entered: Phase[] } {
+  return phasesOn(enemy, state, size, (b) => b.enterBoard(from));
+}
+
+/**
+ * The 2D battle with the fight's counts (`from`'s): a fight that ends on its block has them
+ * there, and the run's tally and badges read them here (#170).
+ */
+export function takeCounts(state: BattleState, from: Pick<HandOver, 'counts'>): BattleState {
+  return onState(state, (b) => void (b.state.counts = { ...from.counts })).state;
 }
 
 /** Lifts a power from newly completed lines. Returns the lines lifted. */
@@ -312,23 +325,6 @@ export function clearInk(
     (b) => b.washLines(ids(lines, height)),
   );
   return { state: next, washed: result };
-}
-
-/**
- * Adds what happened on the fight's block (a boss that switches board) to its counts, so
- * badges and the run's tally see the whole fight. The 3D game counts every mistake where
- * this one counts wrong fills; they mean the same.
- */
-export function withBlockCounts(state: BattleState, block: unknown): BattleState {
-  const more = (block as { counts?: Record<string, number> } | undefined)?.counts;
-  if (!more) return state;
-  const counts = { ...state.counts };
-  const add = (key: keyof FightCounts, n = 0) => (counts[key] = (counts[key] ?? 0) + n);
-  add('wrongFills', more.mistakes);
-  add('zaps', more.zaps);
-  add('wrongAccusations', more.wrongAccusations);
-  add('gadgetsUsed', more.gadgetsUsed);
-  return { ...state, counts };
 }
 
 /** Adds one to a fight's count. */

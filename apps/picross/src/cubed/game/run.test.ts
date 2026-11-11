@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
+import { FIGHT_SAVE } from '@picross/story/fight/save';
 import { addGadget, completeEncounter, damage, heal, removeGadget, startRun } from './run';
 
 describe('runs', () => {
@@ -83,7 +84,7 @@ describe('a fight in the run save (#169)', () => {
     const run = { ...startRun('first-job', 12, 'relaxed'), board, battle };
     saves.saveCurrentRun(run);
     const saved = stored().current;
-    expect(saved.fight).toEqual({ v: 2, boards: { block: { board, battle } } });
+    expect(saved.fight).toEqual({ v: FIGHT_SAVE, boards: { block: { board, battle } } });
     expect(saved).not.toHaveProperty('battle');
     expect(localStorage.getItem('picross3d:run')).toBeNull();
     expect((await load()).getCurrentRun()).toEqual(run);
