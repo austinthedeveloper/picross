@@ -111,8 +111,8 @@ the one path out of the package.
 `src/fight/board.ts` is the interface the story's fights are written against (#163):
 `FightBoard<C>`, a board's lines, clues and the picks that depend on its cells (the live
 line, ink, a swap, a bomb's spot, forgeries, solvability, a turn). The grid implements it
-in `@picross/grid/game/fightBoard` (the block's is #165); each method says why it's there
-and which power uses it.
+in `@picross/grid/game/fightBoard` and the block in `@picross/block/game/fightBoard`; each
+method says why it's there and which power uses it.
 
 `src/fight/fightBoardContract.ts` is one set of tests any `FightBoard` must pass. It isn't
 a `*.test.ts`, so it doesn't run here: each board's tests call

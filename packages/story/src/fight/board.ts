@@ -2,7 +2,7 @@
  * What a fight needs from a board (#163, #164): the one interface the story's fights are
  * written against, so every enemy power works on a flat grid or a block. Each board package
  * implements it over its own puzzle and its board in play: `gridFightBoard` in
- * `@picross/grid/game/fightBoard` (the block's comes with #165).
+ * `@picross/grid/game/fightBoard`, `blockFightBoard` in `@picross/block/game/fightBoard`.
  *
  * A board knows what a line is and what's on it; the fight (HP, phases, the meters, which
  * lines a power gets) stays in the battle. So the board answers questions and makes the
