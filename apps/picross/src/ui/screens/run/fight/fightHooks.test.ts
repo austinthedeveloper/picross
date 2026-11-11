@@ -4,6 +4,8 @@ import { lineKey, type Line, type LineSet } from '@picross/grid/engine/lines';
 import { Game } from '@picross/grid/game/game';
 import { createBoardView, type BoardView } from '@picross/play-grid/ui/board/boardView';
 import type { BoardControls } from '@picross/play-grid/ui/screens/gameScreen';
+import { catalog } from '@picross/story/puzzles/gadgets';
+import { trace } from '../../../../game/fightTrace';
 import { startRun } from '../../../../game/run';
 import { getCurrentRun, saveCurrentRun } from '../../../../game/runSave';
 import { getEncounter } from '../../../../puzzles/runs';
@@ -16,6 +18,8 @@ import { fightHooks } from './index';
  * change to what a fight shows, says, plays or saves shows up as a diff in
  * `__snapshots__/fightHooks.test.ts.snap`. It was recorded on the hooks as they were
  * before the fight rules moved into `game/fight.ts`, to prove the move changed nothing.
+ * And the saved battle after every step must be the one the headless traces play
+ * (`game/fightTrace.ts`, the same script), so those traces are what the screen does.
  *
  * The script: a fixed line order from the solution (fewest filled cells first, rows
  * before columns), each line one stroke that fills its cells and marks the rest. Every
@@ -136,12 +140,13 @@ const cases: Case[] = [
 
 const lineName = (l: Line) => lineKey(l.kind, l.index);
 
-function play(c: Case): string {
+function play(c: Case): { text: string; battles: Map<number, string> } {
   const encounter = getEncounter(c.id);
   if (!encounter?.enemy) throw new Error(`${c.id}: not a fight`);
   saveCurrentRun(startRun('harness', 999, c.relaxed ? 'relaxed' : 'hearts', c.gadgets ?? []));
   log.length = 0;
   const out: string[] = [];
+  const battles = new Map<number, string>();
   let blocked = false;
   const fight = fightHooks(encounter.enemy, encounter.puzzle, () => {
     log.push('onBlock');
@@ -216,9 +221,10 @@ function play(c: Case): string {
 
   let lastBattle: Record<string, unknown> = {};
   let lastKeys = '';
-  const record = (label: string) => {
+  const record = (label: string, step = 0) => {
     vi.runAllTimers();
     const run = getCurrentRun()!;
+    if (step) battles.set(step, JSON.stringify(run.battle));
     // The saved battle as it's written (key order too), as what changed since the last step.
     const battle = JSON.parse(JSON.stringify(run.battle ?? {})) as Record<string, unknown>;
     const parts = [label, ...log.splice(0)];
@@ -318,11 +324,11 @@ function play(c: Case): string {
       );
       button?.click();
     }
-    record(`${step} ${lineName(line)}`);
+    record(`${step} ${lineName(line)}`, step);
   }
   if (!game.solved && !blocked && !endedShown) out.push('stopped: the script never finished');
   out.push(`saved ${JSON.stringify(getCurrentRun())}`);
-  return out.join('\n');
+  return { text: out.join('\n'), battles };
 }
 
 describe('fight hooks in jsdom (#163)', () => {
@@ -343,6 +349,19 @@ describe('fight hooks in jsdom (#163)', () => {
   });
 
   it.each(cases.map((c) => [`${c.id}${c.relaxed ? ' relaxed' : ''}`, c] as const))('%s', (_, c) => {
-    expect(play(c)).toMatchSnapshot();
+    const { text, battles } = play(c);
+    expect(text).toMatchSnapshot();
+    // The headless trace saves the same battle, byte for byte, after every step.
+    const ids = Object.fromEntries(
+      Object.entries(c.use ?? {}).map(([step, name]) => [
+        step,
+        catalog.find((g) => g.name === name)!.id,
+      ]),
+    );
+    const headless = new Map<number, string>();
+    trace(getEncounter(c.id)!, { relaxed: c.relaxed, use: ids }, (step, state) =>
+      headless.set(step, JSON.stringify(state)),
+    );
+    for (const [step, battle] of battles) expect(headless.get(step), `step ${step}`).toBe(battle);
   });
 });
