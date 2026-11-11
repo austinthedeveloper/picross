@@ -11,7 +11,7 @@ import { getSettings } from '../../game/settings';
 import type { Puzzle } from '../../puzzles/format';
 import { puzzles } from '../../puzzles/index';
 import { allPuzzlesLink } from '../components/endPanels';
-import { el } from '../dom';
+import { el } from '@picross/shared/ui/dom';
 import { formatTime, plural } from '../format';
 import type { PlaySession } from './gameScreen';
 

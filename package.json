@@ -15,7 +15,7 @@
     "preview": "npm -w apps/picross run preview --",
     "lint": "eslint . && prettier --check .",
     "format": "prettier --write .",
-    "test": "npm -w apps/picross test && npm -w apps/cubed test",
+    "test": "npm -w packages/shared test && npm -w apps/picross test && npm -w apps/cubed test",
     "test:watch": "npm -w apps/picross run test:watch --",
     "check:puzzles": "npm -w apps/picross run check:puzzles --",
     "script-review": "npm -w apps/picross run script-review --",
@@ -27,7 +27,7 @@
     "test:flat": "npm -w apps/picross test --",
     "test:cubed": "npm -w apps/cubed test --",
     "e2e:cubed": "npm -w apps/cubed run e2e --",
-    "check:cubed": "npm -w apps/cubed run check:shared"
+    "test:shared": "npm -w packages/shared test --"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",
@@ -44,6 +44,7 @@
     "vitest": "^3.2.7"
   },
   "workspaces": [
-    "apps/*"
+    "apps/*",
+    "packages/*"
   ]
 }

@@ -1,5 +1,5 @@
 import type { RunState } from './run';
-import { readStore, writeStore } from './storage';
+import { readStore, writeStore } from '@picross/shared/game/storage';
 
 const KEY = 'picross:run';
 

@@ -1,7 +1,7 @@
 import { solvedIds } from '../../game/progress';
 import { dioramas, tileOf, type Diorama } from '../../puzzles/dioramas';
 import { blockOutline, shapePicture } from '../board/thumbnail';
-import { el } from '../dom';
+import { el } from '@picross/shared/ui/dom';
 
 export const placed = (d: Diorama) => {
   const solved = new Set(solvedIds());

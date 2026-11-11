@@ -25,4 +25,22 @@ export default tseslint.config(
   {
     languageOptions: { globals: { ...globals.browser, ...globals.node } },
   },
+  {
+    // Both games import packages/shared, so it never imports from either of them
+    // (packages/shared/src/imports.test.ts checks the same).
+    files: ['packages/shared/**'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['**/apps/**', 'picross', 'picross-3d', '@picross/*'],
+              message: 'packages/shared imports only its own files (with relative paths).',
+            },
+          ],
+        },
+      ],
+    },
+  },
 );

@@ -2,8 +2,8 @@ import { BROKEN, PAINTED, type Block, type Tool } from '../../game/game';
 import { updateSettings } from '../../game/settings';
 import { isFilled, parsePuzzle } from '../../puzzles/format';
 import { PUZZLES } from '../../puzzles/index';
-import { el } from '../dom';
-import { playSound } from '../sound';
+import { el } from '@picross/shared/ui/dom';
+import { playSound } from '@picross/shared/ui/sound';
 import { createPlay } from './play';
 
 /**

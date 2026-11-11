@@ -1,8 +1,8 @@
 import { absorbHit } from '../../../../game/battle';
 import { damage } from '../../../../game/run';
 import { saveCurrentRun } from '../../../../game/runSave';
-import { el } from '../../../dom';
-import { playSound } from '../../../sound';
+import { el } from '@picross/shared/ui/dom';
+import { playSound } from '@picross/shared/ui/sound';
 import type { EndState } from '../../gameScreen';
 import type { FightContext } from './context';
 

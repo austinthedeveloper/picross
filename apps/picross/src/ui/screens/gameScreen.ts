@@ -11,14 +11,14 @@ import { attachZoom } from '../board/zoom';
 import { createEndPanel, createFailedPanel, solvedPanelContent } from '../components/endPanels';
 import { freePlaySession } from './freePlaySession';
 import { createHintMenu } from '../components/hintMenu';
-import { homeLink } from '../components/homeLink';
-import { createMuteButton } from '../components/muteButton';
+import { homeLink } from '@picross/shared/ui/components/homeLink';
+import { createMuteButton } from '@picross/shared/ui/components/muteButton';
 import { createZoomBar } from '../components/zoomBar';
-import { el } from '../dom';
+import { el } from '@picross/shared/ui/dom';
 import { formatTime, lineName, plural } from '../format';
-import { haptic } from '../haptics';
-import { pause } from '../motion';
-import { playSound } from '../sound';
+import { haptic } from '@picross/shared/ui/haptics';
+import { pause } from '@picross/shared/ui/motion';
+import { playSound } from '@picross/shared/ui/sound';
 
 /**
  * Where a puzzle is being played from. Free play saves to the puzzle list's

@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { updateSettings } from '../game/settings';
+import { updatePrefs } from '../game/prefs';
 import { haptic, hapticsSupported } from './haptics';
 
 // jsdom has neither navigator.vibrate nor the switch checkbox, so each test adds what it needs.
@@ -12,7 +12,7 @@ const addSwitch = () => {
   Object.defineProperty(HTMLInputElement.prototype, 'switch', { value: false, configurable: true });
 };
 
-beforeEach(() => updateSettings({ haptics: true }));
+beforeEach(() => updatePrefs({ haptics: true }));
 
 afterEach(() => {
   Reflect.deleteProperty(navigator, 'vibrate');
@@ -45,7 +45,7 @@ describe('haptic', () => {
   it('stays still when haptics are off', () => {
     const vibrate = addVibrate();
     const click = vi.spyOn(HTMLElement.prototype, 'click');
-    updateSettings({ haptics: false });
+    updatePrefs({ haptics: false });
     haptic('tap');
     haptic('zap');
     expect(vibrate).not.toHaveBeenCalled();

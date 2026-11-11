@@ -8,15 +8,15 @@ import type { Plugin, Rule } from 'postcss';
  *
  * The scope is wrapped in `:where()`, so selectors keep their specificity and the cascade
  * is exactly what it was in each game alone. Styles both games share (tokens, base, the
- * run, fight, dig, dialogue and art styles) aren't scoped.
+ * run, fight, dig, dialogue and art styles, in packages/shared) aren't scoped.
  */
 export const BLOCK = '[data-board="block"]';
 export const FLAT = `:not(${BLOCK})`;
 
 /** Each game's own screen styles, and the board they apply on. */
 const SCOPED: [RegExp, string][] = [
-  [/\/cubed\/src\/styles\/(game|story)\.css$/, BLOCK],
-  [/(?<!\/cubed)\/src\/styles\/(board|game|select|editor|badges)\.css$/, FLAT],
+  [/\/apps\/cubed\/src\/styles\/(game|story)\.css$/, BLOCK],
+  [/\/apps\/picross\/src\/styles\/(board|game|select|editor|badges)\.css$/, FLAT],
 ];
 
 /** One selector, applying only when the root matches `when`. */

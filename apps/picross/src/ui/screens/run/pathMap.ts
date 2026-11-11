@@ -1,10 +1,10 @@
 import { saveCurrentRun } from '../../../game/runSave';
 import type { RunState } from '../../../game/run';
-import { getGadget } from '../../../puzzles/gadgets';
+import { getGadget } from '@picross/shared/puzzles/gadgets';
 import type { RunDef } from '../../../puzzles/runs';
-import { gadgetArt } from '../../art';
-import { homeLink } from '../../components/homeLink';
-import { el } from '../../dom';
+import { gadgetArt } from '@picross/shared/ui/art';
+import { homeLink } from '@picross/shared/ui/components/homeLink';
+import { el } from '@picross/shared/ui/dom';
 import { nodeIcon, nodeLabel, type Hub } from './shared';
 
 function hpBar(state: RunState): HTMLElement {

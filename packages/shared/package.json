@@ -1,0 +1,19 @@
+{
+  "name": "@picross/shared",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Code, styles, story data and art both games use. Plain TypeScript; each app's Vite compiles it.",
+  "exports": {
+    "./vite": {
+      "types": "./vite.d.ts",
+      "default": "./vite.js"
+    },
+    "./styles/*": "./src/styles/*",
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "test": "tsc --noEmit && vitest run",
+    "test:watch": "vitest"
+  }
+}

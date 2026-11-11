@@ -16,11 +16,10 @@
     "test:watch": "vitest",
     "e2e": "playwright test",
     "puzzles": "vite-node scripts/puzzles.ts",
-    "sync:web": "node scripts/sync-web.mjs",
-    "check:shared": "node scripts/sync-web.mjs --check",
     "screenshot": "node scripts/screenshot.mjs"
   },
   "dependencies": {
+    "@picross/shared": "*",
     "three": "0.187.0"
   },
   "devDependencies": {

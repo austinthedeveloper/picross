@@ -1,7 +1,7 @@
 import type { Line, LineSet } from '../../../../engine/lines';
 import { ARMOR_HIT_DAMAGE, ARMOR_HIT_LINES, armorHitsBack } from '../../../../game/battle';
-import { haptic } from '../../../haptics';
-import { playSound } from '../../../sound';
+import { haptic } from '@picross/shared/ui/haptics';
+import { playSound } from '@picross/shared/ui/sound';
 import type { FightContext } from './context';
 import { takeHit } from './hits';
 

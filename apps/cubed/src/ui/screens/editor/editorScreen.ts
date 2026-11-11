@@ -1,5 +1,5 @@
 import { indexOf, type Axis, type Dims } from '../../../engine/volume';
-import { readStore, writeStore } from '../../../game/storage';
+import { readStore, writeStore } from '@picross/shared/game/storage';
 import type { CheckResult } from '../../../puzzles/check';
 import { difficultyOf } from '../../../puzzles/difficulty';
 import {
@@ -14,9 +14,9 @@ import { COLORS, parsePuzzle, type PuzzleFile } from '../../../puzzles/format';
 import { encodeShare } from '../../../puzzles/share';
 import { BlockView } from '../../board/blockView';
 import { attachInput } from '../../board/input';
-import { homeLink } from '../../components/homeLink';
-import { el } from '../../dom';
-import { playSound } from '../../sound';
+import { homeLink } from '@picross/shared/ui/components/homeLink';
+import { el } from '@picross/shared/ui/dom';
+import { playSound } from '@picross/shared/ui/sound';
 
 const KEY = 'picross3d:editor';
 const MAX_UNDO = 100;

@@ -5,7 +5,7 @@ import { currentForm, type Enemy } from './battle';
 import { bestDailyStreak } from './daily';
 import type { RunState } from './run';
 import { getJobStats, type JobStats } from './runSave';
-import { readStore, writeStore } from './storage';
+import { readStore, writeStore } from '@picross/shared/game/storage';
 
 const KEY = 'picross:badges';
 

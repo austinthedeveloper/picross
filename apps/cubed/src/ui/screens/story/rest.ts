@@ -1,6 +1,6 @@
 import { REST_LATE_HEAL, restHeal, type Rest } from '../../../story/data';
-import { iconArt } from '../../art';
-import { el } from '../../dom';
+import { iconArt } from '@picross/shared/ui/art';
+import { el } from '@picross/shared/ui/dom';
 import { formatTime } from '../../format';
 import type { Kind } from './encounter';
 import { took } from './encounter';

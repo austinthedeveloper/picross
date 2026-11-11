@@ -1,4 +1,4 @@
-import { getSettings } from '../game/settings';
+import { getPrefs } from '../game/prefs';
 
 export type Sound =
   | 'fill'
@@ -112,7 +112,7 @@ let ctx: AudioContext | null = null;
  * another sound from the same moment instead of landing on top of it.
  */
 export function playSound(sound: Sound, delay = 0): void {
-  if (getSettings().muted) return;
+  if (getPrefs().muted) return;
   try {
     ctx ??= new AudioContext();
     if (ctx.state === 'suspended') void ctx.resume();

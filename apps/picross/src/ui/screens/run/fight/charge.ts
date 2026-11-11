@@ -2,8 +2,8 @@ import { pickLiveLine } from '../../../../engine/charge';
 import { hasLine, lineKey, unionLines, type Line } from '../../../../engine/lines';
 import { bump, chargeUp, warmUpLines, ZAP_DAMAGE } from '../../../../game/battle';
 import { lineName } from '../../../format';
-import { haptic } from '../../../haptics';
-import { playSound } from '../../../sound';
+import { haptic } from '@picross/shared/ui/haptics';
+import { playSound } from '@picross/shared/ui/sound';
 import type { FightContext } from './context';
 import { takeHit } from './hits';
 

@@ -1,6 +1,6 @@
 import type { Solution } from '../engine/board';
 import { deriveClues, type Clues } from '../engine/clues';
-import { getGadget } from './gadgets';
+import { getGadget } from '@picross/shared/puzzles/gadgets';
 
 /**
  * Puzzle file format. `solution` has one string per row, `#` for a filled

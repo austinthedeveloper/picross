@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { blastSize, pickBlast } from './blast';
 import { Cell, createBoard, revealedCell, type Board, type Solution } from './board';
-import { random } from './random';
+import { random } from '@picross/shared/engine/random';
 
 const solution = (size: number): Solution => ({
   width: size,

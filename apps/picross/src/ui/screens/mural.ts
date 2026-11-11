@@ -16,9 +16,9 @@ import {
 import type { Mural } from '../../puzzles/murals';
 import { murals } from '../../puzzles/murals';
 import { createPicture } from '../board/picture';
-import { homeLink } from '../components/homeLink';
+import { homeLink } from '@picross/shared/ui/components/homeLink';
 import { listSection } from '../components/listSection';
-import { el } from '../dom';
+import { el } from '@picross/shared/ui/dom';
 import { formatTime } from '../format';
 import { renderGameScreen, type PlaySession } from './gameScreen';
 

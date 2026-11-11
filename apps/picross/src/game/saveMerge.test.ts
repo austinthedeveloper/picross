@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { random } from '../engine/random';
+import { random } from '@picross/shared/engine/random';
 import { startRun } from './run';
 import { mergeSaves, SAVE_VERSION, type SaveBundle } from './saveMerge';
 

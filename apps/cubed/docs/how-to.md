@@ -67,9 +67,10 @@ blocks of `src/styles/voxels.css` (light, dark, high contrast).
 
 ## Add a sound or change the base styles
 
-`src/ui/sound.ts`, `src/styles/tokens.css` and `src/styles/base.css` belong to the 2D game.
-Change them there, then `npm run sync:web` (see [Shared files](shared-files.md)). Styles
-only this game needs go in `src/styles/game.css`, `select.css` or `voxels.css`.
+`src/ui/sound.ts`, `src/styles/tokens.css` and `src/styles/base.css` are shared with the 2D
+game, in `packages/shared` at the repo root (see its [README](../../../packages/shared/README.md)):
+a change there is in both games. Styles only this game needs go in `src/styles/game.css`,
+`select.css` or `voxels.css`.
 
 ## See a change
 

@@ -3,7 +3,9 @@ import { catalog } from '../puzzles/gadgets';
 import { enemyArt, portraitArt, withArt } from './art';
 
 const files = new Set(
-  Object.keys(import.meta.glob('/public/art/**/*.png')).map((p) => p.replace('/public/art/', '')),
+  Object.keys(import.meta.glob('../../public/art/**/*.png')).map((p) =>
+    p.replace('../../public/art/', ''),
+  ),
 );
 const encounters = import.meta.glob('../puzzles/encounters/*.json', { eager: true });
 const scenes = import.meta.glob('../puzzles/scenes/*.json', { eager: true });

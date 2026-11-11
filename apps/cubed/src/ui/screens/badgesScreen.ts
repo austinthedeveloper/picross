@@ -1,6 +1,6 @@
 import { BADGES, markBadgesSeen, newBadges, nextStep, tierOf, TIERS } from '../../game/badges';
-import { homeLink } from '../components/homeLink';
-import { el } from '../dom';
+import { homeLink } from '@picross/shared/ui/components/homeLink';
+import { el } from '@picross/shared/ui/dom';
 
 /** Every badge, its tier and what's next (#/badges). Opening it clears the "new" marks. */
 export function renderBadgesScreen(root: HTMLElement): void {

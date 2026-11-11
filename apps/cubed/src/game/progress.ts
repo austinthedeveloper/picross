@@ -1,5 +1,5 @@
 import type { Mode } from './settings';
-import { readStore, writeStore } from './storage';
+import { readStore, writeStore } from '@picross/shared/game/storage';
 
 const KEY = 'picross3d:v1';
 

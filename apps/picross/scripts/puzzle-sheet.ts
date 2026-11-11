@@ -167,8 +167,10 @@ function reservedIds(): Set<string> {
     }
   }
   const ids = new Set<string>();
+  // Run puzzles are the story's, in the shared package.
+  const story = path.join(import.meta.dirname, '../../../packages/shared/src/puzzles');
   for (const dir of ['pack', 'run']) {
-    const full = path.join(root, dir);
+    const full = path.join(dir === 'run' ? story : root, dir);
     for (const f of fs.readdirSync(full)) {
       if (!f.endsWith('.json')) continue;
       const id = JSON.parse(fs.readFileSync(path.join(full, f), 'utf8')).id as string;

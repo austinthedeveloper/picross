@@ -1,5 +1,5 @@
 import type { Clue } from '../engine/clues';
-import { random, shuffled } from '../engine/random';
+import { random, shuffled } from '@picross/shared/engine/random';
 import { EMPTY, FILLED, solve } from '../engine/solver';
 import { indexOf, inside, pointOf, type Line } from '../engine/volume';
 import type { Puzzle } from '../puzzles/format';

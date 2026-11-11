@@ -1,5 +1,5 @@
 import { MAX_HINTS, type HintTarget } from '../../game/game';
-import { el } from '../dom';
+import { el } from '@picross/shared/ui/dom';
 
 export interface HintMenu {
   root: HTMLDetailsElement;

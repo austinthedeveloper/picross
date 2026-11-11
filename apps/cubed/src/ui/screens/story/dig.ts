@@ -1,8 +1,8 @@
 import { PAINTED } from '../../../game/game';
-import { getGadget } from '../../../puzzles/gadgets';
+import { getGadget } from '@picross/shared/puzzles/gadgets';
 import type { Encounter } from '../../../story/data';
-import { gadgetArt, iconArt } from '../../art';
-import { el } from '../../dom';
+import { gadgetArt, iconArt } from '@picross/shared/ui/art';
+import { el } from '@picross/shared/ui/dom';
 import type { Kind } from './encounter';
 import { took } from './encounter';
 

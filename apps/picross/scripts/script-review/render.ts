@@ -1,7 +1,7 @@
 /** Writes the review site: static HTML, with site.js adding the notes on top. */
 import fs from 'node:fs';
 import path from 'node:path';
-import { isItem, type Entry, type Item, type Page, type Section } from './model';
+import { isItem, SHARED, type Entry, type Item, type Page, type Section } from './model';
 import { versionPages, type Version, type VersionPage } from './versions';
 
 const ASSETS = path.join(import.meta.dirname, 'assets');
@@ -333,9 +333,11 @@ export function writeSite(pages: Page[], outDir: string, versions: Version[] = [
   }
   fs.writeFileSync(path.join(outDir, 'index.html'), renderIndex(pages, versions));
   fs.writeFileSync(path.join(outDir, 'notes.html'), renderNotesPage());
-  fs.copyFileSync('src/styles/tokens.css', path.join(outDir, 'tokens.css'));
+  fs.copyFileSync(`${SHARED}/src/styles/tokens.css`, path.join(outDir, 'tokens.css'));
   fs.cpSync(ASSETS, outDir, { recursive: true });
   for (const set of ['cast', 'enemies']) {
-    fs.cpSync(path.join('public/art', set), path.join(outDir, 'art', set), { recursive: true });
+    fs.cpSync(path.join(SHARED, 'public/art', set), path.join(outDir, 'art', set), {
+      recursive: true,
+    });
   }
 }

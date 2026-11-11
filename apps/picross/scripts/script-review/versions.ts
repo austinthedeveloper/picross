@@ -5,7 +5,15 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import prettier from 'prettier';
-import { sceneEntries, sourceFile, isItem, type Entry, type Page, type Section } from './model';
+import {
+  sceneEntries,
+  sourceFile,
+  isItem,
+  SHARED,
+  type Entry,
+  type Page,
+  type Section,
+} from './model';
 import { currentBase, readImport, type Changes } from './transfer';
 
 export interface Version extends Changes {
@@ -217,7 +225,7 @@ export async function planApply(version: Version, pages: Page[], root = '.'): Pr
     // "start" is the default, so the scene files leave it out.
     const { start, ...rest } = scene;
     const data = start === 'start' ? rest : { ...rest, start };
-    const file = `src/puzzles/scenes/${id}.json`;
+    const file = `${SHARED}/src/puzzles/scenes/${id}.json`;
     // Scene files differ in how much they fit on a line. Stay with what this one does.
     outputs.set(file, toJson(data, /\{ "/.test(read(file))));
   }

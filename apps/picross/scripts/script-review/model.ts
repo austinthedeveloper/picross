@@ -5,12 +5,15 @@
  */
 import { badges } from '../../src/puzzles/badges';
 import { chapters } from '../../src/puzzles/chapters';
-import { catalog as gadgets } from '../../src/puzzles/gadgets';
+import { catalog as gadgets } from '@picross/shared/puzzles/gadgets';
 import { ranks } from '../../src/puzzles/ranks';
 import { overtimeRuns, type Encounter, type RunDef } from '../../src/puzzles/runs';
-import { getScene, scenes, type Scene } from '../../src/puzzles/scenes';
+import { getScene, scenes, type Scene } from '@picross/shared/puzzles/scenes';
 import { tutorialSteps } from '../../src/puzzles/tutorial';
 import { POWERS } from '../../src/ui/powers';
+
+/** The shared package (the story, art and tokens), from this app's folder. */
+export const SHARED = '../../packages/shared';
 
 /** Something you can leave a note on. */
 export interface Item {
@@ -383,12 +386,13 @@ export function buildTargets(pages: Page[]): Target[] {
 export function sourceFile(key: string): string {
   const [kind, id] = key.split('/');
   const puzzles = 'src/puzzles';
-  if (kind === 'scene') return `${puzzles}/scenes/${id}.json`;
-  if (kind === 'encounter') return `${puzzles}/encounters/${id}.json`;
-  if (kind === 'job') return `${puzzles}/runs/${id}.json`;
-  if (kind === 'chapter') return `${puzzles}/chapters/${id}.json`;
+  const story = `${SHARED}/src/puzzles`;
+  if (kind === 'scene') return `${story}/scenes/${id}.json`;
+  if (kind === 'encounter') return `${story}/encounters/${id}.json`;
+  if (kind === 'job') return `${story}/runs/${id}.json`;
+  if (kind === 'chapter') return `${story}/chapters/${id}.json`;
   if (kind === 'power') return 'src/ui/powers.ts';
-  if (kind === 'gadget') return `${puzzles}/gadgets.ts`;
+  if (kind === 'gadget') return `${story}/gadgets.ts`;
   if (kind === 'rank') return `${puzzles}/ranks.ts`;
   if (kind === 'badge') return `${puzzles}/badges.ts`;
   if (kind === 'tutorial') return `${puzzles}/tutorial.ts`;

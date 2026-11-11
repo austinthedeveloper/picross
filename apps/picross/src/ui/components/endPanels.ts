@@ -1,7 +1,7 @@
 import type { Puzzle } from '../../puzzles/format';
 import { createPicture } from '../board/picture';
-import { withArt } from '../art';
-import { el } from '../dom';
+import { withArt } from '@picross/shared/ui/art';
+import { el } from '@picross/shared/ui/dom';
 
 export const allPuzzlesLink = () =>
   el('a', { className: 'button ghost', href: '#/', textContent: 'All puzzles' });

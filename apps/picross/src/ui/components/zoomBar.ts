@@ -1,5 +1,5 @@
 import { MAX_ZOOM, MIN_ZOOM, type ZoomControl } from '../board/zoom';
-import { el } from '../dom';
+import { el } from '@picross/shared/ui/dom';
 
 const STEP = 0.5;
 

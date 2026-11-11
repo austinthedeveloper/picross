@@ -3,8 +3,8 @@ import { getCurrentRun, getJobStats, hasSeenScene, saveCurrentRun } from '../../
 import { getSettings, updateSettings, type Mode } from '../../../game/settings';
 import { endlessRun, endlessSetup } from '../../../puzzles/endless';
 import { getRun, runs, type Encounter, type RunDef } from '../../../puzzles/runs';
-import { iconArt } from '../../art';
-import { el } from '../../dom';
+import { iconArt } from '@picross/shared/ui/art';
+import { el } from '@picross/shared/ui/dom';
 
 /** What the run screens share: where to draw, how to redraw, and how to play a scene. */
 export interface Hub {

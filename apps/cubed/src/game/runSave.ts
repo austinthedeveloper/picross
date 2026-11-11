@@ -1,5 +1,5 @@
 import type { RunState } from './run';
-import { readStore, writeStore } from './storage';
+import { readStore, writeStore } from '@picross/shared/game/storage';
 
 // Its own key, apart from the 2D game's story saves.
 const KEY = 'picross3d:run';

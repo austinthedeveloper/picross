@@ -3,8 +3,8 @@ import { badges, jobBadgeFor, type Badge, type BadgeSection } from '../../puzzle
 import { chapters, type Chapter } from '../../puzzles/chapters';
 import { getRun } from '../../puzzles/runs';
 import { badgeIcon, hiddenBadgeIcon, tierTag } from '../components/badge';
-import { homeLink } from '../components/homeLink';
-import { el } from '../dom';
+import { homeLink } from '@picross/shared/ui/components/homeLink';
+import { el } from '@picross/shared/ui/dom';
 import { chapterOpen, unlocked } from './run/jobsBoard';
 
 /** A badge that names a job or enemy stays hidden until its job is open. */

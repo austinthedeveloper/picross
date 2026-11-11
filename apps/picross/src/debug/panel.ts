@@ -9,10 +9,10 @@ import {
 import { getSettings } from '../game/settings';
 import { chapters } from '../puzzles/chapters';
 import { ENDLESS_GADGETS, ENDLESS_HP, ENDLESS_ID } from '../puzzles/endless';
-import { catalog } from '../puzzles/gadgets';
+import { catalog } from '@picross/shared/puzzles/gadgets';
 import { encounters, getRun, runs } from '../puzzles/runs';
-import { scenes } from '../puzzles/scenes';
-import { el } from '../ui/dom';
+import { scenes } from '@picross/shared/puzzles/scenes';
+import { el } from '@picross/shared/ui/dom';
 import { debug } from './hooks';
 import './panel.css';
 

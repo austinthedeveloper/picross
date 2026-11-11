@@ -1,9 +1,8 @@
+import { runPuzzleFiles } from '@picross/shared/puzzles/files/runPuzzles';
 import { parsePuzzle, type Puzzle } from './format';
 
 type JsonModules = Record<string, { default: unknown }>;
 const packFiles: JsonModules = import.meta.glob('./pack/*.json', { eager: true });
-/** Puzzles used only by run encounters; they don't appear on the puzzle list. */
-const runFiles: JsonModules = import.meta.glob('./run/*.json', { eager: true });
 
 /** Free-play pack in play order: the starter set, then one theme at a time. */
 const ORDER = [
@@ -560,7 +559,8 @@ const load = (files: JsonModules) =>
     return puzzle;
   });
 const pack = load(packFiles);
-load(runFiles);
+// Puzzles used only by run encounters; they don't appear on the puzzle list.
+load(runPuzzleFiles);
 
 /**
  * The pack in `ORDER`. The daily puzzle shuffles this list, so its order fixes

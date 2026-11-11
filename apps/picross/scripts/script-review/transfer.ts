@@ -5,8 +5,8 @@
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import { badges } from '../../src/puzzles/badges';
-import { getScene, parseScene, type Scene, type SceneNode } from '../../src/puzzles/scenes';
-import { isItem, type Item, type Page } from './model';
+import { getScene, parseScene, type Scene, type SceneNode } from '@picross/shared/puzzles/scenes';
+import { isItem, SHARED, type Item, type Page } from './model';
 import type { LocatedNote, Tag } from './notes';
 
 export const FORMAT = 'picross-script';
@@ -222,7 +222,7 @@ function parseDocument(raw: string): unknown {
 }
 
 const portraitProblem = (id: string, portrait: string) =>
-  /^[a-z0-9-]+$/.test(portrait) && !fs.existsSync(`public/art/cast/${portrait}.png`)
+  /^[a-z0-9-]+$/.test(portrait) && !fs.existsSync(`${SHARED}/public/art/cast/${portrait}.png`)
     ? `cast member "${id}" uses art "${portrait}", which doesn't exist. Use existing art or an emoji.`
     : undefined;
 

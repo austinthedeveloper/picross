@@ -5,13 +5,17 @@ import path from 'node:path';
 import { solve as lineSolve } from '../src/engine/solver';
 
 const PUZZLES = path.join(import.meta.dirname, '../src/puzzles');
-const read = (file: string) => JSON.parse(fs.readFileSync(path.join(PUZZLES, file), 'utf8'));
+/** The story's data (encounters, run puzzles), in the shared package. */
+const STORY = path.join(import.meta.dirname, '../../../packages/shared/src/puzzles');
+const read = (file: string) => JSON.parse(fs.readFileSync(file, 'utf8'));
 
 /** A puzzle's solution rows (`#` filled), by puzzle id from the pack or run folders. */
 export function solution(puzzleId: string): string[] {
-  for (const dir of ['pack', 'run']) {
-    const file = path.join(PUZZLES, dir, `${puzzleId}.json`);
-    if (fs.existsSync(file)) return read(`${dir}/${puzzleId}.json`).solution;
+  for (const file of [
+    path.join(PUZZLES, 'pack', `${puzzleId}.json`),
+    path.join(STORY, 'run', `${puzzleId}.json`),
+  ]) {
+    if (fs.existsSync(file)) return read(file).solution;
   }
   throw new Error(`No puzzle "${puzzleId}"`);
 }
@@ -41,7 +45,7 @@ export async function solutionFromClues(page: Page): Promise<string[]> {
 
 /** The solution for an encounter's puzzle. */
 export const encounterSolution = (encounterId: string) =>
-  solution(read(`encounters/${encounterId}.json`).puzzle);
+  solution(read(path.join(STORY, 'encounters', `${encounterId}.json`)).puzzle);
 
 /** Saved run data to start a test from (the shape of the `picross:run` key). */
 export interface RunSeed {

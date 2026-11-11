@@ -1,5 +1,6 @@
 import { runs, type RunDef } from './runs';
-import { getScene } from './scenes';
+import { getScene } from '@picross/shared/puzzles/scenes';
+import { chapterFiles } from '@picross/shared/puzzles/files/chapters';
 
 /** A chapter (#23): a named group of jobs, in order, on the jobs board. */
 export interface ChapterFile {
@@ -61,11 +62,9 @@ export function assembleChapters(parsed: Omit<Chapter, 'number'>[], allJobs: Run
   return chapters;
 }
 
-const files = import.meta.glob<{ default: unknown }>('./chapters/*.json', { eager: true });
-
 /** Every chapter, in board order. */
 export const chapters: Chapter[] = assembleChapters(
-  Object.values(files).map((mod) =>
+  Object.values(chapterFiles).map((mod) =>
     parseChapter(mod.default, (id) => runs.find((r) => r.id === id)),
   ),
   runs,

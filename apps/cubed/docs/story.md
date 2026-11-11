@@ -1,12 +1,12 @@
 # Story mode
 
 Rook and Dee's odd jobs from the 2D game, played on blocks. **The 2D game is the source of
-truth for the story**: its scenes, chapters, jobs, encounters, enemies and art are shared
-here verbatim, and this game fits them to blocks.
+truth for the story**: its scenes, chapters, jobs, encounters, enemies and art are in
+`packages/shared`, which both games import, and this game fits them to blocks.
 
 ## What's shared, and what's this game's own
 
-| From the 2D game (shared, don't edit)                                          | This game's own                                              |
+| Shared with the 2D game (`packages/shared`)                                    | This game's own                                              |
 | ------------------------------------------------------------------------------ | ------------------------------------------------------------ |
 | `src/puzzles/{scenes,backdrops,chapters,runs,encounters,run}/*.json`           | `src/puzzles/story/*.json`: a 3D puzzle per encounter puzzle |
 | `src/puzzles/{scenes,backdrops,gadgets}.ts`, `src/game/dialogue.ts`            | `src/story/data.ts`: reads the jobs for blocks               |
@@ -14,7 +14,8 @@ here verbatim, and this game fits them to blocks.
 | `src/ui/screens/sceneScreen.ts`, `src/styles/{run,fight,dig,dialogue,art}.css` | `src/ui/screens/story/*`: board, map, encounters, fights     |
 | `public/art/{cast,enemies,gadgets,icons}/`                                     |                                                              |
 
-`npm run sync:web` copies the shared files (see [Shared files](shared-files.md)).
+The shared files are in `packages/shared` at the repo root, imported by both games (see its
+[README](../../../packages/shared/README.md)).
 
 ## Fitting the story to blocks
 

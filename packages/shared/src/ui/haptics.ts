@@ -1,4 +1,4 @@
-import { getSettings } from '../game/settings';
+import { getPrefs } from '../game/prefs';
 
 /**
  * A light tap when a stroke starts, a firmer one when a line completes, and a
@@ -63,7 +63,7 @@ function tick(): void {
 
 /** Buzzes the phone unless haptics are off. Does nothing where it can't. */
 export function haptic(kind: Haptic): void {
-  if (!getSettings().haptics) return;
+  if (!getPrefs().haptics) return;
   try {
     const how = method();
     if (how === 'vibrate') navigator.vibrate(PATTERNS[kind]);
