@@ -90,8 +90,9 @@ checked in the browser instead.
 One Playwright suite covers both games (`apps/picross/e2e/`, with Cubed's in
 `e2e/cubed/`). It runs the production build (`vite preview`) on a phone-sized touch screen
 with reduced motion, so animations don't slow it down. Its projects: `prod` (the 2D game's
-tests), `cubed` (Cubed's, with service workers blocked), `cubed-perf` (Cubed's timing test,
-alone after the rest) and `dev` (the debug tools, against a dev build):
+tests), `cubed` (Cubed's), `cubed-perf` (Cubed's timing test,
+alone after the rest) and `dev` (the debug tools, against a dev build). Service workers are
+blocked in all of them except `e2e/offline.spec.ts`:
 
 ```bash
 npm run e2e                                  # all of them
@@ -123,6 +124,7 @@ HTML report (`apps/picross/playwright-report`) when something fails. To debug a 
 | `badges.spec.ts`         | Rank and badges: the ladder, rank-ups, and job badges by tier                                                                                         |
 | `switching-boss.spec.ts` | The Curator unfolding into a block and folding back flat                                                                                              |
 | `games.spec.ts`          | The Flat \| Cubed switch, and a 3D puzzle under `#/cubed`                                                                                             |
+| `offline.spec.ts`        | Installable; offline free play on both boards and a story fight in each; a new version waiting off the board; Cubed's old `/3d/` worker retiring      |
 
 `e2e/helpers.ts` has the building blocks:
 
@@ -142,10 +144,11 @@ Local Storage).
 
 Cubed's tests (`e2e/cubed/`) cover free play, the tutorial, the editor, the daily and
 badges, the story (`story.spec.ts`, `fights.spec.ts`, `chapters.spec.ts`; see
-[cubed/story.md](cubed/story.md)), its old `/3d/` links (`old-links.spec.ts`: each kind
-lands on the same screen under `#/cubed`), and its old offline worker retiring
-(`offline.spec.ts`, against a small server of its own, since Playwright can't route a
-worker's script; the offline test itself comes back with #160). Its timing test
+[cubed/story.md](cubed/story.md)) and its old `/3d/` links (`old-links.spec.ts`: each kind
+lands on the same screen under `#/cubed`). `e2e/offline.spec.ts` runs against a small
+server of its own, since Playwright can't route a worker's script and its offline mode may
+not reach a worker's requests: the server can stop answering, serve the old Cubed at
+`/3d/`, or serve a changed `sw.js` (a new version). Its timing test
 (`perf.spec.ts`) runs alone after the others, so they don't share its CPU; to run just it,
 `npm run e2e -- --project cubed-perf --no-deps`. The block helpers both games' tests use
 are in `packages/play-block/e2e/helpers.ts`.
@@ -203,6 +206,12 @@ There are two sites, one per environment:
 | [GitHub Pages](https://austinthedeveloper.github.io/picross/) | **Dev**        | Every push to `main` | `npm run build:dev` | Yes         |
 | [Azure](https://picross.z13.web.core.windows.net/)            | **Production** | Release tags         | `npm run build`     | None        |
 
+Both sites get the offline worker (`sw.js`) and `manifest.webmanifest`, so the game can be
+installed from either and the update bar tried on the dev site first (see
+[Offline and updates](architecture.md#offline-and-updates)). `npm run dev` has no worker. To
+start a browser afresh, unregister the worker and clear the site's storage in devtools
+(Application → Storage → Clear site data).
+
 Azure is covered below. The dev site is public, so anyone with its URL gets the tools.
 That's fine for now, because nothing links to it and nothing it does can affect production. Vite builds with `base: './'`, so the same build works under GitHub Pages'
 `/picross/` path and at the Azure site's root.
@@ -237,13 +246,13 @@ the way out can't land on the new run.
 Releases deploy to an Azure Storage static website:
 **https://picross.z13.web.core.windows.net/**
 
-| Piece          | Where                                                                                                                              |
-| -------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| Resource group | `picross` (eastus)                                                                                                                 |
-| Storage        | Account `picross`, static website on, `index.html` as index and 404 page                                                           |
-| Upload script  | `scripts/deploy-azure.sh`: hashed `assets/` cached a year, then everything else `no-cache` (`index.html`, `art/`, `icons/`, `3d/`) |
-| Pipeline       | `.github/workflows/deploy-azure.yml`                                                                                               |
-| Identity       | App registration `picross-github-deploy`, signed in through GitHub OIDC                                                            |
+| Piece          | Where                                                                                                                                                               |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Resource group | `picross` (eastus)                                                                                                                                                  |
+| Storage        | Account `picross`, static website on, `index.html` as index and 404 page                                                                                            |
+| Upload script  | `scripts/deploy-azure.sh`: hashed `assets/` cached a year, then everything else `no-cache` (`index.html`, `sw.js`, `manifest.webmanifest`, `art/`, `icons/`, `3d/`) |
+| Pipeline       | `.github/workflows/deploy-azure.yml`                                                                                                                                |
+| Identity       | App registration `picross-github-deploy`, signed in through GitHub OIDC                                                                                             |
 
 **To release:** create a GitHub release with a new `v*` tag, for example
 `gh release create v0.2.0 --generate-notes`. Publishing it runs **Deploy to Azure**,

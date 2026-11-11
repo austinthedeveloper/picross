@@ -77,15 +77,21 @@ came from. Tests sit next to the code they cover as `*.test.ts`.
 ```
 apps/
   picross/                 The app: both games (workspace `picross`)
-    index.html             Page shell; loads src/main.ts
+    index.html             Page shell; loads src/main.ts (its <title> and manifest link come from scripts/pwaPlugin.js)
     .env.development       VITE_DEBUG=1 for dev builds (the debug panel)
     public/
       favicon.svg
-      icons/               Cubed's app icons (cubed.svg and the PNGs made from it), for #160
+      icons/               The app icons in manifest.webmanifest (cubed.svg and the PNGs made from it)
       3d/                  Cubed's old address: index.html sends /3d/#/… to #/cubed/…, sw.js retires its old worker
     src/
       main.ts              Entry point: imports styles, applies theme, provides prefs, the hash router
+      name.ts              GAME_NAME: the page title and the installed app's name
       routes.ts            The route table: which screen each hash opens (#/cubed/… is one entry)
+      offline/             Offline play and updates (#160; see "Offline and updates")
+        worker.ts          The service worker, bundled into sw.js by the build
+        plan.ts            Its decisions: how each request is answered, caches, what an update keeps
+        updates.ts         Registers it; "A new version is ready", off a board (register.ts starts it)
+        boards.ts          isBoardRoute: the routes with a board, in both games
       ui/lifecycle.ts      onHide: Cubed's screens save when the page is hidden
       debug/panel.ts       Dev-only tools (#65), and panel.css; never in production builds (hooks are in grid)
       puzzles/             Content and its validation (the pack is in packages/grid)
@@ -167,6 +173,8 @@ apps/
       puzzle-sheet.ts      Check, repair and export puzzle sheets (batches of drawings; see docs/how-to.md)
       rate-puzzles.ts      Writes packages/grid/src/puzzles/ratings.json (npm run rate:puzzles)
       scopeByBoard.ts      PostCSS step: each game's screen styles apply only on its board
+      pwa.ts               The web app manifest and the worker's precache list (pwaPlugin.js writes them)
+      pwaPlugin.js         Vite plugin: the title, manifest.webmanifest and sw.js in each build
       script-review.ts     Build the script review site, serve it, and report notes (see docs/how-to.md)
       script-review/       Its page model, renderer, notes store, server, and browser assets
       screenshot.mjs       Screenshots a page of the running dev server
@@ -515,6 +523,52 @@ when it was the game played last (the Flat | Cubed switch remembers). Cubed used
 own app at `/3d/`: `public/3d/index.html` sends each old link to the same screen here
 (`/3d/#/play/mug` to `#/cubed/play/mug`; scenes to `#/scene/<id>`), and `public/3d/sw.js`
 replaces its old service worker with one that deletes the old cache and unregisters.
+
+## Offline and updates
+
+The game installs as an app and plays offline (#160). A build (`npm run build`, and
+`build:dev` for GitHub Pages) writes two files at the site's root, from
+`scripts/pwaPlugin.js` (its decisions are in `scripts/pwa.ts`, with tests):
+
+- **`manifest.webmanifest`:** the name (`GAME_NAME` in `src/name.ts`, which is also the
+  page's `<title>`), the icons in `public/icons/` (192 and 512 px, and a maskable 512),
+  `start_url` and `scope` `./`, standalone, in the page color (`--bg` from tokens.css).
+- **`sw.js`:** `src/offline/worker.ts`, bundled with the build's file lists and a version
+  (a hash of the files, so an unchanged build is an unchanged worker).
+
+**What's cached.** Installing precaches the app shell: `index.html`, the entry chunk with its
+static imports and CSS (the 2D game, its pack and the story), Cubed's routes chunk with its
+static imports (its list and pack), and every file outside `assets/` (the art, the icons,
+`3d/index.html`), about 1.9 MB. The lazy chunks the entry loads that bring three.js aren't,
+and nor is anything only they load (play-block's screens, the block fight): the first block
+the player opens caches three.js and all of them, so after one block every block screen
+opens offline. Each version has its own cache (`picross-app-<version>`), and when a new
+version installs it carries the lazy files over, copying the unchanged ones and downloading
+the changed. Taking over deletes the old caches.
+
+**How requests are answered** (`strategy` in `plan.ts`): a page load goes to the network
+first and opens the cached `index.html` when that fails or takes over 3 seconds (the app
+routes on the hash, so one page is all of it; `/3d/` opens its cached redirect page the same
+way). Precached files come from the cache, other files under `assets/` from the cache once
+used, and anything else (Google Fonts, the workers themselves, `.vite/`) as if there were no
+worker. The worker's scope is the site's root, which also covers `/3d/`: a player who still
+has Cubed's old worker there has a registration with the narrower scope, which keeps
+`/3d/` until the kill switch at `/3d/sw.js` unregisters it.
+
+**Updates.** A new version installs in the background and waits (no `skipWaiting` on
+install). `src/offline/updates.ts` watches for it, and when the player isn't at a board
+(`isBoardRoute` in `boards.ts`: a puzzle, a fight, the daily, a mural tile or an editor, in
+either game) shows "A new version is ready · Reload". Reload posts `SKIP_WAITING`; the new
+worker takes over, and the page reloads on `controllerchange`. At a board the bar stays away
+and comes back when they leave, so the game never reloads mid-fight; if another tab hands
+over first, this one reloads too, again only off a board. The page asks for an update
+whenever it comes back to the front, for an installed game left open for days.
+
+**Where it registers.** `src/offline/register.ts` (one import in `main.ts`) registers
+`./sw.js` once the page has loaded, in any build (the plugin sets `import.meta.env.VITE_SW`)
+and never under `npm run dev`. GitHub Pages, the dev site, gets the worker too, so offline
+play and updates can be tried there before a release. Browser tests block service workers,
+except `e2e/offline.spec.ts`.
 
 ## Board rendering
 
