@@ -1,18 +1,18 @@
-import { blastSize, pickBlast, type Blast } from '@picross/grid/engine/blast';
+import type { Blast } from '@picross/grid/engine/blast';
 import type { Board } from '@picross/grid/engine/board';
-import { pickLiveLine } from '@picross/grid/engine/charge';
-import { pickInk } from '@picross/grid/engine/ink';
 import {
   hasLine,
   keyToLine,
   lineCount,
   lineKey,
+  lineKeys,
   noLines,
   unionLines,
   type Line,
   type LineSet,
 } from '@picross/grid/engine/lines';
-import { pickSwap, type Swap } from '@picross/grid/engine/swap';
+import type { Swap } from '@picross/grid/engine/swap';
+import { blastOf, gridFightBoard, lineAt, lineId, swapOf } from '@picross/grid/game/fightBoard';
 import type { Puzzle } from '@picross/grid/puzzles/format';
 import type { GadgetEffect } from '@picross/story/puzzles/gadgets';
 import {
@@ -37,7 +37,6 @@ import {
   turnDue,
   turnUp,
   useGadget,
-  warmUpLines,
   ZAP_DAMAGE,
   type BattleState,
   type Enemy,
@@ -55,6 +54,10 @@ import {
  * Some effects wait (`Later`): a swap or a turn until the stroke ends, ink, zaps and the
  * armor's hits until the redraw is over. The step says when one is due, and the hooks
  * run it at that moment by calling `gridStep` again with the matching input.
+ *
+ * The picks that depend on the board (the live line, a swap, ink, a bomb's spot, the
+ * warm-up and a turn) go through the grid's `FightBoard` (`gridFightBoard`, #164), the
+ * interface the story's fights are written against.
  */
 
 /** What started a hit on you: a hit lands on your run HP unless a patch kit blocks it. */
@@ -200,6 +203,15 @@ export interface FightStep {
 
 const count = (set?: LineSet) => (set ? lineCount(set) : 0);
 
+/** Line ids on `puzzle`'s board, from line keys ("r3", "c0"). */
+const idsOf = (puzzle: Puzzle, keys: readonly string[]) =>
+  new Set(keys.map((key) => lineId(puzzle.height, keyToLine(key))));
+
+/** The grid's picks never draw (only a bomb's, which has its own `rand`). */
+function noDraw(): number {
+  throw new Error("A grid's fight picks are deterministic");
+}
+
 /**
  * Starts any phases the enemy's HP has fallen into (#42), with what each one queues.
  * Returns `state` itself when none start.
@@ -258,9 +270,10 @@ function aim(
     return start;
   }
   let state = start;
+  const fight = gridFightBoard(puzzle, { board });
   // The first time the charge shows (fight start, or a phase that brings it), it warms up.
   if (state.warmUp === undefined && !state.live) {
-    state = { ...state, warmUp: warmUpLines(board.width, board.height) };
+    state = { ...state, warmUp: fight.warmUpLines() };
   }
   if (state.warmUp) {
     events.push({ ...none, limit, warmUp: state.warmUp });
@@ -272,7 +285,13 @@ function aim(
     live &&
     !hasLine(avoid, live.kind, live.index) &&
     !state.struck.includes(lineKey(live.kind, live.index));
-  const next = stays ? live : pickLiveLine(board, puzzle.solution, state.struck, avoid);
+  let next = live ?? null;
+  if (!stays) {
+    // Not a struck line, nor one you can't read.
+    const skip = new Set([...idsOf(puzzle, state.struck), ...idsOf(puzzle, lineKeys(avoid))]);
+    const id = fight.pickLive(skip, noDraw);
+    next = id === null ? null : lineAt(puzzle.height, id);
+  }
   const charged = state.charged ?? 0;
   if (!stays) state = { ...state, live: next ?? undefined };
   events.push({ ...none, limit, charged, live: next, fresh: stays ? null : next });
@@ -451,24 +470,24 @@ export function gridStep(
     }
     case 'turn': {
       if (!turnDue(state, currentForm(enemy, state).rotate)) return { state, events: [] };
-      const next = turnBattle(state, puzzle.width);
+      const next = turnBattle(state, puzzle.width, gridFightBoard(puzzle).turn() ?? undefined);
       return { state: next, events: [{ kind: 'turned', turns: next.turns ?? 0 }] };
     }
     case 'swap': {
-      const swap = pickSwap(input.board, puzzle.solution);
-      if (!swap) return { state, events: [] };
+      const fight = gridFightBoard(puzzle, { board: input.board });
+      const pick = fight.pickSwap(idsOf(puzzle, state.struck));
+      if (!pick) return { state, events: [] };
+      const swap = swapOf(puzzle.height, pick);
       // Saved before the board is wiped, so lines it re-opens don't count as new.
       const next = markWiped(state, swap.kind, swap.lines);
       return { state: next, events: [{ kind: 'swapped', swap, wiped: next.wiped! }] };
     }
     case 'ink': {
-      const done = {
-        rows: state.struck.filter((k) => k[0] === 'r').map((k) => Number(k.slice(1))),
-        cols: state.struck.filter((k) => k[0] === 'c').map((k) => Number(k.slice(1))),
-      };
+      const fight = gridFightBoard(puzzle, { board: input.board });
+      const done = idsOf(puzzle, state.struck);
       let ink = state.ink ?? [];
       for (let n = 0; n < (input.count ?? 1); n++) {
-        ink = [...ink, ...pickInk(input.board, input.size, ink, done)];
+        ink = [...ink, ...fight.pickInk(input.size, new Set(ink), done, noDraw)];
       }
       const added = ink.length - (state.ink?.length ?? 0);
       if (!added) return { state, events: [] };
@@ -484,9 +503,10 @@ export function gridStep(
       if (!input.hitsOn) return { state, events: [{ kind: 'fizzled', cause: 'armor' }] };
       return hit(state, 'armor', ARMOR_HIT_DAMAGE);
     case 'blast': {
-      const size = blastSize(puzzle.width, puzzle.height);
-      const blast = pickBlast(input.board, puzzle.solution, size, input.rand);
-      if (!blast) return { state, events: [] };
+      const fight = gridFightBoard(puzzle, { board: input.board });
+      const cells = fight.blast(idsOf(puzzle, state.struck), input.rand ?? Math.random);
+      if (!cells.length) return { state, events: [] };
+      const blast: Blast = blastOf(puzzle.width, cells);
       // The blast washes the ink out of the cells it hits (#115).
       const { state: next, washed } = blastInk(state, blast.cells);
       return { state: next, events: [{ kind: 'blasted', blast, washed }] };

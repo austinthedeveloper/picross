@@ -7,12 +7,14 @@ import {
   lineKey,
   lineKeys,
   linesRemoved,
+  noLines,
   removeLine,
   type Line,
   type LineSet,
 } from '@picross/grid/engine/lines';
 import { washInk } from '@picross/grid/engine/ink';
-import { transformGrid, turnIndex, turnLine, turnLines } from '@picross/grid/engine/transform';
+import { transformGrid, turnLines } from '@picross/grid/engine/transform';
+import { gridTurn, lineAt, lineId } from '@picross/grid/game/fightBoard';
 import type { Puzzle } from '@picross/grid/puzzles/format';
 import type { GadgetEffect } from '@picross/story/puzzles/gadgets';
 
@@ -459,16 +461,11 @@ export function heal(state: BattleState, maxHp: number): { state: BattleState; h
 /** HP a zap costs (#67). Fixed, so a charge stays pressure rather than a run-ender. */
 export const ZAP_DAMAGE = 2;
 
-/** Share of a board's lines you finish before a charge first goes live. */
-export const WARM_UP_SHARE = 0.25;
-
 /**
- * How many lines the charge waits for before it first goes live: a quarter of the
- * board, so the opening is yours and the first live line is one you've started on.
+ * How many lines the charge waits for before it first goes live: a quarter of the board
+ * (`WARM_UP_SHARE`). The grid's `FightBoard` owns it now (#164).
  */
-export function warmUpLines(width: number, height: number): number {
-  return Math.max(1, Math.round((width + height) * WARM_UP_SHARE));
-}
+export { WARM_UP_SHARE, warmUpLines } from '@picross/grid/game/fightBoard';
 
 /**
  * Lines you've just finished move the charge meter (#67). During the warm-up they
@@ -518,23 +515,34 @@ export const turnDue = (state: BattleState, limit: number | undefined) =>
  * marks and every cell it covers moves with the board, so fog, scrambles, weak
  * points, forgeries, wipes, ink, the live line and struck lines stay on the same
  * stretch of picture. The charge and armor counts don't change; the count to the
- * next turn starts over.
+ * next turn starts over. `turn` is how the board moves its lines and cells: the grid's
+ * `FightBoard` turn (#164), for an n×n board.
  */
-export function turnBattle(state: BattleState, n: number): BattleState {
+export function turnBattle(state: BattleState, n: number, turn = gridTurn(n)): BattleState {
+  const move = (line: Line) => lineAt(n, turn.line(lineId(n, line)));
+  // Line by line, rows first, as `turnLines` does (so a set keeps its order and any repeat).
+  const moveSet = (set: LineSet) => {
+    const turned = noLines();
+    for (const key of lineKeys(set)) {
+      const { kind, index } = move(keyToLine(key));
+      (kind === 'row' ? turned.rows : turned.cols).push(index);
+    }
+    return turned;
+  };
   const next: BattleState = {
     ...state,
     struck: state.struck.map((key) => {
-      const { kind, index } = turnLine(keyToLine(key), n);
+      const { kind, index } = move(keyToLine(key));
       return lineKey(kind, index);
     }),
     turns: ((state.turns ?? 0) + 1) % 4,
     turning: 0,
   };
   for (const key of ['fog', 'scramble', 'armor', 'fakes', 'suspects', 'wiped'] as const) {
-    if (state[key]) next[key] = turnLines(state[key], n);
+    if (state[key]) next[key] = moveSet(state[key]);
   }
-  if (state.ink) next.ink = state.ink.map((i) => turnIndex(i, n));
-  if (state.live) next.live = turnLine(state.live, n);
+  if (state.ink) next.ink = state.ink.map((i) => turn.cell(i));
+  if (state.live) next.live = move(state.live);
   return next;
 }
 
