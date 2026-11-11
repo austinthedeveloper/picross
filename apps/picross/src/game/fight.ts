@@ -1,63 +1,30 @@
-import type { Blast } from '@picross/grid/engine/blast';
 import type { Board } from '@picross/grid/engine/board';
-import {
-  hasLine,
-  keyToLine,
-  lineCount,
-  lineKey,
-  lineKeys,
-  noLines,
-  unionLines,
-  type Line,
-  type LineSet,
-} from '@picross/grid/engine/lines';
-import type { Swap } from '@picross/grid/engine/swap';
-import { blastOf, gridFightBoard, lineAt, lineId, swapOf } from '@picross/grid/game/fightBoard';
+import { noLines, type Line, type LineSet } from '@picross/grid/engine/lines';
+import { blastOf, lineAt, lineId, swapOf } from '@picross/grid/game/fightBoard';
 import type { Puzzle } from '@picross/grid/puzzles/format';
+import type { GridEvent } from '@picross/story/fight/battle';
 import type { GadgetEffect } from '@picross/story/puzzles/gadgets';
-import {
-  absorbHit,
-  advancePhase,
-  ARMOR_HIT_DAMAGE,
-  armorHitsBack,
-  blastInk,
-  bump,
-  callOut,
-  chargeUp,
-  chip,
-  clearFog,
-  clearInk,
-  clearScramble,
-  clearSuspects,
-  clearWiped,
-  currentForm,
-  heal,
-  markWiped,
-  turnBattle,
-  turnDue,
-  turnUp,
-  useGadget,
-  ZAP_DAMAGE,
-  type BattleState,
-  type Enemy,
-  type Phase,
-} from './battle';
+import type { Blast } from '@picross/grid/engine/blast';
+import type { Swap } from '@picross/grid/engine/swap';
+import type { BattleState, Enemy, Phase } from './battle';
+import { onBattle, type GridBattle, type Plan } from './battleCodec';
 
 /**
  * A 2D fight's rules in one step, with no DOM, sound or timers (#163). The fight screen's
  * hooks (`ui/screens/run/fight/`) tell `gridStep` what just happened on the board, save
  * the state it returns, and show its events in order: they keep only the rendering,
- * sound, haptics and timing. The pieces are the helpers in `battle.ts`; this puts them
- * in the order a fight runs them, which on a grid is: lift what the lines clear, chip,
- * start phases, the armor's meter, the turn's, then the charge's.
+ * sound, haptics and timing.
+ *
+ * The rules are the story's one battle (`StoryBattle`, #166) with `GRID_RULES`, over the
+ * grid's `FightBoard` (`gridFightBoard`, #164): each step decodes the saved battle, plays
+ * it, and encodes it back in the 2D save's own shape (`battleCodec.ts`). What's left here
+ * is the screen's side: the events in the order it shows them, with what it needs to show
+ * them (rows and columns, the sets as they stand). On a grid a fight runs: lift what the
+ * lines clear, chip, start phases, the armor's meter, the turn's, then the charge's.
  *
  * Some effects wait (`Later`): a swap or a turn until the stroke ends, ink, zaps and the
  * armor's hits until the redraw is over. The step says when one is due, and the hooks
  * run it at that moment by calling `gridStep` again with the matching input.
- *
- * The picks that depend on the board (the live line, a swap, ink, a bomb's spot, the
- * warm-up and a turn) go through the grid's `FightBoard` (`gridFightBoard`, #164), the
- * interface the story's fights are written against.
  */
 
 /** What started a hit on you: a hit lands on your run HP unless a patch kit blocks it. */
@@ -201,111 +168,125 @@ export interface FightStep {
   events: FightEvent[];
 }
 
-const count = (set?: LineSet) => (set ? lineCount(set) : 0);
-
-/** Line ids on `puzzle`'s board, from line keys ("r3", "c0"). */
-const idsOf = (puzzle: Puzzle, keys: readonly string[]) =>
-  new Set(keys.map((key) => lineId(puzzle.height, keyToLine(key))));
-
-/** The grid's picks never draw (only a bomb's, which has its own `rand`). */
-function noDraw(): number {
-  throw new Error("A grid's fight picks are deterministic");
-}
+type StoryEvent = GridEvent;
+type Key = NonNullable<Plan['order']>[number];
+type Of<K extends StoryEvent['kind']> = Extract<StoryEvent, { kind: K }>;
+const find = <K extends StoryEvent['kind']>(events: StoryEvent[], kind: K) =>
+  events.find((e): e is Of<K> => e.kind === kind);
+const all = <K extends StoryEvent['kind']>(events: StoryEvent[], kind: K) =>
+  events.filter((e): e is Of<K> => e.kind === kind);
 
 /**
- * Starts any phases the enemy's HP has fallen into (#42), with what each one queues.
- * Returns `state` itself when none start.
+ * The fields a step that may start phases writes, in the order the 2D game wrote them: the
+ * phase count, then each phase's fog and scrambles (written even if their pools were all
+ * taken).
  */
-function startPhases(
+function phaseKeys(enemy: Enemy, events: StoryEvent[]): Plan {
+  const keys: Key[] = ['phase'];
+  for (const e of all(events, 'phase')) {
+    const phase = enemy.phases![e.index];
+    if (phase.fog) keys.push('fog');
+    if (phase.scramble) keys.push('scramble');
+  }
+  return { order: keys, touch: keys.slice(1) };
+}
+
+/** Plans one after the other: `a`'s fields first. */
+const then = (a: Plan, b: Plan): Plan => ({
+  order: [...(a.order ?? []), ...(b.order ?? [])],
+  touch: [...(a.touch ?? []), ...(b.touch ?? [])],
+});
+
+/**
+ * The phases a step started (#42), as one event with what each one queues: the charge
+ * aims and the turn's count shows after every phase, then its swaps and ink.
+ */
+function phaseEvents(
+  enemy: Enemy,
+  battle: GridBattle,
+  story: StoryEvent[],
+  before: string,
+  next: BattleState,
+): FightEvent[] {
+  const started = all(story, 'phase');
+  if (!started.length) return [];
+  const entered: Phase[] = started.map((e) => enemy.phases![e.index]);
+  const { name, sprite } = battle.current;
+  const swaps = all(story, 'due').filter((e) => e.power === 'swap').length;
+  // Ink lands after the new state is saved, so it isn't lost to the save.
+  const splashes = all(story, 'due').flatMap((e) =>
+    e.power === 'ink' ? [{ size: e.size, count: e.count }] : [],
+  );
+  return [
+    {
+      kind: 'phase',
+      phase: next.phase ?? 0,
+      entered,
+      before,
+      name,
+      sprite,
+      taunt: entered
+        .map((p) => p.taunt)
+        .filter(Boolean)
+        .join(' '),
+      fog: next.fog,
+      scramble: next.scramble,
+      fogged: started.reduce((n, e) => n + (e.fogged?.length ?? 0), 0),
+      scrambled: started.reduce((n, e) => n + (e.scrambled?.length ?? 0), 0),
+    },
+    { kind: 'later', do: 'aim' },
+    { kind: 'later', do: 'sync-turn' },
+    ...(swaps ? [{ kind: 'later', do: 'swap', count: swaps } as const] : []),
+    ...(splashes.length ? [{ kind: 'later', do: 'ink', splashes } as const] : []),
+  ];
+}
+
+/** The charge meter as the battle aimed it, for the screen. */
+function chargeEvent(height: number, e: Of<'charge'>, warming: boolean): ChargeEvent {
+  const live = e.live === null ? null : lineAt(height, e.live);
+  return {
+    kind: 'charge',
+    limit: e.every,
+    warmUp: e.warmUp,
+    charged: e.meter,
+    live,
+    fresh: e.picked ? live : null,
+    warming,
+  };
+}
+
+/** Hits on you, as the battle landed them. */
+const hits = (story: StoryEvent[]): HitEvent[] =>
+  story.filter((e): e is HitEvent => e.kind === 'hit' || e.kind === 'blocked');
+
+/** A step on the battle: what it played, the battle after, and the save it encodes to. */
+function play<R>(
   enemy: Enemy,
   puzzle: Puzzle,
   state: BattleState,
-  events: FightEvent[],
-): BattleState {
-  const { state: next, entered } = advancePhase(enemy, state, puzzle.width);
-  if (!entered.length) return state;
-  const { name, sprite } = currentForm(enemy, next);
-  events.push({
-    kind: 'phase',
-    phase: next.phase ?? 0,
-    entered,
-    before: currentForm(enemy, state).name,
-    name,
-    sprite,
-    taunt: entered
-      .map((p) => p.taunt)
-      .filter(Boolean)
-      .join(' '),
-    fog: next.fog,
-    scramble: next.scramble,
-    fogged: count(next.fog) - count(state.fog),
-    scrambled: count(next.scramble) - count(state.scramble),
-  });
-  events.push({ kind: 'later', do: 'aim' }, { kind: 'later', do: 'sync-turn' });
-  const swaps = entered.filter((p) => p.swap).length;
-  if (swaps) events.push({ kind: 'later', do: 'swap', count: swaps });
-  // Ink lands after the new state is saved, so it isn't lost to the save.
-  const splashes = entered.flatMap((p) => (p.ink ? [{ size: p.ink, count: p.inkCount }] : []));
-  if (splashes.length) events.push({ kind: 'later', do: 'ink', splashes });
-  return next;
+  run: (battle: GridBattle) => R,
+  plan: Plan | ((result: R, battle: GridBattle) => Plan) = {},
+  hitsOn = true,
+) {
+  let battle!: GridBattle;
+  let before = '';
+  const { state: next, result } = onBattle(
+    enemy,
+    state,
+    { puzzle, hitsOn },
+    (b) => {
+      battle = b;
+      before = b.current.name;
+      return run(b);
+    },
+    plan,
+  );
+  return { next, result, battle, before };
 }
 
-/**
- * The charge (#67) makes sure a line you can read is live: the first time it shows, it
- * warms up; after that it keeps the live line unless it's finished or a phase hid it,
- * and otherwise picks another (`pickLiveLine`).
- */
-function aim(
-  enemy: Enemy,
-  puzzle: Puzzle,
-  start: BattleState,
-  board: Board | undefined,
-  events: FightEvent[],
-  warming = false,
-): BattleState {
-  const limit = currentForm(enemy, start).charge;
-  const none = { kind: 'charge', warmUp: 0, charged: 0, live: null, fresh: null, warming } as const;
-  if (!limit || !board) {
-    events.push({ ...none, limit: null });
-    return start;
-  }
-  let state = start;
-  const fight = gridFightBoard(puzzle, { board });
-  // The first time the charge shows (fight start, or a phase that brings it), it warms up.
-  if (state.warmUp === undefined && !state.live) {
-    state = { ...state, warmUp: fight.warmUpLines() };
-  }
-  if (state.warmUp) {
-    events.push({ ...none, limit, warmUp: state.warmUp });
-    return state;
-  }
-  const avoid = unionLines([state.fog, state.scramble, state.suspects]);
-  const { live } = state;
-  const stays =
-    live &&
-    !hasLine(avoid, live.kind, live.index) &&
-    !state.struck.includes(lineKey(live.kind, live.index));
-  let next = live ?? null;
-  if (!stays) {
-    // Not a struck line, nor one you can't read.
-    const skip = new Set([...idsOf(puzzle, state.struck), ...idsOf(puzzle, lineKeys(avoid))]);
-    const id = fight.pickLive(skip, noDraw);
-    next = id === null ? null : lineAt(puzzle.height, id);
-  }
-  const charged = state.charged ?? 0;
-  if (!stays) state = { ...state, live: next ?? undefined };
-  events.push({ ...none, limit, charged, live: next, fresh: stays ? null : next });
-  return state;
-}
+const zapDue = (story: StoryEvent[]) => story.some((e) => e.kind === 'due' && e.power === 'zap');
 
-/** A hit on you, unless a patch kit blocks it (#28). */
-function hit(state: BattleState, cause: HitCause, amount: number): FightStep {
-  const shielded = absorbHit(state);
-  if (shielded.blocked) return { state: shielded.state, events: [{ kind: 'blocked', cause }] };
-  return { state, events: [{ kind: 'hit', amount, cause }] };
-}
-
-/** Lines finished on the board: everything they do, in order. */
+/** Lines finished on the board: everything they do, in the order the screen shows it. */
 function finishLines(
   enemy: Enemy,
   puzzle: Puzzle,
@@ -313,82 +294,98 @@ function finishLines(
   reported: readonly Line[],
   board: Board | undefined,
 ): FightStep {
-  const events: FightEvent[] = [];
-  // A line showing a forgery doesn't count until the forgery is called out (#64).
-  const lines = reported.filter((l) => !hasLine(state.fakes ?? noLines(), l.kind, l.index));
-  // A refilled line (after a swap, say) has already counted, so it can't move a meter again.
-  const fresh = lines.filter((l) => !state.struck.includes(lineKey(l.kind, l.index)));
-  const weak = state.armor;
-
-  // Fog lifts (#30), ink washes off (#67), wipe marks go (#78), solved suspects were
-  // honest (#64), scrambles restore (#49), then chip damage lands or armor takes it (#50).
-  const fogged = clearFog(state, lines);
-  const washedOut = clearInk(fogged.state, lines, puzzle.width);
-  const refilled = clearWiped(washedOut.state, lines);
-  const cleared = clearSuspects(refilled.state, lines);
-  const unscrambled = clearScramble(cleared.state, lines);
-  const chipped = chip(
-    unscrambled.state,
-    lines.map((l) => lineKey(l.kind, l.index)),
+  const h = puzzle.height;
+  // Whether the warm-up was still running before these lines.
+  const warming = Boolean(state.warmUp);
+  const {
+    next,
+    result: story,
+    battle,
+    before,
+  } = play(
+    enemy,
+    puzzle,
+    state,
+    (b) =>
+      b.finished(
+        reported.map((l) => lineId(h, l)),
+        board,
+      ),
+    (story, b) => {
+      const touch: Key[] = [];
+      if (find(story, 'armor-meter')?.others && b.state.targets.length) touch.push('armorLines');
+      if (find(story, 'grounded') || zapDue(story)) touch.push('charged', 'live');
+      if (find(story, 'charge')?.picked) touch.push('live');
+      return then(phaseKeys(enemy, story), {
+        order: ['armorLines', 'turning', 'warmUp', 'charged', 'live'],
+        touch,
+      });
+    },
   );
-  if (chipped.cracked.length || chipped.broke) {
+  const lines = (power: Of<'cleared'>['power']) =>
+    all(story, 'cleared')
+      .find((e) => e.power === power)
+      ?.lines.map((id) => lineAt(h, id)) ?? [];
+  const events: FightEvent[] = [];
+
+  // Weak points crack (#50); the phases the damage starts (#42); then fog lifts (#30), wipe
+  // marks go (#78), solved suspects were honest (#64), ink washes off (#67) and scrambles
+  // restore (#49); then one chip.
+  const cracked = find(story, 'cracked');
+  if (cracked) {
     events.push({
       kind: 'cracked',
-      armor: chipped.state.armor ?? noLines(),
-      lines: chipped.cracked.map(keyToLine),
-      broke: chipped.broke,
+      armor: next.armor ?? noLines(),
+      lines: cracked.lines.map((id) => lineAt(h, id)),
+      broke: cracked.broke,
     });
   }
-  let next = startPhases(enemy, puzzle, chipped.state, events);
-  if (fogged.revealed.length && next.fog) {
-    events.push({ kind: 'fog-lifted', fog: next.fog, lines: fogged.revealed });
+  events.push(...phaseEvents(enemy, battle, story, before, next));
+  const fog = lines('fog');
+  if (fog.length && next.fog) events.push({ kind: 'fog-lifted', fog: next.fog, lines: fog });
+  const refilled = lines('swapped');
+  if (refilled.length) {
+    events.push({ kind: 'refilled', wiped: next.wiped ?? noLines(), lines: refilled });
   }
-  if (refilled.revealed.length) {
-    events.push({ kind: 'refilled', wiped: next.wiped ?? noLines(), lines: refilled.revealed });
+  const honest = lines('suspects');
+  if (honest.length) {
+    events.push({ kind: 'honest', suspects: next.suspects ?? noLines(), lines: honest });
   }
-  if (cleared.revealed.length) {
-    events.push({ kind: 'honest', suspects: next.suspects ?? noLines(), lines: cleared.revealed });
+  const washed = find(story, 'washed');
+  if (washed) events.push({ kind: 'washed', ink: next.ink ?? [], cells: washed.cells });
+  const unscrambled = lines('scramble');
+  if (unscrambled.length && next.scramble) {
+    events.push({ kind: 'unscrambled', scramble: next.scramble, lines: unscrambled });
   }
-  if (washedOut.washed.length) {
-    events.push({ kind: 'washed', ink: next.ink ?? [], cells: washedOut.washed });
-  }
-  if (unscrambled.revealed.length && next.scramble) {
-    events.push({ kind: 'unscrambled', scramble: next.scramble, lines: unscrambled.revealed });
-  }
+  const chip = find(story, 'chip')!;
+  const { armored } = battle.current;
   events.push({
     kind: 'chip',
-    dealt: chipped.dealt,
+    dealt: chip.amount,
     hp: next.enemyHp,
-    lines: lines.length,
-    cracked: chipped.cracked.length,
-    broke: chipped.broke,
-    armored: currentForm(enemy, next).armored,
+    lines: chip.lines.length,
+    cracked: cracked?.lines.length ?? 0,
+    broke: cracked?.broke ?? false,
+    armored,
   });
 
   // The armor's meter (#116): other lines it shrugs off move it toward a hit back.
-  if (weak && fresh.length) {
-    const back = armorHitsBack(next, fresh, weak);
-    next = back.state;
-    const armored = currentForm(enemy, next).armored;
-    events.push({ kind: 'armor-meter', lines: next.armorLines ?? 0, hits: back.hits, armored });
-    for (let n = 0; n < back.hits; n++) events.push({ kind: 'later', do: 'hit-back' });
+  const meter = find(story, 'armor-meter');
+  if (meter) {
+    events.push({ kind: 'armor-meter', lines: next.armorLines ?? 0, hits: meter.hits, armored });
+    for (let n = 0; n < meter.hits; n++) events.push({ kind: 'later', do: 'hit-back' });
   }
-  const form = currentForm(enemy, next);
   // The turn's meter (#83).
-  if (form.rotate && fresh.length) {
-    next = turnUp(next, fresh);
-    events.push({ kind: 'turn-meter', turning: next.turning ?? 0, limit: form.rotate });
+  const turning = find(story, 'turn-meter');
+  if (turning) {
+    events.push({ kind: 'turn-meter', turning: next.turning ?? 0, limit: turning.every });
     events.push({ kind: 'later', do: 'turn' });
   }
   // The charge (#67): the live line grounds it, others charge it toward a zap.
-  if (form.charge && fresh.length) {
-    const warming = Boolean(next.warmUp);
-    const charged = chargeUp(next, fresh, form.charge);
-    next = charged.state;
-    if (charged.grounded) events.push({ kind: 'grounded' });
-    if (charged.zapped) events.push({ kind: 'later', do: 'zap' });
-    next = aim(enemy, puzzle, next, board, events, warming);
-  }
+  if (find(story, 'grounded')) events.push({ kind: 'grounded' });
+  if (zapDue(story)) events.push({ kind: 'later', do: 'zap' });
+  const aimed = find(story, 'charge');
+  if (aimed) events.push(chargeEvent(h, aimed, warming));
   return { state: next, events };
 }
 
@@ -400,37 +397,68 @@ function accuse(
   line: Line,
   hitsOn: boolean,
 ): FightStep {
+  const {
+    next,
+    result: story,
+    battle,
+    before,
+  } = play(
+    enemy,
+    puzzle,
+    state,
+    (b) => b.accuse(lineId(puzzle.height, line)),
+    (story) =>
+      then(
+        { order: ['fakes', 'suspects', 'counts', 'shield', 'enemyHp'] },
+        phaseKeys(enemy, story),
+      ),
+    hitsOn,
+  );
   // Only 🎭 clues can be forged: tapping any other just says so.
-  if (!hasLine(state.suspects ?? noLines(), line.kind, line.index)) {
-    return { state, events: [{ kind: 'not-suspect', line }] };
-  }
-  const result = callOut(state, line);
-  const events: FightEvent[] = [];
-  if (result.caught) {
-    const next = startPhases(enemy, puzzle, result.state, events);
-    events.push({ kind: 'caught', line, dealt: result.dealt, hp: next.enemyHp });
+  if (!story.length) return { state, events: [{ kind: 'not-suspect', line }] };
+  const caught = find(story, 'caught');
+  if (caught) {
+    const events = phaseEvents(enemy, battle, story, before, next);
+    events.push({ kind: 'caught', line, dealt: caught.amount, hp: next.enemyHp });
     return { state: next, events };
   }
-  if (hitsOn) {
-    const accused = bump(result.state, 'wrongAccusations');
-    const landed = hit(accused, 'accusation', currentForm(enemy, accused).attack);
-    return { state: landed.state, events: [{ kind: 'accused', line }, ...landed.events] };
-  }
-  const healed = heal(bump(result.state, 'wrongAccusations'), enemy.hp);
-  events.push({ kind: 'healed', line, amount: healed.healed, hp: healed.state.enemyHp });
-  return { state: healed.state, events };
+  if (hitsOn) return { state: next, events: [{ kind: 'accused', line }, ...hits(story)] };
+  const healed = find(story, 'healed')!;
+  return {
+    state: next,
+    events: [{ kind: 'healed', line, amount: healed.amount, hp: next.enemyHp }],
+  };
 }
 
 /** A gadget (#28), counted for the run's tally (#107): bombs rule out gold, sponges a badge. */
 function gadget(enemy: Enemy, puzzle: Puzzle, state: BattleState, effect: GadgetEffect) {
-  let counted = bump(state, 'gadgetsUsed');
-  if (effect.kind === 'blast') counted = bump(counted, 'bombsUsed');
-  else if (effect.kind === 'wash') counted = bump(counted, 'spongesUsed');
-  const used = useGadget(counted, effect);
-  const events: FightEvent[] = [];
-  const next = startPhases(enemy, puzzle, used.state, events);
-  const washed = effect.kind === 'wash' ? (state.ink ?? []) : [];
-  events.push({ kind: 'gadget', effect: effect.kind, dealt: used.dealt, hp: next.enemyHp, washed });
+  const {
+    next,
+    result: story,
+    battle,
+    before,
+  } = play(
+    enemy,
+    puzzle,
+    state,
+    (b) => b.use(effect),
+    (story) =>
+      then(
+        {
+          order: ['counts', 'shield', 'ink', 'enemyHp'],
+          touch: effect.kind === 'wash' ? ['ink'] : [],
+        },
+        phaseKeys(enemy, story),
+      ),
+  );
+  const events = phaseEvents(enemy, battle, story, before, next);
+  events.push({
+    kind: 'gadget',
+    effect: effect.kind,
+    dealt: find(story, 'chip')?.amount ?? 0,
+    hp: next.enemyHp,
+    washed: effect.kind === 'wash' ? (find(story, 'washed')?.cells ?? []) : [],
+  });
   if (effect.kind === 'blast') events.push({ kind: 'later', do: 'blast' });
   return { state: next, events };
 }
@@ -446,69 +474,88 @@ export function gridStep(
   state: BattleState,
   input: FightInput,
 ): FightStep {
+  const h = puzzle.height;
+  const step = <R>(
+    run: (battle: GridBattle) => R,
+    plan: Plan | ((result: R, battle: GridBattle) => Plan) = {},
+    hitsOn = true,
+  ) => play(enemy, puzzle, state, run, plan, hitsOn);
   switch (input.kind) {
     case 'lines':
       return finishLines(enemy, puzzle, state, input.lines, input.board);
     case 'mistake': {
-      const counted = bump(state, 'wrongFills');
-      return hit(counted, 'mistake', currentForm(enemy, counted).attack);
+      const { next, result } = step((b) => b.mistake(), { order: ['counts', 'shield'] });
+      return { state: next, events: hits(result) };
     }
     case 'call-out':
       return accuse(enemy, puzzle, state, input.line, input.hitsOn);
     case 'gadget':
       return gadget(enemy, puzzle, state, input.effect);
     case 'damage': {
-      const used = useGadget(state, { kind: 'blast', damage: input.amount });
-      const events: FightEvent[] = [];
-      const next = startPhases(enemy, puzzle, used.state, events);
-      events.push({ kind: 'damaged', dealt: used.dealt, hp: next.enemyHp });
+      const { next, result, battle, before } = step(
+        (b) => b.damage(input.amount),
+        (story) => then({ order: ['enemyHp'] }, phaseKeys(enemy, story)),
+      );
+      const events = phaseEvents(enemy, battle, result, before, next);
+      events.push({ kind: 'damaged', dealt: find(result, 'chip')!.amount, hp: next.enemyHp });
       return { state: next, events };
     }
     case 'aim': {
-      const events: FightEvent[] = [];
-      return { state: aim(enemy, puzzle, state, input.board, events), events };
+      const { next, result } = step(
+        (b) => b.aim(input.board),
+        (story) => ({
+          order: ['warmUp', 'live'],
+          touch: find(story, 'charge')?.picked ? ['live'] : [],
+        }),
+      );
+      return { state: next, events: [chargeEvent(h, find(result, 'charge')!, false)] };
     }
     case 'turn': {
-      if (!turnDue(state, currentForm(enemy, state).rotate)) return { state, events: [] };
-      const next = turnBattle(state, puzzle.width, gridFightBoard(puzzle).turn() ?? undefined);
+      const { next, result } = step((b) => b.landTurn(), {
+        order: ['struck', 'turns', 'turning'],
+        touch: ['turns', 'turning'],
+      });
+      if (!result.length) return { state, events: [] };
       return { state: next, events: [{ kind: 'turned', turns: next.turns ?? 0 }] };
     }
     case 'swap': {
-      const fight = gridFightBoard(puzzle, { board: input.board });
-      const pick = fight.pickSwap(idsOf(puzzle, state.struck));
-      if (!pick) return { state, events: [] };
-      const swap = swapOf(puzzle.height, pick);
+      const { next, result } = step((b) => b.landSwap(input.board), { order: ['wiped'] });
+      const swapped = find(result, 'swap');
+      if (!swapped) return { state, events: [] };
+      const swap: Swap = swapOf(h, { lines: swapped.lines, cells: swapped.wiped });
       // Saved before the board is wiped, so lines it re-opens don't count as new.
-      const next = markWiped(state, swap.kind, swap.lines);
       return { state: next, events: [{ kind: 'swapped', swap, wiped: next.wiped! }] };
     }
     case 'ink': {
-      const fight = gridFightBoard(puzzle, { board: input.board });
-      const done = idsOf(puzzle, state.struck);
-      let ink = state.ink ?? [];
-      for (let n = 0; n < (input.count ?? 1); n++) {
-        ink = [...ink, ...fight.pickInk(input.size, new Set(ink), done, noDraw)];
-      }
-      const added = ink.length - (state.ink?.length ?? 0);
+      const { next, result } = step((b) => b.landInk(input.board, input.size, input.count), {
+        order: ['ink'],
+      });
+      const added = all(result, 'ink').reduce((n, e) => n + e.cells.length, 0);
       if (!added) return { state, events: [] };
-      return { state: { ...state, ink }, events: [{ kind: 'inked', ink, added }] };
+      return { state: next, events: [{ kind: 'inked', ink: next.ink!, added }] };
     }
     case 'zap': {
+      const { next, result } = step(
+        (b) => b.landZap(),
+        { order: ['counts', 'shield'] },
+        input.hitsOn,
+      );
       if (!input.hitsOn)
         return { state, events: [{ kind: 'zapped' }, { kind: 'fizzled', cause: 'zap' }] };
-      const landed = hit(bump(state, 'zaps'), 'zap', ZAP_DAMAGE);
-      return { state: landed.state, events: [{ kind: 'zapped' }, ...landed.events] };
+      return { state: next, events: [{ kind: 'zapped' }, ...hits(result)] };
     }
-    case 'hit-back':
+    case 'hit-back': {
       if (!input.hitsOn) return { state, events: [{ kind: 'fizzled', cause: 'armor' }] };
-      return hit(state, 'armor', ARMOR_HIT_DAMAGE);
+      const { next, result } = step((b) => b.landHitBack(), { order: ['shield'] });
+      return { state: next, events: hits(result) };
+    }
     case 'blast': {
-      const fight = gridFightBoard(puzzle, { board: input.board });
-      const cells = fight.blast(idsOf(puzzle, state.struck), input.rand ?? Math.random);
-      if (!cells.length) return { state, events: [] };
-      const blast: Blast = blastOf(puzzle.width, cells);
+      const rand = input.rand ?? Math.random;
+      const { next, result } = step((b) => b.landBlast(input.board, rand), { order: ['ink'] });
+      if (!result.cells.length) return { state, events: [] };
+      const blast: Blast = blastOf(puzzle.width, result.cells);
       // The blast washes the ink out of the cells it hits (#115).
-      const { state: next, washed } = blastInk(state, blast.cells);
+      const washed = find(result.events, 'washed')?.cells ?? [];
       return { state: next, events: [{ kind: 'blasted', blast, washed }] };
     }
   }
