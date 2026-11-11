@@ -2,7 +2,7 @@ import { advance, currentStep, startDialogue } from '@picross/shared/game/dialog
 import type { RunState } from '../../../game/run';
 import { recordRunResult, saveCurrentRun } from '../../../game/runSave';
 import { getScene } from '@picross/shared/puzzles/scenes';
-import type { Job } from '../../../story/data';
+import type { Job } from '@picross/block/story/data';
 import { portraitArt, withArt } from '@picross/shared/ui/art';
 import { homeLink } from '@picross/shared/ui/components/homeLink';
 import { el } from '@picross/shared/ui/dom';

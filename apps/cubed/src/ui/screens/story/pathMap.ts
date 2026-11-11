@@ -1,7 +1,7 @@
 import type { RunState } from '../../../game/run';
 import { saveCurrentRun } from '../../../game/runSave';
 import { getGadget } from '@picross/shared/puzzles/gadgets';
-import type { Job } from '../../../story/data';
+import type { Job } from '@picross/block/story/data';
 import { gadgetArt } from '@picross/shared/ui/art';
 import { homeLink } from '@picross/shared/ui/components/homeLink';
 import { el } from '@picross/shared/ui/dom';

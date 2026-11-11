@@ -1,16 +1,16 @@
 import '@picross/shared/styles/tokens.css';
-import './styles/voxels.css';
+import '@picross/play-block/styles/voxels.css';
 import '@picross/shared/styles/base.css';
-import './styles/game.css';
+import '@picross/play-block/styles/game.css';
 import './styles/select.css';
-import './styles/editor.css';
+import '@picross/play-block/styles/editor.css';
 import '@picross/shared/styles/art.css';
 import '@picross/shared/styles/dialogue.css';
 import '@picross/shared/styles/run.css';
 import '@picross/shared/styles/fight.css';
 import '@picross/shared/styles/dig.css';
-import './styles/story.css';
-import { getPuzzle } from './puzzles/index';
+import '@picross/play-block/styles/story.css';
+import { getPuzzle } from '@picross/block/puzzles/index';
 import { renderHowToPlay } from './ui/screens/howToPlay';
 import { getScene } from '@picross/shared/puzzles/scenes';
 import { renderSceneScreen } from '@picross/shared/ui/screens/sceneScreen';
@@ -21,10 +21,13 @@ import { renderBadgesScreen } from './ui/screens/badgesScreen';
 import { onHide, saveNow } from './ui/lifecycle';
 import { applyTheme } from '@picross/shared/ui/theme';
 import { providePrefs } from '@picross/shared/game/prefs';
+import { providePlayPrefs } from '@picross/play-block/ui/prefs';
 import { getSettings, updateSettings } from './game/settings';
 
 // Shared code (sound, haptics, the theme, the mute button) reads this game's settings.
 providePrefs({ get: getSettings, update: updateSettings });
+// So does the play screen (packages/play-block), for fading finished clues.
+providePlayPrefs(getSettings);
 applyTheme();
 addListCard(dailyCard);
 addListCard(storyCard);
@@ -70,7 +73,9 @@ function route() {
   } else if (scene) {
     cleanup = renderSceneScreen(app, scene);
   } else if (location.hash === '#/editor') {
-    lazy(import('./ui/screens/editor/editorScreen'), (m) => m.renderEditorScreen(app));
+    lazy(import('@picross/play-block/ui/screens/editor/editorScreen'), (m) =>
+      m.renderEditorScreen(app),
+    );
   } else if (shared) {
     lazy(import('./ui/screens/sharedScreen'), (m) =>
       m.renderSharedScreen(app, shared[1], Boolean(shared[2])),

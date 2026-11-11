@@ -1,12 +1,12 @@
-import { SOLID } from '../../game/game';
+import { SOLID } from '@picross/block/game/game';
 import { clearDailyBoard, getDailyBoard, recordDaily, saveDailyBoard } from '../../game/daily';
 import { getSettings } from '../../game/settings';
-import { dailyPuzzle, dateKey } from '../../puzzles/daily';
-import { shapePicture } from '../board/thumbnail';
+import { dailyPuzzle, dateKey } from '@picross/block/puzzles/daily';
+import { shapePicture } from '@picross/play-block/ui/board/thumbnail';
 import { el } from '@picross/shared/ui/dom';
-import { formatTime, plural } from '../format';
+import { formatTime, plural } from '@picross/play-block/ui/format';
 import { onHide } from '../lifecycle';
-import { createPlay } from './play';
+import { createPlay } from '@picross/play-block/ui/screens/play';
 import { prettyDate } from './dailyCard';
 
 /** Today's puzzle (#/daily): one per day, with a streak. */

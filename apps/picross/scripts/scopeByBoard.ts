@@ -13,9 +13,9 @@ import type { Plugin, Rule } from 'postcss';
 export const BLOCK = '[data-board="block"]';
 export const FLAT = `:not(${BLOCK})`;
 
-/** Each game's own screen styles, and the board they apply on. */
+/** Each game's own screen styles (the 3D game's are in packages/play-block), and their board. */
 const SCOPED: [RegExp, string][] = [
-  [/\/apps\/cubed\/src\/styles\/(game|story)\.css$/, BLOCK],
+  [/\/packages\/play-block\/src\/styles\/(game|story)\.css$/, BLOCK],
   [/\/apps\/picross\/src\/styles\/(select|editor|badges)\.css$/, FLAT],
   // The board and play screen (packages/play-grid) are this game's too.
   [/\/packages\/play-grid\/src\/styles\/(board|game)\.css$/, FLAT],

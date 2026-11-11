@@ -1,45 +1,49 @@
-import type { Game, GameMode } from '../../../game/game';
+import type { Game } from '@picross/block/game/game';
 import {
   addGadget,
   addToTally,
   completeEncounter,
+  damage,
   heal,
+  removeGadget,
   withBoard,
   type RunState,
 } from '../../../game/run';
-import { getCurrentRun, saveCurrentRun } from '../../../game/runSave';
+import { getCurrentRun, hasSeenTip, markTipSeen, saveCurrentRun } from '../../../game/runSave';
 import { getGadget } from '@picross/shared/puzzles/gadgets';
 import { getScene } from '@picross/shared/puzzles/scenes';
-import { restHeal, type Encounter } from '../../../story/data';
-import { shapePicture } from '../../board/thumbnail';
+import { restHeal, type Encounter } from '@picross/block/story/data';
+import { shapePicture } from '@picross/play-block/ui/board/thumbnail';
 import { el } from '@picross/shared/ui/dom';
-import { formatTime } from '../../format';
 import { onHide } from '../../lifecycle';
-import { createPlay, type Play, type PlayHooks } from '../play';
+import { createPlay, type Play } from '@picross/play-block/ui/screens/play';
 import { renderSceneScreen } from '@picross/shared/ui/screens/sceneScreen';
 import { digKind } from './dig';
-import { fightKind } from './fight';
+import { fightKind, type FightRun } from '@picross/play-block/ui/screens/story/fight';
+import type { Kind } from '@picross/play-block/ui/screens/story/kind';
 import { restKind } from './rest';
 import { loadRun } from './shared';
 
-/** What an encounter's kind (fight, dig, rest) adds to the play screen. */
-export interface Kind {
-  mode: GameMode;
-  /** Shown above the block (the battle bar, the dig sign, the rest clock). */
-  header: HTMLElement;
-  hooks?: Omit<PlayHooks, 'solved' | 'failed'>;
-  /** Once the play screen exists. */
-  attach?(play: Play): void;
-  /** The solved panel's first line. */
-  note(game: Game): string;
-  /** Called when solved, before the encounter is cleared (the finisher). */
-  land?(): void;
-  /** Kept with the run, so a reload resumes the fight. */
-  save?(): unknown;
-  /** The panel when the run is lost mid-encounter, if it can be. */
-  knockedOut?(): Node[];
-  dispose?(): void;
-}
+/** Cubed's own story run, as a fight needs it. */
+export const storyRun: FightRun = {
+  get() {
+    const run = getCurrentRun();
+    return run?.status === 'active' ? run : null;
+  },
+  hurt(amount) {
+    const run = getCurrentRun();
+    if (run?.status !== 'active') return false;
+    const next = damage(run, amount);
+    saveCurrentRun(next);
+    return next.status === 'lost';
+  },
+  spendGadget(index, id) {
+    const run = getCurrentRun();
+    if (run) saveCurrentRun(removeGadget(run, run.gadgets[index] ?? id));
+  },
+  tipSeen: hasSeenTip,
+  markTip: markTipSeen,
+};
 
 /** The current encounter at #/story/play. Returns a cleanup. */
 export function renderEncounter(app: HTMLElement): (() => void) | undefined {
@@ -54,7 +58,7 @@ export function renderEncounter(app: HTMLElement): (() => void) | undefined {
   const play = (): (() => void) => {
     const kind: Kind =
       encounter.kind === 'fight'
-        ? fightKind(encounter, state)
+        ? fightKind(encounter, state, { run: storyRun })
         : encounter.kind === 'rest'
           ? restKind(encounter.rest!)
           : digKind(encounter);
@@ -134,7 +138,4 @@ export function renderEncounter(app: HTMLElement): (() => void) | undefined {
   let stop = renderSceneScreen(app, scene, { onEnd: () => (stop = play()) });
   return () => stop();
 }
-
-/** The time a puzzle took, for notes. */
-export const took = (game: Game) => formatTime(game.elapsed);
 export type { Encounter };

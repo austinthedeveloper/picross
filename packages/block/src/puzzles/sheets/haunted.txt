@@ -1,5 +1,5 @@
 # Haunted: pumpkins, ghosts and a house on a hill. Export with:
-#   npm run puzzles -- --sheet src/puzzles/sheets/haunted.txt
+#   npm run puzzles -- --sheet ../../packages/block/src/puzzles/sheets/haunted.txt
 
 == jack-o-lantern "Jack-o'-Lantern" hide=0.6
 c=coral g=green o=orange y=yellow

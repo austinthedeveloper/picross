@@ -22,23 +22,27 @@ The SNES demake's `make import` reads the pack from `apps/picross/`.
   shared file went in, story data included; the story and its loaders move out to their
   own `packages/story` in #146. The SNES demake reads the story and art from
   `packages/shared/`.
-- **The 2D packages are done** (#144), ahead of step 3's 3D ones (#145): `packages/grid`
+- **The 2D packages are done** (#144), alongside step 3's 3D ones: `packages/grid`
   (`@picross/grid`: the engine, the puzzle format, the pack, murals and `Game`, with no
   DOM; [README](../packages/grid/README.md)) and `packages/play-grid`
   (`@picross/play-grid`: the board view, input, the play screen and its `PlaySession`
   hooks, `board.css` and `game.css`; [README](../packages/play-grid/README.md)). The 2D
   game imports both. The SNES demake reads the pack from `packages/grid/src/puzzles/`.
+- **Step 3 is done: the 3D game's code is two packages** (#145): `packages/block` (`@picross/block`: the
+  block, clues, solver, puzzle format, pack, dioramas, Game, Battle and the 3D story loader;
+  no three.js) and `packages/play-block` (`@picross/play-block`: the three.js view, input,
+  the play, fight and editor screens and their styles). Cubed and the Curator's block
+  phases both import them; neither app imports the other.
 - The story ideas for the combined game are in [story-combined.md](story-combined.md).
 
 **Step 7 has a first boss, ahead of steps 2–6.** The Curator unfolds into a block at 60%
 and folds back flat at 30%, in the 2D story. Rather than wait for `FightBoard`, the 2D
-story opens the 3D game's own fight screen (from `apps/cubed/`, loaded on demand) for the
+story opens the 3D game's own fight screen (from `packages/play-block`, loaded on demand) for the
 block phases, and carries HP and phases between the two battles. Each game's screen
 styles apply only on its board. Details are in [architecture.md](architecture.md)
 ("Switching board").
 
-The steps below still apply, with `apps/cubed/` standing in for `packages/block` and
-`packages/play-block` until the code is split into packages.
+The steps below still apply; `packages/block` and `packages/play-block` now exist (#145).
 
 ## Where things stand
 

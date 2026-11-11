@@ -1,19 +1,10 @@
-import type { Mode } from './settings';
+import type { SavedBoard } from '@picross/block/game/game';
 import { readStore, writeStore } from '@picross/shared/game/storage';
 
 const KEY = 'picross3d:v1';
 
-/** An unfinished block. `blocks` holds one digit per cube (see `Block` in game.ts). */
-export interface SavedBoard {
-  blocks: string;
-  /** Milliseconds played so far. */
-  elapsed?: number;
-  mode?: Mode;
-  hearts?: number;
-  hintsUsed?: number;
-  /** Breaks into the shape refused so far (hearts and fights). */
-  strikes?: number;
-}
+// An unfinished block's save is the block package's (`Game.save()`); this file stores them.
+export type { SavedBoard };
 
 export interface PuzzleStats {
   solves: number;

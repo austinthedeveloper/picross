@@ -1,14 +1,27 @@
 # Architecture
 
 Plain TypeScript with no UI framework, like the 2D game: screens build DOM with `el()`, and
-three.js draws the block. Four layers, each importing only from the ones above it:
+three.js draws the block. Most of the code is in two packages at the repo root, which the
+2D game also imports (for the Curator's block phases); this app is the screens around them.
+Four layers, each importing only from the ones above it:
 
-| Layer   | Folder         | Knows about the DOM? | Job                                               |
-| ------- | -------------- | -------------------- | ------------------------------------------------- |
-| Engine  | `src/engine/`  | No                   | The block, lines and clues, and the line solver   |
-| Puzzles | `src/puzzles/` | No                   | The puzzle file format, clue hiding, and the pack |
-| Game    | `src/game/`    | No (uses storage)    | A puzzle in play (strokes, hearts, hints), saves  |
-| UI      | `src/ui/`      | Yes                  | Screens, the 3D view, input, sound, haptics       |
+| Layer   | Where                                 | Knows about the DOM? | Job                                                       |
+| ------- | ------------------------------------- | -------------------- | --------------------------------------------------------- |
+| Engine  | `packages/block/src/engine/`          | No                   | The block, lines and clues, and the line solver           |
+| Puzzles | `packages/block/src/puzzles/`         | No                   | The puzzle file format, clue hiding, the pack, dioramas   |
+| Game    | `packages/block/src/{game,story}/`    | No                   | A puzzle in play (strokes, hearts, hints), battles, story |
+|         | `src/game/`                           | No (uses storage)    | Saves, settings, runs, the daily streak, badges           |
+| UI      | `packages/play-block/src/`, `src/ui/` | Yes                  | The 3D view, input, the play screen; this app's screens   |
+
+`@picross/block` (`packages/block`) has no three.js and no screens: a test and a lint rule
+check it. `@picross/play-block` (`packages/play-block`) has the three.js view, input, the
+play controller, the fight and editor screens and their styles (`voxels.css`, `game.css`,
+`story.css`, `editor.css`). Paths below without a package are this app's `src/`; paths in
+`engine/`, `puzzles/`, `game/game.ts`, `game/battle.ts`, `game/clock.ts` and `story/` are
+in `packages/block/src/`, and `ui/board/`, `ui/screens/play.ts`, `ui/screens/story/fight.ts`
+and `ui/screens/editor/` in `packages/play-block/src/`. Neither package imports this app:
+what they need from it is passed in (the story run for a fight, `FightRun`; the play
+screen's settings, `providePlayPrefs` in `main.ts`).
 
 Rules and state live in `engine/` and `game/`, where Vitest covers them. The UI turns
 pointer and key events into `Game` calls and redraws.
@@ -38,7 +51,8 @@ the most, for hints.
 `Puzzle`: dims, the solution as color indexes, every clue, and the shown clues (`null` for
 hidden). `puzzles/hide.ts` picks clues to hide: a seeded shuffle of the lines, hiding each
 one while the puzzle still solves, up to `hideRatio`. `scripts/puzzles.ts` runs it and
-writes `hide` and `passes` back to the file; `pack.test.ts` checks every puzzle still solves.
+writes `hide` and `passes` back to the file (in `packages/block`); `pack.test.ts` checks
+every puzzle still solves.
 
 ## Game
 
@@ -46,7 +60,7 @@ writes `hide` and `passes` back to the file; `pack.test.ts` checks every puzzle 
 seen through one face and keeps to that layer (the face's axis), so breaking a cube never
 lets the stroke fall through to the one behind. Hearts mode refuses to break a cube of the
 shape: it paints it instead and costs a heart. Solved means every cube outside the shape is
-broken; painting is only a help. Undo works in whole strokes. `progress.ts` and
+broken; painting is only a help. Undo works in whole strokes. This app's `progress.ts` and
 `settings.ts` store saves under `picross3d:` keys, apart from the 2D game's.
 
 ## The view

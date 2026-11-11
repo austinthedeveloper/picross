@@ -1,6 +1,6 @@
 # Around the house and garden: household objects, tools, garden things,
 # small animals and plants. Export with:
-#   npm run puzzles -- --sheet src/puzzles/sheets/batch-1.txt
+#   npm run puzzles -- --sheet ../../packages/block/src/puzzles/sheets/batch-1.txt
 
 == cupcake "Cupcake" hide=0.5
 p=sky q=white f=pink s=yellow c=red

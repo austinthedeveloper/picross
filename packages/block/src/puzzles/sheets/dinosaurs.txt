@@ -1,5 +1,5 @@
 # Dinosaurs and fossils: the museum's prehistory wing. Export with:
-#   npm run puzzles -- --sheet src/puzzles/sheets/dinosaurs.txt
+#   npm run puzzles -- --sheet ../../packages/block/src/puzzles/sheets/dinosaurs.txt
 
 == t-rex "T. Rex" hide=0.6
 g=green k=graphite l=leaf r=red w=white

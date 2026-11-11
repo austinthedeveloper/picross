@@ -1,6 +1,6 @@
-import { dioramaTileIds } from '../puzzles/dioramas';
-import { PUZZLES } from '../puzzles/index';
-import { chapters, jobs } from '../story/data';
+import { dioramaTileIds } from '@picross/block/puzzles/dioramas';
+import { PUZZLES } from '@picross/block/puzzles/index';
+import { chapters, jobs } from '@picross/block/story/data';
 import { bestStreak } from './daily';
 import { cleanSolves, playtests, solvedIds } from './progress';
 import { clearedJobs, getJobStats } from './runSave';

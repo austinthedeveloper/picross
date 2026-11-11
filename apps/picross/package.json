@@ -21,6 +21,8 @@
     "e2e": "playwright test"
   },
   "dependencies": {
+    "@picross/block": "*",
+    "@picross/play-block": "*",
     "@picross/grid": "*",
     "@picross/play-grid": "*",
     "@picross/shared": "*"

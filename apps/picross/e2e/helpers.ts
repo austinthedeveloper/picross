@@ -1,4 +1,4 @@
-import { encounterPuzzle, extras, focusBlock, moveTo } from '../../cubed/e2e/helpers';
+import { encounterPuzzle, extras, focusBlock, moveTo } from '@picross/play-block/e2e/helpers';
 import { expect, type BrowserContext, type Page } from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';

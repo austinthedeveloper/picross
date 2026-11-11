@@ -1,4 +1,4 @@
-import { PUZZLES } from '../../puzzles/index';
+import { PUZZLES } from '@picross/block/puzzles/index';
 import { homeLink } from '@picross/shared/ui/components/homeLink';
 import { el } from '@picross/shared/ui/dom';
 

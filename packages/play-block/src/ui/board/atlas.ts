@@ -1,6 +1,6 @@
 import { CanvasTexture, SRGBColorSpace } from 'three';
-import { clueFrame, type Clue } from '../../engine/clues';
-import { MAX_LINE } from '../../engine/solver';
+import { clueFrame, type Clue } from '@picross/block/engine/clues';
+import { MAX_LINE } from '@picross/block/engine/solver';
 import { token } from '../tokens';
 
 /**

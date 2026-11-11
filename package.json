@@ -15,7 +15,7 @@
     "preview": "npm -w apps/picross run preview --",
     "lint": "eslint . && prettier --check .",
     "format": "prettier --write .",
-    "test": "npm -w packages/shared test && npm -w packages/grid test && npm -w packages/play-grid test && npm -w apps/picross test && npm -w apps/cubed test",
+    "test": "npm -w packages/shared test && npm -w packages/grid test && npm -w packages/play-grid test && npm -w packages/block test && npm -w packages/play-block test && npm -w apps/picross test && npm -w apps/cubed test",
     "test:watch": "npm -w apps/picross run test:watch --",
     "check:puzzles": "npm -w packages/grid run check:puzzles --",
     "script-review": "npm -w apps/picross run script-review --",
@@ -29,7 +29,9 @@
     "e2e:cubed": "npm -w apps/cubed run e2e --",
     "test:shared": "npm -w packages/shared test --",
     "test:grid": "npm -w packages/grid test --",
-    "test:play-grid": "npm -w packages/play-grid test --"
+    "test:play-grid": "npm -w packages/play-grid test --",
+    "test:block": "npm -w packages/block test --",
+    "test:play-block": "npm -w packages/play-block test --"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",

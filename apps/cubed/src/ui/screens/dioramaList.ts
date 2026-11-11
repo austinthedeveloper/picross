@@ -1,6 +1,6 @@
 import { solvedIds } from '../../game/progress';
-import { dioramas, tileOf, type Diorama } from '../../puzzles/dioramas';
-import { blockOutline, shapePicture } from '../board/thumbnail';
+import { dioramas, tileOf, type Diorama } from '@picross/block/puzzles/dioramas';
+import { blockOutline, shapePicture } from '@picross/play-block/ui/board/thumbnail';
 import { el } from '@picross/shared/ui/dom';
 
 export const placed = (d: Diorama) => {

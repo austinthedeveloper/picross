@@ -1,8 +1,8 @@
 import { startRun, type RunState } from '../../../game/run';
 import { getCurrentRun, getJobStats, hasSeenScene, saveCurrentRun } from '../../../game/runSave';
 import { getSettings, updateSettings, type Mode } from '../../../game/settings';
-import { dimsLabel } from '../../../engine/volume';
-import { getJob, type Encounter, type Job } from '../../../story/data';
+import { dimsLabel } from '@picross/block/engine/volume';
+import { getJob, type Encounter, type Job } from '@picross/block/story/data';
 import { iconArt } from '@picross/shared/ui/art';
 import { el } from '@picross/shared/ui/dom';
 

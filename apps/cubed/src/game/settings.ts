@@ -1,7 +1,8 @@
+import type { Mode } from '@picross/block/game/game';
 import { readStore, writeStore } from '@picross/shared/game/storage';
 
-/** Relaxed never checks what you break; hearts mode costs a heart for breaking a cube of the shape. */
-export type Mode = 'relaxed' | 'hearts';
+// The block package defines the mode (a Game is played in one); the settings keep the choice.
+export type { Mode };
 
 /** Which puzzles the list shows. A puzzle in progress counts as not done. */
 export type ListFilter = 'all' | 'todo' | 'done';

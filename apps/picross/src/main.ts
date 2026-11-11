@@ -1,11 +1,11 @@
 import '@picross/shared/styles/tokens.css';
 // The 3D game's styles, for a boss that switches to a block. Each game's own screen styles
 // apply only on its board (scripts/scopeByBoard.ts); this order matches both games' own.
-import '../../cubed/src/styles/voxels.css';
+import '@picross/play-block/styles/voxels.css';
 import '@picross/shared/styles/base.css';
 import '@picross/play-grid/styles/board.css';
 import '@picross/play-grid/styles/game.css';
-import '../../cubed/src/styles/game.css';
+import '@picross/play-block/styles/game.css';
 import './styles/select.css';
 import './styles/editor.css';
 import '@picross/shared/styles/run.css';
@@ -14,7 +14,7 @@ import '@picross/shared/styles/dig.css';
 import '@picross/shared/styles/dialogue.css';
 import '@picross/shared/styles/art.css';
 import './styles/badges.css';
-import '../../cubed/src/styles/story.css';
+import '@picross/play-block/styles/story.css';
 import './styles/switch.css';
 import { syncBadges } from './game/badges';
 import { getPuzzle } from '@picross/grid/puzzles/index';

@@ -26,8 +26,9 @@ The repo root is an npm workspace with both games in `apps/` and what they share
 `vite.config.ts` paths in this doc are inside it, except for the files in packages: those
 are at the same paths under each package's `src/` (below), imported as
 `@picross/<package>/<path>`. The shared files are in `packages/shared/`; the engine, the
-puzzle format, the pack and `Game` in `packages/grid/` (no DOM); and the board view, input
-and play screen in `packages/play-grid/`.
+puzzle format, the pack and `Game` in `packages/grid/` (no DOM); the board view, input
+and play screen in `packages/play-grid/`; and the 3D game's rules and data in
+`packages/block/` (no three.js) and its three.js view and screens in `packages/play-block/`.
 
 ```
 apps/picross/              The 2D game (npm workspace `picross`)
@@ -180,6 +181,11 @@ packages/shared/           Code, styles, story and art both games import (@picro
       dig.css              The dig's dirt board and reveal
       dialogue.css         Scene player
       art.css              Portraits, sprites and power icons
+packages/block/            The 3D puzzle's rules and data, no three.js (@picross/block; its README)
+  src/                     Cubed's engine/, puzzles/ (pack, dioramas, story/), game/ (Game, Battle), story/
+packages/play-block/       Playing a block: three.js view, play and fight screens (@picross/play-block)
+  src/                     Cubed's ui/board/, ui/screens/play.ts, story/fight.ts, editor/, styles/
+  e2e/helpers.ts           Block helpers for both games' browser tests
 scripts/
   deploy-azure.sh          Upload a build to the Azure static website
   setup-azure-deploy.sh    One-time Azure + GitHub OIDC setup for the release pipeline
@@ -717,7 +723,7 @@ fight.
 ### Switching board (the Curator)
 
 A phase with `"board": "block"` moves the fight onto a block: the encounter's 3D puzzle
-from Picross Cubed (`apps/cubed/src/puzzles/story/`), played with the 3D game's own fight screen.
+(`packages/block/src/puzzles/story/`), played with the 3D game's own fight screen.
 A later phase with `"board": "flat"` brings it back. The plan and the story ideas behind it
 are in [story-combined.md](story-combined.md).
 
@@ -725,6 +731,11 @@ are in [story-combined.md](story-combined.md).
   names one; the encounter (`ui/screens/run/encounter.ts`) opens that board, and switches
   when a phase changes it. The block screen (`ui/screens/run/blockFight.ts`) loads on
   demand with three.js, so the first download doesn't grow.
+- **What it imports:** packages, never `apps/cubed` (a lint rule checks): the 3D battle,
+  clue hiding and story loader from `@picross/block`, and the play screen, fight screen and
+  thumbnail from `@picross/play-block`. It passes in this game's run (`FightRun`: HP,
+  gadgets, tips) and the play screen's one setting (`providePlayPrefs`: fading finished
+  clues, which this game doesn't have, so it reads Cubed's as before).
 - **What carries:** the enemy's HP as a share (a block has more lines, so more HP;
   `carryHp` rounds so exactly the phases already started have started on the new board),
   the phases, with their fog and scrambles picked again on the new board, and the patch
@@ -739,7 +750,8 @@ are in [story-combined.md](story-combined.md).
   every switching boss has a block whose phases match.
 - **Styles:** both games use some of the same class names for different screens, so each
   game's own screen styles apply only on its board: `scripts/scopeByBoard.ts` (a PostCSS
-  step in `vite.config.ts`) scopes them under `<html data-board="block">` or its absence,
+  step in `vite.config.ts`) scopes them (the 3D game's are play-block's `game.css` and
+  `story.css`) under `<html data-board="block">` or its absence,
   wrapped in `:where()` so nothing's specificity changes. The block screen sets the
   attribute while it's up.
 - **Other games:** Cubed alone plays every fight on a block and ignores `board`; the SNES

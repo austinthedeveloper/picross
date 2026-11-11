@@ -1,5 +1,5 @@
 # Deep water: subs, sea creatures and what sank. Export with:
-#   npm run puzzles -- --sheet src/puzzles/sheets/deep-water.txt
+#   npm run puzzles -- --sheet ../../packages/block/src/puzzles/sheets/deep-water.txt
 
 == submarine "Submarine" hide=0.6
 k=graphite o=orange s=sky y=yellow

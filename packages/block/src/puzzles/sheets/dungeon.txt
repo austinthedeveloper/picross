@@ -1,5 +1,5 @@
 # Dungeon crawl: treasure, potions and the things that live down there. Export with:
-#   npm run puzzles -- --sheet src/puzzles/sheets/dungeon.txt
+#   npm run puzzles -- --sheet ../../packages/block/src/puzzles/sheets/dungeon.txt
 
 == treasure-chest "Treasure Chest" hide=0.55
 b=brown w=wood y=yellow
