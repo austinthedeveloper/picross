@@ -10,7 +10,10 @@ import { createPlay } from '@picross/play-block/ui/screens/play';
 import { prettyDate } from './dailyCard';
 import { cubedHref } from '../../href';
 
-/** Today's puzzle (#/cubed/daily): one per day, with a streak. */
+/**
+ * Today's puzzle on a Cubed day (#/daily, #156): one a day, Flat and Cubed by turns, with
+ * one streak over both. `#/cubed/daily`, its old link, comes here too.
+ */
 export function renderDailyScreen(root: HTMLElement): () => void {
   const today = dateKey();
   const { puzzle } = dailyPuzzle(today);
@@ -43,7 +46,7 @@ export function renderDailyScreen(root: HTMLElement): () => void {
   });
   const persist = (elapsed: number) => {
     const { game } = play;
-    if (game.failed) return clearDailyBoard();
+    if (game.failed) return clearDailyBoard(today);
     if (game.over || !(changed || saved)) return;
     game.elapsed = elapsed;
     if (game.blocks.some((b) => b !== SOLID)) saveDailyBoard(today, game.save());

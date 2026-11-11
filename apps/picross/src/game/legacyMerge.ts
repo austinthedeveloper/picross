@@ -1,5 +1,7 @@
+import { addDays, dailyDimension, dayNumber } from '@picross/shared/puzzles/days';
 import { qualify, type Dimension } from '@picross/shared/puzzles/ids';
 import { combine, higher, mergeBestHp, present, union, unknownFields, type Loose } from './merging';
+import type { DailySave, DaySolved } from './daily';
 import type { BlockSavedBoard, PuzzleStats, SavedBoard, SaveData } from './progress';
 import type { JobStats, RunSave } from './runSave';
 import type { Settings } from './settings';
@@ -188,7 +190,98 @@ export function mergeSettings(
   return present(out) as Partial<Settings>;
 }
 
-/** Both games' saves as one. Daily and badges aren't here: #156 and #157 merge them. */
+/** The 2D game's daily (`picross:daily`): no list of days, just the streak as of `lastSolved`. */
+export interface LegacyFlatDaily {
+  lastSolved?: string;
+  streak?: number;
+  best?: number;
+  solves?: number;
+  board?: { day: string; saved: SavedBoard };
+}
+
+/** Cubed's daily (`picross3d:daily`): the streak as of `last`, and every day's best time. */
+export interface LegacyCubedDaily {
+  streak?: number;
+  best?: number;
+  last?: string;
+  board?: BlockSavedBoard & { date: string };
+  times?: Record<string, number>;
+}
+
+const isDay = (key: unknown): key is string =>
+  typeof key === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(key);
+const count = (n: unknown) => (typeof n === 'number' && n > 0 ? Math.floor(n) : 0);
+
+/** The days a streak of `streak` ending at `last` covers: `last` and the days before it. */
+function streakDays(last: unknown, streak: unknown): string[] {
+  if (!isDay(last)) return [];
+  return Array.from({ length: Math.max(1, count(streak)) }, (_, i) => addDays(last, -i));
+}
+
+/** The longest run of days in a row in `days`, and the run that ends at the last of them. */
+function runs(days: string[]): { longest: number; last: number } {
+  const numbers = [...new Set(days.map(dayNumber))].sort((a, b) => a - b);
+  let [longest, run] = [0, 0];
+  numbers.forEach((n, i) => {
+    run = i && n === numbers[i - 1] + 1 ? run + 1 : 1;
+    longest = Math.max(longest, run);
+  });
+  return { longest, last: run };
+}
+
+/**
+ * The one daily (#156) from both games', with one streak. A day played in either game counts.
+ *
+ * The 2D game kept no list of days, so its days are its last streak's: `lastSolved` and the
+ * `streak − 1` days before it. Cubed's are every day it has a time for. The streak is the
+ * run of days in a row ending at the last day solved (whether it's still alive is decided
+ * on the day, as both games did), the best is the longest of both games' bests and every run
+ * in the days, and the solves add up: the 2D game's count and Cubed's days (a day solved in
+ * both was two puzzles).
+ *
+ * A board in progress comes along only if the one daily would open it: the 2D game's on a
+ * Flat day (Flat days keep their puzzles). Cubed's never does, since Cubed's days have new
+ * puzzles now, so its board would be some other block.
+ */
+export function mergeDailies(
+  flat: LegacyFlatDaily | undefined,
+  cubed: LegacyCubedDaily | undefined,
+): DailySave | undefined {
+  if (!flat && !cubed) return undefined;
+  const flatDays = new Set(streakDays(flat?.lastSolved, flat?.streak));
+  const times = Object.fromEntries(
+    Object.entries(cubed?.times ?? {}).filter(
+      ([day, time]) => isDay(day) && typeof time === 'number' && time >= 0,
+    ),
+  );
+  const cubedDays = new Set([...Object.keys(times), ...streakDays(cubed?.last, cubed?.streak)]);
+  const days: Record<string, DaySolved> = {};
+  for (const day of [...new Set([...flatDays, ...cubedDays])].sort()) {
+    // Played in both: the board that day's one daily is on.
+    const block = cubedDays.has(day) && (!flatDays.has(day) || dailyDimension(day) === 'block');
+    days[day] = block ? present({ dimension: 'block', time: times[day] }) : { dimension: 'grid' };
+  }
+  const keys = Object.keys(days);
+  const { longest, last } = runs(keys);
+  const lastSolved = keys[keys.length - 1];
+  const board = flat?.board;
+  const keep =
+    board &&
+    isDay(board.day) &&
+    dailyDimension(board.day) === 'grid' &&
+    // Solving a daily finishes its board, and a board from before it can't be played.
+    (!lastSolved || dayNumber(board.day) > dayNumber(lastSolved));
+  return present({
+    days,
+    lastSolved,
+    streak: last,
+    best: Math.max(count(flat?.best), count(cubed?.best), longest),
+    solves: Math.max(count(flat?.solves) + cubedDays.size, keys.length),
+    board: keep ? { day: board.day, dimension: 'grid' as const, saved: board.saved } : undefined,
+  });
+}
+
+/** Both games' saves as one. The dailies merge on their own (`mergeDailies`, step 2), and badges in #157. */
 export function mergeLegacy(flat: FlatSaves, cubed: CubedSaves): MergedSaves {
   return present({
     progress: mergeProgress(flat.progress, cubed.progress),

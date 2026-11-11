@@ -7,7 +7,7 @@ import { mergeSaves, SAVE_VERSION, type SaveBundle } from './saveMerge';
 const bundle = (rest: Partial<SaveBundle>): SaveBundle => ({ version: SAVE_VERSION, ...rest });
 const progress = (rest = {}) => ({ solved: {}, boards: {}, time: {}, ...rest });
 const run = (rest = {}) => ({ current: null, seenScenes: [], jobs: {}, ...rest });
-const daily = (rest = {}) => ({ streak: 0, best: 0, solves: 0, ...rest });
+const daily = (rest = {}) => ({ days: {}, streak: 0, best: 0, solves: 0, ...rest });
 
 /** Merges both ways round, checks they agree, and returns the result. */
 function merged(a: SaveBundle, b: SaveBundle) {
@@ -221,7 +221,11 @@ describe('the daily', () => {
     expect(out).toMatchObject({ best: 30, solves: 50 });
   });
 
-  const board = (day: string, elapsed: number) => ({ day, saved: { cells: '1', elapsed } });
+  const board = (day: string, elapsed: number) => ({
+    day,
+    dimension: 'grid' as const,
+    saved: { cells: '1', elapsed },
+  });
 
   it('keeps the board with more time on the same day', () => {
     const out = merge({ board: board('2026-11-05', 10) }, { board: board('2026-11-05', 20) });
@@ -246,6 +250,40 @@ describe('the daily', () => {
   it('keeps a board for a day after the last one solved', () => {
     const out = merge({ board: board('2026-11-05', 10) }, { lastSolved: '2026-11-04', streak: 1 });
     expect(out.board?.day).toBe('2026-11-05');
+  });
+
+  const solvedDays = (...days: string[]) => ({
+    days: Object.fromEntries(days.map((day, i) => [day, { dimension: i % 2 ? 'block' : 'grid' }])),
+    lastSolved: days[days.length - 1],
+    streak: days.length,
+    best: days.length,
+    solves: days.length,
+  });
+
+  it('joins up a streak played partly on each device (#156)', () => {
+    const out = merge(solvedDays('2026-11-01', '2026-11-02'), {
+      ...solvedDays('2026-11-03'),
+      streak: 1,
+    });
+    expect(out).toMatchObject({ lastSolved: '2026-11-03', streak: 3, best: 3, solves: 3 });
+    expect(Object.keys(out.days).sort()).toEqual(['2026-11-01', '2026-11-02', '2026-11-03']);
+  });
+
+  it('counts a day solved on both devices once, and keeps its better time', () => {
+    const a = {
+      ...solvedDays('2026-11-04'),
+      days: { '2026-11-04': { dimension: 'grid', time: 90 } },
+    };
+    const b = {
+      ...solvedDays('2026-11-04'),
+      days: { '2026-11-04': { dimension: 'grid', time: 60 } },
+    };
+    expect(merge(a, b)).toMatchObject({ solves: 1, days: { '2026-11-04': { time: 60 } } });
+  });
+
+  it("keeps solves from before the days were listed, and adds the other side's days", () => {
+    const out = merge({ ...solvedDays('2026-11-04'), solves: 40 }, solvedDays('2026-11-05'));
+    expect(out.solves).toBe(41);
   });
 });
 
@@ -358,8 +396,12 @@ describe('order and repeats never matter', () => {
       if (chance()) jobs[id].hitsOnWins = n(3);
       if (wins && chance()) jobs[id].wonOn = chance() ? ['grid'] : ['block', 'grid'];
     }
-    const days = ['2026-11-03', '2026-11-04', '2026-11-05'];
-    const lastSolved = chance() ? days[n(3)] : undefined;
+    const days = ['2026-11-02', '2026-11-03', '2026-11-04', '2026-11-05'];
+    // A real save's days end at lastSolved, and its streak is the run ending there.
+    const solvedDays = days.filter(chance);
+    const lastSolved = solvedDays[solvedDays.length - 1];
+    let streak = 0;
+    for (let i = days.indexOf(lastSolved); i >= 0 && solvedDays.includes(days[i]); i--) streak++;
     // Solving a daily clears its board, so a real save never has one from before.
     const open = days.filter((day) => !lastSolved || day > lastSolved);
     const earned: Record<string, { tier?: 'bronze' | 'silver' | 'gold'; at?: number }> = {};
@@ -387,12 +429,27 @@ describe('order and repeats never matter', () => {
           : {}),
       },
       daily: {
-        streak: n(4),
-        best: n(9),
-        solves: n(9),
+        days: Object.fromEntries(
+          solvedDays.map((day) => [
+            day,
+            {
+              dimension: chance() ? ('grid' as const) : ('block' as const),
+              ...(chance() ? { time: 1 + n(9) } : {}),
+            },
+          ]),
+        ),
+        streak,
+        best: streak + n(9),
+        solves: solvedDays.length + n(9),
         ...(lastSolved ? { lastSolved } : {}),
         ...(open.length && chance()
-          ? { board: { day: open[n(open.length)], saved: { cells: '1', elapsed: n(4) } } }
+          ? {
+              board: {
+                day: open[n(open.length)],
+                dimension: 'grid' as const,
+                saved: { cells: '1', elapsed: n(4) },
+              },
+            }
           : {}),
       },
       badges: { earned },

@@ -4,11 +4,12 @@ import {
   isDailySolved,
   recordDailySolve,
   saveDailyBoard,
+  solvedOn,
 } from '../../game/daily';
 import { badgeNote, earnFromStats } from '../../game/badges';
 import { currentPoints, rankUpNote } from '../../game/rank';
 import { getSettings } from '../../game/settings';
-import { dailyFor, dateKey, previousDay, type Daily } from '../../puzzles/daily';
+import { dailyDimension, dailyFor, dateKey, type Daily } from '../../puzzles/daily';
 import { createPicture } from '@picross/play-grid/ui/board/picture';
 import { allPuzzlesLink } from '@picross/play-grid/ui/components/endPanels';
 import { el } from '@picross/shared/ui/dom';
@@ -30,19 +31,21 @@ function dayLabel(key: string): string {
 const reveal = (daily: Daily) =>
   `It was the ${daily.base.name}${daily.transform === 'as drawn' ? '' : `, ${daily.transform}`}.`;
 
-/** Today's puzzle at #/daily (#69): its own board and a streak, apart from free play. */
+/**
+ * Today's puzzle at #/daily (#69) on a Flat day: its own board and a streak, apart from free
+ * play. On a Cubed day (#156) the route opens Cubed's daily screen instead (routes.ts).
+ */
 export function renderDailyScreen(app: HTMLElement): () => void {
   const daily = dailyFor(today());
-  const yesterday = previousDay(daily.key);
   const session: PlaySession = {
     title: `Daily · ${dayLabel(daily.key)}`,
     mode: getSettings().mode,
-    saved: getDailyBoard(daily.key),
-    save: (board) => saveDailyBoard(daily.key, board),
+    saved: getDailyBoard(daily.key, 'grid'),
+    save: (board) => saveDailyBoard(daily.key, 'grid', board),
     complete(game) {
       const already = isDailySolved(daily.key);
       const pointsBefore = currentPoints();
-      const streak = recordDailySolve(daily.key, yesterday);
+      const streak = recordDailySolve(daily.key, 'grid', game.elapsed);
       let note = `Solved in ${formatTime(game.elapsed)}`;
       if (game.hintsUsed) note += ` · ${plural(game.hintsUsed, 'hint')}`;
       note += ` · 🔥 ${plural(streak, 'day')} in a row`;
@@ -58,27 +61,44 @@ export function renderDailyScreen(app: HTMLElement): () => void {
   return renderGameScreen(app, daily.puzzle, session);
 }
 
-/** The daily card at the top of the puzzle list: today's date, size, streak, and status. */
+/** What the player calls each board. */
+const BOARD_NAMES = { grid: 'Flat', block: 'Cubed' } as const;
+
+/**
+ * The daily card at the top of the puzzle list: today's date, which board it's on (#156),
+ * its size, the streak, and status. A Cubed day's block isn't drawn here, so the list
+ * doesn't load Cubed's pack.
+ */
 export function dailyCard(): HTMLElement {
-  const daily = dailyFor(today());
-  const solved = isDailySolved(daily.key);
-  const { streak, best } = dailyStreak(daily.key, previousDay(daily.key));
+  const key = today();
+  const dimension = dailyDimension(key);
+  const flat = dimension === 'grid' ? dailyFor(key) : null;
+  const solved = solvedOn(key);
+  const { streak, best } = dailyStreak(key);
+  const solvedNote = flat
+    ? ` · ${reveal(flat)}`
+    : solved?.time !== undefined
+      ? ` in ${formatTime(solved.time)}`
+      : '';
   const status = solved
-    ? `✓ Solved · ${reveal(daily)}`
-    : getDailyBoard(daily.key)
+    ? `✓ Solved${solvedNote}`
+    : getDailyBoard(key, dimension)
       ? 'In progress'
       : 'Not solved yet';
-  const thumb = solved
-    ? createPicture(daily.puzzle.solution, Math.floor(60 / daily.puzzle.width))
-    : el('span', { className: 'thumb-unknown', textContent: '?' });
+  const thumb =
+    solved && flat
+      ? createPicture(flat.puzzle.solution, Math.floor(60 / flat.puzzle.width))
+      : el('span', { className: 'thumb-unknown', textContent: flat ? '?' : '🧊' });
+  const meta = [
+    `Today: ${BOARD_NAMES[dimension]}`,
+    ...(flat ? [`${flat.puzzle.width}×${flat.puzzle.height}`] : []),
+    status,
+  ];
   return el('a', { className: `daily-card${solved ? ' solved' : ''}`, href: '#/daily' }, [
     el('div', { className: 'thumb' }, [thumb]),
     el('div', { className: 'daily-text' }, [
-      el('span', { className: 'daily-kicker', textContent: `Daily · ${dayLabel(daily.key)}` }),
-      el('span', {
-        className: 'daily-meta',
-        textContent: `${daily.puzzle.width}×${daily.puzzle.height} · ${status}`,
-      }),
+      el('span', { className: 'daily-kicker', textContent: `Daily · ${dayLabel(key)}` }),
+      el('span', { className: 'daily-meta', textContent: meta.join(' · ') }),
       el('span', {
         className: 'daily-streak',
         textContent:

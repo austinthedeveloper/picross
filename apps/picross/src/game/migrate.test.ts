@@ -6,7 +6,9 @@ import mainSource from '../main.ts?raw';
 import migrateSource from './migrate.ts?raw';
 import legacyMergeSource from './legacyMerge.ts?raw';
 import mergingSource from './merging.ts?raw';
-import { BACKUP_KEY, MARKER_KEY, migrate, SAVE_FORMAT, type KeyValue } from './migrate';
+import daysSource from '@picross/shared/puzzles/days?raw';
+import { BACKUP_KEY, KEYS, MARKER_KEY, migrate, SAVE_FORMAT, type KeyValue } from './migrate';
+import { DAILY_KEY } from './daily';
 
 /**
  * The first-launch merge (#155) against saves from real play: `fixtures/legacy/` holds every
@@ -57,7 +59,7 @@ describe.each(NAMES)('%s', (name) => {
 
   it('merges once, then writes its marker', () => {
     seed(before);
-    expect(migrate(localStorage, NOW)).toEqual([1]);
+    expect(migrate(localStorage, NOW)).toEqual([1, 2]);
     expect(read(MARKER_KEY)).toEqual({ version: SAVE_FORMAT, mergedAt: NOW });
   });
 
@@ -155,6 +157,21 @@ describe.each(NAMES)('%s', (name) => {
       else expect(run.jobs[id]).not.toHaveProperty('wonOn');
     }
   });
+
+  it("makes one daily of both games', a day in either counting (#156)", () => {
+    seed(before);
+    migrate(localStorage, NOW);
+    const flat = parsed(name, 'picross:daily');
+    const cubed = parsed(name, 'picross3d:daily');
+    const daily = read(DAILY_KEY);
+    const cubedDays = Object.keys(cubed?.times ?? {});
+    for (const day of cubedDays) expect(daily.days[day]).toBeDefined();
+    if (flat) expect(daily.days[flat.lastSolved]).toBeDefined();
+    expect(daily.solves).toBe((flat?.solves ?? 0) + cubedDays.length);
+    expect(daily.best).toBeGreaterThanOrEqual(Math.max(flat?.best ?? 0, cubed?.best ?? 0));
+    expect(daily.streak).toBeGreaterThanOrEqual(Math.max(flat?.streak ?? 0, cubed?.streak ?? 0));
+    expect(daily).not.toHaveProperty('board');
+  });
 });
 
 describe('the fixtures', () => {
@@ -206,9 +223,60 @@ describe('the fixtures', () => {
   });
 });
 
+describe('the dailies (#156)', () => {
+  it('are one, on the key the daily reads', () => {
+    expect(KEYS.daily).toBe(DAILY_KEY);
+  });
+
+  it('come out as one day, solved in both games, from the fixtures', () => {
+    seed(raw('both'));
+    migrate(localStorage, NOW);
+    const cubedTime = parsed('both', 'picross3d:daily').times['2026-11-11'];
+    // 2026-11-11 is a Cubed day, so it's Cubed's solve (with its time) that the day keeps.
+    expect(read(DAILY_KEY)).toEqual({
+      days: { '2026-11-11': { dimension: 'block', time: cubedTime } },
+      lastSolved: '2026-11-11',
+      streak: 1,
+      best: 1,
+      solves: 2,
+    });
+  });
+
+  it('merge for a save that had step 1 only, with dailies played since', () => {
+    const flat = { lastSolved: '2026-11-12', streak: 2, best: 2, solves: 2 };
+    const cubed = { streak: 1, best: 1, last: '2026-11-10', times: { '2026-11-10': 4000 } };
+    seed({
+      'picross:daily': JSON.stringify(flat),
+      'picross3d:daily': JSON.stringify(cubed),
+      [MARKER_KEY]: JSON.stringify({ version: 1, mergedAt: 5 }),
+    });
+    expect(migrate(localStorage, NOW)).toEqual([2]);
+    expect(read(MARKER_KEY)).toEqual({ version: 2, mergedAt: 5 });
+    expect(read(DAILY_KEY)).toMatchObject({ lastSolved: '2026-11-12', streak: 3, solves: 3 });
+    // Both old keys stay as they were, for a rollback.
+    expect(read('picross:daily')).toEqual(flat);
+    expect(read('picross3d:daily')).toEqual(cubed);
+  });
+
+  it('come out the same if cut short before the marker, and run again', () => {
+    seed({
+      'picross:daily': JSON.stringify({ lastSolved: '2026-11-12', streak: 2, best: 2, solves: 2 }),
+      [MARKER_KEY]: JSON.stringify({ version: 1, mergedAt: 5 }),
+    });
+    migrate(localStorage, NOW);
+    const once = snapshot();
+    localStorage.setItem(MARKER_KEY, JSON.stringify({ version: 1, mergedAt: 5 }));
+    expect(migrate(localStorage, NOW)).toEqual([2]);
+    expect(snapshot()).toEqual(once);
+  });
+});
+
 describe('the runner', () => {
   it("doesn't merge a save that has the marker", () => {
-    const keys = { ...raw('both'), [MARKER_KEY]: JSON.stringify({ version: 1, mergedAt: 5 }) };
+    const keys = {
+      ...raw('both'),
+      [MARKER_KEY]: JSON.stringify({ version: SAVE_FORMAT, mergedAt: 5 }),
+    };
     seed(keys);
     expect(migrate(localStorage, NOW)).toEqual([]);
     expect(snapshot()).toEqual(Object.fromEntries(Object.entries(keys).sort()));
@@ -217,7 +285,7 @@ describe('the runner', () => {
   it('writes only its marker and an empty copy for a new player', () => {
     migrate(localStorage, NOW);
     expect(snapshot()).toEqual({
-      [MARKER_KEY]: JSON.stringify({ version: 1, mergedAt: NOW }),
+      [MARKER_KEY]: JSON.stringify({ version: 2, mergedAt: NOW }),
       [BACKUP_KEY]: JSON.stringify({ 'picross:run': null, 'picross:settings': null }),
     });
   });
@@ -250,7 +318,13 @@ describe('the runner', () => {
     const imports = (source: string) =>
       [...source.matchAll(/^import (?!type)[\s\S]*?from '(.+?)';$/gm)].map((m) => m[1]);
     expect(imports(migrateSource)).toEqual(['./legacyMerge']);
-    expect(imports(legacyMergeSource)).toEqual(['@picross/shared/puzzles/ids', './merging']);
+    expect(imports(legacyMergeSource)).toEqual([
+      '@picross/shared/puzzles/days',
+      '@picross/shared/puzzles/ids',
+      './merging',
+    ]);
+    // Day keys only: the 2D daily's module would bring in the pack.
+    expect(imports(daysSource)).toEqual([]);
     expect(imports(mergingSource)).toEqual([]);
   });
 });

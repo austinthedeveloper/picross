@@ -98,7 +98,7 @@ apps/
         runs.ts            The story's encounters and jobs on a flat board: 2D puzzles and enemies
         chapters.ts        The story's chapters (#23), holding this game's jobs
         endless.ts         Endless mode: seeded encounter order, scaling, the run as a RunDef (#68)
-        daily.ts           The daily puzzle: date keys and the day's puzzle and turn (#69)
+        daily.ts           The Flat daily: the day's puzzle and turn (#69); date keys from shared
         tutorial.ts        How to play: its picture and steps, and what counts as a wrong move
         enemies.ts         Validates an enemy; lists its powers (startingPowers, phasePowers, enemyPowers)
         ranks.ts           The rank ladder (#106)
@@ -110,11 +110,11 @@ apps/
         progress.ts        Both games' free play: solve stats, boards, time (localStorage; progressFor(dim))
         runSave.ts         Both games' runs, seen scenes, job stats (localStorage)
         settings.ts        Both games' settings: mode, list filter/order, mute, haptics, dimDone… (localStorage)
-        daily.ts           Daily streak, best, and today's board (localStorage, #69)
+        daily.ts           The one daily (#156): days solved, streak, best, today's board (localStorage)
         badges.ts          Badge rules and the earned badges (#108)
         rank.ts            Rank, worked out from solves (#106)
         saveMerge.ts       Merges two copies of a save (#97)
-        migrate.ts         Save migrations, first thing at startup; step 1 merges the two games' saves (#155)
+        migrate.ts         Save migrations, first thing at startup: the two games' saves (#155), their dailies (#156)
         legacyMerge.ts     That merge's rules, pure (tested on fixtures/legacy/, saves from real play)
         merging.ts         The pieces both merges are built from
         pickPuzzle.ts      The next unsolved puzzle (#114)
@@ -123,7 +123,7 @@ apps/
         screens/
           selectScreen.ts    Puzzle list, mode, settings, stats       (#/)
           freePlaySession.ts Free-play PlaySession: saves, best times, "Next" (#/play/<id>)
-          daily.ts           The daily puzzle: its card on the list and its PlaySession (#/daily)
+          daily.ts           The daily: its card on the list, and a Flat day's PlaySession (#/daily)
           mural.ts           Murals: the list section, a mural's tiles, playing a tile (#/mural/…)
           howToPlay.ts       Guided solve on a real board, then rules (#/how-to-play)
           editorScreen.ts    Puzzle authoring tool                   (#/editor)
@@ -190,6 +190,7 @@ packages/
       imports.test.ts      Nothing here imports from an app or another package
       engine/random.ts     Seeded random numbers and shuffles (endless, daily)
       puzzles/ids.ts       Puzzle ids with a dimension: qualify('grid', 'mug') is 'grid:mug' (#147)
+      puzzles/days.ts      Day keys, and which board a day's daily is on (dailyDimension, #156)
       game/
         prefs.ts           The settings shared code reads (mute, haptics, contrast); each app's main.ts provides its own
         storage.ts         Safe localStorage JSON read/write
@@ -298,6 +299,7 @@ packages/
         hide.ts            Picks the clues a puzzle hides
         difficulty.ts      Bands by passes
         daily.ts, transform.ts  The daily: a pack puzzle turned or mirrored
+        dailyCycle.ts      Which puzzle and turn each Cubed day is: every one before a repeat (#156)
         diorama.ts, dioramas.ts  Dioramas: big blocks split into tile puzzles
         sheet.ts           The sheet format (layers side by side)
         check.ts, draft.ts, share.ts  The editor's checks, drafts and share codes
@@ -406,16 +408,16 @@ the save merge (#155) the 2D game and Picross Cubed share one save:
 | `picross:run`      | `game/runSave.ts`            | The 2D run in progress (`current`, with the current encounter's board), Cubed's (`block.current`, its own RunState), the scenes and tips seen, and job stats from both (`wonOn`: the boards a job's been won on)    |
 | `picross:settings` | `game/settings.ts`           | `mode` (default for new runs), `listFilter`, `listOrder`, `listDifficulty`, `collapsedSections`, `muted`, `highContrast`, `haptics`, and Cubed's `dimDone` and `cubedTutorialDone`, and `freePlayTab` (#153)        |
 | `picross:badges`   | `game/badges.ts`             | Earned badges: each one's best tier and the date you first earned it                                                                                                                                                |
-| `picross:daily`    | `game/daily.ts`              | Daily streak, best streak, solve count, and today's board                                                                                                                                                           |
+| `picross:daily2`   | `game/daily.ts`              | The one daily (#156): every day solved (`days`: its board, and best time if kept), the streak as of `lastSolved`, the best streak, the solve count, and today's board (with its board, `dimension`)                 |
 | `picross:editor`   | `ui/screens/editorScreen.ts` | The editor's current drawing                                                                                                                                                                                        |
 | `picross:game`     | `gameSwitch.ts` (shared)     | The Flat \| Cubed switch's last pick                                                                                                                                                                                |
 | `picross:save`     | `game/migrate.ts`            | `{ version, mergedAt }`: the migrations run so far                                                                                                                                                                  |
 | `picross:premerge` | `game/migrate.ts`            | The text of `picross:run` and `picross:settings` from before the merge rewrote them                                                                                                                                 |
-| `picross3d:daily`  | `cubed/game/daily.ts`        | Cubed's daily streak and times, apart until #156                                                                                                                                                                    |
+| `picross:daily`    | (old)                        | The 2D game's daily before #156; read only by the migration                                                                                                                                                         |
 | `picross3d:badges` | `cubed/game/badges.ts`       | The Cubed badge tiers already seen, apart until #157                                                                                                                                                                |
 
-Cubed's `cubed/game/progress.ts`, `runSave.ts` and `settings.ts` are views of the first three
-on the `block` side (`progressFor('block')`, `block` in the run save, `tutorialDone` read
+Cubed's `cubed/game/progress.ts`, `runSave.ts`, `settings.ts` and `daily.ts` are views of the
+first three and the daily on the `block` side (`progressFor('block')`, `block` in the run save, `tutorialDone` read
 from `cubedTutorialDone`), so Cubed's screens didn't change. A job is the same job on either
 board, so the job stats and the scenes seen are both games', while each game keeps its own
 run in progress, and either can be continued while the other waits.
@@ -437,10 +439,30 @@ real play in `game/fixtures/legacy/`):
 - **Settings:** `picross3d:settings` into `picross:settings`. A setting both games have takes
   the 2D game's value where its key had one, and Cubed's otherwise. `picross:game` becomes
   `freePlayTab`.
-- **Not yet:** the two dailies stay on their own keys until #156, and badges are recounted
-  across both in #157.
+- **Not yet:** badges are recounted across both in #157.
 
-Nothing deletes a key. `picross:v1` and every `picross3d:` key stay as they were, for a
+Step 2 (#156) merges the two dailies into the one daily, `picross:daily2`, with
+`mergeDailies` in `legacyMerge.ts`. It runs for a save step 1 already merged too, which has
+played both dailies on their old keys since:
+
+- **Days:** Cubed's are every day it has a time for. The 2D game kept no list, only its
+  streak as of `lastSolved`, so its days are that streak's: `lastSolved` and the `streak − 1`
+  days before it. A day either game solved counts; one solved in both keeps the board that
+  day's one daily is on.
+- **Streak and best:** the streak is the run of days in a row ending at the last day solved,
+  kept as of that day; whether it's still alive is decided on the day, as before (the last
+  solve was today or yesterday). The best is the highest of both games' bests and every run
+  in the days.
+- **Solves** add up: the 2D game's count and Cubed's days (a day solved in both was two
+  puzzles), so rank keeps every daily it counted.
+- **A board in progress** comes along only if the one daily would open it: the 2D game's,
+  for a Flat day after its last solve. Cubed's never does, since Cubed's days have new
+  puzzles now.
+
+Like step 1's, it reads only keys nothing else writes, and writes a new key, so it's safe to
+run again and `picross:daily` and `picross3d:daily` stay for a rollback.
+
+Nothing deletes a key. `picross:v1`, `picross:daily` and every `picross3d:` key stay as they were, for a
 rollback, and only the migration reads them. The two keys it rewrites keep their old text in
 `picross:premerge`, which is also what a step reads if it runs again after being cut short,
 so Cubed's jobs never count twice.
@@ -532,7 +554,7 @@ draws. A new screen is one entry. Hash routing works on GitHub Pages without ser
 | `#/run`            | `renderRunScreen`: start panel, path map, or results                                              |
 | `#/scene/<id>`     | `renderSceneScreen`: preview a scene (Replay at the end)                                          |
 | `#/run/play`       | `renderRunEncounter`: the current encounter's puzzle                                              |
-| `#/daily`          | `renderDailyScreen`: today's daily puzzle (#69)                                                   |
+| `#/daily`          | Today's daily (#69, #156): `renderDailyScreen` on a Flat day, Cubed's daily screen on a Cubed day |
 | `#/mural/<id>`     | `renderMuralScreen`: a mural's tiles, or the finished picture (#24)                               |
 | `#/mural/<id>/<n>` | `renderMuralTile`: tile n of a mural                                                              |
 | `#/cubed/…`        | Picross Cubed (`cubed/routes.ts`; its routes are in [docs/cubed/](cubed/architecture.md#screens)) |
@@ -664,20 +686,42 @@ special cases for encounter types.
 
 ## The daily puzzle
 
-A card at the top of the puzzle list opens `#/daily` (#69): one puzzle a day, the same
-for everyone on the same local date.
+A card at the top of each game's list opens `#/daily` (#69): one puzzle a day, the same
+for everyone on the same local date. Since #156 there's one daily for both games, with one
+streak, on the two boards by turns.
 
-- **The pick:** `puzzles/daily.ts` takes every pack puzzle 15×15 or bigger (from
+- **The board:** `dailyDimension` (`packages/shared/src/puzzles/days.ts`) puts the daily on
+  Flat on odd days since the epoch and Cubed on even ones (by `dayNumber`, never the day of
+  the month, which would put two Flat days together after a 31st). One a day, rather than
+  both: the 3D one is slower, and two would double the daily. The route picks the screen:
+  a Flat day draws `renderDailyScreen`, and a Cubed day loads Cubed's daily screen with
+  `import()` (`routes.ts`), so three.js stays out of the first download. `#/cubed/daily`,
+  the old link, moves to `#/daily` (`movedTo`, before routing), and so does `/3d/#/daily`.
+  Both lists' cards say which board today's is ("Today: Cubed"); the 2D list doesn't draw a
+  Cubed day's block, so it doesn't load Cubed's pack.
+- **A Flat day's pick:** `puzzles/daily.ts` takes every pack puzzle 15×15 or bigger (from
   `packInOrder`, so re-sorting the list doesn't move anyone's daily) in all eight
   turns and flips (`engine/transform.ts`). That's 213 × 8 = 1704 boards, shuffled with a
-  fixed seed into a cycle, so nothing repeats until the cycle runs out. Turning or
-  flipping keeps a puzzle uniquely solvable, since its clues just move or reverse. The
-  tests solve a sample of days to check.
+  fixed seed into a cycle by calendar day, so nothing repeats until the cycle runs out.
+  Flat days play exactly what they did before #156; Cubed's days just skip their turn.
+  Turning or flipping keeps a puzzle uniquely solvable, since its clues just move or
+  reverse. The tests solve a sample of days to check.
+- **A Cubed day's pick:** `packages/block/src/puzzles/dailyCycle.ts` runs Cubed day number
+  `Math.floor(dayNumber / 2)` through a cycle of every pool puzzle (4 or more on the longest
+  side) in all eight turns and mirrors, the same cycle over and over, so no puzzle and turn
+  repeats within any stretch of that many Cubed days. The cycle is eight rounds of the
+  whole pool, each in a fixed shuffle, so a block comes back only in the next round, in a
+  turn it hasn't had, and never two Cubed days running. (Before #156 Cubed picked by a hash
+  of the date, which repeated.) A test checks the next 365 days: the boards alternate, and
+  neither repeats.
 - **Hidden until solved:** the board is named "Daily puzzle". The end panel and the card
   then say which pack puzzle it was and how it was turned.
-- **Saves:** the daily keeps its own save (`picross:daily`), apart from free-play stats.
-  It holds today's board, the streak, the best streak and the solve count. A streak
-  counts while the last solve was today or yesterday, and shows 0 once a day is missed.
+- **Saves:** the one daily's save (`picross:daily2`, `game/daily.ts`; Cubed's
+  `cubed/game/daily.ts` is a view of it) is apart from free-play stats. It holds every day
+  solved (its board, and its best time), the streak, the best streak and the solve count,
+  and today's board in progress with the board it's on. A streak counts while the last
+  solve was today or yesterday, on either board, and shows 0 once a day is missed. Both
+  games' daily badges and rank read it, so they count both boards' days.
 
 ## The puzzle list
 

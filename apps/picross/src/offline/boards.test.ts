@@ -10,7 +10,6 @@ describe('isBoardRoute', () => {
     '#/editor',
     '#/cubed/play/steps',
     '#/cubed/tutorial',
-    '#/cubed/daily',
     '#/cubed/diorama/park/2',
     '#/cubed/story/play',
     '#/cubed/editor',
@@ -32,6 +31,8 @@ describe('isBoardRoute', () => {
     '#/cubed/badges',
     '#/cubed/diorama/park',
     '#/cubed/how-to-play',
+    // The old link to Cubed's daily: it never stays up (main.ts moves it to #/daily).
+    '#/cubed/daily',
     // Look-alikes.
     '#/play/',
     '#/dailyx',

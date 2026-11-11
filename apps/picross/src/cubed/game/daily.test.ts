@@ -17,7 +17,16 @@ describe('daily streaks', () => {
     expect(d.currentStreak('2026-11-11')).toBe(0);
     expect(d.recordDaily('2026-11-12', 60_000)).toBe(1);
     expect(d.bestStreak()).toBe(2);
-    expect(d.solvedOn('2026-11-08')).toBe(50_000);
+    expect(d.solvedOn('2026-11-08')).toEqual({ dimension: 'block', time: 50_000 });
+  });
+
+  it('are the one daily’s: a Flat day counts toward the streak (#156)', async () => {
+    const d = await load();
+    const one = await import('../../game/daily');
+    expect(d.recordDaily('2026-11-11', 60_000)).toBe(1);
+    expect(one.recordDailySolve('2026-11-12', 'grid', 90_000)).toBe(2);
+    expect(d.currentStreak('2026-11-13')).toBe(2);
+    expect(d.getDailyBoard('2026-11-12')).toBeUndefined();
   });
 
   it('keep only today’s board', async () => {

@@ -34,7 +34,7 @@ test('both games keep their solves and runs in progress', async ({ page, context
   // Cubed was played last, so the app opens on it, as before the merge.
   await expect(page).toHaveURL(/#\/cubed$/);
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('picross:save')!))).toEqual({
-    version: 1,
+    version: 2,
     mergedAt: expect.any(Number),
   });
 
@@ -72,6 +72,24 @@ test('both games keep their solves and runs in progress', async ({ page, context
   );
   expect(cubed.node).toBe(1);
   expect(cubed.board.blocks.startsWith('22')).toBe(true);
+});
+
+test('both dailies become one, with one streak (#156)', async ({ page, context }) => {
+  // Both games solved the daily on 2026-11-11, a Cubed day of the one daily.
+  await arriveWith(context, 'both');
+  await page.clock.setFixedTime(new Date(2026, 10, 11, 12));
+  await page.goto('/#/');
+  await page.getByRole('link', { name: /Flat/ }).click();
+  const card = page.locator('.daily-card');
+  await expect(card).toContainText('Today: Cubed · ✓ Solved in');
+  await expect(card).toContainText('🔥 1 day in a row · best 1');
+  // The next day, a Flat one: the streak is still alive, on both lists.
+  await page.clock.setFixedTime(new Date(2026, 10, 12, 12));
+  await page.reload();
+  await expect(card).toContainText(/Today: Flat · \d+×\d+ · Not solved yet/);
+  await expect(card).toContainText('🔥 1 day in a row');
+  await page.goto('/#/cubed');
+  await expect(page.locator('.daily-card')).toContainText('Keep your 1 day streak going.');
 });
 
 test("a later launch doesn't merge the old saves again", async ({ page, context }) => {

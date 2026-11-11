@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { mergeJob, mergeLegacy, mergeProgress, mergeRuns, mergeSettings } from './legacyMerge';
+import {
+  mergeDailies,
+  mergeJob,
+  mergeLegacy,
+  mergeProgress,
+  mergeRuns,
+  mergeSettings,
+} from './legacyMerge';
 import { startRun } from './run';
 import type { Settings } from './settings';
 
@@ -218,5 +225,129 @@ describe('the whole save', () => {
 
   it('is empty when neither game was played', () => {
     expect(mergeLegacy({}, {})).toEqual({});
+  });
+});
+
+describe('the dailies (#156)', () => {
+  // 2026-11-11 is a Cubed day (even since the epoch), 2026-11-12 a Flat one.
+  const flat = (lastSolved: string, streak: number, rest = {}) => ({
+    lastSolved,
+    streak,
+    best: streak,
+    solves: streak,
+    ...rest,
+  });
+  const cubed = (times: Record<string, number>, rest = {}) => {
+    const days = Object.keys(times).sort();
+    return { times, last: days[days.length - 1], streak: 1, best: 1, ...rest };
+  };
+
+  it("rebuilds the 2D game's days from its streak", () => {
+    const out = mergeDailies(flat('2026-11-03', 3, { solves: 10, best: 6 }), undefined)!;
+    expect(out).toEqual({
+      days: {
+        '2026-11-01': { dimension: 'grid' },
+        '2026-11-02': { dimension: 'grid' },
+        '2026-11-03': { dimension: 'grid' },
+      },
+      lastSolved: '2026-11-03',
+      streak: 3,
+      best: 6,
+      solves: 10,
+    });
+  });
+
+  it("takes Cubed's days and times as they were", () => {
+    const out = mergeDailies(undefined, cubed({ '2026-11-01': 500, '2026-11-03': 400 }))!;
+    expect(out.days).toEqual({
+      '2026-11-01': { dimension: 'block', time: 500 },
+      '2026-11-03': { dimension: 'block', time: 400 },
+    });
+    expect(out).toMatchObject({ lastSolved: '2026-11-03', streak: 1, best: 1, solves: 2 });
+  });
+
+  it('joins days from both games into one streak, across a month', () => {
+    const out = mergeDailies(
+      flat('2026-10-30', 2),
+      cubed({ '2026-10-31': 300, '2026-11-01': 200 }, { streak: 2, best: 2 }),
+    )!;
+    expect(Object.keys(out.days)).toEqual(['2026-10-29', '2026-10-30', '2026-10-31', '2026-11-01']);
+    expect(out).toMatchObject({ lastSolved: '2026-11-01', streak: 4, best: 4, solves: 4 });
+  });
+
+  it("takes the longer game's streak when they overlap", () => {
+    const out = mergeDailies(
+      flat('2026-11-05', 5),
+      cubed({ '2026-11-04': 300, '2026-11-05': 200 }, { streak: 2 }),
+    )!;
+    expect(out).toMatchObject({ streak: 5, best: 5 });
+    // A day solved in both was two puzzles.
+    expect(out.solves).toBe(7);
+    expect(Object.keys(out.days)).toHaveLength(5);
+  });
+
+  it("keeps the board that day's one daily is on when both games solved it", () => {
+    const out = mergeDailies(
+      flat('2026-11-12', 2),
+      cubed({ '2026-11-11': 300, '2026-11-12': 200 }, { streak: 2 }),
+    )!;
+    expect(out.days).toEqual({
+      '2026-11-11': { dimension: 'block', time: 300 },
+      '2026-11-12': { dimension: 'grid' },
+    });
+  });
+
+  it('has a gap break the streak, and keeps the longest run as the best', () => {
+    const out = mergeDailies(
+      flat('2026-11-03', 3, { best: 2 }),
+      cubed({ '2026-11-05': 100, '2026-11-06': 100 }, { streak: 2, best: 2 }),
+    )!;
+    expect(out).toMatchObject({ lastSolved: '2026-11-06', streak: 2, best: 3 });
+  });
+
+  it('keeps a streak as of its last day, which is 0 on the day once a day is missed', () => {
+    // Long ago: the streak stands as of then, and the daily shows it broken (dailyStreak).
+    const out = mergeDailies(flat('2020-01-10', 4), undefined)!;
+    expect(out).toMatchObject({ lastSolved: '2020-01-10', streak: 4, best: 4 });
+  });
+
+  it('keeps the best ever, even from a streak since broken', () => {
+    const out = mergeDailies(
+      flat('2026-11-03', 1, { best: 30, solves: 40 }),
+      cubed({}, { best: 12, streak: 0, last: undefined }),
+    )!;
+    expect(out).toMatchObject({ streak: 1, best: 30, solves: 40 });
+  });
+
+  it("keeps a 2D board in progress for a Flat day, and never Cubed's", () => {
+    const board = { day: '2026-11-12', saved: { cells: '01', elapsed: 9 } };
+    const cubedBoard = { blocks: '012', elapsed: 5, date: '2026-11-11' };
+    const out = mergeDailies(
+      flat('2026-11-10', 1, { board }),
+      cubed({ '2026-11-10': 1 }, { board: cubedBoard }),
+    )!;
+    expect(out.board).toEqual({ ...board, dimension: 'grid' });
+    // Cubed's days have new puzzles now, so its board (even today's) would be another block's.
+    const only = mergeDailies(undefined, cubed({}, { board: cubedBoard, streak: 0 }))!;
+    expect(only).not.toHaveProperty('board');
+  });
+
+  it("drops a 2D board for what's now a Cubed day, or one from before the last solve", () => {
+    const saved = { cells: '01', elapsed: 9 };
+    expect(
+      mergeDailies(flat('2026-11-01', 1, { board: { day: '2026-11-11', saved } }), undefined),
+    ).not.toHaveProperty('board');
+    expect(
+      mergeDailies(flat('2026-11-14', 1, { board: { day: '2026-11-12', saved } }), undefined),
+    ).not.toHaveProperty('board');
+  });
+
+  it('leaves out what it cannot read, and has nothing when neither game played', () => {
+    expect(mergeDailies(undefined, undefined)).toBeUndefined();
+    const out = mergeDailies(
+      { lastSolved: 'yesterday', streak: -3, solves: Number.NaN },
+      { times: { nope: 5, '2026-11-11': -1 } },
+    )!;
+    expect(out).toEqual({ days: {}, streak: 0, best: 0, solves: 0 });
   });
 });

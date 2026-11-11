@@ -68,10 +68,12 @@ shape: it paints it instead and costs a heart. Solved means every cube outside t
 broken; painting is only a help. Undo works in whole strokes. Cubed's saves are the 2D game's
 since the save merge (#155): `game/progress.ts`, `runSave.ts` and `settings.ts` here are views
 of `picross:v2` (the `block:` ids), `picross:run` (Cubed's run is its `block`) and
-`picross:settings` (`dimDone`, `cubedTutorialDone`), so the screens didn't change. The daily
-(`picross3d:daily`) and the badge tiers seen (`picross3d:badges`) keep their keys until #156
-and #157. The old `picross3d:v1`, `picross3d:run` and `picross3d:settings` stay for a
-rollback, read only by the migration (see
+`picross:settings` (`dimDone`, `cubedTutorialDone`), so the screens didn't change. Since
+#156 `game/daily.ts` is a view of the one daily (`picross:daily2`): one daily for both
+games, on Cubed's board every other day, with one streak. The badge tiers seen
+(`picross3d:badges`) keep their key until #157. The old `picross3d:v1`, `picross3d:run`,
+`picross3d:settings` and `picross3d:daily` stay for a rollback, read only by the migration
+(see
 [State and persistence](../architecture.md#state-and-persistence)).
 
 ## The view
@@ -105,7 +107,7 @@ first download or Cubed's list. Every link between them goes through `cubedHref(
 | `#/cubed/how-to-play`                 | `howToPlay.ts`                                 | The rules                                                      |
 | `#/cubed/editor`                      | `editor/editorScreen.ts`                       | Draw, check and share puzzles (checks run in `checkWorker.ts`) |
 | `#/cubed/p/<code>`                    | `sharedScreen.ts`                              | A shared puzzle; `/test` for the editor's play-test            |
-| `#/cubed/daily`                       | `dailyScreen.ts` (`dailyCard.ts` for the list) | Today's puzzle and streak                                      |
+| `#/daily` (on a Cubed day)            | `dailyScreen.ts` (`dailyCard.ts` for the list) | Today's puzzle and streak; `#/cubed/daily` moves here (#156)   |
 | `#/cubed/badges`                      | `badgesScreen.ts`                              | Badges, worked out from saves (`game/badges.ts`)               |
 | `#/cubed/diorama/<id>[/<n>]`          | `dioramaScreen.ts` (`dioramaList.ts`)          | A diorama and its pieces                                       |
 | `#/cubed/story`, `#/cubed/story/play` | `story/*`                                      | Story mode (see [story.md](story.md))                          |

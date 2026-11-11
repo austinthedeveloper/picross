@@ -23,7 +23,7 @@ import { gameHref, lastGame } from '@picross/shared/ui/components/gameSwitch';
 import { applyTheme } from '@picross/shared/ui/theme';
 import { providePrefs } from '@picross/shared/game/prefs';
 import { getSettings, updateSettings } from './game/settings';
-import { ROUTES, type Cleanup, type Game, type Lazy } from './routes';
+import { movedTo, ROUTES, type Cleanup, type Game, type Lazy } from './routes';
 import { onHide, saveNow } from './ui/lifecycle';
 import './offline/register';
 
@@ -65,7 +65,8 @@ function route() {
   cleanup = undefined;
   onHide(null);
   const visit = ++routed;
-  const hash = location.hash;
+  const hash = movedTo(location.hash);
+  if (hash !== location.hash) history.replaceState(null, '', hash);
   let found: unknown;
   const next = ROUTES.find((r) => (found = r.match(hash)))!;
   enter(next.game ?? 'flat');
