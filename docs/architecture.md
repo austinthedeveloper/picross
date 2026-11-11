@@ -15,7 +15,7 @@ keeps the path under `src/` that it had in the app it came from.
 | Workspace             | Name                  | Owns                                                                                                                                                                                                                                                                | May import                                                                                                                      |
 | --------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | `packages/shared`     | `@picross/shared`     | What both games use that isn't the story: tokens and base styles, the run, fight, dig, dialogue and art styles, sound, haptics, theme, `dom`, `motion`, `storage`, `random`, `prefs`, puzzle ids, the Home, mute and Flat \| Cubed buttons, the art and `ui/art.ts` | Only its own files                                                                                                              |
-| `packages/story`      | `@picross/story`      | The story both games play: its JSON, loaders and checks, gadgets, the dialogue runner, the fight board interface (`fight/`), and the scene player (`ui/`)                                                                                                           | shared, outside its `ui/` and `styles/`. Its `ui/` may use all of shared. Its tests may also use block                          |
+| `packages/story`      | `@picross/story`      | The story both games play: its JSON, loaders and checks, gadgets, the dialogue runner, fights over any board (`fight/`: `FightBoard`, `StoryBattle`, `FightRules`), and the scene player (`ui/`)                                                                    | shared, outside its `ui/` and `styles/`. Its `ui/` may use all of shared. Its tests may also use block                          |
 | `packages/grid`       | `@picross/grid`       | The 2D rules and data: the engine, the puzzle format, the pack, sheets, ratings, murals, `Game` and the debug hooks. No DOM                                                                                                                                         | shared and story, outside their `ui/` and `styles/`                                                                             |
 | `packages/play-grid`  | `@picross/play-grid`  | Playing a 2D board: the board view, input, zoom, the play screen and its `PlaySession`, `board.css` and `game.css`                                                                                                                                                  | grid and shared                                                                                                                 |
 | `packages/block`      | `@picross/block`      | The 3D rules and data: the engine, the puzzle format, the pack, dioramas, the 3D story puzzles, `Game`, `Battle` and the story on blocks. No three.js                                                                                                               | shared and story, outside their `ui/` and `styles/`. Never three.js or play-block                                               |
@@ -226,6 +226,12 @@ packages/
       story.test.ts        The whole story reads, with no board
       boards.test.ts       The gate: the boards that can play each encounter and power
       game/dialogue.ts     Scene runner: current line or choices, advance, choose, flags
+      fight/
+        board.ts           FightBoard: what a fight needs of a board (#164)
+        fightBoardContract.ts  The tests every FightBoard passes (each board's tests run them)
+        battle.ts          StoryBattle and FightState: one battle over any board (#166)
+        rules.ts           FightRules: where the boards' fights differ; BLOCK_RULES, GRID_RULES
+        battle.test.ts     Each rule's other value, and powers from a pool
       puzzles/
         runs.ts            Reads and checks encounters and jobs; each game passes its puzzle and enemy
         chapters.ts        Reads and checks chapters: jobs grouped into story chapters (#23)
@@ -298,7 +304,7 @@ packages/
     src/
       imports.test.ts      Only shared and story outside ui/; never three.js, play-block or an app
       engine/              volume.ts (the block and its lines), clues.ts, solver.ts
-      game/                game.ts (Game, Mode, SavedBoard), battle.ts (Battle), clock.ts;
+      game/                game.ts (Game, Mode, SavedBoard), battle.ts (Battle: StoryBattle on a block), clock.ts;
                            battleTraces.test.ts (golden traces of every fight, #168)
       story/               data.ts (the story fitted to blocks, storyIssues), powers.ts (tips)
       puzzles/
@@ -975,8 +981,9 @@ helpers in `engine/`, all deterministic; `lineId` and `lineAt` turn a row or col
 id and back. The block's is `blockFightBoard` (`packages/block/src/game/fightBoard.ts`,
 #165): the block `Battle`'s own picks, lifted out with their draws in the same order, so the
 block traces and fight ratings didn't move. `fightBoardContract` (in the story) is the tests
-any board must pass; the grid's test runs it on four puzzles and the block's on five. The next step (#166) runs both boards' fights on one
-`Battle` over this interface.
+any board must pass; the grid's test runs it on four puzzles and the block's on five. The
+block's fights now run on one battle over this interface (see "One battle" below); the 2D
+game's move onto it next.
 
 Two tests hold it:
 
@@ -991,6 +998,42 @@ Two tests hold it:
   step, a call-out of each suspect while forgeries are left, a patch kit and a bomb. They snapshot each step's
   events, HP and changed state. A boss that switches board plays on flat, as Endless does.
   Update either snapshot (`vitest -u`) only when a change to how fights play is meant.
+
+### One battle
+
+`StoryBattle` (`packages/story/src/fight/battle.ts`, #166) is a fight written once over
+`FightBoard`: HP, phases, armor, the charge, turns, shields, call-outs and gadgets. It came
+out of Cubed's `Battle`, which is now `class Battle extends StoryBattle` with the same
+constructor and constants, on the block's board, so the block's saves, golden traces and
+fight ratings didn't move. It asks the board (`BattleBoard.at(marks)`, a `FightBoard` with
+the marks on it) for everything about lines, and draws from its one seeded generator in
+the order Cubed always has.
+
+- **State:** `FightState<C>`, plain data saved with the run: Cubed's `BattleState`, plus
+  optional fields for the 2D game (`turn.turns`, `counts.bombsUsed`, `counts.spongesUsed`).
+  Phases count Cubed's way (`phase` is the last one's index, -1 for none) and wrong fills
+  are `mistakes`; the 2D save keeps its own shape, and its codec will translate.
+- **Power lines:** a `LinePick`. A block's enemy gives counts (`{ count }`), picked at
+  runtime and checked with the solver; a 2D enemy names pools (`{ pool, count? }`), in
+  priority order and proven offline (the fairness test in `runs.test.ts`).
+- **Rules:** a `FightRules` profile (`rules.ts`) holds every place the boards' fights
+  differ, each documented with what each board does and why:
+
+| Rule            | Block (`BLOCK_RULES`)                          | Grid (`GRID_RULES`, #166's second half)                        |
+| --------------- | ---------------------------------------------- | -------------------------------------------------------------- |
+| `fakesCount`    | a forged line you finish counts (by the truth) | it counts once called out (its shown clue lies)                |
+| `armorHitBack`  | the armor's attack (4)                         | `ARMOR_HIT_DAMAGE` (2)                                         |
+| `armoredAttack` | the enemy's attack, armor or not               | the armor's attack while it's up                               |
+| `liveSkips`     | struck lines                                   | struck lines and any you can't read (fog, scramble, 🎭)        |
+| `countRelaxed`  | mistakes and zaps count in Relaxed             | only with Hits on                                              |
+| `gadgetKinds`   | `gadgetsUsed` only                             | bombs and sponges counted apart too                            |
+| `wipeMarks`     | cleared on the next update                     | kept until the line is finished again                          |
+| `order`         | wash, chip/armor, charge, turn, phases         | clear, chip, phases, armor, turn, charge, with waits (not yet) |
+
+The rest is the board's (the warm-up, which line goes live, ink, a swap, a bomb's cells)
+behind `FightBoard`. Unifying a rule is a change to how fights play, and shows up as a diff
+in the golden traces and `fight-ratings.json`. `packages/story/src/fight/battle.test.ts`
+plays each rule's grid value and powers from a pool on a block.
 
 ### Fog (the fog bat)
 

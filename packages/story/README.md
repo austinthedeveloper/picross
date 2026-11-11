@@ -14,14 +14,14 @@ The paths under `src/` are the ones these files had before, so
 `packages/shared/src/puzzles/scenes.ts` is now `src/puzzles/scenes.ts` here, and the 2D
 game's `src/puzzles/runs.ts` (its common part) is `src/puzzles/runs.ts`.
 
-| What         | Files                                                                                                                      |
-| ------------ | -------------------------------------------------------------------------------------------------------------------------- |
-| Data         | `src/puzzles/{chapters,runs,encounters,run,scenes,backdrops}/*.json`; `files/` globs the first four for the loaders        |
-| Loaders      | `src/puzzles/runs.ts` (encounters and jobs), `chapters.ts`, `scenes.ts`, `backdrops.ts`, `gadgets.ts` (the gadget catalog) |
-| Dialogue     | `src/game/dialogue.ts`: the scene runner (current line or choices, advance, choose, flags)                                 |
-| Fights       | `src/fight/board.ts`: `FightBoard`, what a fight needs of a board (#164); `fightBoardContract.ts`, its tests               |
-| Scene player | `src/ui/components/dialogue.ts`, `backdrop.ts`, `src/ui/screens/sceneScreen.ts`                                            |
-| Tests        | `src/story.test.ts` (the whole story reads), `boards.test.ts` (the gate), `ui/art.test.ts` (every sprite has its art)      |
+| What         | Files                                                                                                                                                                                                          |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Data         | `src/puzzles/{chapters,runs,encounters,run,scenes,backdrops}/*.json`; `files/` globs the first four for the loaders                                                                                            |
+| Loaders      | `src/puzzles/runs.ts` (encounters and jobs), `chapters.ts`, `scenes.ts`, `backdrops.ts`, `gadgets.ts` (the gadget catalog)                                                                                     |
+| Dialogue     | `src/game/dialogue.ts`: the scene runner (current line or choices, advance, choose, flags)                                                                                                                     |
+| Fights       | `src/fight/board.ts`: `FightBoard`, what a fight needs of a board (#164); `fightBoardContract.ts`, its tests; `battle.ts`: `StoryBattle`, the one battle (#166), played by a `FightRules` profile (`rules.ts`) |
+| Scene player | `src/ui/components/dialogue.ts`, `backdrop.ts`, `src/ui/screens/sceneScreen.ts`                                                                                                                                |
+| Tests        | `src/story.test.ts` (the whole story reads), `boards.test.ts` (the gate), `ui/art.test.ts` (every sprite has its art)                                                                                          |
 
 The art (`public/art/`) and the story's styles (`run.css`, `fight.css`, `dig.css`,
 `dialogue.css`, `art.css`) and `ui/art.ts` stay in `@picross/shared`: they don't read the
@@ -118,6 +118,39 @@ method says why it's there and which power uses it.
 a `*.test.ts`, so it doesn't run here: each board's tests call
 `fightBoardContract(name, { fresh, worked })` on their own puzzles. It imports `vitest`,
 which `imports.test.ts` allows in any file.
+
+### One battle
+
+`src/fight/battle.ts` is the fight itself, once for every board (#166): `StoryBattle<C, M,
+E>`, with HP, phases, armor, the charge, turns, shields, call-outs and gadgets. It's Cubed's
+`Battle` generalized: `C` is the board's clue, `M` its marks (a block's cubes), `E` the
+enemy as the board's story reads it (a `FightEnemy`). It takes the enemy, a `FightRules`
+profile, a `BattleBoard` (`at(marks?)` gives the `FightBoard` with those marks on it, or a
+blank one; `scrambled(clue)` is what a scrambled clue shows), Hits on or off, and a saved
+`FightState` or a seed. Every draw comes from its one seeded generator, which a reload
+restarts from the seed and the lines struck.
+
+- **`FightState<C>`** is plain data, saved with the run: Cubed's `BattleState` field for
+  field, plus optional ones the 2D game will need (`turn.turns`, `counts.bombsUsed` and
+  `spongesUsed`), so a block fight saved before #166 loads as it is.
+- **A power's lines** are a `LinePick`: a `count`, which the battle picks at runtime among
+  lines that keep the board solvable (a block's enemies, and a plain number means this), or
+  a `pool` in priority order, proven fair offline, of which it takes the first `count` not
+  finished or already taken (what a 2D enemy names).
+- **`FightRules`** (`src/fight/rules.ts`) has one field for each place the two games' fights
+  differ: whether a forged line you finish counts, what the armor hits back for and what
+  the enemy hits for while it's armored, which lines the charge can't go live on, whether a
+  Relaxed fight counts mistakes and zaps, whether bombs and sponges are counted apart, how
+  long the Mimic's wipe marks last, and the order a stroke's effects land. Each field says
+  what each board does and why. `BLOCK_RULES` is Cubed's fight exactly; `GRID_RULES` has
+  the 2D game's values for all but the order, which waits for the 2D game to move onto the
+  battle (#166's second half). What's the board's (the warm-up, which line goes live, ink,
+  a swap, a bomb) stays behind `FightBoard`.
+
+`@picross/block/game/battle`'s `Battle` is `StoryBattle` with `BLOCK_RULES` on the block's
+board, so Cubed's golden traces (`battleTraces.test.ts`) and battle tests are its tests.
+`src/fight/battle.test.ts` here checks the rest on a block: each rule's other value, and
+powers from a pool.
 
 ## Tests
 
