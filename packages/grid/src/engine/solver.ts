@@ -132,6 +132,78 @@ export function linePasses(width: number, height: number, clues: Clues): number 
   }
 }
 
+/** How hard a fight's board is for a line solver (#168), from `fightPasses`. */
+export interface FightPasses {
+  /** 'unique' when it finishes without guessing, as `solve` says. */
+  status: 'unique' | 'ambiguous' | 'contradiction';
+  /** Passes over the readable lines that settled something, counted like `linePasses`. */
+  passes: number;
+  /** Share of the board's cells (0 to 1) the first pass settles. */
+  firstPass: number;
+}
+
+/**
+ * A fight's difficulty with every power that hides clues applied from the start (#168):
+ * passes over every row, then every column, like `linePasses`, reading only the clues a
+ * player can trust. Fogged lines and 🎭 suspects are skipped (only crossing lines fill
+ * them in), and scrambled lines are solved in any order (`solveLineAnyOrder`). Finishing a
+ * hidden line reveals nothing new, so they stay skipped. More passes and a smaller first
+ * pass mean harder (docs/architecture.md, "Difficulty"). It can't see armor, charge, ink,
+ * swaps or turns.
+ */
+export function fightPasses(
+  width: number,
+  height: number,
+  clues: Clues,
+  {
+    fog = noLines(),
+    scramble = noLines(),
+    suspects = noLines(),
+  }: { fog?: LineSet; scramble?: LineSet; suspects?: LineSet } = {},
+): FightPasses {
+  const grid: Knowledge[] = new Array<Knowledge>(width * height).fill(Unknown);
+  const hidden = (kind: 'rows' | 'cols', i: number) =>
+    fog[kind].includes(i) || suspects[kind].includes(i);
+  const work = (kind: 'rows' | 'cols', i: number, cells: number[]): boolean | null => {
+    if (hidden(kind, i)) return false;
+    const line = cells.map((n) => grid[n]);
+    const runs = clues[kind][i];
+    const solved = scramble[kind].includes(i)
+      ? solveLineAnyOrder(line, runs)
+      : solveLine(line, runs);
+    if (!solved) return null;
+    let changed = false;
+    solved.forEach((value, n) => {
+      if (value !== Unknown && grid[cells[n]] !== value) {
+        grid[cells[n]] = value;
+        changed = true;
+      }
+    });
+    return changed;
+  };
+  const rowCells = (r: number) => Array.from({ length: width }, (_, c) => r * width + c);
+  const colCells = (c: number) => Array.from({ length: height }, (_, r) => r * width + c);
+  const settled = () => grid.filter((v) => v !== Unknown).length / grid.length;
+  let firstPass = 0;
+  for (let passes = 0; ; passes++) {
+    let changed = false;
+    for (const [kind, count, cells] of [
+      ['rows', height, rowCells],
+      ['cols', width, colCells],
+    ] as const) {
+      for (let i = 0; i < count; i++) {
+        const result = work(kind, i, cells(i));
+        if (result === null) return { status: 'contradiction', passes, firstPass };
+        changed = result || changed;
+      }
+    }
+    if (passes === 0) firstPass = settled();
+    if (!changed) {
+      return { status: grid.includes(Unknown) ? 'ambiguous' : 'unique', passes, firstPass };
+    }
+  }
+}
+
 export type SolveResult =
   | { status: 'unique'; grid: Knowledge[] }
   | { status: 'ambiguous'; grid: Knowledge[]; unknown: number }

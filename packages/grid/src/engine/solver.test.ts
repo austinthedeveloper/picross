@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { deriveClues } from './clues';
 import {
   checkSolution,
+  fightPasses,
   linePasses,
   runOrders,
   solve,
@@ -124,5 +125,46 @@ describe('scrambled clues', () => {
     const g = grid(rows);
     const clues = deriveClues(g);
     expect(solve(5, 5, clues, { scramble: { rows: [0, 1], cols: [] } }).status).toBe('unique');
+  });
+});
+
+describe('fightPasses', () => {
+  // Heart: .#.#. / ##### / ##### / .###. / ..#..
+  const heart = grid(['.#.#.', '#####', '#####', '.###.', '..#..']);
+  const clues = deriveClues(heart);
+
+  it('counts passes like linePasses when nothing is hidden', () => {
+    const { passes, status } = fightPasses(5, 5, clues);
+    expect(status).toBe('unique');
+    expect(passes).toBe(linePasses(5, 5, clues));
+  });
+
+  it('says how much of the board the first pass settles', () => {
+    const full = { rows: [[3], [3], [3]], cols: [[3], [3], [3]] };
+    expect(fightPasses(3, 3, full)).toEqual({ status: 'unique', passes: 1, firstPass: 1 });
+    expect(fightPasses(5, 5, clues).firstPass).toBeGreaterThan(0);
+    expect(fightPasses(5, 5, clues).firstPass).toBeLessThan(1);
+  });
+
+  it('skips fogged lines and suspects, so they fill in from their crossings', () => {
+    const plain = fightPasses(5, 5, clues);
+    const fogged = fightPasses(5, 5, clues, { fog: { rows: [1], cols: [] } });
+    expect(fogged.status).toBe('unique');
+    expect(fightPasses(5, 5, clues, { suspects: { rows: [1], cols: [] } })).toEqual(fogged);
+    expect(fogged.firstPass).toBeLessThanOrEqual(plain.firstPass);
+    expect(fightPasses(5, 5, clues, { fog: { rows: [2], cols: [] } }).status).toBe('ambiguous');
+  });
+
+  it('reads scrambled lines in any order', () => {
+    const g = grid(['##.#.', '#.###', '#####', '.###.', '..#..']);
+    const scrambled = deriveClues(g);
+    const result = fightPasses(5, 5, scrambled, { scramble: { rows: [0, 1], cols: [] } });
+    expect(result.status).toBe(
+      solve(5, 5, scrambled, { scramble: { rows: [0, 1], cols: [] } }).status,
+    );
+  });
+
+  it('reports a contradiction', () => {
+    expect(fightPasses(2, 1, { rows: [[3]], cols: [[], []] }).status).toBe('contradiction');
   });
 });
