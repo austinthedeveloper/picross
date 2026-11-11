@@ -34,7 +34,7 @@ test('both games keep their solves and runs in progress', async ({ page, context
   // Cubed was played last, so the app opens on it, as before the merge.
   await expect(page).toHaveURL(/#\/cubed$/);
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('picross:save')!))).toEqual({
-    version: 2,
+    version: 3,
     mergedAt: expect.any(Number),
   });
 

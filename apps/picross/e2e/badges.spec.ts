@@ -87,10 +87,13 @@ test.describe('job badges', () => {
     await solve(page, encounterSolution('gremlin'));
     await press(page, 'See results');
     const earned = page.locator('.badges-earned');
-    await expect(earned.locator('.badge-row')).toHaveCount(2);
+    // With the story's count badges (#157): its chapter cleared, and a Hits-on win.
+    await expect(earned.locator('.badge-row')).toHaveCount(4);
     await expect(earned).toContainText('Invoiced a Bat');
     await expect(earned).toContainText('Gold');
     await expect(earned).toContainText('Toolbox Shut');
+    await expect(earned).toContainText('Odd Jobber');
+    await expect(earned).toContainText('Hits On');
 
     // A reload doesn't show them again.
     await page.reload();
@@ -246,6 +249,8 @@ test.describe('one shelf for both boards (#157)', () => {
     });
     await seedSolved(page, ['heart']);
     await page.context().addInitScript(() => {
+      // Already merged, so the boards each win was on stay as seeded.
+      localStorage.setItem('picross:save', JSON.stringify({ version: 3, mergedAt: 1 }));
       const save = JSON.parse(localStorage.getItem('picross:v2')!);
       save.solved['block:heart'] = { solves: 1, bestTime: 1000 };
       localStorage.setItem('picross:v2', JSON.stringify(save));
