@@ -112,8 +112,9 @@ const mergeBlockRun = (a: BlockRunSave, b: BlockRunSave): BlockRunSave => {
 };
 
 function mergeRun(a: RunSave, b: RunSave): RunSave {
-  // The run is taken whole: two half-runs blended together would be neither. Each game's
-  // run goes by its own date.
+  // The run is taken whole: two half-runs blended together would be neither. So is a
+  // fight's every board (`fight`, #169), saved either way: the run save reads both. Each
+  // game's run goes by its own date.
   const newer = newerRun(a, b);
   return present({
     ...unknownFields(a, b),

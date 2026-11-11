@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { random } from '@picross/shared/engine/random';
-import { startRun } from './run';
+import { loadFight, saveFight } from './fightSave';
+import { startRun, withBattle, withBlock, withBoard } from './run';
 import type { SavedBoard, SaveData } from './progress';
 import { mergeSaves, SAVE_VERSION, type SaveBundle } from './saveMerge';
 
@@ -124,6 +125,35 @@ describe('runs and jobs', () => {
     const newer = startRun('b', 20);
     const out = merge({ current: startRun('a', 10) }, { current: newer, currentUpdatedAt: 1 });
     expect(out.current).toEqual(newer);
+  });
+
+  it('takes a fight whole, saved before #169 or after, so its boards stay together', () => {
+    let fight = withBattle(withBoard(startRun('closing-time', 18), { cells: '01' }), {
+      enemyHp: 30,
+      struck: ['r1'],
+      phase: 4,
+    });
+    fight = withBlock(fight, { board: { blocks: '20' }, battle: { enemyHp: 70, phase: 3 } });
+    const saved = saveFight(fight);
+    const older = { ...fight, node: 2, block: undefined };
+    for (const [a, b] of [
+      [older, saved],
+      [saveFight(older), saved],
+      [saveFight(older), fight],
+    ]) {
+      const out = merge(
+        { current: a, currentUpdatedAt: 100 },
+        { current: b, currentUpdatedAt: 200 },
+      );
+      expect(out.current).toBe(b);
+      expect(loadFight(out.current!)).toEqual(fight);
+    }
+    // The same run saved both ways, at once: either side loads as the same fight.
+    const tie = merge(
+      { current: fight, currentUpdatedAt: 5 },
+      { current: saved, currentUpdatedAt: 5 },
+    );
+    expect(loadFight(tie.current!)).toEqual(fight);
   });
 
   it('adds no stamp when neither side has one', () => {

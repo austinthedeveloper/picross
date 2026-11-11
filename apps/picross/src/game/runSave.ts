@@ -1,3 +1,4 @@
+import { loadFight, saveFight, type SavedRun } from './fightSave';
 import type { RunState } from './run';
 import type { Dimension } from '@picross/shared/puzzles/ids';
 import { readStore, writeStore } from '@picross/shared/game/storage';
@@ -40,8 +41,10 @@ export interface BlockRunSave {
   currentUpdatedAt?: number;
 }
 
+/** What `picross:run` holds. */
 export interface RunSave {
-  current: RunState | null;
+  /** As saved: a fight's progress is in its `fight` (`fightSave.ts`). */
+  current: SavedRun | null;
   /**
    * When `current` last changed, in milliseconds since 1970. It sits beside the run
    * so that clearing the run is dated too, and merging saves can tell which is newer
@@ -58,7 +61,15 @@ export interface RunSave {
   block?: BlockRunSave;
 }
 
-const data = readStore<RunSave>(KEY, { current: null, seenScenes: [], jobs: {} });
+/** The save as the game holds it: the current run as it's played (`loadFight`). */
+type Held = Omit<RunSave, 'current'> & { current: RunState | null };
+
+const stored = readStore<RunSave>(KEY, { current: null, seenScenes: [], jobs: {} });
+const data: Held = { ...stored, current: stored.current && loadFight(stored.current) };
+
+/** Writes the save, with the current run as it's saved (`saveFight`). */
+const persist = () =>
+  writeStore(KEY, { ...data, current: data.current && saveFight(data.current) } satisfies RunSave);
 
 /** The run in progress or just finished, if any. */
 export function getCurrentRun(): RunState | null {
@@ -71,7 +82,7 @@ export function saveCurrentRun(state: RunState | null): void {
   // mustn't let an out-of-date device win a merge.
   if (JSON.stringify(state) !== JSON.stringify(data.current)) data.currentUpdatedAt = Date.now();
   data.current = state;
-  writeStore(KEY, data);
+  persist();
 }
 
 export function hasSeenScene(id: string): boolean {
@@ -80,7 +91,7 @@ export function hasSeenScene(id: string): boolean {
 
 export function markSceneSeen(id: string): void {
   if (!data.seenScenes.includes(id)) data.seenScenes.push(id);
-  writeStore(KEY, data);
+  persist();
 }
 
 export function hasSeenTip(power: string): boolean {
@@ -89,7 +100,7 @@ export function hasSeenTip(power: string): boolean {
 
 export function markTipSeen(power: string): void {
   data.seenTips = [...new Set([...(data.seenTips ?? []), power])];
-  writeStore(KEY, data);
+  persist();
 }
 
 export function getJobStats(id: string): JobStats | undefined {
@@ -130,18 +141,26 @@ export const withWin = (stats: JobStats, dim: Dimension): Dimension[] =>
 /** Cubed's run in progress or just finished, if any (Cubed's view: cubed/game/runSave.ts). */
 export const getBlockRun = (): object | null => data.block?.current ?? null;
 
-/** Saves Cubed's run (or clears it with null), dated like the 2D game's. */
-export function saveBlockRun(state: object | null): void {
+/**
+ * Saves Cubed's run, as it's saved (or clears it with null), dated like the 2D game's: only
+ * a real change counts as newer. `changed` says whether it is one; by default, whether it
+ * differs from the run saved. Cubed's view passes it, since a run can be saved anew in a
+ * newer shape without changing (#169).
+ */
+export function saveBlockRun(
+  state: object | null,
+  changed = JSON.stringify(state) !== JSON.stringify(data.block?.current ?? null),
+): void {
   const block = data.block ?? { current: null };
-  if (JSON.stringify(state) !== JSON.stringify(block.current)) block.currentUpdatedAt = Date.now();
+  if (changed) block.currentUpdatedAt = Date.now();
   data.block = { ...block, current: state };
-  writeStore(KEY, data);
+  persist();
 }
 
 /** Replaces a job's stats (Cubed records its own runs: cubed/game/runSave.ts). */
 export function setJobStats(id: string, stats: JobStats): void {
   data.jobs[id] = stats;
-  writeStore(KEY, data);
+  persist();
 }
 
 /** Every job with stats: played at least once, on either board. */

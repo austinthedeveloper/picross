@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { startRun } from './run';
+import { startRun, withBattle, withBlock, withBoard } from './run';
 
 async function load() {
   vi.resetModules();
@@ -16,6 +16,42 @@ describe('runSave', () => {
     expect((await load()).getCurrentRun()).toMatchObject({ runId: 'r', node: 2, hp: 5 });
     save.saveCurrentRun(null);
     expect((await load()).getCurrentRun()).toBeNull();
+  });
+});
+
+describe('a fight in the run (#169)', () => {
+  const saved = () => JSON.parse(localStorage.getItem('picross:run')!).current;
+  const board = { cells: '0120', elapsed: 9000 };
+  const battle = { enemyHp: 30, struck: ['r1'], phase: 4 };
+  const block = { board: { blocks: '2010' }, battle: { enemyHp: 70, maxHp: 140, phase: 3 } };
+
+  it('is saved as one fight with an entry per board, and reloads as it was played', async () => {
+    const save = await load();
+    const run = withBlock(
+      withBattle(withBoard(startRun('closing-time', 18), board), battle),
+      block,
+    );
+    save.saveCurrentRun(run);
+    expect(saved().fight).toEqual({ v: 2, boards: { flat: { board, battle }, block } });
+    expect(saved()).not.toHaveProperty('battle');
+    expect((await load()).getCurrentRun()).toEqual(run);
+  });
+
+  it('loads a save from before it; saving it unchanged writes the new shape, not a new stamp', async () => {
+    vi.useFakeTimers({ now: 1000 });
+    const old = { ...startRun('closing-time', 18), board, battle, block };
+    localStorage.setItem(
+      'picross:run',
+      JSON.stringify({ current: old, currentUpdatedAt: 500, seenScenes: [], jobs: {} }),
+    );
+    const save = await load();
+    expect(save.getCurrentRun()).toEqual(old);
+    // Opening it saves it unchanged: not a change, so the stamp stays (#97).
+    save.saveCurrentRun({ ...save.getCurrentRun()! });
+    const stamp = JSON.parse(localStorage.getItem('picross:run')!).currentUpdatedAt;
+    expect(stamp).toBe(500);
+    expect(saved().fight.boards.flat).toEqual({ board, battle });
+    vi.useRealTimers();
   });
 });
 
