@@ -1,5 +1,5 @@
 /** Formats milliseconds as m:ss, or h:mm:ss past an hour. */
-import type { Line } from '../engine/lines';
+import type { Line } from '@picross/grid/engine/lines';
 
 export function formatTime(ms: number): string {
   const total = Math.floor(ms / 1000);

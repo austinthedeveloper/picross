@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { lineKey, noLines } from '../../engine/lines';
-import { parsePuzzle } from '../../puzzles/format';
+import { lineKey, noLines } from '@picross/grid/engine/lines';
+import { parsePuzzle } from '@picross/grid/puzzles/format';
 import { createBoardView } from './boardView';
 
 /** Row 1 is 1 1 1, row 2 is 3, row 5 is 2. Column 1 is 2 1, so it has an order to lose. */

@@ -3,8 +3,8 @@ import '@picross/shared/styles/tokens.css';
 // apply only on its board (scripts/scopeByBoard.ts); this order matches both games' own.
 import '../../cubed/src/styles/voxels.css';
 import '@picross/shared/styles/base.css';
-import './styles/board.css';
-import './styles/game.css';
+import '@picross/play-grid/styles/board.css';
+import '@picross/play-grid/styles/game.css';
 import '../../cubed/src/styles/game.css';
 import './styles/select.css';
 import './styles/editor.css';
@@ -17,15 +17,16 @@ import './styles/badges.css';
 import '../../cubed/src/styles/story.css';
 import './styles/switch.css';
 import { syncBadges } from './game/badges';
-import { getPuzzle } from './puzzles/index';
-import { getMural } from './puzzles/murals';
+import { getPuzzle } from '@picross/grid/puzzles/index';
+import { getMural } from '@picross/grid/puzzles/murals';
 import { getScene } from '@picross/shared/puzzles/scenes';
 import { renderBadgesScreen } from './ui/screens/badges';
 import { renderDailyScreen } from './ui/screens/daily';
 import { renderEditorScreen } from './ui/screens/editorScreen';
 import { renderHowToPlay } from './ui/screens/howToPlay';
 import { renderMuralScreen, renderMuralTile } from './ui/screens/mural';
-import { renderGameScreen } from './ui/screens/gameScreen';
+import { renderGameScreen } from '@picross/play-grid/ui/screens/gameScreen';
+import { freePlaySession } from './ui/screens/freePlaySession';
 import { renderRunEncounter, renderRunScreen } from './ui/screens/run';
 import { renderSceneScreen } from '@picross/shared/ui/screens/sceneScreen';
 import { gameHref, lastGame } from '@picross/shared/ui/components/gameSwitch';
@@ -62,7 +63,7 @@ function route() {
   const mural = muralMatch && getMural(muralMatch[1]);
   const tile = mural && muralMatch[2] ? Number(muralMatch[2]) - 1 : null;
   if (puzzle) {
-    cleanup = renderGameScreen(app, puzzle);
+    cleanup = renderGameScreen(app, puzzle, freePlaySession(puzzle));
   } else if (scene && getScene(scene[1])) {
     cleanup = renderSceneScreen(app, getScene(scene[1])!);
   } else if (mural && tile !== null && mural.tiles[tile]) {

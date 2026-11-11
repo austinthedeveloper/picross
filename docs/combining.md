@@ -22,6 +22,12 @@ The SNES demake's `make import` reads the pack from `apps/picross/`.
   shared file went in, story data included; the story and its loaders move out to their
   own `packages/story` in #146. The SNES demake reads the story and art from
   `packages/shared/`.
+- **The 2D packages are done** (#144), ahead of step 3's 3D ones (#145): `packages/grid`
+  (`@picross/grid`: the engine, the puzzle format, the pack, murals and `Game`, with no
+  DOM; [README](../packages/grid/README.md)) and `packages/play-grid`
+  (`@picross/play-grid`: the board view, input, the play screen and its `PlaySession`
+  hooks, `board.css` and `game.css`; [README](../packages/play-grid/README.md)). The 2D
+  game imports both. The SNES demake reads the pack from `packages/grid/src/puzzles/`.
 - The story ideas for the combined game are in [story-combined.md](story-combined.md).
 
 **Step 7 has a first boss, ahead of steps 2–6.** The Curator unfolds into a block at 60%

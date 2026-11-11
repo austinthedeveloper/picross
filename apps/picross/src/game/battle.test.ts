@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { Cell, column } from '../engine/board';
-import { lineKey } from '../engine/lines';
-import { parsePuzzle } from '../puzzles/format';
+import { Cell, column } from '@picross/grid/engine/board';
+import { lineKey } from '@picross/grid/engine/lines';
+import { parsePuzzle } from '@picross/grid/puzzles/format';
 import {
   absorbHit,
   advancePhase,
@@ -32,7 +32,7 @@ import {
   turnUp,
   useGadget,
 } from './battle';
-import { Game } from './game';
+import { Game } from '@picross/grid/game/game';
 
 const goblin = { name: 'Goblin', sprite: '👺', hp: 5, attack: 2 };
 

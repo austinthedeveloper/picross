@@ -18,10 +18,10 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { deriveClues } from '../src/engine/clues';
-import { solve, Unknown, type Knowledge } from '../src/engine/solver';
-import { slugify, stringifyPuzzle, type PuzzleFile } from '../src/puzzles/format';
-import { parseMural } from '../src/puzzles/murals';
+import { deriveClues } from '@picross/grid/engine/clues';
+import { solve, Unknown, type Knowledge } from '@picross/grid/engine/solver';
+import { slugify, stringifyPuzzle, type PuzzleFile } from '@picross/grid/puzzles/format';
+import { parseMural } from '@picross/grid/puzzles/murals';
 
 interface Entry extends PuzzleFile {
   /** Where it came from, for messages. */
@@ -155,7 +155,8 @@ function toRows(e: PuzzleFile, cells: boolean[]): string[] {
  * fine to overwrite, so editing a drawing and re-exporting doesn't trip this.
  */
 function reservedIds(): Set<string> {
-  const root = path.join(import.meta.dirname, '../src/puzzles');
+  // The pack and its sheets are in packages/grid.
+  const root = path.join(import.meta.dirname, '../../../packages/grid/src/puzzles');
   const fromSheets = new Set<string>();
   const sheetDir = path.join(root, 'sheets');
   if (fs.existsSync(sheetDir)) {
@@ -192,7 +193,7 @@ function check(files: string[], { quiet = false } = {}): boolean {
       const problems: string[] = [];
       if (e.width !== e.height) problems.push(`not square (${e.width}×${e.height})`);
       if (e.width < 5 || e.width > 20) problems.push(`size ${e.width} is outside 5–20`);
-      if (taken.has(e.id)) problems.push(`id "${e.id}" already exists in src/puzzles`);
+      if (taken.has(e.id)) problems.push(`id "${e.id}" already exists in the pack or run puzzles`);
       if (seen.has(e.id)) problems.push(`id "${e.id}" also used in ${seen.get(e.id)}`);
       seen.set(e.id, file);
       const pct = Math.round(fill(e) * 100);

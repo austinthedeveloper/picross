@@ -1,7 +1,7 @@
-import { Cell, type Board } from '../engine/board';
-import type { Change } from '../engine/history';
-import type { Line } from '../engine/lines';
-import { parsePuzzle } from './format';
+import { Cell, type Board } from '@picross/grid/engine/board';
+import type { Change } from '@picross/grid/engine/history';
+import type { Line } from '@picross/grid/engine/lines';
+import { parsePuzzle } from '@picross/grid/puzzles/format';
 
 /** The How to play picture. It isn't in the pack, so solving it records nothing. */
 export const tutorialPuzzle = parsePuzzle({

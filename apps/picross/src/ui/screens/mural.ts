@@ -13,14 +13,14 @@ import {
   type ListFilter,
   type ListOrder,
 } from '../../game/settings';
-import type { Mural } from '../../puzzles/murals';
-import { murals } from '../../puzzles/murals';
-import { createPicture } from '../board/picture';
+import type { Mural } from '@picross/grid/puzzles/murals';
+import { murals } from '@picross/grid/puzzles/murals';
+import { createPicture } from '@picross/play-grid/ui/board/picture';
 import { homeLink } from '@picross/shared/ui/components/homeLink';
 import { listSection } from '../components/listSection';
 import { el } from '@picross/shared/ui/dom';
-import { formatTime } from '../format';
-import { renderGameScreen, type PlaySession } from './gameScreen';
+import { formatTime } from '@picross/play-grid/ui/format';
+import { renderGameScreen, type PlaySession } from '@picross/play-grid/ui/screens/gameScreen';
 
 const solvedTiles = (mural: Mural) => mural.tiles.filter((t) => getPuzzleStats(t.id));
 const complete = (mural: Mural) => solvedTiles(mural).length === mural.tiles.length;

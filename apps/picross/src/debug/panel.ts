@@ -13,7 +13,7 @@ import { catalog } from '@picross/shared/puzzles/gadgets';
 import { encounters, getRun, runs } from '../puzzles/runs';
 import { scenes } from '@picross/shared/puzzles/scenes';
 import { el } from '@picross/shared/ui/dom';
-import { debug } from './hooks';
+import { debug } from '@picross/grid/debug/hooks';
 import './panel.css';
 
 const SAVE_KEYS = ['picross:v1', 'picross:run', 'picross:daily'];

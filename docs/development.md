@@ -25,7 +25,7 @@ the page says otherwise.
 | `npm run dev:prod`             | Vite dev server without the debug tools                                   |
 | `npm test`                     | All unit tests once (Vitest, jsdom)                                       |
 | `npm run test:watch`           | Tests in watch mode                                                       |
-| `npm run check:puzzles`        | Only the pack uniqueness check (`src/puzzles/pack.test.ts`)               |
+| `npm run check:puzzles`        | Only the pack uniqueness check (`packages/grid/src/puzzles/pack.test.ts`) |
 | `npm run rate:puzzles`         | Re-rate puzzle difficulty after adding or changing puzzles                |
 | `npm run script-review`        | Generate the script review site and serve it at http://localhost:4177     |
 | `npm run script-review:notes`  | Print your open script review notes                                       |
@@ -42,15 +42,15 @@ the page says otherwise.
 ### Unit tests
 
 Tests live next to their code as `*.test.ts` and run in jsdom, so `localStorage` and basic
-DOM work.
+DOM work. `packages/grid`'s run in Node, with no DOM at all.
 
-| Area                 | Tests                                                                          |
-| -------------------- | ------------------------------------------------------------------------------ |
-| `engine/`            | Grids and win check, clue derivation and dimming, undo history, solver         |
-| `puzzles/`           | File parsing and validation, export, pack size, pack uniqueness                |
-| `game/`              | Strokes, undo, reset, save/restore, clock, Hearts mode, hints, progress store  |
-| `ui/format.test.ts`  | Time formatting                                                                |
-| `ui/haptics.test.ts` | Haptics: feature detection, patterns, the iOS switch fallback, the off setting |
+| Area                 | Tests                                                                           |
+| -------------------- | ------------------------------------------------------------------------------- |
+| `engine/` (grid)     | Grids and win check, clue derivation and dimming, undo history, solver          |
+| `puzzles/`           | File parsing and validation, export, pack size, pack uniqueness (in grid)       |
+| `game/`              | Strokes, undo, reset, save/restore, clock, Hearts, hints (grid's `Game`), saves |
+| `ui/format.test.ts`  | Time formatting (in play-grid)                                                  |
+| `ui/haptics.test.ts` | Haptics: feature detection, patterns, the iOS switch fallback, the off setting  |
 
 Put new rules in `engine/` or `game/` and test them there. The UI modules are thin and are
 checked in the browser instead.
@@ -115,6 +115,12 @@ switch links between the two dev servers.
 Both games import `packages/shared` (`@picross/shared`; see its
 [README](../packages/shared/README.md)), so a change there is in both at once. `npm test`
 runs its tests first (`npm run test:shared` runs just them).
+
+The 2D game's engine, pack and play screen are packages too: `packages/grid`
+(`@picross/grid`: the engine, the puzzle format, the pack and `Game`, no DOM) and
+`packages/play-grid` (`@picross/play-grid`: the board view, input and play screen; see
+their READMEs). `npm test` runs them after shared and before the games;
+`npm run test:grid` and `npm run test:play-grid` run each alone.
 
 ## CI and deploys
 

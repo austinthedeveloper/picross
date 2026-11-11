@@ -1,8 +1,8 @@
-import { deriveClues } from '../engine/clues';
+import { deriveClues } from '@picross/grid/engine/clues';
 import { shuffled } from '@picross/shared/engine/random';
-import { TRANSFORMS, transformGrid } from '../engine/transform';
-import type { Puzzle } from './format';
-import { packInOrder } from './index';
+import { TRANSFORMS, transformGrid } from '@picross/grid/engine/transform';
+import type { Puzzle } from '@picross/grid/puzzles/format';
+import { packInOrder } from '@picross/grid/puzzles/index';
 
 /** Daily puzzles (#69) are 15×15 or bigger. */
 const MIN_SIZE = 15;

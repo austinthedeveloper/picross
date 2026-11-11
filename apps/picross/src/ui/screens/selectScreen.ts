@@ -12,15 +12,15 @@ import {
   type ListOrder,
   type Mode,
 } from '../../game/settings';
-import { DIFFICULTIES, puzzleDifficulty, puzzlePasses } from '../../puzzles/difficulty';
-import { puzzles } from '../../puzzles/index';
-import type { Puzzle } from '../../puzzles/format';
-import { createPicture } from '../board/picture';
+import { DIFFICULTIES, puzzleDifficulty, puzzlePasses } from '@picross/grid/puzzles/difficulty';
+import { puzzles } from '@picross/grid/puzzles/index';
+import type { Puzzle } from '@picross/grid/puzzles/format';
+import { createPicture } from '@picross/play-grid/ui/board/picture';
 import { listSection } from '../components/listSection';
 import { createMuteButton } from '@picross/shared/ui/components/muteButton';
 import { rankCard } from '../components/rankCard';
 import { el } from '@picross/shared/ui/dom';
-import { formatTime } from '../format';
+import { formatTime } from '@picross/play-grid/ui/format';
 import { haptic, hapticsSupported } from '@picross/shared/ui/haptics';
 import { applyTheme } from '@picross/shared/ui/theme';
 import { dailyCard } from './daily';

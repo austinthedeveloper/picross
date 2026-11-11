@@ -3,7 +3,10 @@
 Recipes for common changes. See [architecture.md](architecture.md) for how the pieces fit.
 
 Paths here are in the 2D game's folder, `apps/picross/`, and the `npx` commands run from
-there (`cd apps/picross`). The `npm run` scripts work from the repo root.
+there (`cd apps/picross`). The `npm run` scripts work from the repo root. The pack, the
+engine and `Game` are in `packages/grid/src/`, and the board view, the play screen
+(`ui/screens/gameScreen.ts`) and `board.css` and `game.css` in `packages/play-grid/src/`, at
+the paths they had in the app.
 
 ## Add a puzzle
 
@@ -13,8 +16,9 @@ there (`cd apps/picross`). The `npm run` scripts work from the repo root.
    guessing."** If cells are striped, the clues can't pin them down, so change the picture
    near them. Common fixes are breaking up symmetric shapes or 2×2 checkerboards, or adding
    a cell to a long empty stretch.
-3. Click **Download** (or **Copy JSON**) and save the file as `src/puzzles/pack/<id>.json`.
-4. Add the id to `ORDER` in `src/puzzles/index.ts`, at the position where it should appear
+3. Click **Download** (or **Copy JSON**) and save the file as
+   `packages/grid/src/puzzles/pack/<id>.json`.
+4. Add the id to `ORDER` in `packages/grid/src/puzzles/index.ts`, at the position where it should appear
    among puzzles of its size. Ids not listed in `ORDER` still load, but they go at the end
    of their size. Adding a 15×15 or bigger changes the daily cycle, which shuffles this list.
 5. Run `npm run check:puzzles`. CI runs the same check and fails on ambiguous puzzles.
@@ -28,7 +32,7 @@ groups puzzles by size, smallest first, so a new size gets its own section autom
 ### Add many at once with a sheet
 
 For a batch, write them in one text file instead of one JSON each. The themed batches
-live in `src/puzzles/sheets/` and are the source for their JSON; edit a drawing there and
+live in `packages/grid/src/puzzles/sheets/` and are the source for their JSON; edit a drawing there and
 re-export. A sheet is puzzles separated by blank lines: the name on the first line (optionally `| id=<id>`), then the
 rows of `#` and `.`:
 
@@ -42,26 +46,26 @@ Wizard Hat
 Then:
 
 ```bash
-npx vite-node scripts/puzzle-sheet.ts check src/puzzles/sheets/dungeon.txt
+npx vite-node scripts/puzzle-sheet.ts check ../../packages/grid/src/puzzles/sheets/dungeon.txt
 ```
 
 prints ✓ per puzzle, or the picture with `?` on the cells the solver can't decide, and
 flags ids that already exist and pictures outside 25–70% fill. `fix` flips a few cells to
 make an ambiguous puzzle unique (look at the result; redraw by hand if it spoils the
 picture), and `export <outdir> <sheets...>` writes the JSON files. Then add the new ids to
-`ORDER` in `src/puzzles/index.ts`. Draw the silhouette first, fill 35–60% of the grid, and
+`ORDER` in `packages/grid/src/puzzles/index.ts`. Draw the silhouette first, fill 35–60% of the grid, and
 avoid checkerboards, lone pixels and sparse symmetric detail, which are what make a
 picture ambiguous.
 
 ## Add a mural
 
-Add `src/puzzles/murals/<id>.json` with `id`, `name`, `order`, `tile` (usually 15) and
+Add `packages/grid/src/puzzles/murals/<id>.json` with `id`, `name`, `order`, `tile` (usually 15) and
 `solution` rows whose width and height are multiples of `tile`. It shows up in the murals
 section. `npm test` checks each tile is uniquely solvable on its own. While drawing, this
 renders the picture and shows `?` on the cells a tile can't decide:
 
 ```bash
-npx vite-node scripts/puzzle-sheet.ts mural src/puzzles/murals/whale.json
+npx vite-node scripts/puzzle-sheet.ts mural ../../packages/grid/src/puzzles/murals/whale.json
 ```
 
 If a tile fails, change a detail inside it, or run `mural-fix` in place of `mural` to flip

@@ -1,4 +1,4 @@
-import { Cell, type Board } from '../../engine/board';
+import { Cell, type Board } from '@picross/grid/engine/board';
 import type { BoardView } from './boardView';
 
 export interface Cursor {

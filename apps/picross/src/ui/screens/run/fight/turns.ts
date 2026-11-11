@@ -1,6 +1,6 @@
-import type { Line } from '../../../../engine/lines';
+import type { Line } from '@picross/grid/engine/lines';
 import { turnBattle, turnDue, turnedPuzzle, turnUp } from '../../../../game/battle';
-import { plural } from '../../../format';
+import { plural } from '@picross/play-grid/ui/format';
 import { playSound } from '@picross/shared/ui/sound';
 import type { FightContext } from './context';
 

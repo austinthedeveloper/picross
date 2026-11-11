@@ -1,4 +1,4 @@
-import { MAX_HINTS, type HintTarget } from '../../game/game';
+import { MAX_HINTS, type HintTarget } from '@picross/grid/game/game';
 import { el } from '@picross/shared/ui/dom';
 
 export interface HintMenu {

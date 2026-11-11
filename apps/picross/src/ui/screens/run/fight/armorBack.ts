@@ -1,4 +1,4 @@
-import type { Line, LineSet } from '../../../../engine/lines';
+import type { Line, LineSet } from '@picross/grid/engine/lines';
 import { ARMOR_HIT_DAMAGE, ARMOR_HIT_LINES, armorHitsBack } from '../../../../game/battle';
 import { haptic } from '@picross/shared/ui/haptics';
 import { playSound } from '@picross/shared/ui/sound';

@@ -7,9 +7,9 @@ import {
   clearWiped,
   type BattleState,
 } from '../../../../game/battle';
-import { keyToLine, lineCount, lineKey, noLines, type Line } from '../../../../engine/lines';
-import type { BoardView } from '../../../board/boardView';
-import { lineName } from '../../../format';
+import { keyToLine, lineCount, lineKey, noLines, type Line } from '@picross/grid/engine/lines';
+import type { BoardView } from '@picross/play-grid/ui/board/boardView';
+import { lineName } from '@picross/play-grid/ui/format';
 import { playSound } from '@picross/shared/ui/sound';
 import type { FightContext } from './context';
 import type { CheckPhase } from './phases';

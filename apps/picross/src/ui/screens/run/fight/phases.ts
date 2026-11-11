@@ -1,5 +1,5 @@
 import { advancePhase, currentForm, type BattleState } from '../../../../game/battle';
-import { lineCount, type LineSet } from '../../../../engine/lines';
+import { lineCount, type LineSet } from '@picross/grid/engine/lines';
 import { playSound } from '@picross/shared/ui/sound';
 import type { FightContext } from './context';
 import { phasePowers } from '../../../../puzzles/enemies';

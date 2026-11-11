@@ -1,6 +1,6 @@
-import { Cell } from '../../engine/board';
-import type { Change } from '../../engine/history';
-import { Game } from '../../game/game';
+import { Cell } from '@picross/grid/engine/board';
+import type { Change } from '@picross/grid/engine/history';
+import { Game } from '@picross/grid/game/game';
 import {
   currentStep,
   moveProblem,
@@ -8,10 +8,10 @@ import {
   tutorialPuzzle as puzzle,
   tutorialSteps as steps,
 } from '../../puzzles/tutorial';
-import { createBoardView } from '../board/boardView';
-import { attachInput, type Tool } from '../board/input';
-import { attachKeyboard } from '../board/keyboard';
-import { solvedPanelContent } from '../components/endPanels';
+import { createBoardView } from '@picross/play-grid/ui/board/boardView';
+import { attachInput, type Tool } from '@picross/play-grid/ui/board/input';
+import { attachKeyboard } from '@picross/play-grid/ui/board/keyboard';
+import { solvedPanelContent } from '@picross/play-grid/ui/components/endPanels';
 import { homeLink } from '@picross/shared/ui/components/homeLink';
 import { el } from '@picross/shared/ui/dom';
 import { haptic } from '@picross/shared/ui/haptics';

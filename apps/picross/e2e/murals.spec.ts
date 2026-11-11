@@ -4,7 +4,10 @@ import path from 'node:path';
 import { press, solve } from './helpers';
 
 const whale: string[] = JSON.parse(
-  fs.readFileSync(path.join(import.meta.dirname, '../src/puzzles/murals/whale.json'), 'utf8'),
+  fs.readFileSync(
+    path.join(import.meta.dirname, '../../../packages/grid/src/puzzles/murals/whale.json'),
+    'utf8',
+  ),
 ).solution;
 /** Tile n (1-based) of the 30×30 whale, as solution rows. */
 const tile = (n: number) => {
@@ -54,6 +57,8 @@ test('a mural fills in tile by tile, then shows the whole picture', async ({ pag
   await page.goto('/#/');
   await expect(card).toContainText('Blue Whale');
   // Tiles aren't pack puzzles, so none of them count here.
-  const pack = fs.readdirSync(path.join(import.meta.dirname, '../src/puzzles/pack')).length;
+  const pack = fs.readdirSync(
+    path.join(import.meta.dirname, '../../../packages/grid/src/puzzles/pack'),
+  ).length;
   await expect(page.locator('.stats')).toContainText(`0/${pack}`);
 });

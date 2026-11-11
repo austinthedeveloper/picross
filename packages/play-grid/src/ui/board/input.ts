@@ -1,5 +1,5 @@
-import { Cell, type Board } from '../../engine/board';
-import type { Change } from '../../engine/history';
+import { Cell, type Board } from '@picross/grid/engine/board';
+import type { Change } from '@picross/grid/engine/history';
 
 export type Tool = typeof Cell.Filled | typeof Cell.Marked;
 

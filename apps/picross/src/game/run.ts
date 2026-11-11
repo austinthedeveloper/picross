@@ -1,4 +1,4 @@
-import { debug } from '../debug/hooks';
+import { debug } from '@picross/grid/debug/hooks';
 import type { BattleState, FightCounts } from './battle';
 import type { SavedBoard } from './progress';
 import type { Mode } from './settings';

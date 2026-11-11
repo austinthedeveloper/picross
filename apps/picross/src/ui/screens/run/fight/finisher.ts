@@ -1,4 +1,4 @@
-import { createPicture } from '../../../board/picture';
+import { createPicture } from '@picross/play-grid/ui/board/picture';
 import { pause, reducedMotion } from '@picross/shared/ui/motion';
 import { playSound } from '@picross/shared/ui/sound';
 import type { FightContext } from './context';

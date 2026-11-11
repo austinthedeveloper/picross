@@ -1,6 +1,6 @@
-import { Cell, createBoard, type Solution } from '../../engine/board';
-import { deriveClues } from '../../engine/clues';
-import { checkSolution, Unknown } from '../../engine/solver';
+import { Cell, createBoard, type Solution } from '@picross/grid/engine/board';
+import { deriveClues } from '@picross/grid/engine/clues';
+import { checkSolution, Unknown } from '@picross/grid/engine/solver';
 import { readStore, writeStore } from '@picross/shared/game/storage';
 import {
   parsePuzzle,
@@ -8,11 +8,11 @@ import {
   stringifyPuzzle,
   toPuzzleFile,
   type Puzzle,
-} from '../../puzzles/format';
-import { createBoardView } from '../board/boardView';
+} from '@picross/grid/puzzles/format';
+import { createBoardView } from '@picross/play-grid/ui/board/boardView';
 import { homeLink } from '@picross/shared/ui/components/homeLink';
 import { el } from '@picross/shared/ui/dom';
-import { attachInput } from '../board/input';
+import { attachInput } from '@picross/play-grid/ui/board/input';
 
 const MIN_SIZE = 2;
 const MAX_SIZE = 30;

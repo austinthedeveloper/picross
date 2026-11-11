@@ -87,6 +87,7 @@ games'. `npm run test:shared` runs just these.
 ## Outside this repo
 
 The SNES demake (`../snes/picross-snes`) imports the pack, art and story with
-`make import`. The pack (`pack/`, `murals/`, `index.ts`, `ratings.json`) is still in
-`apps/picross/src/puzzles/`; the story (`src/puzzles/{scenes,chapters,runs,encounters,run}/`)
-and the art (`public/art/`) are here now, so its import scripts read both folders.
+`make import`. The pack (`pack/`, `murals/`, `index.ts`, `ratings.json`) is in
+`packages/grid/src/puzzles/` (#144); the story
+(`src/puzzles/{scenes,chapters,runs,encounters,run}/`) and the art (`public/art/`) are
+here, so its import scripts read both packages.

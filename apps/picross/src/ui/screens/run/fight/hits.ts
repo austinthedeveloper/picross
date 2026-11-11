@@ -3,7 +3,7 @@ import { damage } from '../../../../game/run';
 import { saveCurrentRun } from '../../../../game/runSave';
 import { el } from '@picross/shared/ui/dom';
 import { playSound } from '@picross/shared/ui/sound';
-import type { EndState } from '../../gameScreen';
+import type { EndState } from '@picross/play-grid/ui/screens/gameScreen';
 import type { FightContext } from './context';
 
 /**

@@ -1,4 +1,4 @@
-import { deriveClues } from '../engine/clues';
+import { deriveClues } from '@picross/grid/engine/clues';
 import {
   copyLines,
   hasLine,
@@ -10,10 +10,10 @@ import {
   removeLine,
   type Line,
   type LineSet,
-} from '../engine/lines';
-import { washInk } from '../engine/ink';
-import { transformGrid, turnIndex, turnLine, turnLines } from '../engine/transform';
-import type { Puzzle } from '../puzzles/format';
+} from '@picross/grid/engine/lines';
+import { washInk } from '@picross/grid/engine/ink';
+import { transformGrid, turnIndex, turnLine, turnLines } from '@picross/grid/engine/transform';
+import type { Puzzle } from '@picross/grid/puzzles/format';
 import type { GadgetEffect } from '@picross/shared/puzzles/gadgets';
 
 /** An enemy in a fight encounter (#27). */

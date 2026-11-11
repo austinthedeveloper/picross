@@ -8,12 +8,12 @@ import {
 import { nextUnsolved } from '../../game/pickPuzzle';
 import { currentPoints, rankUpNote } from '../../game/rank';
 import { getSettings } from '../../game/settings';
-import type { Puzzle } from '../../puzzles/format';
-import { puzzles } from '../../puzzles/index';
-import { allPuzzlesLink } from '../components/endPanels';
+import type { Puzzle } from '@picross/grid/puzzles/format';
+import { puzzles } from '@picross/grid/puzzles/index';
+import { allPuzzlesLink } from '@picross/play-grid/ui/components/endPanels';
 import { el } from '@picross/shared/ui/dom';
-import { formatTime, plural } from '../format';
-import type { PlaySession } from './gameScreen';
+import { formatTime, plural } from '@picross/play-grid/ui/format';
+import type { PlaySession } from '@picross/play-grid/ui/screens/gameScreen';
 
 /** Playing a puzzle from the puzzle list: saves boards and records best times. */
 export function freePlaySession(puzzle: Puzzle): PlaySession {

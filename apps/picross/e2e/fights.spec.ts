@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import type { Line } from '../src/engine/lines';
+import type { Line } from '@picross/grid/engine/lines';
 import {
   announcements,
   boardState,

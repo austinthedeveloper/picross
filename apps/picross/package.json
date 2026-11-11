@@ -14,7 +14,6 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "check:puzzles": "vitest run src/puzzles/pack.test.ts",
     "script-review": "vite-node scripts/script-review.ts serve",
     "script-review:notes": "vite-node scripts/script-review.ts notes",
     "script-review:export": "vite-node scripts/script-review.ts export",
@@ -22,6 +21,8 @@
     "e2e": "playwright test"
   },
   "dependencies": {
+    "@picross/grid": "*",
+    "@picross/play-grid": "*",
     "@picross/shared": "*"
   }
 }

@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { parsePuzzle } from './format';
-import { solve, solveLine, solveLineAnyOrder, Unknown, type Knowledge } from '../engine/solver';
+import { parsePuzzle } from '@picross/grid/puzzles/format';
+import {
+  solve,
+  solveLine,
+  solveLineAnyOrder,
+  Unknown,
+  type Knowledge,
+} from '@picross/grid/engine/solver';
 import { CHIP_DAMAGE, type Enemy } from '../game/battle';
 import { allScramble, allUnreadable } from './enemies';
 import { scenes } from '@picross/shared/puzzles/scenes';

@@ -1,6 +1,6 @@
-import type { Blast } from '../../engine/blast';
-import { Cell, column, row, type Board } from '../../engine/board';
-import { satisfiedClues, type Clues } from '../../engine/clues';
+import type { Blast } from '@picross/grid/engine/blast';
+import { Cell, column, row, type Board } from '@picross/grid/engine/board';
+import { satisfiedClues, type Clues } from '@picross/grid/engine/clues';
 import {
   hasLine,
   lineKey,
@@ -8,8 +8,8 @@ import {
   type Line,
   type LineKind,
   type LineSet,
-} from '../../engine/lines';
-import type { Puzzle } from '../../puzzles/format';
+} from '@picross/grid/engine/lines';
+import type { Puzzle } from '@picross/grid/puzzles/format';
 import { el } from '@picross/shared/ui/dom';
 import { playOnce } from '@picross/shared/ui/motion';
 

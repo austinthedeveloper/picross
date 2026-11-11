@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import path from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
 import { announcements, boardState, cell, seed, solution, solve, press } from './helpers';
 
@@ -12,7 +13,8 @@ async function seedSolved(page: Page, ids: string[]) {
   }, ids);
 }
 
-const packIds = () => fs.readdirSync('src/puzzles/pack').map((file) => file.replace(/\.json$/, ''));
+const PACK = path.join(import.meta.dirname, '../../../packages/grid/src/puzzles/pack');
+const packIds = () => fs.readdirSync(PACK).map((file) => file.replace(/\.json$/, ''));
 
 test.describe('free play', () => {
   test('a fresh visit: sound off, small puzzles first, fish is 10×10', async ({ page }) => {

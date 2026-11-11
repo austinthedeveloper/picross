@@ -1,4 +1,4 @@
-import type { Puzzle } from '../../puzzles/format';
+import type { Puzzle } from '@picross/grid/puzzles/format';
 import { createPicture } from '../board/picture';
 import { withArt } from '@picross/shared/ui/art';
 import { el } from '@picross/shared/ui/dom';

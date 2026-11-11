@@ -2,9 +2,10 @@ import { encounterPuzzle, extras, focusBlock, moveTo } from '../../cubed/e2e/hel
 import { expect, type BrowserContext, type Page } from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';
-import { solve as lineSolve } from '../src/engine/solver';
+import { solve as lineSolve } from '@picross/grid/engine/solver';
 
-const PUZZLES = path.join(import.meta.dirname, '../src/puzzles');
+/** The pack, in packages/grid. */
+const PUZZLES = path.join(import.meta.dirname, '../../../packages/grid/src/puzzles');
 /** The story's data (encounters, run puzzles), in the shared package. */
 const STORY = path.join(import.meta.dirname, '../../../packages/shared/src/puzzles');
 const read = (file: string) => JSON.parse(fs.readFileSync(file, 'utf8'));
