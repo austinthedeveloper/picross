@@ -19,6 +19,7 @@ game's `src/puzzles/runs.ts` (its common part) is `src/puzzles/runs.ts`.
 | Data         | `src/puzzles/{chapters,runs,encounters,run,scenes,backdrops}/*.json`; `files/` globs the first four for the loaders        |
 | Loaders      | `src/puzzles/runs.ts` (encounters and jobs), `chapters.ts`, `scenes.ts`, `backdrops.ts`, `gadgets.ts` (the gadget catalog) |
 | Dialogue     | `src/game/dialogue.ts`: the scene runner (current line or choices, advance, choose, flags)                                 |
+| Fights       | `src/fight/board.ts`: `FightBoard`, what a fight needs of a board (#164); `fightBoardContract.ts`, its tests               |
 | Scene player | `src/ui/components/dialogue.ts`, `backdrop.ts`, `src/ui/screens/sceneScreen.ts`                                            |
 | Tests        | `src/story.test.ts` (the whole story reads), `boards.test.ts` (the gate), `ui/art.test.ts` (every sprite has its art)      |
 
@@ -104,6 +105,19 @@ from above, and no caller changed but the import path. `ui/art.ts` and the style
 read the story, so they stayed in shared. The art test, which checks the story's sprites
 and portraits against shared's `public/art/`, moved here and reads that folder by its path:
 the one path out of the package.
+
+## Fights over any board
+
+`src/fight/board.ts` is the interface the story's fights are written against (#163):
+`FightBoard<C>`, a board's lines, clues and the picks that depend on its cells (the live
+line, ink, a swap, a bomb's spot, forgeries, solvability, a turn). The grid implements it
+in `@picross/grid/game/fightBoard` (the block's is #165); each method says why it's there
+and which power uses it.
+
+`src/fight/fightBoardContract.ts` is one set of tests any `FightBoard` must pass. It isn't
+a `*.test.ts`, so it doesn't run here: each board's tests call
+`fightBoardContract(name, { fresh, worked })` on their own puzzles. It imports `vitest`,
+which `imports.test.ts` allows in any file.
 
 ## Tests
 

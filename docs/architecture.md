@@ -15,7 +15,7 @@ keeps the path under `src/` that it had in the app it came from.
 | Workspace             | Name                  | Owns                                                                                                                                                                                                                                                                | May import                                                                                                                      |
 | --------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | `packages/shared`     | `@picross/shared`     | What both games use that isn't the story: tokens and base styles, the run, fight, dig, dialogue and art styles, sound, haptics, theme, `dom`, `motion`, `storage`, `random`, `prefs`, puzzle ids, the Home, mute and Flat \| Cubed buttons, the art and `ui/art.ts` | Only its own files                                                                                                              |
-| `packages/story`      | `@picross/story`      | The story both games play: its JSON, loaders and checks, gadgets, the dialogue runner, and the scene player (`ui/`)                                                                                                                                                 | shared, outside its `ui/` and `styles/`. Its `ui/` may use all of shared. Its tests may also use block                          |
+| `packages/story`      | `@picross/story`      | The story both games play: its JSON, loaders and checks, gadgets, the dialogue runner, the fight board interface (`fight/`), and the scene player (`ui/`)                                                                                                           | shared, outside its `ui/` and `styles/`. Its `ui/` may use all of shared. Its tests may also use block                          |
 | `packages/grid`       | `@picross/grid`       | The 2D rules and data: the engine, the puzzle format, the pack, sheets, ratings, murals, `Game` and the debug hooks. No DOM                                                                                                                                         | shared and story, outside their `ui/` and `styles/`                                                                             |
 | `packages/play-grid`  | `@picross/play-grid`  | Playing a 2D board: the board view, input, zoom, the play screen and its `PlaySession`, `board.css` and `game.css`                                                                                                                                                  | grid and shared                                                                                                                 |
 | `packages/block`      | `@picross/block`      | The 3D rules and data: the engine, the puzzle format, the pack, dioramas, the 3D story puzzles, `Game`, `Battle` and the story on blocks. No three.js                                                                                                               | shared and story, outside their `ui/` and `styles/`. Never three.js or play-block                                               |
@@ -963,6 +963,18 @@ Some effects wait, and come back as `Later` events: swaps and turns until no str
 progress; ink, zaps, the armor's hits and a bomb's blast until the redraw is over; and
 after every phase, the charge aims again and the turn's count shows. When one is due the
 hooks call `gridStep` again with the input of the same kind (`swap`, `ink`, `zap`, …).
+
+The picks that depend on the board go through the grid's `FightBoard` (#164): the live
+line, a swap, ink, a bomb's spot, the charge's warm-up and a turn (`turnBattle` takes the
+board's turn). `FightBoard<C>` (`packages/story/src/fight/board.ts`) is what a fight needs
+from any board: its lines by id (a grid's rows, then its columns), each line's clue, the
+lines finished now, whether it's solvable with some clues hidden, and those picks. Every
+method that may draw takes the battle's generator, so a block's draws stay in order.
+`gridFightBoard(puzzle, game)` (`packages/grid/src/game/fightBoard.ts`) wraps the 2D
+helpers in `engine/`, all deterministic; `lineId` and `lineAt` turn a row or column into an
+id and back. `fightBoardContract` (in the story) is the tests any board must pass, and the
+grid's test runs it on four puzzles. The next step (#166) runs both boards' fights on one
+`Battle` over this interface.
 
 Two tests hold it:
 
