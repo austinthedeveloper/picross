@@ -4,7 +4,7 @@ import { saveCurrentRun } from '../../../../game/runSave';
 import { getGadget, type Gadget } from '@picross/story/puzzles/gadgets';
 import { gadgetArt } from '@picross/shared/ui/art';
 import { el } from '@picross/shared/ui/dom';
-import { plural } from '@picross/play-grid/ui/format';
+import { plural } from '@picross/shared/ui/format';
 import { playSound } from '@picross/shared/ui/sound';
 import type { FightContext } from './context';
 import type { ShowPhase } from './phases';

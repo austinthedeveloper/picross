@@ -12,13 +12,13 @@ It's plain TypeScript and CSS with no build step: each app's Vite compiles it.
 The paths under `src/` are the ones these files had in Cubed, so
 `apps/cubed/src/ui/board/blockView.ts` is now `src/ui/board/blockView.ts` here.
 
-| What    | Files                                                                                                                   |
-| ------- | ----------------------------------------------------------------------------------------------------------------------- |
-| View    | `src/ui/board/blockView.ts` (the three.js scene), `atlas.ts`, `input.ts`, `thumbnail.ts`; `src/ui/tokens.ts`            |
-| Play    | `src/ui/screens/play.ts` (the play controller), `src/ui/components/hintMenu.ts`, `src/ui/format.ts`, `src/ui/prefs.ts`  |
-| Screens | `src/ui/screens/story/fight.ts` (a fight on a block), `story/kind.ts`, `src/ui/screens/editor/` (with its check worker) |
-| Styles  | `src/styles/voxels.css` (shape colors), `game.css` (the play screen), `story.css`, `editor.css`                         |
-| Tests   | `e2e/helpers.ts`: browser-test helpers for a block, for both games' Playwright tests                                    |
+| What    | Files                                                                                                                                   |
+| ------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| View    | `src/ui/board/blockView.ts` (the three.js scene), `atlas.ts`, `input.ts`, `thumbnail.ts`; `src/ui/tokens.ts`                            |
+| Play    | `src/ui/screens/play.ts` (the play controller), `src/ui/components/hintMenu.ts`, `src/ui/format.ts` (`puzzleNumber`), `src/ui/prefs.ts` |
+| Screens | `src/ui/screens/story/fight.ts` (a fight on a block), `story/kind.ts`, `src/ui/screens/editor/` (with its check worker)                 |
+| Styles  | `src/styles/voxels.css` (shape colors), `game.css` (the play screen), `story.css`, `editor.css`                                         |
+| Tests   | `e2e/helpers.ts`: browser-test helpers for a block, for both games' Playwright tests                                                    |
 
 Cubed's list, free play, tutorial, daily, dioramas, badges and story screens (board, map,
 encounter, dig, rest) are in the app, in `apps/picross/src/cubed/ui/`: they use Cubed's

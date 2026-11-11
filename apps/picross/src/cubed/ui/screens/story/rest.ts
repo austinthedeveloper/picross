@@ -1,7 +1,7 @@
 import { REST_LATE_HEAL, restHeal, type Rest } from '@picross/block/story/data';
 import { iconArt } from '@picross/shared/ui/art';
 import { el } from '@picross/shared/ui/dom';
-import { formatTime } from '@picross/play-block/ui/format';
+import { formatTime } from '@picross/shared/ui/format';
 import type { Kind } from '@picross/play-block/ui/screens/story/kind';
 import { took } from '@picross/play-block/ui/screens/story/kind';
 

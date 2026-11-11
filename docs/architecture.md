@@ -106,7 +106,8 @@ apps/
         badges.ts          The badge catalog (#108)
         ids.test.ts        Every id in both games, qualified (grid:mug, block:mug), and the clashes
       game/                Game state and saves, no DOM (Game itself is in packages/grid)
-        battle.ts          Enemy and BattleState (the 2D save), the switch's handOver and enterFlat; the rules' helpers, over the story battle
+        battle.ts          Enemy and BattleState (the 2D save), startBattle, advancePhase, the switch's handOver and enterFlat
+        battleSteps.ts     Each grid rule as one step on the 2D save, for battle.test.ts only
         battleCodec.ts     The 2D save ↔ the story battle's FightState, sparse and in place (#166)
         fight.ts           gridStep: one step of a 2D fight on the story battle, with the screen's events (#163)
         fightTrace.ts      A fight played headless through gridStep, for the tests only (#163)
@@ -207,6 +208,7 @@ packages/
         storage.ts         Safe localStorage JSON read/write
       ui/
         dom.ts             el(): create an element with props and children
+        format.ts          formatTime(), plural(): times and counts as both games show them
         motion.ts          reducedMotion(), wait(), pause(), playOnce() for animations
         sound.ts           WebAudio-synthesized sound effects
         haptics.ts         Vibration on taps, lines, hits, and zaps (and the iOS switch fallback)
@@ -288,7 +290,7 @@ packages/
     src/
       imports.test.ts      Nothing here imports from an app
       ui/
-        format.ts          formatTime(), plural(), lineName()
+        format.ts          lineName()
         screens/gameScreen.ts  Play screen; PlaySession and its hooks  (#/play/<id>)
         board/
           boardView.ts     Clues + cells (ARIA grid), dimming, fog/scramble/weak points
@@ -1033,9 +1035,10 @@ games' fights run on it:
   has.
 - **The 2D game:** `gridStep` (`game/fight.ts`) with `GRID_RULES` on the grid's board
   (`gridFightBoard`, the board in play as the marks). The helpers in `game/battle.ts`
-  (`chip`, `advancePhase`, `currentForm`, `chargeUp`, `turnBattle` and the rest) are each
-  one step of the battle on the 2D save, so `battle.test.ts`, the board switch and the
-  fight ratings run on it too. The hooks harness, the golden traces and
+  (`startBattle`, `advancePhase`, `currentForm`, `finish`, the board switch's) and, for
+  `battle.test.ts`, `game/battleSteps.ts` (`chip`, `chargeUp`, `turnBattle` and the rest,
+  one rule each) are each one step of the battle on the 2D save, so those tests, the board
+  switch and the fight ratings run on it too. The hooks harness, the golden traces and
   `fight-ratings.json` didn't move.
 
 The battle asks the board (`BattleBoard.at(marks)`, a `FightBoard` with the marks on it)
@@ -1162,7 +1165,7 @@ An enemy can have `armor: { weakPoints: { rows, cols }, attack }`. While any wea
 unsolved, ordinary lines deal no damage (they still count as struck, so they never chip
 later), and the enemy hits for the armored `attack`. Weak-point clues are marked 🎯.
 Completing one deals `WEAK_POINT_DAMAGE` (3) and cracks the armor, and after the last one
-it breaks and normal rules return (`chip` in `game/battle.ts`). The Beetle is a 15×15
+it breaks and normal rules return (the battle's `chip`, tested through `chip` in `game/battleSteps.ts`). The Beetle is a 15×15
 beetle with weak points at rows 9 and 12 and column 3.
 
 Armor matters in two ways, since the finisher always wins and HP only sets when phases
@@ -1310,7 +1313,7 @@ since a turn swaps width and height (`parseEnemy` checks).
 - **What turns:** everything. The solution, your marks, and the clues (rows become
   columns, and a column that becomes a row reads backwards). So does every line and cell
   the battle marks: fog, scrambles, weak points, forgeries and suspects, wiped lines,
-  struck lines, ink, and the live ⚡ line (`turnBattle` in `game/battle.ts`, using
+  struck lines, ink, and the live ⚡ line (the battle's `applyTurn`, `turnBattle` in `game/battleSteps.ts` on the 2D save, using
   `turnIndex`, `turnLine` and `turnLines` in `engine/transform.ts`). Forgeries are made
   from the clues as drawn and then turned, so a turn moves a forgery but never changes it.
   Phase pools are written as drawn and turned when a phase starts.

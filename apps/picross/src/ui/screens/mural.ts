@@ -20,7 +20,7 @@ import { createPicture } from '@picross/play-grid/ui/board/picture';
 import { homeLink } from '@picross/shared/ui/components/homeLink';
 import { listSection } from '../components/listSection';
 import { el } from '@picross/shared/ui/dom';
-import { formatTime } from '@picross/play-grid/ui/format';
+import { formatTime } from '@picross/shared/ui/format';
 import { renderGameScreen, type PlaySession } from '@picross/play-grid/ui/screens/gameScreen';
 
 const solvedTiles = (mural: Mural) => mural.tiles.filter((t) => getPuzzleStats(t.id));

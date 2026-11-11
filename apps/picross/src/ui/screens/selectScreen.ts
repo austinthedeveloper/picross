@@ -15,7 +15,7 @@ import { puzzles } from '@picross/grid/puzzles/index';
 import { rankCard } from '../components/rankCard';
 import { settingsLink } from '../components/settingsLink';
 import { el } from '@picross/shared/ui/dom';
-import { formatTime } from '@picross/play-grid/ui/format';
+import { formatTime } from '@picross/shared/ui/format';
 import { dailyCard } from './daily';
 import { puzzleList } from './puzzleList';
 import { runBanner } from './run/banner';

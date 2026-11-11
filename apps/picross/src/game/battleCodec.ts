@@ -354,3 +354,11 @@ export function onBattle<R>(
   const how = typeof plan === 'function' ? plan(result, battle) : plan;
   return { state: encode(state, battle.state, height, how), result };
 }
+
+/** A step on the battle for a helper that's given only the state (and some numbers). */
+export const onState = <R>(
+  state: BattleState,
+  run: (battle: GridBattle) => R,
+  plan: Plan | ((result: R, battle: GridBattle) => Plan) = {},
+  more: Partial<Enemy> = {},
+) => onBattle(someone(state, more), state, {}, run, plan);

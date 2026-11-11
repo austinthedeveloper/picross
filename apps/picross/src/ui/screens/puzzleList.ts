@@ -16,7 +16,7 @@ import { DIFFICULTIES, puzzleDifficulty, puzzlePasses } from '@picross/grid/puzz
 import { puzzles } from '@picross/grid/puzzles/index';
 import type { Puzzle } from '@picross/grid/puzzles/format';
 import { createPicture } from '@picross/play-grid/ui/board/picture';
-import { formatTime } from '@picross/play-grid/ui/format';
+import { formatTime } from '@picross/shared/ui/format';
 import { el } from '@picross/shared/ui/dom';
 import { listSection } from '../components/listSection';
 import { lazyThumbs } from '../components/lazyThumb';

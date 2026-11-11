@@ -1,5 +1,5 @@
 import { turnedPuzzle } from '../../../../game/battle';
-import { plural } from '@picross/play-grid/ui/format';
+import { plural } from '@picross/shared/ui/format';
 import { playSound } from '@picross/shared/ui/sound';
 import type { FightContext } from './context';
 

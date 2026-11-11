@@ -3,19 +3,25 @@ import { Cell, column } from '@picross/grid/engine/board';
 import { lineKey } from '@picross/grid/engine/lines';
 import { parsePuzzle } from '@picross/grid/puzzles/format';
 import {
-  absorbHit,
   advancePhase,
   ARMOR_HIT_LINES,
+  CALL_OUT_DAMAGE,
+  FALSE_ACCUSATION_HEAL,
+  currentForm,
+  finish,
+  startBattle,
+  turnedPuzzle,
+} from './battle';
+import {
+  absorbHit,
   armorHitsBack,
   blastInk,
   bump,
-  CALL_OUT_DAMAGE,
   callOut,
   clearInk,
   clearSuspects,
   clearWiped,
   markWiped,
-  FALSE_ACCUSATION_HEAL,
   heal,
   WEAK_POINT_DAMAGE,
   chargeUp,
@@ -23,15 +29,11 @@ import {
   chip,
   clearFog,
   clearScramble,
-  currentForm,
-  finish,
-  startBattle,
   turnBattle,
   turnDue,
-  turnedPuzzle,
   turnUp,
   useGadget,
-} from './battle';
+} from './battleSteps';
 import { Game } from '@picross/grid/game/game';
 
 const goblin = { name: 'Goblin', sprite: '👺', hp: 5, attack: 2 };

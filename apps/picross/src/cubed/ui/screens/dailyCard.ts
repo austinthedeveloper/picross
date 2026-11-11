@@ -1,7 +1,7 @@
 import { currentStreak, getDailyBoard, solvedOn } from '../../game/daily';
 import { dailyDimension, dateKey } from '@picross/shared/puzzles/days';
 import { el } from '@picross/shared/ui/dom';
-import { formatTime, plural } from '@picross/play-block/ui/format';
+import { formatTime, plural } from '@picross/shared/ui/format';
 
 export const prettyDate = (key: string) => {
   const [y, m, d] = key.split('-').map(Number);

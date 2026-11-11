@@ -104,32 +104,10 @@ export function solveLineAnyOrder(
 /**
  * How many passes over every row, then every column, a line solver needs to finish
  * a puzzle from its clues alone: a rough measure of how hard it is (#112). A puzzle
- * it can't finish returns the passes it managed.
+ * it can't finish returns the passes it managed. It's `fightPasses` with nothing hidden.
  */
 export function linePasses(width: number, height: number, clues: Clues): number {
-  const grid: Knowledge[] = new Array<Knowledge>(width * height).fill(Unknown);
-  const work = (cells: number[], runs: readonly number[]) => {
-    const solved = solveLine(
-      cells.map((i) => grid[i]),
-      runs,
-    );
-    let changed = false;
-    solved?.forEach((value, n) => {
-      if (grid[cells[n]] !== value) {
-        grid[cells[n]] = value;
-        changed = true;
-      }
-    });
-    return changed;
-  };
-  const rowCells = (r: number) => Array.from({ length: width }, (_, c) => r * width + c);
-  const colCells = (c: number) => Array.from({ length: height }, (_, r) => r * width + c);
-  for (let passes = 0; ; passes++) {
-    let changed = false;
-    for (let r = 0; r < height; r++) changed = work(rowCells(r), clues.rows[r]) || changed;
-    for (let c = 0; c < width; c++) changed = work(colCells(c), clues.cols[c]) || changed;
-    if (!changed) return passes;
-  }
+  return fightPasses(width, height, clues).passes;
 }
 
 /** How hard a fight's board is for a line solver (#168), from `fightPasses`. */
