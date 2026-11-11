@@ -1,0 +1,5 @@
+{
+  "$comment": "Gzipped bytes of each game's first download (entry JS with its static imports, and its CSS). npm run check:budget fails 10% over. Raise a number with the reason in the commit (#148).",
+  "picross": { "js": 159039, "css": 10043 },
+  "cubed": { "js": 87036, "css": 7215 }
+}

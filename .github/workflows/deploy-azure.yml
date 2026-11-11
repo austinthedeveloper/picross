@@ -36,6 +36,7 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: npm run check:bundle
+      - run: npm run check:budget
       - uses: azure/login@v2
         with:
           client-id: ${{ vars.AZURE_CLIENT_ID }}

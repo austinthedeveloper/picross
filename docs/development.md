@@ -141,8 +141,29 @@ Curator's block phases. `npm test` runs their tests after grid's (`npm run test:
 1. `npm ci`
 2. `npm run lint`
 3. `npm test`, which includes the uniqueness check for every puzzle
-4. `npm run build`, then `npm run check:bundle` (no debug code in production)
+4. `npm run build`, then `npm run check:bundle` (no debug code in production) and
+   `npm run check:budget` (the first download's budget, below)
 5. A separate `e2e` job runs the Playwright tests.
+
+**The bundle budget** (#148). `npm run check:budget` (`scripts/check-bundle-budget.mjs`)
+reads each game's Vite manifest (`dist/.vite/manifest.json`, `dist/3d/.vite/manifest.json`)
+and takes the entry chunk with everything it imports statically: what a player downloads
+before the home screen. It fails if any of it contains three.js (it looks for `__THREE__`
+and `THREE.WebGLRenderer`, strings only three.js has, and checks it still finds them in the
+lazy chunk), or if its gzipped JS or CSS is more than 10% over `scripts/bundle-budget.json`.
+Only the block screens use three.js, and they're loaded with `import()`: the 2D game's
+`blockFight` and Cubed's play screen. A static import of `@picross/play-block` anywhere on
+the way to the home screen puts about 140 kB (gzipped) of three.js in front of every player,
+and the check names the chunk and the import path. To raise a budget, change its number in
+`scripts/bundle-budget.json` and say why in the commit. It runs in CI and before each Azure
+deploy, after `check:bundle`.
+
+The budgets, measured when the check went in (gzipped, each file on its own):
+
+| Game          | Entry JS | Entry CSS | Lazy three.js chunk                    |
+| ------------- | -------- | --------- | -------------------------------------- |
+| Picross (2D)  | 159.0 kB | 10.0 kB   | `blockFight`: 177.0 kB (three + fight) |
+| Picross Cubed | 87.0 kB  | 7.2 kB    | `input`: 136.7 kB (three)              |
 
 There are two sites, one per environment:
 

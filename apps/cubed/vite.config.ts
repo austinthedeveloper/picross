@@ -7,8 +7,9 @@ export default defineConfig({
   base: './',
   // The shared art (packages/shared/public) is served and built beside public/.
   plugins: [sharedPublic()],
-  // three.js is one ~550 kB chunk, loaded only by the play screen.
-  build: { chunkSizeWarningLimit: 700 },
+  // three.js is one ~550 kB chunk, loaded only by the play screen. The manifest
+  // (.vite/manifest.json) is for npm run check:budget (#148).
+  build: { chunkSizeWarningLimit: 700, manifest: true },
   // 5174, so it can run beside the 2D game's dev server on 5173.
   server: { port: 5174 },
   test: {

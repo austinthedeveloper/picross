@@ -29,6 +29,8 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: npm run check:bundle
+      # No three.js in either first download, and neither grows 10% over scripts/bundle-budget.json.
+      - run: npm run check:budget
       # GitHub Pages is the dev site: it gets the debug tools (#65). Azure serves
       # production builds from release tags (deploy-azure.yml).
       - run: npm run build:dev
