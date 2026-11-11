@@ -1510,8 +1510,8 @@ once when you've already had the full tip on the other board.
   `picross:run`, so each game reads a bare name as seen on its own board, `flat` in the 2D
   game and `block` in Cubed, and records that board beside the note's key when the note is
   seen. play-block's `FightRun` says which with `home` (`block` by default). The 2D game's
-  block fight (the Curator's, `run/blockFight.ts`) doesn't pass `home: 'flat'` yet, so it
-  takes an older name as seen on a block, as it did before notes.
+  block fight (the Curator's, `run/blockFight.ts`) passes `home: 'flat'`, as the 2D game's
+  run, so an older name there shows the block's note once.
 
 The tests check that every power any enemy has comes with a tip (`enemies.test.ts`), that
 every power has a tip for each board and a note for each where it works differently

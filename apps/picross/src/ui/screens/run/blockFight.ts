@@ -62,6 +62,8 @@ const run: FightRun = {
   },
   tipSeen: hasSeenTip,
   markTip: markTipSeen,
+  // This is the 2D game's run: a tip it saved before tips knew their board was seen flat.
+  home: 'flat',
 };
 
 /** Renders the block fight, or returns null if the encounter has no block. */
