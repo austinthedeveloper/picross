@@ -114,6 +114,7 @@ apps/
         run.ts             RunState and its pure transitions
         progress.ts        Both games' free play: solve stats, boards, time (localStorage; progressFor(dim))
         runSave.ts         Both games' runs, seen scenes, job stats (localStorage)
+        fightSave.ts       A fight's boards as the run saves them (one fight, an entry per board, #169)
         settings.ts        Both games' settings: mode, list filter/order, mute, haptics, dimDone… (localStorage)
         daily.ts           The one daily (#156): days solved, streak, best, today's board (localStorage)
         badges.ts          Badge rules and the earned badges (#108)
@@ -234,6 +235,7 @@ packages/
         fightBoardContract.ts  The tests every FightBoard passes (each board's tests run them)
         battle.ts          StoryBattle and FightState: one battle over any board, in either order (#166)
         rules.ts           FightRules: where the boards' fights differ; BLOCK_RULES, GRID_RULES
+        save.ts            FightSave: a fight as both games' runs save it, an entry per board (#169)
         battle.test.ts     Each rule's other value, powers from a pool, and the grid's order
       puzzles/
         runs.ts            Reads and checks encounters and jobs; each game passes its puzzle and enemy
@@ -419,19 +421,19 @@ rules stay identical across input methods.
 All saved data lives in `localStorage`, read once at startup and written on change. Since
 the save merge (#155) the 2D game and Picross Cubed share one save:
 
-| Key                | Module                       | Contents                                                                                                                                                                                                            |
-| ------------------ | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `picross:v2`       | `game/progress.ts`           | Both games' free play, by qualified id (`grid:mug`, `block:mug`): per-puzzle stats (`clean` solves for Cubed), in-progress boards, time played per dimension (`time.grid`, `time.block`), Cubed's editor play-tests |
-| `picross:run`      | `game/runSave.ts`            | The 2D run in progress (`current`, with the current encounter's board), Cubed's (`block.current`, its own RunState), the scenes and tips seen, and job stats from both (`wonOn`: the boards a job's been won on)    |
-| `picross:settings` | `game/settings.ts`           | `mode` (default for new runs), `listFilter`, `listOrder`, `listDifficulty`, `collapsedSections`, `muted`, `highContrast`, `haptics`, and Cubed's `dimDone` and `cubedTutorialDone`, and `freePlayTab` (#153)        |
-| `picross:badges`   | `game/badges.ts`             | Both games' earned badges (Cubed's as `block-<id>`, #157): each one's best tier and the date first earned, and `seen`, how far each had got when the shelf was last open                                            |
-| `picross:daily2`   | `game/daily.ts`              | The one daily (#156): every day solved (`days`: its board, and best time if kept), the streak as of `lastSolved`, the best streak, the solve count, and today's board (with its board, `dimension`)                 |
-| `picross:editor`   | `ui/screens/editorScreen.ts` | The editor's current drawing                                                                                                                                                                                        |
-| `picross:game`     | `gameSwitch.ts` (shared)     | The Flat \| Cubed switch's last pick                                                                                                                                                                                |
-| `picross:save`     | `game/migrate.ts`            | `{ version, mergedAt }`: the migrations run so far                                                                                                                                                                  |
-| `picross:premerge` | `game/migrate.ts`            | The text of `picross:run` and `picross:settings` from before the merge rewrote them                                                                                                                                 |
-| `picross:daily`    | (old)                        | The 2D game's daily before #156; read only by the migration                                                                                                                                                         |
-| `picross3d:badges` | (old)                        | Cubed's badge tiers seen before #157; read only by the migration                                                                                                                                                    |
+| Key                | Module                       | Contents                                                                                                                                                                                                                                                         |
+| ------------------ | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `picross:v2`       | `game/progress.ts`           | Both games' free play, by qualified id (`grid:mug`, `block:mug`): per-puzzle stats (`clean` solves for Cubed), in-progress boards, time played per dimension (`time.grid`, `time.block`), Cubed's editor play-tests                                              |
+| `picross:run`      | `game/runSave.ts`            | The 2D run in progress (`current`, with the current encounter's board, or a fight's `fight`), Cubed's (`block.current`, its own RunState, its fight's the same way), the scenes and tips seen, and job stats from both (`wonOn`: the boards a job's been won on) |
+| `picross:settings` | `game/settings.ts`           | `mode` (default for new runs), `listFilter`, `listOrder`, `listDifficulty`, `collapsedSections`, `muted`, `highContrast`, `haptics`, and Cubed's `dimDone` and `cubedTutorialDone`, and `freePlayTab` (#153)                                                     |
+| `picross:badges`   | `game/badges.ts`             | Both games' earned badges (Cubed's as `block-<id>`, #157): each one's best tier and the date first earned, and `seen`, how far each had got when the shelf was last open                                                                                         |
+| `picross:daily2`   | `game/daily.ts`              | The one daily (#156): every day solved (`days`: its board, and best time if kept), the streak as of `lastSolved`, the best streak, the solve count, and today's board (with its board, `dimension`)                                                              |
+| `picross:editor`   | `ui/screens/editorScreen.ts` | The editor's current drawing                                                                                                                                                                                                                                     |
+| `picross:game`     | `gameSwitch.ts` (shared)     | The Flat \| Cubed switch's last pick                                                                                                                                                                                                                             |
+| `picross:save`     | `game/migrate.ts`            | `{ version, mergedAt }`: the migrations run so far                                                                                                                                                                                                               |
+| `picross:premerge` | `game/migrate.ts`            | The text of `picross:run` and `picross:settings` from before the merge rewrote them                                                                                                                                                                              |
+| `picross:daily`    | (old)                        | The 2D game's daily before #156; read only by the migration                                                                                                                                                                                                      |
+| `picross3d:badges` | (old)                        | Cubed's badge tiers seen before #157; read only by the migration                                                                                                                                                                                                 |
 
 Free play's size filter and its Both boards toggle are `listSize` and `pickBoth` there too.
 
@@ -510,6 +512,18 @@ Nothing deletes a key. `picross:v1`, `picross:daily` and every `picross3d:` key 
 rollback, and only the migration reads them. The two keys it rewrites keep their old text in
 `picross:premerge`, which is also what a step reads if it runs again after being cut short,
 so Cubed's jobs never count twice.
+
+A fight in progress saves as one `fight` on the run (#169, `@picross/story/fight/save`):
+`{ v: 2, boards: { flat?, block? } }`, an entry for each board the fight has used, each with
+that board's marks and battle (`board`, `battle`) in that board's own format, exactly as
+before. Cubed's run (`block.current` in the same `picross:run`) saves its fights the same
+way, as the block's entry. Which board is showing isn't saved: it's the board the fight's
+phase says (`boardAt`). The game holds the run as it always did (`board`, `battle`,
+`block`); the run save moves a fight into `fight` as it writes (`saveFight`,
+`game/fightSave.ts`, and Cubed's own) and back as it reads (`loadFight`), and a run saved
+before #169, with those fields on the run, loads as it is, forever. Those fields beside a
+`fight` can only have been written by an older version since, so they win, whole. Digs and
+rests keep their board in `board`.
 
 `game/saveMerge.ts` combines two copies of a save (#97), so cross-device sync never has to
 ask which one to keep. It's a pure function with one rule per kind of data: bests and
@@ -1293,10 +1307,12 @@ are in [story-combined.md](story-combined.md).
   `carryHp` rounds so exactly the phases already started have started on the new board),
   the phases, with their fog and scrambles picked again on the new board, and the patch
   kit. Your HP and gadgets are the run's, so they're shared anyway.
-- **What doesn't:** each board keeps its own progress. The flat board and its battle stay
-  in `RunState.board` and `battle`; the block's are in `RunState.block`, saved in the 3D
-  game's format. Going back finds a board as you left it. When the fight's won, the
-  block's counts (mistakes, zaps, wrong accusations, gadgets) are added to the battle's
+- **What doesn't:** each board keeps its own progress. The flat board and its battle are
+  in `RunState.board` and `battle`; the block's are in `RunState.block`, in the 3D game's
+  format. The run saves them as the fight's two entries, `fight.boards.flat` and
+  `fight.boards.block` (#169), so a reload mid-fight opens the board its phase says, and
+  going back finds a board as you left it. When the fight's won, the block's counts
+  (mistakes, zaps, wrong accusations, gadgets) are added to the battle's
   (`withBlockCounts`), so badges and the tally see the whole fight.
 - **Rules:** a switching phase can't swap or splash ink (they'd land on the board that's
   going). Solving either board finishes the fight. Endless runs stay flat. A test checks
