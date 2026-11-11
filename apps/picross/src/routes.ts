@@ -6,11 +6,13 @@
  *
  * Picross Cubed, the 3D game, is one entry: everything under `#/cubed/…`, loaded with one
  * `import('./cubed/routes')`, so neither its screens nor three.js are in the first download
- * (`npm run check:budget` checks). `#/scene/<id>` is both games'.
+ * (`npm run check:budget` checks). `#/scene/<id>` is both games', and so is `#/daily`, which
+ * opens Cubed's daily screen the same way on a Cubed day (#156).
  */
 import { getPuzzle } from '@picross/grid/puzzles/index';
 import { getMural } from '@picross/grid/puzzles/murals';
 import { getScene } from '@picross/story/puzzles/scenes';
+import { dailyDimension, dateKey } from '@picross/shared/puzzles/days';
 import { renderGameScreen } from '@picross/play-grid/ui/screens/gameScreen';
 import { renderSceneScreen } from '@picross/story/ui/screens/sceneScreen';
 import { renderBadgesScreen } from './ui/screens/badges';
@@ -44,6 +46,18 @@ export interface Route<T = unknown> {
   game?: Game;
 }
 
+/**
+ * Old links and where they go now. `main.ts` swaps the hash before routing, so the old one
+ * leaves no step in the history.
+ */
+const MOVED: Record<string, string> = {
+  // Cubed's daily (#156): one daily for both boards now.
+  '#/cubed/daily': '#/daily',
+};
+
+/** Where `hash` goes now: itself, unless it's an old link. */
+export const movedTo = (hash: string): string => MOVED[hash] ?? hash;
+
 /** A route, typed by what its `match` finds. */
 const route = <T>(r: Route<T>): Route => r as Route;
 /** Exactly this hash. */
@@ -69,6 +83,13 @@ export const ROUTES: Route[] = [
     },
     render: (app, { mural, tile }) =>
       tile === null ? renderMuralScreen(app, mural) : renderMuralTile(app, mural, tile),
+  }),
+  // The one daily (#156): Flat and Cubed by turns. A Cubed day's is Cubed's daily screen.
+  route({
+    game: 'cubed',
+    match: (h) => h === '#/daily' && dailyDimension(dateKey()) === 'block',
+    render: (app, _, lazy) =>
+      lazy(import('./cubed/routes'), (m) => m.renderCubed(app, '/daily', lazy)),
   }),
   route({ match: is('#/daily'), render: (app) => renderDailyScreen(app) }),
   route({ match: is('#/run'), render: (app) => renderRunScreen(app) }),

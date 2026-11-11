@@ -7,12 +7,13 @@
 const BOARDS: RegExp[] = [
   /^#\/play\/[\w-]+$/,
   /^#\/run\/play$/,
+  // The one daily, on either board (#156).
   /^#\/daily$/,
   /^#\/mural\/[\w-]+\/\d+$/,
   /^#\/editor$/,
-  // Picross Cubed (cubed/routes.ts): a puzzle, the tutorial, the daily, a diorama tile, a
-  // story fight, the editor, and a shared puzzle or a play-test.
-  /^#\/cubed\/(play\/[\w-]+|tutorial|daily|diorama\/[\w-]+\/\d+|story\/play|editor|p\/[\w-]+(\/test)?)$/,
+  // Picross Cubed (cubed/routes.ts): a puzzle, the tutorial, a diorama tile, a story fight,
+  // the editor, and a shared puzzle or a play-test. (#/cubed/daily moves to #/daily.)
+  /^#\/cubed\/(play\/[\w-]+|tutorial|diorama\/[\w-]+\/\d+|story\/play|editor|p\/[\w-]+(\/test)?)$/,
 ];
 
 /** Whether `hash` (`location.hash`) is a screen with a board on it. */

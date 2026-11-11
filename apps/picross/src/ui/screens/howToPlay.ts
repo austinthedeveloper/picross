@@ -31,7 +31,10 @@ const RULES: [string, string][] = [
   ['Relaxed', 'Nothing checks your work. Solve at your own pace.'],
   ['♥ Hearts', 'A wrong fill costs a heart. Lose all three and you start over.'],
   ['Hints', 'You get 3 per puzzle. Each reveals the cell, row or column you’re on.'],
-  ['Daily', 'One big puzzle a day, the same for everyone. Keep your streak going.'],
+  [
+    'Daily',
+    'One puzzle a day, the same for everyone: Flat one day, Cubed the next. Keep your streak going.',
+  ],
   ['Murals', 'Each tile is its own puzzle. Solve them all to see the whole picture.'],
   ['Jobs', 'A string of fights and digs, where enemies mess with your board.'],
 ];

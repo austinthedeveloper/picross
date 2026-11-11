@@ -7,8 +7,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pointOf } from '@picross/block/engine/volume';
 import { parsePuzzle, type Puzzle } from '@picross/block/puzzles/format';
-import { hashString } from '@picross/block/puzzles/hide';
+import { dailyPick } from '@picross/block/puzzles/dailyCycle';
 import { turnPuzzle } from '@picross/block/puzzles/transform';
+import { dayNumber } from '@picross/shared/puzzles/days';
 
 /** The block package's puzzles (the pack, the story's 3D puzzles). */
 const PUZZLES = path.join(import.meta.dirname, '../../block/src/puzzles');
@@ -46,7 +47,10 @@ export async function skipScene(page: Page): Promise<void> {
   if (await skip.isVisible()) await skip.click();
 }
 
-/** The daily puzzle for a date, built the way packages/block/src/puzzles/daily.ts builds it. */
+/**
+ * The daily puzzle for a Cubed day (#156: the even days since the epoch), built the way
+ * packages/block/src/puzzles/daily.ts builds it.
+ */
 export function dailyFor(key: string): Puzzle {
   const files = fs
     .readdirSync(PACK)
@@ -63,9 +67,8 @@ export function dailyFor(key: string): Puzzle {
         a.p.name.localeCompare(b.p.name),
     )
     .filter(({ p }) => longest(p) >= 4);
-  const { f, p } = pool[hashString(`daily:${key}`) % pool.length];
-  const h = hashString(`turn:${key}`);
-  const turn = { quarters: (h % 4) as 0 | 1 | 2 | 3, mirror: Boolean((h >> 2) & 1) };
+  const { source, turn } = dailyPick(Math.floor(dayNumber(key) / 2), pool.length);
+  const { f, p } = pool[source];
   return parsePuzzle(turnPuzzle(f, p, turn));
 }
 

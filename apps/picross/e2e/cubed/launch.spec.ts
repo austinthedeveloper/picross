@@ -2,39 +2,58 @@ import { expect, test } from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';
 import { parseDiorama, type DioramaFile } from '@picross/block/puzzles/diorama';
+import { addDays, dailyDimension } from '@picross/shared/puzzles/days';
 import { breakCubes, dailyFor, extras, focusBlock } from './helpers';
 
-/** November's daily puzzle for a day, and how many cubes it takes to break. */
-const novemberDaily = (day: number) => {
-  const puzzle = dailyFor(`2026-11-${String(day).padStart(2, '0')}`);
+/** "Nov 13" for a day key, as the card puts it. */
+const prettyDate = (key: string) => {
+  const [y, m, d] = key.split('-').map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+};
+
+/** A day's Cubed daily, and how many cubes it takes to break. */
+const daily = (key: string) => {
+  const puzzle = dailyFor(key);
   return { puzzle, breaks: extras(puzzle).length };
 };
 
-// Two days in a row whose blocks break quickest, so the test stays short as the pack grows
-// (which day gets which puzzle shifts with every puzzle added).
-const firstDay = Array.from({ length: 29 }, (_, i) => i + 1).reduce((best, day) =>
-  novemberDaily(day).breaks + novemberDaily(day + 1).breaks <
-  novemberDaily(best).breaks + novemberDaily(best + 1).breaks
-    ? day
-    : best,
-);
+// The Cubed day this month and next whose block breaks quickest, so the test stays short as
+// the pack grows (which day gets which puzzle shifts with every puzzle added). Cubed days are
+// the even ones since the epoch (#156); the day before is a Flat one.
+const cubedDay = Array.from({ length: 60 }, (_, i) => addDays('2026-11-01', i))
+  .filter((key) => dailyDimension(key) === 'block')
+  .reduce((best, key) => (daily(key).breaks < daily(best).breaks ? key : best));
+const [y, m, d] = cubedDay.split('-').map(Number);
+const flatDay = addDays(cubedDay, -1);
 
-test('the daily puzzle: one block a day, and a streak across days', async ({ page }) => {
-  for (const [day, streak] of [
-    [firstDay, '1 day in a row'],
-    [firstDay + 1, '2 days in a row'],
-  ] as const) {
-    await page.clock.setFixedTime(new Date(2026, 10, day, 12));
-    await page.goto(`/?day=${day}#/cubed`);
-    await expect(page.locator('.daily-card')).toContainText(`Daily · Nov ${day}`);
-    await page.locator('.daily-card').click();
-    const { puzzle } = novemberDaily(day);
-    await focusBlock(page);
-    await breakCubes(page, puzzle, extras(puzzle));
-    await expect(page.locator('.end-note')).toContainText(streak);
-    await page.getByRole('link', { name: 'All puzzles' }).click();
-    await expect(page.locator('.daily-card')).toContainText('Solved in');
-  }
+test("the daily on a Cubed day: a block, on yesterday's Flat streak", async ({ page, context }) => {
+  // Yesterday's Flat daily solved, on the one daily's save.
+  await context.addInitScript((day) => {
+    if (localStorage.getItem('picross:daily2')) return;
+    const save = {
+      days: { [day]: { dimension: 'grid' } },
+      lastSolved: day,
+      streak: 1,
+      best: 1,
+      solves: 1,
+    };
+    localStorage.setItem('picross:daily2', JSON.stringify(save));
+  }, flatDay);
+  await page.clock.setFixedTime(new Date(y, m - 1, d, 12));
+  await page.goto(`/?day=${d}#/cubed`);
+  const card = page.locator('.daily-card');
+  await expect(card).toContainText(`Daily · ${prettyDate(cubedDay)} · Today: Cubed`);
+  await expect(card).toContainText('Keep your 1 day streak going.');
+  await card.click();
+  await expect(page).toHaveURL(/#\/daily$/);
+  const { puzzle } = daily(cubedDay);
+  await focusBlock(page);
+  await breakCubes(page, puzzle, extras(puzzle));
+  await expect(page.locator('.end-note')).toContainText('2 days in a row');
+  await page.getByRole('link', { name: 'All puzzles' }).click();
+  await expect(card).toContainText('Solved in');
+  await expect(card).toContainText('2-day streak!');
+  await expect(card).toContainText('Replay');
 });
 
 test('badges list every badge with its next step, and count new ones', async ({ page }) => {

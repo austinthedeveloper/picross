@@ -1,4 +1,11 @@
-import { mergeLegacy, type CubedSaves, type FlatSaves } from './legacyMerge';
+import {
+  mergeDailies,
+  mergeLegacy,
+  type CubedSaves,
+  type FlatSaves,
+  type LegacyCubedDaily,
+  type LegacyFlatDaily,
+} from './legacyMerge';
 
 /**
  * Save migrations, run once at startup before anything reads a save. The store modules read
@@ -17,7 +24,7 @@ export const MARKER_KEY = 'picross:save';
 /** Copies of the keys step 1 rewrites, as they were before it first ran. */
 export const BACKUP_KEY = 'picross:premerge';
 
-/** Every key step 1 reads or writes. */
+/** Every key a step reads or writes. */
 export const KEYS = {
   flatProgress: 'picross:v1',
   flatRun: 'picross:run',
@@ -28,6 +35,10 @@ export const KEYS = {
   cubedSettings: 'picross3d:settings',
   /** The merged free play. Runs and settings stay on the 2D game's keys. */
   progress: 'picross:v2',
+  /** Step 2's: the two dailies, and the one they become (`game/daily.ts`). */
+  flatDaily: 'picross:daily',
+  cubedDaily: 'picross3d:daily',
+  daily: 'picross:daily2',
 } as const;
 
 /** The marker: the last step run, and when the first one ran. */
@@ -99,7 +110,24 @@ function mergeTheGames(store: KeyValue): void {
   if (merged.settings) store.setItem(KEYS.flatSettings, JSON.stringify(merged.settings));
 }
 
-const STEPS: Step[] = [{ version: 1, run: mergeTheGames }];
+/**
+ * Step 2 (#156): one daily and one streak. `picross:daily` and `picross3d:daily` merge into
+ * `picross:daily2` (`legacyMerge.ts`'s `mergeDailies`), and both stay as they were. A save
+ * merged by step 1 alone has played both dailies since on their old keys, so this reads them
+ * whenever it runs.
+ */
+function mergeTheDailies(store: KeyValue): void {
+  const merged = mergeDailies(
+    readJson<LegacyFlatDaily>(store, KEYS.flatDaily),
+    readJson<LegacyCubedDaily>(store, KEYS.cubedDaily),
+  );
+  if (merged) store.setItem(KEYS.daily, JSON.stringify(merged));
+}
+
+const STEPS: Step[] = [
+  { version: 1, run: mergeTheGames },
+  { version: 2, run: mergeTheDailies },
+];
 
 /** The version a save is at once every step has run. */
 export const SAVE_FORMAT = STEPS[STEPS.length - 1].version;

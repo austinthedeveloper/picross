@@ -42,6 +42,8 @@ const ROUTES: CubedRoute[] = [
     render: (app, _, lazy) => lazy(import('./ui/screens/tutorial'), (m) => m.renderTutorial(app)),
   },
   {
+    // Not a link of its own: the app's #/daily opens this on a Cubed day (#156), and
+    // #/cubed/daily, the old link, moves there (../routes.ts).
     match: /^\/daily$/,
     render: (app, _, lazy) =>
       lazy(import('./ui/screens/dailyScreen'), (m) => m.renderDailyScreen(app)),

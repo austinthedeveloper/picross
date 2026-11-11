@@ -22,7 +22,13 @@ const LINKS: [string, string, (page: Page) => Promise<void>][] = [
   ['/3d/#/play/steps', '#/cubed/play/steps', block],
   ['/3d/#/tutorial', '#/cubed/tutorial', block],
   ['/3d/#/how-to-play', '#/cubed/how-to-play', heading('How to play')],
-  ['/3d/#/daily', '#/cubed/daily', block],
+  // One daily for both boards now (#156): a block on a Cubed day, the Flat board on a Flat one.
+  [
+    '/3d/#/daily',
+    '#/daily',
+    (page) =>
+      expect(page.locator('canvas.block-canvas').or(page.locator('.board')).first()).toBeVisible(),
+  ],
   ['/3d/#/badges', '#/cubed/badges', heading('Badges')],
   ['/3d/#/diorama/park', '#/cubed/diorama/park', heading('Park')],
   ['/3d/#/diorama/park/1', '#/cubed/diorama/park/1', block],
