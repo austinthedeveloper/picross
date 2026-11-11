@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { getEncounter as getBlockEncounter, KNOWN, storyIssues } from '@picross/block/story/data';
+import { isPower, POWER_TIPS } from './fight/tips';
 import { encounterFiles } from './puzzles/files/encounters';
 import { runPuzzleFiles } from './puzzles/files/runPuzzles';
 
 /**
- * The story's gate: for every encounter and power, the boards that can play it.
+ * The story's gate: every encounter and every power plays on both boards (#146, #167).
  *
  * - **Flat** (the 2D game) is where the story comes from: it plays an encounter whose 2D
  *   puzzle is in `run/`, and every power (its loader checks each enemy against its puzzle,
@@ -13,10 +14,12 @@ import { runPuzzleFiles } from './puzzles/files/runPuzzles';
  *   3D puzzle (`packages/block/src/puzzles/story/`), and a power whose fields its loader
  *   reads (`KNOWN` in `packages/block/src/story/data.ts`).
  *
- * What the block can't play yet is reported (printed with the test run), not failed: Cubed
- * leaves it out. Broken data fails: the story's loaders throw on it (story.test.ts, and
- * importing Cubed's loader here), and so does a boss that switches to a block with no block
- * to switch to. #167 makes the rest a hard check once every power runs on both boards.
+ * Both boards fight on the one battle, and every power runs on either (the parity test,
+ * `apps/picross/src/game/powers.test.ts`), so this is a hard check: an encounter or a power
+ * a board can't play fails, as does a power with no tip for each board
+ * (`fight/tips.ts`). The report still prints with the test run. Broken data fails too: the
+ * story's loaders throw on it (story.test.ts, and importing Cubed's loader here), and so
+ * does a boss that switches to a block with no block to switch to.
  */
 
 type Data = Record<string, unknown>;
@@ -121,6 +124,31 @@ describe('the boards that can play the story', () => {
         : ['Cubed plays all of it.']),
     ];
     console.log(lines.join('\n'));
+  });
+
+  it('plays every encounter on both boards', () => {
+    expect(report.filter((e) => !both(e.boards)).map((e) => `${e.id}: ${e.boards}`)).toEqual([]);
+    expect(storyIssues).toEqual([]);
+  });
+
+  it('plays every power on both boards, with a tip for each', () => {
+    const unplayable = report.flatMap((e) =>
+      e.powers.filter((p) => !both(p.boards)).map((p) => `${e.id}: ${p.power} (${p.boards})`),
+    );
+    expect(unplayable).toEqual([]);
+    // A power is one the battle knows (or the board switch), and it explains itself on each board.
+    const powers = new Set(report.flatMap((e) => e.powers.map((p) => p.power)));
+    for (const power of powers) {
+      if (power === 'board switch') continue;
+      expect(isPower(power), `${power} has no tip`).toBe(true);
+      expect(POWER_TIPS[power as keyof typeof POWER_TIPS].tip).toEqual({
+        flat: expect.any(String),
+        block: expect.any(String),
+      });
+    }
+    expect(Object.keys(POWERS).filter((p) => p !== 'board switch')).toEqual(
+      Object.keys(POWER_TIPS),
+    );
   });
 
   // The 2D game plays a switching boss's block phases with Cubed's fight, so that boss must
