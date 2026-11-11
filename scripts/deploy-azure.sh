@@ -29,12 +29,16 @@ fi
 
 # 2. Everything else (index.html, the art, icons, 3d/ for Cubed's old links, ...) is always
 #    revalidated. Not .vite/, the build's manifest for npm run check:budget.
+#    sw.js has to be revalidated too: it's how an installed game finds a new version.
 find "$dist" -type f -not -path "$dist/assets/*" -not -path "$dist/.vite/*" | while read -r file; do
+  # The CLI guesses types from the extension, and may not know .webmanifest.
+  type=()
+  [[ "$file" == *.webmanifest ]] && type=(--content-type 'application/manifest+json')
   az storage blob upload \
     --account-name "$account" --auth-mode "$auth" \
     --container-name '$web' --name "${file#"$dist"/}" --file "$file" \
     --overwrite --only-show-errors --output none \
-    --content-cache-control 'no-cache'
+    --content-cache-control 'no-cache' ${type[@]+"${type[@]}"}
 done
 
 url=$(az storage account show --name "$account" --query primaryEndpoints.web --output tsv)

@@ -114,7 +114,7 @@ settings (see [the 2D game's routing](../architecture.md#routing-and-screens)).
 (`/3d/#/play/mug` to `../#/cubed/play/mug`, and `/3d/` to `#/cubed`), and `/3d/sw.js`
 retires the old service worker: it deletes the `picross-cubed` cache, unregisters, and
 reloads the pages it had, which then land here. `e2e/cubed/old-links.spec.ts` and
-`offline.spec.ts` check both.
+`e2e/offline.spec.ts` check both.
 
 ### The play controller
 
@@ -141,10 +141,11 @@ back from the browser's page cache draws the screen again.
 
 ## Offline
 
-Cubed played offline when it was its own app (its worker cached every file at `/3d/`).
-That worker is retired (above), and the one app's own comes with #160, which also brings
-back the installable manifest (the icons are in `apps/picross/public/icons/`, made from
-`cubed.svg` by `npm -w apps/picross run icons`) and the offline test.
+Cubed plays offline as part of the one app (#160): its list and pack are precached with the
+rest of the game, and the first block the player opens caches three.js and every screen
+with a block. Its old worker at `/3d/` is retired (above). The app's icons are in
+`apps/picross/public/icons/`, made from `cubed.svg` by `npm -w apps/picross run icons`. See
+[Offline and updates](../architecture.md#offline-and-updates).
 
 Keep three.js out of the first download: screens with a block are loaded on demand, and
 the list's cards (daily, story, dioramas) live in modules that don't import the view.
