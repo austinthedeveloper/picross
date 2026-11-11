@@ -12,6 +12,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@picross/shared": "*"
+    "@picross/shared": "*",
+    "@picross/story": "*"
   }
 }

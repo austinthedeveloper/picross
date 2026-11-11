@@ -9,7 +9,7 @@ import {
   sceneEntries,
   sourceFile,
   isItem,
-  SHARED,
+  STORY,
   type Entry,
   type Page,
   type Section,
@@ -225,7 +225,7 @@ export async function planApply(version: Version, pages: Page[], root = '.'): Pr
     // "start" is the default, so the scene files leave it out.
     const { start, ...rest } = scene;
     const data = start === 'start' ? rest : { ...rest, start };
-    const file = `${SHARED}/src/puzzles/scenes/${id}.json`;
+    const file = `${STORY}/src/puzzles/scenes/${id}.json`;
     // Scene files differ in how much they fit on a line. Stay with what this one does.
     outputs.set(file, toJson(data, /\{ "/.test(read(file))));
   }

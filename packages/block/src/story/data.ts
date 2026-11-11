@@ -1,24 +1,37 @@
-import { getGadget } from '@picross/shared/puzzles/gadgets';
 import type { Puzzle } from '../puzzles/format';
 import { getStoryPuzzle } from '../puzzles/index';
-import { getScene } from '@picross/shared/puzzles/scenes';
-import { chapterFiles as chapterModules } from '@picross/shared/puzzles/files/chapters';
-import { encounterFiles as encounterModules } from '@picross/shared/puzzles/files/encounters';
-import { runPuzzleFiles } from '@picross/shared/puzzles/files/runPuzzles';
-import { runFiles as runModules } from '@picross/shared/puzzles/files/runs';
+import { chapterFiles as chapterModules } from '@picross/story/puzzles/files/chapters';
+import { encounterFiles as encounterModules } from '@picross/story/puzzles/files/encounters';
+import { runPuzzleFiles } from '@picross/story/puzzles/files/runPuzzles';
+import { runFiles as runModules } from '@picross/story/puzzles/files/runs';
+import { getGadget } from '@picross/story/puzzles/gadgets';
+import { assembleChapters, parseChapter, type StoryChapter } from '@picross/story/puzzles/chapters';
+import {
+  parseEncounter as parseStoryEncounter,
+  parseRun,
+  type StoryEncounter,
+  type StoryRun,
+} from '@picross/story/puzzles/runs';
 
 /**
- * The story, read from the shared data (packages/shared, the 2D game's story) and
- * fitted to blocks. The 2D game's enemies name the exact rows and columns their powers
- * hit; a block has different lines, so here each power keeps only its size ("fog over 5
- * lines"), and the fight picks lines on the block (src/game/battle.ts).
+ * The story (packages/story, the 2D game's story) fitted to blocks. `@picross/story` reads
+ * and checks what every board shares (kinds, rests, scenes, gadgets, jobs and chapters) and
+ * throws on anything broken; this adds each encounter's 3D puzzle and its enemy on a block.
+ * The 2D game's enemies name the exact rows and columns their powers hit; a block has
+ * different lines, so here each power keeps only its size ("fog over 5 lines"), and the
+ * fight picks lines on the block (src/game/battle.ts).
  *
- * Anything the 2D data uses that this game can't play yet is collected in `storyIssues`
- * instead of failing the whole app; `story.test.ts` fails while there are any, which is
- * the import's compatibility gate (docs/story.md).
+ * Anything the story uses that this game can't play yet (an encounter with no 3D puzzle, a
+ * field it doesn't read) is collected in `storyIssues` and left out, instead of failing the
+ * whole app. packages/story's `boards.test.ts` reports them (docs/story.md).
  */
 
-export type EncounterKind = 'fight' | 'dig' | 'rest';
+export {
+  REST_LATE_HEAL,
+  restHeal,
+  type EncounterKind,
+  type Rest,
+} from '@picross/story/puzzles/runs';
 
 /** A power's size and settings, from the 2D enemy. */
 export interface Enemy {
@@ -59,57 +72,18 @@ export interface Phase {
   rotate?: number;
 }
 
-export interface Rest {
-  seconds: number;
-  heal: number;
-}
-
-/** HP a rest stop still gives when you finish after its timer. */
-export const REST_LATE_HEAL = 1;
-export const restHeal = (rest: Rest, elapsed: number) =>
-  elapsed <= rest.seconds * 1000 ? rest.heal : REST_LATE_HEAL;
-
-export interface Encounter {
-  id: string;
-  name: string;
-  kind: EncounterKind;
-  puzzle: Puzzle;
-  blurb?: string;
-  enemy?: Enemy;
-  boss?: boolean;
-  scene?: string;
-  rest?: Rest;
+export interface Encounter extends StoryEncounter<Puzzle, Enemy> {
   /** The gadget a dig's find becomes (from the 2D puzzle's `gadget`). */
   gadget?: string;
 }
 
-export interface Job {
-  id: string;
-  name: string;
-  hp: number;
-  encounters: Encounter[];
-  gadgets: string[];
-  intro?: string;
-  outro?: string;
-  blurb?: string;
+export interface Job extends Omit<StoryRun<Encounter>, 'order'> {
   order: number;
-  requires?: string;
-  overtimeOf?: string;
-  bossOf?: string;
 }
 
-export interface Chapter {
-  id: string;
-  title: string;
-  blurb?: string;
-  order: number;
-  /** 1-based, in board order. */
-  number: number;
-  jobs: Job[];
-  opening?: string;
-}
+export type Chapter = StoryChapter<Job>;
 
-/** Things the 2D story uses that this game can't play (yet). */
+/** Things the story uses that this game can't play (yet). */
 export const storyIssues: string[] = [];
 
 const load = <T>(files: Record<string, unknown>) =>
@@ -126,8 +100,8 @@ const runPuzzles = new Map(
   ]),
 );
 
-/** Fields this game reads; anything else in the 2D data is reported. */
-const KNOWN = {
+/** Fields this game reads; anything else in the story is reported. */
+export const KNOWN = {
   encounter: ['id', 'name', 'kind', 'puzzle', 'blurb', 'enemy', 'boss', 'scene', 'rest'],
   enemy: [
     'name',
@@ -238,44 +212,21 @@ function scaleEnemy(enemy: Enemy, puzzle: Puzzle, lines2d: number): Enemy {
 function parseEncounter(data: Record<string, unknown>): Encounter | null {
   const where = `encounter "${data.id}"`;
   unknownKeys('encounter', where, data);
-  const puzzle = getStoryPuzzle(String(data.puzzle));
-  if (!puzzle) {
+  if (!getStoryPuzzle(String(data.puzzle))) {
     storyIssues.push(`${where}: no 3D puzzle "${data.puzzle}" in src/puzzles/story/`);
     return null;
-  }
-  const kind = data.kind as EncounterKind;
-  if (!['fight', 'dig', 'rest'].includes(kind)) {
-    storyIssues.push(`${where}: unknown kind "${kind}"`);
-    return null;
-  }
-  if (typeof data.scene === 'string' && !getScene(data.scene)) {
-    storyIssues.push(`${where}: unknown scene "${data.scene}"`);
   }
   const flat = runPuzzles.get(String(data.puzzle));
   const gadget = flat?.gadget;
   // A block has more lines than the 2D board, so enemies get HP in proportion: the same
   // share of the fight goes by per line finished.
   const lines2d = flat ? flat.width + flat.height : 30;
-  return {
-    id: String(data.id),
-    name: String(data.name),
-    kind,
-    puzzle,
-    ...(data.blurb ? { blurb: String(data.blurb) } : {}),
-    ...(kind === 'fight' && data.enemy
-      ? {
-          enemy: scaleEnemy(
-            parseEnemy(data.enemy as Record<string, unknown>, where),
-            puzzle,
-            lines2d,
-          ),
-        }
-      : {}),
-    ...(data.boss ? { boss: true } : {}),
-    ...(typeof data.scene === 'string' ? { scene: data.scene } : {}),
-    ...(kind === 'rest' ? { rest: data.rest as Rest } : {}),
-    ...(gadget && getGadget(gadget) ? { gadget } : {}),
-  };
+  const encounter: Encounter = parseStoryEncounter(data, {
+    puzzle: getStoryPuzzle,
+    enemy: (enemy, puzzle) =>
+      scaleEnemy(parseEnemy(enemy as Record<string, unknown>, where), puzzle, lines2d),
+  });
+  return { ...encounter, ...(gadget && getGadget(gadget) ? { gadget } : {}) };
 }
 
 const encounters = new Map<string, Encounter>();
@@ -287,38 +238,22 @@ for (const file of encounterFiles) {
 /** An encounter by id, fitted to a block. */
 export const getEncounter = (id: string) => encounters.get(id);
 
+/** Every encounter and job in the story, playable here or not. */
+const storyEncounterIds = new Set(encounterFiles.map((data) => String(data.id)));
+const storyJobIds = new Set(runFiles.map((data) => String(data.id)));
+
 function parseJob(data: Record<string, unknown>): Job | null {
   const where = `job "${data.id}"`;
   unknownKeys('run', where, data);
-  const list = (data.encounters as string[]).map((id) => {
-    const e = encounters.get(id);
-    if (!e) storyIssues.push(`${where}: encounter "${id}" isn't playable`);
-    return e;
-  });
-  if (list.some((e) => !e)) return null;
-  const gadgets = ((data.gadgets as string[]) ?? []).filter((g) => {
-    if (getGadget(g)) return true;
-    storyIssues.push(`${where}: unknown gadget "${g}"`);
-    return false;
-  });
-  for (const key of ['intro', 'outro'] as const) {
-    if (typeof data[key] === 'string' && !getScene(data[key] as string)) {
-      storyIssues.push(`${where}: unknown ${key} scene "${data[key]}"`);
-    }
-  }
-  return {
-    id: String(data.id),
-    name: String(data.name),
-    hp: Number(data.hp),
-    encounters: list as Encounter[],
-    gadgets,
-    order: Number(data.order ?? 999),
-    ...Object.fromEntries(
-      (['intro', 'outro', 'blurb', 'requires', 'overtimeOf', 'bossOf'] as const)
-        .filter((k) => typeof data[k] === 'string')
-        .map((k) => [k, data[k] as string]),
-    ),
-  };
+  // A job plays every encounter in turn, so one this game can't play leaves out the job.
+  // (An encounter the story doesn't have at all is an error, from parseRun.)
+  const unplayable = (Array.isArray(data.encounters) ? (data.encounters as string[]) : []).filter(
+    (id) => !encounters.has(id) && storyEncounterIds.has(id),
+  );
+  for (const id of unplayable) storyIssues.push(`${where}: encounter "${id}" isn't playable`);
+  if (unplayable.length) return null;
+  const job = parseRun(data, (id) => encounters.get(id));
+  return { ...job, order: job.order ?? 999 };
 }
 
 /** Every job, including Overtime runs and boss fights. */
@@ -334,26 +269,16 @@ export const overtimeFor = (id: string) => jobs.filter((j) => j.overtimeOf === i
 /** Standalone boss fights a job unlocks. */
 export const bossFightsFor = (id: string) => jobs.filter((j) => j.bossOf === id);
 
-/** Every chapter, in board order, holding its story jobs. */
-export const chapters: Chapter[] = chapterFiles
-  .map((data) => {
+/** Every chapter, in board order, holding its story jobs this game can play. */
+export const chapters: Chapter[] = assembleChapters(
+  chapterFiles.map((data) => {
     unknownKeys('chapter', `chapter "${data.id}"`, data);
-    const chapterJobs = (data.jobs as string[]).flatMap((id) => {
+    return parseChapter(data, (id) => {
       const job = jobById.get(id);
-      if (!job) storyIssues.push(`chapter "${data.id}": job "${id}" isn't playable`);
-      return job ? [job] : [];
+      if (job || !storyJobIds.has(id)) return job;
+      storyIssues.push(`chapter "${data.id}": job "${id}" isn't playable`);
+      return null;
     });
-    if (typeof data.opening === 'string' && !getScene(data.opening)) {
-      storyIssues.push(`chapter "${data.id}": unknown opening scene "${data.opening}"`);
-    }
-    return {
-      id: String(data.id),
-      title: String(data.title),
-      order: Number(data.order),
-      jobs: chapterJobs,
-      ...(data.blurb ? { blurb: String(data.blurb) } : {}),
-      ...(typeof data.opening === 'string' ? { opening: data.opening } : {}),
-    };
-  })
-  .sort((a, b) => a.order - b.order)
-  .map((c, i) => ({ ...c, number: i + 1 }));
+  }),
+  jobs.filter((j) => !j.overtimeOf && !j.bossOf),
+);

@@ -63,4 +63,5 @@ Then open http://localhost:5173.
 - [Development](docs/development.md): running, testing, CI and deploys, branches and stacked PRs
 - [How-to guides](docs/how-to.md): add a puzzle, screen, setting, sound, animation, or game rule
 - [Art direction](docs/art-direction.md): the look and feel, palette, type, and mood board
-- [Shared package](packages/shared/README.md): the code, styles, story and art both games import
+- [Shared package](packages/shared/README.md): the code, styles and art both games import
+- [Story package](packages/story/README.md): the story both games play, its loaders and its gate

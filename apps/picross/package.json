@@ -25,6 +25,7 @@
     "@picross/play-block": "*",
     "@picross/grid": "*",
     "@picross/play-grid": "*",
-    "@picross/shared": "*"
+    "@picross/shared": "*",
+    "@picross/story": "*"
   }
 }

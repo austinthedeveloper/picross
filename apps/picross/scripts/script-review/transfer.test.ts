@@ -2,8 +2,8 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-import { scenes } from '@picross/shared/puzzles/scenes';
-import { buildPages, buildTargets, isItem, SHARED } from './model';
+import { scenes } from '@picross/story/puzzles/scenes';
+import { buildPages, buildTargets, isItem, STORY } from './model';
 import { locateAll, type Note } from './notes';
 import { buildExport, readImport, type ExportDoc, type SceneItem, type TextItem } from './transfer';
 import { importVersion, planApply, versionPages, type Version } from './versions';
@@ -239,7 +239,7 @@ describe('planApply', () => {
     item.nodes[item.start].lines![0].text = `${original}!`;
     const plan = await planApply(asVersion(reread(doc).changes), pages);
     const [write] = plan.writes;
-    const file = `${SHARED}/src/puzzles/scenes/${scene.id}.json`;
+    const file = `${STORY}/src/puzzles/scenes/${scene.id}.json`;
     expect(write.file).toBe(file);
     const before = fs.readFileSync(file, 'utf8');
     expect(write.content).toBe(

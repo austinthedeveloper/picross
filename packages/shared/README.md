@@ -1,8 +1,9 @@
 # @picross/shared
 
-The code, styles, story and art both games use: the 2D game (`apps/picross`) and Picross
-Cubed (`apps/cubed`) import it, so a change here (a token, a sound, a scene) is in both
-games at once. It replaced the copies `sync-web.mjs` used to make (#143).
+The code, styles and art both games use: the 2D game (`apps/picross`) and Picross Cubed
+(`apps/cubed`) import it, so a change here (a token, a sound, a portrait) is in both games
+at once. It replaced the copies `sync-web.mjs` used to make (#143). The story is in its own
+package, `@picross/story` (`packages/story`, #146), which imports this one.
 
 It's plain TypeScript and CSS with no build step: each app's Vite compiles it, as it does
 the app's own `src/`.
@@ -12,16 +13,16 @@ the app's own `src/`.
 The paths under `src/` are the ones these files had in both games, so
 `apps/picross/src/ui/dom.ts` is now `src/ui/dom.ts` here.
 
-| What       | Files                                                                                                                                                                           |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Look       | `src/styles/tokens.css`, `base.css`; `run.css`, `fight.css`, `dig.css`, `dialogue.css`, `art.css`                                                                               |
-| Feel       | `src/ui/sound.ts`, `haptics.ts`, `theme.ts`, `dom.ts`, `motion.ts`; `src/game/prefs.ts` (below)                                                                                 |
-| Plumbing   | `src/game/storage.ts`, `src/engine/random.ts`, `src/ui/components/homeLink.ts`, `muteButton.ts`, `gameSwitch.ts`                                                                |
-| Story code | `src/puzzles/scenes.ts`, `backdrops.ts`, `gadgets.ts`, `src/game/dialogue.ts`, `src/ui/art.ts`, `src/ui/components/dialogue.ts`, `backdrop.ts`, `src/ui/screens/sceneScreen.ts` |
-| Story data | `src/puzzles/{scenes,backdrops,chapters,runs,encounters,run}/*.json`; `src/puzzles/files/` globs the last four for the games' loaders                                           |
-| Art        | `public/art/{cast,enemies,gadgets,icons}/`                                                                                                                                      |
+| What     | Files                                                                                                                            |
+| -------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| Look     | `src/styles/tokens.css`, `base.css`; `run.css`, `fight.css`, `dig.css`, `dialogue.css`, `art.css`                                |
+| Feel     | `src/ui/sound.ts`, `haptics.ts`, `theme.ts`, `dom.ts`, `motion.ts`; `src/game/prefs.ts` (below)                                  |
+| Plumbing | `src/game/storage.ts`, `src/engine/random.ts`, `src/ui/components/homeLink.ts`, `muteButton.ts`, `gameSwitch.ts`                 |
+| Art      | `src/ui/art.ts` (portraits, sprites, gadgets and power glyphs, with emoji stand-ins); `public/art/{cast,enemies,gadgets,icons}/` |
 
-The story data and its loaders move to their own package, `packages/story`, in #146.
+The story's data, loaders, dialogue and scene player moved to `packages/story` (#146).
+The art and the story's styles stayed here: they don't read the story, and every screen
+uses them.
 
 ## Importing it
 
@@ -30,7 +31,7 @@ into `node_modules`. Import by path, without the extension:
 
 ```ts
 import { el } from '@picross/shared/ui/dom';
-import { getScene } from '@picross/shared/puzzles/scenes';
+import { portraitArt } from '@picross/shared/ui/art';
 import '@picross/shared/styles/tokens.css';
 ```
 
@@ -38,9 +39,10 @@ The `exports` map: `./*` is `./src/*.ts`, `./styles/*` is `./src/styles/*` (the 
 with their extension), and `./vite` is the Vite plugin below. CSS stays CSS: each app
 imports the styles it uses, in its `main.ts`.
 
-## The rule: nothing here imports from an app
+## The rule: nothing here imports from an app or another package
 
-Both games import this package, so it can only use its own files, with relative imports.
+Both games and every package import this one (the story included), so it can only use its
+own files, with relative imports.
 `src/imports.test.ts` fails on any import that leaves the package or names another package
 (besides `vitest`), and `eslint.config.js` says the same with `no-restricted-imports`.
 
@@ -88,7 +90,6 @@ games'. `npm run test:shared` runs just these.
 ## Outside this repo
 
 The SNES demake (`../snes/picross-snes`) imports the pack, art and story with
-`make import`. The pack (`pack/`, `murals/`, `index.ts`, `ratings.json`) is in
-`packages/grid/src/puzzles/` (#144); the story
-(`src/puzzles/{scenes,chapters,runs,encounters,run}/`) and the art (`public/art/`) are
-here, so its import scripts read both packages.
+`make import`. The art is here, in `public/art/`; the pack (`pack/`, `murals/`, `index.ts`,
+`ratings.json`) is in `packages/grid/src/puzzles/` (#144), and the story
+(`src/puzzles/{scenes,backdrops,chapters,runs,encounters,run}/`) in `packages/story` (#146).

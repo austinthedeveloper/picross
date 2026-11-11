@@ -9,7 +9,7 @@ import {
 } from '@picross/grid/engine/solver';
 import { CHIP_DAMAGE, type Enemy } from '../game/battle';
 import { allScramble, allUnreadable } from './enemies';
-import { scenes } from '@picross/shared/puzzles/scenes';
+import { scenes } from '@picross/story/puzzles/scenes';
 import {
   bossFights,
   bossFightsFor,

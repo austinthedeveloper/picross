@@ -1,5 +1,5 @@
 import { PAINTED } from '@picross/block/game/game';
-import { getGadget } from '@picross/shared/puzzles/gadgets';
+import { getGadget } from '@picross/story/puzzles/gadgets';
 import type { Encounter } from '@picross/block/story/data';
 import { gadgetArt, iconArt } from '@picross/shared/ui/art';
 import { el } from '@picross/shared/ui/dom';

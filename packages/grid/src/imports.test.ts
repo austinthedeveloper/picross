@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 /**
  * Nothing here touches the page or an app: it imports only its own files (relative) and
- * @picross/shared's pure modules, never `@picross/shared/ui` or its styles.
+ * the pure modules of @picross/shared and @picross/story, never their `ui/` or styles.
  * (eslint.config.js says the same with `no-restricted-imports`; the rule is copied from
  * packages/shared/src/imports.test.ts.)
  */
@@ -15,7 +15,8 @@ const sources = import.meta.glob<string>(['./**/*.ts', '!./imports.test.ts'], {
 /** Bare imports allowed besides the package's own files. */
 const allowed = (spec: string) =>
   spec === 'vitest' ||
-  (spec.startsWith('@picross/shared/') && !/^@picross\/shared\/(ui|styles)\//.test(spec));
+  (/^@picross\/(shared|story)\//.test(spec) &&
+    !/^@picross\/(shared|story)\/(ui|styles)\//.test(spec));
 
 const SPECIFIERS = [
   /\b(?:import|export)\s[^;]*?\bfrom\s*['"]([^'"]+)['"]/g,
@@ -53,11 +54,11 @@ describe('the package imports', () => {
     expect(Object.keys(sources)).toContain('./engine/solver.ts');
     expect(specifiers(sources['./engine/solver.ts'])).toContain('./clues');
     expect(specifiers(sources['./puzzles/index.ts'])).toContain(
-      '@picross/shared/puzzles/files/runPuzzles',
+      '@picross/story/puzzles/files/runPuzzles',
     );
   });
 
-  it('only its own files and shared pure modules', () => {
+  it('only its own files and the pure modules of shared and story', () => {
     const outside: string[] = [];
     for (const [file, code] of Object.entries(sources)) {
       for (const spec of specifiers(code)) {

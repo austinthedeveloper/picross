@@ -6,8 +6,8 @@ import { solve as lineSolve } from '@picross/grid/engine/solver';
 
 /** The pack, in packages/grid. */
 const PUZZLES = path.join(import.meta.dirname, '../../../packages/grid/src/puzzles');
-/** The story's data (encounters, run puzzles), in the shared package. */
-const STORY = path.join(import.meta.dirname, '../../../packages/shared/src/puzzles');
+/** The story's data (encounters, run puzzles), in the story package. */
+const STORY = path.join(import.meta.dirname, '../../../packages/story/src/puzzles');
 const read = (file: string) => JSON.parse(fs.readFileSync(file, 'utf8'));
 
 /** A puzzle's solution rows (`#` filled), by puzzle id from the pack or run folders. */

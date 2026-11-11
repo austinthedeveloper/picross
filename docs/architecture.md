@@ -22,10 +22,11 @@ screens stay in the app and reach the play screen through its `PlaySession`.
 ## Directory map
 
 The repo root is an npm workspace with both games in `apps/` and what they share in
-`packages/shared/`. This game is `apps/picross/`, and the `src/`, `public/`, `e2e/` and
+`packages/`. This game is `apps/picross/`, and the `src/`, `public/`, `e2e/` and
 `vite.config.ts` paths in this doc are inside it, except for the files in packages: those
 are at the same paths under each package's `src/` (below), imported as
-`@picross/<package>/<path>`. The shared files are in `packages/shared/`; the engine, the
+`@picross/<package>/<path>`. The shared files are in `packages/shared/`; the story (its
+data, loaders, dialogue and scene player) in `packages/story/`; the engine, the
 puzzle format, the pack and `Game` in `packages/grid/` (no DOM); the board view, input
 and play screen in `packages/play-grid/`; and the 3D game's rules and data in
 `packages/block/` (no three.js) and its three.js view and screens in `packages/play-block/`.
@@ -38,8 +39,8 @@ apps/picross/              The 2D game (npm workspace `picross`)
     main.ts                Entry point: imports styles, applies theme, hash router
     debug/panel.ts         Dev-only tools (#65); never in production builds (hooks are in grid)
     puzzles/               Content and its validation (the pack is in packages/grid)
-      runs.ts              Loads encounters/*.json and runs/*.json (jobs)
-      chapters.ts          Loads chapters/*.json: jobs grouped into story chapters (#23)
+      runs.ts              The story's encounters and jobs on a flat board: 2D puzzles and enemies
+      chapters.ts          The story's chapters (#23), holding this game's jobs
       endless.ts           Endless mode: seeded encounter order, scaling, the run as a RunDef (#68)
       daily.ts             The daily puzzle: date keys and the day's puzzle and turn (#69)
       tutorial.ts          How to play: its picture and steps, and what counts as a wrong move
@@ -138,27 +139,15 @@ packages/play-grid/        The 2D board view and play screen (@picross/play-grid
     styles/
       board.css            Board, clues, cells, cursor, fog/scramble/weak-point clues
       game.css             Play screen: toolbar, hint menu, tools and zoom row, end states
-packages/shared/           Code, styles, story and art both games import (@picross/shared; its README)
+packages/shared/           Code, styles and art both games import (@picross/shared; its README)
   vite.js                  sharedPublic(): serves public/ in dev, copies it into each build
   public/art/              Portraits (cast/), enemy sprites (enemies/), gadgets/, power icons/
   src/                     Same paths as they had in the apps: imported as @picross/shared/<path>
-    imports.test.ts        Nothing here imports from an app
+    imports.test.ts        Nothing here imports from an app or another package
     engine/random.ts       Seeded random numbers and shuffles (endless, daily)
     game/
       prefs.ts             The settings shared code reads (mute, haptics, contrast); each app's main.ts provides its own
       storage.ts           Safe localStorage JSON read/write
-      dialogue.ts          Scene runner: current line or choices, advance, choose, flags
-    puzzles/
-      gadgets.ts           Gadget catalog: name, icon, description, effect
-      scenes.ts            Loads and validates scenes/*.json (dialogue, #22)
-      backdrops.ts         Loads and validates backdrops/*.json (where a scene happens)
-      files/               Globs chapters, runs, encounters and run/ for the apps' loaders
-      encounters/*.json    Encounters: name, kind (fight/dig), puzzle, enemy, boss, scene
-      runs/*.json          Jobs: HP, encounters, gadgets, intro/outro, order, requires
-      chapters/*.json      Chapters: title, order, blurb, jobs, opening scene
-      run/*.json           Run-only puzzles (the sword, wrench, owl, pocket watch, ...)
-      scenes/*.json        Scenes: backdrop, cast, nodes of lines, choices, and conditions
-      backdrops/*.json     Backdrops: rows of # and ., drawn behind a scene's portraits
     ui/
       dom.ts               el(): create an element with props and children
       motion.ts            reducedMotion(), wait(), pause(), playOnce() for animations
@@ -166,10 +155,7 @@ packages/shared/           Code, styles, story and art both games import (@picro
       haptics.ts           Vibration on taps, lines, hits, and zaps (and the iOS switch fallback)
       theme.ts             Applies the high-contrast theme
       art.ts               Portrait, sprite and gadget images, with emoji stand-ins
-      screens/sceneScreen.ts  Plays a scene full screen        (#/scene/<id>)
       components/
-        dialogue.ts        Scene player: stage of portraits, typed text box, choices, Skip
-        backdrop.ts        Draws a backdrop as an SVG in the theme's color
         homeLink.ts        The Home button at the top of every screen
         muteButton.ts      Sound toggle
         gameSwitch.ts      The Flat | Cubed switch
@@ -181,8 +167,33 @@ packages/shared/           Code, styles, story and art both games import (@picro
       dig.css              The dig's dirt board and reveal
       dialogue.css         Scene player
       art.css              Portraits, sprites and power icons
+packages/story/            The story both games play (@picross/story; its README)
+  src/                     Same paths as before (in shared or the 2D game): imported as @picross/story/<path>
+    imports.test.ts        Imports only shared (pure outside ui/); never an app or a board package
+    story.test.ts          The whole story reads, with no board
+    boards.test.ts         The gate: the boards that can play each encounter and power
+    game/dialogue.ts       Scene runner: current line or choices, advance, choose, flags
+    puzzles/
+      runs.ts              Reads and checks encounters and jobs; each game passes its puzzle and enemy
+      chapters.ts          Reads and checks chapters: jobs grouped into story chapters (#23)
+      gadgets.ts           Gadget catalog: name, icon, description, effect
+      scenes.ts            Loads and validates scenes/*.json (dialogue, #22)
+      backdrops.ts         Loads and validates backdrops/*.json (where a scene happens)
+      files/               Globs chapters, runs, encounters and run/ for the loaders
+      encounters/*.json    Encounters: name, kind (fight/dig/rest), puzzle, enemy, boss, scene
+      runs/*.json          Jobs: HP, encounters, gadgets, intro/outro, order, requires
+      chapters/*.json      Chapters: title, order, blurb, jobs, opening scene
+      run/*.json           Run-only puzzles (the sword, wrench, owl, pocket watch, ...)
+      scenes/*.json        Scenes: backdrop, cast, nodes of lines, choices, and conditions
+      backdrops/*.json     Backdrops: rows of # and ., drawn behind a scene's portraits
+    ui/
+      art.test.ts          Every sprite, portrait and gadget the story names has its art (in shared)
+      screens/sceneScreen.ts  Plays a scene full screen        (#/scene/<id>)
+      components/
+        dialogue.ts        Scene player: stage of portraits, typed text box, choices, Skip
+        backdrop.ts        Draws a backdrop as an SVG in the theme's color
 packages/block/            The 3D puzzle's rules and data, no three.js (@picross/block; its README)
-  src/                     Cubed's engine/, puzzles/ (pack, dioramas, story/), game/ (Game, Battle), story/
+  src/                     Cubed's engine/, puzzles/ (pack, dioramas, story/), game/ (Game, Battle), story/ (the story on blocks)
 packages/play-block/       Playing a block: three.js view, play and fight screens (@picross/play-block)
   src/                     Cubed's ui/board/, ui/screens/play.ts, story/fight.ts, editor/, styles/
   e2e/helpers.ts           Block helpers for both games' browser tests
@@ -440,9 +451,11 @@ cell or two inside a tile is usually enough. Keep tiles from being empty.
 
 ## Runs
 
-A run (`puzzles/runs/*.json`) is a starting HP plus an ordered list of encounter ids. An
-encounter (`puzzles/encounters/*.json`) names a pack puzzle, a kind (`fight` or `dig`),
-and a line of flavor text. `RunState` (`game/run.ts`) tracks the current node, HP, max
+A run (`puzzles/runs/*.json` in `packages/story`) is a starting HP plus an ordered list of
+encounter ids. An encounter (`puzzles/encounters/*.json` there) names a puzzle (from
+`run/`), a kind (`fight`, `dig` or `rest`), and a line of flavor text. `packages/story`'s
+`puzzles/runs.ts` reads and checks both; this game's `puzzles/runs.ts` passes it each
+encounter's 2D puzzle and enemy (`enemies.ts`), and Cubed's loader its 3D ones. `RunState` (`game/run.ts`) tracks the current node, HP, max
 HP, gadgets, status (`active`, `won`, or `lost`), and the current encounter's board. It
 changes only through pure functions: `startRun`, `withBoard`, `damage`, and
 `completeEncounter`. Every change is saved immediately, so closing the tab at any point
@@ -859,7 +872,7 @@ break that alternates between a dig and a rest stop.
 
 A puzzle's JSON can name a `gadget`. Solving that puzzle in a run adds the gadget to
 `RunState.gadgets`, and runs can also list starting gadgets (First Job starts with a
-patch kit). The catalog in `puzzles/gadgets.ts` describes each gadget's effect as data:
+patch kit). The catalog in `packages/story`'s `puzzles/gadgets.ts` describes each gadget's effect as data:
 
 - `{ kind: 'blast', damage }` hits the enemy right away and reveals a square of the board
   (#115). Chip rules apply, so it can't take the enemy below 1 HP and the finisher still
@@ -880,9 +893,9 @@ Only a blast changes the grid.
 
 ## Scenes (dialogue)
 
-Scenes are JSON in `puzzles/scenes/`, validated at load: unknown speakers, unknown target
+Scenes are JSON in `packages/story`'s `puzzles/scenes/`, validated at load: unknown speakers, unknown target
 nodes, and empty nodes all fail. A scene has a `cast` (name plus a portrait, which is a
-file name from `public/art/cast/` or an emoji until the art exists) and `nodes`. Play starts at `start`. A node plays its `lines` in order, then
+file name from `packages/shared`'s `public/art/cast/` or an emoji until the art exists) and `nodes`. Play starts at `start`. A node plays its `lines` in order, then
 shows its `choices`, jumps to `next`, or ends the scene.
 
 - Lines and choices can have `"if": "flag"` or `"if": "!flag"`, and they're skipped when
@@ -890,8 +903,8 @@ shows its `choices`, jumps to `next`, or ends the scene.
 - Choices can `"set"` flags. Flags start from whatever the caller passes in, so a run can
   pass `{ "won": true }` for a sign-off.
 
-`game/dialogue.ts` is the pure runner (`startDialogue`, `currentStep`, `advance`,
-`choose`). `ui/components/dialogue.ts` draws it:
+`game/dialogue.ts` (in `packages/story`) is the pure runner (`startDialogue`,
+`currentStep`, `advance`, `choose`). `ui/components/dialogue.ts` (there too) draws it:
 
 - **Lines:** each line types out; a tap, Enter, or Space finishes it and then moves on.
 - **Choices:** buttons, with the first one focused, and number keys pick them.
@@ -906,6 +919,9 @@ automatically the first time you start that run. Seen scenes are stored with the
 and after that the start screen offers "Watch the intro." The outro is a single-line
 sign-off picked by the `won` flag and shown on the results screen with the speaker's
 portrait. First Job introduces Rook and Dee in `scenes/first-job-intro.json`.
+
+The scene player lives in `packages/story` rather than `packages/shared` because it loads
+a scene's backdrop and takes a `Scene`, and shared never imports the story.
 
 ## The solver
 

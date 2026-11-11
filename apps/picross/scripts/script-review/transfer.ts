@@ -5,7 +5,7 @@
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import { badges } from '../../src/puzzles/badges';
-import { getScene, parseScene, type Scene, type SceneNode } from '@picross/shared/puzzles/scenes';
+import { getScene, parseScene, type Scene, type SceneNode } from '@picross/story/puzzles/scenes';
 import { isItem, SHARED, type Item, type Page } from './model';
 import type { LocatedNote, Tag } from './notes';
 

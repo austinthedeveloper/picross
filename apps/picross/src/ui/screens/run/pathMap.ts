@@ -1,6 +1,6 @@
 import { saveCurrentRun } from '../../../game/runSave';
 import type { RunState } from '../../../game/run';
-import { getGadget } from '@picross/shared/puzzles/gadgets';
+import { getGadget } from '@picross/story/puzzles/gadgets';
 import type { RunDef } from '../../../puzzles/runs';
 import { gadgetArt } from '@picross/shared/ui/art';
 import { homeLink } from '@picross/shared/ui/components/homeLink';

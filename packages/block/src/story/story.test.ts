@@ -1,17 +1,20 @@
 import { describe, expect, it } from 'vitest';
+import { chapterFiles } from '@picross/story/puzzles/files/chapters';
+import { runFiles } from '@picross/story/puzzles/files/runs';
 import { chapters, getJob, jobs, storyIssues } from './data';
 
+// What this game can't play yet (`storyIssues`) is reported by packages/story's
+// boards.test.ts, the story's gate, rather than failing here.
 describe('the story, as imported from the 2D game', () => {
-  // The compatibility gate (docs/story.md): the 2D story uses nothing this game can't play.
-  it('has nothing that needs porting', () => {
-    expect(storyIssues).toEqual([]);
-  });
-
-  it('has every chapter and job, with a 3D puzzle for every encounter', () => {
-    expect(chapters.length).toBe(10);
-    expect(chapters.map((c) => c.number)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
-    for (const c of chapters) expect(c.jobs.length).toBeGreaterThan(0);
-    expect(jobs.length).toBe(20);
+  it('has every chapter, and every job but the ones it reports, with a 3D puzzle each', () => {
+    const files = Object.keys(chapterFiles);
+    expect(chapters.map((c) => c.number)).toEqual(files.map((_, i) => i + 1));
+    const ids = Object.values(runFiles).map((mod) => (mod.default as { id: string }).id);
+    expect(ids.length).toBeGreaterThan(0);
+    for (const id of ids) {
+      if (!getJob(id))
+        expect(storyIssues.some((issue) => issue.startsWith(`job "${id}"`))).toBe(true);
+    }
     for (const job of jobs) {
       for (const e of job.encounters) expect(e.puzzle.id).toBeTruthy();
     }

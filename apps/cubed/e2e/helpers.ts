@@ -6,8 +6,8 @@ import { skipScene } from '@picross/play-block/e2e/helpers';
 // The block helpers both games' browser tests use; runAt below is Cubed's own story run.
 export * from '@picross/play-block/e2e/helpers';
 
-/** The story's data (encounters, jobs), in the shared package. */
-const STORY = path.join(import.meta.dirname, '../../../packages/shared/src/puzzles');
+/** The story's data (encounters, jobs), in the story package. */
+const STORY = path.join(import.meta.dirname, '../../../packages/story/src/puzzles');
 
 /**
  * Starts straight at one encounter of a job: seeds the run save, then opens the

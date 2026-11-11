@@ -5,11 +5,13 @@
 - Read `docs/architecture.md` first; puzzles are in `docs/how-to.md`.
 - Before committing: `npm run lint`, `npm test`, `npm run build`, and `npm run e2e` for UI changes.
   This app's `npm test` covers only `src/`; the packages' tests run from the repo root
-  (`npm test` there, or `npm run test:block` and `npm run test:play-block`).
+  (`npm test` there, or `npm run test:block`, `npm run test:play-block` and
+  `npm run test:story`; the story's gate is in `packages/story`).
 - After adding or changing a puzzle (in `packages/block/src/puzzles/`): `npm run puzzles`
   (writes `hide` and `passes`).
-- Code, styles, story and art shared with the 2D game live in `packages/shared` (at the
-  repo root; see its `README.md`), imported as `@picross/shared/<path>`. A change there is
+- Code, styles and art shared with the 2D game live in `packages/shared`, and the story in
+  `packages/story` (at the repo root; see their `README.md`s), imported as
+  `@picross/shared/<path>` and `@picross/story/<path>`. A change there is
   in both games: run both games' tests.
 - The block's rules and data (engine, puzzles, pack, Game, Battle, the story loader) are in
   `packages/block`, and the three.js view, play, fight and editor screens and their styles

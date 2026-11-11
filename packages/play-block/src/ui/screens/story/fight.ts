@@ -5,7 +5,7 @@ import {
   type BattleState,
 } from '@picross/block/game/battle';
 import { PAINTED, type Mode } from '@picross/block/game/game';
-import { getGadget } from '@picross/shared/puzzles/gadgets';
+import { getGadget } from '@picross/story/puzzles/gadgets';
 import { hashString } from '@picross/block/puzzles/hide';
 import { lineIdAt, pointOf } from '@picross/block/engine/volume';
 import type { Encounter } from '@picross/block/story/data';

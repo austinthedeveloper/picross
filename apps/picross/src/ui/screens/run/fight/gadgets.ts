@@ -2,7 +2,7 @@ import { blastSize, pickBlast } from '@picross/grid/engine/blast';
 import { blastInk, bump, useGadget, type BattleState } from '../../../../game/battle';
 import { removeGadget, withBattle } from '../../../../game/run';
 import { saveCurrentRun } from '../../../../game/runSave';
-import { getGadget, type Gadget } from '@picross/shared/puzzles/gadgets';
+import { getGadget, type Gadget } from '@picross/story/puzzles/gadgets';
 import { gadgetArt } from '@picross/shared/ui/art';
 import { el } from '@picross/shared/ui/dom';
 import { plural } from '@picross/play-grid/ui/format';

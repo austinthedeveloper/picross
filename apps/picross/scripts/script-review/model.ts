@@ -5,15 +5,18 @@
  */
 import { badges } from '../../src/puzzles/badges';
 import { chapters } from '../../src/puzzles/chapters';
-import { catalog as gadgets } from '@picross/shared/puzzles/gadgets';
+import { catalog as gadgets } from '@picross/story/puzzles/gadgets';
 import { ranks } from '../../src/puzzles/ranks';
 import { overtimeRuns, type Encounter, type RunDef } from '../../src/puzzles/runs';
-import { getScene, scenes, type Scene } from '@picross/shared/puzzles/scenes';
+import { getScene, scenes, type Scene } from '@picross/story/puzzles/scenes';
 import { tutorialSteps } from '../../src/puzzles/tutorial';
 import { POWERS } from '../../src/ui/powers';
 
-/** The shared package (the story, art and tokens), from this app's folder. */
+/** The shared package (the art and tokens), from this app's folder. */
 export const SHARED = '../../packages/shared';
+
+/** The story package (scenes, encounters, jobs, chapters, gadgets), from this app's folder. */
+export const STORY = '../../packages/story';
 
 /** Something you can leave a note on. */
 export interface Item {
@@ -386,7 +389,7 @@ export function buildTargets(pages: Page[]): Target[] {
 export function sourceFile(key: string): string {
   const [kind, id] = key.split('/');
   const puzzles = 'src/puzzles';
-  const story = `${SHARED}/src/puzzles`;
+  const story = `${STORY}/src/puzzles`;
   if (kind === 'scene') return `${story}/scenes/${id}.json`;
   if (kind === 'encounter') return `${story}/encounters/${id}.json`;
   if (kind === 'job') return `${story}/runs/${id}.json`;
