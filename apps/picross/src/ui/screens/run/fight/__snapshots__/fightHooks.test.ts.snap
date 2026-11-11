@@ -1,0 +1,4438 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`fight hooks in jsdom (#163) > armored-beetle 1`] = `
+"start
+  bar.setForm("Armored Beetle", "armored-beetle")
+  bar.setPlayerHp(999, 999)
+  bar.setShield(0)
+  bar.setInfo(<button.powers-info aria-label="What can Armored Beetle do?" aria-expanded="false">"ⓘ")
+  bar.setGadgets([])
+  view.setWeakPoints({r8,11 c2})
+  bar.setArmor(3)
+  view.setInk([])
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setArmorLines(0, 5)
+  bar.setTurn(null)
+  bar.setTip(<div.tip-card role="status">"Armor. Only  lines hurt it, for triple damage. Every 5 other lines you finish, the armor hits back. Solve the  lines to break it.Got it")
+  run hp 999 active gadgets [] dom e4aa48ef
+1 c0
+  bar.setArmorLines(1, 5)
+  complete c0: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  keys enemyHp,struck,armor,armorLines
+  battle enemyHp=45 struck=["c0"] armor={"rows":[8,11],"cols":[2]} armorLines=1
+  run hp 999 active gadgets [] dom fdee94d4
+2 c14
+  bar.setArmorLines(2, 5)
+  complete c14: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["c14"] armorLines=2
+  run hp 999 active gadgets [] dom 1730edbf
+3 r1
+  bar.setArmorLines(3, 5)
+  complete r1: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["r1"] armorLines=3
+  run hp 999 active gadgets [] dom 490b6cad
+4 r14
+  bar.setArmorLines(4, 5)
+  complete r14: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["r14"] armorLines=4
+  run hp 999 active gadgets [] dom dd9fa0db
+5 r2
+  bar.setArmorLines(0, 5)
+  complete r2: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  sound hit
+  haptic hit
+  bar.setPlayerHp(997, 999)
+  bar.hitPlayer(2)
+  controls.refresh()
+  bar.say("🛡 Armored Beetle's armor hits back! Armored Beetle hits you for 2. 997 HP left.")
+  battle struck+=["r2"] armorLines=0
+  run hp 997 active gadgets [] dom 53db0dee
+6 c1
+  bar.setArmorLines(1, 5)
+  complete c1: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["c1"] armorLines=1
+  run hp 997 active gadgets [] dom 92403236
+7 c6
+  bar.setArmorLines(2, 5)
+  complete c6: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["c6"] armorLines=2
+  run hp 997 active gadgets [] dom 3046fe88
+8 c8
+  bar.setArmorLines(3, 5)
+  complete c8: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["c8"] armorLines=3
+  run hp 997 active gadgets [] dom 66142afc
+9 c13
+  bar.setArmorLines(4, 5)
+  complete c13: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["c13"] armorLines=4
+  run hp 997 active gadgets [] dom 4aaa0524
+10 r0
+  bar.setPlayerHp(993, 999)
+  bar.hitPlayer(4)
+  mistake: "Wrong cell! Armored Beetle hits you for 4. 993 HP left."
+  bar.setArmorLines(0, 5)
+  complete r0: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  sound hit
+  haptic hit
+  bar.setPlayerHp(991, 999)
+  bar.hitPlayer(2)
+  controls.refresh()
+  bar.say("🛡 Armored Beetle's armor hits back! Armored Beetle hits you for 2. 991 HP left.")
+  keys enemyHp,struck,armor,armorLines,counts
+  battle struck+=["r0"] armorLines=0 counts={"wrongFills":1}
+  run hp 991 active gadgets [] dom 2bb9a842
+11 c2
+  view.setWeakPoints({r8,11 c}, [c2])
+  bar.setArmor(2)
+  bar.setEnemyHp(42)
+  bar.hitEnemy(3)
+  sound strike
+  bar.setGadgets([])
+  bar.setArmorLines(0, 5)
+  complete c2: "Armored Beetle takes 3 damage, 42 HP left. Weak point! Triple damage."
+  battle enemyHp=42 struck+=["c2"] armor={"rows":[8,11],"cols":[]}
+  run hp 991 active gadgets [] dom 59b5709e
+12 c12
+  bar.setArmorLines(1, 5)
+  complete c12: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["c12"] armorLines=1
+  run hp 991 active gadgets [] dom 3763cffe
+13 r3
+  bar.setArmorLines(2, 5)
+  complete r3: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["r3"] armorLines=2
+  run hp 991 active gadgets [] dom a90e4353
+14 r13
+  bar.setArmorLines(3, 5)
+  complete r13: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["r13"] armorLines=3
+  run hp 991 active gadgets [] dom 123921ac
+15 r5
+  bar.setArmorLines(4, 5)
+  complete r5: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["r5"] armorLines=4
+  run hp 991 active gadgets [] dom d55fc1a9
+16 r9
+  bar.setArmorLines(0, 5)
+  complete r9: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  sound hit
+  haptic hit
+  bar.setPlayerHp(989, 999)
+  bar.hitPlayer(2)
+  controls.refresh()
+  bar.say("🛡 Armored Beetle's armor hits back! Armored Beetle hits you for 2. 989 HP left.")
+  battle struck+=["r9"] armorLines=0
+  run hp 989 active gadgets [] dom 789feb7b
+17 r12
+  bar.setArmorLines(1, 5)
+  complete r12: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["r12"] armorLines=1
+  run hp 989 active gadgets [] dom 4bd338c0
+18 r4
+  bar.setArmorLines(2, 5)
+  complete r4: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["r4"] armorLines=2
+  run hp 989 active gadgets [] dom 0fb79267
+19 r6
+  bar.setArmorLines(3, 5)
+  complete r6: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["r6"] armorLines=3
+  run hp 989 active gadgets [] dom 10141a3e
+20 r7
+  bar.setArmorLines(4, 5)
+  complete r7: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["r7"] armorLines=4
+  run hp 989 active gadgets [] dom 1acc2c71
+21 r8
+  view.setWeakPoints({r11 c}, [r8])
+  bar.setArmor(1)
+  bar.setEnemyHp(39)
+  bar.hitEnemy(3)
+  sound strike
+  bar.setGadgets([])
+  bar.setArmorLines(4, 5)
+  complete r8: "Armored Beetle takes 3 damage, 39 HP left. Weak point! Triple damage."
+  battle enemyHp=39 struck+=["r8"] armor={"rows":[11],"cols":[]}
+  run hp 989 active gadgets [] dom 7033f871
+22 r10
+  bar.setArmorLines(0, 5)
+  complete r10: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  sound hit
+  haptic hit
+  bar.setPlayerHp(987, 999)
+  bar.hitPlayer(2)
+  controls.refresh()
+  bar.say("🛡 Armored Beetle's armor hits back! Armored Beetle hits you for 2. 987 HP left.")
+  battle struck+=["r10"] armorLines=0
+  run hp 987 active gadgets [] dom 67eaca35
+23 r11
+  view.setWeakPoints({r c}, [r11])
+  bar.setArmor(0)
+  bar.armorBreaks()
+  bar.setEnemyHp(36)
+  bar.hitEnemy(3)
+  sound strike
+  bar.setGadgets([])
+  complete r11 c3 c4 c5 c7 c9 c10 c11: "Armored Beetle takes 3 damage, 36 HP left. Weak point! Triple damage. Armored Beetle's armor breaks! Its hits soften."
+  bar.setGadgets([])
+  land 36 as Armored Beetle
+  keys enemyHp,struck,armor,counts
+  battle enemyHp=36 struck+=["r11","c3","c4","c5","c7","c9","c10","c11"] armor={"rows":[],"cols":[]} armorLines=undefined
+  run hp 987 active gadgets [] dom 16b2f864
+saved {"runId":"harness","node":0,"hp":987,"maxHp":999,"gadgets":[],"status":"active","mode":"hearts","tally":{"wrongFills":0,"zaps":0,"wrongAccusations":0,"gadgetsUsed":0,"bombsUsed":0,"spongesUsed":0,"hintsUsed":0},"battle":{"enemyHp":36,"struck":["c0","c14","r1","r14","r2","c1","c6","c8","c13","r0","c2","c12","r3","r13","r5","r9","r12","r4","r6","r7","r8","r10","r11","c3","c4","c5","c7","c9","c10","c11"],"armor":{"rows":[],"cols":[]},"counts":{"wrongFills":1}}}"
+`;
+
+exports[`fight hooks in jsdom (#163) > armored-beetle relaxed 1`] = `
+"start
+  bar.setForm("Armored Beetle", "armored-beetle")
+  bar.setPlayerHp(999, 999)
+  bar.setShield(0)
+  bar.setInfo(<button.powers-info aria-label="What can Armored Beetle do?" aria-expanded="false">"ⓘ")
+  bar.setGadgets([])
+  view.setWeakPoints({r8,11 c2})
+  bar.setArmor(3)
+  view.setInk([])
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setArmorLines(0, 5)
+  bar.setTurn(null)
+  bar.setTip(<div.tip-card role="status">"Armor. Only  lines hurt it, for triple damage. Every 5 other lines you finish, the armor hits back. Solve the  lines to break it.Got it")
+  run hp 999 active gadgets [] dom e4aa48ef
+1 c0
+  bar.setArmorLines(1, 5)
+  complete c0: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  keys enemyHp,struck,armor,armorLines
+  battle enemyHp=45 struck=["c0"] armor={"rows":[8,11],"cols":[2]} armorLines=1
+  run hp 999 active gadgets [] dom fdee94d4
+2 c14
+  bar.setArmorLines(2, 5)
+  complete c14: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["c14"] armorLines=2
+  run hp 999 active gadgets [] dom 1730edbf
+3 r1
+  bar.setArmorLines(3, 5)
+  complete r1: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["r1"] armorLines=3
+  run hp 999 active gadgets [] dom 490b6cad
+4 r14
+  bar.setArmorLines(4, 5)
+  complete r14: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["r14"] armorLines=4
+  run hp 999 active gadgets [] dom dd9fa0db
+5 r2
+  bar.setArmorLines(0, 5)
+  complete r2: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  controls.refresh()
+  bar.say("🛡 Armored Beetle's armor hits back. It fizzles in a Relaxed run.")
+  battle struck+=["r2"] armorLines=0
+  run hp 999 active gadgets [] dom 0bb8b8f7
+6 c1
+  bar.setArmorLines(1, 5)
+  complete c1: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["c1"] armorLines=1
+  run hp 999 active gadgets [] dom 56677349
+7 c6
+  bar.setArmorLines(2, 5)
+  complete c6: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["c6"] armorLines=2
+  run hp 999 active gadgets [] dom edb9684d
+8 c8
+  bar.setArmorLines(3, 5)
+  complete c8: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["c8"] armorLines=3
+  run hp 999 active gadgets [] dom 1c95e07b
+9 c13
+  bar.setArmorLines(4, 5)
+  complete c13: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["c13"] armorLines=4
+  run hp 999 active gadgets [] dom 8d2329ad
+10 r0
+  bar.setArmorLines(0, 5)
+  complete r0: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  controls.refresh()
+  bar.say("🛡 Armored Beetle's armor hits back. It fizzles in a Relaxed run.")
+  battle struck+=["r0"] armorLines=0
+  run hp 999 active gadgets [] dom 25c80b9f
+11 c2
+  view.setWeakPoints({r8,11 c}, [c2])
+  bar.setArmor(2)
+  bar.setEnemyHp(42)
+  bar.hitEnemy(3)
+  sound strike
+  bar.setGadgets([])
+  bar.setArmorLines(0, 5)
+  complete c2: "Armored Beetle takes 3 damage, 42 HP left. Weak point! Triple damage."
+  battle enemyHp=42 struck+=["c2"] armor={"rows":[8,11],"cols":[]}
+  run hp 999 active gadgets [] dom 62e37233
+12 c12
+  bar.setArmorLines(1, 5)
+  complete c12: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["c12"] armorLines=1
+  run hp 999 active gadgets [] dom ed4cc3f3
+13 r3
+  bar.setArmorLines(2, 5)
+  complete r3: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["r3"] armorLines=2
+  run hp 999 active gadgets [] dom 40396f44
+14 r13
+  bar.setArmorLines(3, 5)
+  complete r13: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["r13"] armorLines=3
+  run hp 999 active gadgets [] dom ac48824d
+15 r5
+  bar.setArmorLines(4, 5)
+  complete r5: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["r5"] armorLines=4
+  run hp 999 active gadgets [] dom 2c3913aa
+16 r9
+  bar.setArmorLines(0, 5)
+  complete r9: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  controls.refresh()
+  bar.say("🛡 Armored Beetle's armor hits back. It fizzles in a Relaxed run.")
+  battle struck+=["r9"] armorLines=0
+  run hp 999 active gadgets [] dom ea1e523d
+17 r12
+  bar.setArmorLines(1, 5)
+  complete r12: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["r12"] armorLines=1
+  run hp 999 active gadgets [] dom 0615ca32
+18 r4
+  bar.setArmorLines(2, 5)
+  complete r4: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["r4"] armorLines=2
+  run hp 999 active gadgets [] dom 9a72ae11
+19 r6
+  bar.setArmorLines(3, 5)
+  complete r6: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["r6"] armorLines=3
+  run hp 999 active gadgets [] dom c2f00570
+20 r7
+  bar.setArmorLines(4, 5)
+  complete r7: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["r7"] armorLines=4
+  run hp 999 active gadgets [] dom d6eb2a63
+21 r8
+  view.setWeakPoints({r11 c}, [r8])
+  bar.setArmor(1)
+  bar.setEnemyHp(39)
+  bar.hitEnemy(3)
+  sound strike
+  bar.setGadgets([])
+  bar.setArmorLines(4, 5)
+  complete r8: "Armored Beetle takes 3 damage, 39 HP left. Weak point! Triple damage."
+  battle enemyHp=39 struck+=["r8"] armor={"rows":[11],"cols":[]}
+  run hp 999 active gadgets [] dom 07b07617
+22 r10
+  bar.setArmorLines(0, 5)
+  complete r10: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  controls.refresh()
+  bar.say("🛡 Armored Beetle's armor hits back. It fizzles in a Relaxed run.")
+  battle struck+=["r10"] armorLines=0
+  run hp 999 active gadgets [] dom 73a51f4c
+23 r11
+  view.setWeakPoints({r c}, [r11])
+  bar.setArmor(0)
+  bar.armorBreaks()
+  bar.setEnemyHp(36)
+  bar.hitEnemy(3)
+  sound strike
+  bar.setGadgets([])
+  complete r11 c3 c4 c5 c7 c9 c10 c11: "Armored Beetle takes 3 damage, 36 HP left. Weak point! Triple damage. Armored Beetle's armor breaks! Its hits soften."
+  bar.setGadgets([])
+  land 36 as Armored Beetle
+  keys enemyHp,struck,armor
+  battle enemyHp=36 struck+=["r11","c3","c4","c5","c7","c9","c10","c11"] armor={"rows":[],"cols":[]} armorLines=undefined
+  run hp 999 active gadgets [] dom 23a2a451
+saved {"runId":"harness","node":0,"hp":999,"maxHp":999,"gadgets":[],"status":"active","mode":"relaxed","tally":{"wrongFills":0,"zaps":0,"wrongAccusations":0,"gadgetsUsed":0,"bombsUsed":0,"spongesUsed":0,"hintsUsed":0},"battle":{"enemyHp":36,"struck":["c0","c14","r1","r14","r2","c1","c6","c8","c13","r0","c2","c12","r3","r13","r5","r9","r12","r4","r6","r7","r8","r10","r11","c3","c4","c5","c7","c9","c10","c11"],"armor":{"rows":[],"cols":[]}}}"
+`;
+
+exports[`fight hooks in jsdom (#163) > clockwork-owl 1`] = `
+"start
+  bar.setForm("Clockwork Owl", "clockwork-owl")
+  bar.setPlayerHp(999, 999)
+  bar.setShield(0)
+  bar.setInfo(<button.powers-info aria-label="What can Clockwork Owl do?" aria-expanded="false">"ⓘ")
+  bar.setGadgets([])
+  view.setScramble({r5,7,9,11 c3,6,9})
+  view.setInk([])
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setTurn(null)
+  bar.setTip(<div.tip-card role="status">"Scrambled clues. The  clues have the right numbers in the wrong order. Finishing the line puts them back.Got it")
+  run hp 999 active gadgets [] dom 0f63ae43
+1 c0
+  bar.setEnemyHp(44)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c0: "Clockwork Owl takes 1 damage, 44 HP left."
+  keys enemyHp,struck,scramble
+  battle enemyHp=44 struck=["c0"] scramble={"rows":[5,7,9,11],"cols":[3,6,9]}
+  run hp 999 active gadgets [] dom f372bacb
+2 c14
+  bar.setEnemyHp(43)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c14: "Clockwork Owl takes 1 damage, 43 HP left."
+  battle enemyHp=43 struck+=["c14"]
+  run hp 999 active gadgets [] dom e0922d9b
+3 r0
+  bar.setEnemyHp(42)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r0: "Clockwork Owl takes 1 damage, 42 HP left."
+  battle enemyHp=42 struck+=["r0"]
+  run hp 999 active gadgets [] dom dada6d38
+4 r14
+  bar.setEnemyHp(41)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r14: "Clockwork Owl takes 1 damage, 41 HP left."
+  battle enemyHp=41 struck+=["r14"]
+  run hp 999 active gadgets [] dom 2d25477c
+5 r1
+  bar.setEnemyHp(40)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r1: "Clockwork Owl takes 1 damage, 40 HP left."
+  battle enemyHp=40 struck+=["r1"]
+  run hp 999 active gadgets [] dom 53632110
+6 r13
+  bar.setEnemyHp(39)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r13: "Clockwork Owl takes 1 damage, 39 HP left."
+  battle enemyHp=39 struck+=["r13"]
+  run hp 999 active gadgets [] dom 3ffe3d3e
+7 r4
+  bar.setForm("Wound-up Owl", "clockwork-owl")
+  bar.phaseBanner("Wound-up Owl", "Tick-tock, tinkerer!")
+  view.setScramble({r5,7,9,11,8,12 c3,6,9,4})
+  sound phase
+  bar.setEnemyHp(38)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r4: "Clockwork Owl takes 1 damage, 38 HP left. Clockwork Owl becomes Wound-up Owl! Tick-tock, tinkerer! 3 clues scramble."
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setTurn(null)
+  keys enemyHp,struck,scramble,phase
+  battle enemyHp=38 struck+=["r4"] scramble={"rows":[5,7,9,11,8,12],"cols":[3,6,9,4]} phase=1
+  run hp 999 active gadgets [] dom 843f3d2f
+8 r5
+  view.setScramble({r7,9,11,8,12 c3,6,9,4}, [r5])
+  bar.setEnemyHp(37)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r5: "Clockwork Owl takes 1 damage, 37 HP left. Gears click back into place: row 6 in order."
+  battle enemyHp=37 struck+=["r5"] scramble={"rows":[7,9,11,8,12],"cols":[3,6,9,4]}
+  run hp 999 active gadgets [] dom d9e107f8
+9 r7
+  view.setScramble({r9,11,8,12 c3,6,9,4}, [r7])
+  bar.setEnemyHp(36)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r7: "Clockwork Owl takes 1 damage, 36 HP left. Gears click back into place: row 8 in order."
+  battle enemyHp=36 struck+=["r7"] scramble={"rows":[9,11,8,12],"cols":[3,6,9,4]}
+  run hp 999 active gadgets [] dom dacd1839
+10 r8
+  bar.setPlayerHp(996, 999)
+  bar.hitPlayer(3)
+  mistake: "Wrong cell! Wound-up Owl hits you for 3. 996 HP left."
+  view.setScramble({r9,11,12 c3,6,9,4}, [r8])
+  bar.setEnemyHp(35)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r8: "Clockwork Owl takes 1 damage, 35 HP left. Gears click back into place: row 9 in order."
+  keys enemyHp,struck,scramble,phase,counts
+  battle enemyHp=35 struck+=["r8"] scramble={"rows":[9,11,12],"cols":[3,6,9,4]} counts={"wrongFills":1}
+  run hp 996 active gadgets [] dom b229088c
+11 c6
+  view.setScramble({r9,11,12 c3,9,4}, [c6])
+  bar.setEnemyHp(34)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c6: "Clockwork Owl takes 1 damage, 34 HP left. Gears click back into place: column 7 in order."
+  battle enemyHp=34 struck+=["c6"] scramble={"rows":[9,11,12],"cols":[3,9,4]}
+  run hp 996 active gadgets [] dom a1cf40e6
+12 c8
+  bar.setEnemyHp(33)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c8: "Clockwork Owl takes 1 damage, 33 HP left."
+  battle enemyHp=33 struck+=["c8"]
+  run hp 996 active gadgets [] dom 3c823cdf
+13 c3
+  view.setScramble({r9,11,12 c9,4}, [c3])
+  bar.setEnemyHp(32)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c3: "Clockwork Owl takes 1 damage, 32 HP left. Gears click back into place: column 4 in order."
+  battle enemyHp=32 struck+=["c3"] scramble={"rows":[9,11,12],"cols":[9,4]}
+  run hp 996 active gadgets [] dom 396fd6e0
+14 c5
+  bar.setEnemyHp(31)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c5: "Clockwork Owl takes 1 damage, 31 HP left."
+  battle enemyHp=31 struck+=["c5"]
+  run hp 996 active gadgets [] dom d51e6d44
+15 c9
+  view.setScramble({r9,11,12 c4}, [c9])
+  bar.setEnemyHp(30)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c9: "Clockwork Owl takes 1 damage, 30 HP left. Gears click back into place: column 10 in order."
+  battle enemyHp=30 struck+=["c9"] scramble={"rows":[9,11,12],"cols":[4]}
+  run hp 996 active gadgets [] dom 4a48ed7a
+16 c11
+  bar.setEnemyHp(29)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c11: "Clockwork Owl takes 1 damage, 29 HP left."
+  battle enemyHp=29 struck+=["c11"]
+  run hp 996 active gadgets [] dom 5b6fb2e9
+17 c1
+  bar.setEnemyHp(28)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c1: "Clockwork Owl takes 1 damage, 28 HP left."
+  battle enemyHp=28 struck+=["c1"]
+  run hp 996 active gadgets [] dom 87489554
+18 c2
+  bar.setEnemyHp(27)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c2: "Clockwork Owl takes 1 damage, 27 HP left."
+  battle enemyHp=27 struck+=["c2"]
+  run hp 996 active gadgets [] dom af2b9431
+19 c12
+  bar.setEnemyHp(26)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c12: "Clockwork Owl takes 1 damage, 26 HP left."
+  battle enemyHp=26 struck+=["c12"]
+  run hp 996 active gadgets [] dom a25b9834
+20 c13
+  bar.setPlayerHp(993, 999)
+  bar.hitPlayer(3)
+  mistake: "Wrong cell! Wound-up Owl hits you for 3. 993 HP left."
+  bar.setEnemyHp(25)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c13: "Clockwork Owl takes 1 damage, 25 HP left."
+  battle enemyHp=25 struck+=["c13"] counts={"wrongFills":2}
+  run hp 993 active gadgets [] dom 21256ca3
+21 r2
+  bar.setEnemyHp(24)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r2: "Clockwork Owl takes 1 damage, 24 HP left."
+  battle enemyHp=24 struck+=["r2"]
+  run hp 993 active gadgets [] dom 143ed66f
+22 r6
+  bar.setEnemyHp(23)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r6: "Clockwork Owl takes 1 damage, 23 HP left."
+  battle enemyHp=23 struck+=["r6"]
+  run hp 993 active gadgets [] dom 9efc2a1a
+23 r9
+  view.setScramble({r11,12 c4}, [r9])
+  bar.setEnemyHp(22)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r9: "Clockwork Owl takes 1 damage, 22 HP left. Gears click back into place: row 10 in order."
+  battle enemyHp=22 struck+=["r9"] scramble={"rows":[11,12],"cols":[4]}
+  run hp 993 active gadgets [] dom 842db104
+24 r10
+  bar.setEnemyHp(21)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r10: "Clockwork Owl takes 1 damage, 21 HP left."
+  battle enemyHp=21 struck+=["r10"]
+  run hp 993 active gadgets [] dom 562bd24d
+25 r11
+  view.setScramble({r12 c4}, [r11])
+  bar.setEnemyHp(20)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r11: "Clockwork Owl takes 1 damage, 20 HP left. Gears click back into place: row 12 in order."
+  battle enemyHp=20 struck+=["r11"] scramble={"rows":[12],"cols":[4]}
+  run hp 993 active gadgets [] dom 9fd6a609
+26 r12
+  view.setScramble({r c4}, [r12])
+  bar.setEnemyHp(19)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r12: "Clockwork Owl takes 1 damage, 19 HP left. Gears click back into place: row 13 in order."
+  battle enemyHp=19 struck+=["r12"] scramble={"rows":[],"cols":[4]}
+  run hp 993 active gadgets [] dom 31e31d3c
+27 c7
+  bar.setEnemyHp(18)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c7: "Clockwork Owl takes 1 damage, 18 HP left."
+  battle enemyHp=18 struck+=["c7"]
+  run hp 993 active gadgets [] dom 6b68853b
+28 c4
+  view.setScramble({r c}, [c4])
+  bar.setEnemyHp(17)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c4: "Clockwork Owl takes 1 damage, 17 HP left. Gears click back into place: column 5 in order."
+  battle enemyHp=17 struck+=["c4"] scramble={"rows":[],"cols":[]}
+  run hp 993 active gadgets [] dom 354bbde7
+29 c10
+  bar.setEnemyHp(15)
+  bar.hitEnemy(2)
+  sound strike
+  bar.setGadgets([])
+  complete r3 c10: "Clockwork Owl takes 2 damage, 15 HP left."
+  bar.setGadgets([])
+  land 15 as Wound-up Owl
+  battle enemyHp=15 struck+=["r3","c10"]
+  run hp 993 active gadgets [] dom 86d5d921
+saved {"runId":"harness","node":0,"hp":993,"maxHp":999,"gadgets":[],"status":"active","mode":"hearts","tally":{"wrongFills":0,"zaps":0,"wrongAccusations":0,"gadgetsUsed":0,"bombsUsed":0,"spongesUsed":0,"hintsUsed":0},"battle":{"enemyHp":15,"struck":["c0","c14","r0","r14","r1","r13","r4","r5","r7","r8","c6","c8","c3","c5","c9","c11","c1","c2","c12","c13","r2","r6","r9","r10","r11","r12","c7","c4","r3","c10"],"scramble":{"rows":[],"cols":[]},"phase":1,"counts":{"wrongFills":2}}}"
+`;
+
+exports[`fight hooks in jsdom (#163) > curator 1`] = `
+"start
+  bar.setForm("Curator Ambrose", "curator")
+  bar.setPlayerHp(999, 999)
+  bar.setShield(0)
+  bar.setInfo(<button.powers-info aria-label="What can Curator Ambrose do?" aria-expanded="false">"ⓘ")
+  bar.setGadgets([])
+  view.setFog({r3,9 c})
+  view.setInk([])
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setTurn(null)
+  bar.setTip(<div.tip-card role="status">"Fog. Some clues are hidden. Work those lines out from the ones crossing them; finishing a line reveals its clue.Got it")
+  run hp 999 active gadgets [] dom 3e50cf7d
+1 r1
+  bar.setEnemyHp(59)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r1: "Curator Ambrose takes 1 damage, 59 HP left."
+  keys enemyHp,struck,fog
+  battle enemyHp=59 struck=["r1"] fog={"rows":[3,9],"cols":[]}
+  run hp 999 active gadgets [] dom 160f6d60
+2 r0
+  bar.setEnemyHp(58)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r0: "Curator Ambrose takes 1 damage, 58 HP left."
+  battle enemyHp=58 struck+=["r0"]
+  run hp 999 active gadgets [] dom e8cb45e5
+3 r11
+  bar.setEnemyHp(57)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r11: "Curator Ambrose takes 1 damage, 57 HP left."
+  battle enemyHp=57 struck+=["r11"]
+  run hp 999 active gadgets [] dom 6353a408
+4 r19
+  bar.setEnemyHp(56)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r19: "Curator Ambrose takes 1 damage, 56 HP left."
+  battle enemyHp=56 struck+=["r19"]
+  run hp 999 active gadgets [] dom 0982a084
+5 c6
+  bar.setForm("Clockwork Curator", "clockwork-curator")
+  bar.phaseBanner("Clockwork Curator", "Exhibit hours are over.")
+  view.setFog({r3,9,7 c})
+  sound phase
+  bar.setEnemyHp(55)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c6: "Curator Ambrose takes 1 damage, 55 HP left. Curator Ambrose becomes Clockwork Curator! Exhibit hours are over. 1 lines go dark."
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setTurn(null)
+  keys enemyHp,struck,fog,phase
+  battle enemyHp=55 struck+=["c6"] fog={"rows":[3,9,7],"cols":[]} phase=1
+  run hp 999 active gadgets [] dom bcac5d7f
+6 r2
+  bar.setEnemyHp(54)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r2: "Curator Ambrose takes 1 damage, 54 HP left."
+  battle enemyHp=54 struck+=["r2"]
+  run hp 999 active gadgets [] dom 60f14c57
+7 r9
+  view.setFog({r3,7 c}, [r9])
+  bar.setEnemyHp(53)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r9: "Curator Ambrose takes 1 damage, 53 HP left. You solved through the fog: row 10 revealed."
+  battle enemyHp=53 struck+=["r9"] fog={"rows":[3,7],"cols":[]}
+  run hp 999 active gadgets [] dom 282f279a
+8 r12
+  bar.setEnemyHp(52)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r12: "Curator Ambrose takes 1 damage, 52 HP left."
+  battle enemyHp=52 struck+=["r12"]
+  run hp 999 active gadgets [] dom 25081215
+9 r13
+  bar.setForm("Clockwork Curator", "clockwork-curator")
+  bar.phaseBanner("Clockwork Curator", "Allow me to re-label that for you.")
+  view.setFog({r3,7 c})
+  view.setScramble({r c8,9,11})
+  sound phase
+  bar.setEnemyHp(51)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r13: "Curator Ambrose takes 1 damage, 51 HP left. Allow me to re-label that for you. 3 clues scramble."
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setTurn(null)
+  keys enemyHp,struck,fog,phase,scramble
+  battle enemyHp=51 struck+=["r13"] phase=2 scramble={"rows":[],"cols":[8,9,11]}
+  run hp 999 active gadgets [] dom 8ae8ecf2
+10 r18
+  bar.setPlayerHp(996, 999)
+  bar.hitPlayer(3)
+  mistake: "Wrong cell! Clockwork Curator hits you for 3. 996 HP left."
+  bar.setEnemyHp(50)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r18: "Curator Ambrose takes 1 damage, 50 HP left."
+  keys enemyHp,struck,fog,phase,scramble,counts
+  battle enemyHp=50 struck+=["r18"] counts={"wrongFills":1}
+  run hp 996 active gadgets [] dom 25463c10
+11 c4
+  bar.setEnemyHp(49)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c4: "Curator Ambrose takes 1 damage, 49 HP left."
+  battle enemyHp=49 struck+=["c4"]
+  run hp 996 active gadgets [] dom ab40ba66
+12 c5
+  bar.setEnemyHp(48)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c5: "Curator Ambrose takes 1 damage, 48 HP left."
+  battle enemyHp=48 struck+=["c5"]
+  run hp 996 active gadgets [] dom ff343fdc
+13 c7
+  bar.setEnemyHp(47)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c7: "Curator Ambrose takes 1 damage, 47 HP left."
+  battle enemyHp=47 struck+=["c7"]
+  run hp 996 active gadgets [] dom 7b28a8e1
+14 c13
+  bar.setForm("Overwound Curator", "overwound-curator")
+  bar.phaseBanner("Overwound Curator", "Rearranging the collection!")
+  view.setFog({r3,7 c})
+  view.setScramble({r c8,9,11})
+  sound phase
+  bar.setEnemyHp(46)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c13: "Curator Ambrose takes 1 damage, 46 HP left. Clockwork Curator becomes Overwound Curator! Rearranging the collection!"
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setTurn(null)
+  game.wipe([1 21 41 181 221 241 261 361 381 2 22 42 182 222 242 262 362 382])
+  view.setWiped({r c1,2})
+  controls.refresh()
+  view.flashSwap("col", 1, 2)
+  sound phase
+  bar.say("Overwound Curator swapped columns 2 and 3 and ate 18 marks! Fill them in again.")
+  keys enemyHp,struck,fog,phase,scramble,counts,wiped
+  battle enemyHp=46 struck+=["c13"] phase=3 wiped={"rows":[],"cols":[1,2]}
+  run hp 996 active gadgets [] dom de726301
+15 r11
+  complete r11: undefined
+  run hp 996 active gadgets [] dom 61229d4c
+16 r9
+  complete r9: undefined
+  run hp 996 active gadgets [] dom 82616107
+17 r12
+  complete r12: undefined
+  run hp 996 active gadgets [] dom c4d59f4c
+18 r13
+  complete r13: undefined
+  run hp 996 active gadgets [] dom 3848ebc9
+19 c15
+  bar.setEnemyHp(45)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c15: "Curator Ambrose takes 1 damage, 45 HP left."
+  battle enemyHp=45 struck+=["c15"]
+  run hp 996 active gadgets [] dom e903f0eb
+20 c1
+  bar.setPlayerHp(992, 999)
+  bar.hitPlayer(4)
+  mistake: "Wrong cell! Overwound Curator hits you for 4. 992 HP left."
+  view.setWiped({r c2})
+  bar.setEnemyHp(44)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c1: "Curator Ambrose takes 1 damage, 44 HP left."
+  battle enemyHp=44 struck+=["c1"] counts={"wrongFills":2} wiped={"rows":[],"cols":[2]}
+  run hp 992 active gadgets [] dom e80e52b0
+21 c12
+  bar.setEnemyHp(43)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c12: "Curator Ambrose takes 1 damage, 43 HP left."
+  battle enemyHp=43 struck+=["c12"]
+  run hp 992 active gadgets [] dom e03aeb5c
+22 c14
+  bar.setEnemyHp(42)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c14: "Curator Ambrose takes 1 damage, 42 HP left."
+  battle enemyHp=42 struck+=["c14"]
+  run hp 992 active gadgets [] dom a7b37aed
+23 c18
+  bar.setEnemyHp(41)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c18: "Curator Ambrose takes 1 damage, 41 HP left."
+  battle enemyHp=41 struck+=["c18"]
+  run hp 992 active gadgets [] dom 116c8d39
+24 r6
+  bar.setEnemyHp(40)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r6: "Curator Ambrose takes 1 damage, 40 HP left."
+  battle enemyHp=40 struck+=["r6"]
+  run hp 992 active gadgets [] dom eeea82cd
+25 r7
+  view.setFog({r3 c}, [r7])
+  bar.setEnemyHp(39)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r7: "Curator Ambrose takes 1 damage, 39 HP left. You solved through the fog: row 8 revealed."
+  battle enemyHp=39 struck+=["r7"] fog={"rows":[3],"cols":[]}
+  run hp 992 active gadgets [] dom 711c40ff
+26 r8
+  bar.setEnemyHp(38)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r8: "Curator Ambrose takes 1 damage, 38 HP left."
+  battle enemyHp=38 struck+=["r8"]
+  run hp 992 active gadgets [] dom d1b133df
+27 r14
+  bar.setEnemyHp(37)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r14: "Curator Ambrose takes 1 damage, 37 HP left."
+  battle enemyHp=37 struck+=["r14"]
+  run hp 992 active gadgets [] dom fdfe91bc
+28 c8
+  bar.setForm("Unfolded Curator", "overwound-curator")
+  bar.phaseBanner("Unfolded Curator", "Flat was never my best side.")
+  view.setFog({r3 c})
+  view.setScramble({r c9,11})
+  sound phase
+  view.setScramble({r c9,11}, [c8])
+  bar.setEnemyHp(36)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c8: "Curator Ambrose takes 1 damage, 36 HP left. Gears click back into place: column 9 in order. Overwound Curator becomes Unfolded Curator! Flat was never my best side."
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setTurn(null)
+  onBlock
+  battle enemyHp=36 struck+=["c8"] phase=4 scramble={"rows":[],"cols":[9,11]}
+  run hp 992 active gadgets [] dom f6d4e68f
+saved {"runId":"harness","node":0,"hp":992,"maxHp":999,"gadgets":[],"status":"active","mode":"hearts","tally":{"wrongFills":0,"zaps":0,"wrongAccusations":0,"gadgetsUsed":0,"bombsUsed":0,"spongesUsed":0,"hintsUsed":0},"battle":{"enemyHp":36,"struck":["r1","r0","r11","r19","c6","r2","r9","r12","r13","r18","c4","c5","c7","c13","c15","c1","c12","c14","c18","r6","r7","r8","r14","c8"],"fog":{"rows":[3],"cols":[]},"phase":4,"scramble":{"rows":[],"cols":[9,11]},"counts":{"wrongFills":2},"wiped":{"rows":[],"cols":[2]}}}"
+`;
+
+exports[`fight hooks in jsdom (#163) > cuttlefish 1`] = `
+"start
+  bar.setForm("Cuttlefish", "cuttlefish")
+  bar.setPlayerHp(999, 999)
+  bar.setShield(0)
+  bar.setInfo(<button.powers-info aria-label="What can Cuttlefish do?" aria-expanded="false">"ⓘ")
+  bar.setGadgets([<button.gadget aria-label="Use Sponge. No ink to wipe" title="No ink to wipe" disabled="">"Sponge" <button.gadget aria-label="Use Bomb. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb"])
+  view.setInk([])
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setTurn(null)
+  run hp 999 active gadgets ["sponge" "bomb"] dom 1a7b4b2f
+1 c0
+  bar.setEnemyHp(44)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([<button.gadget aria-label="Use Sponge. No ink to wipe" title="No ink to wipe" disabled="">"Sponge" <button.gadget aria-label="Use Bomb. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb"])
+  complete c0: "Cuttlefish takes 1 damage, 44 HP left."
+  keys enemyHp,struck
+  battle enemyHp=44 struck=["c0"]
+  run hp 999 active gadgets ["sponge" "bomb"] dom 4d455b8d
+2 c14
+  bar.setEnemyHp(43)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([<button.gadget aria-label="Use Sponge. No ink to wipe" title="No ink to wipe" disabled="">"Sponge" <button.gadget aria-label="Use Bomb. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb"])
+  complete c14: "Cuttlefish takes 1 damage, 43 HP left."
+  battle enemyHp=43 struck+=["c14"]
+  run hp 999 active gadgets ["sponge" "bomb"] dom f2570b55
+3 r0
+  bar.setEnemyHp(42)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([<button.gadget aria-label="Use Sponge. No ink to wipe" title="No ink to wipe" disabled="">"Sponge" <button.gadget aria-label="Use Bomb. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb"])
+  complete r0: "Cuttlefish takes 1 damage, 42 HP left."
+  battle enemyHp=42 struck+=["r0"]
+  run hp 999 active gadgets ["sponge" "bomb"] dom 41372623
+4 r12
+  bar.setEnemyHp(41)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([<button.gadget aria-label="Use Sponge. No ink to wipe" title="No ink to wipe" disabled="">"Sponge" <button.gadget aria-label="Use Bomb. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb"])
+  complete r12: "Cuttlefish takes 1 damage, 41 HP left."
+  battle enemyHp=41 struck+=["r12"]
+  run hp 999 active gadgets ["sponge" "bomb"] dom ac8465e1
+5 r13
+  bar.setTip(<div.tip-card role="status">"Ink. Ink hides your marks, but you can still play there. Finishing a line through it washes it off.Got it")
+  bar.setForm("Cuttlefish", "cuttlefish")
+  bar.phaseBanner("Cuttlefish", "Pfft!")
+  sound phase
+  bar.setEnemyHp(40)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([<button.gadget aria-label="Use Sponge. No ink to wipe" title="No ink to wipe" disabled="">"Sponge" <button.gadget aria-label="Use Bomb. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb"])
+  complete r13: "Cuttlefish takes 1 damage, 40 HP left. Pfft!"
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setTurn(null)
+  view.setInk([16 17 18 19 31 32 33 34 46 47 48 49 61 62 63 64])
+  sound phase
+  bar.say("Cuttlefish squirts ink! 16 cells go dark.")
+  keys enemyHp,struck,phase,ink
+  battle enemyHp=40 struck+=["r13"] phase=1 ink=[16,17,18,19,31,32,33,34,46,47,48,49,61,62,63,64]
+  run hp 999 active gadgets ["sponge" "bomb"] dom 03385997
+6 r14
+  bar.setEnemyHp(39)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([<button.gadget aria-label="Use Sponge. Use in a fight to wipe all the ink off the board." title="Use in a fight to wipe all the ink off the board.">"Sponge" <button.gadget aria-label="Use Bomb. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb"])
+  complete r14: "Cuttlefish takes 1 damage, 39 HP left."
+  battle enemyHp=39 struck+=["r14"]
+  run hp 999 active gadgets ["sponge" "bomb"] dom a74f9ce5
+7 c2
+  view.setInk([16 18 19 31 33 34 46 48 49 61 63 64], [17 32 47 62])
+  bar.setEnemyHp(38)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([<button.gadget aria-label="Use Sponge. Use in a fight to wipe all the ink off the board." title="Use in a fight to wipe all the ink off the board.">"Sponge" <button.gadget aria-label="Use Bomb. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb"])
+  complete c2: "Cuttlefish takes 1 damage, 38 HP left. The ink washes away."
+  battle enemyHp=38 struck+=["c2"] ink=[16,18,19,31,33,34,46,48,49,61,63,64]
+  run hp 999 active gadgets ["sponge" "bomb"] dom 260ffd48
+8 c12
+  bar.setEnemyHp(37)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([<button.gadget aria-label="Use Sponge. Use in a fight to wipe all the ink off the board." title="Use in a fight to wipe all the ink off the board.">"Sponge" <button.gadget aria-label="Use Bomb. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb"])
+  complete c12: "Cuttlefish takes 1 damage, 37 HP left."
+  battle enemyHp=37 struck+=["c12"]
+  run hp 999 active gadgets ["sponge" "bomb"] dom 0a93cc82
+9 r9
+  bar.setEnemyHp(36)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([<button.gadget aria-label="Use Sponge. Use in a fight to wipe all the ink off the board." title="Use in a fight to wipe all the ink off the board.">"Sponge" <button.gadget aria-label="Use Bomb. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb"])
+  complete r9: "Cuttlefish takes 1 damage, 36 HP left."
+  battle enemyHp=36 struck+=["r9"]
+  run hp 999 active gadgets ["sponge" "bomb"] dom 89b04530
+10 r11
+  bar.setPlayerHp(997, 999)
+  bar.hitPlayer(2)
+  mistake: "Wrong cell! Cuttlefish hits you for 2. 997 HP left."
+  bar.setEnemyHp(35)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([<button.gadget aria-label="Use Sponge. Use in a fight to wipe all the ink off the board." title="Use in a fight to wipe all the ink off the board.">"Sponge" <button.gadget aria-label="Use Bomb. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb"])
+  complete r11: "Cuttlefish takes 1 damage, 35 HP left."
+  keys enemyHp,struck,phase,ink,counts
+  battle enemyHp=35 struck+=["r11"] counts={"wrongFills":1}
+  run hp 997 active gadgets ["sponge" "bomb"] dom a3a46f14
+11 c1
+  view.setInk([18 19 33 34 48 49 63 64], [16 31 46 61])
+  bar.setEnemyHp(34)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([<button.gadget aria-label="Use Sponge. Use in a fight to wipe all the ink off the board." title="Use in a fight to wipe all the ink off the board.">"Sponge" <button.gadget aria-label="Use Bomb. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb"])
+  complete c1: "Cuttlefish takes 1 damage, 34 HP left. The ink washes away."
+  battle enemyHp=34 struck+=["c1"] ink=[18,19,33,34,48,49,63,64]
+  run hp 997 active gadgets ["sponge" "bomb"] dom 87a03659
+12 c13
+  bar.setForm("Cuttlefish", "cuttlefish")
+  bar.phaseBanner("Cuttlefish", "Pfft! Pfft!")
+  sound phase
+  bar.setEnemyHp(33)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([<button.gadget aria-label="Use Sponge. Use in a fight to wipe all the ink off the board." title="Use in a fight to wipe all the ink off the board.">"Sponge" <button.gadget aria-label="Use Bomb. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb"])
+  complete c13: "Cuttlefish takes 1 damage, 33 HP left. Pfft! Pfft!"
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setTurn(null)
+  view.setInk([18 19 33 34 48 49 63 64 20 21 22 23 35 36 37 38 50 51 52 53 65 66 67 68])
+  sound phase
+  bar.say("Cuttlefish squirts ink! 16 cells go dark.")
+  use Sponge
+  view.setInk([], [18 19 33 34 48 49 63 64 20 21 22 23 35 36 37 38 50 51 52 53 65 66 67 68])
+  sound hint
+  bar.say("Sponge! The ink wipes right off.")
+  bar.setGadgets([<button.gadget aria-label="Use Bomb. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb"])
+  battle enemyHp=33 struck+=["c13"] phase=2 ink=[] counts={"wrongFills":1,"gadgetsUsed":1,"spongesUsed":1}
+  run hp 997 active gadgets ["bomb"] dom a5b42a4d
+13 r1
+  bar.setEnemyHp(32)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([<button.gadget aria-label="Use Bomb. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb"])
+  complete r1: "Cuttlefish takes 1 damage, 32 HP left."
+  battle enemyHp=32 struck+=["r1"]
+  run hp 997 active gadgets ["bomb"] dom d2e0ed64
+14 r8
+  bar.setEnemyHp(31)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([<button.gadget aria-label="Use Bomb. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb"])
+  complete r8: "Cuttlefish takes 1 damage, 31 HP left."
+  use Bomb
+  bar.setEnemyHp(29)
+  bar.hitEnemy(2)
+  sound finisher
+  bar.setGadgets([])
+  game.reveal([3 4 5 6 7 18 19 20 21 22 33 34 35 36 37 48 49 50 51 52 63 64 65 66 67])
+  view.flashBlast({"cells":[3,4,5,6,7,18,19,20,21,22,33,34,35,36,37,48,49,50,51,52,63,64,65,66,67],"row":2,"col":5})
+  controls.refresh()
+  bar.say("Bomb! Cuttlefish takes 2 damage, 29 HP left. The blast reveals 15 cells around row 3, column 6.")
+  battle enemyHp=29 struck+=["r8"] counts={"wrongFills":1,"gadgetsUsed":2,"spongesUsed":1,"bombsUsed":1}
+  run hp 997 active gadgets [] dom 85b8dcf7
+15 r10
+  bar.setEnemyHp(28)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r10: "Cuttlefish takes 1 damage, 28 HP left."
+  battle enemyHp=28 struck+=["r10"]
+  run hp 997 active gadgets [] dom 6f911fce
+16 c4
+  bar.setForm("Inky Cuttlefish", "cuttlefish")
+  bar.phaseBanner("Inky Cuttlefish", "Lights out, little painter.")
+  sound phase
+  bar.setEnemyHp(27)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c4: "Cuttlefish takes 1 damage, 27 HP left. Cuttlefish becomes Inky Cuttlefish! Lights out, little painter."
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setTurn(null)
+  view.setInk([33 35 36 37 48 50 51 52 63 65 66 67 78 80 81 82 93 95 96 97])
+  sound phase
+  bar.say("Inky Cuttlefish squirts ink! 20 cells go dark.")
+  battle enemyHp=27 struck+=["c4"] phase=3 ink+=[33,35,36,37,48,50,51,52,63,65,66,67,78,80,81,82,93,95,96,97]
+  run hp 997 active gadgets [] dom 00686f77
+17 c7
+  view.setInk([33 35 36 48 50 51 63 65 66 78 80 81 93 95 96], [37 52 67 82 97])
+  bar.setEnemyHp(26)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c7: "Cuttlefish takes 1 damage, 26 HP left. The ink washes away."
+  battle enemyHp=26 struck+=["c7"] ink=[33,35,36,48,50,51,63,65,66,78,80,81,93,95,96]
+  run hp 997 active gadgets [] dom a2ad98d6
+18 c10
+  bar.setEnemyHp(25)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c10: "Cuttlefish takes 1 damage, 25 HP left."
+  battle enemyHp=25 struck+=["c10"]
+  run hp 997 active gadgets [] dom 2d4b176b
+19 r2
+  view.setInk([48 50 51 63 65 66 78 80 81 93 95 96], [33 35 36])
+  bar.setEnemyHp(24)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r2: "Cuttlefish takes 1 damage, 24 HP left. The ink washes away."
+  battle enemyHp=24 struck+=["r2"] ink=[48,50,51,63,65,66,78,80,81,93,95,96]
+  run hp 997 active gadgets [] dom 916972e9
+20 c5
+  view.setInk([48 51 63 66 78 81 93 96], [50 65 80 95])
+  bar.setEnemyHp(23)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c5: "Cuttlefish takes 1 damage, 23 HP left. The ink washes away."
+  battle enemyHp=23 struck+=["c5"] ink=[48,51,63,66,78,81,93,96]
+  run hp 997 active gadgets [] dom 665b7e00
+21 c9
+  bar.setEnemyHp(22)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c9: "Cuttlefish takes 1 damage, 22 HP left."
+  battle enemyHp=22 struck+=["c9"]
+  run hp 997 active gadgets [] dom 666c3f98
+22 c3
+  view.setInk([51 66 81 96], [48 63 78 93])
+  bar.setEnemyHp(21)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c3: "Cuttlefish takes 1 damage, 21 HP left. The ink washes away."
+  battle enemyHp=21 struck+=["c3"] ink=[51,66,81,96]
+  run hp 997 active gadgets [] dom ac82a427
+23 c11
+  bar.setEnemyHp(20)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c11: "Cuttlefish takes 1 damage, 20 HP left."
+  battle enemyHp=20 struck+=["c11"]
+  run hp 997 active gadgets [] dom 28125677
+24 r3
+  view.setInk([66 81 96], [51])
+  bar.setEnemyHp(19)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r3: "Cuttlefish takes 1 damage, 19 HP left. The ink washes away."
+  battle enemyHp=19 struck+=["r3"] ink=[66,81,96]
+  run hp 997 active gadgets [] dom 1aee9050
+25 r4
+  view.setInk([81 96], [66])
+  bar.setEnemyHp(18)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r4: "Cuttlefish takes 1 damage, 18 HP left. The ink washes away."
+  battle enemyHp=18 struck+=["r4"] ink=[81,96]
+  run hp 997 active gadgets [] dom c54314e3
+26 r5
+  view.setInk([96], [81])
+  bar.setEnemyHp(17)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r5: "Cuttlefish takes 1 damage, 17 HP left. The ink washes away."
+  battle enemyHp=17 struck+=["r5"] ink=[96]
+  run hp 997 active gadgets [] dom af40984b
+27 r6
+  view.setInk([], [96])
+  bar.setEnemyHp(16)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r6: "Cuttlefish takes 1 damage, 16 HP left. The ink washes away."
+  battle enemyHp=16 struck+=["r6"] ink=[]
+  run hp 997 active gadgets [] dom 04e865ba
+28 r7
+  bar.setEnemyHp(13)
+  bar.hitEnemy(3)
+  sound strike
+  bar.setGadgets([])
+  complete r7 c6 c8: "Cuttlefish takes 3 damage, 13 HP left."
+  bar.setGadgets([])
+  land 13 as Inky Cuttlefish
+  battle enemyHp=13 struck+=["r7","c6","c8"]
+  run hp 997 active gadgets [] dom 029fbb25
+saved {"runId":"harness","node":0,"hp":997,"maxHp":999,"gadgets":[],"status":"active","mode":"hearts","tally":{"wrongFills":0,"zaps":0,"wrongAccusations":0,"gadgetsUsed":0,"bombsUsed":0,"spongesUsed":0,"hintsUsed":0},"battle":{"enemyHp":13,"struck":["c0","c14","r0","r12","r13","r14","c2","c12","r9","r11","c1","c13","r1","r8","r10","c4","c7","c10","r2","c5","c9","c3","c11","r3","r4","r5","r6","r7","c6","c8"],"phase":3,"ink":[],"counts":{"wrongFills":1,"gadgetsUsed":2,"spongesUsed":1,"bombsUsed":1}}}"
+`;
+
+exports[`fight hooks in jsdom (#163) > electric-eel 1`] = `
+"start
+  bar.setForm("Electric Eel", "electric-eel")
+  bar.setPlayerHp(999, 999)
+  bar.setShield(0)
+  bar.setInfo(<button.powers-info aria-label="What can Electric Eel do?" aria-expanded="false">"ⓘ")
+  bar.setGadgets([<button.gadget aria-label="Use Patch kit. Use in a fight to block the next hit." title="Use in a fight to block the next hit.">"Patch kit"])
+  view.setInk([])
+  bar.setCharge(0, "Warming up · 8 lines")
+  view.setLive(null)
+  bar.setTurn(null)
+  bar.setTip(<div.tip-card role="status">"Charge. After a warm-up, each line you finish charges the  meter, and when it’s full you get zapped. Finish the yellow live line first to ground it. Take as long as you like: only finished lines count.Got it")
+  keys enemyHp,struck,warmUp
+  battle enemyHp=45 struck=[] warmUp=8
+  run hp 999 active gadgets ["patch-kit"] dom e82381bf
+1 r0
+  bar.setEnemyHp(44)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([<button.gadget aria-label="Use Patch kit. Use in a fight to block the next hit." title="Use in a fight to block the next hit.">"Patch kit"])
+  bar.setCharge(0, "Warming up · 7 lines")
+  view.setLive(null)
+  complete r0: "Electric Eel takes 1 damage, 44 HP left."
+  use Patch kit
+  bar.setShield(1)
+  sound hint
+  bar.say("Patch kit ready. It blocks the next hit.")
+  bar.setGadgets([])
+  keys enemyHp,struck,warmUp,counts,shield
+  battle enemyHp=44 struck+=["r0"] warmUp=7 counts={"gadgetsUsed":1} shield=1
+  run hp 999 active gadgets [] dom 6bbeb019
+2 r5
+  bar.setEnemyHp(43)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0, "Warming up · 6 lines")
+  view.setLive(null)
+  complete r5: "Electric Eel takes 1 damage, 43 HP left."
+  battle enemyHp=43 struck+=["r5"] warmUp=6
+  run hp 999 active gadgets [] dom 4e01536c
+3 r10
+  bar.setEnemyHp(42)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0, "Warming up · 5 lines")
+  view.setLive(null)
+  complete r10: "Electric Eel takes 1 damage, 42 HP left."
+  battle enemyHp=42 struck+=["r10"] warmUp=5
+  run hp 999 active gadgets [] dom 5d3cfb59
+4 r6
+  bar.setEnemyHp(41)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0, "Warming up · 4 lines")
+  view.setLive(null)
+  complete r6: "Electric Eel takes 1 damage, 41 HP left."
+  battle enemyHp=41 struck+=["r6"] warmUp=4
+  run hp 999 active gadgets [] dom 23a725b9
+5 r9
+  bar.setEnemyHp(40)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0, "Warming up · 3 lines")
+  view.setLive(null)
+  complete r9: "Electric Eel takes 1 damage, 40 HP left."
+  battle enemyHp=40 struck+=["r9"] warmUp=3
+  run hp 999 active gadgets [] dom 2a34ab59
+6 r4
+  bar.setEnemyHp(39)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0, "Warming up · 2 lines")
+  view.setLive(null)
+  complete r4: "Electric Eel takes 1 damage, 39 HP left."
+  battle enemyHp=39 struck+=["r4"] warmUp=2
+  run hp 999 active gadgets [] dom 0d695061
+7 r11
+  bar.setEnemyHp(38)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0, "Warming up · 1 line")
+  view.setLive(null)
+  complete r11: "Electric Eel takes 1 damage, 38 HP left."
+  battle enemyHp=38 struck+=["r11"] warmUp=1
+  run hp 999 active gadgets [] dom 3a8c9d56
+8 c1
+  bar.setEnemyHp(37)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0, "Column 13 · 5 left")
+  view.setLive(c12)
+  sound charged +0.15
+  complete c1: "Electric Eel takes 1 damage, 37 HP left. ⚡ Column 13 is live."
+  keys enemyHp,struck,warmUp,counts,shield,live
+  battle enemyHp=37 struck+=["c1"] warmUp=0 live={"kind":"col","index":12}
+  run hp 999 active gadgets [] dom 89837ca0
+9 c5
+  bar.setEnemyHp(36)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.2, "Column 13 · 4 left")
+  view.setLive(c12)
+  complete c5: "Electric Eel takes 1 damage, 36 HP left."
+  keys enemyHp,struck,warmUp,counts,shield,live,charged
+  battle enemyHp=36 struck+=["c5"] charged=1
+  run hp 999 active gadgets [] dom 9d55d707
+10 c9
+  bar.setShield(0)
+  bar.block()
+  sound block
+  mistake: "Wrong cell! Electric Eel attacks, but the patch kit blocks it."
+  bar.setEnemyHp(35)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.4, "Column 13 · 3 left")
+  view.setLive(c12)
+  complete c9: "Electric Eel takes 1 damage, 35 HP left."
+  battle enemyHp=35 struck+=["c9"] counts={"gadgetsUsed":1,"wrongFills":1} shield=0 charged=2
+  run hp 999 active gadgets [] dom 1f3a577f
+11 r14
+  bar.setEnemyHp(34)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.6, "Column 13 · 2 left")
+  view.setLive(c12)
+  complete r14: "Electric Eel takes 1 damage, 34 HP left."
+  battle enemyHp=34 struck+=["r14"] charged=3
+  run hp 999 active gadgets [] dom 2cd22839
+12 c6
+  bar.setEnemyHp(33)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.8, "Column 13 · 1 left")
+  view.setLive(c12)
+  complete c6: "Electric Eel takes 1 damage, 33 HP left."
+  battle enemyHp=33 struck+=["c6"] charged=4
+  run hp 999 active gadgets [] dom 6cf3f023
+13 c7
+  bar.setEnemyHp(32)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0, "Column 3 · 5 left")
+  view.setLive(c2)
+  sound live +0.5
+  complete c7: "Electric Eel takes 1 damage, 32 HP left. ⚡ Column 3 is live."
+  bar.zap()
+  sound zap
+  haptic zap
+  bar.setPlayerHp(997, 999)
+  bar.hitPlayer(2)
+  controls.refresh()
+  bar.say("⚡ Electric Eel zaps you! Electric Eel hits you for 2. 997 HP left.")
+  battle enemyHp=32 struck+=["c7"] counts={"gadgetsUsed":1,"wrongFills":1,"zaps":1} live={"kind":"col","index":2} charged=0
+  run hp 997 active gadgets [] dom 42c16106
+14 c8
+  bar.setEnemyHp(31)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.2, "Column 3 · 4 left")
+  view.setLive(c2)
+  complete c8: "Electric Eel takes 1 damage, 31 HP left."
+  battle enemyHp=31 struck+=["c8"] charged=1
+  run hp 997 active gadgets [] dom c369a413
+15 c13
+  bar.setEnemyHp(30)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.4, "Column 3 · 3 left")
+  view.setLive(c2)
+  complete c13: "Electric Eel takes 1 damage, 30 HP left."
+  battle enemyHp=30 struck+=["c13"] charged=2
+  run hp 997 active gadgets [] dom bd04c4c3
+16 r1
+  bar.setEnemyHp(29)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.6, "Column 3 · 2 left")
+  view.setLive(c2)
+  complete r1: "Electric Eel takes 1 damage, 29 HP left."
+  battle enemyHp=29 struck+=["r1"] charged=3
+  run hp 997 active gadgets [] dom 4603f43b
+17 c4
+  bar.setEnemyHp(28)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.8, "Column 3 · 1 left")
+  view.setLive(c2)
+  complete c4: "Electric Eel takes 1 damage, 28 HP left."
+  battle enemyHp=28 struck+=["c4"] charged=4
+  run hp 997 active gadgets [] dom a6b00887
+18 r3
+  bar.setForm("Overcharged Eel", "electric-eel")
+  bar.phaseBanner("Overcharged Eel", "Bzzzzt!")
+  sound phase
+  bar.setEnemyHp(27)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0, "Column 13 · 4 left")
+  view.setLive(c12)
+  sound live +0.5
+  complete r3: "Electric Eel takes 1 damage, 27 HP left. Electric Eel becomes Overcharged Eel! Bzzzzt! The air starts to crackle. ⚡ ⚡ Column 13 is live."
+  bar.setCharge(0, "Column 13 · 4 left")
+  view.setLive(c12)
+  bar.setTurn(null)
+  bar.zap()
+  sound zap
+  haptic zap
+  bar.setPlayerHp(995, 999)
+  bar.hitPlayer(2)
+  controls.refresh()
+  bar.say("⚡ Overcharged Eel zaps you! Overcharged Eel hits you for 2. 995 HP left.")
+  keys enemyHp,struck,warmUp,counts,shield,live,charged,phase
+  battle enemyHp=27 struck+=["r3"] counts={"gadgetsUsed":1,"wrongFills":1,"zaps":2} live={"kind":"col","index":12} charged=0 phase=1
+  run hp 995 active gadgets [] dom 29738bed
+19 c10
+  bar.setEnemyHp(26)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.25, "Column 13 · 3 left")
+  view.setLive(c12)
+  complete c10: "Electric Eel takes 1 damage, 26 HP left."
+  battle enemyHp=26 struck+=["c10"] charged=1
+  run hp 995 active gadgets [] dom ed03b9e1
+20 r7
+  bar.setPlayerHp(992, 999)
+  bar.hitPlayer(3)
+  mistake: "Wrong cell! Overcharged Eel hits you for 3. 992 HP left."
+  bar.setEnemyHp(25)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.5, "Column 13 · 2 left")
+  view.setLive(c12)
+  complete r7: "Electric Eel takes 1 damage, 25 HP left."
+  battle enemyHp=25 struck+=["r7"] counts={"gadgetsUsed":1,"wrongFills":2,"zaps":2} charged=2
+  run hp 992 active gadgets [] dom b846a2a1
+21 r12
+  bar.setEnemyHp(24)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.75, "Column 13 · 1 left")
+  view.setLive(c12)
+  complete r12: "Electric Eel takes 1 damage, 24 HP left."
+  battle enemyHp=24 struck+=["r12"] charged=3
+  run hp 992 active gadgets [] dom 9e495ea1
+22 c2
+  bar.setEnemyHp(23)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0, "Row 14 · 4 left")
+  view.setLive(r13)
+  sound live +0.5
+  complete c2: "Electric Eel takes 1 damage, 23 HP left. ⚡ Row 14 is live."
+  bar.zap()
+  sound zap
+  haptic zap
+  bar.setPlayerHp(990, 999)
+  bar.hitPlayer(2)
+  controls.refresh()
+  bar.say("⚡ Overcharged Eel zaps you! Overcharged Eel hits you for 2. 990 HP left.")
+  battle enemyHp=23 struck+=["c2"] counts={"gadgetsUsed":1,"wrongFills":2,"zaps":3} live={"kind":"row","index":13} charged=0
+  run hp 990 active gadgets [] dom 0bcb5e78
+23 c3
+  bar.setEnemyHp(22)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.25, "Row 14 · 3 left")
+  view.setLive(r13)
+  complete c3: "Electric Eel takes 1 damage, 22 HP left."
+  battle enemyHp=22 struck+=["c3"] charged=1
+  run hp 990 active gadgets [] dom ec6978b6
+24 c12
+  bar.setEnemyHp(21)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.5, "Row 14 · 2 left")
+  view.setLive(r13)
+  complete c12: "Electric Eel takes 1 damage, 21 HP left."
+  battle enemyHp=21 struck+=["c12"] charged=2
+  run hp 990 active gadgets [] dom 4c4318fd
+25 r2
+  bar.setEnemyHp(20)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.75, "Row 14 · 1 left")
+  view.setLive(r13)
+  complete r2: "Electric Eel takes 1 damage, 20 HP left."
+  battle enemyHp=20 struck+=["r2"] charged=3
+  run hp 990 active gadgets [] dom 206483bf
+26 r8
+  bar.setEnemyHp(19)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0, "Row 14 · 4 left")
+  view.setLive(r13)
+  sound live +0.5
+  complete r8: "Electric Eel takes 1 damage, 19 HP left. ⚡ Row 14 is live."
+  bar.zap()
+  sound zap
+  haptic zap
+  bar.setPlayerHp(988, 999)
+  bar.hitPlayer(2)
+  controls.refresh()
+  bar.say("⚡ Overcharged Eel zaps you! Overcharged Eel hits you for 2. 988 HP left.")
+  battle enemyHp=19 struck+=["r8"] counts={"gadgetsUsed":1,"wrongFills":2,"zaps":4} charged=0
+  run hp 988 active gadgets [] dom 9ec55b65
+27 r13
+  bar.setEnemyHp(17)
+  bar.hitEnemy(2)
+  sound strike
+  bar.setGadgets([])
+  sound phase
+  bar.setCharge(0, "4 left")
+  view.setLive(null)
+  complete r13 c11: "Electric Eel takes 2 damage, 17 HP left. ⚡ Grounded! The charge drains away."
+  bar.setGadgets([])
+  land 17 as Overcharged Eel
+  keys enemyHp,struck,warmUp,counts,shield,charged,phase
+  battle enemyHp=17 struck+=["r13","c11"] live=undefined
+  run hp 988 active gadgets [] dom 633685e1
+saved {"runId":"harness","node":0,"hp":988,"maxHp":999,"gadgets":[],"status":"active","mode":"hearts","tally":{"wrongFills":0,"zaps":0,"wrongAccusations":0,"gadgetsUsed":0,"bombsUsed":0,"spongesUsed":0,"hintsUsed":0},"battle":{"enemyHp":17,"struck":["r0","r5","r10","r6","r9","r4","r11","c1","c5","c9","r14","c6","c7","c8","c13","r1","c4","r3","c10","r7","r12","c2","c3","c12","r2","r8","r13","c11"],"warmUp":0,"counts":{"gadgetsUsed":1,"wrongFills":2,"zaps":4},"shield":0,"charged":0,"phase":1}}"
+`;
+
+exports[`fight hooks in jsdom (#163) > electric-eel relaxed 1`] = `
+"start
+  bar.setForm("Electric Eel", "electric-eel")
+  bar.setPlayerHp(999, 999)
+  bar.setShield(0)
+  bar.setInfo(<button.powers-info aria-label="What can Electric Eel do?" aria-expanded="false">"ⓘ")
+  bar.setGadgets([])
+  view.setInk([])
+  bar.setCharge(0, "Warming up · 8 lines")
+  view.setLive(null)
+  bar.setTurn(null)
+  bar.setTip(<div.tip-card role="status">"Charge. After a warm-up, each line you finish charges the  meter, and when it’s full you get zapped. Finish the yellow live line first to ground it. Take as long as you like: only finished lines count.Got it")
+  keys enemyHp,struck,warmUp
+  battle enemyHp=45 struck=[] warmUp=8
+  run hp 999 active gadgets [] dom 86faf98c
+1 r0
+  bar.setEnemyHp(44)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0, "Warming up · 7 lines")
+  view.setLive(null)
+  complete r0: "Electric Eel takes 1 damage, 44 HP left."
+  battle enemyHp=44 struck+=["r0"] warmUp=7
+  run hp 999 active gadgets [] dom 082be6c1
+2 r5
+  bar.setEnemyHp(43)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0, "Warming up · 6 lines")
+  view.setLive(null)
+  complete r5: "Electric Eel takes 1 damage, 43 HP left."
+  battle enemyHp=43 struck+=["r5"] warmUp=6
+  run hp 999 active gadgets [] dom 7137a2cc
+3 r10
+  bar.setEnemyHp(42)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0, "Warming up · 5 lines")
+  view.setLive(null)
+  complete r10: "Electric Eel takes 1 damage, 42 HP left."
+  battle enemyHp=42 struck+=["r10"] warmUp=5
+  run hp 999 active gadgets [] dom e1be3bd1
+4 r6
+  bar.setEnemyHp(41)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0, "Warming up · 4 lines")
+  view.setLive(null)
+  complete r6: "Electric Eel takes 1 damage, 41 HP left."
+  battle enemyHp=41 struck+=["r6"] warmUp=4
+  run hp 999 active gadgets [] dom 38d07857
+5 r9
+  bar.setEnemyHp(40)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0, "Warming up · 3 lines")
+  view.setLive(null)
+  complete r9: "Electric Eel takes 1 damage, 40 HP left."
+  battle enemyHp=40 struck+=["r9"] warmUp=3
+  run hp 999 active gadgets [] dom 1d6bded9
+6 r4
+  bar.setEnemyHp(39)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0, "Warming up · 2 lines")
+  view.setLive(null)
+  complete r4: "Electric Eel takes 1 damage, 39 HP left."
+  battle enemyHp=39 struck+=["r4"] warmUp=2
+  run hp 999 active gadgets [] dom c60fd121
+7 r11
+  bar.setEnemyHp(38)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0, "Warming up · 1 line")
+  view.setLive(null)
+  complete r11: "Electric Eel takes 1 damage, 38 HP left."
+  battle enemyHp=38 struck+=["r11"] warmUp=1
+  run hp 999 active gadgets [] dom 09e3e4bc
+8 c1
+  bar.setEnemyHp(37)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0, "Column 13 · 5 left")
+  view.setLive(c12)
+  sound charged +0.15
+  complete c1: "Electric Eel takes 1 damage, 37 HP left. ⚡ Column 13 is live."
+  keys enemyHp,struck,warmUp,live
+  battle enemyHp=37 struck+=["c1"] warmUp=0 live={"kind":"col","index":12}
+  run hp 999 active gadgets [] dom 5a70b9e0
+9 c5
+  bar.setEnemyHp(36)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.2, "Column 13 · 4 left")
+  view.setLive(c12)
+  complete c5: "Electric Eel takes 1 damage, 36 HP left."
+  keys enemyHp,struck,warmUp,live,charged
+  battle enemyHp=36 struck+=["c5"] charged=1
+  run hp 999 active gadgets [] dom d88e787d
+10 c9
+  bar.setEnemyHp(35)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.4, "Column 13 · 3 left")
+  view.setLive(c12)
+  complete c9: "Electric Eel takes 1 damage, 35 HP left."
+  battle enemyHp=35 struck+=["c9"] charged=2
+  run hp 999 active gadgets [] dom 3bf9a463
+11 r14
+  bar.setEnemyHp(34)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.6, "Column 13 · 2 left")
+  view.setLive(c12)
+  complete r14: "Electric Eel takes 1 damage, 34 HP left."
+  battle enemyHp=34 struck+=["r14"] charged=3
+  run hp 999 active gadgets [] dom 7e4f4c8d
+12 c6
+  bar.setEnemyHp(33)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.8, "Column 13 · 1 left")
+  view.setLive(c12)
+  complete c6: "Electric Eel takes 1 damage, 33 HP left."
+  battle enemyHp=33 struck+=["c6"] charged=4
+  run hp 999 active gadgets [] dom a4d2bc3d
+13 c7
+  bar.setEnemyHp(32)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0, "Column 3 · 5 left")
+  view.setLive(c2)
+  sound live +0.5
+  complete c7: "Electric Eel takes 1 damage, 32 HP left. ⚡ Column 3 is live."
+  bar.zap()
+  sound zap
+  haptic zap
+  controls.refresh()
+  bar.say("⚡ Electric Eel zaps the board. It fizzles in a Relaxed run.")
+  battle enemyHp=32 struck+=["c7"] live={"kind":"col","index":2} charged=0
+  run hp 999 active gadgets [] dom 37b628be
+14 c8
+  bar.setEnemyHp(31)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.2, "Column 3 · 4 left")
+  view.setLive(c2)
+  complete c8: "Electric Eel takes 1 damage, 31 HP left."
+  battle enemyHp=31 struck+=["c8"] charged=1
+  run hp 999 active gadgets [] dom 1ae7e669
+15 c13
+  bar.setEnemyHp(30)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.4, "Column 3 · 3 left")
+  view.setLive(c2)
+  complete c13: "Electric Eel takes 1 damage, 30 HP left."
+  battle enemyHp=30 struck+=["c13"] charged=2
+  run hp 999 active gadgets [] dom 737748a1
+16 r1
+  bar.setEnemyHp(29)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.6, "Column 3 · 2 left")
+  view.setLive(c2)
+  complete r1: "Electric Eel takes 1 damage, 29 HP left."
+  battle enemyHp=29 struck+=["r1"] charged=3
+  run hp 999 active gadgets [] dom deb08e2a
+17 c4
+  bar.setEnemyHp(28)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.8, "Column 3 · 1 left")
+  view.setLive(c2)
+  complete c4: "Electric Eel takes 1 damage, 28 HP left."
+  battle enemyHp=28 struck+=["c4"] charged=4
+  run hp 999 active gadgets [] dom 1392aef0
+18 r3
+  bar.setForm("Overcharged Eel", "electric-eel")
+  bar.phaseBanner("Overcharged Eel", "Bzzzzt!")
+  sound phase
+  bar.setEnemyHp(27)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0, "Column 13 · 4 left")
+  view.setLive(c12)
+  sound live +0.5
+  complete r3: "Electric Eel takes 1 damage, 27 HP left. Electric Eel becomes Overcharged Eel! Bzzzzt! The air starts to crackle. ⚡ ⚡ Column 13 is live."
+  bar.setCharge(0, "Column 13 · 4 left")
+  view.setLive(c12)
+  bar.setTurn(null)
+  bar.zap()
+  sound zap
+  haptic zap
+  controls.refresh()
+  bar.say("⚡ Overcharged Eel zaps the board. It fizzles in a Relaxed run.")
+  keys enemyHp,struck,warmUp,live,charged,phase
+  battle enemyHp=27 struck+=["r3"] live={"kind":"col","index":12} charged=0 phase=1
+  run hp 999 active gadgets [] dom 64813223
+19 c10
+  bar.setEnemyHp(26)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.25, "Column 13 · 3 left")
+  view.setLive(c12)
+  complete c10: "Electric Eel takes 1 damage, 26 HP left."
+  battle enemyHp=26 struck+=["c10"] charged=1
+  run hp 999 active gadgets [] dom d3aca6df
+20 r7
+  bar.setEnemyHp(25)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.5, "Column 13 · 2 left")
+  view.setLive(c12)
+  complete r7: "Electric Eel takes 1 damage, 25 HP left."
+  battle enemyHp=25 struck+=["r7"] charged=2
+  run hp 999 active gadgets [] dom 748469c9
+21 r12
+  bar.setEnemyHp(24)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.75, "Column 13 · 1 left")
+  view.setLive(c12)
+  complete r12: "Electric Eel takes 1 damage, 24 HP left."
+  battle enemyHp=24 struck+=["r12"] charged=3
+  run hp 999 active gadgets [] dom bb4dfe6d
+22 c2
+  bar.setEnemyHp(23)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0, "Row 14 · 4 left")
+  view.setLive(r13)
+  sound live +0.5
+  complete c2: "Electric Eel takes 1 damage, 23 HP left. ⚡ Row 14 is live."
+  bar.zap()
+  sound zap
+  haptic zap
+  controls.refresh()
+  bar.say("⚡ Overcharged Eel zaps the board. It fizzles in a Relaxed run.")
+  battle enemyHp=23 struck+=["c2"] live={"kind":"row","index":13} charged=0
+  run hp 999 active gadgets [] dom f75c8b91
+23 c3
+  bar.setEnemyHp(22)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.25, "Row 14 · 3 left")
+  view.setLive(r13)
+  complete c3: "Electric Eel takes 1 damage, 22 HP left."
+  battle enemyHp=22 struck+=["c3"] charged=1
+  run hp 999 active gadgets [] dom bc2f1d1c
+24 c12
+  bar.setEnemyHp(21)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.5, "Row 14 · 2 left")
+  view.setLive(r13)
+  complete c12: "Electric Eel takes 1 damage, 21 HP left."
+  battle enemyHp=21 struck+=["c12"] charged=2
+  run hp 999 active gadgets [] dom 78ebe7e7
+25 r2
+  bar.setEnemyHp(20)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.75, "Row 14 · 1 left")
+  view.setLive(r13)
+  complete r2: "Electric Eel takes 1 damage, 20 HP left."
+  battle enemyHp=20 struck+=["r2"] charged=3
+  run hp 999 active gadgets [] dom df68e57f
+26 r8
+  bar.setEnemyHp(19)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0, "Row 14 · 4 left")
+  view.setLive(r13)
+  sound live +0.5
+  complete r8: "Electric Eel takes 1 damage, 19 HP left. ⚡ Row 14 is live."
+  bar.zap()
+  sound zap
+  haptic zap
+  controls.refresh()
+  bar.say("⚡ Overcharged Eel zaps the board. It fizzles in a Relaxed run.")
+  battle enemyHp=19 struck+=["r8"] charged=0
+  run hp 999 active gadgets [] dom 94069a31
+27 r13
+  bar.setEnemyHp(17)
+  bar.hitEnemy(2)
+  sound strike
+  bar.setGadgets([])
+  sound phase
+  bar.setCharge(0, "4 left")
+  view.setLive(null)
+  complete r13 c11: "Electric Eel takes 2 damage, 17 HP left. ⚡ Grounded! The charge drains away."
+  bar.setGadgets([])
+  land 17 as Overcharged Eel
+  keys enemyHp,struck,warmUp,charged,phase
+  battle enemyHp=17 struck+=["r13","c11"] live=undefined
+  run hp 999 active gadgets [] dom 88c10bb9
+saved {"runId":"harness","node":0,"hp":999,"maxHp":999,"gadgets":[],"status":"active","mode":"relaxed","tally":{"wrongFills":0,"zaps":0,"wrongAccusations":0,"gadgetsUsed":0,"bombsUsed":0,"spongesUsed":0,"hintsUsed":0},"battle":{"enemyHp":17,"struck":["r0","r5","r10","r6","r9","r4","r11","c1","c5","c9","r14","c6","c7","c8","c13","r1","c4","r3","c10","r7","r12","c2","c3","c12","r2","r8","r13","c11"],"warmUp":0,"charged":0,"phase":1}}"
+`;
+
+exports[`fight hooks in jsdom (#163) > forger 1`] = `
+"start
+  bar.setForm("The Forger", "forger")
+  bar.setPlayerHp(999, 999)
+  bar.setShield(0)
+  bar.setInfo(<button.powers-info aria-label="What can The Forger do?" aria-expanded="false">"ⓘ")
+  bar.setGadgets([<button.gadget.call-out aria-pressed="false" title="Accuse a clue of being forged">"Call out"])
+  view.setFakes(Map{r3:[6 7] r7:[12] r13:[7]})
+  view.setSuspects({r2,3,6,7,13 c})
+  bar.setFakes(3)
+  view.setInk([])
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setTurn(null)
+  bar.setTip(<div.tip-card role="status">"Forged clues. Some  clues are fakes, but not all. Don't trust them: solve those lines from the ones crossing them. Honest ones light up; a fake stays dark. Then  Call out the fake.Got it")
+  run hp 999 active gadgets [] dom 54e94c3e
+1 r14
+  bar.setEnemyHp(44)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([<button.gadget.call-out aria-pressed="false" title="Accuse a clue of being forged">"Call out"])
+  complete r14: "The Forger takes 1 damage, 44 HP left."
+  view.pickClue(fn)
+  bar.say("Tap the 🎭 clue you think is forged.")
+  bar.setGadgets([<button.gadget.call-out.active aria-pressed="true" title="Accuse a clue of being forged">"Pick a clue…"])
+  bar.say("Row 1 isn't a suspect. Pick a 🎭 clue, or tap Call out again to cancel.")
+  view.pickClue(null)
+  view.setSuspects({r3,6,7,13 c})
+  sound hit
+  haptic hit
+  bar.setPlayerHp(997, 999)
+  bar.hitPlayer(2)
+  controls.refresh()
+  bar.setGadgets([<button.gadget.call-out aria-pressed="false" title="Accuse a clue of being forged">"Call out"])
+  bar.say("Row 3 was honest! The Forger hits you for 2. 997 HP left.")
+  view.pickClue(fn)
+  bar.say("Tap the 🎭 clue you think is forged.")
+  bar.setGadgets([<button.gadget.call-out.active aria-pressed="true" title="Accuse a clue of being forged">"Pick a clue…"])
+  view.pickClue(null)
+  view.setFakes(Map{r7:[12] r13:[7]}, [r3])
+  view.setSuspects({r6,7,13 c})
+  bar.setFakes(2)
+  bar.setEnemyHp(39)
+  bar.hitEnemy(5)
+  sound strike
+  controls.refresh()
+  bar.setGadgets([<button.gadget.call-out aria-pressed="false" title="Accuse a clue of being forged">"Call out"])
+  bar.say("Caught it! Row 4 was a forgery. The Forger takes 5 damage, 39 HP left.")
+  view.pickClue(fn)
+  bar.say("Tap the 🎭 clue you think is forged.")
+  bar.setGadgets([<button.gadget.call-out.active aria-pressed="true" title="Accuse a clue of being forged">"Pick a clue…"])
+  view.pickClue(null)
+  view.setSuspects({r7,13 c})
+  sound hit
+  haptic hit
+  bar.setPlayerHp(995, 999)
+  bar.hitPlayer(2)
+  controls.refresh()
+  bar.setGadgets([<button.gadget.call-out aria-pressed="false" title="Accuse a clue of being forged">"Call out"])
+  bar.say("Row 7 was honest! The Forger hits you for 2. 995 HP left.")
+  view.pickClue(fn)
+  bar.say("Tap the 🎭 clue you think is forged.")
+  bar.setGadgets([<button.gadget.call-out.active aria-pressed="true" title="Accuse a clue of being forged">"Pick a clue…"])
+  view.pickClue(null)
+  view.setFakes(Map{r13:[7]}, [r7])
+  view.setSuspects({r13 c})
+  bar.setFakes(1)
+  bar.setEnemyHp(34)
+  bar.hitEnemy(5)
+  sound strike
+  controls.refresh()
+  bar.setGadgets([<button.gadget.call-out aria-pressed="false" title="Accuse a clue of being forged">"Call out"])
+  bar.say("Caught it! Row 8 was a forgery. The Forger takes 5 damage, 34 HP left.")
+  view.pickClue(fn)
+  bar.say("Tap the 🎭 clue you think is forged.")
+  bar.setGadgets([<button.gadget.call-out.active aria-pressed="true" title="Accuse a clue of being forged">"Pick a clue…"])
+  view.pickClue(null)
+  view.setFakes(Map{}, [r13])
+  view.setSuspects({r c})
+  bar.setFakes(0)
+  bar.setEnemyHp(29)
+  bar.hitEnemy(5)
+  sound strike
+  controls.refresh()
+  bar.setGadgets([])
+  bar.say("Caught it! Row 14 was a forgery. The Forger takes 5 damage, 29 HP left.")
+  keys enemyHp,struck,fakes,suspects,counts
+  battle enemyHp=29 struck=["r14"] fakes={"rows":[],"cols":[]} suspects={"rows":[],"cols":[]} counts={"wrongAccusations":2}
+  run hp 995 active gadgets [] dom 0e8f5473
+2 c14
+  bar.setEnemyHp(28)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c14: "The Forger takes 1 damage, 28 HP left."
+  battle enemyHp=28 struck+=["c14"]
+  run hp 995 active gadgets [] dom 01be143b
+3 r0
+  bar.setEnemyHp(27)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r0: "The Forger takes 1 damage, 27 HP left."
+  battle enemyHp=27 struck+=["r0"]
+  run hp 995 active gadgets [] dom 273b842b
+4 r13
+  bar.setEnemyHp(26)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r13: "The Forger takes 1 damage, 26 HP left."
+  battle enemyHp=26 struck+=["r13"]
+  run hp 995 active gadgets [] dom c72eecbc
+5 c0
+  bar.setEnemyHp(25)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c0: "The Forger takes 1 damage, 25 HP left."
+  battle enemyHp=25 struck+=["c0"]
+  run hp 995 active gadgets [] dom e2319467
+6 c13
+  bar.setEnemyHp(24)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c13: "The Forger takes 1 damage, 24 HP left."
+  battle enemyHp=24 struck+=["c13"]
+  run hp 995 active gadgets [] dom eda8f3e3
+7 c1
+  bar.setEnemyHp(23)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c1: "The Forger takes 1 damage, 23 HP left."
+  battle enemyHp=23 struck+=["c1"]
+  run hp 995 active gadgets [] dom f13f0148
+8 r9
+  bar.setForm("Master Forger", "master-forger")
+  bar.phaseBanner("Master Forger", "Every clue's a masterpiece. Some are even real.")
+  sound phase
+  bar.setEnemyHp(22)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r9: "The Forger takes 1 damage, 22 HP left. The Forger becomes Master Forger! Every clue's a masterpiece. Some are even real."
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setTurn(null)
+  keys enemyHp,struck,fakes,suspects,counts,phase
+  battle enemyHp=22 struck+=["r9"] phase=1
+  run hp 995 active gadgets [] dom 5ad5dfb3
+9 r10
+  bar.setEnemyHp(21)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r10: "The Forger takes 1 damage, 21 HP left."
+  battle enemyHp=21 struck+=["r10"]
+  run hp 995 active gadgets [] dom 63d61b32
+10 c10
+  bar.setPlayerHp(992, 999)
+  bar.hitPlayer(3)
+  mistake: "Wrong cell! Master Forger hits you for 3. 992 HP left."
+  bar.setEnemyHp(20)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c10: "The Forger takes 1 damage, 20 HP left."
+  battle enemyHp=20 struck+=["c10"] counts={"wrongAccusations":2,"wrongFills":1}
+  run hp 992 active gadgets [] dom a75e0aef
+11 c11
+  bar.setEnemyHp(19)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c11: "The Forger takes 1 damage, 19 HP left."
+  battle enemyHp=19 struck+=["c11"]
+  run hp 992 active gadgets [] dom c2e1501f
+12 c12
+  bar.setEnemyHp(18)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c12: "The Forger takes 1 damage, 18 HP left."
+  battle enemyHp=18 struck+=["c12"]
+  run hp 992 active gadgets [] dom add6eee2
+13 r1
+  bar.setEnemyHp(17)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r1: "The Forger takes 1 damage, 17 HP left."
+  battle enemyHp=17 struck+=["r1"]
+  run hp 992 active gadgets [] dom f5c72ead
+14 r8
+  bar.setEnemyHp(16)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r8: "The Forger takes 1 damage, 16 HP left."
+  battle enemyHp=16 struck+=["r8"]
+  run hp 992 active gadgets [] dom b9621a24
+15 r12
+  bar.setEnemyHp(15)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r12: "The Forger takes 1 damage, 15 HP left."
+  battle enemyHp=15 struck+=["r12"]
+  run hp 992 active gadgets [] dom 0991e689
+16 c2
+  bar.setEnemyHp(14)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c2: "The Forger takes 1 damage, 14 HP left."
+  battle enemyHp=14 struck+=["c2"]
+  run hp 992 active gadgets [] dom 9f862341
+17 c3
+  bar.setEnemyHp(13)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c3: "The Forger takes 1 damage, 13 HP left."
+  battle enemyHp=13 struck+=["c3"]
+  run hp 992 active gadgets [] dom 4321f9c6
+18 c4
+  bar.setEnemyHp(12)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c4: "The Forger takes 1 damage, 12 HP left."
+  battle enemyHp=12 struck+=["c4"]
+  run hp 992 active gadgets [] dom a12483f1
+19 r2
+  bar.setEnemyHp(11)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r2: "The Forger takes 1 damage, 11 HP left."
+  battle enemyHp=11 struck+=["r2"]
+  run hp 992 active gadgets [] dom 19aa4d51
+20 r4
+  bar.setPlayerHp(989, 999)
+  bar.hitPlayer(3)
+  mistake: "Wrong cell! Master Forger hits you for 3. 989 HP left."
+  bar.setEnemyHp(10)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r4: "The Forger takes 1 damage, 10 HP left."
+  battle enemyHp=10 struck+=["r4"] counts={"wrongAccusations":2,"wrongFills":2}
+  run hp 989 active gadgets [] dom dbc70a62
+21 r5
+  bar.setEnemyHp(9)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r5: "The Forger takes 1 damage, 9 HP left."
+  battle enemyHp=9 struck+=["r5"]
+  run hp 989 active gadgets [] dom 0f17abee
+22 r7
+  bar.setEnemyHp(8)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r7: "The Forger takes 1 damage, 8 HP left."
+  battle enemyHp=8 struck+=["r7"]
+  run hp 989 active gadgets [] dom f4bb157f
+23 r11
+  bar.setEnemyHp(7)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r11: "The Forger takes 1 damage, 7 HP left."
+  battle enemyHp=7 struck+=["r11"]
+  run hp 989 active gadgets [] dom a93e6a4a
+24 c7
+  bar.setEnemyHp(6)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c7: "The Forger takes 1 damage, 6 HP left."
+  battle enemyHp=6 struck+=["c7"]
+  run hp 989 active gadgets [] dom f146256c
+25 r3
+  bar.setEnemyHp(5)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r3: "The Forger takes 1 damage, 5 HP left."
+  battle enemyHp=5 struck+=["r3"]
+  run hp 989 active gadgets [] dom 4c074ca4
+26 c5
+  bar.setEnemyHp(4)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c5: "The Forger takes 1 damage, 4 HP left."
+  battle enemyHp=4 struck+=["c5"]
+  run hp 989 active gadgets [] dom dc77f1be
+27 c6
+  bar.setEnemyHp(3)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c6: "The Forger takes 1 damage, 3 HP left."
+  battle enemyHp=3 struck+=["c6"]
+  run hp 989 active gadgets [] dom bb131339
+28 c9
+  bar.setEnemyHp(2)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c9: "The Forger takes 1 damage, 2 HP left."
+  battle enemyHp=2 struck+=["c9"]
+  run hp 989 active gadgets [] dom cae5ff2d
+29 r6
+  bar.setEnemyHp(1)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r6 c8: "The Forger takes 1 damage, 1 HP left."
+  bar.setGadgets([])
+  land 1 as Master Forger
+  battle enemyHp=1 struck+=["r6","c8"]
+  run hp 989 active gadgets [] dom 5da7659f
+saved {"runId":"harness","node":0,"hp":989,"maxHp":999,"gadgets":[],"status":"active","mode":"hearts","tally":{"wrongFills":0,"zaps":0,"wrongAccusations":0,"gadgetsUsed":0,"bombsUsed":0,"spongesUsed":0,"hintsUsed":0},"battle":{"enemyHp":1,"struck":["r14","c14","r0","r13","c0","c13","c1","r9","r10","c10","c11","c12","r1","r8","r12","c2","c3","c4","r2","r4","r5","r7","r11","c7","r3","c5","c6","c9","r6","c8"],"fakes":{"rows":[],"cols":[]},"suspects":{"rows":[],"cols":[]},"counts":{"wrongAccusations":2,"wrongFills":2},"phase":1}}"
+`;
+
+exports[`fight hooks in jsdom (#163) > forger relaxed 1`] = `
+"start
+  bar.setForm("The Forger", "forger")
+  bar.setPlayerHp(999, 999)
+  bar.setShield(0)
+  bar.setInfo(<button.powers-info aria-label="What can The Forger do?" aria-expanded="false">"ⓘ")
+  bar.setGadgets([<button.gadget.call-out aria-pressed="false" title="Accuse a clue of being forged">"Call out"])
+  view.setFakes(Map{r3:[6 7] r7:[12] r13:[7]})
+  view.setSuspects({r2,3,6,7,13 c})
+  bar.setFakes(3)
+  view.setInk([])
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setTurn(null)
+  bar.setTip(<div.tip-card role="status">"Forged clues. Some  clues are fakes, but not all. Don't trust them: solve those lines from the ones crossing them. Honest ones light up; a fake stays dark. Then  Call out the fake.Got it")
+  run hp 999 active gadgets [] dom 54e94c3e
+1 r14
+  bar.setEnemyHp(44)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([<button.gadget.call-out aria-pressed="false" title="Accuse a clue of being forged">"Call out"])
+  complete r14: "The Forger takes 1 damage, 44 HP left."
+  view.pickClue(fn)
+  bar.say("Tap the 🎭 clue you think is forged.")
+  bar.setGadgets([<button.gadget.call-out.active aria-pressed="true" title="Accuse a clue of being forged">"Pick a clue…"])
+  bar.say("Row 1 isn't a suspect. Pick a 🎭 clue, or tap Call out again to cancel.")
+  view.pickClue(null)
+  view.setSuspects({r3,6,7,13 c})
+  bar.setEnemyHp(45)
+  controls.refresh()
+  bar.setGadgets([<button.gadget.call-out aria-pressed="false" title="Accuse a clue of being forged">"Call out"])
+  bar.say("Row 3 was honest. The Forger touches up 1 HP.")
+  view.pickClue(fn)
+  bar.say("Tap the 🎭 clue you think is forged.")
+  bar.setGadgets([<button.gadget.call-out.active aria-pressed="true" title="Accuse a clue of being forged">"Pick a clue…"])
+  view.pickClue(null)
+  view.setFakes(Map{r7:[12] r13:[7]}, [r3])
+  view.setSuspects({r6,7,13 c})
+  bar.setFakes(2)
+  bar.setEnemyHp(40)
+  bar.hitEnemy(5)
+  sound strike
+  controls.refresh()
+  bar.setGadgets([<button.gadget.call-out aria-pressed="false" title="Accuse a clue of being forged">"Call out"])
+  bar.say("Caught it! Row 4 was a forgery. The Forger takes 5 damage, 40 HP left.")
+  view.pickClue(fn)
+  bar.say("Tap the 🎭 clue you think is forged.")
+  bar.setGadgets([<button.gadget.call-out.active aria-pressed="true" title="Accuse a clue of being forged">"Pick a clue…"])
+  view.pickClue(null)
+  view.setSuspects({r7,13 c})
+  bar.setEnemyHp(43)
+  controls.refresh()
+  bar.setGadgets([<button.gadget.call-out aria-pressed="false" title="Accuse a clue of being forged">"Call out"])
+  bar.say("Row 7 was honest. The Forger touches up 3 HP.")
+  view.pickClue(fn)
+  bar.say("Tap the 🎭 clue you think is forged.")
+  bar.setGadgets([<button.gadget.call-out.active aria-pressed="true" title="Accuse a clue of being forged">"Pick a clue…"])
+  view.pickClue(null)
+  view.setFakes(Map{r13:[7]}, [r7])
+  view.setSuspects({r13 c})
+  bar.setFakes(1)
+  bar.setEnemyHp(38)
+  bar.hitEnemy(5)
+  sound strike
+  controls.refresh()
+  bar.setGadgets([<button.gadget.call-out aria-pressed="false" title="Accuse a clue of being forged">"Call out"])
+  bar.say("Caught it! Row 8 was a forgery. The Forger takes 5 damage, 38 HP left.")
+  view.pickClue(fn)
+  bar.say("Tap the 🎭 clue you think is forged.")
+  bar.setGadgets([<button.gadget.call-out.active aria-pressed="true" title="Accuse a clue of being forged">"Pick a clue…"])
+  view.pickClue(null)
+  view.setFakes(Map{}, [r13])
+  view.setSuspects({r c})
+  bar.setFakes(0)
+  bar.setEnemyHp(33)
+  bar.hitEnemy(5)
+  sound strike
+  controls.refresh()
+  bar.setGadgets([])
+  bar.say("Caught it! Row 14 was a forgery. The Forger takes 5 damage, 33 HP left.")
+  keys enemyHp,struck,fakes,suspects,counts
+  battle enemyHp=33 struck=["r14"] fakes={"rows":[],"cols":[]} suspects={"rows":[],"cols":[]} counts={"wrongAccusations":2}
+  run hp 999 active gadgets [] dom ce8b4654
+2 c14
+  bar.setEnemyHp(32)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c14: "The Forger takes 1 damage, 32 HP left."
+  battle enemyHp=32 struck+=["c14"]
+  run hp 999 active gadgets [] dom f3ae44cb
+3 r0
+  bar.setEnemyHp(31)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r0: "The Forger takes 1 damage, 31 HP left."
+  battle enemyHp=31 struck+=["r0"]
+  run hp 999 active gadgets [] dom 222659b8
+4 r13
+  bar.setEnemyHp(30)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r13: "The Forger takes 1 damage, 30 HP left."
+  battle enemyHp=30 struck+=["r13"]
+  run hp 999 active gadgets [] dom 4c9bca14
+5 c0
+  bar.setEnemyHp(29)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c0: "The Forger takes 1 damage, 29 HP left."
+  battle enemyHp=29 struck+=["c0"]
+  run hp 999 active gadgets [] dom 3235e707
+6 c13
+  bar.setEnemyHp(28)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c13: "The Forger takes 1 damage, 28 HP left."
+  battle enemyHp=28 struck+=["c13"]
+  run hp 999 active gadgets [] dom e844ca79
+7 c1
+  bar.setEnemyHp(27)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c1: "The Forger takes 1 damage, 27 HP left."
+  battle enemyHp=27 struck+=["c1"]
+  run hp 999 active gadgets [] dom 11c7efa6
+8 r9
+  bar.setEnemyHp(26)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r9: "The Forger takes 1 damage, 26 HP left."
+  battle enemyHp=26 struck+=["r9"]
+  run hp 999 active gadgets [] dom cd8b7fca
+9 r10
+  bar.setEnemyHp(25)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r10: "The Forger takes 1 damage, 25 HP left."
+  battle enemyHp=25 struck+=["r10"]
+  run hp 999 active gadgets [] dom 307d165a
+10 c10
+  bar.setEnemyHp(24)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c10: "The Forger takes 1 damage, 24 HP left."
+  battle enemyHp=24 struck+=["c10"]
+  run hp 999 active gadgets [] dom 383d1b05
+11 c11
+  bar.setEnemyHp(23)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c11: "The Forger takes 1 damage, 23 HP left."
+  battle enemyHp=23 struck+=["c11"]
+  run hp 999 active gadgets [] dom c3a65635
+12 c12
+  bar.setForm("Master Forger", "master-forger")
+  bar.phaseBanner("Master Forger", "Every clue's a masterpiece. Some are even real.")
+  sound phase
+  bar.setEnemyHp(22)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c12: "The Forger takes 1 damage, 22 HP left. The Forger becomes Master Forger! Every clue's a masterpiece. Some are even real."
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setTurn(null)
+  keys enemyHp,struck,fakes,suspects,counts,phase
+  battle enemyHp=22 struck+=["c12"] phase=1
+  run hp 999 active gadgets [] dom 31fd14aa
+13 r1
+  bar.setEnemyHp(21)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r1: "The Forger takes 1 damage, 21 HP left."
+  battle enemyHp=21 struck+=["r1"]
+  run hp 999 active gadgets [] dom 4854bfc0
+14 r8
+  bar.setEnemyHp(20)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r8: "The Forger takes 1 damage, 20 HP left."
+  battle enemyHp=20 struck+=["r8"]
+  run hp 999 active gadgets [] dom 7a4aa680
+15 r12
+  bar.setEnemyHp(19)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r12: "The Forger takes 1 damage, 19 HP left."
+  battle enemyHp=19 struck+=["r12"]
+  run hp 999 active gadgets [] dom 6205f062
+16 c2
+  bar.setEnemyHp(18)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c2: "The Forger takes 1 damage, 18 HP left."
+  battle enemyHp=18 struck+=["c2"]
+  run hp 999 active gadgets [] dom 2faa130e
+17 c3
+  bar.setEnemyHp(17)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c3: "The Forger takes 1 damage, 17 HP left."
+  battle enemyHp=17 struck+=["c3"]
+  run hp 999 active gadgets [] dom 6b9c5566
+18 c4
+  bar.setEnemyHp(16)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c4: "The Forger takes 1 damage, 16 HP left."
+  battle enemyHp=16 struck+=["c4"]
+  run hp 999 active gadgets [] dom b3e96275
+19 r2
+  bar.setEnemyHp(15)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r2: "The Forger takes 1 damage, 15 HP left."
+  battle enemyHp=15 struck+=["r2"]
+  run hp 999 active gadgets [] dom 4f02f256
+20 r4
+  bar.setEnemyHp(14)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r4: "The Forger takes 1 damage, 14 HP left."
+  battle enemyHp=14 struck+=["r4"]
+  run hp 999 active gadgets [] dom 0b800cf0
+21 r5
+  bar.setEnemyHp(13)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r5: "The Forger takes 1 damage, 13 HP left."
+  battle enemyHp=13 struck+=["r5"]
+  run hp 999 active gadgets [] dom d12bba14
+22 r7
+  bar.setEnemyHp(12)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r7: "The Forger takes 1 damage, 12 HP left."
+  battle enemyHp=12 struck+=["r7"]
+  run hp 999 active gadgets [] dom f02882f9
+23 r11
+  bar.setEnemyHp(11)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r11: "The Forger takes 1 damage, 11 HP left."
+  battle enemyHp=11 struck+=["r11"]
+  run hp 999 active gadgets [] dom b4294a7a
+24 c7
+  bar.setEnemyHp(10)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c7: "The Forger takes 1 damage, 10 HP left."
+  battle enemyHp=10 struck+=["c7"]
+  run hp 999 active gadgets [] dom b5cd32b7
+25 r3
+  bar.setEnemyHp(9)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r3: "The Forger takes 1 damage, 9 HP left."
+  battle enemyHp=9 struck+=["r3"]
+  run hp 999 active gadgets [] dom 4039e24a
+26 c5
+  bar.setEnemyHp(8)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c5: "The Forger takes 1 damage, 8 HP left."
+  battle enemyHp=8 struck+=["c5"]
+  run hp 999 active gadgets [] dom d77953bb
+27 c6
+  bar.setEnemyHp(7)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c6: "The Forger takes 1 damage, 7 HP left."
+  battle enemyHp=7 struck+=["c6"]
+  run hp 999 active gadgets [] dom 40cd8aae
+28 c9
+  bar.setEnemyHp(6)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c9: "The Forger takes 1 damage, 6 HP left."
+  battle enemyHp=6 struck+=["c9"]
+  run hp 999 active gadgets [] dom 1488166a
+29 r6
+  bar.setEnemyHp(4)
+  bar.hitEnemy(2)
+  sound strike
+  bar.setGadgets([])
+  complete r6 c8: "The Forger takes 2 damage, 4 HP left."
+  bar.setGadgets([])
+  land 4 as Master Forger
+  battle enemyHp=4 struck+=["r6","c8"]
+  run hp 999 active gadgets [] dom 41097a07
+saved {"runId":"harness","node":0,"hp":999,"maxHp":999,"gadgets":[],"status":"active","mode":"relaxed","tally":{"wrongFills":0,"zaps":0,"wrongAccusations":0,"gadgetsUsed":0,"bombsUsed":0,"spongesUsed":0,"hintsUsed":0},"battle":{"enemyHp":4,"struck":["r14","c14","r0","r13","c0","c13","c1","r9","r10","c10","c11","c12","r1","r8","r12","c2","c3","c4","r2","r4","r5","r7","r11","c7","r3","c5","c6","c9","r6","c8"],"fakes":{"rows":[],"cols":[]},"suspects":{"rows":[],"cols":[]},"counts":{"wrongAccusations":2},"phase":1}}"
+`;
+
+exports[`fight hooks in jsdom (#163) > gremlin 1`] = `
+"start
+  bar.setForm("Generator Gremlin", "gremlin")
+  bar.setPlayerHp(999, 999)
+  bar.setShield(0)
+  bar.setInfo(<button.powers-info aria-label="What can Generator Gremlin do?" aria-expanded="false">"ⓘ")
+  bar.setGadgets([<button.gadget aria-label="Use Patch kit. Use in a fight to block the next hit." title="Use in a fight to block the next hit.">"Patch kit" <button.gadget aria-label="Use Bomb. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb"])
+  view.setFog({r3,8,10 c})
+  view.setInk([])
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setTurn(null)
+  bar.setTip(<div.tip-card role="status">"Fog. Some clues are hidden. Work those lines out from the ones crossing them; finishing a line reveals its clue.Got it")
+  run hp 999 active gadgets ["patch-kit" "bomb"] dom 41b3f42b
+1 r7
+  bar.setEnemyHp(44)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([<button.gadget aria-label="Use Patch kit. Use in a fight to block the next hit." title="Use in a fight to block the next hit.">"Patch kit" <button.gadget aria-label="Use Bomb. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb"])
+  complete r7: "Generator Gremlin takes 1 damage, 44 HP left."
+  keys enemyHp,struck,fog
+  battle enemyHp=44 struck=["r7"] fog={"rows":[3,8,10],"cols":[]}
+  run hp 999 active gadgets ["patch-kit" "bomb"] dom e55d6ff4
+2 r6
+  bar.setEnemyHp(43)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([<button.gadget aria-label="Use Patch kit. Use in a fight to block the next hit." title="Use in a fight to block the next hit.">"Patch kit" <button.gadget aria-label="Use Bomb. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb"])
+  complete r6: "Generator Gremlin takes 1 damage, 43 HP left."
+  use Patch kit
+  bar.setShield(1)
+  sound hint
+  bar.say("Patch kit ready. It blocks the next hit.")
+  bar.setGadgets([<button.gadget aria-label="Use Bomb. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb"])
+  keys enemyHp,struck,fog,counts,shield
+  battle enemyHp=43 struck+=["r6"] counts={"gadgetsUsed":1} shield=1
+  run hp 999 active gadgets ["bomb"] dom ff64ca4a
+3 r8
+  view.setFog({r3,10 c}, [r8])
+  bar.setEnemyHp(42)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([<button.gadget aria-label="Use Bomb. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb"])
+  complete r8: "Generator Gremlin takes 1 damage, 42 HP left. You solved through the fog: row 9 revealed."
+  battle enemyHp=42 struck+=["r8"] fog={"rows":[3,10],"cols":[]}
+  run hp 999 active gadgets ["bomb"] dom 6c1d91ec
+4 r9
+  bar.setEnemyHp(41)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([<button.gadget aria-label="Use Bomb. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb"])
+  complete r9: "Generator Gremlin takes 1 damage, 41 HP left."
+  battle enemyHp=41 struck+=["r9"]
+  run hp 999 active gadgets ["bomb"] dom f82c29c1
+5 r12
+  bar.setForm("Overcharged Gremlin", "overcharged-gremlin")
+  bar.phaseBanner("Overcharged Gremlin", "Lights out, tinkerer!")
+  view.setFog({r3,10,1,14,4 c})
+  sound phase
+  bar.setEnemyHp(40)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([<button.gadget aria-label="Use Bomb. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb"])
+  complete r12: "Generator Gremlin takes 1 damage, 40 HP left. Generator Gremlin becomes Overcharged Gremlin! Lights out, tinkerer! 3 lines go dark."
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setTurn(null)
+  keys enemyHp,struck,fog,counts,shield,phase
+  battle enemyHp=40 struck+=["r12"] fog={"rows":[3,10,1,14,4],"cols":[]} phase=1
+  run hp 999 active gadgets ["bomb"] dom 89a599a2
+6 c2
+  bar.setEnemyHp(39)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([<button.gadget aria-label="Use Bomb. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb"])
+  complete c2: "Generator Gremlin takes 1 damage, 39 HP left."
+  use Bomb
+  bar.setForm("Blackout Gremlin", "blackout-gremlin")
+  bar.phaseBanner("Blackout Gremlin", "Who needs clues? Not you!")
+  view.setFog({r3,10,1,14,4 c})
+  sound phase
+  bar.setEnemyHp(37)
+  bar.hitEnemy(2)
+  sound finisher
+  bar.setGadgets([])
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setTurn(null)
+  game.reveal([0 1 2 3 4 15 16 17 18 19 30 31 32 33 34 45 46 47 48 49 60 61 62 63 64])
+  view.flashBlast({"cells":[0,1,2,3,4,15,16,17,18,19,30,31,32,33,34,45,46,47,48,49,60,61,62,63,64],"row":2,"col":2})
+  controls.refresh()
+  bar.setEnemyHp(36)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c3: "Generator Gremlin takes 1 damage, 36 HP left."
+  bar.say("Bomb! Blackout Gremlin takes 2 damage, 37 HP left. The blast reveals 20 cells around row 3, column 3. Overcharged Gremlin becomes Blackout Gremlin! Who needs clues? Not you!")
+  battle enemyHp=36 struck+=["c2","c3"] counts={"gadgetsUsed":2,"bombsUsed":1} phase=2
+  run hp 999 active gadgets [] dom 123f4448
+7 c12
+  bar.setEnemyHp(35)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c12: "Generator Gremlin takes 1 damage, 35 HP left."
+  battle enemyHp=35 struck+=["c12"]
+  run hp 999 active gadgets [] dom 7f7d229b
+8 r10
+  view.setFog({r3,1,14,4 c}, [r10])
+  bar.setEnemyHp(34)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r10: "Generator Gremlin takes 1 damage, 34 HP left. You solved through the fog: row 11 revealed."
+  battle enemyHp=34 struck+=["r10"] fog={"rows":[3,1,14,4],"cols":[]}
+  run hp 999 active gadgets [] dom 4d541bab
+9 r14
+  view.setFog({r3,1,4 c}, [r14])
+  bar.setEnemyHp(33)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r14: "Generator Gremlin takes 1 damage, 33 HP left. You solved through the fog: row 15 revealed."
+  battle enemyHp=33 struck+=["r14"] fog={"rows":[3,1,4],"cols":[]}
+  run hp 999 active gadgets [] dom 9c21dc76
+10 r0
+  bar.setShield(0)
+  bar.block()
+  sound block
+  mistake: "Wrong cell! Blackout Gremlin attacks, but the patch kit blocks it."
+  bar.setEnemyHp(32)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r0: "Generator Gremlin takes 1 damage, 32 HP left."
+  battle enemyHp=32 struck+=["r0"] counts={"gadgetsUsed":2,"bombsUsed":1,"wrongFills":1} shield=0
+  run hp 999 active gadgets [] dom 5113ac8b
+11 r1
+  view.setFog({r3,4 c}, [r1])
+  bar.setEnemyHp(31)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r1: "Generator Gremlin takes 1 damage, 31 HP left. You solved through the fog: row 2 revealed."
+  battle enemyHp=31 struck+=["r1"] fog={"rows":[3,4],"cols":[]}
+  run hp 999 active gadgets [] dom 251c7323
+12 r11
+  bar.setEnemyHp(30)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r11: "Generator Gremlin takes 1 damage, 30 HP left."
+  battle enemyHp=30 struck+=["r11"]
+  run hp 999 active gadgets [] dom 784bd2c6
+13 r13
+  bar.setEnemyHp(29)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r13: "Generator Gremlin takes 1 damage, 29 HP left."
+  battle enemyHp=29 struck+=["r13"]
+  run hp 999 active gadgets [] dom b0ce0e7c
+14 c11
+  bar.setEnemyHp(28)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c11: "Generator Gremlin takes 1 damage, 28 HP left."
+  battle enemyHp=28 struck+=["c11"]
+  run hp 999 active gadgets [] dom 86e7432f
+15 r5
+  bar.setEnemyHp(26)
+  bar.hitEnemy(2)
+  sound strike
+  bar.setGadgets([])
+  complete r5 c4: "Generator Gremlin takes 2 damage, 26 HP left."
+  battle enemyHp=26 struck+=["r5","c4"]
+  run hp 999 active gadgets [] dom a6a38aff
+16 r2
+  bar.setEnemyHp(25)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r2: "Generator Gremlin takes 1 damage, 25 HP left."
+  battle enemyHp=25 struck+=["r2"]
+  run hp 999 active gadgets [] dom e75df7cb
+17 c5
+  bar.setEnemyHp(24)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c5: "Generator Gremlin takes 1 damage, 24 HP left."
+  battle enemyHp=24 struck+=["c5"]
+  run hp 999 active gadgets [] dom 851e2dbc
+18 c7
+  bar.setEnemyHp(23)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c7: "Generator Gremlin takes 1 damage, 23 HP left."
+  battle enemyHp=23 struck+=["c7"]
+  run hp 999 active gadgets [] dom 977f9c54
+19 c9
+  bar.setEnemyHp(22)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c9: "Generator Gremlin takes 1 damage, 22 HP left."
+  battle enemyHp=22 struck+=["c9"]
+  run hp 999 active gadgets [] dom ae4147c9
+20 r4
+  bar.setPlayerHp(995, 999)
+  bar.hitPlayer(4)
+  mistake: "Wrong cell! Blackout Gremlin hits you for 4. 995 HP left."
+  view.setFog({r3 c}, [r4])
+  bar.setEnemyHp(21)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r4: "Generator Gremlin takes 1 damage, 21 HP left. You solved through the fog: row 5 revealed."
+  battle enemyHp=21 struck+=["r4"] fog={"rows":[3],"cols":[]} counts={"gadgetsUsed":2,"bombsUsed":1,"wrongFills":2}
+  run hp 995 active gadgets [] dom 08d078a2
+21 c10
+  bar.setEnemyHp(20)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c10: "Generator Gremlin takes 1 damage, 20 HP left."
+  battle enemyHp=20 struck+=["c10"]
+  run hp 995 active gadgets [] dom 660c5a80
+22 r3
+  view.setFog({r c}, [r3])
+  bar.setEnemyHp(17)
+  bar.hitEnemy(3)
+  sound strike
+  bar.setGadgets([])
+  complete r3 c6 c8: "Generator Gremlin takes 3 damage, 17 HP left. You solved through the fog: row 4 revealed."
+  bar.setGadgets([])
+  land 17 as Blackout Gremlin
+  battle enemyHp=17 struck+=["r3","c6","c8"] fog={"rows":[],"cols":[]}
+  run hp 995 active gadgets [] dom 173bd441
+saved {"runId":"harness","node":0,"hp":995,"maxHp":999,"gadgets":[],"status":"active","mode":"hearts","tally":{"wrongFills":0,"zaps":0,"wrongAccusations":0,"gadgetsUsed":0,"bombsUsed":0,"spongesUsed":0,"hintsUsed":0},"battle":{"enemyHp":17,"struck":["r7","r6","r8","r9","r12","c2","c3","c12","r10","r14","r0","r1","r11","r13","c11","r5","c4","r2","c5","c7","c9","r4","c10","r3","c6","c8"],"fog":{"rows":[],"cols":[]},"counts":{"gadgetsUsed":2,"bombsUsed":1,"wrongFills":2},"shield":0,"phase":2}}"
+`;
+
+exports[`fight hooks in jsdom (#163) > mimic 1`] = `
+"start
+  bar.setForm("Mimic", "mimic")
+  bar.setPlayerHp(999, 999)
+  bar.setShield(0)
+  bar.setInfo(<button.powers-info aria-label="What can Mimic do?" aria-expanded="false">"ⓘ")
+  bar.setGadgets([])
+  view.setInk([])
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setTurn(null)
+  run hp 999 active gadgets [] dom b63c5916
+1 r7
+  bar.setEnemyHp(44)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r7: "Mimic takes 1 damage, 44 HP left."
+  keys enemyHp,struck
+  battle enemyHp=44 struck=["r7"]
+  run hp 999 active gadgets [] dom c3dc8db3
+2 r6
+  bar.setEnemyHp(43)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r6: "Mimic takes 1 damage, 43 HP left."
+  battle enemyHp=43 struck+=["r6"]
+  run hp 999 active gadgets [] dom dfde67fb
+3 r8
+  bar.setEnemyHp(42)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r8: "Mimic takes 1 damage, 42 HP left."
+  battle enemyHp=42 struck+=["r8"]
+  run hp 999 active gadgets [] dom 63ba89a7
+4 r0
+  bar.setEnemyHp(41)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r0: "Mimic takes 1 damage, 41 HP left."
+  battle enemyHp=41 struck+=["r0"]
+  run hp 999 active gadgets [] dom 25edda8c
+5 r10
+  bar.setEnemyHp(40)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r10: "Mimic takes 1 damage, 40 HP left."
+  battle enemyHp=40 struck+=["r10"]
+  run hp 999 active gadgets [] dom 9d31f0a8
+6 r12
+  bar.setEnemyHp(39)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r12: "Mimic takes 1 damage, 39 HP left."
+  battle enemyHp=39 struck+=["r12"]
+  run hp 999 active gadgets [] dom 6271fdcf
+7 c6
+  bar.setTip(<div.tip-card role="status">"Swaps. Two lines get wiped clean and boxed with . Fill them in again.Got it")
+  bar.setForm("Mimic", "mimic")
+  bar.phaseBanner("Mimic", "Shell game!")
+  sound phase
+  bar.setEnemyHp(38)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c6: "Mimic takes 1 damage, 38 HP left. Shell game!"
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setTurn(null)
+  game.wipe([1 91 106 121 151 181 2 92 107 122 152 182])
+  view.setWiped({r c1,2})
+  controls.refresh()
+  view.flashSwap("col", 1, 2)
+  sound phase
+  bar.say("Mimic swapped columns 2 and 3 and ate 12 marks! Fill them in again.")
+  keys enemyHp,struck,phase,wiped
+  battle enemyHp=38 struck+=["c6"] phase=1 wiped={"rows":[],"cols":[1,2]}
+  run hp 999 active gadgets [] dom 8eaf8330
+8 r7
+  complete r7: undefined
+  run hp 999 active gadgets [] dom 87f15509
+9 r6
+  complete r6: undefined
+  run hp 999 active gadgets [] dom 55b225a4
+10 r8
+  bar.setPlayerHp(997, 999)
+  bar.hitPlayer(2)
+  mistake: "Wrong cell! Mimic hits you for 2. 997 HP left."
+  complete r8: undefined
+  keys enemyHp,struck,phase,wiped,counts
+  battle counts={"wrongFills":1}
+  run hp 997 active gadgets [] dom 6a997e67
+11 r10
+  complete r10: undefined
+  run hp 997 active gadgets [] dom c2647ba0
+12 r12
+  complete r12: undefined
+  run hp 997 active gadgets [] dom fb5e0835
+13 c8
+  bar.setEnemyHp(37)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c8: "Mimic takes 1 damage, 37 HP left."
+  battle enemyHp=37 struck+=["c8"]
+  run hp 997 active gadgets [] dom 67c6ce89
+14 r1
+  bar.setEnemyHp(36)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r1: "Mimic takes 1 damage, 36 HP left."
+  battle enemyHp=36 struck+=["r1"]
+  run hp 997 active gadgets [] dom 0dbeacfc
+15 r2
+  bar.setEnemyHp(35)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r2: "Mimic takes 1 damage, 35 HP left."
+  battle enemyHp=35 struck+=["r2"]
+  run hp 997 active gadgets [] dom 9d3ec6b4
+16 r4
+  bar.setEnemyHp(34)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r4: "Mimic takes 1 damage, 34 HP left."
+  battle enemyHp=34 struck+=["r4"]
+  run hp 997 active gadgets [] dom be77f5ac
+17 r11
+  bar.setEnemyHp(33)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r11: "Mimic takes 1 damage, 33 HP left."
+  battle enemyHp=33 struck+=["r11"]
+  run hp 997 active gadgets [] dom 563a2687
+18 r14
+  bar.setEnemyHp(32)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r14: "Mimic takes 1 damage, 32 HP left."
+  battle enemyHp=32 struck+=["r14"]
+  run hp 997 active gadgets [] dom cdaead6c
+19 c2
+  bar.setForm("Mimic", "mimic")
+  bar.phaseBanner("Mimic", "Now you see it...")
+  sound phase
+  view.setWiped({r c1})
+  bar.setEnemyHp(31)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c2: "Mimic takes 1 damage, 31 HP left. Now you see it..."
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setTurn(null)
+  game.wipe([1 16 31 61 91 106 121 151 166 181 211 3 18 33 63 93 108 123 153 168 183 213])
+  view.setWiped({r c1,3})
+  controls.refresh()
+  view.flashSwap("col", 1, 3)
+  sound phase
+  bar.say("Mimic swapped columns 2 and 4 and ate 22 marks! Fill them in again.")
+  battle enemyHp=31 struck+=["c2"] phase=2 wiped={"rows":[],"cols":[1,3]}
+  run hp 997 active gadgets [] dom 48c64c0e
+20 r7
+  bar.setPlayerHp(995, 999)
+  bar.hitPlayer(2)
+  mistake: "Wrong cell! Mimic hits you for 2. 995 HP left."
+  complete r7: undefined
+  battle counts={"wrongFills":2}
+  run hp 995 active gadgets [] dom 189c4f4c
+21 r6
+  complete r6: undefined
+  run hp 995 active gadgets [] dom 6ccacaab
+22 r8
+  complete r8: undefined
+  run hp 995 active gadgets [] dom a4848144
+23 r0
+  complete r0: undefined
+  run hp 995 active gadgets [] dom f26f07a0
+24 r10
+  complete r10: undefined
+  run hp 995 active gadgets [] dom c82f7e57
+25 r12
+  complete r12: undefined
+  run hp 995 active gadgets [] dom 7e38931c
+26 r1
+  complete r1: undefined
+  run hp 995 active gadgets [] dom a69ee3cf
+27 r2
+  complete r2: undefined
+  run hp 995 active gadgets [] dom 96728d74
+28 r4
+  complete r4: undefined
+  run hp 995 active gadgets [] dom bd061c5f
+29 r11
+  complete r11: undefined
+  run hp 995 active gadgets [] dom def2ccec
+30 r14
+  bar.setPlayerHp(993, 999)
+  bar.hitPlayer(2)
+  mistake: "Wrong cell! Mimic hits you for 2. 993 HP left."
+  complete r14: undefined
+  battle counts={"wrongFills":3}
+  run hp 993 active gadgets [] dom a1ade4a6
+31 c12
+  bar.setEnemyHp(30)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c12: "Mimic takes 1 damage, 30 HP left."
+  battle enemyHp=30 struck+=["c12"]
+  run hp 993 active gadgets [] dom 65a09b48
+32 c1
+  view.setWiped({r c3})
+  bar.setEnemyHp(29)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c1: "Mimic takes 1 damage, 29 HP left."
+  battle enemyHp=29 struck+=["c1"] wiped={"rows":[],"cols":[3]}
+  run hp 993 active gadgets [] dom 1a0ea842
+33 c4
+  bar.setEnemyHp(28)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c4: "Mimic takes 1 damage, 28 HP left."
+  battle enemyHp=28 struck+=["c4"]
+  run hp 993 active gadgets [] dom 831f6b7a
+34 c5
+  bar.setEnemyHp(27)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c5: "Mimic takes 1 damage, 27 HP left."
+  battle enemyHp=27 struck+=["c5"]
+  run hp 993 active gadgets [] dom e9540ebc
+35 c7
+  bar.setEnemyHp(26)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c7: "Mimic takes 1 damage, 26 HP left."
+  battle enemyHp=26 struck+=["c7"]
+  run hp 993 active gadgets [] dom c9153705
+36 c9
+  bar.setEnemyHp(25)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c9: "Mimic takes 1 damage, 25 HP left."
+  battle enemyHp=25 struck+=["c9"]
+  run hp 993 active gadgets [] dom ca966fce
+37 c10
+  bar.setForm("Hungry Mimic", "hungry-mimic")
+  bar.phaseBanner("Hungry Mimic", "Which row was it again?")
+  sound phase
+  bar.setEnemyHp(24)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c10: "Mimic takes 1 damage, 24 HP left. Mimic becomes Hungry Mimic! Which row was it again?"
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setTurn(null)
+  game.wipe([3 18 33 63 93 108 123 153 168 183 213 11 26 41 71 101 116 131 161 176 191 221])
+  view.setWiped({r c3,11})
+  controls.refresh()
+  view.flashSwap("col", 3, 11)
+  sound phase
+  bar.say("Hungry Mimic swapped columns 4 and 12 and ate 22 marks! Fill them in again.")
+  battle enemyHp=24 struck+=["c10"] phase=3 wiped={"rows":[],"cols":[3,11]}
+  run hp 993 active gadgets [] dom 0da4245b
+38 r6
+  complete r6: undefined
+  run hp 993 active gadgets [] dom 8d1b15d0
+39 r8
+  complete r8: undefined
+  run hp 993 active gadgets [] dom ec803259
+40 r0
+  bar.setPlayerHp(990, 999)
+  bar.hitPlayer(3)
+  mistake: "Wrong cell! Hungry Mimic hits you for 3. 990 HP left."
+  complete r0: undefined
+  battle counts={"wrongFills":4}
+  run hp 990 active gadgets [] dom 12347098
+41 r10
+  complete r10: undefined
+  run hp 990 active gadgets [] dom 1aace40d
+42 r12
+  complete r12: undefined
+  run hp 990 active gadgets [] dom 2fc56860
+43 r1
+  complete r1: undefined
+  run hp 990 active gadgets [] dom 3edffd3b
+44 r2
+  complete r2: undefined
+  run hp 990 active gadgets [] dom 6493b516
+45 r11
+  complete r11: undefined
+  run hp 990 active gadgets [] dom db1309df
+46 r14
+  complete r14: undefined
+  run hp 990 active gadgets [] dom 3a7c8312
+47 c13
+  bar.setEnemyHp(23)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c13: "Mimic takes 1 damage, 23 HP left."
+  battle enemyHp=23 struck+=["c13"]
+  run hp 990 active gadgets [] dom ab424dda
+48 r3
+  bar.setEnemyHp(22)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r3: "Mimic takes 1 damage, 22 HP left."
+  battle enemyHp=22 struck+=["r3"]
+  run hp 990 active gadgets [] dom 305e22f1
+49 r5
+  bar.setEnemyHp(21)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r5: "Mimic takes 1 damage, 21 HP left."
+  battle enemyHp=21 struck+=["r5"]
+  run hp 990 active gadgets [] dom f0fbc87d
+50 r9
+  bar.setPlayerHp(987, 999)
+  bar.hitPlayer(3)
+  mistake: "Wrong cell! Hungry Mimic hits you for 3. 987 HP left."
+  bar.setEnemyHp(20)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r9: "Mimic takes 1 damage, 20 HP left."
+  battle enemyHp=20 struck+=["r9"] counts={"wrongFills":5}
+  run hp 987 active gadgets [] dom e27c8b44
+51 r13
+  view.setWiped({r c})
+  bar.setEnemyHp(17)
+  bar.hitEnemy(3)
+  sound strike
+  bar.setGadgets([])
+  complete r13 c3 c11: "Mimic takes 3 damage, 17 HP left."
+  bar.setGadgets([])
+  land 17 as Hungry Mimic
+  battle enemyHp=17 struck+=["r13","c3","c11"] wiped={"rows":[],"cols":[]}
+  run hp 987 active gadgets [] dom 00a6a464
+saved {"runId":"harness","node":0,"hp":987,"maxHp":999,"gadgets":[],"status":"active","mode":"hearts","tally":{"wrongFills":0,"zaps":0,"wrongAccusations":0,"gadgetsUsed":0,"bombsUsed":0,"spongesUsed":0,"hintsUsed":0},"battle":{"enemyHp":17,"struck":["r7","r6","r8","r0","r10","r12","c6","c8","r1","r2","r4","r11","r14","c2","c12","c1","c4","c5","c7","c9","c10","c13","r3","r5","r9","r13","c3","c11"],"phase":3,"wiped":{"rows":[],"cols":[]},"counts":{"wrongFills":5}}}"
+`;
+
+exports[`fight hooks in jsdom (#163) > old-wyrm 1`] = `
+"start
+  bar.setForm("The Old Wyrm", "old-wyrm")
+  bar.setPlayerHp(999, 999)
+  bar.setShield(0)
+  bar.setInfo(<button.powers-info aria-label="What can The Old Wyrm do?" aria-expanded="false">"ⓘ")
+  bar.setGadgets([<button.gadget.call-out aria-pressed="false" title="Accuse a clue of being forged">"Call out" <button.gadget aria-label="Use Bomb, 2 held. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb ×2"])
+  view.setScramble({r c6})
+  view.setWeakPoints({r17 c2,14})
+  bar.setArmor(3)
+  view.setFakes(Map{r6:[13] r18:[19]})
+  view.setSuspects({r6,11,18 c})
+  bar.setFakes(2)
+  view.setInk([])
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setArmorLines(0, 5)
+  bar.setTurn(null)
+  bar.setTip(<div.tip-card role="status">"Scrambled clues. The  clues have the right numbers in the wrong order. Finishing the line puts them back.Got it")
+  run hp 999 active gadgets ["bomb" "bomb"] dom cc044d46
+1 c19
+  bar.setArmorLines(1, 5)
+  complete c19: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  view.pickClue(fn)
+  bar.say("Tap the 🎭 clue you think is forged.")
+  bar.setGadgets([<button.gadget.call-out.active aria-pressed="true" title="Accuse a clue of being forged">"Pick a clue…" <button.gadget aria-label="Use Bomb, 2 held. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb ×2"])
+  bar.say("Row 1 isn't a suspect. Pick a 🎭 clue, or tap Call out again to cancel.")
+  view.pickClue(null)
+  view.setFakes(Map{r18:[19]}, [r6])
+  view.setSuspects({r11,18 c})
+  bar.setFakes(1)
+  bar.setEnemyHp(55)
+  bar.hitEnemy(5)
+  sound strike
+  controls.refresh()
+  bar.setGadgets([<button.gadget.call-out aria-pressed="false" title="Accuse a clue of being forged">"Call out" <button.gadget aria-label="Use Bomb, 2 held. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb ×2"])
+  bar.say("Caught it! Row 7 was a forgery. The Old Wyrm takes 5 damage, 55 HP left.")
+  view.pickClue(fn)
+  bar.say("Tap the 🎭 clue you think is forged.")
+  bar.setGadgets([<button.gadget.call-out.active aria-pressed="true" title="Accuse a clue of being forged">"Pick a clue…" <button.gadget aria-label="Use Bomb, 2 held. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb ×2"])
+  view.pickClue(null)
+  view.setSuspects({r18 c})
+  sound hit
+  haptic hit
+  bar.setPlayerHp(995, 999)
+  bar.hitPlayer(4)
+  controls.refresh()
+  bar.setGadgets([<button.gadget.call-out aria-pressed="false" title="Accuse a clue of being forged">"Call out" <button.gadget aria-label="Use Bomb, 2 held. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb ×2"])
+  bar.say("Row 12 was honest! The Old Wyrm hits you for 4. 995 HP left.")
+  view.pickClue(fn)
+  bar.say("Tap the 🎭 clue you think is forged.")
+  bar.setGadgets([<button.gadget.call-out.active aria-pressed="true" title="Accuse a clue of being forged">"Pick a clue…" <button.gadget aria-label="Use Bomb, 2 held. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb ×2"])
+  view.pickClue(null)
+  bar.setForm("The Old Wyrm", "old-wyrm")
+  bar.phaseBanner("The Old Wyrm", "Its coils shift across the hoard.")
+  view.setScramble({r c6,8,11})
+  sound phase
+  view.setFakes(Map{}, [r18])
+  view.setSuspects({r c})
+  bar.setFakes(0)
+  bar.setEnemyHp(50)
+  bar.hitEnemy(5)
+  sound strike
+  controls.refresh()
+  bar.setGadgets([<button.gadget aria-label="Use Bomb, 2 held. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb ×2"])
+  bar.say("Caught it! Row 19 was a forgery. The Old Wyrm takes 5 damage, 50 HP left. Its coils shift across the hoard. 2 clues scramble.")
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setTurn(null)
+  keys enemyHp,struck,armor,scramble,fakes,suspects,armorLines,counts,phase
+  battle enemyHp=50 struck=["c19"] armor={"rows":[17],"cols":[2,14]} scramble={"rows":[],"cols":[6,8,11]} fakes={"rows":[],"cols":[]} suspects={"rows":[],"cols":[]} armorLines=1 counts={"wrongAccusations":1} phase=1
+  run hp 995 active gadgets ["bomb" "bomb"] dom 953c26a1
+2 r0
+  bar.setArmorLines(2, 5)
+  complete r0: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["r0"] armorLines=2
+  run hp 995 active gadgets ["bomb" "bomb"] dom fa1acfbb
+3 c0
+  bar.setArmorLines(3, 5)
+  complete c0: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  use Bomb
+  bar.setForm("Waking Wyrm", "old-wyrm")
+  bar.phaseBanner("Waking Wyrm", "Mine.")
+  view.setScramble({r c6,8,11})
+  sound phase
+  bar.setEnemyHp(48)
+  bar.hitEnemy(2)
+  sound finisher
+  bar.setGadgets([<button.gadget aria-label="Use Bomb. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb"])
+  bar.setCharge(0, "Warming up · 10 lines")
+  view.setLive(null)
+  bar.setTurn(null)
+  game.reveal([0 1 2 3 4 20 21 22 23 24 40 41 42 43 44 60 61 62 63 64 80 81 82 83 84])
+  view.flashBlast({"cells":[0,1,2,3,4,20,21,22,23,24,40,41,42,43,44,60,61,62,63,64,80,81,82,83,84],"row":2,"col":2})
+  controls.refresh()
+  bar.say("Bomb! Waking Wyrm takes 2 damage, 48 HP left. The blast reveals 16 cells around row 3, column 3. The Old Wyrm becomes Waking Wyrm! Mine. The air starts to crackle. ⚡")
+  keys enemyHp,struck,armor,scramble,fakes,suspects,armorLines,counts,phase,warmUp
+  battle enemyHp=48 struck+=["c0"] armorLines=3 counts={"wrongAccusations":1,"gadgetsUsed":1,"bombsUsed":1} phase=2 warmUp=10
+  run hp 995 active gadgets ["bomb"] dom b096a442
+4 c18
+  bar.setArmorLines(4, 5)
+  bar.setCharge(0, "Warming up · 9 lines")
+  view.setLive(null)
+  complete c18: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["c18"] armorLines=4 warmUp=9
+  run hp 995 active gadgets ["bomb"] dom d24449ae
+5 r1
+  bar.setArmorLines(0, 5)
+  bar.setCharge(0, "Warming up · 8 lines")
+  view.setLive(null)
+  complete r1: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  sound hit
+  haptic hit
+  bar.setPlayerHp(993, 999)
+  bar.hitPlayer(2)
+  controls.refresh()
+  bar.say("🛡 Waking Wyrm's armor hits back! Waking Wyrm hits you for 2. 993 HP left.")
+  battle struck+=["r1"] armorLines=0 warmUp=8
+  run hp 993 active gadgets ["bomb"] dom 9a356515
+6 r9
+  bar.setArmorLines(1, 5)
+  bar.setCharge(0, "Warming up · 7 lines")
+  view.setLive(null)
+  complete r9: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["r9"] armorLines=1 warmUp=7
+  run hp 993 active gadgets ["bomb"] dom e2c57469
+7 r10
+  bar.setArmorLines(2, 5)
+  bar.setCharge(0, "Warming up · 6 lines")
+  view.setLive(null)
+  complete r10: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["r10"] armorLines=2 warmUp=6
+  run hp 993 active gadgets ["bomb"] dom beb50eef
+8 c16
+  bar.setArmorLines(3, 5)
+  bar.setCharge(0, "Warming up · 5 lines")
+  view.setLive(null)
+  complete c16: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["c16"] armorLines=3 warmUp=5
+  run hp 993 active gadgets ["bomb"] dom 0cef61cd
+9 c17
+  bar.setArmorLines(4, 5)
+  bar.setCharge(0, "Warming up · 4 lines")
+  view.setLive(null)
+  complete c17: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["c17"] armorLines=4 warmUp=4
+  run hp 993 active gadgets ["bomb"] dom 594bf9b0
+10 r2
+  bar.setPlayerHp(989, 999)
+  bar.hitPlayer(4)
+  mistake: "Wrong cell! Waking Wyrm hits you for 4. 989 HP left."
+  bar.setArmorLines(0, 5)
+  bar.setCharge(0, "Warming up · 3 lines")
+  view.setLive(null)
+  complete r2: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  sound hit
+  haptic hit
+  bar.setPlayerHp(987, 999)
+  bar.hitPlayer(2)
+  controls.refresh()
+  bar.say("🛡 Waking Wyrm's armor hits back! Waking Wyrm hits you for 2. 987 HP left.")
+  battle struck+=["r2"] armorLines=0 counts={"wrongAccusations":1,"gadgetsUsed":1,"bombsUsed":1,"wrongFills":1} warmUp=3
+  run hp 987 active gadgets ["bomb"] dom 1a240374
+11 r11
+  bar.setArmorLines(1, 5)
+  bar.setCharge(0, "Warming up · 2 lines")
+  view.setLive(null)
+  complete r11: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["r11"] armorLines=1 warmUp=2
+  run hp 987 active gadgets ["bomb"] dom 19765ad4
+12 r8
+  bar.setArmorLines(2, 5)
+  bar.setCharge(0, "Warming up · 1 line")
+  view.setLive(null)
+  complete r8: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["r8"] armorLines=2 warmUp=1
+  run hp 987 active gadgets ["bomb"] dom db66d8cb
+13 c1
+  bar.setArmorLines(3, 5)
+  bar.setCharge(0, "Column 11 · 6 left")
+  view.setLive(c10)
+  sound charged +0.15
+  complete c1: "The armor shrugs it off. Find the 🎯 weak points before it hits back. ⚡ Column 11 is live."
+  keys enemyHp,struck,armor,scramble,fakes,suspects,armorLines,counts,phase,warmUp,live
+  battle struck+=["c1"] armorLines=3 warmUp=0 live={"kind":"col","index":10}
+  run hp 987 active gadgets ["bomb"] dom 53aa16a1
+14 r3
+  bar.setArmorLines(4, 5)
+  bar.setCharge(0.16666666666666666, "Column 11 · 5 left")
+  view.setLive(c10)
+  complete r3: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  keys enemyHp,struck,armor,scramble,fakes,suspects,armorLines,counts,phase,warmUp,live,charged
+  battle struck+=["r3"] armorLines=4 charged=1
+  run hp 987 active gadgets ["bomb"] dom 7a12a072
+15 c15
+  bar.setArmorLines(0, 5)
+  bar.setCharge(0.3333333333333333, "Column 11 · 4 left")
+  view.setLive(c10)
+  complete c15: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  sound hit
+  haptic hit
+  bar.setPlayerHp(985, 999)
+  bar.hitPlayer(2)
+  controls.refresh()
+  bar.say("🛡 Waking Wyrm's armor hits back! Waking Wyrm hits you for 2. 985 HP left.")
+  battle struck+=["c15"] armorLines=0 charged=2
+  run hp 985 active gadgets ["bomb"] dom bbe1a288
+16 r4
+  bar.setArmorLines(1, 5)
+  bar.setCharge(0.5, "Column 11 · 3 left")
+  view.setLive(c10)
+  complete r4: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["r4"] armorLines=1 charged=3
+  run hp 985 active gadgets ["bomb"] dom a3643fce
+17 r7
+  bar.setArmorLines(2, 5)
+  bar.setCharge(0.6666666666666666, "Column 11 · 2 left")
+  view.setLive(c10)
+  complete r7: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["r7"] armorLines=2 charged=4
+  run hp 985 active gadgets ["bomb"] dom 80a37635
+18 r12
+  bar.setArmorLines(3, 5)
+  bar.setCharge(0.8333333333333334, "Column 11 · 1 left")
+  view.setLive(c10)
+  complete r12: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["r12"] armorLines=3 charged=5
+  run hp 985 active gadgets ["bomb"] dom 29fabe73
+19 r17
+  view.setWeakPoints({r c2,14}, [r17])
+  bar.setArmor(2)
+  bar.setEnemyHp(45)
+  bar.hitEnemy(3)
+  sound strike
+  bar.setGadgets([<button.gadget aria-label="Use Bomb. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb"])
+  bar.setArmorLines(3, 5)
+  bar.setCharge(0, "Column 11 · 6 left")
+  view.setLive(c10)
+  sound live +0.5
+  complete r17: "The Old Wyrm takes 3 damage, 45 HP left. Weak point! Triple damage. ⚡ Column 11 is live."
+  bar.zap()
+  sound zap
+  haptic zap
+  bar.setPlayerHp(983, 999)
+  bar.hitPlayer(2)
+  controls.refresh()
+  bar.say("⚡ Waking Wyrm zaps you! Waking Wyrm hits you for 2. 983 HP left.")
+  battle enemyHp=45 struck+=["r17"] armor={"rows":[],"cols":[2,14]} counts={"wrongAccusations":1,"gadgetsUsed":1,"bombsUsed":1,"wrongFills":1,"zaps":1} charged=0
+  run hp 983 active gadgets ["bomb"] dom 17d5d032
+20 c3
+  bar.setPlayerHp(979, 999)
+  bar.hitPlayer(4)
+  mistake: "Wrong cell! Waking Wyrm hits you for 4. 979 HP left."
+  bar.setArmorLines(4, 5)
+  bar.setCharge(0.16666666666666666, "Column 11 · 5 left")
+  view.setLive(c10)
+  complete c3: "The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  battle struck+=["c3"] armorLines=4 counts={"wrongAccusations":1,"gadgetsUsed":1,"bombsUsed":1,"wrongFills":2,"zaps":1} charged=1
+  run hp 979 active gadgets ["bomb"] dom 45f47533
+21 c2
+  view.setWeakPoints({r c14}, [c2])
+  bar.setArmor(1)
+  bar.setEnemyHp(42)
+  bar.hitEnemy(3)
+  sound strike
+  bar.setGadgets([<button.gadget aria-label="Use Bomb. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb"])
+  bar.setArmorLines(4, 5)
+  bar.setCharge(0.3333333333333333, "Column 11 · 4 left")
+  view.setLive(c10)
+  complete c2: "The Old Wyrm takes 3 damage, 42 HP left. Weak point! Triple damage."
+  battle enemyHp=42 struck+=["c2"] armor={"rows":[],"cols":[14]} charged=2
+  run hp 979 active gadgets ["bomb"] dom c64aac36
+22 c8
+  view.setScramble({r c6,11}, [c8])
+  bar.setArmorLines(0, 5)
+  bar.setCharge(0.5, "Column 11 · 3 left")
+  view.setLive(c10)
+  complete c8: "Gears click back into place: column 9 in order. The armor shrugs it off. Find the 🎯 weak points before it hits back."
+  sound hit
+  haptic hit
+  bar.setPlayerHp(977, 999)
+  bar.hitPlayer(2)
+  controls.refresh()
+  bar.say("🛡 Waking Wyrm's armor hits back! Waking Wyrm hits you for 2. 977 HP left.")
+  battle struck+=["c8"] scramble={"rows":[],"cols":[6,11]} armorLines=0 charged=3
+  run hp 977 active gadgets ["bomb"] dom 4aa44e90
+23 c14
+  view.setWeakPoints({r c}, [c14])
+  bar.setArmor(0)
+  bar.armorBreaks()
+  bar.setEnemyHp(39)
+  bar.hitEnemy(3)
+  sound strike
+  bar.setGadgets([<button.gadget aria-label="Use Bomb. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb"])
+  bar.setCharge(0.6666666666666666, "Column 11 · 2 left")
+  view.setLive(c10)
+  complete c14: "The Old Wyrm takes 3 damage, 39 HP left. Weak point! Triple damage. Waking Wyrm's armor breaks! Its hits soften."
+  keys enemyHp,struck,armor,scramble,fakes,suspects,counts,phase,warmUp,live,charged
+  battle enemyHp=39 struck+=["c14"] armor={"rows":[],"cols":[]} armorLines=undefined charged=4
+  run hp 977 active gadgets ["bomb"] dom 662fdb98
+24 r6
+  bar.setEnemyHp(38)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([<button.gadget aria-label="Use Bomb. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb"])
+  bar.setCharge(0.8333333333333334, "Column 11 · 1 left")
+  view.setLive(c10)
+  complete r6: "The Old Wyrm takes 1 damage, 38 HP left."
+  battle enemyHp=38 struck+=["r6"] charged=5
+  run hp 977 active gadgets ["bomb"] dom b2e61e0f
+25 r13
+  bar.setEnemyHp(37)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([<button.gadget aria-label="Use Bomb. Throw it in a fight for 2 damage. The blast reveals part of the board." title="Throw it in a fight for 2 damage. The blast reveals part of the board.">"Bomb"])
+  bar.setCharge(0, "Column 11 · 6 left")
+  view.setLive(c10)
+  sound live +0.5
+  complete r13: "The Old Wyrm takes 1 damage, 37 HP left. ⚡ Column 11 is live."
+  bar.zap()
+  sound zap
+  haptic zap
+  bar.setPlayerHp(975, 999)
+  bar.hitPlayer(2)
+  controls.refresh()
+  bar.say("⚡ Waking Wyrm zaps you! Waking Wyrm hits you for 2. 975 HP left.")
+  use Bomb
+  bar.setForm("Waking Wyrm", "old-wyrm")
+  bar.phaseBanner("Waking Wyrm", "A snort of black smoke rolls over everything.")
+  view.setScramble({r c6,11})
+  sound phase
+  bar.setEnemyHp(35)
+  bar.hitEnemy(2)
+  sound finisher
+  bar.setGadgets([])
+  bar.setCharge(0, "Column 11 · 6 left")
+  view.setLive(c10)
+  bar.setTurn(null)
+  view.setInk([284 285 286 287 304 305 306 307 324 325 326 327])
+  sound phase
+  bar.say("Waking Wyrm squirts ink! 12 cells go dark.")
+  game.reveal([269 270 271 272 273 289 290 291 292 293 309 310 311 312 313 329 330 331 332 333 349 350 351 352 353])
+  view.flashBlast({"cells":[269,270,271,272,273,289,290,291,292,293,309,310,311,312,313,329,330,331,332,333,349,350,351,352,353],"row":15,"col":11})
+  controls.refresh()
+  bar.say("Bomb! Waking Wyrm takes 2 damage, 35 HP left. The blast reveals 15 cells around row 16, column 12. A snort of black smoke rolls over everything.")
+  keys enemyHp,struck,armor,scramble,fakes,suspects,counts,phase,warmUp,live,charged,ink
+  battle enemyHp=35 struck+=["r13"] counts={"wrongAccusations":1,"gadgetsUsed":2,"bombsUsed":2,"wrongFills":2,"zaps":2} phase=3 charged=0 ink=[284,285,286,287,304,305,306,307,324,325,326,327]
+  run hp 975 active gadgets [] dom 04ed4a8d
+26 r16
+  view.setInk([284 285 286 287 304 305 306 307], [324 325 326 327])
+  bar.setEnemyHp(34)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.16666666666666666, "Column 11 · 5 left")
+  view.setLive(c10)
+  complete r16: "The Old Wyrm takes 1 damage, 34 HP left. The ink washes away."
+  battle enemyHp=34 struck+=["r16"] charged=1 ink=[284,285,286,287,304,305,306,307]
+  run hp 975 active gadgets [] dom 817c6c91
+27 c6
+  view.setInk([284 285 287 304 305 307], [286 306])
+  view.setScramble({r c11}, [c6])
+  bar.setEnemyHp(33)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.3333333333333333, "Column 11 · 4 left")
+  view.setLive(c10)
+  complete c6: "The Old Wyrm takes 1 damage, 33 HP left. The ink washes away. Gears click back into place: column 7 in order."
+  battle enemyHp=33 struck+=["c6"] scramble={"rows":[],"cols":[11]} charged=2 ink=[284,285,287,304,305,307]
+  run hp 975 active gadgets [] dom 64bffda1
+28 c7
+  view.setInk([284 285 304 305], [287 307])
+  bar.setEnemyHp(32)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.5, "Column 11 · 3 left")
+  view.setLive(c10)
+  complete c7: "The Old Wyrm takes 1 damage, 32 HP left. The ink washes away."
+  battle enemyHp=32 struck+=["c7"] charged=3 ink=[284,285,304,305]
+  run hp 975 active gadgets [] dom 1e3e1bcf
+29 r5
+  bar.setEnemyHp(31)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.6666666666666666, "Column 11 · 2 left")
+  view.setLive(c10)
+  complete r5: "The Old Wyrm takes 1 damage, 31 HP left."
+  battle enemyHp=31 struck+=["r5"] charged=4
+  run hp 975 active gadgets [] dom 30dc72be
+30 c4
+  bar.setPlayerHp(972, 999)
+  bar.hitPlayer(3)
+  mistake: "Wrong cell! Waking Wyrm hits you for 3. 972 HP left."
+  view.setInk([285 305], [284 304])
+  bar.setEnemyHp(30)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.8333333333333334, "Column 11 · 1 left")
+  view.setLive(c10)
+  complete c4: "The Old Wyrm takes 1 damage, 30 HP left. The ink washes away."
+  battle enemyHp=30 struck+=["c4"] counts={"wrongAccusations":1,"gadgetsUsed":2,"bombsUsed":2,"wrongFills":3,"zaps":2} charged=5 ink=[285,305]
+  run hp 972 active gadgets [] dom b2128074
+31 c5
+  view.setInk([], [285 305])
+  bar.setEnemyHp(27)
+  bar.hitEnemy(3)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0, "Column 11 · 6 left")
+  view.setLive(c10)
+  sound live +0.5
+  complete r14 r15 c5: "The Old Wyrm takes 3 damage, 27 HP left. The ink washes away. ⚡ Column 11 is live."
+  bar.zap()
+  sound zap
+  haptic zap
+  bar.setPlayerHp(970, 999)
+  bar.hitPlayer(2)
+  controls.refresh()
+  bar.say("⚡ Waking Wyrm zaps you! Waking Wyrm hits you for 2. 970 HP left.")
+  battle enemyHp=27 struck+=["r14","r15","c5"] counts={"wrongAccusations":1,"gadgetsUsed":2,"bombsUsed":2,"wrongFills":3,"zaps":3} charged=0 ink=[]
+  run hp 970 active gadgets [] dom 7c929bc4
+32 c13
+  bar.setEnemyHp(26)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.16666666666666666, "Column 11 · 5 left")
+  view.setLive(c10)
+  complete c13: "The Old Wyrm takes 1 damage, 26 HP left."
+  battle enemyHp=26 struck+=["c13"] charged=1
+  run hp 970 active gadgets [] dom 9ade9493
+33 c9
+  bar.setEnemyHp(25)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.3333333333333333, "Column 11 · 4 left")
+  view.setLive(c10)
+  complete c9: "The Old Wyrm takes 1 damage, 25 HP left."
+  battle enemyHp=25 struck+=["c9"] charged=2
+  run hp 970 active gadgets [] dom eda8dbf6
+34 c11
+  bar.setForm("Wrathful Wyrm", "wrathful-wyrm")
+  bar.phaseBanner("Wrathful Wyrm", "ALL OF IT. MINE.")
+  view.setScramble({r c})
+  sound phase
+  view.setScramble({r c}, [c11])
+  bar.setEnemyHp(24)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0.6, "Column 11 · 2 left")
+  view.setLive(c10)
+  complete c11: "The Old Wyrm takes 1 damage, 24 HP left. Gears click back into place: column 12 in order. Waking Wyrm becomes Wrathful Wyrm! ALL OF IT. MINE. The air starts to crackle. ⚡"
+  bar.setCharge(0.6, "Column 11 · 2 left")
+  view.setLive(c10)
+  bar.setTurn(null)
+  view.setInk([370 372 390 392])
+  sound phase
+  bar.say("Wrathful Wyrm squirts ink! 4 cells go dark.")
+  battle enemyHp=24 struck+=["c11"] scramble={"rows":[],"cols":[]} phase=4 charged=3 ink+=[370,372,390,392]
+  run hp 970 active gadgets [] dom 98962f8c
+35 c12
+  view.setInk([390], [370 372 392])
+  bar.setEnemyHp(22)
+  bar.hitEnemy(2)
+  sound strike
+  bar.setGadgets([])
+  bar.setCharge(0, "Row 20 · 5 left")
+  view.setLive(r19)
+  sound live +0.5
+  complete r18 c12: "The Old Wyrm takes 2 damage, 22 HP left. The ink washes away. ⚡ Row 20 is live."
+  bar.zap()
+  sound zap
+  haptic zap
+  bar.setPlayerHp(968, 999)
+  bar.hitPlayer(2)
+  controls.refresh()
+  bar.say("⚡ Wrathful Wyrm zaps you! Wrathful Wyrm hits you for 2. 968 HP left.")
+  battle enemyHp=22 struck+=["r18","c12"] counts={"wrongAccusations":1,"gadgetsUsed":2,"bombsUsed":2,"wrongFills":3,"zaps":4} live={"kind":"row","index":19} charged=0 ink=[390]
+  run hp 968 active gadgets [] dom 79d6e970
+36 c10
+  view.setInk([], [390])
+  bar.setEnemyHp(20)
+  bar.hitEnemy(2)
+  sound strike
+  bar.setGadgets([])
+  sound phase
+  bar.setCharge(0, "5 left")
+  view.setLive(null)
+  complete r19 c10: "The Old Wyrm takes 2 damage, 20 HP left. The ink washes away. ⚡ Grounded! The charge drains away."
+  bar.setGadgets([])
+  land 20 as Wrathful Wyrm
+  keys enemyHp,struck,armor,scramble,fakes,suspects,counts,phase,warmUp,charged,ink
+  battle enemyHp=20 struck+=["r19","c10"] live=undefined ink=[]
+  run hp 968 active gadgets [] dom b2a652ee
+saved {"runId":"harness","node":0,"hp":968,"maxHp":999,"gadgets":[],"status":"active","mode":"hearts","tally":{"wrongFills":0,"zaps":0,"wrongAccusations":0,"gadgetsUsed":0,"bombsUsed":0,"spongesUsed":0,"hintsUsed":0},"battle":{"enemyHp":20,"struck":["c19","r0","c0","c18","r1","r9","r10","c16","c17","r2","r11","r8","c1","r3","c15","r4","r7","r12","r17","c3","c2","c8","c14","r6","r13","r16","c6","c7","r5","c4","r14","r15","c5","c13","c9","c11","r18","c12","r19","c10"],"armor":{"rows":[],"cols":[]},"scramble":{"rows":[],"cols":[]},"fakes":{"rows":[],"cols":[]},"suspects":{"rows":[],"cols":[]},"counts":{"wrongAccusations":1,"gadgetsUsed":2,"bombsUsed":2,"wrongFills":3,"zaps":4},"phase":4,"warmUp":0,"charged":0,"ink":[]}}"
+`;
+
+exports[`fight hooks in jsdom (#163) > ostrander 1`] = `
+"start
+  bar.setForm("Professor Ostrander", "ostrander")
+  bar.setPlayerHp(999, 999)
+  bar.setShield(0)
+  bar.setInfo(<button.powers-info aria-label="What can Professor Ostrander do?" aria-expanded="false">"ⓘ")
+  bar.setGadgets([<button.gadget.call-out aria-pressed="false" title="Accuse a clue of being forged">"Call out"])
+  view.setScramble({r c6})
+  view.setFakes(Map{r10:[7 4] r17:[7 4]})
+  view.setSuspects({r4,10,17 c})
+  bar.setFakes(2)
+  view.setInk([])
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setTurn(null)
+  bar.setTip(<div.tip-card role="status">"Scrambled clues. The  clues have the right numbers in the wrong order. Finishing the line puts them back.Got it")
+  run hp 999 active gadgets [] dom 9260f1d7
+1 r0
+  bar.setEnemyHp(59)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([<button.gadget.call-out aria-pressed="false" title="Accuse a clue of being forged">"Call out"])
+  complete r0: "Professor Ostrander takes 1 damage, 59 HP left."
+  view.pickClue(fn)
+  bar.say("Tap the 🎭 clue you think is forged.")
+  bar.setGadgets([<button.gadget.call-out.active aria-pressed="true" title="Accuse a clue of being forged">"Pick a clue…"])
+  bar.say("Row 1 isn't a suspect. Pick a 🎭 clue, or tap Call out again to cancel.")
+  view.pickClue(null)
+  view.setSuspects({r10,17 c})
+  sound hit
+  haptic hit
+  bar.setPlayerHp(997, 999)
+  bar.hitPlayer(2)
+  controls.refresh()
+  bar.setGadgets([<button.gadget.call-out aria-pressed="false" title="Accuse a clue of being forged">"Call out"])
+  bar.say("Row 5 was honest! Professor Ostrander hits you for 2. 997 HP left.")
+  view.pickClue(fn)
+  bar.say("Tap the 🎭 clue you think is forged.")
+  bar.setGadgets([<button.gadget.call-out.active aria-pressed="true" title="Accuse a clue of being forged">"Pick a clue…"])
+  view.pickClue(null)
+  bar.setForm("Professor Emerita", "ostrander")
+  bar.phaseBanner("Professor Emerita", "Your figures do not add up.")
+  view.setScramble({r c6,10,16})
+  sound phase
+  view.setFakes(Map{r17:[7 4]}, [r10])
+  view.setSuspects({r17 c})
+  bar.setFakes(1)
+  bar.setEnemyHp(54)
+  bar.hitEnemy(5)
+  sound strike
+  controls.refresh()
+  bar.setGadgets([<button.gadget.call-out aria-pressed="false" title="Accuse a clue of being forged">"Call out"])
+  bar.say("Caught it! Row 11 was a forgery. Professor Emerita takes 5 damage, 54 HP left. Professor Ostrander becomes Professor Emerita! Your figures do not add up. 2 clues scramble.")
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setTurn(null)
+  view.pickClue(fn)
+  bar.say("Tap the 🎭 clue you think is forged.")
+  bar.setGadgets([<button.gadget.call-out.active aria-pressed="true" title="Accuse a clue of being forged">"Pick a clue…"])
+  view.pickClue(null)
+  bar.setForm("Professor Emerita", "ostrander")
+  bar.phaseBanner("Professor Emerita", "I think you will find these belong the other way round.")
+  view.setScramble({r c6,10,16})
+  sound phase
+  view.setFakes(Map{}, [r17])
+  view.setSuspects({r c})
+  bar.setFakes(0)
+  bar.setEnemyHp(49)
+  bar.hitEnemy(5)
+  sound strike
+  controls.refresh()
+  bar.setGadgets([])
+  bar.say("Caught it! Row 18 was a forgery. Professor Emerita takes 5 damage, 49 HP left. I think you will find these belong the other way round.")
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setTurn(null)
+  game.wipe([0 1])
+  view.setWiped({r c0,1})
+  controls.refresh()
+  view.flashSwap("col", 0, 1)
+  sound phase
+  bar.say("Professor Emerita swapped columns 1 and 2 and ate 2 marks! Fill them in again.")
+  keys enemyHp,struck,scramble,fakes,suspects,counts,phase,wiped
+  battle enemyHp=49 struck=["r0"] scramble={"rows":[],"cols":[6,10,16]} fakes={"rows":[],"cols":[]} suspects={"rows":[],"cols":[]} counts={"wrongAccusations":1} phase=2 wiped={"rows":[],"cols":[0,1]}
+  run hp 997 active gadgets [] dom 43ef2cd9
+2 c0
+  view.setWiped({r c1})
+  bar.setEnemyHp(48)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c0: "Professor Ostrander takes 1 damage, 48 HP left."
+  battle enemyHp=48 struck+=["c0"] wiped={"rows":[],"cols":[1]}
+  run hp 997 active gadgets [] dom 9fde19f5
+3 c2
+  bar.setEnemyHp(47)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c2: "Professor Ostrander takes 1 damage, 47 HP left."
+  battle enemyHp=47 struck+=["c2"]
+  run hp 997 active gadgets [] dom ce85890c
+4 c17
+  bar.setEnemyHp(46)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c17: "Professor Ostrander takes 1 damage, 46 HP left."
+  battle enemyHp=46 struck+=["c17"]
+  run hp 997 active gadgets [] dom 3e395d99
+5 r5
+  bar.setEnemyHp(45)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r5: "Professor Ostrander takes 1 damage, 45 HP left."
+  battle enemyHp=45 struck+=["r5"]
+  run hp 997 active gadgets [] dom 85ac8c02
+6 c1
+  view.setWiped({r c})
+  bar.setEnemyHp(44)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c1: "Professor Ostrander takes 1 damage, 44 HP left."
+  battle enemyHp=44 struck+=["c1"] wiped={"rows":[],"cols":[]}
+  run hp 997 active gadgets [] dom d54257fe
+7 r12
+  bar.setEnemyHp(43)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r12: "Professor Ostrander takes 1 damage, 43 HP left."
+  battle enemyHp=43 struck+=["r12"]
+  run hp 997 active gadgets [] dom dc584b09
+8 r14
+  bar.setForm("Professor Emerita", "ostrander")
+  bar.phaseBanner("Professor Emerita", "Retracted.")
+  view.setScramble({r c6,10,16})
+  sound phase
+  bar.setEnemyHp(42)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r14: "Professor Ostrander takes 1 damage, 42 HP left. Retracted."
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setTurn(null)
+  view.setInk([23 24 25 26 43 44 45 46 63 64 65 66 83 84 85 86])
+  sound phase
+  bar.say("Professor Emerita squirts ink! 16 cells go dark.")
+  keys enemyHp,struck,scramble,fakes,suspects,counts,phase,wiped,ink
+  battle enemyHp=42 struck+=["r14"] phase=3 ink=[23,24,25,26,43,44,45,46,63,64,65,66,83,84,85,86]
+  run hp 997 active gadgets [] dom 1648581c
+9 c19
+  bar.setEnemyHp(41)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c19: "Professor Ostrander takes 1 damage, 41 HP left."
+  battle enemyHp=41 struck+=["c19"]
+  run hp 997 active gadgets [] dom 94d49a15
+10 c3
+  bar.setPlayerHp(994, 999)
+  bar.hitPlayer(3)
+  mistake: "Wrong cell! Professor Emerita hits you for 3. 994 HP left."
+  view.setInk([24 25 26 44 45 46 64 65 66 84 85 86], [23 43 63 83])
+  bar.setEnemyHp(40)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c3: "Professor Ostrander takes 1 damage, 40 HP left. The ink washes away."
+  battle enemyHp=40 struck+=["c3"] counts={"wrongAccusations":1,"wrongFills":1} ink=[24,25,26,44,45,46,64,65,66,84,85,86]
+  run hp 994 active gadgets [] dom e41bcc43
+11 c16
+  view.setScramble({r c6,10}, [c16])
+  bar.setEnemyHp(39)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c16: "Professor Ostrander takes 1 damage, 39 HP left. Gears click back into place: column 17 in order."
+  battle enemyHp=39 struck+=["c16"] scramble={"rows":[],"cols":[6,10]}
+  run hp 994 active gadgets [] dom 7180987f
+12 r7
+  bar.setEnemyHp(38)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r7: "Professor Ostrander takes 1 damage, 38 HP left."
+  battle enemyHp=38 struck+=["r7"]
+  run hp 994 active gadgets [] dom fcc2ebd4
+13 r9
+  bar.setEnemyHp(37)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r9: "Professor Ostrander takes 1 damage, 37 HP left."
+  battle enemyHp=37 struck+=["r9"]
+  run hp 994 active gadgets [] dom e536732f
+14 r13
+  bar.setEnemyHp(36)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r13: "Professor Ostrander takes 1 damage, 36 HP left."
+  battle enemyHp=36 struck+=["r13"]
+  run hp 994 active gadgets [] dom 8366845b
+15 r15
+  bar.setEnemyHp(35)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r15: "Professor Ostrander takes 1 damage, 35 HP left."
+  battle enemyHp=35 struck+=["r15"]
+  run hp 994 active gadgets [] dom b13553c8
+16 r16
+  bar.setEnemyHp(34)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r16: "Professor Ostrander takes 1 damage, 34 HP left."
+  battle enemyHp=34 struck+=["r16"]
+  run hp 994 active gadgets [] dom 75897a3f
+17 r11
+  bar.setEnemyHp(33)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r11: "Professor Ostrander takes 1 damage, 33 HP left."
+  battle enemyHp=33 struck+=["r11"]
+  run hp 994 active gadgets [] dom 3c55bf65
+18 r1
+  view.setInk([44 45 46 64 65 66 84 85 86], [24 25 26])
+  bar.setEnemyHp(32)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r1: "Professor Ostrander takes 1 damage, 32 HP left. The ink washes away."
+  battle enemyHp=32 struck+=["r1"] ink=[44,45,46,64,65,66,84,85,86]
+  run hp 994 active gadgets [] dom a0a45d21
+19 c18
+  bar.setEnemyHp(31)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c18: "Professor Ostrander takes 1 damage, 31 HP left."
+  battle enemyHp=31 struck+=["c18"]
+  run hp 994 active gadgets [] dom 17814d82
+20 r8
+  bar.setPlayerHp(991, 999)
+  bar.hitPlayer(3)
+  mistake: "Wrong cell! Professor Emerita hits you for 3. 991 HP left."
+  bar.setForm("Reviewer One", "reviewer-one")
+  bar.phaseBanner("Reviewer One", "Rejected. Rejected. Rejected.")
+  view.setScramble({r c6,10})
+  sound phase
+  bar.setEnemyHp(30)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r8: "Professor Ostrander takes 1 damage, 30 HP left. Professor Emerita becomes Reviewer One! Rejected. Rejected. Rejected."
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setTurn(null)
+  game.wipe([4 24 104 124 144 164 184 224 244 264 284 304 324 5 25 105 145 165 185 225 245 265 285 305 325])
+  view.setWiped({r c4,5})
+  controls.refresh()
+  view.flashSwap("col", 4, 5)
+  sound phase
+  bar.say("Reviewer One swapped columns 5 and 6 and ate 25 marks! Fill them in again.")
+  view.setInk([44 45 46 64 65 66 84 85 86 47 48 49 50 51 67 68 69 70 71 87 88 89 90 91 127 128 129 130 131])
+  sound phase
+  bar.say("Reviewer One squirts ink! 20 cells go dark.")
+  battle enemyHp=30 struck+=["r8"] counts={"wrongAccusations":1,"wrongFills":2} phase=4 wiped={"rows":[],"cols":[4,5]} ink+=[47,48,49,50,51,67,68,69,70,71,87,88,89,90,91,127,128,129,130,131]
+  run hp 991 active gadgets [] dom 1948a159
+21 r5
+  complete r5: undefined
+  run hp 991 active gadgets [] dom 7c55566a
+22 r12
+  complete r12: undefined
+  run hp 991 active gadgets [] dom fd5f0795
+23 r14
+  complete r14: undefined
+  run hp 991 active gadgets [] dom 34cf686c
+24 r7
+  complete r7: undefined
+  run hp 991 active gadgets [] dom f6d2fa1b
+25 r9
+  complete r9: undefined
+  run hp 991 active gadgets [] dom 3fe63d88
+26 r11
+  complete r11: undefined
+  run hp 991 active gadgets [] dom 9e77832f
+27 r8
+  complete r8: undefined
+  run hp 991 active gadgets [] dom b85f7530
+28 r10
+  bar.setEnemyHp(29)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r10: "Professor Ostrander takes 1 damage, 29 HP left."
+  battle enemyHp=29 struck+=["r10"]
+  run hp 991 active gadgets [] dom 2bbb5317
+29 r17
+  bar.setEnemyHp(28)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r17: "Professor Ostrander takes 1 damage, 28 HP left."
+  battle enemyHp=28 struck+=["r17"]
+  run hp 991 active gadgets [] dom 7df01632
+30 r18
+  bar.setPlayerHp(987, 999)
+  bar.hitPlayer(4)
+  mistake: "Wrong cell! Reviewer One hits you for 4. 987 HP left."
+  bar.setEnemyHp(27)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r18: "Professor Ostrander takes 1 damage, 27 HP left."
+  battle enemyHp=27 struck+=["r18"] counts={"wrongAccusations":1,"wrongFills":3}
+  run hp 987 active gadgets [] dom 6accbf5f
+31 c5
+  view.setWiped({r c4})
+  view.setInk([44 46 64 66 84 86 47 48 49 50 51 67 68 69 70 71 87 88 89 90 91 127 128 129 130 131], [45 65 85])
+  bar.setEnemyHp(26)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c5: "Professor Ostrander takes 1 damage, 26 HP left. The ink washes away."
+  battle enemyHp=26 struck+=["c5"] wiped={"rows":[],"cols":[4]} ink=[44,46,64,66,84,86,47,48,49,50,51,67,68,69,70,71,87,88,89,90,91,127,128,129,130,131]
+  run hp 987 active gadgets [] dom eae844a2
+32 r6
+  view.setInk([44 46 64 66 84 86 47 48 49 50 51 67 68 69 70 71 87 88 89 90 91], [127 128 129 130 131])
+  bar.setEnemyHp(25)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r6: "Professor Ostrander takes 1 damage, 25 HP left. The ink washes away."
+  battle enemyHp=25 struck+=["r6"] ink=[44,46,64,66,84,86,47,48,49,50,51,67,68,69,70,71,87,88,89,90,91]
+  run hp 987 active gadgets [] dom ea07a28a
+33 c4
+  view.setWiped({r c})
+  view.setInk([46 66 86 47 48 49 50 51 67 68 69 70 71 87 88 89 90 91], [44 64 84])
+  bar.setEnemyHp(24)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c4: "Professor Ostrander takes 1 damage, 24 HP left. The ink washes away."
+  battle enemyHp=24 struck+=["c4"] wiped={"rows":[],"cols":[]} ink=[46,66,86,47,48,49,50,51,67,68,69,70,71,87,88,89,90,91]
+  run hp 987 active gadgets [] dom c34301a1
+34 c6
+  view.setInk([47 48 49 50 51 67 68 69 70 71 87 88 89 90 91], [46 66 86])
+  view.setScramble({r c10}, [c6])
+  bar.setEnemyHp(23)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c6: "Professor Ostrander takes 1 damage, 23 HP left. The ink washes away. Gears click back into place: column 7 in order."
+  battle enemyHp=23 struck+=["c6"] scramble={"rows":[],"cols":[10]} ink=[47,48,49,50,51,67,68,69,70,71,87,88,89,90,91]
+  run hp 987 active gadgets [] dom bf44c6d6
+35 c7
+  view.setInk([48 49 50 51 68 69 70 71 88 89 90 91], [47 67 87])
+  bar.setEnemyHp(22)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c7: "Professor Ostrander takes 1 damage, 22 HP left. The ink washes away."
+  battle enemyHp=22 struck+=["c7"] ink=[48,49,50,51,68,69,70,71,88,89,90,91]
+  run hp 987 active gadgets [] dom 49c1d404
+36 c13
+  bar.setEnemyHp(21)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c13: "Professor Ostrander takes 1 damage, 21 HP left."
+  battle enemyHp=21 struck+=["c13"]
+  run hp 987 active gadgets [] dom 87e36436
+37 c14
+  bar.setEnemyHp(20)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c14: "Professor Ostrander takes 1 damage, 20 HP left."
+  battle enemyHp=20 struck+=["c14"]
+  run hp 987 active gadgets [] dom d08183f0
+38 c15
+  bar.setEnemyHp(19)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c15: "Professor Ostrander takes 1 damage, 19 HP left."
+  battle enemyHp=19 struck+=["c15"]
+  run hp 987 active gadgets [] dom 401dc150
+39 r19
+  bar.setEnemyHp(18)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r19: "Professor Ostrander takes 1 damage, 18 HP left."
+  battle enemyHp=18 struck+=["r19"]
+  run hp 987 active gadgets [] dom fac49768
+40 c8
+  view.setInk([49 50 51 69 70 71 89 90 91], [48 68 88])
+  bar.setEnemyHp(17)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c8: "Professor Ostrander takes 1 damage, 17 HP left. The ink washes away."
+  battle enemyHp=17 struck+=["c8"] ink=[49,50,51,69,70,71,89,90,91]
+  run hp 987 active gadgets [] dom b05d48ed
+41 c11
+  view.setInk([49 50 69 70 89 90], [51 71 91])
+  bar.setEnemyHp(16)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c11: "Professor Ostrander takes 1 damage, 16 HP left. The ink washes away."
+  battle enemyHp=16 struck+=["c11"] ink=[49,50,69,70,89,90]
+  run hp 987 active gadgets [] dom 9e763119
+42 c12
+  bar.setEnemyHp(15)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c12: "Professor Ostrander takes 1 damage, 15 HP left."
+  battle enemyHp=15 struck+=["c12"]
+  run hp 987 active gadgets [] dom 8a0cf6d1
+43 c10
+  view.setInk([49 69 89], [50 70 90])
+  view.setScramble({r c}, [c10])
+  bar.setEnemyHp(14)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete c10: "Professor Ostrander takes 1 damage, 14 HP left. The ink washes away. Gears click back into place: column 11 in order."
+  battle enemyHp=14 struck+=["c10"] scramble={"rows":[],"cols":[]} ink=[49,69,89]
+  run hp 987 active gadgets [] dom 136f99ac
+44 r2
+  view.setInk([69 89], [49])
+  bar.setEnemyHp(13)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  complete r2: "Professor Ostrander takes 1 damage, 13 HP left. The ink washes away."
+  battle enemyHp=13 struck+=["r2"] ink=[69,89]
+  run hp 987 active gadgets [] dom e1d84e8b
+45 c9
+  view.setInk([], [69 89])
+  bar.setEnemyHp(10)
+  bar.hitEnemy(3)
+  sound strike
+  bar.setGadgets([])
+  complete r3 r4 c9: "Professor Ostrander takes 3 damage, 10 HP left. The ink washes away."
+  bar.setGadgets([])
+  land 10 as Reviewer One
+  battle enemyHp=10 struck+=["r3","r4","c9"] ink=[]
+  run hp 987 active gadgets [] dom 3f7ac53e
+saved {"runId":"harness","node":0,"hp":987,"maxHp":999,"gadgets":[],"status":"active","mode":"hearts","tally":{"wrongFills":0,"zaps":0,"wrongAccusations":0,"gadgetsUsed":0,"bombsUsed":0,"spongesUsed":0,"hintsUsed":0},"battle":{"enemyHp":10,"struck":["r0","c0","c2","c17","r5","c1","r12","r14","c19","c3","c16","r7","r9","r13","r15","r16","r11","r1","c18","r8","r10","r17","r18","c5","r6","c4","c6","c7","c13","c14","c15","r19","c8","c11","c12","c10","r2","r3","r4","c9"],"scramble":{"rows":[],"cols":[]},"fakes":{"rows":[],"cols":[]},"suspects":{"rows":[],"cols":[]},"counts":{"wrongAccusations":1,"wrongFills":3},"phase":4,"wiped":{"rows":[],"cols":[]},"ink":[]}}"
+`;
+
+exports[`fight hooks in jsdom (#163) > weathervane 1`] = `
+"start
+  bar.setForm("Weathervane", "🐓")
+  bar.setPlayerHp(999, 999)
+  bar.setShield(0)
+  bar.setInfo(<button.powers-info aria-label="What can Weathervane do?" aria-expanded="false">"ⓘ")
+  bar.setGadgets([])
+  view.setInk([])
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setTurn(0, "Turns in 6 lines")
+  bar.setTip(<div.tip-card role="status">"Turns. Every few lines you finish, the  meter fills and the whole board turns a quarter clockwise. Your marks, clues and everything on them turn too: rows become columns. Only finished lines count.Got it")
+  run hp 999 active gadgets [] dom 6767bc67
+1 c14
+  bar.setEnemyHp(44)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setTurn(0.16666666666666666, "Turns in 5 lines")
+  complete c14: "Weathervane takes 1 damage, 44 HP left."
+  keys enemyHp,struck,turning
+  battle enemyHp=44 struck=["c14"] turning=1
+  run hp 999 active gadgets [] dom 4c911df9
+2 r0
+  bar.setEnemyHp(43)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setTurn(0.3333333333333333, "Turns in 4 lines")
+  complete r0: "Weathervane takes 1 damage, 43 HP left."
+  battle enemyHp=43 struck+=["r0"] turning=2
+  run hp 999 active gadgets [] dom 5c8c634a
+3 r10
+  bar.setEnemyHp(42)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setTurn(0.5, "Turns in 3 lines")
+  complete r10: "Weathervane takes 1 damage, 42 HP left."
+  battle enemyHp=42 struck+=["r10"] turning=3
+  run hp 999 active gadgets [] dom 0f8fa5dc
+4 r6
+  bar.setEnemyHp(41)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setTurn(0.6666666666666666, "Turns in 2 lines")
+  complete r6: "Weathervane takes 1 damage, 41 HP left."
+  battle enemyHp=41 struck+=["r6"] turning=4
+  run hp 999 active gadgets [] dom d5c833a8
+5 r11
+  bar.setEnemyHp(40)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setTurn(0.8333333333333334, "Turns in 1 line")
+  complete r11: "Weathervane takes 1 damage, 40 HP left."
+  battle enemyHp=40 struck+=["r11"] turning=5
+  run hp 999 active gadgets [] dom 6f10e54e
+6 c0
+  bar.setEnemyHp(39)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setTurn(1, "Turning…")
+  complete c0: "Weathervane takes 1 damage, 39 HP left."
+  game.turn({"id":"weathervane","name":"Weathervane","width":15,"height":15,"solution":{"width":15,"height":15,"cells":[false,false,false,false,false,true,true,true,false,false,false,false,false,false,false,true,false,false,false,false,true,true,true,false,false,false,false,false,false,false,true,true,false,false,false,false,true,false,false,false,false,false,false,false,false,true,true,true,false,false,false,true,false,false,false,true,false,false,false,false,true,false,true,false,false,false,true,false,false,true,true,false,true,true,false,true,true,true,true,false,false,true,false,false,true,true,true,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false,false,true,false,false,true,true,true,true,true,false,true,false,true,false,false,false,true,false,true,true,true,true,true,false,false,true,true,true,false,false,false,true,false,false,true,true,true,false,false,false,true,true,false,false,false,false,true,false,false,true,true,true,false,false,false,true,false,false,false,true,true,true,true,true,false,true,false,false,false,false,false,false,false,false,false,true,true,true,false,false,true,true,true,false,false,false,false,false,false,false,false,true,false,false,false,false,true,true,false,false,false,false,false,false,false,false,true,false,false,false,false,false,false,false,false]},"clues":{"rows":[[3],[1,3],[2,1],[3,1,1],[1,1,1,2,2],[4,1,3,2],[15],[4,1,5],[1,1,1,5],[3,1,3],[2,1,3],[1,5,1],[3,3],[1,2],[1]],"cols":[[11],[2,3,2],[7],[3],[1,1],[2,1,2],[15],[2,1,2],[1,1,1],[7],[10],[6,2],[1,3,2],[4],[2]]}})
+  view.setClues({r3,1,3,2,1,3,1,1,1,1,1,2,2,4,1,3,2,15,4,1,5,1,1,1,5,3,1,3,2,1,3,1,5,1,3,3,1,2,1 c11,2,3,2,7,3,1,1,2,1,2,15,2,1,2,1,1,1,7,10,6,2,1,3,2,4,2})
+  view.setInk([])
+  bar.setCharge(null)
+  view.setLive(null)
+  controls.refresh()
+  view.flashTurn()
+  bar.setTurn(0, "Turns in 6 lines")
+  sound phase
+  bar.say("Weathervane spins. The board turns a quarter clockwise.")
+  keys enemyHp,struck,turning,turns
+  battle enemyHp=39 struck=["r14","c14","c4","c8","c3","r0"] turning=0 turns=1
+  run hp 999 active gadgets [] dom 06d5926f
+7 r2
+  bar.setEnemyHp(38)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setTurn(0.16666666666666666, "Turns in 5 lines")
+  complete r2: "Weathervane takes 1 damage, 38 HP left."
+  battle enemyHp=38 struck+=["r2"] turning=1
+  run hp 999 active gadgets [] dom 4cb01afe
+8 r13
+  bar.setEnemyHp(37)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setTurn(0.3333333333333333, "Turns in 4 lines")
+  complete r13: "Weathervane takes 1 damage, 37 HP left."
+  battle enemyHp=37 struck+=["r13"] turning=2
+  run hp 999 active gadgets [] dom 421f70fa
+9 r1
+  bar.setEnemyHp(36)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setTurn(0.5, "Turns in 3 lines")
+  complete r1: "Weathervane takes 1 damage, 36 HP left."
+  battle enemyHp=36 struck+=["r1"] turning=3
+  run hp 999 active gadgets [] dom fdbf20d8
+10 c13
+  bar.setPlayerHp(997, 999)
+  bar.hitPlayer(2)
+  mistake: "Wrong cell! Weathervane hits you for 2. 997 HP left."
+  bar.setEnemyHp(35)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setTurn(0.6666666666666666, "Turns in 2 lines")
+  complete c13: "Weathervane takes 1 damage, 35 HP left."
+  keys enemyHp,struck,turning,turns,counts
+  battle enemyHp=35 struck+=["c13"] turning=4 counts={"wrongFills":1}
+  run hp 997 active gadgets [] dom 75e140c9
+11 r3
+  bar.setEnemyHp(34)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setTurn(0.8333333333333334, "Turns in 1 line")
+  complete r3: "Weathervane takes 1 damage, 34 HP left."
+  battle enemyHp=34 struck+=["r3"] turning=5
+  run hp 997 active gadgets [] dom 89921c65
+12 c5
+  bar.setEnemyHp(33)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setTurn(1, "Turning…")
+  complete c5: "Weathervane takes 1 damage, 33 HP left."
+  game.turn({"id":"weathervane","name":"Weathervane","width":15,"height":15,"solution":{"width":15,"height":15,"cells":[false,false,false,true,true,true,true,true,true,true,true,true,true,true,false,false,false,false,false,true,true,false,true,true,true,false,true,true,false,false,false,false,false,false,false,true,true,true,true,true,true,true,false,false,false,false,false,false,false,false,false,false,true,true,true,false,false,false,false,false,false,false,false,true,false,false,false,false,true,false,false,false,false,false,false,false,false,true,true,false,false,false,false,true,false,false,false,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false,false,true,true,false,false,false,false,true,false,false,false,false,true,true,false,false,false,true,false,false,true,false,true,false,false,false,false,false,false,false,false,false,false,true,true,true,true,true,true,true,false,false,false,false,false,false,true,true,true,true,true,true,true,true,true,true,false,false,false,false,true,true,false,true,true,true,true,true,true,false,false,false,false,false,false,true,true,false,false,false,true,true,true,false,true,false,false,false,false,false,false,false,false,false,false,false,true,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,true,true,false,false,false,false,false]},"clues":{"rows":[[11],[2,3,2],[7],[3],[1,1],[2,1,2],[15],[2,1,2],[1,1,1],[7],[10],[2,6],[2,3,1],[4],[2]],"cols":[[1],[1,2],[3,3],[1,5,1],[2,1,3],[3,1,3],[1,1,1,5],[4,1,5],[15],[4,1,3,2],[1,1,1,2,2],[3,1,1],[2,1],[1,3],[3]]}})
+  view.setClues({r11,2,3,2,7,3,1,1,2,1,2,15,2,1,2,1,1,1,7,10,2,6,2,3,1,4,2 c1,1,2,3,3,1,5,1,2,1,3,3,1,3,1,1,1,5,4,1,5,15,4,1,3,2,1,1,1,2,2,3,1,1,2,1,1,3,3})
+  view.setInk([])
+  bar.setCharge(null)
+  view.setLive(null)
+  controls.refresh()
+  view.flashTurn()
+  bar.setTurn(0, "Turns in 6 lines")
+  sound phase
+  bar.say("Weathervane spins. The board turns a quarter clockwise.")
+  battle enemyHp=33 struck=["c0","r14","r4","r8","r3","c14","c12","c1","c13","r13","c11","r5"] turning=0 turns=2
+  run hp 997 active gadgets [] dom e56f464f
+13 r7
+  bar.setEnemyHp(32)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setTurn(0.16666666666666666, "Turns in 5 lines")
+  complete r7: "Weathervane takes 1 damage, 32 HP left."
+  battle enemyHp=32 struck+=["r7"] turning=1
+  run hp 997 active gadgets [] dom e92518e1
+14 r12
+  bar.setEnemyHp(31)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setTurn(0.3333333333333333, "Turns in 4 lines")
+  complete r12: "Weathervane takes 1 damage, 31 HP left."
+  battle enemyHp=31 struck+=["r12"] turning=2
+  run hp 997 active gadgets [] dom 24526f4a
+15 c2
+  bar.setEnemyHp(30)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setTurn(0.5, "Turns in 3 lines")
+  complete c2: "Weathervane takes 1 damage, 30 HP left."
+  battle enemyHp=30 struck+=["c2"] turning=3
+  run hp 997 active gadgets [] dom 53165d09
+16 c4
+  bar.setEnemyHp(29)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setTurn(0.6666666666666666, "Turns in 2 lines")
+  complete c4: "Weathervane takes 1 damage, 29 HP left."
+  battle enemyHp=29 struck+=["c4"] turning=4
+  run hp 997 active gadgets [] dom afa91b75
+17 r1
+  bar.setEnemyHp(28)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setTurn(0.8333333333333334, "Turns in 1 line")
+  complete r1: "Weathervane takes 1 damage, 28 HP left."
+  battle enemyHp=28 struck+=["r1"] turning=5
+  run hp 997 active gadgets [] dom e0a09877
+18 r2
+  bar.setForm("Whirling Weathervane", "🐓")
+  bar.phaseBanner("Whirling Weathervane", "Which way's north? Every way!")
+  sound phase
+  bar.setEnemyHp(27)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setTurn(1, "Turning…")
+  complete r2: "Weathervane takes 1 damage, 27 HP left. Weathervane becomes Whirling Weathervane! Which way's north? Every way! The wind picks up. 🔃"
+  bar.setCharge(null)
+  view.setLive(null)
+  bar.setTurn(1, "Turning…")
+  game.turn({"id":"weathervane","name":"Weathervane","width":15,"height":15,"solution":{"width":15,"height":15,"cells":[false,false,false,false,false,false,false,false,true,false,false,false,false,false,false,false,false,true,true,false,false,false,false,true,false,false,false,false,false,false,false,false,true,true,true,false,false,true,true,true,false,false,false,false,false,false,false,false,false,true,false,true,true,true,true,true,false,false,false,true,false,false,false,true,true,true,false,false,true,false,false,false,false,true,true,false,false,false,true,true,true,false,false,true,false,false,false,true,true,true,false,false,true,true,true,true,true,false,true,false,false,false,true,false,true,false,true,true,true,true,true,false,false,true,false,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false,true,true,true,false,false,true,false,false,true,true,true,true,false,true,true,false,true,true,false,false,true,false,false,false,true,false,true,false,false,false,false,true,false,false,false,true,false,false,false,true,true,true,false,false,false,false,false,false,false,false,true,false,false,false,false,true,true,false,false,false,false,false,false,false,true,true,true,false,false,false,false,true,false,false,false,false,false,false,false,true,true,true,false,false,false,false,false]},"clues":{"rows":[[1],[2,1],[3,3],[1,5,1],[3,1,2],[3,1,3],[5,1,1,1],[5,1,4],[15],[2,3,1,4],[2,2,1,1,1],[1,1,3],[1,2],[3,1],[3]],"cols":[[2],[4],[2,3,1],[2,6],[10],[7],[1,1,1],[2,1,2],[15],[2,1,2],[1,1],[3],[7],[2,3,2],[11]]}})
+  view.setClues({r1,2,1,3,3,1,5,1,3,1,2,3,1,3,5,1,1,1,5,1,4,15,2,3,1,4,2,2,1,1,1,1,1,3,1,2,3,1,3 c2,4,2,3,1,2,6,10,7,1,1,1,2,1,2,15,2,1,2,1,1,3,7,2,3,2,11})
+  view.setInk([])
+  bar.setCharge(null)
+  view.setLive(null)
+  controls.refresh()
+  view.flashTurn()
+  bar.setTurn(0, "Turns in 4 lines")
+  sound phase
+  bar.say("Whirling Weathervane spins. The board turns a quarter clockwise.")
+  keys enemyHp,struck,turning,turns,counts,phase
+  battle enemyHp=27 struck=["r0","c0","c10","c6","c11","r14","r12","r1","r13","c1","r11","c9","c7","c2","r2","r4","c13","c12"] turning=0 turns=3 phase=1
+  run hp 997 active gadgets [] dom f30c53c3
+19 r3
+  bar.setEnemyHp(26)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setTurn(0.25, "Turns in 3 lines")
+  complete r3: "Weathervane takes 1 damage, 26 HP left."
+  battle enemyHp=26 struck+=["r3"] turning=1
+  run hp 997 active gadgets [] dom a3f6de6d
+20 r5
+  bar.setPlayerHp(994, 999)
+  bar.hitPlayer(3)
+  mistake: "Wrong cell! Whirling Weathervane hits you for 3. 994 HP left."
+  bar.setEnemyHp(25)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setTurn(0.5, "Turns in 2 lines")
+  complete r5: "Weathervane takes 1 damage, 25 HP left."
+  battle enemyHp=25 struck+=["r5"] turning=2 counts={"wrongFills":2}
+  run hp 994 active gadgets [] dom c8c27cdb
+21 r10
+  bar.setEnemyHp(24)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setTurn(0.75, "Turns in 1 line")
+  complete r10: "Weathervane takes 1 damage, 24 HP left."
+  battle enemyHp=24 struck+=["r10"] turning=3
+  run hp 994 active gadgets [] dom 2452912a
+22 c5
+  bar.setEnemyHp(23)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setTurn(1, "Turning…")
+  complete c5: "Weathervane takes 1 damage, 23 HP left."
+  game.turn({"id":"weathervane","name":"Weathervane","width":15,"height":15,"solution":{"width":15,"height":15,"cells":[false,false,false,false,false,true,true,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,true,false,false,false,false,false,false,false,false,false,false,false,true,false,true,true,true,false,false,false,true,true,false,false,false,false,false,false,true,true,true,true,true,true,false,true,true,false,false,false,false,true,true,true,true,true,true,true,true,true,true,false,false,false,false,false,false,true,true,true,true,true,true,true,false,false,false,false,false,false,false,false,false,false,true,false,true,false,false,true,false,false,false,true,true,false,false,false,false,true,false,false,false,false,true,true,false,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false,false,false,false,true,false,false,false,false,true,true,false,false,false,false,false,false,false,false,true,false,false,false,false,true,false,false,false,false,false,false,false,false,true,true,true,false,false,false,false,false,false,false,false,false,false,true,true,true,true,true,true,true,false,false,false,false,false,false,false,true,true,false,true,true,true,false,true,true,false,false,false,false,false,true,true,true,true,true,true,true,true,true,true,true,false,false,false]},"clues":{"rows":[[2],[4],[1,3,2],[6,2],[10],[7],[1,1,1],[2,1,2],[15],[2,1,2],[1,1],[3],[7],[2,3,2],[11]],"cols":[[3],[3,1],[1,2],[1,1,3],[2,2,1,1,1],[2,3,1,4],[15],[5,1,4],[5,1,1,1],[3,1,3],[3,1,2],[1,5,1],[3,3],[2,1],[1]]}})
+  view.setClues({r2,4,1,3,2,6,2,10,7,1,1,1,2,1,2,15,2,1,2,1,1,3,7,2,3,2,11 c3,3,1,1,2,1,1,3,2,2,1,1,1,2,3,1,4,15,5,1,4,5,1,1,1,3,1,3,3,1,2,1,5,1,3,3,2,1,1})
+  view.setInk([])
+  bar.setCharge(null)
+  view.setLive(null)
+  controls.refresh()
+  view.flashTurn()
+  bar.setTurn(0, "Turns in 4 lines")
+  sound phase
+  bar.say("Whirling Weathervane spins. The board turns a quarter clockwise.")
+  battle enemyHp=23 struck=["c14","r0","r10","r6","r11","c0","c2","c13","c1","r1","c3","r9","r7","r2","c12","c10","r13","r12","c11","c9","c4","r5"] turning=0 turns=0
+  run hp 994 active gadgets [] dom 46dcabfc
+23 r3
+  bar.setEnemyHp(22)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setTurn(0.25, "Turns in 3 lines")
+  complete r3: "Weathervane takes 1 damage, 22 HP left."
+  battle enemyHp=22 struck+=["r3"] turning=1
+  run hp 994 active gadgets [] dom 51c13b8f
+24 c8
+  bar.setEnemyHp(21)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setTurn(0.5, "Turns in 2 lines")
+  complete c8: "Weathervane takes 1 damage, 21 HP left."
+  battle enemyHp=21 struck+=["c8"] turning=2
+  run hp 994 active gadgets [] dom c62344f8
+25 r4
+  bar.setEnemyHp(20)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setTurn(0.75, "Turns in 1 line")
+  complete r4: "Weathervane takes 1 damage, 20 HP left."
+  battle enemyHp=20 struck+=["r4"] turning=3
+  run hp 994 active gadgets [] dom 1942b57f
+26 c5
+  bar.setEnemyHp(19)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setTurn(1, "Turning…")
+  complete c5: "Weathervane takes 1 damage, 19 HP left."
+  game.turn({"id":"weathervane","name":"Weathervane","width":15,"height":15,"solution":{"width":15,"height":15,"cells":[false,false,false,false,false,true,true,true,false,false,false,false,false,false,false,true,false,false,false,false,true,true,true,false,false,false,false,false,false,false,true,true,false,false,false,false,true,false,false,false,false,false,false,false,false,true,true,true,false,false,false,true,false,false,false,true,false,false,false,false,true,false,true,false,false,false,true,false,false,true,true,false,true,true,false,true,true,true,true,false,false,true,false,false,true,true,true,false,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,false,false,true,false,false,true,true,true,true,true,false,true,false,true,false,false,false,true,false,true,true,true,true,true,false,false,true,true,true,false,false,false,true,false,false,true,true,true,false,false,false,true,true,false,false,false,false,true,false,false,true,true,true,false,false,false,true,false,false,false,true,true,true,true,true,false,true,false,false,false,false,false,false,false,false,false,true,true,true,false,false,true,true,true,false,false,false,false,false,false,false,false,true,false,false,false,false,true,true,false,false,false,false,false,false,false,false,true,false,false,false,false,false,false,false,false]},"clues":{"rows":[[3],[1,3],[2,1],[3,1,1],[1,1,1,2,2],[4,1,3,2],[15],[4,1,5],[1,1,1,5],[3,1,3],[2,1,3],[1,5,1],[3,3],[1,2],[1]],"cols":[[11],[2,3,2],[7],[3],[1,1],[2,1,2],[15],[2,1,2],[1,1,1],[7],[10],[6,2],[1,3,2],[4],[2]]}})
+  view.setClues({r3,1,3,2,1,3,1,1,1,1,1,2,2,4,1,3,2,15,4,1,5,1,1,1,5,3,1,3,2,1,3,1,5,1,3,3,1,2,1 c11,2,3,2,7,3,1,1,2,1,2,15,2,1,2,1,1,1,7,10,6,2,1,3,2,4,2})
+  view.setInk([])
+  bar.setCharge(null)
+  view.setLive(null)
+  controls.refresh()
+  view.flashTurn()
+  bar.setTurn(0, "Turns in 4 lines")
+  sound phase
+  bar.say("Whirling Weathervane spins. The board turns a quarter clockwise.")
+  battle enemyHp=19 struck=["r14","c14","c4","c8","c3","r0","r2","r13","r1","c13","r3","c5","c7","c12","r12","r10","c1","c2","r11","r9","r4","c9","c11","r8","c10","r5"] turning=0 turns=1
+  run hp 994 active gadgets [] dom acbcf7d2
+27 r7
+  bar.setEnemyHp(18)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setTurn(0.25, "Turns in 3 lines")
+  complete r7: "Weathervane takes 1 damage, 18 HP left."
+  battle enemyHp=18 struck+=["r7"] turning=1
+  run hp 994 active gadgets [] dom 9a6b7f75
+28 c0
+  bar.setEnemyHp(17)
+  bar.hitEnemy(1)
+  sound strike
+  bar.setGadgets([])
+  bar.setTurn(0.5, "Turns in 2 lines")
+  complete c0: "Weathervane takes 1 damage, 17 HP left."
+  battle enemyHp=17 struck+=["c0"] turning=2
+  run hp 994 active gadgets [] dom 839028c6
+29 r6
+  bar.setEnemyHp(15)
+  bar.hitEnemy(2)
+  sound strike
+  bar.setGadgets([])
+  bar.setTurn(1, "Turning…")
+  complete r6 c6: "Weathervane takes 2 damage, 15 HP left."
+  bar.setGadgets([])
+  land 15 as Whirling Weathervane
+  battle enemyHp=15 struck+=["r6","c6"] turning=4
+  run hp 994 active gadgets [] dom e9d7ced1
+saved {"runId":"harness","node":0,"hp":994,"maxHp":999,"gadgets":[],"status":"active","mode":"hearts","tally":{"wrongFills":0,"zaps":0,"wrongAccusations":0,"gadgetsUsed":0,"bombsUsed":0,"spongesUsed":0,"hintsUsed":0},"battle":{"enemyHp":15,"struck":["r14","c14","c4","c8","c3","r0","r2","r13","r1","c13","r3","c5","c7","c12","r12","r10","c1","c2","r11","r9","r4","c9","c11","r8","c10","r5","r7","c0","r6","c6"],"turning":4,"turns":1,"counts":{"wrongFills":2},"phase":1}}"
+`;
