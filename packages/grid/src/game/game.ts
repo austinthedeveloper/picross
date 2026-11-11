@@ -3,8 +3,9 @@ import { Cell, createBoard, isSolved, revealedCell, type Board } from '../engine
 import { applyMove, History, type Change, type Move } from '../engine/history';
 import { transformGrid, turnIndex } from '../engine/transform';
 import type { Puzzle } from '../puzzles/format';
-import type { SavedBoard } from './progress';
-import type { Mode } from './settings';
+
+/** Relaxed never checks fills; hearts mode costs a heart for each wrong fill. */
+export type Mode = 'relaxed' | 'hearts';
 
 /**
  * How mistakes work: relaxed never checks fills; hearts checks them and fails
@@ -17,6 +18,19 @@ export const MAX_HEARTS = 3;
 export const MAX_HINTS = 3;
 
 export type HintTarget = 'cell' | 'row' | 'col';
+
+/**
+ * An in-progress board. `cells` holds one digit per cell (see `Cell`). Free play saves
+ * it in the app's progress, and a run with its encounter.
+ */
+export interface SavedBoard {
+  cells: string;
+  /** Milliseconds played so far. */
+  elapsed?: number;
+  mode?: GameMode;
+  hearts?: number;
+  hintsUsed?: number;
+}
 
 export interface PreviewResult {
   /** Changes actually made, which may differ from those requested. */

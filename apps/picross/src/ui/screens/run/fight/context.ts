@@ -8,10 +8,10 @@ import {
 } from '../../../../game/battle';
 import { withBattle, type RunState } from '../../../../game/run';
 import { getCurrentRun, saveCurrentRun } from '../../../../game/runSave';
-import type { Puzzle } from '../../../../puzzles/format';
-import type { BoardView } from '../../../board/boardView';
+import type { Puzzle } from '@picross/grid/puzzles/format';
+import type { BoardView } from '@picross/play-grid/ui/board/boardView';
 import { createBattleBar, type BattleBar } from '../../../components/battleBar';
-import type { BoardControls } from '../../gameScreen';
+import type { BoardControls } from '@picross/play-grid/ui/screens/gameScreen';
 
 /**
  * What every fight mechanic shares. The battle lives in the saved run, so it's

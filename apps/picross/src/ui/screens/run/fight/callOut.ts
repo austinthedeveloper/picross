@@ -1,11 +1,11 @@
 import { bump, callOut, heal } from '../../../../game/battle';
-import { hasLine, keyToLine, lineKey } from '../../../../engine/lines';
-import { fakeClues } from '../../../../engine/fakes';
-import { lineCount, noLines, type Line, type LineSet } from '../../../../engine/lines';
-import { turnClue, turnLines } from '../../../../engine/transform';
+import { hasLine, keyToLine, lineKey } from '@picross/grid/engine/lines';
+import { fakeClues } from '@picross/grid/engine/fakes';
+import { lineCount, noLines, type Line, type LineSet } from '@picross/grid/engine/lines';
+import { turnClue, turnLines } from '@picross/grid/engine/transform';
 import { withArt } from '@picross/shared/ui/art';
 import { el } from '@picross/shared/ui/dom';
-import { lineName } from '../../../format';
+import { lineName } from '@picross/play-grid/ui/format';
 import { haptic } from '@picross/shared/ui/haptics';
 import { playSound } from '@picross/shared/ui/sound';
 import type { FightContext } from './context';

@@ -1,7 +1,7 @@
-import { fakeClues } from '../engine/fakes';
-import { hasLine, lineKeys, unionLines, type LineSet } from '../engine/lines';
+import { fakeClues } from '@picross/grid/engine/fakes';
+import { hasLine, lineKeys, unionLines, type LineSet } from '@picross/grid/engine/lines';
 import type { Enemy, Phase } from '../game/battle';
-import type { Puzzle } from './format';
+import type { Puzzle } from '@picross/grid/puzzles/format';
 
 /**
  * Parses and validates a fight's enemy (#27) against its puzzle: HP and

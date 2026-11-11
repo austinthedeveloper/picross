@@ -1,7 +1,7 @@
-import { getPuzzle } from './index';
+import { getPuzzle } from '@picross/grid/puzzles/index';
 import type { Enemy } from '../game/battle';
 import { parseEnemy } from './enemies';
-import type { Puzzle } from './format';
+import type { Puzzle } from '@picross/grid/puzzles/format';
 import { getGadget } from '@picross/shared/puzzles/gadgets';
 import { getScene } from '@picross/shared/puzzles/scenes';
 import { encounterFiles } from '@picross/shared/puzzles/files/encounters';

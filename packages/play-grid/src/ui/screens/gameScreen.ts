@@ -1,15 +1,19 @@
-import { debug } from '../../debug/hooks';
-import { Cell } from '../../engine/board';
-import { revertMove, type Change } from '../../engine/history';
-import { Game, MAX_HEARTS, type GameMode, type HintTarget } from '../../game/game';
-import type { SavedBoard } from '../../game/progress';
-import type { Puzzle } from '../../puzzles/format';
+import { debug } from '@picross/grid/debug/hooks';
+import { Cell } from '@picross/grid/engine/board';
+import { revertMove, type Change } from '@picross/grid/engine/history';
+import {
+  Game,
+  MAX_HEARTS,
+  type GameMode,
+  type HintTarget,
+  type SavedBoard,
+} from '@picross/grid/game/game';
+import type { Puzzle } from '@picross/grid/puzzles/format';
 import { createBoardView, type BoardView, type Line } from '../board/boardView';
 import { attachInput, type Tool } from '../board/input';
 import { attachKeyboard } from '../board/keyboard';
 import { attachZoom } from '../board/zoom';
 import { createEndPanel, createFailedPanel, solvedPanelContent } from '../components/endPanels';
-import { freePlaySession } from './freePlaySession';
 import { createHintMenu } from '../components/hintMenu';
 import { homeLink } from '@picross/shared/ui/components/homeLink';
 import { createMuteButton } from '@picross/shared/ui/components/muteButton';
@@ -76,11 +80,12 @@ export interface EndState {
  * Renders the play screen for one puzzle. All board changes (mouse, touch,
  * keyboard, hints) go through `Game`; `refresh` then redraws, saves, and
  * reacts to solving or failing. Returns a cleanup function for the router.
+ * The app passes the session: free play's (`freePlaySession`) or an encounter's.
  */
 export function renderGameScreen(
   app: HTMLElement,
   puzzle: Puzzle,
-  session: PlaySession = freePlaySession(puzzle),
+  session: PlaySession,
 ): () => void {
   const game = new Game(puzzle, session.saved, session.mode);
   const view = createBoardView(puzzle);

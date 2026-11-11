@@ -1,8 +1,9 @@
-import type { Difficulty } from '../puzzles/difficulty';
+import type { Mode } from '@picross/grid/game/game';
+import type { Difficulty } from '@picross/grid/puzzles/difficulty';
 import { readStore, writeStore } from '@picross/shared/game/storage';
 
-/** Relaxed never checks fills; hearts mode costs a heart for each wrong fill. */
-export type Mode = 'relaxed' | 'hearts';
+// Relaxed or hearts: the mode new puzzles start in. The game (packages/grid) defines them.
+export type { Mode };
 
 /** Which puzzles the list shows. A puzzle in progress counts as not completed. */
 export type ListFilter = 'all' | 'todo' | 'done';

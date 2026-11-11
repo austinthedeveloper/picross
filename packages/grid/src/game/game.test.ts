@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { Cell } from '../engine/board';
+import { deriveClues } from '../engine/clues';
 import type { Move } from '../engine/history';
-import { parsePuzzle } from '../puzzles/format';
-import { turnedPuzzle } from './battle';
+import { transformGrid } from '../engine/transform';
+import { parsePuzzle, type Puzzle } from '../puzzles/format';
 import { Game } from './game';
 
 const puzzle = parsePuzzle({ id: 't', name: 'T', width: 2, height: 1, solution: ['#.'] });
@@ -208,6 +209,11 @@ describe('wipe', () => {
 });
 
 describe('turn (#83)', () => {
+  /** The puzzle after quarter turns, as a fight turns it (the app's `turnedPuzzle`). */
+  const turnedPuzzle = (puzzle: Puzzle, turns: number): Puzzle => {
+    const solution = transformGrid(puzzle.solution, turns);
+    return { ...puzzle, solution, clues: deriveClues(solution) };
+  };
   const lopsided = parsePuzzle({ id: 'l', name: 'L', width: 2, height: 2, solution: ['##', '..'] });
 
   it('turns your marks and the undo history with the board', () => {

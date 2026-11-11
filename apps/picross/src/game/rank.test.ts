@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { murals } from '../puzzles/murals';
-import { puzzles } from '../puzzles/index';
+import { murals } from '@picross/grid/puzzles/murals';
+import { puzzles } from '@picross/grid/puzzles/index';
 import { DAILY_POINTS, puzzlePoints, ranks, TILE_POINTS } from '../puzzles/ranks';
 import { countPoints, rankProgress, rankUpNote } from './rank';
 

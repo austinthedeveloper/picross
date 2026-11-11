@@ -9,11 +9,11 @@ import { badgeNote, earnFromStats } from '../../game/badges';
 import { currentPoints, rankUpNote } from '../../game/rank';
 import { getSettings } from '../../game/settings';
 import { dailyFor, dateKey, previousDay, type Daily } from '../../puzzles/daily';
-import { createPicture } from '../board/picture';
-import { allPuzzlesLink } from '../components/endPanels';
+import { createPicture } from '@picross/play-grid/ui/board/picture';
+import { allPuzzlesLink } from '@picross/play-grid/ui/components/endPanels';
 import { el } from '@picross/shared/ui/dom';
-import { formatTime, plural } from '../format';
-import { renderGameScreen, type PlaySession } from './gameScreen';
+import { formatTime, plural } from '@picross/play-grid/ui/format';
+import { renderGameScreen, type PlaySession } from '@picross/play-grid/ui/screens/gameScreen';
 
 const today = () => dateKey(new Date());
 

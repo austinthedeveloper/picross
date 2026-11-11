@@ -1,4 +1,4 @@
-import type { Solution } from '../engine/board';
+import type { Solution } from '@picross/grid/engine/board';
 
 /** How well you cleared a job (#108). */
 export type Tier = 'bronze' | 'silver' | 'gold';

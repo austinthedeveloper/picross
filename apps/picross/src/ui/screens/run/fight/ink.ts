@@ -1,4 +1,4 @@
-import { pickInk } from '../../../../engine/ink';
+import { pickInk } from '@picross/grid/engine/ink';
 import { playSound } from '@picross/shared/ui/sound';
 import type { FightContext } from './context';
 

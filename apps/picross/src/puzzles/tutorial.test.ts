@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { Cell, createBoard, isSolved } from '../engine/board';
-import { solve, solveLine, Unknown, type Knowledge } from '../engine/solver';
+import { Cell, createBoard, isSolved } from '@picross/grid/engine/board';
+import { solve, solveLine, Unknown, type Knowledge } from '@picross/grid/engine/solver';
 import {
   currentStep,
   moveProblem,

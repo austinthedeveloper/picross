@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { solve } from '../engine/solver';
-import { TRANSFORMS } from '../engine/transform';
+import { solve } from '@picross/grid/engine/solver';
+import { TRANSFORMS } from '@picross/grid/engine/transform';
 import { bigPuzzles, dailyFor, dateKey, dayNumber, previousDay } from './daily';
 
 describe('day keys', () => {

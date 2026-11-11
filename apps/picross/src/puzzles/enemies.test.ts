@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { deriveClues } from '../engine/clues';
-import { solve } from '../engine/solver';
-import { transformGrid } from '../engine/transform';
+import { deriveClues } from '@picross/grid/engine/clues';
+import { solve } from '@picross/grid/engine/solver';
+import { transformGrid } from '@picross/grid/engine/transform';
 import { CHIP_DAMAGE } from '../game/battle';
 import { POWERS } from '../ui/powers';
 import { enemyPowers, parseEnemy, phasePowers, startingPowers } from './enemies';
-import { parsePuzzle } from './format';
+import { parsePuzzle } from '@picross/grid/puzzles/format';
 import { getEncounter, runs } from './runs';
 
 const powersOf = (id: string) => enemyPowers(getEncounter(id)!.enemy!);

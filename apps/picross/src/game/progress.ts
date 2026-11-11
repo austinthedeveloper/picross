@@ -1,17 +1,10 @@
-import type { GameMode } from './game';
+import type { SavedBoard } from '@picross/grid/game/game';
 import { readStore, writeStore } from '@picross/shared/game/storage';
 
-const KEY = 'picross:v1';
+// The board's save format belongs to the game (packages/grid); this module stores it.
+export type { SavedBoard };
 
-/** An in-progress board. `cells` holds one digit per cell (see `Cell`). */
-export interface SavedBoard {
-  cells: string;
-  /** Milliseconds played so far. */
-  elapsed?: number;
-  mode?: GameMode;
-  hearts?: number;
-  hintsUsed?: number;
-}
+const KEY = 'picross:v1';
 
 export interface PuzzleStats {
   solves: number;

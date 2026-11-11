@@ -14,12 +14,20 @@ imports from the layers above it in this list:
 Keep rules and state in `engine/` and `game/`, where they can be unit tested without a
 browser. The UI should only translate events into `Game` calls and redraw.
 
+The 2D core of the first three layers (the engine, the format and pack, and `Game`) is a
+package, `packages/grid`, which can't import the UI and runs its tests in Node. The board
+view, input and play screen are `packages/play-grid`. Fights, runs, saves and the other
+screens stay in the app and reach the play screen through its `PlaySession`.
+
 ## Directory map
 
 The repo root is an npm workspace with both games in `apps/` and what they share in
 `packages/shared/`. This game is `apps/picross/`, and the `src/`, `public/`, `e2e/` and
-`vite.config.ts` paths in this doc are inside it, except for the shared files: those are at
-the same paths in `packages/shared/` (below), imported as `@picross/shared/<path>`.
+`vite.config.ts` paths in this doc are inside it, except for the files in packages: those
+are at the same paths under each package's `src/` (below), imported as
+`@picross/<package>/<path>`. The shared files are in `packages/shared/`; the engine, the
+puzzle format, the pack and `Game` in `packages/grid/` (no DOM); and the board view, input
+and play screen in `packages/play-grid/`.
 
 ```
 apps/picross/              The 2D game (npm workspace `picross`)
@@ -27,32 +35,15 @@ apps/picross/              The 2D game (npm workspace `picross`)
   public/favicon.svg
   src/
     main.ts                Entry point: imports styles, applies theme, hash router
-    debug/                 Dev-only tools (#65): panel and hooks; never in production builds
-    engine/                Pure puzzle logic, no DOM
-      board.ts             Cell states (Empty/Filled/Marked), Grid/Board/Solution, isSolved
-      clues.ts             Clue derivation and per-clue "satisfied" check (clue dimming)
-      history.ts           Change/Move types and the undo/redo History
-      lines.ts             LineSet: sets of rows/columns (fog, scrambles, weak points)
-      solver.ts            Line solver: uniqueness/no-guess check; fog and scramble aware
-      swap.ts              Which two lines the Mimic swaps and wipes (#48)
-      fakes.ts             The Forger's forged clues: a convincing wrong clue per line (#64)
-      ink.ts               Where ink lands and how completed lines wash it off (#67)
-      transform.ts         The eight turns and flips of a grid (daily, #69); turning cells and lines (#83)
-    puzzles/               Content and its validation
-      format.ts            Puzzle file format, parse/validate, export helpers
-      index.ts             Loads pack/*.json and run/*.json; the list sorts by size, then ORDER
-      pack/*.json          Free-play puzzles (5×5 to 20×20): the starter set plus themed batches
-      sheets/*.txt         The themed batches as drawings; scripts/puzzle-sheet.ts exports them
-      pack.test.ts         Uniqueness check over every puzzle
+    debug/panel.ts         Dev-only tools (#65); never in production builds (hooks are in grid)
+    puzzles/               Content and its validation (the pack is in packages/grid)
       runs.ts              Loads encounters/*.json and runs/*.json (jobs)
       chapters.ts          Loads chapters/*.json: jobs grouped into story chapters (#23)
       endless.ts           Endless mode: seeded encounter order, scaling, the run as a RunDef (#68)
       daily.ts             The daily puzzle: date keys and the day's puzzle and turn (#69)
       tutorial.ts          How to play: its picture and steps, and what counts as a wrong move
-      murals.ts            Loads murals/*.json and splits each picture into tile puzzles (#24)
       enemies.ts           Validates an enemy; lists its powers (startingPowers, phasePowers, enemyPowers)
-    game/                  Game state and saves, no DOM
-      game.ts              Game: board, history, mode/hearts, hints, clock, wipes
+    game/                  Game state and saves, no DOM (Game itself is in packages/grid)
       battle.ts            Enemy and BattleState: chip, finisher, gadgets, phases, armor, call-outs
       run.ts               RunState and its pure transitions
       progress.ts          Free-play saves, solve stats, totals (localStorage)
@@ -60,11 +51,9 @@ apps/picross/              The 2D game (npm workspace `picross`)
       settings.ts          Mode, list filter/order, closed sections, mute, high contrast, haptics (localStorage)
       daily.ts             Daily streak, best, and today's board (localStorage, #69)
     ui/
-      format.ts            formatTime(), plural(), lineName()
       screens/
         selectScreen.ts    Puzzle list, mode, settings, stats       (#/)
-        gameScreen.ts      Play screen; PlaySession and its hooks  (#/play/<id>)
-        freePlaySession.ts Free-play PlaySession: saves, best times, "Next"
+        freePlaySession.ts Free-play PlaySession: saves, best times, "Next" (#/play/<id>)
         daily.ts           The daily puzzle: its card on the list and its PlaySession (#/daily)
         mural.ts           Murals: the list section, a mural's tiles, playing a tile (#/mural/…)
         howToPlay.ts       Guided solve on a real board, then rules (#/how-to-play)
@@ -91,21 +80,10 @@ apps/picross/              The 2D game (npm workspace `picross`)
             hits.ts        Mistakes, shields, knockouts
             finisher.ts    The solved picture flying at the enemy
           dig.ts           Dig hooks: dirt board, header, the reveal
-      board/
-        boardView.ts       Clues + cells (ARIA grid), dimming, fog/scramble/weak points
-        input.ts           Pointer input: click, right-click, drag strokes, touch
-        keyboard.ts        Keyboard cursor and actions on a board
-        zoom.ts            Pinch/wheel zoom and two-finger pan
-        picture.ts         Pixel-art canvas of a solution
       components/
         battleBar.ts       Enemy/player HP, gadgets, armor, 🎭 forgeries, phase banner, hit effects
-        endPanels.ts       Solved, out-of-hearts, and generic end panels
-        hintMenu.ts        "Hint n/3" dropdown
         listSection.ts     Collapsible puzzle list section
-        zoomBar.ts         − / level / + zoom buttons
     styles/
-      board.css            Board, clues, cells, cursor, fog/scramble/weak-point clues
-      game.css             Play screen: toolbar, hint menu, tools and zoom row, end states
       select.css           Puzzle list
       editor.css           Editor
   e2e/                     Playwright browser tests (see docs/development.md)
@@ -114,6 +92,51 @@ apps/picross/              The 2D game (npm workspace `picross`)
     script-review.ts       Build the script review site, serve it, and report notes (see docs/how-to.md)
     script-review/         Its page model, renderer, notes store, server, and browser assets
 apps/cubed/                Picross Cubed, the 3D game (npm workspace `picross-3d`; its own docs)
+packages/grid/             The 2D puzzles, no DOM (@picross/grid; its README)
+  src/                     Same paths as they had in apps/picross: imported as @picross/grid/<path>
+    imports.test.ts        Nothing here imports the page or an app
+    node.test.ts           Every module loads and works in Node, with no DOM
+    engine/                Pure puzzle logic
+      board.ts             Cell states (Empty/Filled/Marked), Grid/Board/Solution, isSolved
+      clues.ts             Clue derivation and per-clue "satisfied" check (clue dimming)
+      history.ts           Change/Move types and the undo/redo History
+      lines.ts             LineSet: sets of rows/columns (fog, scrambles, weak points)
+      solver.ts            Line solver: uniqueness/no-guess check; fog and scramble aware
+      swap.ts              Which two lines the Mimic swaps and wipes (#48)
+      fakes.ts             The Forger's forged clues: a convincing wrong clue per line (#64)
+      ink.ts               Where ink lands and how completed lines wash it off (#67)
+      blast.ts             Where a bomb goes off and the cells it hits (#115)
+      charge.ts            Which line a charging enemy goes live on (#67)
+      transform.ts         The eight turns and flips of a grid (daily, #69); turning cells and lines (#83)
+    game/game.ts           Game: board, history, mode/hearts, hints, clock, wipes; SavedBoard
+    debug/hooks.ts         How the app's debug panel reaches into a board in play (#65)
+    puzzles/
+      format.ts            Puzzle file format, parse/validate, export helpers
+      index.ts             Loads pack/*.json and run/*.json; the list sorts by size, then ORDER
+      pack/*.json          Free-play puzzles (5×5 to 20×20): the starter set plus themed batches
+      sheets/*.txt         The themed batches as drawings; apps/picross/scripts/puzzle-sheet.ts exports them
+      pack.test.ts         Uniqueness check over every puzzle
+      difficulty.ts        Difficulty bands from ratings.json (solver passes, #112)
+      murals.ts            Loads murals/*.json and splits each picture into tile puzzles (#24)
+packages/play-grid/        The 2D board view and play screen (@picross/play-grid; its README)
+  src/                     Same paths as they had in apps/picross: imported as @picross/play-grid/<path>
+    imports.test.ts        Nothing here imports from an app
+    ui/
+      format.ts            formatTime(), plural(), lineName()
+      screens/gameScreen.ts  Play screen; PlaySession and its hooks  (#/play/<id>)
+      board/
+        boardView.ts       Clues + cells (ARIA grid), dimming, fog/scramble/weak points
+        input.ts           Pointer input: click, right-click, drag strokes, touch
+        keyboard.ts        Keyboard cursor and actions on a board
+        zoom.ts            Pinch/wheel zoom and two-finger pan
+        picture.ts         Pixel-art canvas of a solution
+      components/
+        endPanels.ts       Solved, out-of-hearts, and generic end panels
+        hintMenu.ts        "Hint n/3" dropdown
+        zoomBar.ts         − / level / + zoom buttons
+    styles/
+      board.css            Board, clues, cells, cursor, fog/scramble/weak-point clues
+      game.css             Play screen: toolbar, hint menu, tools and zoom row, end states
 packages/shared/           Code, styles, story and art both games import (@picross/shared; its README)
   vite.js                  sharedPublic(): serves public/ in dev, copies it into each build
   public/art/              Portraits (cast/), enemy sprites (enemies/), gadgets/, power icons/

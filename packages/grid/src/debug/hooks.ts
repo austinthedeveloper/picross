@@ -5,6 +5,13 @@
  */
 const KEY = 'picross:debug';
 
+// The browser's storage. This package builds without the DOM types (it never touches the
+// page), so it names the two methods it uses; only debug builds call them.
+declare const localStorage: {
+  getItem(key: string): string | null;
+  setItem(key: string, value: string): void;
+};
+
 function read(): { infiniteHealth?: boolean } {
   try {
     return JSON.parse(localStorage.getItem(KEY) ?? '{}');

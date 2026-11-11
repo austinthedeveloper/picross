@@ -1,4 +1,4 @@
-import { lineCount } from '../engine/lines';
+import { lineCount } from '@picross/grid/engine/lines';
 import { badges, getBadge, type Badge, type Tier } from '../puzzles/badges';
 import { ENDLESS_ID } from '../puzzles/endless';
 import { currentForm, type Enemy } from './battle';

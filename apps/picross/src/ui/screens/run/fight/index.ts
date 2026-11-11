@@ -1,8 +1,8 @@
-import { debug } from '../../../../debug/hooks';
-import { lineKey } from '../../../../engine/lines';
+import { debug } from '@picross/grid/debug/hooks';
+import { lineKey } from '@picross/grid/engine/lines';
 import { bump, finish, useGadget, type Enemy } from '../../../../game/battle';
-import type { Puzzle } from '../../../../puzzles/format';
-import type { PlaySession } from '../../gameScreen';
+import type { Puzzle } from '@picross/grid/puzzles/format';
+import type { PlaySession } from '@picross/play-grid/ui/screens/gameScreen';
 import { createArmorBack } from './armorBack';
 import { createCallOut } from './callOut';
 import { createCharge } from './charge';

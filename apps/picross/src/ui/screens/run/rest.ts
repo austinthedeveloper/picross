@@ -1,8 +1,8 @@
 import { REST_LATE_HEAL, type Rest } from '../../../puzzles/runs';
 import { iconArt } from '@picross/shared/ui/art';
 import { el } from '@picross/shared/ui/dom';
-import { formatTime } from '../../format';
-import type { PlaySession } from '../gameScreen';
+import { formatTime } from '@picross/play-grid/ui/format';
+import type { PlaySession } from '@picross/play-grid/ui/screens/gameScreen';
 
 /**
  * A rest stop (#77): a small puzzle against the clock. Solve it before the

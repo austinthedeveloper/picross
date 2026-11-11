@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
-import { lineClues } from '../src/engine/clues';
-import { fakeClue } from '../src/engine/fakes';
+import { lineClues } from '@picross/grid/engine/clues';
+import { fakeClue } from '@picross/grid/engine/fakes';
 import { cell, encounterSolution, meter, press, seed, skipScene } from './helpers';
 
 // Runs against a dev build (see playwright.config.ts); production has none of this.

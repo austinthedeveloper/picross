@@ -37,9 +37,15 @@ describe('scopeByBoard', () => {
   });
 
   it("scopes this game's screen styles to the flat board", () => {
-    expect(run('.stage { gap: 0 }', '/repo/apps/picross/src/styles/game.css')).toBe(
-      ':where(:root:not([data-board="block"])) .stage { gap: 0 }',
-    );
+    for (const from of [
+      '/repo/packages/play-grid/src/styles/game.css',
+      '/repo/packages/play-grid/src/styles/board.css',
+      '/repo/apps/picross/src/styles/select.css',
+    ]) {
+      expect(run('.stage { gap: 0 }', from)).toBe(
+        ':where(:root:not([data-board="block"])) .stage { gap: 0 }',
+      );
+    }
   });
 
   it('leaves shared styles, keyframes and media queries alone', () => {
@@ -48,10 +54,13 @@ describe('scopeByBoard', () => {
       expect(run('.stage { gap: 0 }', from)).toBe('.stage { gap: 0 }');
     }
     expect(
-      run('@keyframes pop { from { opacity: 0 } }', '/repo/apps/picross/src/styles/game.css'),
+      run('@keyframes pop { from { opacity: 0 } }', '/repo/packages/play-grid/src/styles/game.css'),
     ).toBe('@keyframes pop { from { opacity: 0 } }');
     expect(
-      run('@media (width < 40em) { .stage { gap: 0 } }', '/repo/apps/picross/src/styles/game.css'),
+      run(
+        '@media (width < 40em) { .stage { gap: 0 } }',
+        '/repo/packages/play-grid/src/styles/game.css',
+      ),
     ).toBe('@media (width < 40em) { :where(:root:not([data-board="block"])) .stage { gap: 0 } }');
   });
 });

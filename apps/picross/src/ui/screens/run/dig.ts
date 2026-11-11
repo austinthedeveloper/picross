@@ -1,9 +1,9 @@
-import type { Puzzle } from '../../../puzzles/format';
+import type { Puzzle } from '@picross/grid/puzzles/format';
 import { getGadget } from '@picross/shared/puzzles/gadgets';
 import { gadgetArt, iconArt } from '@picross/shared/ui/art';
 import { el } from '@picross/shared/ui/dom';
 import { pause } from '@picross/shared/ui/motion';
-import type { PlaySession } from '../gameScreen';
+import type { PlaySession } from '@picross/play-grid/ui/screens/gameScreen';
 
 /**
  * A dig encounter (#29): no enemy and no HP pressure. The board is dirt, and

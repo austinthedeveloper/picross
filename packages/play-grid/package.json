@@ -1,0 +1,19 @@
+{
+  "name": "@picross/play-grid",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "The 2D game's play screen and board view: the DOM side of @picross/grid. Plain TypeScript and CSS; each app's Vite compiles it.",
+  "exports": {
+    "./styles/*": "./src/styles/*",
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "test": "tsc --noEmit && vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@picross/grid": "*",
+    "@picross/shared": "*"
+  }
+}

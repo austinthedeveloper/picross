@@ -1,5 +1,5 @@
-import { murals } from '../puzzles/murals';
-import { puzzles } from '../puzzles/index';
+import { murals } from '@picross/grid/puzzles/murals';
+import { puzzles } from '@picross/grid/puzzles/index';
 import { DAILY_POINTS, puzzlePoints, ranks, TILE_POINTS, type Rank } from '../puzzles/ranks';
 import { dailySolves } from './daily';
 import { getPuzzleStats } from './progress';

@@ -1,6 +1,6 @@
-import { pickSwap } from '../../../../engine/swap';
+import { pickSwap } from '@picross/grid/engine/swap';
 import { markWiped } from '../../../../game/battle';
-import { plural } from '../../../format';
+import { plural } from '@picross/play-grid/ui/format';
 import { playSound } from '@picross/shared/ui/sound';
 import type { FightContext } from './context';
 
