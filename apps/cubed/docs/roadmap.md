@@ -14,7 +14,7 @@ and [milestones](https://github.com/austinthedeveloper/picross-3d/milestones).
 
 ## After that
 
-[Combining with the 2D game](../../docs/combining.md): one game with both, bosses that switch from a
+[Combining with the 2D game](../../../docs/combining.md): one game with both, bosses that switch from a
 2D board to a block mid-fight, in the 2D repo as a monorepo.
 
 ## How releases work

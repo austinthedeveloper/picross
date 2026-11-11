@@ -1,5 +1,7 @@
 # Moving puzzles out of the repo
 
+Paths here are in the 2D game's folder, `apps/picross/`.
+
 The pack is bundled: `src/puzzles/index.ts` globs `pack/*.json` at build time, so every
 puzzle ships in the JavaScript bundle and adding one means a commit and a deploy. That
 was right for 22 puzzles. With a few hundred, and more to come, the content should live

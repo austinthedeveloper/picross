@@ -1,11 +1,11 @@
 import './styles/tokens.css';
 // The 3D game's styles, for a boss that switches to a block. Each game's own screen styles
 // apply only on its board (scripts/scopeByBoard.ts); this order matches both games' own.
-import '../cubed/src/styles/voxels.css';
+import '../../cubed/src/styles/voxels.css';
 import './styles/base.css';
 import './styles/board.css';
 import './styles/game.css';
-import '../cubed/src/styles/game.css';
+import '../../cubed/src/styles/game.css';
 import './styles/select.css';
 import './styles/editor.css';
 import './styles/run.css';
@@ -14,7 +14,7 @@ import './styles/dig.css';
 import './styles/dialogue.css';
 import './styles/art.css';
 import './styles/badges.css';
-import '../cubed/src/styles/story.css';
+import '../../cubed/src/styles/story.css';
 import './styles/switch.css';
 import { syncBadges } from './game/badges';
 import { getPuzzle } from './puzzles/index';

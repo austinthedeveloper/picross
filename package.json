@@ -1,5 +1,5 @@
 {
-  "name": "picross",
+  "name": "picross-workspace",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -7,27 +7,27 @@
     "node": ">=20"
   },
   "scripts": {
-    "dev": "vite",
-    "dev:prod": "vite --mode production",
-    "build": "tsc --noEmit && vite build && node scripts/build-cubed.mjs dist",
-    "build:dev": "tsc --noEmit && vite build --mode development --outDir dist-dev && node scripts/build-cubed.mjs dist-dev",
+    "dev": "npm -w apps/picross run dev --",
+    "dev:prod": "npm -w apps/picross run dev:prod --",
+    "build": "npm -w apps/picross run build && node scripts/build-cubed.mjs dist",
+    "build:dev": "npm -w apps/picross run build:dev && node scripts/build-cubed.mjs dist-dev",
     "check:bundle": "sh scripts/check-prod-bundle.sh",
-    "preview": "vite preview",
+    "preview": "npm -w apps/picross run preview --",
     "lint": "eslint . && prettier --check .",
     "format": "prettier --write .",
-    "test": "vitest run && npm -w cubed test",
-    "test:watch": "vitest",
-    "check:puzzles": "vitest run src/puzzles/pack.test.ts",
-    "script-review": "vite-node scripts/script-review.ts serve",
-    "script-review:notes": "vite-node scripts/script-review.ts notes",
-    "script-review:export": "vite-node scripts/script-review.ts export",
-    "rate:puzzles": "vite-node scripts/rate-puzzles.ts",
-    "e2e": "playwright test",
-    "dev:cubed": "npm -w cubed run dev",
-    "test:flat": "vitest run",
-    "test:cubed": "npm -w cubed test",
-    "e2e:cubed": "npm -w cubed run e2e",
-    "check:cubed": "npm -w cubed run check:shared"
+    "test": "npm -w apps/picross test && npm -w apps/cubed test",
+    "test:watch": "npm -w apps/picross run test:watch --",
+    "check:puzzles": "npm -w apps/picross run check:puzzles --",
+    "script-review": "npm -w apps/picross run script-review --",
+    "script-review:notes": "npm -w apps/picross run script-review:notes --",
+    "script-review:export": "npm -w apps/picross run script-review:export --",
+    "rate:puzzles": "npm -w apps/picross run rate:puzzles --",
+    "e2e": "npm -w apps/picross run e2e --",
+    "dev:cubed": "npm -w apps/cubed run dev --",
+    "test:flat": "npm -w apps/picross test --",
+    "test:cubed": "npm -w apps/cubed test --",
+    "e2e:cubed": "npm -w apps/cubed run e2e --",
+    "check:cubed": "npm -w apps/cubed run check:shared"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",
@@ -44,6 +44,6 @@
     "vitest": "^3.2.7"
   },
   "workspaces": [
-    "cubed"
+    "apps/*"
   ]
 }

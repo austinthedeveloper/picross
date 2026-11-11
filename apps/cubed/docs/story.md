@@ -93,7 +93,7 @@ is read and ignored: here every fight is on a block already.
 ### Used by the 2D story
 
 A switching boss's block phases in the 2D story run this game's fight screen
-(`fightKind`), its `Battle` and its play screen, loaded from `cubed/` on demand. So
+(`fightKind`), its `Battle` and its play screen, loaded from `apps/cubed/` on demand. So
 `fightKind` takes its run through a `FightRun` (this game's story run by default), can be
 handed a `Battle` and HP to `carry` over, and calls `phased` after a phase starts. Keep
 those working when changing the fight; the root's `e2e/switching-boss.spec.ts` covers them.

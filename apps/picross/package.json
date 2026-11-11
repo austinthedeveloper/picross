@@ -1,0 +1,24 @@
+{
+  "name": "picross",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "vite",
+    "dev:prod": "vite --mode production",
+    "build": "tsc --noEmit && vite build",
+    "build:dev": "tsc --noEmit && vite build --mode development --outDir ../../dist-dev",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check:puzzles": "vitest run src/puzzles/pack.test.ts",
+    "script-review": "vite-node scripts/script-review.ts serve",
+    "script-review:notes": "vite-node scripts/script-review.ts notes",
+    "script-review:export": "vite-node scripts/script-review.ts export",
+    "rate:puzzles": "vite-node scripts/rate-puzzles.ts",
+    "e2e": "playwright test"
+  }
+}

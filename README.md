@@ -18,8 +18,8 @@ Fill cells so each row and column matches its clue numbers, and a pixel picture 
 
 This repo holds both games, with a **Flat | Cubed** switch at the top of each home screen:
 
-- **Flat** is the 2D game, at the site's root (this folder's `src/`).
-- **Cubed** ([Picross Cubed](cubed/README.md)) is the 3D game, under `/3d/` (the `cubed/`
+- **Flat** is the 2D game, at the site's root (`apps/picross/`).
+- **Cubed** ([Picross Cubed](apps/cubed/README.md)) is the 3D game, under `/3d/` (the `apps/cubed/`
   workspace, with its own docs).
 
 They're being combined into one game: [the plan](docs/combining.md), and
