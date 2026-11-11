@@ -1,4 +1,4 @@
-import { newBadgeLine, tierLabel, type NewBadge } from '../../game/badges';
+import { newBadgeCount, newBadgeLine, tierLabel, type NewBadge } from '../../game/badges';
 import { pictureOf, type Badge, type Tier } from '../../puzzles/badges';
 import { createPicture } from '@picross/play-grid/ui/board/picture';
 import { el } from '@picross/shared/ui/dom';
@@ -50,4 +50,10 @@ export function earnedBadges(fresh: readonly NewBadge[]): HTMLElement[] {
 /** A tier in words, so color is never the only signal. */
 export function tierTag(tier: Tier): HTMLElement {
   return el('span', { className: `badge-tier tier-${tier}`, textContent: tierLabel(tier) });
+}
+
+/** A link to the shelf that says how many badges are new: "Badges (2 new)". */
+export function badgesLink(className = 'button ghost'): HTMLElement {
+  const n = newBadgeCount();
+  return el('a', { className, href: '#/badges', textContent: n ? `Badges (${n} new)` : 'Badges' });
 }

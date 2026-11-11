@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
+  badgeLevel,
+  mergeBadgesSeen,
   mergeDailies,
   mergeJob,
   mergeLegacy,
@@ -349,5 +351,48 @@ describe('the dailies (#156)', () => {
       { times: { nope: 5, '2026-11-11': -1 } },
     )!;
     expect(out).toEqual({ days: {}, streak: 0, best: 0, solves: 0 });
+  });
+});
+
+describe('the badges seen (#157)', () => {
+  it('ranks a badge by how far it has got', () => {
+    expect(
+      [undefined, {}, { tier: 'bronze' }, { tier: 'silver' }, { tier: 'gold' }].map((e) =>
+        badgeLevel(e as never),
+      ),
+    ).toEqual([0, 1, 1, 2, 3]);
+  });
+
+  it("puts Cubed's tiers seen under block- ids, and leaves out what it never earned", () => {
+    expect(mergeBadgesSeen(undefined, { tiers: { solver: 1, clean: -1, big: 2 } })).toEqual({
+      earned: {},
+      seen: { 'block-solver': 2, 'block-big': 3 },
+    });
+  });
+
+  it("counts the 2D game's badges as seen, since it showed each one as it was earned", () => {
+    const flat = { earned: { 'invoiced-a-bat': { tier: 'gold' as const, at: 4 }, grounded: {} } };
+    expect(mergeBadgesSeen(flat, undefined)).toEqual({
+      ...flat,
+      seen: { 'invoiced-a-bat': 3, grounded: 1 },
+    });
+  });
+
+  it('only raises a level seen, so running again changes nothing', () => {
+    const once = mergeBadgesSeen(
+      { earned: {}, seen: { 'block-solver': 3, other: 2 } },
+      { tiers: { solver: 0, clean: 1 } },
+    )!;
+    expect(once.seen).toEqual({ 'block-solver': 3, 'block-clean': 2, other: 2 });
+    expect(mergeBadgesSeen(once, { tiers: { solver: 0, clean: 1 } })).toEqual(once);
+  });
+
+  it('writes nothing for a player with no badges in either game, and skips junk', () => {
+    expect(mergeBadgesSeen(undefined, undefined)).toBeUndefined();
+    expect(mergeBadgesSeen(undefined, {})).toBeUndefined();
+    expect(mergeBadgesSeen(undefined, { tiers: { solver: 'x' as never, big: 9 } })).toEqual({
+      earned: {},
+      seen: { 'block-big': 3 },
+    });
   });
 });

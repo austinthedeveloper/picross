@@ -1,4 +1,4 @@
-import { badgeCount } from '../../game/badges';
+import { badgeCount, newBadgeCount } from '../../game/badges';
 import { currentPoints, rankProgress } from '../../game/rank';
 import { el } from '@picross/shared/ui/dom';
 import { plural } from '@picross/play-grid/ui/format';
@@ -11,6 +11,7 @@ export function rankCard(): HTMLElement {
     ? `${total} · ${(next.points - points).toLocaleString()} to ${next.name}`
     : `${total} · the top rank`;
   const { earned, total: badges } = badgeCount();
+  const fresh = newBadgeCount();
   return el('section', { className: 'rank-card', ariaLabel: 'Rank' }, [
     el('div', { className: 'rank-title' }, [
       el('span', { className: 'rank-kicker', textContent: 'Rank' }),
@@ -27,7 +28,7 @@ export function rankCard(): HTMLElement {
       el('a', {
         className: 'rank-badges',
         href: '#/badges',
-        textContent: `Badges ${earned}/${badges} →`,
+        textContent: `Badges ${earned}/${badges}${fresh ? ` · ${fresh} new` : ''} →`,
       }),
     ]),
   ]);

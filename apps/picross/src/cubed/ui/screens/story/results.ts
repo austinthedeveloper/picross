@@ -8,6 +8,7 @@ import { homeLink } from '@picross/shared/ui/components/homeLink';
 import { el } from '@picross/shared/ui/dom';
 import { modePicker, newRunButton, type Hub } from './shared';
 import { cubedHref } from '../../../href';
+import { earnedNote } from '../earned';
 
 /** The job's sign-off for a win or a loss: the lines its outro plays for that flag. */
 function signOff(job: Job, won: boolean): HTMLElement[] {
@@ -41,6 +42,8 @@ function signOff(job: Job, won: boolean): HTMLElement[] {
 /** A finished run: records it once, then the outcome, the sign-off, and what's next. */
 export function results(hub: Hub, finished: RunState, job: Job): Node[] {
   const state = recordRunResult(finished);
+  // Badges once, on the first look: a reload of the results earns nothing new anyway.
+  const earned = finished.recorded ? [] : earnedNote();
   const won = state.status === 'won';
   const cleared = Math.min(state.node, job.encounters.length);
   return [
@@ -55,6 +58,7 @@ export function results(hub: Hub, finished: RunState, job: Job): Node[] {
         textContent: `${cleared}/${job.encounters.length} encounters cleared · ${state.hp}/${state.maxHp} HP left`,
       }),
       ...signOff(job, won),
+      ...earned,
       modePicker(hub),
       el('div', { className: 'end-actions' }, [
         el('button', {

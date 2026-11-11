@@ -5,6 +5,7 @@ import {
   recordSolve,
   saveBoard,
 } from '../../game/progress';
+import { badgeNote, earnFromStats } from '../../game/badges';
 import { currentPoints, rankUpNote } from '../../game/rank';
 import {
   getSettings,
@@ -114,7 +115,7 @@ export function renderMuralTile(app: HTMLElement, mural: Mural, n: number): () =
     complete(game) {
       const pointsBefore = currentPoints();
       recordSolve(tile.id, game.elapsed);
-      const rankUp = rankUpNote(pointsBefore);
+      const earned = [rankUpNote(pointsBefore), badgeNote(earnFromStats())].filter(Boolean);
       const left = mural.tiles
         .map((t, i) => [t, i] as const)
         .filter(([t]) => !getPuzzleStats(t.id));
@@ -123,7 +124,7 @@ export function renderMuralTile(app: HTMLElement, mural: Mural, n: number): () =
         ? `Tile ${n + 1} done in ${formatTime(game.elapsed)}. ${left.length} to go.`
         : `The last tile! ${mural.name} is complete.`;
       return {
-        note: rankUp ? `${note} ${rankUp}` : note,
+        note: [note, ...earned].join(' '),
         actions: [
           el('a', {
             className: `button ${next ? 'ghost' : 'primary'}`,

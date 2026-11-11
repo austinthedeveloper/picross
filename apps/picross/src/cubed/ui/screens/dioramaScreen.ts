@@ -19,6 +19,8 @@ import { playSound } from '@picross/shared/ui/sound';
 import { onHide } from '../../../ui/lifecycle';
 import { createPlay } from '@picross/play-block/ui/screens/play';
 import { cubedHref } from '../../href';
+import { currentPoints } from '../../../game/rank';
+import { earnedNote } from './earned';
 
 /** A diorama (#/cubed/diorama/<id>): the scene so far, its pieces, and the finished scene to turn. */
 export function renderDioramaScreen(root: HTMLElement, id: string): () => void {
@@ -121,6 +123,7 @@ export function renderDioramaTile(root: HTMLElement, id: string, n: number): () 
     hooks: {
       changed: () => (changed = true),
       solved(time) {
+        const pointsBefore = currentPoints();
         recordSolve(tile.puzzle.id, time, play.game.hintsUsed);
         const left = d.tiles.length - placed(d).length;
         playSound('line', 0.4);
@@ -133,6 +136,7 @@ export function renderDioramaTile(root: HTMLElement, id: string, n: number): () 
               ? `${left} piece${left === 1 ? '' : 's'} to go · ${formatTime(time)}`
               : `The ${d.name.toLowerCase()} is done.`,
           }),
+          ...earnedNote(pointsBefore),
           el('div', { className: 'end-actions' }, [
             el('a', {
               className: 'button primary',

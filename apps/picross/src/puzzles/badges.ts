@@ -20,10 +20,55 @@ export type BadgeRule =
   /** Reach this depth in Endless. */
   | { kind: 'depth'; depth: number }
   /** Reach this daily streak. */
-  | { kind: 'streak'; days: number };
+  | { kind: 'streak'; days: number }
+  /**
+   * Reach a count the saves show (#157): three steps for bronze, silver and gold, or one
+   * step for a badge without tiers.
+   */
+  | { kind: 'count'; count: Count; steps: readonly [number] | readonly [number, number, number] };
 
-/** Where a badge sits on the shelf. Job badges go under their chapter. */
-export type BadgeSection = 'job' | 'mastery' | 'losses' | 'endless' | 'daily';
+/**
+ * What a count badge counts. `game/badges.ts` works each one out from the saves, so
+ * progress from before a badge existed counts too.
+ */
+export type Count =
+  /** Flat free-play puzzles solved (the pack, not murals). */
+  | 'flat-solved'
+  /** Flat free-play puzzles of 20×20 or bigger solved. */
+  | 'flat-big'
+  /** Murals with every tile solved. */
+  | 'murals'
+  /** Cubed free-play puzzles solved (the pack, not dioramas). */
+  | 'cubed-solved'
+  /** Blocks solved at least once without a hint, dioramas included. */
+  | 'cubed-clean'
+  /** The longest side of the biggest Cubed free-play block solved. */
+  | 'cubed-biggest'
+  /** Diorama pieces solved. */
+  | 'diorama-pieces'
+  /** Cubed editor play-tests solved. */
+  | 'playtests'
+  /** The best daily streak, both boards' days together. */
+  | 'best-streak'
+  /** Chapters with every job won. */
+  | 'chapters'
+  /** Hits-on wins, every job's added up. */
+  | 'hits-on-wins'
+  /** Overtime runs and boss fights won. */
+  | 'overtime-wins'
+  /** The fewer of the two boards' free-play solves. */
+  | 'both-solved'
+  /** Jobs won on both boards. */
+  | 'jobs-on-both'
+  /** Pictures in both packs solved on both boards. */
+  | 'pictures-on-both';
+
+/**
+ * Where a badge sits on the shelf. Job badges go under their chapter; `story` ones follow
+ * the chapters.
+ */
+export type BadgeSection =
+  'job' | 'story' | 'flat' | 'cubed' | 'daily' | 'endless' | 'mastery' | 'losses' | 'both';
 
 export interface Badge {
   id: string;
@@ -308,6 +353,209 @@ const FLAME = [
   '...#####...',
 ];
 
+// Free play and both boards (#157). Cubed's badges had emoji before they joined this shelf.
+
+/** A ticked square: a fair deal. */
+const SQUARE = [
+  '###########',
+  '#.........#',
+  '#.......#.#',
+  '#......##.#',
+  '#.....##..#',
+  '#.#..##...#',
+  '#.####....#',
+  '#..##.....#',
+  '#.........#',
+  '###########',
+  '...........',
+];
+
+const WALL = [
+  '...........',
+  '#####.#####',
+  '#####.#####',
+  '...........',
+  '##.#####.##',
+  '##.#####.##',
+  '...........',
+  '#####.#####',
+  '#####.#####',
+  '...........',
+  '...........',
+];
+
+/** A framed hill, signed in the corner. */
+const SIGNED = [
+  '###########',
+  '#.........#',
+  '#....#....#',
+  '#...###...#',
+  '#..#####..#',
+  '#.........#',
+  '#.....#.#.#',
+  '#....#.#..#',
+  '#.........#',
+  '###########',
+  '...........',
+];
+
+const PICK = [
+  '...........',
+  '..#######..',
+  '.###...###.',
+  '.##..#..##.',
+  '.#...#...#.',
+  '.....#.....',
+  '.....#.....',
+  '.....#.....',
+  '.....#.....',
+  '....###....',
+  '...........',
+];
+
+const BULB = [
+  '...#####...',
+  '..#.....#..',
+  '.#.......#.',
+  '.#.......#.',
+  '.#.......#.',
+  '..#.....#..',
+  '...#...#...',
+  '...#####...',
+  '...#####...',
+  '....###....',
+  '...........',
+];
+
+const CUBE = [
+  '....#######',
+  '...#.....##',
+  '..#.....#.#',
+  '.#######..#',
+  '.#.....#..#',
+  '.#.....#..#',
+  '.#.....#..#',
+  '.#.....#.#.',
+  '.#.....##..',
+  '.#######...',
+  '...........',
+];
+
+const LANDSCAPE = [
+  '...........',
+  '........##.',
+  '..#....####',
+  '.###....##.',
+  '#####......',
+  '..#....#...',
+  '..#...###..',
+  '.....#####.',
+  '###########',
+  '###########',
+  '...........',
+];
+
+const BRUSH = [
+  '.........##',
+  '........###',
+  '.......###.',
+  '......###..',
+  '.....###...',
+  '....#.#....',
+  '..###......',
+  '.####......',
+  '.###.......',
+  '##.........',
+  '...........',
+];
+
+const CALENDAR = [
+  '..#.....#..',
+  '###########',
+  '###########',
+  '#.........#',
+  '#.#.#.#.#.#',
+  '#.........#',
+  '#.#.#.#.#.#',
+  '#.........#',
+  '#.#.#.#...#',
+  '###########',
+  '...........',
+];
+
+const NOTEBOOK = [
+  '.#########.',
+  '##.......#.',
+  '.#.#####.#.',
+  '##.......#.',
+  '.#.#####.#.',
+  '##.......#.',
+  '.#.####..#.',
+  '##.......#.',
+  '.#.......#.',
+  '.#########.',
+  '...........',
+];
+
+const HEART = [
+  '...........',
+  '.###...###.',
+  '#####.#####',
+  '###########',
+  '###########',
+  '.#########.',
+  '..#######..',
+  '...#####...',
+  '....###....',
+  '.....#.....',
+  '...........',
+];
+
+/** Half and half. */
+const HALVES = [
+  '...#####...',
+  '.##...####.',
+  '.#....####.',
+  '#.....#####',
+  '#.....#####',
+  '#.....#####',
+  '#.....#####',
+  '#.....#####',
+  '.#....####.',
+  '.##...####.',
+  '...#####...',
+];
+
+/** A checklist, ticked twice. */
+const CHECKLIST = [
+  '...#####...',
+  '.####.####.',
+  '.#.......#.',
+  '.#.##....#.',
+  '.#.##.##.#.',
+  '.#.......#.',
+  '.#.##....#.',
+  '.#.##.##.#.',
+  '.#.......#.',
+  '.#########.',
+  '...........',
+];
+
+/** A box, unfolded flat. */
+const NET = [
+  '....####...',
+  '....#..#...',
+  '....#..#...',
+  '.##########',
+  '.#..#..#..#',
+  '.#..#..#..#',
+  '.##########',
+  '....#..#...',
+  '....#..#...',
+  '....####...',
+  '...........',
+];
+
 /** Each job's badge, named after a line from that job's script. */
 const jobBadge = (id: string, job: string, jobName: string, name: string, picture: string[]) =>
   ({
@@ -317,6 +565,25 @@ const jobBadge = (id: string, job: string, jobName: string, name: string, pictur
     section: 'job',
     rule: { kind: 'job', job },
     opensWith: job,
+    picture,
+  }) satisfies Badge;
+
+/** A badge for reaching a count (#157). */
+const count = (
+  id: string,
+  name: string,
+  description: string,
+  section: BadgeSection,
+  counted: Count,
+  steps: readonly [number] | readonly [number, number, number],
+  picture: string[],
+) =>
+  ({
+    id,
+    name,
+    description,
+    section,
+    rule: { kind: 'count', count: counted, steps },
     picture,
   }) satisfies Badge;
 
@@ -444,6 +711,137 @@ export const badges: Badge[] = [
     rule: { kind: 'streak', days: 100 },
     picture: FLAME,
   },
+  // Free play on each board, and Cubed's badges from before the one shelf (#157). Cubed's
+  // keep their ids with `block-` in front, and their names, but one: its "Regular" is
+  // "Clocking In", since the 2D game has a Regular too.
+  count(
+    'flat-solver',
+    'Square Deal',
+    'Free-play puzzles solved on the Flat board.',
+    'flat',
+    'flat-solved',
+    [25, 100, 250],
+    SQUARE,
+  ),
+  count('flat-big', 'Wall to Wall', '20×20 puzzles solved.', 'flat', 'flat-big', [1, 10, 40], WALL),
+  count(
+    'flat-murals',
+    'Signed in the Corner',
+    'Murals finished, every tile.',
+    'flat',
+    'murals',
+    [1, 5, 12],
+    SIGNED,
+  ),
+  count(
+    'block-solver',
+    'Block Breaker',
+    'Free-play puzzles solved on the Cubed board.',
+    'cubed',
+    'cubed-solved',
+    [5, 15, 30],
+    PICK,
+  ),
+  count(
+    'block-clean',
+    'No Peeking',
+    'Blocks solved without a hint.',
+    'cubed',
+    'cubed-clean',
+    [3, 10, 25],
+    BULB,
+  ),
+  count(
+    'block-big',
+    'Big Blocks',
+    'Longest side of the biggest block solved.',
+    'cubed',
+    'cubed-biggest',
+    [7, 8, 9],
+    CUBE,
+  ),
+  count(
+    'block-diorama',
+    'Diorama Maker',
+    'Diorama pieces placed.',
+    'cubed',
+    'diorama-pieces',
+    [2, 5, 10],
+    LANDSCAPE,
+  ),
+  count(
+    'block-builder',
+    'Builder',
+    "Play-tests solved in Cubed's editor.",
+    'cubed',
+    'playtests',
+    [1, 3, 10],
+    BRUSH,
+  ),
+  count(
+    'block-daily',
+    'Clocking In',
+    'Best daily streak, in days.',
+    'daily',
+    'best-streak',
+    [3, 7, 30],
+    CALENDAR,
+  ),
+  count(
+    'block-story',
+    'Odd Jobber',
+    'Story chapters cleared.',
+    'story',
+    'chapters',
+    [1, 5, 10],
+    NOTEBOOK,
+  ),
+  count(
+    'block-overtime',
+    'Overtime',
+    'Overtime runs and boss fights won.',
+    'story',
+    'overtime-wins',
+    [1, 3, 8],
+    MOON,
+  ),
+  count(
+    'block-hits-on',
+    'Hits On',
+    'Jobs won with Hits on.',
+    'mastery',
+    'hits-on-wins',
+    [1, 5, 15],
+    HEART,
+  ),
+  // Both boards (#157).
+  count(
+    'fifty-fifty',
+    'Fifty-Fifty',
+    'Solve 50 free-play puzzles on each board.',
+    'both',
+    'both-solved',
+    [50],
+    HALVES,
+  ),
+  count(
+    'second-opinion',
+    'Second Opinion',
+    'Jobs won on the Flat board and the Cubed one.',
+    'both',
+    'jobs-on-both',
+    [1, 5, 10],
+    CHECKLIST,
+  ),
+  count(
+    'flat-packed',
+    'Flat-Packed',
+    'Pictures solved both flat and as a block.',
+    'both',
+    'pictures-on-both',
+    [1, 10, 25],
+    NET,
+  ),
 ];
 
 const byId = new Map(badges.map((badge) => [badge.id, badge]));
@@ -451,6 +849,10 @@ const byId = new Map(badges.map((badge) => [badge.id, badge]));
 export function getBadge(id: string): Badge | undefined {
   return byId.get(id);
 }
+
+/** Whether a badge comes in bronze, silver and gold. */
+export const hasTiers = ({ rule }: Badge): boolean =>
+  rule.kind === 'job' || (rule.kind === 'count' && rule.steps.length > 1);
 
 /** A job's badge, if it has one. */
 export function jobBadgeFor(job: string): Badge | undefined {

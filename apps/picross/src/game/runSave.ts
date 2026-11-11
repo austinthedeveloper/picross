@@ -144,6 +144,9 @@ export function setJobStats(id: string, stats: JobStats): void {
   writeStore(KEY, data);
 }
 
+/** Every job with stats: played at least once, on either board. */
+export const jobIds = () => Object.keys(data.jobs);
+
 /** Every job won at least once, on either board. */
 export const clearedJobs = () =>
   Object.entries(data.jobs)

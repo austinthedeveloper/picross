@@ -2,6 +2,7 @@ import { addDays, dailyDimension, dayNumber } from '@picross/shared/puzzles/days
 import { qualify, type Dimension } from '@picross/shared/puzzles/ids';
 import { combine, higher, mergeBestHp, present, union, unknownFields, type Loose } from './merging';
 import type { DailySave, DaySolved } from './daily';
+import type { BadgeSave, Earned } from './badges';
 import type { BlockSavedBoard, PuzzleStats, SavedBoard, SaveData } from './progress';
 import type { JobStats, RunSave } from './runSave';
 import type { Settings } from './settings';
@@ -281,11 +282,52 @@ export function mergeDailies(
   });
 }
 
-/** Both games' saves as one. The dailies merge on their own (`mergeDailies`, step 2), and badges in #157. */
+/**
+ * Both games' saves as one. The dailies merge on their own (`mergeDailies`, step 2), and so
+ * do the badges seen (`mergeBadgesSeen`, step 3).
+ */
 export function mergeLegacy(flat: FlatSaves, cubed: CubedSaves): MergedSaves {
   return present({
     progress: mergeProgress(flat.progress, cubed.progress),
     run: mergeRuns(flat.run, cubed.run),
     settings: mergeSettings(flat.settings, cubed.settings, flat.game),
   });
+}
+
+/**
+ * How far a badge has got, as a number (#157): 0 not earned, 1 earned (or bronze), 2 silver,
+ * 3 gold. The shelf marks a badge "New!" while it's further on than the level seen.
+ */
+export function badgeLevel(earned: Earned | undefined): number {
+  if (!earned) return 0;
+  return earned.tier === 'gold' ? 3 : earned.tier === 'silver' ? 2 : 1;
+}
+
+/** Cubed's `picross3d:badges`: the tier of each badge the last time its shelf was open. */
+export interface LegacyCubedBadges {
+  /** -1 none, 0 bronze, 1 silver, 2 gold. */
+  tiers?: Record<string, number>;
+}
+
+/**
+ * The badges seen (#157), so the one shelf doesn't greet a player with "New!" on everything
+ * they've seen already. Cubed's badges join the shelf as `block-<id>`, at the tier its own
+ * shelf last showed them. The 2D game showed each badge as it was earned, so those count as
+ * seen. Running it again changes nothing: a level seen only goes up.
+ */
+export function mergeBadgesSeen(
+  flat: BadgeSave | undefined,
+  cubed: LegacyCubedBadges | undefined,
+): BadgeSave | undefined {
+  if (!flat && !cubed?.tiers) return undefined;
+  const save: BadgeSave = { ...flat, earned: flat?.earned ?? {} };
+  const seen: Record<string, number> = { ...save.seen };
+  const see = (id: string, level: number) => {
+    if (Number.isFinite(level) && level > (seen[id] ?? 0)) seen[id] = level;
+  };
+  for (const [id, earned] of Object.entries(save.earned)) see(id, badgeLevel(earned));
+  for (const [id, tier] of Object.entries(cubed?.tiers ?? {})) {
+    if (typeof tier === 'number') see(`block-${id}`, Math.min(tier, 2) + 1);
+  }
+  return Object.keys(seen).length ? { ...save, seen } : save;
 }

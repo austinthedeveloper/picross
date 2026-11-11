@@ -1,13 +1,15 @@
 import { murals } from '@picross/grid/puzzles/murals';
 import { puzzles } from '@picross/grid/puzzles/index';
+import { blockCatalog } from '@picross/block/puzzles/catalog';
 import { DAILY_POINTS, puzzlePoints, ranks, TILE_POINTS, type Rank } from '../puzzles/ranks';
 import { dailySolves } from './daily';
-import { getPuzzleStats } from './progress';
+import { progressFor } from './progress';
 
 /**
  * Rank (#106) measures how much you've solved. It's worked out from existing
  * solves and never stored, so old saves have the right rank with no migration.
- * Time and mode don't count: slow, careful solving is the game.
+ * Time and mode don't count: slow, careful solving is the game. Both boards count (#157):
+ * a block by its longest side, a diorama piece like a mural tile.
  */
 
 interface Sized {
@@ -31,13 +33,25 @@ export function countPoints(
   );
 }
 
-/** The player's points right now. Counts from the lists, since the save holds other ids too. */
+/** Cubed's pack, sized by each block's longest side, from the catalog (not the pack itself). */
+export const blockPack: Sized[] = Object.entries(blockCatalog.puzzles).map(([id, side]) => ({
+  id,
+  width: side,
+  height: side,
+}));
+const blockTiles = blockCatalog.dioramaTiles.map((id) => ({ id }));
+const muralTiles = murals.flatMap((m) => m.tiles);
+
+/**
+ * The player's points right now, on both boards. Counts from the lists, since the save holds
+ * other ids too.
+ */
 export function currentPoints(): number {
-  return countPoints(
-    puzzles,
-    murals.flatMap((m) => m.tiles),
-    (id) => Boolean(getPuzzleStats(id)),
-    dailySolves(),
+  const flat = progressFor('grid');
+  const block = progressFor('block');
+  return (
+    countPoints(puzzles, muralTiles, (id) => Boolean(flat.getPuzzleStats(id)), dailySolves()) +
+    countPoints(blockPack, blockTiles, (id) => Boolean(block.getPuzzleStats(id)), 0)
   );
 }
 

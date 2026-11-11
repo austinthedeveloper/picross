@@ -28,11 +28,12 @@ describe('isBoardRoute', () => {
     '#/cubed',
     '#/cubed/',
     '#/cubed/story',
-    '#/cubed/badges',
     '#/cubed/diorama/park',
     '#/cubed/how-to-play',
-    // The old link to Cubed's daily: it never stays up (main.ts moves it to #/daily).
+    // The old links to Cubed's daily and badges: they never stay up (main.ts moves them to
+    // #/daily and #/badges).
     '#/cubed/daily',
+    '#/cubed/badges',
     // Look-alikes.
     '#/play/',
     '#/dailyx',

@@ -18,7 +18,7 @@ export const FLAT = `:not(${BLOCK})`;
 /** Each game's own screen styles (the 3D game's are in packages/play-block), and their board. */
 const SCOPED: [RegExp, string][] = [
   [/\/packages\/play-block\/src\/styles\/(game|story|editor)\.css$/, BLOCK],
-  // Cubed's own screens (its list, badges and how to play), in this app since the 3D game
+  // Cubed's own screens (its list and how to play), in this app since the 3D game
   // moved in.
   [/\/apps\/picross\/src\/cubed\/styles\/[\w-]+\.css$/, BLOCK],
   [/\/apps\/picross\/src\/styles\/(select|editor|badges)\.css$/, FLAT],

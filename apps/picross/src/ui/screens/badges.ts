@@ -1,4 +1,13 @@
-import { badgeCount, getEarned, nextTierHint } from '../../game/badges';
+import {
+  badgeCount,
+  currentCount,
+  getEarned,
+  isNew,
+  markBadgesSeen,
+  nextStep,
+  nextTierHint,
+  syncBadges,
+} from '../../game/badges';
 import { badges, jobBadgeFor, type Badge, type BadgeSection } from '../../puzzles/badges';
 import { chapters, type Chapter } from '../../puzzles/chapters';
 import { getRun } from '../../puzzles/runs';
@@ -17,6 +26,14 @@ function visible(badge: Badge): boolean {
 const dateLabel = (at: number) =>
   new Date(at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
 
+/** How to earn it, or the next tier: what the card says under the name. */
+function howTo(badge: Badge): string {
+  const { rule } = badge;
+  if (rule.kind === 'job') return nextTierHint(getEarned(badge.id));
+  if (rule.kind !== 'count') return badge.description;
+  return `${badge.description} ${nextStep(badge, currentCount(rule.count))}.`;
+}
+
 /**
  * One badge on the shelf. Everything an icon shows is also said in text. `chapter`
  * labels a job's badge with where it comes from.
@@ -34,11 +51,11 @@ function badgeCard(badge: Badge, chapter?: string): HTMLElement {
     ]);
   }
   const earned = getEarned(badge.id);
-  const hasTiers = badge.rule.kind === 'job';
   const status: (HTMLElement | string)[] = [];
   if (earned?.tier) status.push(tierTag(earned.tier));
   else if (earned) status.push(el('span', { className: 'badge-tier', textContent: 'Earned' }));
   else status.push(el('span', { className: 'badge-tier none', textContent: 'Not earned yet' }));
+  if (isNew(badge.id)) status.push(el('span', { className: 'badge-new', textContent: 'New!' }));
   if (earned?.at) {
     status.push(el('span', { className: 'badge-date', textContent: dateLabel(earned.at) }));
   }
@@ -47,10 +64,7 @@ function badgeCard(badge: Badge, chapter?: string): HTMLElement {
     el('div', { className: 'badge-text' }, [
       ...kicker,
       el('strong', { className: 'badge-name', textContent: badge.name }),
-      el('span', {
-        className: 'badge-how',
-        textContent: hasTiers ? nextTierHint(earned) : badge.description,
-      }),
+      el('span', { className: 'badge-how', textContent: howTo(badge) }),
       el('div', { className: 'badge-status' }, status),
     ]),
   ]);
@@ -72,27 +86,35 @@ function chapterCards(chapter: Chapter): HTMLElement[] {
   });
 }
 
+const cardsIn = (section: BadgeSection) =>
+  badges.filter((b) => b.section === section).map((b) => badgeCard(b));
+
+/** The shelves after the story's, in order (#157: both boards' badges, on one shelf). */
 const OTHER_SHELVES: [BadgeSection, string][] = [
+  ['flat', 'Free play · Flat'],
+  ['cubed', 'Free play · Cubed'],
+  ['daily', 'Daily'],
+  ['endless', 'Endless'],
   ['mastery', 'Know-how'],
   ['losses', 'Bad days'],
-  ['endless', 'Endless'],
-  ['daily', 'Daily'],
+  ['both', 'Both boards'],
 ];
 
-/** The badge shelf at #/badges (#109): everything earned, and what's left to earn. */
+/**
+ * The badge shelf at #/badges (#109): everything earned on either board, and what's left
+ * to earn. Opening it marks what's new as seen.
+ */
 export function renderBadgesScreen(app: HTMLElement): void {
+  // Anything the saves show that a screen didn't award as it happened.
+  syncBadges();
   const { earned, total } = badgeCount();
   app.replaceChildren(
     el('main', { className: 'screen badges' }, [
       el('header', { className: 'topbar' }, [homeLink(), el('h1', { textContent: 'Badges' })]),
       el('p', { className: 'run-meta', textContent: `${earned} of ${total} earned` }),
-      shelf('The story', chapters.flatMap(chapterCards)),
-      ...OTHER_SHELVES.map(([section, title]) =>
-        shelf(
-          title,
-          badges.filter((b) => b.section === section).map((b) => badgeCard(b)),
-        ),
-      ),
+      shelf('The story', [...chapters.flatMap(chapterCards), ...cardsIn('story')]),
+      ...OTHER_SHELVES.map(([section, title]) => shelf(title, cardsIn(section))),
     ]),
   );
+  markBadgesSeen();
 }

@@ -24,8 +24,8 @@ import type { BlockRunSave, JobStats, RunSave } from './runSave';
  *
  * Settings and the editor's drawing aren't here: they belong to one device. Since the
  * first-launch merge (#155) `progress` and `run` hold both games' (`picross:v2`, and
- * Cubed's run as `run.block`), and since #156 `daily` is both games' too; Cubed's badges
- * join with #157.
+ * Cubed's run as `run.block`), and since #156 `daily` is both games' too, and since #157
+ * `badges` (Cubed's as `block-` ids).
  */
 export interface SaveBundle {
   version: number;
@@ -38,8 +38,9 @@ export interface SaveBundle {
 /**
  * 2: progress is `picross:v2` (qualified ids, time per dimension), and runs have `block`.
  * 3: the one daily (#156): `daily` is `picross:daily2`, with its days and both boards'.
+ * 4: one badge shelf (#157): `badges` holds Cubed's too, and `seen`.
  */
-export const SAVE_VERSION = 3;
+export const SAVE_VERSION = 4;
 
 const mergeStats = (a: PuzzleStats, b: PuzzleStats): PuzzleStats =>
   present({
@@ -187,10 +188,13 @@ const mergeEarned = (a: Earned, b: Earned): Earned =>
     at: lower(a.at, b.at),
   });
 
-const mergeBadges = (a: BadgeSave, b: BadgeSave): BadgeSave => ({
-  ...(unknownFields(a, b) as object),
-  earned: mergeRecord(a.earned, b.earned, mergeEarned) ?? {},
-});
+const mergeBadges = (a: BadgeSave, b: BadgeSave): BadgeSave =>
+  present({
+    ...(unknownFields(a, b) as object),
+    earned: mergeRecord(a.earned, b.earned, mergeEarned) ?? {},
+    // Seen on either device is seen.
+    seen: mergeRecord(a.seen, b.seen, Math.max),
+  });
 
 export function mergeSaves(a: SaveBundle, b: SaveBundle): SaveBundle {
   return present({

@@ -309,6 +309,19 @@ describe('badges', () => {
   it('adds no date or tier when neither side has one', () => {
     expect(merge({ a: {} }, { a: {} }).a).toEqual({});
   });
+
+  it("keeps the higher level seen of each, Cubed's badges too (#157)", () => {
+    const out = merged(
+      bundle({ badges: { earned: {}, seen: { a: 1, 'block-solver': 3 } } }),
+      bundle({ badges: { earned: {}, seen: { a: 2, b: 1 } } }),
+    ).badges!;
+    expect(out.seen).toEqual({ a: 2, b: 1, 'block-solver': 3 });
+    expect(
+      merged(bundle({ badges: { earned: {} } }), bundle({ badges: { earned: {} } })).badges,
+    ).toEqual({
+      earned: {},
+    });
+  });
 });
 
 describe('the save as a whole', () => {

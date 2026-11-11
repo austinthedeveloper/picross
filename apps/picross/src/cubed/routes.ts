@@ -17,7 +17,6 @@ import { renderHowToPlay } from './ui/screens/howToPlay';
 import { addListCard, renderSelectScreen } from './ui/screens/selectScreen';
 import { renderStoryScreen, storyCard } from './ui/screens/story/index';
 import { dailyCard } from './ui/screens/dailyCard';
-import { renderBadgesScreen } from './ui/screens/badgesScreen';
 
 addListCard(dailyCard);
 addListCard(storyCard);
@@ -48,7 +47,6 @@ const ROUTES: CubedRoute[] = [
     render: (app, _, lazy) =>
       lazy(import('./ui/screens/dailyScreen'), (m) => m.renderDailyScreen(app)),
   },
-  { match: /^\/badges$/, render: (app) => renderBadgesScreen(app) },
   {
     match: /^\/diorama\/([\w-]+)(?:\/(\d+))?$/,
     render: (app, [, id, n], lazy) =>

@@ -1,5 +1,7 @@
 import { SOLID } from '@picross/block/game/game';
 import { clearDailyBoard, getDailyBoard, recordDaily, saveDailyBoard } from '../../game/daily';
+import { currentPoints } from '../../../game/rank';
+import { earnedNote } from './earned';
 import { getSettings } from '../../game/settings';
 import { dailyPuzzle, dateKey } from '@picross/block/puzzles/daily';
 import { shapePicture } from '@picross/play-block/ui/board/thumbnail';
@@ -28,6 +30,7 @@ export function renderDailyScreen(root: HTMLElement): () => void {
     hooks: {
       changed: () => (changed = true),
       solved(time) {
+        const pointsBefore = currentPoints();
         const streak = recordDaily(today, time);
         return [
           el('h2', { textContent: 'Solved!' }),
@@ -37,6 +40,7 @@ export function renderDailyScreen(root: HTMLElement): () => void {
             className: 'end-note',
             textContent: `${formatTime(time)} · ${plural(streak, 'day')} in a row`,
           }),
+          ...earnedNote(pointsBefore),
           el('div', { className: 'end-actions' }, [
             el('a', { className: 'button primary', href: cubedHref(), textContent: 'All puzzles' }),
           ]),

@@ -16,6 +16,8 @@ import { formatTime, plural, puzzleNumber } from '@picross/play-block/ui/format'
 import { onHide } from '../../../ui/lifecycle';
 import { createPlay } from '@picross/play-block/ui/screens/play';
 import { cubedHref } from '../../href';
+import { currentPoints } from '../../../game/rank';
+import { earnedNote } from './earned';
 
 /** Free play (#/cubed/play/<id>): saves as you go, records times, and offers the next puzzle. */
 export function renderGameScreen(root: HTMLElement, puzzle: Puzzle): () => void {
@@ -32,6 +34,7 @@ export function renderGameScreen(root: HTMLElement, puzzle: Puzzle): () => void 
     hooks: {
       changed: () => (changed = true),
       solved(time) {
+        const pointsBefore = currentPoints();
         const best = recordSolve(puzzle.id, time, play.game.hintsUsed);
         const stats = getPuzzleStats(puzzle.id)!;
         const next = nextPuzzle(puzzle.id);
@@ -50,6 +53,7 @@ export function renderGameScreen(root: HTMLElement, puzzle: Puzzle): () => void 
               : `${formatTime(time)}${extras.length ? ` (${extras.join(', ')})` : ''}`,
           }),
           el('p', { className: 'end-note', textContent: difficultyOf(puzzle).label }),
+          ...earnedNote(pointsBefore),
           el('div', { className: 'end-actions' }, [
             el('a', { className: 'button ghost', href: cubedHref(), textContent: 'All puzzles' }),
             ...(next

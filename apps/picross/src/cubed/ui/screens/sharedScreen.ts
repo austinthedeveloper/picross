@@ -1,4 +1,5 @@
 import { recordPlaytest } from '../../game/progress';
+import { earnedNote } from './earned';
 import { getSettings } from '../../game/settings';
 import { decodeShare } from '@picross/block/puzzles/share';
 import { shapePicture } from '@picross/play-block/ui/board/thumbnail';
@@ -38,6 +39,7 @@ export function renderSharedScreen(root: HTMLElement, code: string, test: boolea
               shapePicture(puzzle, 120),
               el('p', { className: 'end-name', textContent: puzzle.name }),
               el('p', { className: 'end-note', textContent: formatTime(time) }),
+              ...(test ? earnedNote() : []),
               el('div', { className: 'end-actions' }, [
                 test
                   ? el('a', {
