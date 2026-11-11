@@ -21,7 +21,6 @@ const packIds = () => fs.readdirSync(PACK).map((file) => file.replace(/\.json$/,
 test.describe('free play', () => {
   test('a fresh visit: sound off, small puzzles first, fish is 10×10', async ({ page }) => {
     await page.goto('/#/');
-    await expect(page.locator('.mute')).toHaveText(/Sound off/);
     await expect(page.locator('.size-section:not(.murals) .size-heading').first()).toHaveText(
       /5×5/,
     );
@@ -30,6 +29,7 @@ test.describe('free play', () => {
     );
     await page.goto('/#/play/fish');
     await expect(page.locator('.cell')).toHaveCount(100);
+    await expect(page.locator('.mute')).toHaveAttribute('title', 'Sound off');
   });
 
   test('solving shows only the result, and the list marks it solved', async ({ page }) => {

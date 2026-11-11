@@ -6,12 +6,10 @@ import { BANDS, difficultyOf } from '@picross/block/puzzles/difficulty';
 import type { Puzzle } from '@picross/block/puzzles/format';
 import { PUZZLES } from '@picross/block/puzzles/index';
 import { blockOutline, shapePicture } from '@picross/play-block/ui/board/thumbnail';
-import { createMuteButton } from '@picross/shared/ui/components/muteButton';
 import { el } from '@picross/shared/ui/dom';
 import { formatTime, puzzleNumber } from '@picross/play-block/ui/format';
-import { hapticsSupported } from '@picross/shared/ui/haptics';
-import { applyTheme } from '@picross/shared/ui/theme';
 import { badgesLink } from '../../../ui/components/badge';
+import { settingsLink } from '../../../ui/components/settingsLink';
 import { dioramaSection } from './dioramaList';
 import { cubedHref } from '../../href';
 import { freePlayHref, type Candidate, type SizeBand } from '../../../game/freePlay';
@@ -61,17 +59,6 @@ function card(puzzle: Puzzle, index: number, fill: ReturnType<typeof lazyThumbs>
       el('span', { className: `card-band band-${band.id}`, textContent: band.label }),
     ],
   );
-}
-
-function toggle(label: string, on: () => boolean, set: (v: boolean) => void): HTMLButtonElement {
-  const button = el('button', { className: 'toggle', textContent: label });
-  const render = () => button.setAttribute('aria-pressed', String(on()));
-  button.onclick = () => {
-    set(!on());
-    render();
-  };
-  render();
-  return button;
 }
 
 /** A row of joined buttons where one is chosen. */
@@ -187,7 +174,7 @@ export function unsolvedPuzzles(size: SizeBand): Candidate[] {
   );
 }
 
-/** The puzzle list, settings and stats (#/cubed). */
+/** The puzzle list, the mode, stats and a link to the settings (#/cubed). */
 export function renderSelectScreen(root: HTMLElement): void {
   const rerender = () => renderSelectScreen(root);
   const stats = getOverallStats();
@@ -243,30 +230,8 @@ export function renderSelectScreen(root: HTMLElement): void {
           () => getSettings().mode,
           (mode) => updateSettings({ mode }),
         ),
-        createMuteButton(),
-        toggle(
-          'High contrast',
-          () => getSettings().highContrast,
-          (v) => {
-            updateSettings({ highContrast: v });
-            applyTheme();
-            rerender();
-          },
-        ),
-        toggle(
-          'Fade finished lines',
-          () => getSettings().dimDone,
-          (v) => updateSettings({ dimDone: v }),
-        ),
-        ...(hapticsSupported()
-          ? [
-              toggle(
-                'Haptics',
-                () => getSettings().haptics,
-                (v) => updateSettings({ haptics: v }),
-              ),
-            ]
-          : []),
+        // Sound, high contrast, fading and haptics are on the settings screen (#154).
+        settingsLink(),
       ]),
       el('p', {
         className: 'stats',

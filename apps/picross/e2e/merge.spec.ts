@@ -112,13 +112,15 @@ test("Cubed's settings come with it when the 2D game had none", async ({ page, c
   await arriveWith(context, 'cubed-only');
   await page.goto('/#/cubed');
   // Cubed-only: sound on, the list on Done, fading off, the tutorial skipped.
-  await expect(page.locator('.mute').first()).toHaveAttribute('aria-pressed', 'true');
   await expect(page.getByRole('button', { name: 'Done', exact: true })).toHaveAttribute(
     'aria-pressed',
     'true',
   );
   await expect(page.locator('.tutorial-card')).toHaveCount(0);
-  // One settings save: the 2D game's list has sound on too.
-  await page.goto('/#/');
+  await page.getByRole('link', { name: 'Settings' }).click();
+  await expect(page.getByRole('switch', { name: 'Sound', exact: true })).toBeChecked();
+  await expect(page.getByRole('switch', { name: 'Fade finished clues' })).not.toBeChecked();
+  // One settings save: the 2D game's board has sound on too.
+  await page.goto('/#/play/heart');
   await expect(page.locator('.mute').first()).toHaveAttribute('aria-pressed', 'true');
 });
