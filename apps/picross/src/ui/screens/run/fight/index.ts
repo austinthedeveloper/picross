@@ -1,6 +1,6 @@
 import { debug } from '@picross/grid/debug/hooks';
-import { lineKey } from '@picross/grid/engine/lines';
-import { bump, finish, useGadget, type Enemy } from '../../../../game/battle';
+import { finish, type Enemy } from '../../../../game/battle';
+import type { Later } from '../../../../game/fight';
 import type { Puzzle } from '@picross/grid/puzzles/format';
 import type { PlaySession } from '@picross/play-grid/ui/screens/gameScreen';
 import { createArmorBack } from './armorBack';
@@ -9,9 +9,9 @@ import { createCharge } from './charge';
 import { createFightContext } from './context';
 import { playFinisher } from './finisher';
 import { createGadgetTray } from './gadgets';
-import { knockedOut, takeHit } from './hits';
+import { hitOf, knockedOut, takeHit } from './hits';
 import { createInker } from './ink';
-import { completeLines, showLineEffects } from './lines';
+import { createLines, showLineEffects } from './lines';
 import { createPhases } from './phases';
 import { createSwapper } from './swaps';
 import { createTips } from './tips';
@@ -20,25 +20,33 @@ import { createTurner } from './turns';
 /**
  * Fight rules on top of a run encounter (#27): completed lines chip the enemy,
  * the solved picture is the finisher, and in Hits-on runs each wrong fill lets
- * the enemy hit your run HP. Each mechanic lives in its own module: line
- * effects (fog, scramble, armor, ink), phases, swaps, forged clues, the charge
- * meter, turns, gadgets, hits, and the finisher. This wires them into the play
- * session's hooks.
+ * the enemy hit your run HP. The rules are `gridStep` (`game/fight.ts`); each
+ * mechanic's showing and timing lives in its own module: line effects (fog, scramble,
+ * armor, ink), phases, swaps, forged clues, the charge meter, turns, gadgets, hits, and
+ * the finisher. This wires them into the play session's hooks.
  */
 export function fightHooks(enemy: Enemy, puzzle: Puzzle, onBlock?: () => void) {
   const ctx = createFightContext(enemy, puzzle, onBlock);
   const swapper = createSwapper(ctx);
   const inker = createInker(ctx);
   const tips = createTips(ctx);
-  const checkPhase = createPhases(ctx, swapper, inker, (powers) => {
-    tips.phase(powers);
-    // Once the phase's new state is saved: it may start the charge or fog the live line.
-    window.setTimeout(charge.sync, 0);
-    window.setTimeout(turner.sync, 0);
-  });
+  const showPhase = createPhases(ctx, tips.phase);
+  /** Runs what a step said waits, at its moment (`Later` in game/fight.ts). */
+  const later = (e: Later) => {
+    // A phase's: once its new state is saved, it may start the charge or fog the live
+    // line, or start or change the turn's count.
+    if (e.do === 'aim') window.setTimeout(charge.sync, 0);
+    else if (e.do === 'sync-turn') window.setTimeout(turner.sync, 0);
+    else if (e.do === 'swap') swapper.queue(e.count);
+    else if (e.do === 'ink') inker.later(e.splashes);
+    else if (e.do === 'zap') charge.zapLater();
+    else if (e.do === 'hit-back') armorBack.hitLater();
+    else if (e.do === 'turn') turner.turnLater();
+    // The gadget tray throws its own bomb ('blast').
+  };
   // The call-out button sits in the gadget tray, and calling out refreshes the tray.
-  const callOut = createCallOut(ctx, checkPhase, () => gadgets.render());
-  const gadgets = createGadgetTray(ctx, checkPhase, callOut.buttons);
+  const callOut = createCallOut(ctx, showPhase, later, () => gadgets.render());
+  const gadgets = createGadgetTray(ctx, showPhase, later, callOut.buttons);
   const charge = createCharge(ctx, () => gadgets.render());
   const armorBack = createArmorBack(ctx, () => gadgets.render());
   // After a turn (#83), everything on the board's clues and cells goes back on, turned.
@@ -48,6 +56,14 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle, onBlock?: () => void) {
     callOut.show();
     inker.show();
     charge.sync();
+  });
+  const finishLines = createLines(ctx, {
+    showPhase,
+    later,
+    onDamage: () => gadgets.render(),
+    armorMeter: armorBack.draw,
+    turnMeter: turner.draw,
+    charge: charge.finished,
   });
   let finisher = 0;
   let defeatedAs = enemy.name;
@@ -66,25 +82,17 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle, onBlock?: () => void) {
       callOut.show();
       inker.show();
       charge.sync();
-      armorBack.show();
+      armorBack.draw();
       turner.sync();
       tips.start();
     },
-    // A line showing a forgery doesn't count until the forgery is called out.
-    onLinesComplete(lines) {
-      const counted = lines.filter((line) => !callOut.isFaked(line));
-      // A refilled line (after a swap, say) has already counted, so it can't charge again.
-      const { struck, armor } = ctx.battle();
-      const fresh = counted.filter((l) => !struck.includes(lineKey(l.kind, l.index)));
-      const message = completeLines(ctx, counted, checkPhase, gadgets.render);
-      armorBack.finished(fresh, armor);
-      turner.finished(fresh);
-      return [message, charge.finished(fresh)].filter(Boolean).join(' ') || undefined;
-    },
+    // Lines the board reports finished; a forgery doesn't count until it's called out.
+    onLinesComplete: (lines) => finishLines(lines),
     onMistake() {
-      // Counted here, not in takeHit: zaps and wrong accusations hit too, and a block returns early.
-      ctx.saveBattle(bump(ctx.battle(), 'wrongFills'));
-      return takeHit(ctx, gadgets.render);
+      // The step counts the wrong fill; zaps and wrong accusations count their own.
+      const { state, events } = ctx.step({ kind: 'mistake' });
+      ctx.saveBattle(state);
+      return takeHit(ctx, gadgets.render, undefined, hitOf(events));
     },
     ended: () => knockedOut(ctx),
     celebrate: (board) => playFinisher(ctx, board, finisher),
@@ -92,13 +100,19 @@ export function fightHooks(enemy: Enemy, puzzle: Puzzle, onBlock?: () => void) {
 
   if (import.meta.env.VITE_DEBUG === '1') {
     const damage = (amount: number) => {
-      const used = useGadget(ctx.battle(), { kind: 'blast', damage: amount });
-      const { state, message } = checkPhase(used.state);
+      const { state, events } = ctx.step({ kind: 'damage', amount });
+      let message = '';
+      let dealt = 0;
+      for (const e of events) {
+        if (e.kind === 'phase') message = showPhase(e);
+        else if (e.kind === 'later') later(e);
+        else if (e.kind === 'damaged') dealt = e.dealt;
+      }
       ctx.saveBattle(state);
       ctx.bar.setEnemyHp(state.enemyHp);
-      ctx.bar.hitEnemy(used.dealt);
+      ctx.bar.hitEnemy(dealt);
       gadgets.render();
-      ctx.bar.say(`Debug: ${used.dealt} damage, ${state.enemyHp} HP left. ${message}`);
+      ctx.bar.say(`Debug: ${dealt} damage, ${state.enemyHp} HP left. ${message}`);
     };
     debug.fight = {
       damage,

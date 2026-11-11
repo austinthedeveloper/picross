@@ -6,6 +6,7 @@ import {
   type BattleState,
   type Enemy,
 } from '../../../../game/battle';
+import { gridStep, type FightInput, type FightStep } from '../../../../game/fight';
 import { withBattle, type RunState } from '../../../../game/run';
 import { getCurrentRun, saveCurrentRun } from '../../../../game/runSave';
 import type { Puzzle } from '@picross/grid/puzzles/format';
@@ -32,6 +33,11 @@ export interface FightContext {
   form(): ReturnType<typeof currentForm>;
   /** Saves a new battle state into the run. */
   saveBattle(state: BattleState): void;
+  /**
+   * The fight's rules (`gridStep`) for what just happened, on the battle as saved. Saves
+   * nothing; `changed` says whether the step changed the battle.
+   */
+  step(input: FightInput): FightStep & { changed: boolean };
   /** Set once the board exists (see `onBoard`). */
   view: BoardView | null;
   controls: BoardControls | null;
@@ -66,6 +72,11 @@ export function createFightContext(
           if (!ctx.finished) onBlock();
         }, 0);
       }
+    },
+    step(input) {
+      const before = battle();
+      const step = gridStep(enemy, ctx.puzzle, before, input);
+      return { ...step, changed: step.state !== before };
     },
     view: null,
     controls: null,

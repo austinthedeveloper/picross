@@ -1,11 +1,10 @@
-import { pickLiveLine } from '@picross/grid/engine/charge';
-import { hasLine, lineKey, unionLines, type Line } from '@picross/grid/engine/lines';
-import { bump, chargeUp, warmUpLines, ZAP_DAMAGE } from '../../../../game/battle';
+import type { Line } from '@picross/grid/engine/lines';
+import type { ChargeEvent } from '../../../../game/fight';
 import { lineName } from '@picross/play-grid/ui/format';
 import { haptic } from '@picross/shared/ui/haptics';
 import { playSound } from '@picross/shared/ui/sound';
 import type { FightContext } from './context';
-import { takeHit } from './hits';
+import { hitOf, takeHit } from './hits';
 
 /**
  * The charge meter (#67, the Electric Eel). One line is live ⚡. Finish it and you
@@ -13,7 +12,8 @@ import { takeHit } from './hits';
  * (Hits-on runs). Either way another line goes live. It only moves when you finish a
  * line, never with time, because working a line out is the game. It warms up first:
  * no line is live until you've finished a quarter of the board, so the opening is
- * free and the first live line is one you're already into.
+ * free and the first live line is one you're already into. `gridStep` keeps the meter;
+ * this shows it and lands the zap.
  */
 export function createCharge(ctx: FightContext, onKnockout: () => void) {
   const zap = () => {
@@ -22,54 +22,29 @@ export function createCharge(ctx: FightContext, onKnockout: () => void) {
     playSound('zap');
     haptic('zap');
     const { name } = ctx.form();
-    if (ctx.hitsOn) ctx.saveBattle(bump(ctx.battle(), 'zaps'));
+    const { state, events } = ctx.step({ kind: 'zap', hitsOn: ctx.hitsOn });
+    if (ctx.hitsOn) ctx.saveBattle(state);
     const message = ctx.hitsOn
-      ? takeHit(ctx, onKnockout, `⚡ ${name} zaps you!`, ZAP_DAMAGE)
+      ? takeHit(ctx, onKnockout, `⚡ ${name} zaps you!`, hitOf(events))
       : `⚡ ${name} zaps the board. It fizzles in a Relaxed run.`;
     ctx.controls?.refresh();
     ctx.bar.say(message);
   };
 
-  /**
-   * Makes sure a line you can read is live and shows the meter. Returns the newly
-   * live line, if there is one. A phase can fog the live line, so this runs after
-   * phases too.
-   */
-  const aim = (): Line | null => {
-    const limit = ctx.form().charge;
-    if (!limit || !ctx.controls) {
+  /** Shows the meter and the live line as the charge aimed them. */
+  const show = (e: ChargeEvent) => {
+    if (!e.limit) {
       ctx.bar.setCharge(null);
       ctx.view?.setLive(null);
-      return null;
-    }
-    let state = ctx.battle();
-    // The first time the charge shows (fight start, or a phase that brings it), it warms up.
-    if (state.warmUp === undefined && !state.live) {
-      const { board } = ctx.controls.game;
-      state = { ...state, warmUp: warmUpLines(board.width, board.height) };
-      ctx.saveBattle(state);
-    }
-    if (state.warmUp) {
-      const n = state.warmUp;
+    } else if (e.warmUp) {
+      const n = e.warmUp;
       ctx.bar.setCharge(0, `Warming up · ${n} ${n === 1 ? 'line' : 'lines'}`);
       ctx.view?.setLive(null);
-      return null;
+    } else {
+      const left = `${e.limit - e.charged} left`;
+      ctx.bar.setCharge(e.charged / e.limit, e.live ? `${lineName(e.live, true)} · ${left}` : left);
+      ctx.view?.setLive(e.live);
     }
-    const avoid = unionLines([state.fog, state.scramble, state.suspects]);
-    const { live } = state;
-    const stays =
-      live &&
-      !hasLine(avoid, live.kind, live.index) &&
-      !state.struck.includes(lineKey(live.kind, live.index));
-    const next = stays
-      ? live
-      : pickLiveLine(ctx.controls.game.board, ctx.puzzle.solution, state.struck, avoid);
-    if (!stays) ctx.saveBattle({ ...state, live: next ?? undefined });
-    const charged = state.charged ?? 0;
-    const left = `${limit - charged} left`;
-    ctx.bar.setCharge(charged / limit, next ? `${lineName(next, true)} · ${left}` : left);
-    ctx.view?.setLive(next);
-    return stays ? null : next;
   };
 
   const liveNow = (line: Line | null) => (line ? `⚡ ${lineName(line, true)} is live.` : '');
@@ -77,27 +52,39 @@ export function createCharge(ctx: FightContext, onKnockout: () => void) {
   return {
     /** Shows the meter once the board is up, and after a phase, which may start the charge or fog the live line. */
     sync() {
-      const line = aim();
-      if (!line) return;
-      ctx.bar.say(liveNow(line));
+      const step = ctx.controls ? ctx.step({ kind: 'aim', board: ctx.controls.game.board }) : null;
+      if (step?.changed) ctx.saveBattle(step.state);
+      const aimed = step?.events.find((e) => e.kind === 'charge');
+      show(
+        aimed ?? {
+          kind: 'charge',
+          limit: null,
+          warmUp: 0,
+          charged: 0,
+          live: null,
+          fresh: null,
+          warming: false,
+        },
+      );
+      if (!aimed?.fresh) return;
+      ctx.bar.say(liveNow(aimed.fresh));
       playSound('live', 0.6); // after the phase's own sound
     },
-    /** Lines you just finished for the first time move the meter. Returns the announcement. */
-    finished(lines: Line[]): string {
-      const limit = ctx.form().charge;
-      if (!limit || !lines.length) return '';
-      const warming = Boolean(ctx.battle().warmUp);
-      const { state, grounded, zapped } = chargeUp(ctx.battle(), lines, limit);
-      ctx.saveBattle(state);
-      if (grounded) playSound('phase');
-      // Like ink and swaps, the zap lands outside the redraw that triggered it.
-      if (zapped) window.setTimeout(zap, 0);
-      const line = aim();
+    /**
+     * The meter after lines you just finished. `grounded` and `zapped` say whether they
+     * grounded it or charged it to a zap. Returns the announcement.
+     */
+    finished(e: ChargeEvent, grounded: boolean, zapped: boolean): string {
+      show(e);
       // A new live line sounds after the line chime, or after grounding or the zap.
-      if (line) playSound(warming ? 'charged' : 'live', grounded || zapped ? 0.5 : 0.15);
-      return [grounded ? '⚡ Grounded! The charge drains away.' : '', liveNow(line)]
+      if (e.fresh) playSound(e.warming ? 'charged' : 'live', grounded || zapped ? 0.5 : 0.15);
+      return [grounded ? '⚡ Grounded! The charge drains away.' : '', liveNow(e.fresh)]
         .filter(Boolean)
         .join(' ');
+    },
+    /** Like ink and swaps, the zap lands outside the redraw that triggered it. */
+    zapLater() {
+      window.setTimeout(zap, 0);
     },
   };
 }
