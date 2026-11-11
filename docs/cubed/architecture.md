@@ -14,7 +14,7 @@ it:
 | Engine  | `packages/block/src/engine/`                             | No                   | The block, lines and clues, and the line solver           |
 | Puzzles | `packages/block/src/puzzles/`                            | No                   | The puzzle file format, clue hiding, the pack, dioramas   |
 | Game    | `packages/block/src/{game,story}/`                       | No                   | A puzzle in play (strokes, hearts, hints), battles, story |
-|         | `apps/picross/src/cubed/game/`                           | No (uses storage)    | Saves, settings, runs, the daily streak, badges           |
+|         | `apps/picross/src/cubed/game/`                           | No (uses storage)    | Views of the one save; runs, the daily streak, badges     |
 | UI      | `packages/play-block/src/`, `apps/picross/src/cubed/ui/` | Yes                  | The 3D view, input, the play screen; Cubed's screens      |
 
 `@picross/block` (`packages/block`) has no three.js and no screens: a test and a lint rule
@@ -65,9 +65,14 @@ file; `pack.test.ts` checks every puzzle still solves.
 seen through one face and keeps to that layer (the face's axis), so breaking a cube never
 lets the stroke fall through to the one behind. Hearts mode refuses to break a cube of the
 shape: it paints it instead and costs a heart. Solved means every cube outside the shape is
-broken; painting is only a help. Undo works in whole strokes. Cubed's `progress.ts` and
-`settings.ts` store saves under `picross3d:` keys, apart from the 2D game's (#155 merges
-them).
+broken; painting is only a help. Undo works in whole strokes. Cubed's saves are the 2D game's
+since the save merge (#155): `game/progress.ts`, `runSave.ts` and `settings.ts` here are views
+of `picross:v2` (the `block:` ids), `picross:run` (Cubed's run is its `block`) and
+`picross:settings` (`dimDone`, `cubedTutorialDone`), so the screens didn't change. The daily
+(`picross3d:daily`) and the badge tiers seen (`picross3d:badges`) keep their keys until #156
+and #157. The old `picross3d:v1`, `picross3d:run` and `picross3d:settings` stay for a
+rollback, read only by the migration (see
+[State and persistence](../architecture.md#state-and-persistence)).
 
 ## The view
 
@@ -106,8 +111,8 @@ first download or Cubed's list. Every link between them goes through `cubedHref(
 | `#/cubed/story`, `#/cubed/story/play` | `story/*`                                      | Story mode (see [story.md](story.md))                          |
 
 Scenes (`#/scene/<id>`) are both games'. On its routes the router sets
-`<html data-board="block">`, where Cubed's styles apply, and hands shared code Cubed's
-settings (see [the 2D game's routing](../architecture.md#routing-and-screens)).
+`<html data-board="block">`, where Cubed's styles apply, and hands shared code Cubed's view
+of the settings (see [the 2D game's routing](../architecture.md#routing-and-screens)).
 
 **The old address.** Cubed was its own app at `/3d/` until it moved in. `/3d/` is now a page
 (`apps/picross/public/3d/index.html`) that sends each old link to the same screen
