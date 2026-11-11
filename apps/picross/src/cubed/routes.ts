@@ -14,7 +14,13 @@ import { getSettings, updateSettings } from './game/settings';
 import { cubedHref } from './href';
 import type { Lazy, Screen } from '../routes';
 import { renderHowToPlay } from './ui/screens/howToPlay';
-import { addListCard, renderSelectScreen } from './ui/screens/selectScreen';
+import {
+  addListCard,
+  puzzleList,
+  renderSelectScreen,
+  unsolvedPuzzles,
+} from './ui/screens/selectScreen';
+import type { SizeBand } from '../game/freePlay';
 import { renderStoryScreen, storyCard } from './ui/screens/story/index';
 import { dailyCard } from './ui/screens/dailyCard';
 
@@ -99,3 +105,12 @@ export function renderCubed(app: HTMLElement, path: string, lazy: Lazy): Screen 
   }
   return renderSelectScreen(app);
 }
+
+/** Free play's Cubed tab (#153, ui/screens/freePlay.ts): Cubed's list, with its settings up. */
+export function freePlayList(size: SizeBand): HTMLElement[] {
+  useCubedSettings();
+  return puzzleList(size);
+}
+
+/** The unsolved puzzles the Cubed tab shows, for Next unsolved and Surprise me. */
+export const freePlayPicks = unsolvedPuzzles;

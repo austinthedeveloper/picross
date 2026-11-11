@@ -1,0 +1,77 @@
+/*
+ * Free play (#153, src/ui/screens/freePlay.ts): the tabs, filters and pickers above either
+ * board's list. Unlike select.css this isn't scoped by board (scripts/scopeByBoard.ts): it
+ * looks the same on the Flat tab and on the Cubed tab, where <html data-board="block"> is up
+ * and each list keeps its own game's styles. The tabs are the Flat | Cubed switch's look
+ * (.game-switch in base.css).
+ */
+
+.free-tabs {
+  margin-bottom: 12px;
+}
+
+.free-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px 12px;
+  margin-bottom: 12px;
+}
+
+/* Size, difficulty and sort share a row, even on a phone. */
+.free-selects {
+  display: flex;
+  flex: 1 1 320px;
+  gap: 8px;
+  max-width: 480px;
+}
+
+.free-select {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.free-select select {
+  width: 100%;
+  padding: 6px 4px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.85rem;
+}
+
+/* Next unsolved, Surprise me, and Both boards: one row, even on a phone. */
+.free-picks {
+  display: flex;
+  gap: 8px;
+  max-width: 480px;
+  margin-bottom: 16px;
+}
+
+.free-picks > button {
+  flex: 1 1 auto;
+  padding: 8px 10px;
+  font-size: 0.9rem;
+}
+
+.free-picks .button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/*
+ * 600+ cards between the two lists: the browser lays out and paints only the ones near the
+ * screen, keeping each one's last size (about a card's) for the scrollbar meanwhile.
+ */
+.free-list .card,
+.free-list .puzzle-card {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 150px;
+}
