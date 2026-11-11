@@ -1,4 +1,4 @@
-# Roadmap
+# Picross Cubed: roadmap
 
 v1.0 brings over everything the 2D game has: free play, an editor, the daily puzzle,
 dioramas (its murals), badges, and the whole story with every enemy power. The backlog
@@ -14,11 +14,12 @@ and [milestones](https://github.com/austinthedeveloper/picross-3d/milestones).
 
 ## After that
 
-[Combining with the 2D game](../../../docs/combining.md): one game with both, bosses that switch from a
-2D board to a block mid-fight, in the 2D repo as a monorepo.
+[Combining with the 2D game](../combining.md): one game with both, and bosses that switch
+from a 2D board to a block mid-fight. The monorepo part (steps 1 to 3) is done.
 
-## How releases work
+## Releases
 
-- Bump `version` in `package.json`, add `docs/releases/vX.Y.Z.md`, merge, then tag `vX.Y.Z`
-  on `main` and push the tag. `release.yml` checks, builds, publishes the release with the
-  site zipped, and redeploys the site with it at the root.
+Cubed ships with the 2D game now: `npm run build` puts it in `dist/3d/`, and a 2D release
+deploys both (see [development.md](../development.md#azure-deployment-releases)). Its own
+`release.yml` went when the games shared a site. The notes for its releases as a separate
+game are in [releases/](releases/).

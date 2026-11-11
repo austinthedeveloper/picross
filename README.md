@@ -20,7 +20,10 @@ This repo holds both games, with a **Flat | Cubed** switch at the top of each ho
 
 - **Flat** is the 2D game, at the site's root (`apps/picross/`).
 - **Cubed** ([Picross Cubed](apps/cubed/README.md)) is the 3D game, under `/3d/` (the `apps/cubed/`
-  workspace, with its own docs).
+  workspace; its docs are in [docs/cubed/](docs/cubed/architecture.md)).
+
+The code both use is in six packages under `packages/`. The
+[package map](docs/architecture.md#package-map) says what each one owns and may import.
 
 They're being combined into one game: [the plan](docs/combining.md), and
 [the story ideas](docs/story-combined.md).
@@ -41,7 +44,7 @@ Then open http://localhost:5173.
 | `npm run dev`                  | Dev server with hot reload and the debug tools                        |
 | `npm run dev:prod`             | Dev server without the debug tools                                    |
 | `npm run dev:cubed`            | The 3D game's dev server, at http://localhost:5174                    |
-| `npm test`                     | Unit tests (Vitest), including the puzzle pack uniqueness check       |
+| `npm test`                     | Unit tests (Vitest) for every package and both games                  |
 | `npm run test:watch`           | Tests in watch mode                                                   |
 | `npm run check:puzzles`        | Only the puzzle pack uniqueness check                                 |
 | `npm run rate:puzzles`         | Re-rate puzzle difficulty after adding or changing puzzles            |
@@ -53,15 +56,21 @@ Then open http://localhost:5173.
 | `npm run build`                | Type-check and build to `dist/`                                       |
 | `npm run build:dev`            | The same, with the debug tools, to `dist-dev/`                        |
 | `npm run check:bundle`         | Fails if debug code reached `dist/`                                   |
+| `npm run check:budget`         | Fails if three.js reached either first download, or it grew too big   |
 | `npm run preview`              | Serve the production build locally                                    |
 | `npm run e2e`                  | Browser tests (Playwright, phone-sized) against the build             |
+| `npm run e2e:cubed`            | The 3D game's browser tests                                           |
+
+Each package's and game's tests also run alone (`npm run test:grid`, `test:cubed` and so
+on); [development.md](docs/development.md#scripts) lists every script.
 
 ## Docs
 
-- [Architecture](docs/architecture.md): where everything lives and how a move flows through
-  the code
+- [Architecture](docs/architecture.md): the package map (where every file lives and what it
+  may import), then how the 2D game works
 - [Development](docs/development.md): running, testing, CI and deploys, branches and stacked PRs
 - [How-to guides](docs/how-to.md): add a puzzle, screen, setting, sound, animation, or game rule
 - [Art direction](docs/art-direction.md): the look and feel, palette, type, and mood board
 - [Shared package](packages/shared/README.md): the code, styles and art both games import
 - [Story package](packages/story/README.md): the story both games play, its loaders and its gate
+- [Picross Cubed](docs/cubed/architecture.md): the 3D game's architecture, how-to, story and roadmap

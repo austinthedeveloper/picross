@@ -76,7 +76,7 @@ export interface FightOptions {
 }
 
 /**
- * A fight on a block (docs/story.md): finishing lines chips the enemy, the solved shape
+ * A fight on a block (docs/cubed/story.md): finishing lines chips the enemy, the solved shape
  * finishes it, and its powers fight back. With Hits on, breaking a cube of the shape lets
  * it hit you; in Relaxed nothing can hurt you.
  */

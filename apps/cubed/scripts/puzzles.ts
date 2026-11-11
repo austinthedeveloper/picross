@@ -10,7 +10,7 @@
  *                              shapes get new hidden clues), then check everything. Sheets
  *                              in sheets/story/ export to the story puzzles (puzzles/story/).
  *
- * A puzzle has to be solvable without guessing from the clues it shows. See docs/how-to.md.
+ * A puzzle has to be solvable without guessing from the clues it shows. See docs/cubed/how-to.md.
  */
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';

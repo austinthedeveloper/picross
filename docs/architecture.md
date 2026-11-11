@@ -1,212 +1,354 @@
 # Architecture
 
-The game is a single-page app in plain TypeScript with no UI framework. Screens build DOM
-nodes with a small `el()` helper, and the code is split into four layers. Each layer only
-imports from the layers above it in this list:
+This repo holds two games and the packages they share. This page starts with where every
+file lives and what it may import, then describes the 2D game. The 3D game, Picross Cubed,
+has its own pages in [docs/cubed/](cubed/architecture.md) (below).
 
-| Layer   | Folder         | Knows about the DOM? | Job                                                             |
-| ------- | -------------- | -------------------- | --------------------------------------------------------------- |
-| Engine  | `src/engine/`  | No                   | Pure puzzle logic: grids, clues, undo history, the line solver  |
-| Puzzles | `src/puzzles/` | No                   | The puzzle file format and the built-in pack                    |
-| Game    | `src/game/`    | No (uses storage)    | A puzzle in play (rules, hearts, hints, clock), saves, settings |
-| UI      | `src/ui/`      | Yes                  | Screens, the board view, input, sound, and components           |
+## Package map
 
-Keep rules and state in `engine/` and `game/`, where they can be unit tested without a
-browser. The UI should only translate events into `Game` calls and redraw.
+The root is an npm workspace (`"workspaces": ["apps/*", "packages/*"]`): two apps, six
+packages, and the docs, CI, lint config and build scripts at the root. A package is plain
+TypeScript with no build step. Its export map turns `@picross/<name>/<path>` into
+`src/<path>.ts` (and `@picross/<name>/styles/<file>` into `src/styles/<file>`), so a file
+keeps the path under `src/` that it had in the app it came from.
 
-The 2D core of the first three layers (the engine, the format and pack, and `Game`) is a
-package, `packages/grid`, which can't import the UI and runs its tests in Node. The board
-view, input and play screen are `packages/play-grid`. Fights, runs, saves and the other
-screens stay in the app and reach the play screen through its `PlaySession`.
+| Workspace             | Name                  | Owns                                                                                                                                                                                                                                                                | May import                                                                                                      |
+| --------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `packages/shared`     | `@picross/shared`     | What both games use that isn't the story: tokens and base styles, the run, fight, dig, dialogue and art styles, sound, haptics, theme, `dom`, `motion`, `storage`, `random`, `prefs`, puzzle ids, the Home, mute and Flat \| Cubed buttons, the art and `ui/art.ts` | Only its own files                                                                                              |
+| `packages/story`      | `@picross/story`      | The story both games play: its JSON, loaders and checks, gadgets, the dialogue runner, and the scene player (`ui/`)                                                                                                                                                 | shared, outside its `ui/` and `styles/`. Its `ui/` may use all of shared. Its tests may also use block          |
+| `packages/grid`       | `@picross/grid`       | The 2D rules and data: the engine, the puzzle format, the pack, sheets, ratings, murals, `Game` and the debug hooks. No DOM                                                                                                                                         | shared and story, outside their `ui/` and `styles/`                                                             |
+| `packages/play-grid`  | `@picross/play-grid`  | Playing a 2D board: the board view, input, zoom, the play screen and its `PlaySession`, `board.css` and `game.css`                                                                                                                                                  | grid and shared                                                                                                 |
+| `packages/block`      | `@picross/block`      | The 3D rules and data: the engine, the puzzle format, the pack, dioramas, the 3D story puzzles, `Game`, `Battle` and the story on blocks. No three.js                                                                                                               | shared and story, outside their `ui/` and `styles/`. Never three.js or play-block                               |
+| `packages/play-block` | `@picross/play-block` | Playing a block: the three.js view, input, the play, fight and editor screens, their styles, and the block e2e helpers                                                                                                                                              | block, shared, story and three.js                                                                               |
+| `apps/picross`        | `picross`             | The 2D game: routes, saves and settings, runs and fights, the daily, murals, badges, the editor, the debug panel and its scripts                                                                                                                                    | Every package. Never `apps/cubed`. Anything that pulls in three.js only with `import()`                         |
+| `apps/cubed`          | `picross-3d`          | The 3D game: routes, saves and settings, the list, the daily, dioramas, badges, the tutorial and the story screens                                                                                                                                                  | shared, story, block and play-block. Never `apps/picross`. Anything that pulls in three.js only with `import()` |
+
+No package imports an app, and a relative import never leaves its package (the one
+exception: story's art test reads shared's `public/art/`). Each package's rule is checked
+twice: by `src/imports.test.ts` in the package (part of `npm test`), which reads every
+import, `import()` and glob, and by its block in `eslint.config.js`
+(`no-restricted-imports`, part of `npm run lint`). The apps' rule is lint only, with
+`no-restricted-syntax` catching `import()`. `npm run check:budget` checks that three.js
+stays out of each game's first download: the play-block modules that use it (the view,
+input and the screens built on them) load with `import()`.
+
+Arrows point at what a workspace imports:
+
+```mermaid
+graph TD
+  picross[apps/picross] --> playgrid[play-grid]
+  picross --> grid
+  picross --> playblock[play-block]
+  picross --> block
+  picross --> story
+  picross --> shared
+  cubed[apps/cubed] --> playblock
+  cubed --> block
+  cubed --> story
+  cubed --> shared
+  playgrid --> grid
+  playgrid --> shared
+  playblock --> block
+  playblock --> story
+  playblock --> shared
+  playblock --> three[three.js]
+  grid --> story
+  grid --> shared
+  block --> story
+  block --> shared
+  story --> shared
+  story -. "tests only" .-> block
+```
+
+Each package has a README with its files and rules: [shared](../packages/shared/README.md),
+[story](../packages/story/README.md), [grid](../packages/grid/README.md),
+[play-grid](../packages/play-grid/README.md), [block](../packages/block/README.md) and
+[play-block](../packages/play-block/README.md).
+
+The 3D game's docs:
+
+- [cubed/architecture.md](cubed/architecture.md): its layers, the block, the view, its screens
+- [cubed/how-to.md](cubed/how-to.md): add a puzzle, a color, a sound
+- [cubed/story.md](cubed/story.md): the story on blocks, and the gate
+- [cubed/roadmap.md](cubed/roadmap.md), [cubed/device-checklist.md](cubed/device-checklist.md)
+  and [cubed/releases/](cubed/releases/)
 
 ## Directory map
 
-The repo root is an npm workspace with both games in `apps/` and what they share in
-`packages/`. This game is `apps/picross/`, and the `src/`, `public/`, `e2e/` and
-`vite.config.ts` paths in this doc are inside it, except for the files in packages: those
-are at the same paths under each package's `src/` (below), imported as
-`@picross/<package>/<path>`. The shared files are in `packages/shared/`; the story (its
-data, loaders, dialogue and scene player) in `packages/story/`; the engine, the
-puzzle format, the pack and `Game` in `packages/grid/` (no DOM); the board view, input
-and play screen in `packages/play-grid/`; and the 3D game's rules and data in
-`packages/block/` (no three.js) and its three.js view and screens in `packages/play-block/`.
+Every package keeps its files under `src/`, at the same paths they had in the app they
+came from. Tests sit next to the code they cover as `*.test.ts`.
 
 ```
-apps/picross/              The 2D game (npm workspace `picross`)
-  index.html               Page shell; loads src/main.ts
-  public/favicon.svg
-  src/
-    main.ts                Entry point: imports styles, applies theme, hash router
-    debug/panel.ts         Dev-only tools (#65); never in production builds (hooks are in grid)
-    puzzles/               Content and its validation (the pack is in packages/grid)
-      runs.ts              The story's encounters and jobs on a flat board: 2D puzzles and enemies
-      chapters.ts          The story's chapters (#23), holding this game's jobs
-      endless.ts           Endless mode: seeded encounter order, scaling, the run as a RunDef (#68)
-      daily.ts             The daily puzzle: date keys and the day's puzzle and turn (#69)
-      tutorial.ts          How to play: its picture and steps, and what counts as a wrong move
-      enemies.ts           Validates an enemy; lists its powers (startingPowers, phasePowers, enemyPowers)
-    game/                  Game state and saves, no DOM (Game itself is in packages/grid)
-      battle.ts            Enemy and BattleState: chip, finisher, gadgets, phases, armor, call-outs
-      run.ts               RunState and its pure transitions
-      progress.ts          Free-play saves, solve stats, totals (localStorage)
-      runSave.ts           Current run, seen scenes, job stats (localStorage)
-      settings.ts          Mode, list filter/order, closed sections, mute, high contrast, haptics (localStorage)
-      daily.ts             Daily streak, best, and today's board (localStorage, #69)
-    ui/
-      screens/
-        selectScreen.ts    Puzzle list, mode, settings, stats       (#/)
-        freePlaySession.ts Free-play PlaySession: saves, best times, "Next" (#/play/<id>)
-        daily.ts           The daily puzzle: its card on the list and its PlaySession (#/daily)
-        mural.ts           Murals: the list section, a mural's tiles, playing a tile (#/mural/…)
-        howToPlay.ts       Guided solve on a real board, then rules (#/how-to-play)
-        editorScreen.ts    Puzzle authoring tool                   (#/editor)
-        run/               Runs                                    (#/run, #/run/play)
-          index.ts         Run hub router and the puzzle-list banner
-          shared.ts        Hub type, loadRun, mode picker, start buttons
-          jobsBoard.ts     Jobs board (#47), grouped into chapters (#23)
-          pathMap.ts       Path map, HP, gadget inventory
-          results.ts       Results and sign-off
-          encounter.ts     Plays the current encounter (a PlaySession)
-          fight/           Fight hooks, one module per mechanic:
-            index.ts       Wires them into the session hooks (fightHooks)
-            context.ts     Shared state: enemy, battle bar, battle, form, saving
-            lines.ts       Completed lines: fog, scramble, armor, chip damage
-            phases.ts      Phase changes: form, banner, more fog/scramble, swaps
-            swaps.ts       The Mimic's swaps (wait for strokes to end)
-            callOut.ts     Forged clues: the 🔍 Call out button and accusations
-            ink.ts         Ink splashes from phases (#67)
-            charge.ts      The ⚡ charge meter and its zaps (#67)
-            turns.ts       The 🔃 turn meter: the board turns a quarter clockwise (#83)
-            tips.ts        Power tips: a card the first time you meet a power, and the ⓘ list (#79)
-            gadgets.ts     The gadget tray
-            hits.ts        Mistakes, shields, knockouts
-            finisher.ts    The solved picture flying at the enemy
-          dig.ts           Dig hooks: dirt board, header, the reveal
-      components/
-        battleBar.ts       Enemy/player HP, gadgets, armor, 🎭 forgeries, phase banner, hit effects
-        listSection.ts     Collapsible puzzle list section
-    styles/
-      select.css           Puzzle list
-      editor.css           Editor
-  e2e/                     Playwright browser tests (see docs/development.md)
-  scripts/
-    puzzle-sheet.ts        Check, repair and export puzzle sheets (batches of drawings; see docs/how-to.md)
-    script-review.ts       Build the script review site, serve it, and report notes (see docs/how-to.md)
-    script-review/         Its page model, renderer, notes store, server, and browser assets
-apps/cubed/                Picross Cubed, the 3D game (npm workspace `picross-3d`; its own docs)
-packages/grid/             The 2D puzzles, no DOM (@picross/grid; its README)
-  src/                     Same paths as they had in apps/picross: imported as @picross/grid/<path>
-    imports.test.ts        Nothing here imports the page or an app
-    node.test.ts           Every module loads and works in Node, with no DOM
-    engine/                Pure puzzle logic
-      board.ts             Cell states (Empty/Filled/Marked), Grid/Board/Solution, isSolved
-      clues.ts             Clue derivation and per-clue "satisfied" check (clue dimming)
-      history.ts           Change/Move types and the undo/redo History
-      lines.ts             LineSet: sets of rows/columns (fog, scrambles, weak points)
-      solver.ts            Line solver: uniqueness/no-guess check; fog and scramble aware
-      swap.ts              Which two lines the Mimic swaps and wipes (#48)
-      fakes.ts             The Forger's forged clues: a convincing wrong clue per line (#64)
-      ink.ts               Where ink lands and how completed lines wash it off (#67)
-      blast.ts             Where a bomb goes off and the cells it hits (#115)
-      charge.ts            Which line a charging enemy goes live on (#67)
-      transform.ts         The eight turns and flips of a grid (daily, #69); turning cells and lines (#83)
-    game/game.ts           Game: board, history, mode/hearts, hints, clock, wipes; SavedBoard
-    debug/hooks.ts         How the app's debug panel reaches into a board in play (#65)
-    puzzles/
-      format.ts            Puzzle file format, parse/validate, export helpers
-      index.ts             Loads pack/*.json and run/*.json; the list sorts by size, then ORDER
-      pack/*.json          Free-play puzzles (5×5 to 20×20): the starter set plus themed batches
-      sheets/*.txt         The themed batches as drawings; apps/picross/scripts/puzzle-sheet.ts exports them
-      pack.test.ts         Uniqueness check over every puzzle
-      difficulty.ts        Difficulty bands from ratings.json (solver passes, #112)
-      murals.ts            Loads murals/*.json and splits each picture into tile puzzles (#24)
-packages/play-grid/        The 2D board view and play screen (@picross/play-grid; its README)
-  src/                     Same paths as they had in apps/picross: imported as @picross/play-grid/<path>
-    imports.test.ts        Nothing here imports from an app
-    ui/
-      format.ts            formatTime(), plural(), lineName()
-      screens/gameScreen.ts  Play screen; PlaySession and its hooks  (#/play/<id>)
-      board/
-        boardView.ts       Clues + cells (ARIA grid), dimming, fog/scramble/weak points
-        input.ts           Pointer input: click, right-click, drag strokes, touch
-        keyboard.ts        Keyboard cursor and actions on a board
-        zoom.ts            Pinch/wheel zoom and two-finger pan
-        picture.ts         Pixel-art canvas of a solution
-      components/
-        endPanels.ts       Solved, out-of-hearts, and generic end panels
-        hintMenu.ts        "Hint n/3" dropdown
-        zoomBar.ts         − / level / + zoom buttons
-    styles/
-      board.css            Board, clues, cells, cursor, fog/scramble/weak-point clues
-      game.css             Play screen: toolbar, hint menu, tools and zoom row, end states
-packages/shared/           Code, styles and art both games import (@picross/shared; its README)
-  vite.js                  sharedPublic(): serves public/ in dev, copies it into each build
-  public/art/              Portraits (cast/), enemy sprites (enemies/), gadgets/, power icons/
-  src/                     Same paths as they had in the apps: imported as @picross/shared/<path>
-    imports.test.ts        Nothing here imports from an app or another package
-    engine/random.ts       Seeded random numbers and shuffles (endless, daily)
-    game/
-      prefs.ts             The settings shared code reads (mute, haptics, contrast); each app's main.ts provides its own
-      storage.ts           Safe localStorage JSON read/write
-    ui/
-      dom.ts               el(): create an element with props and children
-      motion.ts            reducedMotion(), wait(), pause(), playOnce() for animations
-      sound.ts             WebAudio-synthesized sound effects
-      haptics.ts           Vibration on taps, lines, hits, and zaps (and the iOS switch fallback)
-      theme.ts             Applies the high-contrast theme
-      art.ts               Portrait, sprite and gadget images, with emoji stand-ins
-      components/
-        homeLink.ts        The Home button at the top of every screen
-        muteButton.ts      Sound toggle
-        gameSwitch.ts      The Flat | Cubed switch
-    styles/
-      tokens.css           Color tokens for light, dark, and high-contrast themes
-      base.css             Page layout, buttons, toggles, segmented controls
-      run.css              Run banner, jobs board, path map, results
-      fight.css            Battle bar, gadgets, phase banner, armor, call-out
-      dig.css              The dig's dirt board and reveal
-      dialogue.css         Scene player
-      art.css              Portraits, sprites and power icons
-packages/story/            The story both games play (@picross/story; its README)
-  src/                     Same paths as before (in shared or the 2D game): imported as @picross/story/<path>
-    imports.test.ts        Imports only shared (pure outside ui/); never an app or a board package
-    story.test.ts          The whole story reads, with no board
-    boards.test.ts         The gate: the boards that can play each encounter and power
-    game/dialogue.ts       Scene runner: current line or choices, advance, choose, flags
-    puzzles/
-      runs.ts              Reads and checks encounters and jobs; each game passes its puzzle and enemy
-      chapters.ts          Reads and checks chapters: jobs grouped into story chapters (#23)
-      gadgets.ts           Gadget catalog: name, icon, description, effect
-      scenes.ts            Loads and validates scenes/*.json (dialogue, #22)
-      backdrops.ts         Loads and validates backdrops/*.json (where a scene happens)
-      files/               Globs chapters, runs, encounters and run/ for the loaders
-      encounters/*.json    Encounters: name, kind (fight/dig/rest), puzzle, enemy, boss, scene
-      runs/*.json          Jobs: HP, encounters, gadgets, intro/outro, order, requires
-      chapters/*.json      Chapters: title, order, blurb, jobs, opening scene
-      run/*.json           Run-only puzzles (the sword, wrench, owl, pocket watch, ...)
-      scenes/*.json        Scenes: backdrop, cast, nodes of lines, choices, and conditions
-      backdrops/*.json     Backdrops: rows of # and ., drawn behind a scene's portraits
-    ui/
-      art.test.ts          Every sprite, portrait and gadget the story names has its art (in shared)
-      screens/sceneScreen.ts  Plays a scene full screen        (#/scene/<id>)
-      components/
-        dialogue.ts        Scene player: stage of portraits, typed text box, choices, Skip
-        backdrop.ts        Draws a backdrop as an SVG in the theme's color
-packages/block/            The 3D puzzle's rules and data, no three.js (@picross/block; its README)
-  src/                     Cubed's engine/, puzzles/ (pack, dioramas, story/), game/ (Game, Battle), story/ (the story on blocks)
-packages/play-block/       Playing a block: three.js view, play and fight screens (@picross/play-block)
-  src/                     Cubed's ui/board/, ui/screens/play.ts, story/fight.ts, editor/, styles/
-  e2e/helpers.ts           Block helpers for both games' browser tests
+apps/
+  picross/                 The 2D game (workspace `picross`)
+    index.html             Page shell; loads src/main.ts
+    .env.development       VITE_DEBUG=1 for dev builds (the debug panel)
+    public/favicon.svg
+    src/
+      main.ts              Entry point: imports styles, applies theme, provides prefs, hash router
+      debug/panel.ts       Dev-only tools (#65), and panel.css; never in production builds (hooks are in grid)
+      puzzles/             Content and its validation (the pack is in packages/grid)
+        runs.ts            The story's encounters and jobs on a flat board: 2D puzzles and enemies
+        chapters.ts        The story's chapters (#23), holding this game's jobs
+        endless.ts         Endless mode: seeded encounter order, scaling, the run as a RunDef (#68)
+        daily.ts           The daily puzzle: date keys and the day's puzzle and turn (#69)
+        tutorial.ts        How to play: its picture and steps, and what counts as a wrong move
+        enemies.ts         Validates an enemy; lists its powers (startingPowers, phasePowers, enemyPowers)
+        ranks.ts           The rank ladder (#106)
+        badges.ts          The badge catalog (#108)
+        ids.test.ts        Every id in both games, qualified (grid:mug, block:mug), and the clashes
+      game/                Game state and saves, no DOM (Game itself is in packages/grid)
+        battle.ts          Enemy and BattleState: chip, finisher, gadgets, phases, armor, call-outs, boardAt
+        run.ts             RunState and its pure transitions
+        progress.ts        Free-play saves, solve stats, totals (localStorage)
+        runSave.ts         Current run, seen scenes, job stats (localStorage)
+        settings.ts        Mode, list filter/order, closed sections, mute, high contrast, haptics (localStorage)
+        daily.ts           Daily streak, best, and today's board (localStorage, #69)
+        badges.ts          Badge rules and the earned badges (#108)
+        rank.ts            Rank, worked out from solves (#106)
+        saveMerge.ts       Merges two copies of a save (#97)
+        pickPuzzle.ts      The next unsolved puzzle (#114)
+      ui/
+        powers.ts          A one-line tip per enemy power (#79)
+        screens/
+          selectScreen.ts    Puzzle list, mode, settings, stats       (#/)
+          freePlaySession.ts Free-play PlaySession: saves, best times, "Next" (#/play/<id>)
+          daily.ts           The daily puzzle: its card on the list and its PlaySession (#/daily)
+          mural.ts           Murals: the list section, a mural's tiles, playing a tile (#/mural/…)
+          howToPlay.ts       Guided solve on a real board, then rules (#/how-to-play)
+          editorScreen.ts    Puzzle authoring tool                   (#/editor)
+          badges.ts          The badge shelf                         (#/badges)
+          run/               Runs                                    (#/run, #/run/play)
+            index.ts         Run hub router and the puzzle-list banner
+            shared.ts        Hub type, loadRun, mode picker, start buttons
+            jobsBoard.ts     Jobs board (#47), grouped into chapters (#23)
+            pathMap.ts       Path map, HP, gadget inventory
+            results.ts       Results and sign-off
+            encounter.ts     Plays the current encounter (a PlaySession), and switches board
+            blockFight.ts    A boss's block phases, on play-block's fight screen (loaded on demand)
+            dig.ts           Dig hooks: dirt board, header, the reveal
+            rest.ts          Rest stop hooks: the countdown and the heal (#77)
+            fight/           Fight hooks, one module per mechanic:
+              index.ts       Wires them into the session hooks (fightHooks)
+              context.ts     Shared state: enemy, battle bar, battle, form, saving
+              lines.ts       Completed lines: fog, scramble, armor, chip damage
+              phases.ts      Phase changes: form, banner, more fog/scramble, swaps
+              swaps.ts       The Mimic's swaps (wait for strokes to end)
+              callOut.ts     Forged clues: the 🔍 Call out button and accusations
+              ink.ts         Ink splashes from phases (#67)
+              charge.ts      The ⚡ charge meter and its zaps (#67)
+              turns.ts       The 🔃 turn meter: the board turns a quarter clockwise (#83)
+              armorBack.ts   Armor hitting back every few lines (#116)
+              tips.ts        Power tips: a card the first time you meet a power, and the ⓘ list (#79)
+              gadgets.ts     The gadget tray
+              hits.ts        Mistakes, shields, knockouts
+              finisher.ts    The solved picture flying at the enemy
+        components/
+          battleBar.ts     Enemy/player HP, gadgets, armor, 🎭 forgeries, phase banner, hit effects
+          listSection.ts   Collapsible puzzle list section
+          rankCard.ts      Your rank and the way to your badges, on the list
+          badge.ts         A badge's picture and tier rim
+      styles/
+        select.css         Puzzle list
+        editor.css         Editor
+        badges.css         Badges and the shelf
+        switch.css         A boss switching board: the new board unfolds in
+    e2e/                   Playwright browser tests (see docs/development.md)
+    scripts/
+      puzzle-sheet.ts      Check, repair and export puzzle sheets (batches of drawings; see docs/how-to.md)
+      rate-puzzles.ts      Writes packages/grid/src/puzzles/ratings.json (npm run rate:puzzles)
+      scopeByBoard.ts      PostCSS step: each game's screen styles apply only on its board
+      script-review.ts     Build the script review site, serve it, and report notes (see docs/how-to.md)
+      script-review/       Its page model, renderer, notes store, server, and browser assets
+  cubed/                   Picross Cubed, the 3D game (workspace `picross-3d`; docs/cubed/)
+    index.html, public/    Page shell, service worker (sw.js), manifest and icons
+    src/
+      main.ts              Entry point and hash router; provides prefs and play prefs
+      game/                Saves under picross3d: keys: progress, settings, run, runSave, daily, badges
+      ui/lifecycle.ts      onHide: saves when the page is hidden
+      ui/screens/          The list, free play, tutorial, how to play, shared puzzles, daily, dioramas, badges
+        story/             Story screens: jobs board, path map, encounters, digs, rests, results
+      styles/select.css    The list
+    e2e/                   Playwright browser tests (helpers re-export play-block's)
+    scripts/
+      puzzles.ts           Checks the pack and writes hide and passes (npm -w apps/cubed run puzzles)
+      screenshot.mjs       Screenshots a page of the running dev server
+      icons.mjs            Makes public/icons/
+      bench.ts             Times hiding and solving a 10×10×10 block
+packages/
+  shared/                  What both games use (@picross/shared; its README)
+    vite.js                sharedPublic(): serves public/ in dev, copies it into each build
+    public/art/            Portraits (cast/), enemy sprites (enemies/), gadgets/, power icons/
+    src/
+      imports.test.ts      Nothing here imports from an app or another package
+      engine/random.ts     Seeded random numbers and shuffles (endless, daily)
+      puzzles/ids.ts       Puzzle ids with a dimension: qualify('grid', 'mug') is 'grid:mug' (#147)
+      game/
+        prefs.ts           The settings shared code reads (mute, haptics, contrast); each app's main.ts provides its own
+        storage.ts         Safe localStorage JSON read/write
+      ui/
+        dom.ts             el(): create an element with props and children
+        motion.ts          reducedMotion(), wait(), pause(), playOnce() for animations
+        sound.ts           WebAudio-synthesized sound effects
+        haptics.ts         Vibration on taps, lines, hits, and zaps (and the iOS switch fallback)
+        theme.ts           Applies the high-contrast theme
+        art.ts             Portrait, sprite and gadget images, with emoji stand-ins
+        components/
+          homeLink.ts      The Home button at the top of every screen
+          muteButton.ts    Sound toggle
+          gameSwitch.ts    The Flat | Cubed switch
+      styles/
+        tokens.css         Color tokens for light, dark, and high-contrast themes
+        base.css           Page layout, buttons, toggles, segmented controls
+        run.css            Run banner, jobs board, path map, results
+        fight.css          Battle bar, gadgets, phase banner, armor, call-out
+        dig.css            The dig's dirt board and reveal
+        dialogue.css       Scene player
+        art.css            Portraits, sprites and power icons
+  story/                   The story both games play (@picross/story; its README)
+    src/
+      imports.test.ts      Imports only shared (pure outside ui/); never an app or a board package
+      story.test.ts        The whole story reads, with no board
+      boards.test.ts       The gate: the boards that can play each encounter and power
+      game/dialogue.ts     Scene runner: current line or choices, advance, choose, flags
+      puzzles/
+        runs.ts            Reads and checks encounters and jobs; each game passes its puzzle and enemy
+        chapters.ts        Reads and checks chapters: jobs grouped into story chapters (#23)
+        gadgets.ts         Gadget catalog: name, icon, description, effect
+        scenes.ts          Loads and validates scenes/*.json (dialogue, #22)
+        backdrops.ts       Loads and validates backdrops/*.json (where a scene happens)
+        files/             Globs chapters, runs, encounters and run/ for the loaders
+        encounters/*.json  Encounters: name, kind (fight/dig/rest), puzzle, enemy, boss, scene
+        runs/*.json        Jobs: HP, encounters, gadgets, intro/outro, order, requires
+        chapters/*.json    Chapters: title, order, blurb, jobs, opening scene
+        run/*.json         Run-only puzzles (the sword, wrench, owl, pocket watch, ...)
+        scenes/*.json      Scenes: backdrop, cast, nodes of lines, choices, and conditions
+        backdrops/*.json   Backdrops: rows of # and ., drawn behind a scene's portraits
+      ui/
+        art.test.ts        Every sprite, portrait and gadget the story names has its art (in shared)
+        screens/sceneScreen.ts  Plays a scene full screen        (#/scene/<id>)
+        components/
+          dialogue.ts      Scene player: stage of portraits, typed text box, choices, Skip
+          backdrop.ts      Draws a backdrop as an SVG in the theme's color
+  grid/                    The 2D rules and data, no DOM (@picross/grid; its README)
+    src/
+      imports.test.ts      Nothing here imports the page or an app
+      node.test.ts         Every module loads and works in Node, with no DOM
+      engine/              Pure puzzle logic
+        board.ts           Cell states (Empty/Filled/Marked), Grid/Board/Solution, isSolved
+        clues.ts           Clue derivation and per-clue "satisfied" check (clue dimming)
+        history.ts         Change/Move types and the undo/redo History
+        lines.ts           LineSet: sets of rows/columns (fog, scrambles, weak points)
+        solver.ts          Line solver: uniqueness/no-guess check; fog and scramble aware
+        swap.ts            Which two lines the Mimic swaps and wipes (#48)
+        fakes.ts           The Forger's forged clues: a convincing wrong clue per line (#64)
+        ink.ts             Where ink lands and how completed lines wash it off (#67)
+        blast.ts           Where a bomb goes off and the cells it hits (#115)
+        charge.ts          Which line a charging enemy goes live on (#67)
+        transform.ts       The eight turns and flips of a grid (daily, #69); turning cells and lines (#83)
+      game/game.ts         Game: board, history, mode/hearts, hints, clock, wipes; SavedBoard
+      debug/hooks.ts       How the app's debug panel reaches into a board in play (#65)
+      puzzles/
+        format.ts          Puzzle file format, parse/validate, export helpers
+        index.ts           Loads pack/*.json and story's run/*.json; the list sorts by size, then ORDER
+        pack/*.json        Free-play puzzles (5×5 to 20×20): the starter set plus themed batches
+        sheets/*.txt       The themed batches as drawings; apps/picross/scripts/puzzle-sheet.ts exports them
+        pack.test.ts       Uniqueness check over every puzzle (npm run check:puzzles)
+        ratings.json       Solver passes per puzzle (npm run rate:puzzles, #112)
+        difficulty.ts      Difficulty bands from ratings.json
+        murals.ts          Loads murals/*.json and splits each picture into tile puzzles (#24)
+  play-grid/               Playing a 2D board (@picross/play-grid; its README)
+    src/
+      imports.test.ts      Nothing here imports from an app
+      ui/
+        format.ts          formatTime(), plural(), lineName()
+        screens/gameScreen.ts  Play screen; PlaySession and its hooks  (#/play/<id>)
+        board/
+          boardView.ts     Clues + cells (ARIA grid), dimming, fog/scramble/weak points
+          input.ts         Pointer input: click, right-click, drag strokes, touch
+          keyboard.ts      Keyboard cursor and actions on a board
+          zoom.ts          Pinch/wheel zoom and two-finger pan
+          picture.ts       Pixel-art canvas of a solution
+        components/
+          endPanels.ts     Solved, out-of-hearts, and generic end panels
+          hintMenu.ts      "Hint n/3" dropdown
+          zoomBar.ts       − / level / + zoom buttons
+      styles/
+        board.css          Board, clues, cells, cursor, fog/scramble/weak-point clues
+        game.css           Play screen: toolbar, hint menu, tools and zoom row, end states
+  block/                   The 3D rules and data, no three.js (@picross/block; its README)
+    src/
+      imports.test.ts      Only shared and story outside ui/; never three.js, play-block or an app
+      engine/              volume.ts (the block and its lines), clues.ts, solver.ts
+      game/                game.ts (Game, Mode, SavedBoard), battle.ts (Battle), clock.ts
+      story/               data.ts (the story fitted to blocks, storyIssues), powers.ts (tips)
+      puzzles/
+        format.ts          The block puzzle format and COLORS
+        index.ts           Loads the pack
+        hide.ts            Picks the clues a puzzle hides
+        difficulty.ts      Bands by passes
+        daily.ts, transform.ts  The daily: a pack puzzle turned or mirrored
+        diorama.ts, dioramas.ts  Dioramas: big blocks split into tile puzzles
+        sheet.ts           The sheet format (layers side by side)
+        check.ts, draft.ts, share.ts  The editor's checks, drafts and share codes
+        pack/*.json        Free-play puzzles
+        dioramas/*.json    Dioramas
+        story/*.json       A 3D puzzle per story encounter, named after its 2D puzzle
+        sheets/*.txt       Batches as drawings (sheets/story/ for the story puzzles)
+        pack.test.ts       Every puzzle solves from the clues it shows
+  play-block/              Playing a block (@picross/play-block; its README)
+    e2e/helpers.ts         Block helpers for both games' browser tests
+    src/
+      imports.test.ts      Only block, shared, story and three.js; never an app
+      ui/
+        board/             blockView.ts (three.js scene), atlas.ts, input.ts, thumbnail.ts
+        screens/play.ts    The play controller and PlayHooks
+        screens/story/     fight.ts (a fight on a block, FightRun), kind.ts
+        screens/editor/    editorScreen.ts and checkWorker.ts
+        components/hintMenu.ts, format.ts, prefs.ts (providePlayPrefs), tokens.ts
+      styles/              voxels.css (shape colors), game.css, story.css, editor.css
+docs/                      These docs; docs/cubed/ for the 3D game
 scripts/
+  build-cubed.mjs          Builds Cubed into dist/3d (or dist-dev/3d)
+  check-prod-bundle.sh     npm run check:bundle: no debug code in dist/
+  check-bundle-budget.mjs  npm run check:budget: the first download's size, and no three.js in it
+  bundle-budget.json       The budgets
   deploy-azure.sh          Upload a build to the Azure static website
   setup-azure-deploy.sh    One-time Azure + GitHub OIDC setup for the release pipeline
+  art-clean.py             Cleans approved art from docs/art/incoming
+eslint.config.js           Lint for every workspace, with the import rules
 .github/workflows/
-  ci.yml                   Lint, test, build; deploy main to GitHub Pages
+  ci.yml                   Lint, test, build, check:bundle, check:budget, both games' e2e; deploy main to Pages
   deploy-azure.yml         Deploy a published release to Azure
 .claude/launch.json        Dev server config for Claude Code's preview
 ```
 
-Tests sit next to the code they cover as `*.test.ts`.
+## The 2D game
+
+The 2D game is a single-page app in plain TypeScript with no UI framework. Screens build
+DOM nodes with a small `el()` helper, and the code is split into four layers. Each layer
+only imports from the layers above it in this list:
+
+| Layer   | Folder     | Knows about the DOM? | Job                                                             |
+| ------- | ---------- | -------------------- | --------------------------------------------------------------- |
+| Engine  | `engine/`  | No                   | Pure puzzle logic: grids, clues, undo history, the line solver  |
+| Puzzles | `puzzles/` | No                   | The puzzle file format and the built-in pack                    |
+| Game    | `game/`    | No (uses storage)    | A puzzle in play (rules, hearts, hints, clock), saves, settings |
+| UI      | `ui/`      | Yes                  | Screens, the board view, input, sound, and components           |
+
+Keep rules and state in `engine/` and `game/`, where they can be unit tested without a
+browser. The UI should only translate events into `Game` calls and redraw.
+
+The layers span the app and the packages. The 2D core of the first three (the engine, the
+format and pack, and `Game`) is `packages/grid`, which can't import the UI and runs its
+tests in Node. The board view, input and play screen are `packages/play-grid`. The story's
+data, loaders and scene player are `packages/story`. Fights, runs, saves and the other
+screens stay in `apps/picross` and reach the play screen through its `PlaySession`.
+
+The rest of this page names files by their path under `src/`. Look a path up in the
+directory map above to find which workspace it's in: `engine/` and `game/game.ts` are in
+grid, `ui/board/` and `ui/screens/gameScreen.ts` in play-grid, the story JSON in story,
+`styles/tokens.css` in shared, and the rest in `apps/picross`.
 
 ## Core data model
 

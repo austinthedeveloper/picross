@@ -15,8 +15,8 @@ built yet; it's the design to agree on before the story code is combined (steps 
 - **Cubed** plays the same story on blocks: the same jobs, scenes and enemies, a 3D puzzle
   per encounter, and every enemy power rebuilt for three axes.
 
-So the story exists twice, once per dimension. The combined game should tell it once, and
-use each dimension for what it's good at.
+The story's data lives once (`packages/story`), but each game plays all of it on its own
+board. The combined game should tell it once, and use each dimension for what it's good at.
 
 ## What each dimension is good at
 

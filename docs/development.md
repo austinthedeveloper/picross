@@ -11,46 +11,75 @@ npm run dev        # http://localhost:5173, hot reload
 
 `.claude/launch.json` starts the same dev server from Claude Code's preview pane.
 
-The repo root is an npm workspace: the 2D game is `apps/picross/` (workspace `picross`) and
-Picross Cubed is `apps/cubed/`. One `npm install` at the root sets up both, and the root
-scripts below run the 2D game's with `npm -w apps/picross run …`. Paths like `src/` and
-`e2e/` on this page are in `apps/picross/`; `scripts/` and `dist/` are at the root unless
-the page says otherwise.
+The repo root is an npm workspace with two apps and six packages: the 2D game is
+`apps/picross/` (workspace `picross`), Picross Cubed is `apps/cubed/` (`picross-3d`), and
+the code they share is in `packages/` (`@picross/shared`, `story`, `grid`, `play-grid`,
+`block` and `play-block`). [The package map](architecture.md#package-map) says what each
+owns and may import. One `npm install` at the root sets up everything. Run the scripts below
+from the root: the app ones delegate with `npm -w apps/picross run …` or
+`npm -w apps/cubed run …`, and the trailing `--` passes arguments on
+(`npm run dev -- --port 5173`). Paths like `src/` and `e2e/` on this page are in
+`apps/picross/`; `scripts/` and `dist/` are at the root unless the page says otherwise.
 
 ## Scripts
 
-| Command                        | What it does                                                              |
-| ------------------------------ | ------------------------------------------------------------------------- |
-| `npm run dev`                  | Vite dev server                                                           |
-| `npm run dev:prod`             | Vite dev server without the debug tools                                   |
-| `npm test`                     | All unit tests once (Vitest, jsdom)                                       |
-| `npm run test:watch`           | Tests in watch mode                                                       |
-| `npm run check:puzzles`        | Only the pack uniqueness check (`packages/grid/src/puzzles/pack.test.ts`) |
-| `npm run rate:puzzles`         | Re-rate puzzle difficulty after adding or changing puzzles                |
-| `npm run script-review`        | Generate the script review site and serve it at http://localhost:4177     |
-| `npm run script-review:notes`  | Print your open script review notes                                       |
-| `npm run script-review:export` | Export the whole script and open notes as JSON for rewriting              |
-| `npm run lint`                 | ESLint, then `prettier --check`                                           |
-| `npm run format`               | `prettier --write .`                                                      |
-| `npm run build`                | `tsc --noEmit` type-check, then `vite build` to `dist/`                   |
-| `npm run build:dev`            | The same, with the debug tools, to `dist-dev/` (what GitHub Pages serves) |
-| `npm run check:bundle`         | Fails if debug code reached `dist/`                                       |
-| `npm run preview`              | Serve `dist/` locally                                                     |
+| Command                        | What it does                                                                 |
+| ------------------------------ | ---------------------------------------------------------------------------- |
+| `npm run dev`                  | The 2D game's Vite dev server (http://localhost:5173)                        |
+| `npm run dev:prod`             | The same, without the debug tools                                            |
+| `npm run dev:cubed`            | Cubed's dev server (http://localhost:5174)                                   |
+| `npm test`                     | Every unit test once: the six packages, then both games (see below)          |
+| `npm run test:shared`          | Only `packages/shared`'s tests                                               |
+| `npm run test:story`           | Only `packages/story`'s, with the story gate                                 |
+| `npm run test:grid`            | Only `packages/grid`'s                                                       |
+| `npm run test:play-grid`       | Only `packages/play-grid`'s                                                  |
+| `npm run test:block`           | Only `packages/block`'s, with Cubed's pack check                             |
+| `npm run test:play-block`      | Only `packages/play-block`'s                                                 |
+| `npm run test:flat`            | Only the 2D game's (`apps/picross`)                                          |
+| `npm run test:cubed`           | Only Cubed's (`apps/cubed`)                                                  |
+| `npm run test:watch`           | The 2D game's tests in watch mode                                            |
+| `npm run check:puzzles`        | Only the 2D pack uniqueness check (`packages/grid/src/puzzles/pack.test.ts`) |
+| `npm run rate:puzzles`         | Re-rate puzzle difficulty after adding or changing puzzles                   |
+| `npm run script-review`        | Generate the script review site and serve it at http://localhost:4177        |
+| `npm run script-review:notes`  | Print your open script review notes                                          |
+| `npm run script-review:export` | Export the whole script and open notes as JSON for rewriting                 |
+| `npm run lint`                 | ESLint (with the import rules), then `prettier --check`                      |
+| `npm run format`               | `prettier --write .`                                                         |
+| `npm run build`                | Type-check and build both games: Flat to `dist/`, Cubed to `dist/3d/`        |
+| `npm run build:dev`            | The same, with the debug tools, to `dist-dev/` (what GitHub Pages serves)    |
+| `npm run check:bundle`         | Fails if debug code reached `dist/`                                          |
+| `npm run check:budget`         | Fails if three.js is in either first download, or it grew past the budget    |
+| `npm run preview`              | Serve `dist/` locally                                                        |
+| `npm run e2e`                  | The 2D game's browser tests                                                  |
+| `npm run e2e:cubed`            | Cubed's browser tests                                                        |
+
+Cubed has two scripts of its own, run with `npm -w apps/cubed run …`: `puzzles` (check the
+pack and pick which clues new puzzles hide) and `screenshot` (see
+[cubed/how-to.md](cubed/how-to.md)).
 
 ## Testing
 
 ### Unit tests
 
-Tests live next to their code as `*.test.ts` and run in jsdom, so `localStorage` and basic
-DOM work. `packages/grid`'s run in Node, with no DOM at all.
+Tests live next to their code as `*.test.ts`. Each workspace runs its own with Vitest (the
+packages first type-check with `tsc --noEmit`), and `npm test` runs them all in the order
+below. Most run in jsdom, so `localStorage` and basic DOM work; `packages/grid`'s run in
+Node, with no DOM at all.
 
-| Area                 | Tests                                                                           |
-| -------------------- | ------------------------------------------------------------------------------- |
-| `engine/` (grid)     | Grids and win check, clue derivation and dimming, undo history, solver          |
-| `puzzles/`           | File parsing and validation, export, pack size, pack uniqueness (in grid)       |
-| `game/`              | Strokes, undo, reset, save/restore, clock, Hearts, hints (grid's `Game`), saves |
-| `ui/format.test.ts`  | Time formatting (in play-grid)                                                  |
-| `ui/haptics.test.ts` | Haptics: feature detection, patterns, the iOS switch fallback, the off setting  |
+| Suite (run alone)         | Where                     | Covers                                                                                                      |
+| ------------------------- | ------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `npm run test:shared`     | `packages/shared/src`     | Prefs, puzzle ids, haptics, art, the import rule                                                            |
+| `npm run test:story`      | `packages/story/src`      | Scenes, backdrops, dialogue, runs and chapters; the whole story loads (`story.test.ts`); the gate           |
+| `npm run test:grid`       | `packages/grid/src`       | The 2D engine (grids, clues, history, solver, powers), format, murals, ratings, `Game`, pack uniqueness     |
+| `npm run test:play-grid`  | `packages/play-grid/src`  | The board view, time formatting                                                                             |
+| `npm run test:block`      | `packages/block/src`      | The 3D engine and solver, `Game`, `Battle`, the clock, puzzles, the editor's checks, the story on blocks    |
+| `npm run test:play-block` | `packages/play-block/src` | Formatting                                                                                                  |
+| `npm run test:flat`       | `apps/picross`            | Saves, settings, badges, rank, runs, fights, enemies, Endless, the daily, the ids both packs share, scripts |
+| `npm run test:cubed`      | `apps/cubed/src`          | Saves, the run, the daily, badges                                                                           |
+
+Every package also has `src/imports.test.ts`, which fails on an import its rule doesn't
+allow (see the package map). The story's gate (`packages/story/src/boards.test.ts`) prints
+which boards can play each encounter and power, and fails only on broken data.
 
 Put new rules in `engine/` or `game/` and test them there. The UI modules are thin and are
 checked in the browser instead.
@@ -58,10 +87,12 @@ checked in the browser instead.
 `progress.ts` and `settings.ts` read storage once at import. Their tests call
 `vi.resetModules()` and re-import to simulate a reload (see `game/progress.test.ts`).
 
-### Browser tests (`e2e/`)
+### Browser tests
 
-Playwright tests run the production build (`vite preview`) on a phone-sized touch screen
-with reduced motion, so animations don't slow them down:
+Each game has its own Playwright suite in its `e2e/`: `npm run e2e` for the 2D game
+(`apps/picross/e2e/`) and `npm run e2e:cubed` for Cubed (`apps/cubed/e2e/`). Both run the
+production build (`vite preview`) on a phone-sized touch screen with reduced motion, so
+animations don't slow them down:
 
 ```bash
 npm run e2e                                  # all of them
@@ -87,6 +118,11 @@ HTML report (`apps/picross/playwright-report`) when something fails. To debug a 
 | `murals.spec.ts`         | A mural filling in tile by tile, the last tile, and the finished picture                                                                              |
 | `debug.spec.ts`          | The debug tools, against a dev build (project `dev`, port 4174)                                                                                       |
 | `editor-zoom.spec.ts`    | Editor uniqueness check and export, pinch zoom                                                                                                        |
+| `overtime.spec.ts`       | Overtime: hidden until its job is cleared, always Hits on, and every job's can be finished                                                            |
+| `boss-fights.spec.ts`    | Standalone boss fights: the Weathervane waits for Summit Station, then plays from its card                                                            |
+| `badges.spec.ts`         | Rank and badges: the ladder, rank-ups, and job badges by tier                                                                                         |
+| `switching-boss.spec.ts` | The Curator unfolding into a block and folding back flat                                                                                              |
+| `games.spec.ts`          | The Flat \| Cubed switch, and a 3D puzzle on the combined site                                                                                        |
 
 `e2e/helpers.ts` has the building blocks:
 
@@ -104,35 +140,19 @@ on a real phone.
 To start from a clean slate, clear the site's local storage in devtools (Application →
 Local Storage).
 
-## The 3D game (`apps/cubed/`)
+Cubed's suite (`apps/cubed/e2e/`) covers free play, the tutorial, the editor, the daily and
+badges, the story (`story.spec.ts`, `fights.spec.ts`, `chapters.spec.ts`; see
+[cubed/story.md](cubed/story.md)), and offline play. Its timing test (`perf.spec.ts`) runs
+alone after the others, so they don't share its CPU; to run just it,
+`npm run e2e:cubed -- perf.spec.ts --no-deps`. The block helpers both games' tests use are
+in `packages/play-block/e2e/helpers.ts`.
 
-Picross Cubed is an npm workspace in `apps/cubed/` with its own docs (`apps/cubed/docs/`). From the
-root: `npm run dev:cubed` (http://localhost:5174), `npm run test:cubed`,
-`npm run e2e:cubed`. `npm test` and `npm run build` cover both games; the build puts Cubed
-in `dist/3d` (and `dist-dev/3d`), where the Flat | Cubed switch links to it. In dev, the
-switch links between the two dev servers.
+## Both games
 
-Both games import `packages/shared` (`@picross/shared`; see its
-[README](../packages/shared/README.md)), so a change there is in both at once. `npm test`
-runs its tests first (`npm run test:shared` runs just them).
-
-The story is `packages/story` (`@picross/story`; see its
-[README](../packages/story/README.md)): the chapters, jobs, encounters, scenes, gadgets and
-the scene player, read by both games. `npm test` runs its tests after shared's
-(`npm run test:story`), and its gate (`boards.test.ts`) prints which boards can play each
-encounter and power.
-
-The 2D game's engine, pack and play screen are packages too: `packages/grid`
-(`@picross/grid`: the engine, the puzzle format, the pack and `Game`, no DOM) and
-`packages/play-grid` (`@picross/play-grid`: the board view, input and play screen; see
-their READMEs). `npm test` runs them after shared and story and before the games;
-`npm run test:grid` and `npm run test:play-grid` run each alone.
-
-The 3D game's code is in two packages: `packages/block` (`@picross/block`: the rules and
-data, no three.js) and `packages/play-block` (`@picross/play-block`: the three.js view and
-the screens with a block). Cubed imports both, and the 2D game imports them for the
-Curator's block phases. `npm test` runs their tests after grid's (`npm run test:block`,
-`npm run test:play-block`). Neither app imports the other; a lint rule checks.
+`npm run build` puts Cubed in `dist/3d` (and `build:dev` in `dist-dev/3d`), where the Flat |
+Cubed switch links to it. In dev, the switch links between the two dev servers
+(`npm run dev` and `npm run dev:cubed`). A change in a package is in both games at once,
+so run both games' tests after one.
 
 ## CI and deploys
 
@@ -140,10 +160,12 @@ Curator's block phases. `npm test` runs their tests after grid's (`npm run test:
 
 1. `npm ci`
 2. `npm run lint`
-3. `npm test`, which includes the uniqueness check for every puzzle
+3. `npm test`: every package, then both games, including the uniqueness check for every
+   puzzle
 4. `npm run build`, then `npm run check:bundle` (no debug code in production) and
    `npm run check:budget` (the first download's budget, below)
-5. A separate `e2e` job runs the Playwright tests.
+5. A separate `e2e` job runs both games' Playwright tests (`npm run e2e`, then
+   `npm run e2e:cubed`).
 
 **The bundle budget** (#148). `npm run check:budget` (`scripts/check-bundle-budget.mjs`)
 reads each game's Vite manifest (`dist/.vite/manifest.json`, `dist/3d/.vite/manifest.json`)

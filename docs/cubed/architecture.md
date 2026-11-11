@@ -1,27 +1,30 @@
-# Architecture
+# Picross Cubed: architecture
+
+How the 3D game works. Where its files live, and what each package may import, is in the
+package map at the top of [the main architecture doc](../architecture.md).
 
 Plain TypeScript with no UI framework, like the 2D game: screens build DOM with `el()`, and
-three.js draws the block. Most of the code is in two packages at the repo root, which the
-2D game also imports (for the Curator's block phases); this app is the screens around them.
-Four layers, each importing only from the ones above it:
+three.js draws the block. Most of the code is in two packages, which the 2D game also
+imports (for the Curator's block phases); `apps/cubed` is the screens around them. Four
+layers, each importing only from the ones above it:
 
-| Layer   | Where                                 | Knows about the DOM? | Job                                                       |
-| ------- | ------------------------------------- | -------------------- | --------------------------------------------------------- |
-| Engine  | `packages/block/src/engine/`          | No                   | The block, lines and clues, and the line solver           |
-| Puzzles | `packages/block/src/puzzles/`         | No                   | The puzzle file format, clue hiding, the pack, dioramas   |
-| Game    | `packages/block/src/{game,story}/`    | No                   | A puzzle in play (strokes, hearts, hints), battles, story |
-|         | `src/game/`                           | No (uses storage)    | Saves, settings, runs, the daily streak, badges           |
-| UI      | `packages/play-block/src/`, `src/ui/` | Yes                  | The 3D view, input, the play screen; this app's screens   |
+| Layer   | Where                                            | Knows about the DOM? | Job                                                       |
+| ------- | ------------------------------------------------ | -------------------- | --------------------------------------------------------- |
+| Engine  | `packages/block/src/engine/`                     | No                   | The block, lines and clues, and the line solver           |
+| Puzzles | `packages/block/src/puzzles/`                    | No                   | The puzzle file format, clue hiding, the pack, dioramas   |
+| Game    | `packages/block/src/{game,story}/`               | No                   | A puzzle in play (strokes, hearts, hints), battles, story |
+|         | `apps/cubed/src/game/`                           | No (uses storage)    | Saves, settings, runs, the daily streak, badges           |
+| UI      | `packages/play-block/src/`, `apps/cubed/src/ui/` | Yes                  | The 3D view, input, the play screen; the app's screens    |
 
 `@picross/block` (`packages/block`) has no three.js and no screens: a test and a lint rule
 check it. `@picross/play-block` (`packages/play-block`) has the three.js view, input, the
 play controller, the fight and editor screens and their styles (`voxels.css`, `game.css`,
-`story.css`, `editor.css`). Paths below without a package are this app's `src/`; paths in
-`engine/`, `puzzles/`, `game/game.ts`, `game/battle.ts`, `game/clock.ts` and `story/` are
-in `packages/block/src/`, and `ui/board/`, `ui/screens/play.ts`, `ui/screens/story/fight.ts`
-and `ui/screens/editor/` in `packages/play-block/src/`. Neither package imports this app:
-what they need from it is passed in (the story run for a fight, `FightRun`; the play
-screen's settings, `providePlayPrefs` in `main.ts`).
+`story.css`, `editor.css`). Paths below without a package are in `apps/cubed/src/`; paths
+in `engine/`, `puzzles/`, `game/game.ts`, `game/battle.ts`, `game/clock.ts` and `story/`
+are in `packages/block/src/`, and `ui/board/`, `ui/screens/play.ts`,
+`ui/screens/story/fight.ts` and `ui/screens/editor/` in `packages/play-block/src/`. Neither
+package imports the app: what they need from it is passed in (the story run for a fight,
+`FightRun`; the play screen's settings, `providePlayPrefs` in `main.ts`).
 
 Rules and state live in `engine/` and `game/`, where Vitest covers them. The UI turns
 pointer and key events into `Game` calls and redraws.
@@ -50,7 +53,7 @@ the most, for hints.
 `puzzles/format.ts` defines the file (see [How-to](how-to.md)) and parses it into a
 `Puzzle`: dims, the solution as color indexes, every clue, and the shown clues (`null` for
 hidden). `puzzles/hide.ts` picks clues to hide: a seeded shuffle of the lines, hiding each
-one while the puzzle still solves, up to `hideRatio`. `scripts/puzzles.ts` runs it and
+one while the puzzle still solves, up to `hideRatio`. `apps/cubed/scripts/puzzles.ts` runs it and
 writes `hide` and `passes` back to the file (in `packages/block`); `pack.test.ts` checks
 every puzzle still solves.
 
@@ -94,7 +97,7 @@ first download.
 | `#/daily`                                 | `dailyScreen.ts` (`dailyCard.ts` for the list) | Today's puzzle and streak                                      |
 | `#/badges`                                | `badgesScreen.ts`                              | Badges, worked out from saves (`game/badges.ts`)               |
 | `#/diorama/<id>[/<n>]`                    | `dioramaScreen.ts` (`dioramaList.ts`)          | A diorama and its pieces                                       |
-| `#/story`, `#/story/play`, `#/scene/<id>` | `story/*`                                      | Story mode (see story.md)                                      |
+| `#/story`, `#/story/play`, `#/scene/<id>` | `story/*`                                      | Story mode (see [story.md](story.md))                          |
 
 ### The play controller
 
@@ -120,10 +123,10 @@ route. Coming back from the browser's page cache draws the screen again.
 
 ## Offline
 
-`public/sw.js` caches every file the game loads and serves it from the cache, refreshing in
+`apps/cubed/public/sw.js` caches every file the game loads and serves it from the cache, refreshing in
 the background (so updates show on the next launch). `main.ts` registers it in production
-builds. `public/manifest.webmanifest` and `public/icons/` (made by `node scripts/icons.mjs`)
-make it installable. Browser tests block service workers except `e2e/offline.spec.ts`.
+builds. `public/manifest.webmanifest` and `public/icons/` (made by `node scripts/icons.mjs`, in `apps/cubed`)
+make it installable. Browser tests block service workers except `apps/cubed/e2e/offline.spec.ts`.
 
 Keep three.js out of the first download: screens with a block are loaded on demand, and
 the list's cards (daily, story, dioramas) live in modules that don't import the view.

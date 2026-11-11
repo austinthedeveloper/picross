@@ -1,4 +1,4 @@
-# Story mode
+# Picross Cubed: story mode
 
 Rook and Dee's odd jobs from the 2D game, played on blocks. **The 2D game is the source of
 truth for the story**: its scenes, chapters, jobs, encounters and enemies are in
@@ -16,7 +16,7 @@ fits them to blocks.
 | `packages/shared`: `public/art/{cast,enemies,gadgets,icons}/`                                     |                                                                                   |
 
 Both packages are at the repo root, imported by both games (see their READMEs:
-[story](../../../packages/story/README.md), [shared](../../../packages/shared/README.md)).
+[story](../../packages/story/README.md), [shared](../../packages/shared/README.md)).
 
 ## Fitting the story to blocks
 
@@ -73,9 +73,9 @@ throw on broken data. It passes in what's this game's own:
 - `packages/block/src/story/story.test.ts`: every chapter, and every job it can play, loads
   with a 3D puzzle for each encounter
 - `packages/block/src/game/battle.test.ts`: the fight rules
-- `e2e/story.spec.ts`: the whole First Job by hand, and a Hits-on hit and resume
-- `e2e/fights.spec.ts`: one test per power or system
-- `e2e/chapters.spec.ts`: every chapter from its opening through each job to its boss,
+- `apps/cubed/e2e/story.spec.ts`: the whole First Job by hand, and a Hits-on hit and resume
+- `apps/cubed/e2e/fights.spec.ts`: one test per power or system
+- `apps/cubed/e2e/chapters.spec.ts`: every chapter from its opening through each job to its boss,
   with each encounter seeded one cube short of solved (so it checks the flow quickly),
   and that cleared jobs offer their Overtime and boss fights
 
@@ -109,4 +109,4 @@ A switching boss's block phases in the 2D story run this game's fight screen
 `packages/block`, loaded on demand. So
 `fightKind` takes its run through a `FightRun` (this game's story run by default), can be
 handed a `Battle` and HP to `carry` over, and calls `phased` after a phase starts. Keep
-those working when changing the fight; the root's `e2e/switching-boss.spec.ts` covers them.
+those working when changing the fight; the 2D game's `apps/picross/e2e/switching-boss.spec.ts` covers them.
