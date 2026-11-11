@@ -1,12 +1,11 @@
-import { pickSwap } from '@picross/grid/engine/swap';
-import { markWiped } from '../../../../game/battle';
 import { plural } from '@picross/play-grid/ui/format';
 import { playSound } from '@picross/shared/ui/sound';
 import type { FightContext } from './context';
 
 /**
- * The Mimic's swaps (#48): two rows or columns get swapped and wiped. Swaps wait
- * until no stroke is in progress, so a drag never paints into lines just wiped.
+ * The Mimic's swaps (#48): two rows or columns get swapped and wiped (`gridStep` picks
+ * them). Swaps wait until no stroke is in progress, so a drag never paints into lines
+ * just wiped.
  */
 export function createSwapper(ctx: FightContext) {
   let strokes = 0;
@@ -15,14 +14,15 @@ export function createSwapper(ctx: FightContext) {
   const run = () => {
     if (strokes > 0 || !ctx.controls) return;
     for (; pending > 0; pending--) {
-      const swap = pickSwap(ctx.controls.game.board, ctx.puzzle.solution);
-      if (!swap) continue;
+      const { state, events } = ctx.step({ kind: 'swap', board: ctx.controls.game.board });
+      const swapped = events.find((e) => e.kind === 'swapped');
+      if (!swapped) continue;
+      const { swap } = swapped;
       const [a, b] = swap.lines;
       // Save the wipe before the redraw, so lines it re-opens don't count as new.
-      const state = markWiped(ctx.battle(), swap.kind, swap.lines);
       ctx.saveBattle(state);
       ctx.controls.game.wipe(swap.cells);
-      ctx.view?.setWiped(state.wiped!);
+      ctx.view?.setWiped(swapped.wiped);
       ctx.controls.refresh();
       ctx.view?.flashSwap(swap.kind, a, b);
       playSound('phase');

@@ -1,5 +1,4 @@
-import type { Line } from '@picross/grid/engine/lines';
-import { turnBattle, turnDue, turnedPuzzle, turnUp } from '../../../../game/battle';
+import { turnedPuzzle } from '../../../../game/battle';
 import { plural } from '@picross/play-grid/ui/format';
 import { playSound } from '@picross/shared/ui/sound';
 import type { FightContext } from './context';
@@ -10,8 +9,8 @@ import type { FightContext } from './context';
  * history, the clues, and everything on them (fog, scrambles, weak points,
  * forgeries, wipes, ink, the live line). Rows become columns, so your picture of
  * the board has to turn too. Like the charge, it only moves when you finish a
- * line, never with time. Like a swap, a turn waits until no stroke is in progress,
- * so a drag never paints across a board that just moved.
+ * line, never with time (`gridStep` counts the lines). Like a swap, a turn waits until
+ * no stroke is in progress, so a drag never paints across a board that just moved.
  */
 export function createTurner(
   ctx: FightContext,
@@ -30,9 +29,10 @@ export function createTurner(
 
   const turn = () => {
     const { controls, view } = ctx;
-    if (strokes > 0 || !controls || !turnDue(ctx.battle(), ctx.form().rotate)) return;
+    if (strokes > 0 || !controls) return;
     if (ctx.finished || controls.game.over || ctx.run()?.status !== 'active') return;
-    const state = turnBattle(ctx.battle(), ctx.puzzle.width);
+    const { state, events } = ctx.step({ kind: 'turn' });
+    if (!events.length) return;
     ctx.saveBattle(state);
     ctx.puzzle = turnedPuzzle(ctx.drawn, state.turns);
     controls.game.turn(ctx.puzzle);
@@ -64,12 +64,10 @@ export function createTurner(
       draw();
       window.setTimeout(turn, 0);
     },
-    /** Lines you just finished for the first time move the count toward the next turn. */
-    finished(lines: Line[]) {
-      if (!ctx.form().rotate || !lines.length) return;
-      ctx.saveBattle(turnUp(ctx.battle(), lines));
-      draw();
-      // Outside the redraw that triggered it, like ink, swaps and zaps.
+    /** Shows the meter after lines move it. */
+    draw,
+    /** Outside the redraw that triggered it, like ink, swaps and zaps. */
+    turnLater() {
       window.setTimeout(turn, 0);
     },
   };

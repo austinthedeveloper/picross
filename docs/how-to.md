@@ -181,8 +181,9 @@ that, but `npm test` does. For how hard to make a new fight, see Difficulty in
    emoji that stands for it in text), one-line description, and effect. Its art goes in
    `public/art/gadgets/<id>.png`, and a test checks that it's there.
 2. If the effect is a new kind, add it to the `GadgetEffect` union, handle it in
-   `useGadget` in `src/game/battle.ts` (with a test in `battle.test.ts`), and give it
-   feedback in `use()` in `src/ui/screens/run/fight/gadgets.ts`.
+   `useGadget` in `src/game/battle.ts` (with a test in `battle.test.ts`), count it in
+   `gadget()` in `src/game/fight.ts`, and give it feedback in `use()` in
+   `src/ui/screens/run/fight/gadgets.ts`.
 3. Hand it out: set `"gadget": "<id>"` on the puzzle JSON whose picture becomes it, or
    list it in a run's `"gadgets"` to start with it. Unknown ids fail at load.
 

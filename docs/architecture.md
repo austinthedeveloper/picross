@@ -107,6 +107,9 @@ apps/
         ids.test.ts        Every id in both games, qualified (grid:mug, block:mug), and the clashes
       game/                Game state and saves, no DOM (Game itself is in packages/grid)
         battle.ts          Enemy and BattleState: chip, finisher, gadgets, phases, armor, call-outs, boardAt
+        fight.ts           gridStep: a 2D fight's rules in one headless step, with events (#163)
+        fightTrace.ts      A fight played headless through gridStep, for the tests only (#163)
+        fightTraces.test.ts Golden traces of every 2D fight (#163)
         run.ts             RunState and its pure transitions
         progress.ts        Both games' free play: solve stats, boards, time (localStorage; progressFor(dim))
         runSave.ts         Both games' runs, seen scenes, job stats (localStorage)
@@ -140,11 +143,11 @@ apps/
             blockFight.ts    A boss's block phases, on play-block's fight screen (loaded on demand)
             dig.ts           Dig hooks: dirt board, header, the reveal
             rest.ts          Rest stop hooks: the countdown and the heal (#77)
-            fight/           Fight hooks, one module per mechanic:
-              index.ts       Wires them into the session hooks (fightHooks)
-              context.ts     Shared state: enemy, battle bar, battle, form, saving
-              lines.ts       Completed lines: fog, scramble, armor, chip damage
-              phases.ts      Phase changes: form, banner, more fog/scramble, swaps
+            fight/           Fight hooks, one module per mechanic, showing gridStep's events:
+              index.ts       Wires them into the session hooks (fightHooks), and runs what waits
+              context.ts     Shared state: enemy, battle bar, battle, form, saving, step
+              lines.ts       Completed lines: fog, scramble, armor, chip damage, the meters
+              phases.ts      Phase changes: form, banner, more fog/scramble
               swaps.ts       The Mimic's swaps (wait for strokes to end)
               callOut.ts     Forged clues: the 🔍 Call out button and accusations
               ink.ts         Ink splashes from phases (#67)
@@ -155,6 +158,7 @@ apps/
               gadgets.ts     The gadget tray
               hits.ts        Mistakes, shields, knockouts
               finisher.ts    The solved picture flying at the enemy
+              fightHooks.test.ts The hooks in jsdom: every call they make, step by step (#163)
         components/
           battleBar.ts     Enemy/player HP, gadgets, armor, 🎭 forgeries, phase banner, hit effects
           listSection.ts   Collapsible puzzle list section
@@ -923,7 +927,8 @@ jobs you've played, fixed at the start, so a reload plays the same order.
 ## Fights
 
 A fight encounter has an `enemy` (`name`, `sprite`, `hp`, `attack`). The rules live in
-`game/battle.ts`:
+`game/battle.ts`, and `gridStep` in `game/fight.ts` runs them in order (see "The fight
+step" below):
 
 - **Chip damage.** Each newly completed row or column deals `CHIP_DAMAGE` (1). Each line
   counts once, even if it's broken and completed again, and chip damage never takes the
@@ -939,6 +944,39 @@ A fight encounter has an `enemy` (`name`, `sprite`, `hp`, `attack`). The rules l
 
 Battle progress (enemy HP, which lines have struck, any active shield, and the fog still
 up) is saved in `RunState.battle`, so a reload resumes mid-fight.
+
+### The fight step
+
+`gridStep(enemy, puzzle, state, input)` (`game/fight.ts`, #163) is a 2D fight's rules in
+one pure step, with no DOM, sound or timers. `input` is what just happened: lines the board
+reports finished (their shown clue just became satisfied; a forged one doesn't count
+until it's called out), a mistake, a call-out, a gadget, or an effect that waited. It
+returns the new battle and a list of events in the order the screen shows them. For lines
+that's what they clear (fog, ink, wipe marks, suspects, scrambles), then the armor's
+cracks, the phases they start, one `chip`, and then the armor's, the turn's and the
+charge's meters. The fight screen's hooks (`ui/screens/run/fight/`) keep only the
+rendering, sound, haptics and timing: each asks `ctx.step`, saves the state, and shows the
+events. They save at `chip`, as the screen always has, so a board switch still queues
+after a phase's own timers.
+
+Some effects wait, and come back as `Later` events: swaps and turns until no stroke is in
+progress; ink, zaps, the armor's hits and a bomb's blast until the redraw is over; and
+after every phase, the charge aims again and the turn's count shows. When one is due the
+hooks call `gridStep` again with the input of the same kind (`swap`, `ink`, `zap`, …).
+
+Two tests hold it:
+
+- **The hooks in jsdom** (`run/fight/fightHooks.test.ts`) play 14 fights covering every
+  power, gadget and Relaxed, and log every call the hooks make on the battle bar, board
+  view, game, sound and haptics, the saved battle as written (key order too) and a digest
+  of the DOM after every step. It was recorded before the rules moved out of the hooks,
+  and it checks that the saved battle after every step is the headless trace's.
+- **Golden traces** (`game/fightTraces.test.ts`) play every fight with an enemy (76:
+  story, Overtime, bosses and the Weathervane) headless through `gridStep`
+  (`game/fightTrace.ts`): a fixed line order from the solution, a wrong fill every 10th
+  step, a call-out of each suspect while forgeries are left, a patch kit and a bomb. They snapshot each step's
+  events, HP and changed state. A boss that switches board plays on flat, as Endless does.
+  Update either snapshot (`vitest -u`) only when a change to how fights play is meant.
 
 ### Fog (the fog bat)
 
@@ -1007,9 +1045,10 @@ start:
 
 - **Mistakes:** in Hits-on runs, cracking it early softens the enemy's hits (4 → 2).
 - **It hits back** (#116): every `ARMOR_HIT_LINES` (5) other lines you finish while it's up
-  cost `ARMOR_HIT_DAMAGE` (2), or fizzle in a Relaxed run (`armorHitsBack`,
-  `run/fight/armorBack.ts`). Lines deal no damage under armor, so without this, leaving the
-  weak points until last skips the enemy's phases for free. The count is in lines, not time.
+  cost `ARMOR_HIT_DAMAGE` (2), or fizzle in a Relaxed run (`armorHitsBack`, run by
+  `gridStep`; `run/fight/armorBack.ts` shows it). Lines deal no damage under armor, so
+  without this, leaving the weak points until last skips the enemy's phases for free. The
+  count is in lines, not time.
 
 Because of that, weak points have to be reachable early. A test in `runs.test.ts` holds
 every armored fight to it: each weak point must be solvable within the first two passes of
@@ -1108,7 +1147,7 @@ blocks of ink. `pickInk` (`engine/ink.ts`) puts each block where it hides the mo
 your marks, skipping cells already inked and lines you've completed. It's deterministic.
 Inked cells (`BattleState.ink`, saved) hide whether they're filled or marked, but you can
 still play them, and mistakes still count. Completing a row or column washes the ink out
-of it (`clearInk` in `completeLines`). The 🧽 **Sponge** gadget (`effect: { kind: 'wash' }`)
+of it (`clearInk`, run by `gridStep`). The 🧽 **Sponge** gadget (`effect: { kind: 'wash' }`)
 wipes it all. Ink only hides your marks, never clues, so it doesn't affect solvability.
 
 ### Turns (the Weathervane)
@@ -1275,8 +1314,8 @@ them instead: `packages/block/src/game/battleTraces.test.ts` plays every fight w
 puzzle through the real `Battle` in a fixed line order (emptiest lines first, a call-out
 of every suspect, a mistake every 10th step) and snapshots the HP, phase, hidden lines,
 meters and events of every step, so a change to how a block fight plays shows up as a
-diff. The flat board's rules live in the fight's screen hooks (`ui/screens/run/fight/`),
-so it has no headless trace yet. To tune a charge, expect about 1 to 3 zaps a
+diff. The flat board has the same (`game/fightTraces.test.ts`, see "The fight step"),
+through `gridStep`. To tune a charge, expect about 1 to 3 zaps a
 fight from a player ignoring the live line, at 5 or 6 lines to fill the meter. The picture matters more than the powers: dense
 drawings stay easy under any number of powers, and thin outlines get hard quickly, so
 give a thin drawing some solid areas to start from.

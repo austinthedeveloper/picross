@@ -1,26 +1,28 @@
-import type { Line, LineSet } from '@picross/grid/engine/lines';
-import { ARMOR_HIT_DAMAGE, ARMOR_HIT_LINES, armorHitsBack } from '../../../../game/battle';
+import { ARMOR_HIT_LINES } from '../../../../game/battle';
 import { haptic } from '@picross/shared/ui/haptics';
 import { playSound } from '@picross/shared/ui/sound';
 import type { FightContext } from './context';
-import { takeHit } from './hits';
+import { hitOf, takeHit } from './hits';
 
 /**
  * Armor hits back (#116): every few lines you finish that aren't weak points costs
  * HP (Hits-on runs). Without it, leaving the weak points until last skips the enemy's
  * phases for free, because lines deal no damage under armor. It only moves when you
- * finish a line, never with time, because working a line out is the game.
+ * finish a line, never with time, because working a line out is the game. `gridStep`
+ * keeps the meter; this shows it and lands the hit.
  */
 export function createArmorBack(ctx: FightContext, onKnockout: () => void) {
   const hit = () => {
     if (ctx.finished || ctx.run()?.status !== 'active') return;
     const { name } = ctx.form();
+    const { state, events, changed } = ctx.step({ kind: 'hit-back', hitsOn: ctx.hitsOn });
     if (ctx.hitsOn) {
       playSound('hit');
       haptic('hit');
     }
+    if (changed) ctx.saveBattle(state);
     const message = ctx.hitsOn
-      ? takeHit(ctx, onKnockout, `🛡 ${name}'s armor hits back!`, ARMOR_HIT_DAMAGE)
+      ? takeHit(ctx, onKnockout, `🛡 ${name}'s armor hits back!`, hitOf(events))
       : `🛡 ${name}'s armor hits back. It fizzles in a Relaxed run.`;
     ctx.controls?.refresh();
     ctx.bar.say(message);
@@ -31,16 +33,11 @@ export function createArmorBack(ctx: FightContext, onKnockout: () => void) {
   };
 
   return {
-    /** Shows the meter once the board is up. */
-    show: draw,
-    /** Lines you just finished for the first time, with the weak points from before them. */
-    finished(lines: Line[], weak: LineSet | undefined) {
-      if (!weak || !lines.length) return;
-      const { state, hits } = armorHitsBack(ctx.battle(), lines, weak);
-      if (state !== ctx.battle()) ctx.saveBattle(state);
-      draw();
-      // Like ink, swaps and zaps, the hit lands outside the redraw that triggered it.
-      for (let n = 0; n < hits; n++) window.setTimeout(hit, 0);
+    /** Shows the meter once the board is up, and after lines move it. */
+    draw,
+    /** Like ink, swaps and zaps, the hit lands outside the redraw that triggered it. */
+    hitLater() {
+      window.setTimeout(hit, 0);
     },
   };
 }
