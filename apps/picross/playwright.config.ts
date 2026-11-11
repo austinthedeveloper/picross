@@ -6,7 +6,8 @@ const root = path.resolve(import.meta.dirname, '../..');
 /**
  * Browser tests on a phone-sized touch screen (the game is phone-first): every
  * spec against the production build, and `debug.spec.ts` against a dev build with
- * the debug tools (#65). Locally they use your installed Chrome; CI installs
+ * the debug tools (#65). Picross Cubed's are in `e2e/cubed/` (project `cubed`, or
+ * `npm run e2e:cubed`). Locally they use your installed Chrome; CI installs
  * Playwright's Chromium. Run with `npm run e2e`.
  */
 export default defineConfig({
@@ -28,10 +29,26 @@ export default defineConfig({
     trace: 'retain-on-failure',
   },
   projects: [
-    { name: 'prod', testIgnore: 'debug.spec.ts' },
-    { name: 'dev', testMatch: 'debug.spec.ts', use: { baseURL: 'http://localhost:4174/' } },
+    { name: 'prod', testIgnore: [/debug\.spec\.ts$/, /\/cubed\//] },
+    {
+      name: 'cubed',
+      testMatch: /\/cubed\/.*\.spec\.ts$/,
+      testIgnore: /perf\.spec\.ts$/,
+      // No service workers: the old one at /3d/ would hold pages between tests (its test,
+      // cubed/offline.spec.ts, turns them on).
+      use: { serviceWorkers: 'block' },
+    },
+    // Cubed's timing test runs alone after the rest, so other tests don't share the CPU it
+    // times (to run just it: npm run e2e -- --project cubed-perf --no-deps).
+    {
+      name: 'cubed-perf',
+      testMatch: /\/cubed\/perf\.spec\.ts$/,
+      dependencies: ['prod', 'cubed'],
+      use: { serviceWorkers: 'block' },
+    },
+    { name: 'dev', testMatch: /debug\.spec\.ts$/, use: { baseURL: 'http://localhost:4174/' } },
   ],
-  // The servers run from the repo root, whose build puts Cubed in dist/3d beside Flat.
+  // The servers run from the repo root, which builds into dist/ (and dist-dev/).
   webServer: [
     {
       command: 'npm run build && npm run preview -- --port 4173 --strictPort',

@@ -25,11 +25,12 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run lint
-      # The shared package's and both games' unit tests, then both built: the 3D game lands in dist/3d.
+      # Every package's unit tests, then the app's (both games), then the build.
       - run: npm test
       - run: npm run build
       - run: npm run check:bundle
-      # No three.js in either first download, and neither grows 10% over scripts/bundle-budget.json.
+      # No three.js in the first download or Cubed's routes, and no growing 10% over
+      # scripts/bundle-budget.json.
       - run: npm run check:budget
       # GitHub Pages is the dev site: it gets the debug tools (#65). Azure serves
       # production builds from release tags (deploy-azure.yml).
@@ -39,7 +40,8 @@ jobs:
         with:
           path: dist-dev
 
-  # Browser tests against the production build on a phone-sized screen (apps/*/e2e/).
+  # Browser tests against the production build on a phone-sized screen (apps/picross/e2e/,
+  # Cubed's in e2e/cubed/).
   e2e:
     runs-on: ubuntu-latest
     steps:
@@ -51,14 +53,11 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - run: npm run e2e
-      - run: npm run e2e:cubed
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: playwright-report
-          path: |
-            apps/picross/playwright-report
-            apps/cubed/playwright-report
+          path: apps/picross/playwright-report
           retention-days: 7
 
   deploy:

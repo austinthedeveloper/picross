@@ -69,8 +69,8 @@ export interface FightOptions {
   battle?: Battle;
   /** Enemy HP carried over from the other board: phases it has fallen into start here. */
   carry?: number;
-  /** Where the knocked-out panel leads. Default: Cubed's story map. */
-  home?: string;
+  /** Where the knocked-out panel leads: the game's story map. */
+  home: string;
   /** After each update that started a phase: a boss can change board here. */
   phased?(battle: Battle): void;
 }
@@ -283,7 +283,7 @@ export function fightKind(
       el('div', { className: 'end-actions' }, [
         el('a', {
           className: 'button primary',
-          href: opts.home ?? '#/story',
+          href: opts.home,
           textContent: 'See results →',
         }),
       ]),

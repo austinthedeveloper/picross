@@ -1,27 +1,19 @@
 import { el } from '../dom';
 
 /**
- * The switch between the two games on one site: Flat (this 2D game, at the site's root) and
- * Cubed (the 3D game, under /3d/). Shared with the 3D game, so both show the same switch.
- * It remembers the last one picked, so the site opens on it next time.
+ * The switch between the two games in one app: Flat (the 2D game, at `#/`) and Cubed (the
+ * 3D game, under `#/cubed`). Shared with the 3D game's screens, so both show the same
+ * switch. It remembers the last one picked, so the app opens on it next time.
  */
 export type GameKind = 'flat' | 'cubed';
 
 const KEY = 'picross:game';
 
-/** Where each game lives, seen from the other. In dev each has its own server. */
-const HREF: Record<GameKind, { fromFlat: string; fromCubed: string }> = {
-  flat: { fromFlat: './', fromCubed: '../' },
-  cubed: { fromFlat: './3d/', fromCubed: './' },
-};
-const DEV_HREF: Record<GameKind, string> = {
-  flat: 'http://localhost:5173/',
-  cubed: 'http://localhost:5174/',
-};
+/** Each game's home. */
+const HREF: Record<GameKind, string> = { flat: '#/', cubed: '#/cubed' };
 
-export function gameHref(target: GameKind, from: GameKind): string {
-  if (import.meta.env.DEV) return DEV_HREF[target];
-  return from === 'flat' ? HREF[target].fromFlat : HREF[target].fromCubed;
+export function gameHref(target: GameKind): string {
+  return HREF[target];
 }
 
 export function lastGame(): GameKind | null {
@@ -49,7 +41,7 @@ export function gameSwitch(current: GameKind): HTMLElement {
       'a',
       {
         className: 'game-option',
-        href: kind === current ? '#/' : gameHref(kind, current),
+        href: gameHref(kind),
         title: hint,
       },
       [

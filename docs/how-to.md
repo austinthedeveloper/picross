@@ -307,9 +307,13 @@ in one step. `versions` lists what's saved, and `delete-version <version>` remov
    finish with `app.replaceChildren(...)`.
 2. If it adds window or document listeners, intervals, or other global state, return a
    cleanup function, as `renderGameScreen` does.
-3. Add a route in `route()` in `src/main.ts`, for example
-   `else if (location.hash === '#/stats') renderStatsScreen(app);`. If it returns a cleanup
-   function, assign it to `cleanup`.
+3. Add a route to `ROUTES` in `src/routes.ts`, above the last one (the list, for anything
+   else), for example
+   `route({ match: is('#/stats'), render: (app) => renderStatsScreen(app) }),`. Whatever
+   `render` returns is the cleanup the router runs before the next screen. A screen with a
+   block loads with `lazy(import('…'), (m) => m.render…(app))`, so three.js stays out of
+   the first download. A Cubed screen goes in `src/cubed/routes.ts` instead, linked with
+   `cubedHref('/<name>')`.
 4. Add `src/styles/<name>.css` and import it in `main.ts` after the other styles.
 5. Link to it with a normal `<a href="#/<name>">`.
 

@@ -92,6 +92,8 @@ export interface PlayOptions {
   toolbar?: HTMLElement[];
   /** The top bar's back link. Default: Home. */
   back?: HTMLElement;
+  /** Where Home and "All puzzles" lead: the game's puzzle list. Default: `#/`. */
+  home?: string;
 }
 
 export interface Play {
@@ -202,7 +204,13 @@ export function createPlay(root: HTMLElement, opts: PlayOptions): Play {
   view.canvas.ariaLabel = `${dimsLabel(puzzle.dims)} block. Arrow keys move, X breaks, Space paints.`;
 
   const screen = el('div', { className: 'screen game' }, [
-    el('header', { className: 'topbar' }, [opts.back ?? homeLink(), title, size, hearts, timer]),
+    el('header', { className: 'topbar' }, [
+      opts.back ?? homeLink(opts.home),
+      title,
+      size,
+      hearts,
+      timer,
+    ]),
     el('div', { className: 'toolbar' }, [
       ...(opts.toolbar ?? []),
       el('div', { className: 'actions' }, [undo, redo]),
@@ -670,7 +678,11 @@ export function createPlay(root: HTMLElement, opts: PlayOptions): Play {
             textContent: 'Three cubes of the shape broken. Try again?',
           }),
           el('div', { className: 'end-actions' }, [
-            el('a', { className: 'button ghost', href: '#/', textContent: 'All puzzles' }),
+            el('a', {
+              className: 'button ghost',
+              href: opts.home ?? '#/',
+              textContent: 'All puzzles',
+            }),
             el('button', { className: 'button primary', textContent: 'Retry', onclick: retry }),
           ]),
         ];

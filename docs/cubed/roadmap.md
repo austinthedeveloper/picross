@@ -15,11 +15,12 @@ and [milestones](https://github.com/austinthedeveloper/picross-3d/milestones).
 ## After that
 
 [Combining with the 2D game](../combining.md): one game with both, and bosses that switch
-from a 2D board to a block mid-fight. The monorepo part (steps 1 to 3) is done.
+from a 2D board to a block mid-fight. The monorepo part (steps 1 to 3) is done, and Cubed's
+screens are in the one app (step 4 has begun).
 
 ## Releases
 
-Cubed ships with the 2D game now: `npm run build` puts it in `dist/3d/`, and a 2D release
-deploys both (see [development.md](../development.md#azure-deployment-releases)). Its own
-`release.yml` went when the games shared a site. The notes for its releases as a separate
+Cubed is part of the one app now, under `#/cubed/…`, and ships with every release (see
+[development.md](../development.md#azure-deployment-releases)); its old address, `/3d/`,
+sends links on. Its own `release.yml` went when the games shared a site. The notes for its releases as a separate
 game are in [releases/](releases/).

@@ -1,9 +1,9 @@
 # @picross/block
 
 The 3D puzzle's rules and data, with no screen and no three.js: Picross Cubed
-(`apps/cubed`) is built on it, and the 2D game (`apps/picross`) imports it for the
-Curator's block phases. `@picross/play-block` draws it. It came out of `apps/cubed/src`
-(#145).
+(`apps/picross/src/cubed`) is built on it, and the 2D game imports it for the Curator's
+block phases. `@picross/play-block` draws it. It came out of Cubed's app (then
+`apps/cubed/src`, #145).
 
 It's plain TypeScript with no build step: each app's Vite compiles it.
 
@@ -20,8 +20,8 @@ The paths under `src/` are the ones these files had in Cubed, so
 | Play    | `src/game/game.ts` (a puzzle in play, `Mode`, `SavedBoard`), `battle.ts` (a story fight's rules), `clock.ts`                                                        |
 | Story   | `src/story/data.ts` (the story, from `@picross/story`, fitted to blocks; what it can't play yet), `powers.ts` (how each power is shown)                             |
 
-Cubed's saves, settings, runs, daily streak and badges stay in `apps/cubed/src/game/`:
-they're that app's, under its `picross3d:` storage keys.
+Cubed's saves, settings, runs, daily streak and badges stay in the app, in
+`apps/picross/src/cubed/game/`, under their `picross3d:` storage keys.
 
 ## Importing it
 
@@ -43,10 +43,11 @@ for three.js), and `eslint.config.js` says the same with `no-restricted-imports`
 
 ## Puzzles
 
-Cubed's `npm run puzzles` (`apps/cubed/scripts/puzzles.ts`) writes `hide` and `passes`
-into `src/puzzles/pack/` and `story/` here, and exports sheets: from `apps/cubed`,
-`npm run puzzles -- --sheet ../../packages/block/src/puzzles/sheets/<name>.txt`. See
-Cubed's [how-to](../../docs/cubed/how-to.md).
+`npm run puzzles` here (`scripts/puzzles.ts`; `npm -w packages/block run puzzles` from the
+root) writes `hide` and `passes` into `src/puzzles/pack/` and `story/`, and exports sheets:
+`npm run puzzles -- --sheet src/puzzles/sheets/<name>.txt`. `npm run bench`
+(`scripts/bench.ts`) times hiding and solving a 10×10×10 block. See Cubed's
+[how-to](../../docs/cubed/how-to.md).
 
 ## Tests
 

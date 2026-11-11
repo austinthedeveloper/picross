@@ -1,10 +1,12 @@
 import type { Plugin, Rule } from 'postcss';
 
 /**
- * Both games' play screens use some of the same class names (`.stage`, `.toolbar`,
- * `.topbar`) for different layouts. A fight that switches board shows the 3D screen inside
- * this app, so each game's own screen styles only apply on its board: the 3D game's while
- * `<html data-board="block">` is set, this game's the rest of the time.
+ * Both games' screens use some of the same class names (`.stage`, `.toolbar`, `.topbar`,
+ * `.puzzle-card`) for different layouts, and both games are in this app: Cubed's routes
+ * (`#/cubed/…`) and a fight that switches board show the 3D screens. So each game's own
+ * screen styles only apply on its board: the 3D game's while `<html data-board="block">` is
+ * set (the router sets it on Cubed's routes, blockFight.ts during a block phase), this
+ * game's the rest of the time.
  *
  * The scope is wrapped in `:where()`, so selectors keep their specificity and the cascade
  * is exactly what it was in each game alone. Styles both games share (tokens, base, the
@@ -15,7 +17,10 @@ export const FLAT = `:not(${BLOCK})`;
 
 /** Each game's own screen styles (the 3D game's are in packages/play-block), and their board. */
 const SCOPED: [RegExp, string][] = [
-  [/\/packages\/play-block\/src\/styles\/(game|story)\.css$/, BLOCK],
+  [/\/packages\/play-block\/src\/styles\/(game|story|editor)\.css$/, BLOCK],
+  // Cubed's own screens (its list, badges and how to play), in this app since the 3D game
+  // moved in.
+  [/\/apps\/picross\/src\/cubed\/styles\/[\w-]+\.css$/, BLOCK],
   [/\/apps\/picross\/src\/styles\/(select|editor|badges)\.css$/, FLAT],
   // The board and play screen (packages/play-grid) are this game's too.
   [/\/packages\/play-grid\/src\/styles\/(board|game)\.css$/, FLAT],

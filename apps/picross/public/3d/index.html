@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Picross Cubed</title>
+    <!--
+      Picross Cubed used to be its own app here, at /3d/. It's part of the one app now, under
+      #/cubed/…, so old links and bookmarks come on to the same screen: /3d/#/play/mug opens
+      ../#/cubed/play/mug, and /3d/ opens Cubed's list. Servers never see the hash, so this
+      page does it (GitHub Pages and Azure can't redirect). Scenes were both games' already.
+      /3d/sw.js retires Cubed's old offline worker.
+    -->
+    <script>
+      (function () {
+        var path = location.hash.replace(/^#/, '');
+        var to = /^\/scene\//.test(path)
+          ? '#' + path
+          : /^\/./.test(path)
+            ? '#/cubed' + path
+            : '#/cubed';
+        location.replace('../' + to);
+      })();
+    </script>
+  </head>
+  <body>
+    <p><a href="../#/cubed">Picross Cubed has moved: open it here.</a></p>
+  </body>
+</html>

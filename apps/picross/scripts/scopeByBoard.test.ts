@@ -25,13 +25,22 @@ describe('scopeByBoard', () => {
     expect(run('.stage, .topbar { gap: 0 }', '/repo/packages/play-block/src/styles/game.css')).toBe(
       ':where(:root[data-board="block"]) .stage, :where(:root[data-board="block"]) .topbar { gap: 0 }',
     );
+    // Cubed's own screens (its list, under #/cubed) and its editor.
+    for (const from of [
+      '/repo/apps/picross/src/cubed/styles/select.css',
+      '/repo/packages/play-block/src/styles/editor.css',
+    ]) {
+      expect(run('.puzzle-card { gap: 0 }', from)).toBe(
+        ':where(:root[data-board="block"]) .puzzle-card { gap: 0 }',
+      );
+    }
   });
 
   it("doesn't scope a file that only shares a game's name for its own", () => {
     expect(run('.stage { gap: 0 }', '/repo/packages/shared/src/styles/game.css')).toBe(
       '.stage { gap: 0 }',
     );
-    expect(run('.stage { gap: 0 }', '/repo/apps/cubed/src/styles/select.css')).toBe(
+    expect(run('.stage { gap: 0 }', '/repo/apps/picross/src/styles/switch.css')).toBe(
       '.stage { gap: 0 }',
     );
     expect(run('.stage { gap: 0 }', '/repo/packages/play-block/src/styles/voxels.css')).toBe(

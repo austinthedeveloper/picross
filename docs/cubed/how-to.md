@@ -2,8 +2,9 @@
 
 Recipes for the 3D game. The 2D game's are in [how-to.md](../how-to.md).
 
-The puzzles and their checks are in `packages/block`; run the `npm run` commands below from
-`apps/cubed` (or as `npm -w apps/cubed run …` from the root).
+The puzzles and their checks are in `packages/block`; run the `npm run puzzles` commands
+below from `packages/block` (or as `npm -w packages/block run puzzles …` from the root).
+Cubed's screens are in `apps/picross/src/cubed/`, under `#/cubed/…` in the app.
 
 ## Add a puzzle
 
@@ -46,7 +47,7 @@ For a batch, draw them in one sheet (`packages/block/src/puzzles/sheets/*.txt`, 
 `packages/block/src/puzzles/sheet.ts`: layers side by side, one line per row) and export it:
 
 ```bash
-npm run puzzles -- --sheet ../../packages/block/src/puzzles/sheets/batch-1.txt
+npm run puzzles -- --sheet src/puzzles/sheets/batch-1.txt
 ```
 
 Unchanged shapes keep their hidden clues. Sheets under `sheets/story/` export to
@@ -54,7 +55,7 @@ Unchanged shapes keep their hidden clues. Sheets under `sheets/story/` export to
 
 ### In the browser: the editor
 
-`#/editor` (the Editor button on the list) draws a shape layer by layer with a live 3D
+`#/cubed/editor` (the Editor button on the list) draws a shape layer by layer with a live 3D
 preview, and checks it in a web worker as you go: solvable or not (outlining the cubes
 line logic can't work out), and with a slider for how many clues to hide. Play-test it,
 copy a share link (`#/p/<code>`, the puzzle deflated into the URL), or export the JSON and
@@ -77,12 +78,15 @@ blocks of `packages/play-block/src/styles/voxels.css` (light, dark, high contras
 game, in `packages/shared` at the repo root (see its [README](../../packages/shared/README.md)):
 a change there is in both games. Styles for a block go in `packages/play-block/src/styles/`
 (`game.css`, `voxels.css`, `story.css`, `editor.css`; the 2D game uses the first three for
-its block fights), and styles for Cubed's list in `apps/cubed/src/styles/select.css`.
+its block fights), and styles for Cubed's list in `apps/picross/src/cubed/styles/select.css`.
+Both are scoped to the block (`<html data-board="block">`), so they never reach the 2D
+game's screens.
 
 ## See a change
 
-`npm run dev`, or screenshot a page in your installed Chrome while it runs:
+`npm run dev` (http://localhost:5173/#/cubed), or screenshot a page in your installed Chrome
+while it runs:
 
 ```bash
-npm run screenshot -- '#/play/castle' castle.png --phone --dark
+npm -w apps/picross run screenshot -- '#/cubed/play/castle' castle.png --phone --dark
 ```

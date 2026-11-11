@@ -1,9 +1,9 @@
 # @picross/play-block
 
 Playing a block: the three.js view, input, the play screen, the story fight and editor
-screens, and their styles. Picross Cubed (`apps/cubed`) builds its screens on it, and the
-2D game (`apps/picross`) runs its play and fight screens for the Curator's block phases.
-It came out of `apps/cubed/src` (#145). The rules it plays are `@picross/block`.
+screens, and their styles. Picross Cubed (`apps/picross/src/cubed`) builds its screens on
+it, and the 2D game runs its play and fight screens for the Curator's block phases. It came
+out of Cubed's app (then `apps/cubed/src`, #145). The rules it plays are `@picross/block`.
 
 It's plain TypeScript and CSS with no build step: each app's Vite compiles it.
 
@@ -21,7 +21,8 @@ The paths under `src/` are the ones these files had in Cubed, so
 | Tests   | `e2e/helpers.ts`: browser-test helpers for a block, for both games' Playwright tests                                    |
 
 Cubed's list, free play, tutorial, daily, dioramas, badges and story screens (board, map,
-encounter, dig, rest) stay in `apps/cubed/src/ui/`: they use that app's saves and routes.
+encounter, dig, rest) are in the app, in `apps/picross/src/cubed/ui/`: they use Cubed's
+saves and routes.
 
 ## Importing it
 
@@ -40,18 +41,24 @@ the screens using them) on demand, so three.js stays out of an app's first downl
 
 ## What the apps pass in
 
-- **The run, for a fight:** `fightKind(encounter, state, { run })` takes a `FightRun`
-  (your HP, gadgets and seen tips). Cubed passes its story run; the 2D game passes its own.
+- **The run, for a fight:** `fightKind(encounter, state, { run, home })` takes a
+  `FightRun` (your HP, gadgets and seen tips), and where the knocked-out panel leads (the
+  game's story map). Cubed passes its story run; the 2D game passes its own.
+- **Links:** nothing here hardcodes a route. `createPlay`'s `home` (default `#/`) is where
+  Home and "All puzzles" lead, and `renderEditorScreen(root, { home, sharedHref })` builds
+  its share and play-test links with `sharedHref(code)` (default `#/p/<code>`). Cubed
+  passes its own (`#/cubed`, `#/cubed/p/<code>`).
 - **Settings, for the play screen:** `providePlayPrefs(get)` (`src/ui/prefs.ts`) hands
-  over `dimDone` (fade finished clues). Cubed passes its settings in `main.ts`; the 2D game,
-  which has no such setting, passes Cubed's saved one. Until then it's on.
+  over `dimDone` (fade finished clues). Cubed passes its settings in its `routes.ts`; the
+  2D game, which has no such setting, passes Cubed's saved one. Until then it's on.
 - Sound, haptics and the theme read `@picross/shared`'s `providePrefs`, as before.
 
 ## Styles and the 2D game
 
-The 2D game imports `voxels.css`, `game.css` and `story.css`. Both games use some of the
-same class names, so its `scripts/scopeByBoard.ts` scopes `game.css` and `story.css` (by
-their path in this package) to `<html data-board="block">`.
+The app imports `voxels.css`, `game.css` and `story.css` up front, and `editor.css` with
+Cubed's routes. Both games use some of the same class names, so its
+`scripts/scopeByBoard.ts` scopes `game.css`, `story.css` and `editor.css` (by their path in
+this package) to `<html data-board="block">`.
 
 ## The rule: nothing here imports from an app
 
@@ -63,4 +70,4 @@ their path in this package) to `<html data-board="block">`.
 
 `npm test` at the root runs this package's tests (`tsc --noEmit && vitest run`);
 `npm run test:play-block` runs just these. The view and screens are covered by both games'
-browser tests (`npm run e2e`, `npm run e2e:cubed`).
+browser tests (`npm run e2e`; Cubed's alone with `npm run e2e:cubed`).

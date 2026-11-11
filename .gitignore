@@ -8,5 +8,3 @@ dist-script-review
 .claude/worktrees
 playwright-report
 test-results
-# Picross Cubed's own build output (copied into dist/3d by the build)
-apps/cubed/dist

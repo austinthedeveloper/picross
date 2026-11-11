@@ -303,8 +303,7 @@ describe('rest stops', () => {
 });
 
 describe('scenes the runs play', () => {
-  // Here rather than in backdrops.test.ts, which stays free of runs so the 3D game
-  // (picross-3d) can share it.
+  // Here rather than in backdrops.test.ts (packages/story), which stays free of runs.
   it('all have a backdrop, except outros', () => {
     // A run's outro is only ever text on the results screen.
     const outros = new Set(runs.map((run) => run.outro));

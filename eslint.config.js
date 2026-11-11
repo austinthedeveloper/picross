@@ -35,7 +35,7 @@ export default tseslint.config(
         {
           patterns: [
             {
-              group: ['**/apps/**', 'picross', 'picross-3d', '@picross/*'],
+              group: ['**/apps/**', 'picross', '@picross/*'],
               message: 'packages/shared imports only its own files (with relative paths).',
             },
           ],
@@ -55,7 +55,7 @@ export default tseslint.config(
         {
           patterns: [
             {
-              group: ['**/apps/**', 'picross', 'picross-3d'],
+              group: ['**/apps/**', 'picross'],
               message: 'packages/story never imports from an app.',
             },
             {
@@ -85,7 +85,7 @@ export default tseslint.config(
         {
           patterns: [
             {
-              group: ['**/apps/**', 'picross', 'picross-3d'],
+              group: ['**/apps/**', 'picross'],
               message: 'packages/story never imports from an app.',
             },
             {
@@ -106,7 +106,7 @@ export default tseslint.config(
         {
           patterns: [
             {
-              group: ['**/apps/**', 'picross', 'picross-3d'],
+              group: ['**/apps/**', 'picross'],
               message: 'packages/story never imports from an app.',
             },
             {
@@ -128,7 +128,7 @@ export default tseslint.config(
         {
           patterns: [
             {
-              group: ['**/apps/**', 'picross', 'picross-3d'],
+              group: ['**/apps/**', 'picross'],
               message: 'packages/grid never imports from an app.',
             },
             {
@@ -155,7 +155,7 @@ export default tseslint.config(
         {
           patterns: [
             {
-              group: ['**/apps/**', 'picross', 'picross-3d'],
+              group: ['**/apps/**', 'picross'],
               message: 'packages/play-grid never imports from an app; pass it in a PlaySession.',
             },
             {
@@ -181,7 +181,6 @@ export default tseslint.config(
               group: [
                 '**/apps/**',
                 'picross',
-                'picross-3d',
                 '@picross/play-block',
                 '@picross/play-block/**',
                 '@picross/shared/ui/**',
@@ -208,7 +207,7 @@ export default tseslint.config(
         {
           patterns: [
             {
-              group: ['**/apps/**', 'picross', 'picross-3d'],
+              group: ['**/apps/**', 'picross'],
               message: 'packages/play-block imports only block, shared, story and three.js.',
             },
           ],
@@ -217,16 +216,19 @@ export default tseslint.config(
     },
   },
   {
-    // Neither game imports the other: what both use lives in packages/.
-    files: ['apps/picross/**'],
+    // Picross Cubed's screens (src/cubed/) load with one import('./cubed/routes') from
+    // src/routes.ts, so neither they nor three.js are in the first download (npm run
+    // check:budget checks the build too). Nothing else in the app reaches into src/cubed/.
+    files: ['apps/picross/src/**'],
+    ignores: ['apps/picross/src/cubed/**'],
     rules: {
       'no-restricted-imports': [
         'error',
         {
           patterns: [
             {
-              group: ['**/cubed/**', 'picross-3d', 'picross-3d/**'],
-              message: 'The 2D game never imports from apps/cubed: use a package.',
+              group: ['**/cubed', '**/cubed/**'],
+              message: "Cubed's screens load with import('./cubed/routes') (src/routes.ts).",
             },
           ],
         },
@@ -234,31 +236,8 @@ export default tseslint.config(
       'no-restricted-syntax': [
         'error',
         {
-          selector: 'ImportExpression > Literal[value=/(^|\\/)cubed\\//]',
-          message: 'The 2D game never imports from apps/cubed: use a package.',
-        },
-      ],
-    },
-  },
-  {
-    files: ['apps/cubed/**'],
-    rules: {
-      'no-restricted-imports': [
-        'error',
-        {
-          patterns: [
-            {
-              group: ['**/picross/**', 'picross', 'picross/**'],
-              message: 'Cubed never imports from apps/picross: use a package.',
-            },
-          ],
-        },
-      ],
-      'no-restricted-syntax': [
-        'error',
-        {
-          selector: 'ImportExpression > Literal[value=/(^|\\/)picross\\//]',
-          message: 'Cubed never imports from apps/picross: use a package.',
+          selector: 'ImportExpression > Literal[value=/(^|\\/)cubed(\\/(?!routes$)|$)/]',
+          message: "Cubed's screens load with import('./cubed/routes') (src/routes.ts).",
         },
       ],
     },
