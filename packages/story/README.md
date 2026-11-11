@@ -14,14 +14,14 @@ The paths under `src/` are the ones these files had before, so
 `packages/shared/src/puzzles/scenes.ts` is now `src/puzzles/scenes.ts` here, and the 2D
 game's `src/puzzles/runs.ts` (its common part) is `src/puzzles/runs.ts`.
 
-| What         | Files                                                                                                                                                                                                          |
-| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Data         | `src/puzzles/{chapters,runs,encounters,run,scenes,backdrops}/*.json`; `files/` globs the first four for the loaders                                                                                            |
-| Loaders      | `src/puzzles/runs.ts` (encounters and jobs), `chapters.ts`, `scenes.ts`, `backdrops.ts`, `gadgets.ts` (the gadget catalog)                                                                                     |
-| Dialogue     | `src/game/dialogue.ts`: the scene runner (current line or choices, advance, choose, flags)                                                                                                                     |
-| Fights       | `src/fight/board.ts`: `FightBoard`, what a fight needs of a board (#164); `fightBoardContract.ts`, its tests; `battle.ts`: `StoryBattle`, the one battle (#166), played by a `FightRules` profile (`rules.ts`) |
-| Scene player | `src/ui/components/dialogue.ts`, `backdrop.ts`, `src/ui/screens/sceneScreen.ts`                                                                                                                                |
-| Tests        | `src/story.test.ts` (the whole story reads), `boards.test.ts` (the gate), `ui/art.test.ts` (every sprite has its art)                                                                                          |
+| What         | Files                                                                                                                                                                                                                                                                           |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Data         | `src/puzzles/{chapters,runs,encounters,run,scenes,backdrops}/*.json`; `files/` globs the first four for the loaders                                                                                                                                                             |
+| Loaders      | `src/puzzles/runs.ts` (encounters and jobs), `chapters.ts`, `scenes.ts`, `backdrops.ts`, `gadgets.ts` (the gadget catalog)                                                                                                                                                      |
+| Dialogue     | `src/game/dialogue.ts`: the scene runner (current line or choices, advance, choose, flags)                                                                                                                                                                                      |
+| Fights       | `src/fight/board.ts`: `FightBoard`, what a fight needs of a board (#164); `fightBoardContract.ts`, its tests; `battle.ts`: `StoryBattle`, the one battle (#166), played by a `FightRules` profile (`rules.ts`); `save.ts`: a fight as a run saves it, an entry per board (#169) |
+| Scene player | `src/ui/components/dialogue.ts`, `backdrop.ts`, `src/ui/screens/sceneScreen.ts`                                                                                                                                                                                                 |
+| Tests        | `src/story.test.ts` (the whole story reads), `boards.test.ts` (the gate), `ui/art.test.ts` (every sprite has its art)                                                                                                                                                           |
 
 The art (`public/art/`) and the story's styles (`run.css`, `fight.css`, `dig.css`,
 `dialogue.css`, `art.css`) and `ui/art.ts` stay in `@picross/shared`: they don't read the

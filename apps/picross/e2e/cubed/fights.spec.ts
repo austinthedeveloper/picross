@@ -80,3 +80,26 @@ test('with Hits on, running out of HP knocks you out and ends the run', async ({
   await page.getByRole('link', { name: 'See results →' }).click();
   await expect(page.getByRole('heading', { name: 'Run over' })).toBeVisible();
 });
+
+test('a reload mid-fight finds the block and the battle as they were', async ({ page }) => {
+  await runAt(page, 'first-job', 0);
+  const goblin = encounterPuzzle('goblin');
+  const line = emptyLines(goblin)[0];
+  const before = await hpValue(page);
+  await focusBlock(page);
+  await breakCubes(page, goblin, line);
+  await expect.poll(() => hpValue(page)).toBeLessThan(before);
+  const hp = await hpValue(page);
+  await page.reload();
+  await page.locator('canvas.block-canvas').waitFor();
+  await expect.poll(() => hpValue(page)).toBe(hp);
+  // The run saves the fight as its block's entry (#169): the cubes broken, the battle. Cubed's
+  // run is `block` in the one run save (#155).
+  const saved = await page.evaluate(
+    () => JSON.parse(localStorage.getItem('picross:run')!).block.current,
+  );
+  expect(saved.battle).toBeUndefined();
+  expect(saved.fight.boards.block.battle.enemyHp).toBe(hp);
+  const blocks: string = saved.fight.boards.block.board.blocks;
+  expect(line.map((cell) => blocks[cell])).toEqual(line.map(() => '2'));
+});

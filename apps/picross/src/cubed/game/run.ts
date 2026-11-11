@@ -11,8 +11,10 @@ export interface Tally {
 const emptyTally = (): Tally => ({ mistakes: 0, hintsUsed: 0, gadgetsUsed: 0 });
 
 /**
- * Where a player is in a run (a job). Pure data, saved as-is; change it only through the
- * functions below, which return a new state. Mirrors the 2D game's RunState.
+ * Where a player is in a run (a job). Pure data, so it can be saved: a fight's board and
+ * battle are saved together as its `fight` (`fightSave.ts`, #169), and everything else as
+ * it is. Change it only through the functions below, which return a new state. Mirrors the
+ * 2D game's RunState.
  */
 export interface RunState {
   runId: string;

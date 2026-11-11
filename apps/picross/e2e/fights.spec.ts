@@ -311,7 +311,8 @@ test('electric eel: thinking is free, other lines charge it, the live line groun
   const live = () =>
     page.evaluate(
       () =>
-        JSON.parse(localStorage.getItem('picross:run')!).current.battle.live as Line | undefined,
+        JSON.parse(localStorage.getItem('picross:run')!).current.fight.boards.flat.battle.live as
+          Line | undefined,
     );
   await expect(charge).toBeVisible();
   await expect(page.locator('.clue.live')).toHaveCount(1);
@@ -437,7 +438,7 @@ test('weathervane: the board turns a quarter clockwise, marks, clues and undo an
   await expect.poll(() => boardState(page)).toEqual(turned);
   await expect(page.locator('.col-clue').nth(n - 1)).toHaveText('2');
   const turns = await page.evaluate(
-    () => JSON.parse(localStorage.getItem('picross:run')!).current.battle.turns,
+    () => JSON.parse(localStorage.getItem('picross:run')!).current.fight.boards.flat.battle.turns,
   );
   expect(turns).toBe(1);
 

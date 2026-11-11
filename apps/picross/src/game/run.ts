@@ -19,8 +19,9 @@ const emptyTally = (): Tally => ({
 });
 
 /**
- * Where a player is in a run. Pure data, so it can be saved as-is. Change it
- * only through the functions below, which return a new state.
+ * Where a player is in a run. Pure data, so it can be saved: a fight's boards and battles
+ * are saved together as its `fight` (`fightSave.ts`, #169), and everything else as it is.
+ * Change it only through the functions below, which return a new state.
  */
 export interface RunState {
   runId: string;
