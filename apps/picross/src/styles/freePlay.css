@@ -68,10 +68,15 @@
 
 /*
  * 600+ cards between the two lists: the browser lays out and paints only the ones near the
- * screen, keeping each one's last size (about a card's) for the scrollbar meanwhile.
+ * screen, holding each one's place meanwhile with about a card's height (a 2D card, then a
+ * block's), or its own once it has drawn.
  */
 .free-list .card,
 .free-list .puzzle-card {
   content-visibility: auto;
-  contain-intrinsic-size: auto 150px;
+  contain-intrinsic-size: auto 144px;
+}
+
+.free-list .puzzle-card {
+  contain-intrinsic-size: auto 177px;
 }
