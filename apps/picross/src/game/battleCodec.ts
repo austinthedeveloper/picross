@@ -1,4 +1,4 @@
-import { createBoard, type Board } from '@picross/grid/engine/board';
+import type { Board } from '@picross/grid/engine/board';
 import { keyToLine, lineKey, type LineSet } from '@picross/grid/engine/lines';
 import { turnLines } from '@picross/grid/engine/transform';
 import { gridFightBoard, lineAt, lineId } from '@picross/grid/game/fightBoard';
@@ -296,14 +296,8 @@ export function gridBoard(puzzle: Puzzle): BattleBoard<number[], Board> {
  * which cells a line covers (ink washing off it).
  */
 export function shapeBoard(width: number, height: number): BattleBoard<number[], Board> {
-  return gridBoard({
-    id: '',
-    name: '',
-    width,
-    height,
-    solution: createBoard(width, height) as never,
-    clues: { rows: [], cols: [] },
-  } as unknown as Puzzle);
+  const solution = { width, height, cells: new Array<boolean>(width * height).fill(false) };
+  return gridBoard({ id: '', name: '', width, height, solution, clues: { rows: [], cols: [] } });
 }
 
 /** No board at all: for the helpers that only change the state, which never ask it. */

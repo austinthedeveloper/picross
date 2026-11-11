@@ -246,12 +246,12 @@ function chargeEvent(height: number, e: Of<'charge'>, warming: boolean): ChargeE
   const live = e.live === null ? null : lineAt(height, e.live);
   return {
     kind: 'charge',
-    limit: e.every,
     warmUp: e.warmUp,
     charged: e.meter,
     live,
     fresh: e.picked ? live : null,
     warming,
+    limit: e.every,
   };
 }
 
