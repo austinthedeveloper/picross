@@ -2,6 +2,8 @@ import { expect, test } from '@playwright/test';
 import { encounterSolution, runAt, seed, skipScene, solve, press } from './helpers';
 
 const cleared = { plays: 1, wins: 1 };
+/** A seeded win as the save holds it after the first-launch merge (#155) marks its board. */
+const clearedOnFlat = { ...cleared, wonOn: ['grid'] };
 const seenOpenings = ['after-hours-opening', 'deep-water-opening'];
 
 const allOpenings = [
@@ -88,7 +90,7 @@ test.describe('Overtime', () => {
     await expect(page.locator('.results h2')).toHaveText('Job done!');
     const jobs = await page.evaluate(() => JSON.parse(localStorage.getItem('picross:run')!).jobs);
     expect(jobs['night-shift-overtime']).toMatchObject({ plays: 1, wins: 1, hitsOnWins: 1 });
-    expect(jobs['night-shift']).toEqual(cleared);
+    expect(jobs['night-shift']).toEqual(clearedOnFlat);
 
     await press(page, 'Jobs board');
     await skipScene(page);
@@ -134,7 +136,7 @@ test.describe('Overtime', () => {
       await expect(page.locator('.results h2')).toHaveText('Job done!');
       const jobs = await page.evaluate(() => JSON.parse(localStorage.getItem('picross:run')!).jobs);
       expect(jobs[`${job}-overtime`]).toMatchObject({ plays: 1, wins: 1, hitsOnWins: 1 });
-      expect(jobs[job]).toEqual(cleared);
+      expect(jobs[job]).toEqual(clearedOnFlat);
     });
   }
 });

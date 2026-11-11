@@ -1,0 +1,71 @@
+{
+  "description": "Only Picross Cubed played: free play, a half-done block, the daily, First Job won, tutorial skipped, fading off, sound on, the list on Done.",
+  "origin": "Played in Chrome by a Playwright script against the build before the merge (50d4082), then every localStorage key dumped as it was. Nothing hand-edited.",
+  "keys": {
+    "picross3d:badges": {
+      "tiers": {
+        "solver": -1,
+        "clean": -1,
+        "big": -1,
+        "daily": -1,
+        "story": 0,
+        "hits-on": -1,
+        "overtime": -1,
+        "builder": -1,
+        "diorama": -1
+      }
+    },
+    "picross3d:daily": {
+      "streak": 1,
+      "best": 1,
+      "times": {
+        "2026-11-11": 659.3999999761581
+      },
+      "last": "2026-11-11"
+    },
+    "picross3d:run": {
+      "current": null,
+      "seenScenes": ["first-job-intro", "after-hours-opening"],
+      "seenTips": [],
+      "jobs": {
+        "first-job": {
+          "plays": 1,
+          "wins": 1
+        }
+      }
+    },
+    "picross3d:settings": {
+      "mode": "relaxed",
+      "listFilter": "done",
+      "listDifficulty": "any",
+      "dimDone": false,
+      "tutorialDone": true,
+      "muted": false,
+      "highContrast": false,
+      "haptics": true
+    },
+    "picross3d:v1": {
+      "solved": {
+        "steps": {
+          "solves": 1,
+          "bestTime": 738.3999999761581,
+          "clean": 1
+        },
+        "jack": {
+          "solves": 1,
+          "bestTime": 265.59999990463257,
+          "clean": 1
+        }
+      },
+      "boards": {
+        "mug": {
+          "blocks": "000220002000000000000000000000000000000000000000000000000000",
+          "elapsed": 592.3999999761581,
+          "mode": "relaxed"
+        }
+      },
+      "totalTime": 1003.9999998807907
+    },
+    "picross:game": "cubed"
+  }
+}

@@ -1,3 +1,5 @@
+// First: moves old saves to the current keys before any store module reads them (#155).
+import './game/migrate';
 import '@picross/shared/styles/tokens.css';
 // The 3D game's styles, for a boss that switches to a block. Each game's own screen styles
 // apply only on its board (scripts/scopeByBoard.ts); this order matches both games' own.
