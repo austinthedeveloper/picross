@@ -1,0 +1,2252 @@
+{
+  "goblin": {
+    "flat": {
+      "size": "10×10",
+      "status": "unique",
+      "passes": 2,
+      "firstPass": 0.84,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "3×5×3",
+      "status": "unique",
+      "passes": 4,
+      "firstPass": 0.911,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 0
+      }
+    }
+  },
+  "fog-bat": {
+    "flat": {
+      "size": "10×10",
+      "status": "unique",
+      "passes": 2,
+      "firstPass": 0.68,
+      "fog": 4,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 4,
+        "scramble": 0,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "5×4×3",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.933,
+      "fog": 4,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 4,
+        "scramble": 0,
+        "suspects": 0
+      }
+    }
+  },
+  "gremlin": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 5,
+      "firstPass": 0.329,
+      "fog": 8,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 8,
+        "scramble": 0,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "5×6×3",
+      "status": "unique",
+      "passes": 4,
+      "firstPass": 0.811,
+      "fog": 18,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 18,
+        "scramble": 0,
+        "suspects": 0
+      }
+    }
+  },
+  "mimic": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 2,
+      "firstPass": 0.876,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "5×5×4",
+      "status": "unique",
+      "passes": 4,
+      "firstPass": 0.97,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 0
+      }
+    }
+  },
+  "clockwork-owl": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 5,
+      "firstPass": 0.48,
+      "fog": 0,
+      "scramble": 13,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 10,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "5×5×4",
+      "status": "unique",
+      "passes": 2,
+      "firstPass": 1,
+      "fog": 0,
+      "scramble": 16,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 16,
+        "suspects": 0
+      }
+    }
+  },
+  "forger": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 7,
+      "firstPass": 0.342,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 5,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 5
+      }
+    },
+    "block": {
+      "size": "6×2×5",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.933,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 5,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 5
+      }
+    }
+  },
+  "armored-beetle": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 2,
+      "firstPass": 0.778,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "6×4×6",
+      "status": "unique",
+      "passes": 5,
+      "firstPass": 0.868,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 0
+      }
+    }
+  },
+  "museum-rex": {
+    "flat": {
+      "size": "20×20",
+      "status": "unique",
+      "passes": 5,
+      "firstPass": 0.32,
+      "fog": 0,
+      "scramble": 5,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 5,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "5×7×7",
+      "status": "unique",
+      "passes": 2,
+      "firstPass": 1,
+      "fog": 0,
+      "scramble": 8,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 8,
+        "suspects": 0
+      }
+    }
+  },
+  "electric-eel": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.453,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "5×3×5",
+      "status": "unique",
+      "passes": 7,
+      "firstPass": 0.747,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 0
+      }
+    }
+  },
+  "anglerfish": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 5,
+      "firstPass": 0.538,
+      "fog": 8,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 7,
+        "scramble": 0,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "5×5×6",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.953,
+      "fog": 10,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 10,
+        "scramble": 0,
+        "suspects": 0
+      }
+    }
+  },
+  "cuttlefish": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 4,
+      "firstPass": 0.591,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "5×4×6",
+      "status": "unique",
+      "passes": 4,
+      "firstPass": 0.908,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 0
+      }
+    }
+  },
+  "old-tess": {
+    "flat": {
+      "size": "20×20",
+      "status": "unique",
+      "passes": 5,
+      "firstPass": 0.435,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "7×7×7",
+      "status": "unique",
+      "passes": 5,
+      "firstPass": 0.796,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 0
+      }
+    }
+  },
+  "snapjaw": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.502,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "6×6×5",
+      "status": "unique",
+      "passes": 4,
+      "firstPass": 0.867,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 0
+      }
+    }
+  },
+  "spore-puff": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 4,
+      "firstPass": 0.591,
+      "fog": 5,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 5,
+        "scramble": 0,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "6×6×6",
+      "status": "unique",
+      "passes": 4,
+      "firstPass": 0.931,
+      "fog": 7,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 7,
+        "scramble": 0,
+        "suspects": 0
+      }
+    }
+  },
+  "ironbark": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.644,
+      "fog": 0,
+      "scramble": 5,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 5,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "7×6×7",
+      "status": "unique",
+      "passes": 2,
+      "firstPass": 1,
+      "fog": 0,
+      "scramble": 7,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 7,
+        "suspects": 0
+      }
+    }
+  },
+  "mother-bramble": {
+    "flat": {
+      "size": "20×20",
+      "status": "unique",
+      "passes": 6,
+      "firstPass": 0.205,
+      "fog": 4,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 4,
+        "scramble": 0,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "8×8×8",
+      "status": "unique",
+      "passes": 4,
+      "firstPass": 0.963,
+      "fog": 6,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 6,
+        "scramble": 0,
+        "suspects": 0
+      }
+    }
+  },
+  "funhouse-mirror": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 4,
+      "firstPass": 0.502,
+      "fog": 0,
+      "scramble": 4,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 4,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "5×6×3",
+      "status": "unique",
+      "passes": 2,
+      "firstPass": 1,
+      "fog": 0,
+      "scramble": 5,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 5,
+        "suspects": 0
+      }
+    }
+  },
+  "madame-vesper": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 6,
+      "firstPass": 0.227,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 3,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 3
+      }
+    },
+    "block": {
+      "size": "6×6×6",
+      "status": "unique",
+      "passes": 2,
+      "firstPass": 1,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 3,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 3
+      }
+    }
+  },
+  "great-bruno": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 7,
+      "firstPass": 0.64,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "7×7×5",
+      "status": "unique",
+      "passes": 4,
+      "firstPass": 0.812,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 0
+      }
+    }
+  },
+  "ringmaster": {
+    "flat": {
+      "size": "20×20",
+      "status": "unique",
+      "passes": 8,
+      "firstPass": 0.253,
+      "fog": 0,
+      "scramble": 3,
+      "suspects": 3,
+      "asked": {
+        "fog": 0,
+        "scramble": 3,
+        "suspects": 3
+      }
+    },
+    "block": {
+      "size": "7×8×6",
+      "status": "unique",
+      "passes": 2,
+      "firstPass": 1,
+      "fog": 0,
+      "scramble": 5,
+      "suspects": 3,
+      "asked": {
+        "fog": 0,
+        "scramble": 5,
+        "suspects": 3
+      }
+    }
+  },
+  "whiteout": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 5,
+      "firstPass": 0.142,
+      "fog": 3,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 3,
+        "scramble": 0,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "6×6×5",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.989,
+      "fog": 4,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 4,
+        "scramble": 0,
+        "suspects": 0
+      }
+    }
+  },
+  "falling-star": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 6,
+      "firstPass": 0.178,
+      "fog": 0,
+      "scramble": 2,
+      "suspects": 4,
+      "asked": {
+        "fog": 0,
+        "scramble": 2,
+        "suspects": 4
+      }
+    },
+    "block": {
+      "size": "5×6×5",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.987,
+      "fog": 0,
+      "scramble": 2,
+      "suspects": 4,
+      "asked": {
+        "fog": 0,
+        "scramble": 2,
+        "suspects": 4
+      }
+    }
+  },
+  "ice-mammoth": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 6,
+      "firstPass": 0.631,
+      "fog": 5,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 5,
+        "scramble": 0,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "7×6×3",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.952,
+      "fog": 7,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 7,
+        "scramble": 0,
+        "suspects": 0
+      }
+    }
+  },
+  "yeti": {
+    "flat": {
+      "size": "20×20",
+      "status": "unique",
+      "passes": 9,
+      "firstPass": 0.135,
+      "fog": 3,
+      "scramble": 4,
+      "suspects": 0,
+      "asked": {
+        "fog": 3,
+        "scramble": 4,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "8×8×5",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.969,
+      "fog": 4,
+      "scramble": 6,
+      "suspects": 0,
+      "asked": {
+        "fog": 4,
+        "scramble": 6,
+        "suspects": 0
+      }
+    }
+  },
+  "signal-box": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 4,
+      "firstPass": 0.591,
+      "fog": 3,
+      "scramble": 3,
+      "suspects": 0,
+      "asked": {
+        "fog": 3,
+        "scramble": 3,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "5×8×5",
+      "status": "unique",
+      "passes": 2,
+      "firstPass": 1,
+      "fog": 4,
+      "scramble": 4,
+      "suspects": 0,
+      "asked": {
+        "fog": 4,
+        "scramble": 4,
+        "suspects": 0
+      }
+    }
+  },
+  "ticket-inspector": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 6,
+      "firstPass": 0.236,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 3,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 3
+      }
+    },
+    "block": {
+      "size": "7×8×6",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.976,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 3,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 3
+      }
+    }
+  },
+  "coal-heap": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.52,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "8×8×5",
+      "status": "unique",
+      "passes": 6,
+      "firstPass": 0.784,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 0
+      }
+    }
+  },
+  "the-1159": {
+    "flat": {
+      "size": "20×20",
+      "status": "unique",
+      "passes": 9,
+      "firstPass": 0.203,
+      "fog": 3,
+      "scramble": 4,
+      "suspects": 0,
+      "asked": {
+        "fog": 3,
+        "scramble": 4,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "8×10×10",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.991,
+      "fog": 4,
+      "scramble": 6,
+      "suspects": 0,
+      "asked": {
+        "fog": 4,
+        "scramble": 6,
+        "suspects": 0
+      }
+    }
+  },
+  "rusted-sentry": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 4,
+      "firstPass": 0.396,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "5×8×3",
+      "status": "unique",
+      "passes": 4,
+      "firstPass": 0.567,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 0
+      }
+    }
+  },
+  "cellar-ooze": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 5,
+      "firstPass": 0.453,
+      "fog": 0,
+      "scramble": 4,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 4,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "7×6×7",
+      "status": "unique",
+      "passes": 2,
+      "firstPass": 1,
+      "fog": 0,
+      "scramble": 6,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 6,
+        "suspects": 0
+      }
+    }
+  },
+  "rat-king": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 6,
+      "firstPass": 0.351,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 3,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 3
+      }
+    },
+    "block": {
+      "size": "9×7×5",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.965,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 3,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 3
+      }
+    }
+  },
+  "old-wyrm": {
+    "flat": {
+      "size": "20×20",
+      "status": "unique",
+      "passes": 10,
+      "firstPass": 0.31,
+      "fog": 0,
+      "scramble": 3,
+      "suspects": 3,
+      "asked": {
+        "fog": 0,
+        "scramble": 3,
+        "suspects": 3
+      }
+    },
+    "block": {
+      "size": "10×10×9",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.913,
+      "fog": 0,
+      "scramble": 5,
+      "suspects": 3,
+      "asked": {
+        "fog": 0,
+        "scramble": 5,
+        "suspects": 3
+      }
+    }
+  },
+  "spark-hound": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 4,
+      "firstPass": 0.484,
+      "fog": 0,
+      "scramble": 4,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 4,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "8×7×3",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.929,
+      "fog": 0,
+      "scramble": 6,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 6,
+        "suspects": 0
+      }
+    }
+  },
+  "failed-clone": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 5,
+      "firstPass": 0.662,
+      "fog": 3,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 3,
+        "scramble": 0,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "8×8×5",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.988,
+      "fog": 4,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 4,
+        "scramble": 0,
+        "suspects": 0
+      }
+    }
+  },
+  "reviewer-two": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 6,
+      "firstPass": 0.578,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 3,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 3
+      }
+    },
+    "block": {
+      "size": "8×5×7",
+      "status": "unique",
+      "passes": 2,
+      "firstPass": 1,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 3,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 3
+      }
+    }
+  },
+  "ostrander": {
+    "flat": {
+      "size": "20×20",
+      "status": "unique",
+      "passes": 11,
+      "firstPass": 0.143,
+      "fog": 0,
+      "scramble": 3,
+      "suspects": 3,
+      "asked": {
+        "fog": 0,
+        "scramble": 3,
+        "suspects": 3
+      }
+    },
+    "block": {
+      "size": "10×9×10",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.996,
+      "fog": 0,
+      "scramble": 5,
+      "suspects": 3,
+      "asked": {
+        "fog": 0,
+        "scramble": 5,
+        "suspects": 3
+      }
+    }
+  },
+  "tin-soldier": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 4,
+      "firstPass": 0.502,
+      "fog": 4,
+      "scramble": 5,
+      "suspects": 0,
+      "asked": {
+        "fog": 4,
+        "scramble": 5,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "6×9×5",
+      "status": "unique",
+      "passes": 2,
+      "firstPass": 1,
+      "fog": 6,
+      "scramble": 7,
+      "suspects": 0,
+      "asked": {
+        "fog": 6,
+        "scramble": 7,
+        "suspects": 0
+      }
+    }
+  },
+  "curator": {
+    "flat": {
+      "size": "20×20",
+      "status": "unique",
+      "passes": 12,
+      "firstPass": 0.123,
+      "fog": 4,
+      "scramble": 4,
+      "suspects": 0,
+      "asked": {
+        "fog": 4,
+        "scramble": 3,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "9×10×4",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.994,
+      "fog": 6,
+      "scramble": 7,
+      "suspects": 0,
+      "asked": {
+        "fog": 6,
+        "scramble": 7,
+        "suspects": 0
+      }
+    }
+  },
+  "overtime-electric-eel": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 8,
+      "firstPass": 0.342,
+      "fog": 2,
+      "scramble": 2,
+      "suspects": 0,
+      "asked": {
+        "fog": 2,
+        "scramble": 2,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "5×3×5",
+      "status": "unique",
+      "passes": 2,
+      "firstPass": 1,
+      "fog": 2,
+      "scramble": 2,
+      "suspects": 0,
+      "asked": {
+        "fog": 2,
+        "scramble": 2,
+        "suspects": 0
+      }
+    }
+  },
+  "overtime-anglerfish": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 6,
+      "firstPass": 0.524,
+      "fog": 8,
+      "scramble": 2,
+      "suspects": 0,
+      "asked": {
+        "fog": 7,
+        "scramble": 2,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "5×5×6",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.967,
+      "fog": 10,
+      "scramble": 2,
+      "suspects": 0,
+      "asked": {
+        "fog": 10,
+        "scramble": 2,
+        "suspects": 0
+      }
+    }
+  },
+  "overtime-cuttlefish": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 6,
+      "firstPass": 0.582,
+      "fog": 1,
+      "scramble": 2,
+      "suspects": 0,
+      "asked": {
+        "fog": 1,
+        "scramble": 2,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "5×4×6",
+      "status": "unique",
+      "passes": 2,
+      "firstPass": 1,
+      "fog": 1,
+      "scramble": 2,
+      "suspects": 0,
+      "asked": {
+        "fog": 1,
+        "scramble": 2,
+        "suspects": 0
+      }
+    }
+  },
+  "overtime-old-tess": {
+    "flat": {
+      "size": "20×20",
+      "status": "unique",
+      "passes": 9,
+      "firstPass": 0.395,
+      "fog": 2,
+      "scramble": 3,
+      "suspects": 0,
+      "asked": {
+        "fog": 2,
+        "scramble": 3,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "7×7×7",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.921,
+      "fog": 3,
+      "scramble": 3,
+      "suspects": 0,
+      "asked": {
+        "fog": 3,
+        "scramble": 3,
+        "suspects": 0
+      }
+    }
+  },
+  "overtime-goblin": {
+    "flat": {
+      "size": "10×10",
+      "status": "unique",
+      "passes": 4,
+      "firstPass": 0.66,
+      "fog": 1,
+      "scramble": 2,
+      "suspects": 0,
+      "asked": {
+        "fog": 1,
+        "scramble": 2,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "3×5×3",
+      "status": "unique",
+      "passes": 2,
+      "firstPass": 1,
+      "fog": 1,
+      "scramble": 1,
+      "suspects": 0,
+      "asked": {
+        "fog": 1,
+        "scramble": 2,
+        "suspects": 0
+      }
+    }
+  },
+  "overtime-fog-bat": {
+    "flat": {
+      "size": "10×10",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.5,
+      "fog": 4,
+      "scramble": 4,
+      "suspects": 0,
+      "asked": {
+        "fog": 4,
+        "scramble": 4,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "5×4×3",
+      "status": "unique",
+      "passes": 2,
+      "firstPass": 1,
+      "fog": 4,
+      "scramble": 4,
+      "suspects": 0,
+      "asked": {
+        "fog": 4,
+        "scramble": 4,
+        "suspects": 0
+      }
+    }
+  },
+  "overtime-gremlin": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 7,
+      "firstPass": 0.324,
+      "fog": 8,
+      "scramble": 3,
+      "suspects": 0,
+      "asked": {
+        "fog": 8,
+        "scramble": 3,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "5×6×3",
+      "status": "unique",
+      "passes": 4,
+      "firstPass": 0.756,
+      "fog": 18,
+      "scramble": 4,
+      "suspects": 0,
+      "asked": {
+        "fog": 18,
+        "scramble": 4,
+        "suspects": 0
+      }
+    }
+  },
+  "overtime-snapjaw": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 5,
+      "firstPass": 0.489,
+      "fog": 2,
+      "scramble": 2,
+      "suspects": 0,
+      "asked": {
+        "fog": 2,
+        "scramble": 2,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "6×6×5",
+      "status": "unique",
+      "passes": 2,
+      "firstPass": 1,
+      "fog": 2,
+      "scramble": 2,
+      "suspects": 0,
+      "asked": {
+        "fog": 2,
+        "scramble": 2,
+        "suspects": 0
+      }
+    }
+  },
+  "overtime-spore-puff": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 4,
+      "firstPass": 0.569,
+      "fog": 5,
+      "scramble": 3,
+      "suspects": 0,
+      "asked": {
+        "fog": 5,
+        "scramble": 3,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "6×6×6",
+      "status": "unique",
+      "passes": 4,
+      "firstPass": 0.949,
+      "fog": 7,
+      "scramble": 3,
+      "suspects": 0,
+      "asked": {
+        "fog": 7,
+        "scramble": 3,
+        "suspects": 0
+      }
+    }
+  },
+  "overtime-ironbark": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 5,
+      "firstPass": 0.591,
+      "fog": 1,
+      "scramble": 5,
+      "suspects": 0,
+      "asked": {
+        "fog": 1,
+        "scramble": 5,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "7×6×7",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.997,
+      "fog": 2,
+      "scramble": 7,
+      "suspects": 0,
+      "asked": {
+        "fog": 2,
+        "scramble": 7,
+        "suspects": 0
+      }
+    }
+  },
+  "overtime-mother-bramble": {
+    "flat": {
+      "size": "20×20",
+      "status": "unique",
+      "passes": 10,
+      "firstPass": 0.16,
+      "fog": 4,
+      "scramble": 3,
+      "suspects": 0,
+      "asked": {
+        "fog": 4,
+        "scramble": 3,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "8×8×8",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.957,
+      "fog": 6,
+      "scramble": 4,
+      "suspects": 0,
+      "asked": {
+        "fog": 6,
+        "scramble": 4,
+        "suspects": 0
+      }
+    }
+  },
+  "overtime-funhouse-mirror": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 6,
+      "firstPass": 0.444,
+      "fog": 1,
+      "scramble": 6,
+      "suspects": 0,
+      "asked": {
+        "fog": 1,
+        "scramble": 6,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "5×6×3",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.911,
+      "fog": 1,
+      "scramble": 7,
+      "suspects": 0,
+      "asked": {
+        "fog": 1,
+        "scramble": 7,
+        "suspects": 0
+      }
+    }
+  },
+  "overtime-madame-vesper": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 8,
+      "firstPass": 0.2,
+      "fog": 0,
+      "scramble": 2,
+      "suspects": 3,
+      "asked": {
+        "fog": 0,
+        "scramble": 2,
+        "suspects": 3
+      }
+    },
+    "block": {
+      "size": "6×6×6",
+      "status": "unique",
+      "passes": 2,
+      "firstPass": 1,
+      "fog": 0,
+      "scramble": 2,
+      "suspects": 3,
+      "asked": {
+        "fog": 0,
+        "scramble": 2,
+        "suspects": 3
+      }
+    }
+  },
+  "overtime-great-bruno": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 8,
+      "firstPass": 0.64,
+      "fog": 1,
+      "scramble": 1,
+      "suspects": 0,
+      "asked": {
+        "fog": 1,
+        "scramble": 1,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "7×7×5",
+      "status": "unique",
+      "passes": 2,
+      "firstPass": 1,
+      "fog": 1,
+      "scramble": 1,
+      "suspects": 0,
+      "asked": {
+        "fog": 1,
+        "scramble": 1,
+        "suspects": 0
+      }
+    }
+  },
+  "overtime-ringmaster": {
+    "flat": {
+      "size": "20×20",
+      "status": "unique",
+      "passes": 8,
+      "firstPass": 0.253,
+      "fog": 2,
+      "scramble": 3,
+      "suspects": 3,
+      "asked": {
+        "fog": 2,
+        "scramble": 3,
+        "suspects": 3
+      }
+    },
+    "block": {
+      "size": "7×8×6",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.988,
+      "fog": 2,
+      "scramble": 5,
+      "suspects": 3,
+      "asked": {
+        "fog": 2,
+        "scramble": 5,
+        "suspects": 3
+      }
+    }
+  },
+  "overtime-signal-box": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 4,
+      "firstPass": 0.538,
+      "fog": 5,
+      "scramble": 6,
+      "suspects": 0,
+      "asked": {
+        "fog": 5,
+        "scramble": 6,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "5×8×5",
+      "status": "unique",
+      "passes": 2,
+      "firstPass": 1,
+      "fog": 7,
+      "scramble": 8,
+      "suspects": 0,
+      "asked": {
+        "fog": 7,
+        "scramble": 8,
+        "suspects": 0
+      }
+    }
+  },
+  "overtime-ticket-inspector": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 8,
+      "firstPass": 0.231,
+      "fog": 0,
+      "scramble": 1,
+      "suspects": 3,
+      "asked": {
+        "fog": 0,
+        "scramble": 1,
+        "suspects": 3
+      }
+    },
+    "block": {
+      "size": "7×8×6",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.976,
+      "fog": 0,
+      "scramble": 1,
+      "suspects": 3,
+      "asked": {
+        "fog": 0,
+        "scramble": 1,
+        "suspects": 3
+      }
+    }
+  },
+  "overtime-coal-heap": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 5,
+      "firstPass": 0.409,
+      "fog": 3,
+      "scramble": 3,
+      "suspects": 0,
+      "asked": {
+        "fog": 3,
+        "scramble": 3,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "8×8×5",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.988,
+      "fog": 3,
+      "scramble": 3,
+      "suspects": 0,
+      "asked": {
+        "fog": 3,
+        "scramble": 3,
+        "suspects": 0
+      }
+    }
+  },
+  "overtime-the-1159": {
+    "flat": {
+      "size": "20×20",
+      "status": "unique",
+      "passes": 10,
+      "firstPass": 0.178,
+      "fog": 4,
+      "scramble": 5,
+      "suspects": 0,
+      "asked": {
+        "fog": 4,
+        "scramble": 5,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "8×10×10",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.996,
+      "fog": 5,
+      "scramble": 7,
+      "suspects": 0,
+      "asked": {
+        "fog": 5,
+        "scramble": 7,
+        "suspects": 0
+      }
+    }
+  },
+  "overtime-mimic": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.764,
+      "fog": 3,
+      "scramble": 4,
+      "suspects": 0,
+      "asked": {
+        "fog": 3,
+        "scramble": 4,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "5×5×4",
+      "status": "unique",
+      "passes": 2,
+      "firstPass": 1,
+      "fog": 3,
+      "scramble": 4,
+      "suspects": 0,
+      "asked": {
+        "fog": 3,
+        "scramble": 4,
+        "suspects": 0
+      }
+    }
+  },
+  "overtime-clockwork-owl": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 9,
+      "firstPass": 0.338,
+      "fog": 1,
+      "scramble": 14,
+      "suspects": 0,
+      "asked": {
+        "fog": 1,
+        "scramble": 11,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "5×5×4",
+      "status": "unique",
+      "passes": 2,
+      "firstPass": 1,
+      "fog": 1,
+      "scramble": 17,
+      "suspects": 0,
+      "asked": {
+        "fog": 1,
+        "scramble": 17,
+        "suspects": 0
+      }
+    }
+  },
+  "overtime-forger": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 8,
+      "firstPass": 0.329,
+      "fog": 0,
+      "scramble": 3,
+      "suspects": 5,
+      "asked": {
+        "fog": 0,
+        "scramble": 3,
+        "suspects": 5
+      }
+    },
+    "block": {
+      "size": "6×2×5",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.95,
+      "fog": 0,
+      "scramble": 3,
+      "suspects": 5,
+      "asked": {
+        "fog": 0,
+        "scramble": 3,
+        "suspects": 5
+      }
+    }
+  },
+  "overtime-armored-beetle": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 5,
+      "firstPass": 0.64,
+      "fog": 3,
+      "scramble": 3,
+      "suspects": 0,
+      "asked": {
+        "fog": 3,
+        "scramble": 3,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "6×4×6",
+      "status": "unique",
+      "passes": 2,
+      "firstPass": 1,
+      "fog": 3,
+      "scramble": 3,
+      "suspects": 0,
+      "asked": {
+        "fog": 3,
+        "scramble": 3,
+        "suspects": 0
+      }
+    }
+  },
+  "overtime-museum-rex": {
+    "flat": {
+      "size": "20×20",
+      "status": "unique",
+      "passes": 10,
+      "firstPass": 0.253,
+      "fog": 2,
+      "scramble": 9,
+      "suspects": 0,
+      "asked": {
+        "fog": 2,
+        "scramble": 9,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "5×7×7",
+      "status": "unique",
+      "passes": 2,
+      "firstPass": 1,
+      "fog": 2,
+      "scramble": 12,
+      "suspects": 0,
+      "asked": {
+        "fog": 2,
+        "scramble": 12,
+        "suspects": 0
+      }
+    }
+  },
+  "overtime-whiteout": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 6,
+      "firstPass": 0.133,
+      "fog": 3,
+      "scramble": 2,
+      "suspects": 0,
+      "asked": {
+        "fog": 3,
+        "scramble": 2,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "6×6×5",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.989,
+      "fog": 4,
+      "scramble": 2,
+      "suspects": 0,
+      "asked": {
+        "fog": 4,
+        "scramble": 2,
+        "suspects": 0
+      }
+    }
+  },
+  "overtime-falling-star": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 7,
+      "firstPass": 0.151,
+      "fog": 1,
+      "scramble": 1,
+      "suspects": 4,
+      "asked": {
+        "fog": 1,
+        "scramble": 1,
+        "suspects": 4
+      }
+    },
+    "block": {
+      "size": "5×6×5",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.973,
+      "fog": 1,
+      "scramble": 1,
+      "suspects": 4,
+      "asked": {
+        "fog": 1,
+        "scramble": 1,
+        "suspects": 4
+      }
+    }
+  },
+  "overtime-ice-mammoth": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 7,
+      "firstPass": 0.591,
+      "fog": 5,
+      "scramble": 3,
+      "suspects": 0,
+      "asked": {
+        "fog": 5,
+        "scramble": 3,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "7×6×3",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.984,
+      "fog": 7,
+      "scramble": 3,
+      "suspects": 0,
+      "asked": {
+        "fog": 7,
+        "scramble": 3,
+        "suspects": 0
+      }
+    }
+  },
+  "overtime-yeti": {
+    "flat": {
+      "size": "20×20",
+      "status": "unique",
+      "passes": 11,
+      "firstPass": 0.135,
+      "fog": 3,
+      "scramble": 6,
+      "suspects": 0,
+      "asked": {
+        "fog": 3,
+        "scramble": 6,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "8×8×5",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.975,
+      "fog": 4,
+      "scramble": 8,
+      "suspects": 0,
+      "asked": {
+        "fog": 4,
+        "scramble": 8,
+        "suspects": 0
+      }
+    }
+  },
+  "overtime-spark-hound": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 6,
+      "firstPass": 0.467,
+      "fog": 1,
+      "scramble": 5,
+      "suspects": 0,
+      "asked": {
+        "fog": 1,
+        "scramble": 5,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "8×7×3",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.964,
+      "fog": 1,
+      "scramble": 7,
+      "suspects": 0,
+      "asked": {
+        "fog": 1,
+        "scramble": 7,
+        "suspects": 0
+      }
+    }
+  },
+  "overtime-failed-clone": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 5,
+      "firstPass": 0.604,
+      "fog": 3,
+      "scramble": 3,
+      "suspects": 0,
+      "asked": {
+        "fog": 3,
+        "scramble": 3,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "8×8×5",
+      "status": "unique",
+      "passes": 2,
+      "firstPass": 1,
+      "fog": 4,
+      "scramble": 3,
+      "suspects": 0,
+      "asked": {
+        "fog": 4,
+        "scramble": 3,
+        "suspects": 0
+      }
+    }
+  },
+  "overtime-reviewer-two": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 6,
+      "firstPass": 0.578,
+      "fog": 1,
+      "scramble": 2,
+      "suspects": 3,
+      "asked": {
+        "fog": 1,
+        "scramble": 2,
+        "suspects": 3
+      }
+    },
+    "block": {
+      "size": "8×5×7",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.993,
+      "fog": 1,
+      "scramble": 2,
+      "suspects": 3,
+      "asked": {
+        "fog": 1,
+        "scramble": 2,
+        "suspects": 3
+      }
+    }
+  },
+  "overtime-ostrander": {
+    "flat": {
+      "size": "20×20",
+      "status": "unique",
+      "passes": 15,
+      "firstPass": 0.128,
+      "fog": 1,
+      "scramble": 5,
+      "suspects": 3,
+      "asked": {
+        "fog": 1,
+        "scramble": 5,
+        "suspects": 3
+      }
+    },
+    "block": {
+      "size": "10×9×10",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.99,
+      "fog": 1,
+      "scramble": 7,
+      "suspects": 3,
+      "asked": {
+        "fog": 1,
+        "scramble": 7,
+        "suspects": 3
+      }
+    }
+  },
+  "overtime-rusted-sentry": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 7,
+      "firstPass": 0.382,
+      "fog": 1,
+      "scramble": 2,
+      "suspects": 0,
+      "asked": {
+        "fog": 1,
+        "scramble": 2,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "5×8×3",
+      "status": "unique",
+      "passes": 2,
+      "firstPass": 1,
+      "fog": 1,
+      "scramble": 2,
+      "suspects": 0,
+      "asked": {
+        "fog": 1,
+        "scramble": 2,
+        "suspects": 0
+      }
+    }
+  },
+  "overtime-cellar-ooze": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 7,
+      "firstPass": 0.453,
+      "fog": 1,
+      "scramble": 4,
+      "suspects": 0,
+      "asked": {
+        "fog": 1,
+        "scramble": 4,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "7×6×7",
+      "status": "unique",
+      "passes": 2,
+      "firstPass": 1,
+      "fog": 1,
+      "scramble": 6,
+      "suspects": 0,
+      "asked": {
+        "fog": 1,
+        "scramble": 6,
+        "suspects": 0
+      }
+    }
+  },
+  "overtime-rat-king": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 6,
+      "firstPass": 0.333,
+      "fog": 0,
+      "scramble": 3,
+      "suspects": 3,
+      "asked": {
+        "fog": 0,
+        "scramble": 3,
+        "suspects": 3
+      }
+    },
+    "block": {
+      "size": "9×7×5",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.978,
+      "fog": 0,
+      "scramble": 3,
+      "suspects": 3,
+      "asked": {
+        "fog": 0,
+        "scramble": 3,
+        "suspects": 3
+      }
+    }
+  },
+  "overtime-old-wyrm": {
+    "flat": {
+      "size": "20×20",
+      "status": "unique",
+      "passes": 10,
+      "firstPass": 0.31,
+      "fog": 2,
+      "scramble": 3,
+      "suspects": 3,
+      "asked": {
+        "fog": 2,
+        "scramble": 3,
+        "suspects": 3
+      }
+    },
+    "block": {
+      "size": "10×10×9",
+      "status": "unique",
+      "passes": 3,
+      "firstPass": 0.912,
+      "fog": 3,
+      "scramble": 5,
+      "suspects": 3,
+      "asked": {
+        "fog": 3,
+        "scramble": 5,
+        "suspects": 3
+      }
+    }
+  },
+  "weathervane": {
+    "flat": {
+      "size": "15×15",
+      "status": "unique",
+      "passes": 5,
+      "firstPass": 0.413,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 0
+      }
+    },
+    "block": {
+      "size": "9×9×5",
+      "status": "unique",
+      "passes": 4,
+      "firstPass": 0.914,
+      "fog": 0,
+      "scramble": 0,
+      "suspects": 0,
+      "asked": {
+        "fog": 0,
+        "scramble": 0,
+        "suspects": 0
+      }
+    }
+  }
+}

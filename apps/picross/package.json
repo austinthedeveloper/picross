@@ -18,6 +18,7 @@
     "script-review:notes": "vite-node scripts/script-review.ts notes",
     "script-review:export": "vite-node scripts/script-review.ts export",
     "rate:puzzles": "vite-node scripts/rate-puzzles.ts",
+    "rate:fights": "vite-node scripts/rate-fights.ts",
     "e2e": "playwright test",
     "screenshot": "node scripts/screenshot.mjs",
     "icons": "node scripts/icons.mjs"

@@ -86,6 +86,8 @@ describe('solver', () => {
     const clues = lines.map((l) => clueOf(l.cells.map((c) => filled.has(c))));
     const result = solve(dims, clues);
     expect(result.solved).toBe(true);
+    // Every line's clue says everything at once on a block this small.
+    expect(result.firstPass).toBe(1);
     expect([...result.known].map((k) => k === FILLED)).toEqual(
       [0, 1, 2, 3, 4, 5, 6, 7].map((c) => filled.has(c)),
     );
@@ -95,5 +97,39 @@ describe('solver', () => {
         clues.map(() => null),
       ).solved,
     ).toBe(false);
+  });
+
+  it('says how much of the block the first sweep settles (#168)', () => {
+    const dims = { x: 3, y: 1, z: 1 };
+    const lines = allLines(dims);
+    // A row of 3 with one cube at the end: only the x line says anything, all at once.
+    const filled = new Set([2]);
+    const clues = lines.map((l) => clueOf(l.cells.map((c) => filled.has(c))));
+    expect(solve(dims, clues, undefined, lines)).toMatchObject({ solved: true, firstPass: 1 });
+    // Without the x line, the three single-cube lines settle a cube each.
+    const noRow = clues.map((c, i) => (lines[i].axis === 'x' ? null : c));
+    expect(solve(dims, noRow, undefined, lines).firstPass).toBe(1);
+    // With nothing to read, nothing is settled.
+    expect(
+      solve(
+        dims,
+        clues.map(() => null),
+        undefined,
+        lines,
+      ),
+    ).toMatchObject({
+      passes: 0,
+      firstPass: 0,
+    });
+    // A start counts: one cube known of three, before any sweep.
+    const start = new Uint8Array([FILLED, UNKNOWN, UNKNOWN]);
+    expect(
+      solve(
+        dims,
+        clues.map(() => null),
+        start,
+        lines,
+      ).firstPass,
+    ).toBeCloseTo(1 / 3);
   });
 });

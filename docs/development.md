@@ -38,6 +38,7 @@ ones delegate with `npm -w apps/picross run …`, and the trailing `--` passes a
 | `npm run test:watch`           | The 2D game's tests in watch mode                                                        |
 | `npm run check:puzzles`        | Only the 2D pack uniqueness check (`packages/grid/src/puzzles/pack.test.ts`)             |
 | `npm run rate:puzzles`         | Re-rate puzzle difficulty after adding or changing puzzles                               |
+| `npm run rate:fights`          | Re-rate every fight on both boards after changing a fight, a power, a battle or a solver |
 | `npm run script-review`        | Generate the script review site and serve it at http://localhost:4177                    |
 | `npm run script-review:notes`  | Print your open script review notes                                                      |
 | `npm run script-review:export` | Export the whole script and open notes as JSON for rewriting                             |
@@ -65,15 +66,15 @@ packages first type-check with `tsc --noEmit`), and `npm test` runs them all in 
 below. Most run in jsdom, so `localStorage` and basic DOM work; `packages/grid`'s run in
 Node, with no DOM at all.
 
-| Suite (run alone)         | Where                     | Covers                                                                                                                                                                |
-| ------------------------- | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `npm run test:shared`     | `packages/shared/src`     | Prefs, puzzle ids, haptics, art, the import rule                                                                                                                      |
-| `npm run test:story`      | `packages/story/src`      | Scenes, backdrops, dialogue, runs and chapters; the whole story loads (`story.test.ts`); the gate                                                                     |
-| `npm run test:grid`       | `packages/grid/src`       | The 2D engine (grids, clues, history, solver, powers), format, murals, ratings, `Game`, pack uniqueness                                                               |
-| `npm run test:play-grid`  | `packages/play-grid/src`  | The board view, time formatting                                                                                                                                       |
-| `npm run test:block`      | `packages/block/src`      | The 3D engine and solver, `Game`, `Battle`, the clock, puzzles, the editor's checks, the story on blocks                                                              |
-| `npm run test:play-block` | `packages/play-block/src` | Formatting                                                                                                                                                            |
-| `npm run test:flat`       | `apps/picross`            | Saves, settings, badges, rank, runs, fights, enemies, Endless, the daily, the ids both packs share, scripts; Cubed's saves, run, daily and badges (`src/cubed/game/`) |
+| Suite (run alone)         | Where                     | Covers                                                                                                                                                                                                         |
+| ------------------------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm run test:shared`     | `packages/shared/src`     | Prefs, puzzle ids, haptics, art, the import rule                                                                                                                                                               |
+| `npm run test:story`      | `packages/story/src`      | Scenes, backdrops, dialogue, runs and chapters; the whole story loads (`story.test.ts`); the gate                                                                                                              |
+| `npm run test:grid`       | `packages/grid/src`       | The 2D engine (grids, clues, history, solver, powers), format, murals, ratings, `Game`, pack uniqueness                                                                                                        |
+| `npm run test:play-grid`  | `packages/play-grid/src`  | The board view, time formatting                                                                                                                                                                                |
+| `npm run test:block`      | `packages/block/src`      | The 3D engine and solver, `Game`, `Battle` and every fight's golden trace (a snapshot), the clock, puzzles, the editor's checks, the story on blocks                                                           |
+| `npm run test:play-block` | `packages/play-block/src` | Formatting                                                                                                                                                                                                     |
+| `npm run test:flat`       | `apps/picross`            | Saves, settings, badges, rank, runs, fights and their ratings (`fight-ratings.json`), enemies, Endless, the daily, the ids both packs share, scripts; Cubed's saves, run, daily and badges (`src/cubed/game/`) |
 
 Every package also has `src/imports.test.ts`, which fails on an import its rule doesn't
 allow (see the package map). The story's gate (`packages/story/src/boards.test.ts`) prints

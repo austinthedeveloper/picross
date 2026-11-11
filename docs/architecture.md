@@ -101,6 +101,7 @@ apps/
         daily.ts           The Flat daily: the day's puzzle and turn (#69); date keys from shared
         tutorial.ts        How to play: its picture and steps, and what counts as a wrong move
         enemies.ts         Validates an enemy; lists its powers (startingPowers, phasePowers, enemyPowers)
+        fightRatings.ts    Every fight's solver numbers on each board (#168), for fight-ratings.json
         ranks.ts           The rank ladder (#106)
         badges.ts          The badge catalog (#108)
         ids.test.ts        Every id in both games, qualified (grid:mug, block:mug), and the clashes
@@ -176,6 +177,7 @@ apps/
     scripts/
       puzzle-sheet.ts      Check, repair and export puzzle sheets (batches of drawings; see docs/how-to.md)
       rate-puzzles.ts      Writes packages/grid/src/puzzles/ratings.json (npm run rate:puzzles)
+      rate-fights.ts       Writes src/puzzles/fight-ratings.json, both boards (npm run rate:fights)
       scopeByBoard.ts      PostCSS step: each game's screen styles apply only on its board
       pwa.ts               The web app manifest and the worker's precache list (pwaPlugin.js writes them)
       pwaPlugin.js         Vite plugin: the title, manifest.webmanifest and sw.js in each build
@@ -248,7 +250,7 @@ packages/
         clues.ts           Clue derivation and per-clue "satisfied" check (clue dimming)
         history.ts         Change/Move types and the undo/redo History
         lines.ts           LineSet: sets of rows/columns (fog, scrambles, weak points)
-        solver.ts          Line solver: uniqueness/no-guess check; fog and scramble aware
+        solver.ts          Line solver: uniqueness/no-guess check; fog and scramble aware; fightPasses
         swap.ts            Which two lines the Mimic swaps and wipes (#48)
         fakes.ts           The Forger's forged clues: a convincing wrong clue per line (#64)
         ink.ts             Where ink lands and how completed lines wash it off (#67)
@@ -292,7 +294,8 @@ packages/
     src/
       imports.test.ts      Only shared and story outside ui/; never three.js, play-block or an app
       engine/              volume.ts (the block and its lines), clues.ts, solver.ts
-      game/                game.ts (Game, Mode, SavedBoard), battle.ts (Battle), clock.ts
+      game/                game.ts (Game, Mode, SavedBoard), battle.ts (Battle), clock.ts;
+                           battleTraces.test.ts (golden traces of every fight, #168)
       story/               data.ts (the story fitted to blocks, storyIssues), powers.ts (tips)
       puzzles/
         format.ts          The block puzzle format and COLORS
@@ -542,8 +545,9 @@ clues (`linePasses` in `engine/solver.ts`), sorted into bands in `puzzles/diffic
 Rating the whole pack takes long enough to stall the list on a phone, so the numbers are
 saved in `puzzles/ratings.json` by `npm run rate:puzzles`, and a test fails if they fall out
 of step with the puzzles. Passes only approximate how hard a puzzle feels, and enemy powers
-aren't counted, so fights aren't rated. Murals aren't either, and a difficulty filter
-leaves them out.
+aren't counted. Fights are rated separately, with their powers, in the app's
+`puzzles/fight-ratings.json` (see [Difficulty](#difficulty)). Murals aren't rated, and a
+difficulty filter leaves them out.
 
 ### Rank and badges
 
@@ -1217,21 +1221,62 @@ with every power an enemy can bring applied from the start, by counting two thin
 many passes over the readable clues it takes to finish, and how much of the board the
 first pass fills in. More passes and less first-pass progress mean harder.
 
-| Boss              | Chapter | Board | Passes | First pass |
-| ----------------- | ------- | ----- | ------ | ---------- |
-| Generator Gremlin | 1       | 15×15 | 5      | 33%        |
-| Museum Rex        | 2       | 20×20 | 5      | 32%        |
-| Old Tess          | 3       | 20×20 | 5      | 44%        |
-| Mother Bramble    | 4       | 20×20 | 6      | 21%        |
-| The Ringmaster    | 5       | 20×20 | 8      | 25%        |
-| The Yeti          | 6       | 20×20 | 9      | 14%        |
-| The 11:59         | 7       | 20×20 | 9      | 20%        |
-| The Old Wyrm      | 8       | 20×20 | 10     | 31%        |
-| Prof. Ostrander   | 9       | 20×20 | 11     | 14%        |
-| The Curator       | 10      | 20×20 | 12     | 12%        |
+`npm run rate:fights` (`apps/picross/scripts/rate-fights.ts`, #168) measures every story,
+Overtime and boss fight on each board that can play it, writes the numbers to
+`apps/picross/src/puzzles/fight-ratings.json`, and prints the bosses' table below.
+`fightRatings.test.ts` next to it fails when they drift, so a change that makes a fight
+harder or easier shows up in review: rerun the script and check the diff says what you
+meant. The same test keeps the Curator the hardest story fight on the flat board (Overtime
+may pass it). For each fight and board the file has `passes`, `firstPass` (a share, to 3
+places), `status` (`unique` when it finishes without guessing), and the lines hidden while
+it's measured: `fog`, `scramble` and `suspects`, and in `asked` the lines the fight itself
+hides once every phase has started.
+
+- **Flat:** `fightPasses` in `engine/solver.ts` (packages/grid). A pass goes over every row,
+  then every column, like `linePasses`, and only passes that settle something count.
+  Fogged lines and 🎭 suspects are skipped, and scrambled ones are read in any order. It
+  hides the enemy's starting lines plus every phase's whole pool, as the fairness test in
+  `runs.test.ts` does, so it can measure more than a fight hides: the Curator's last
+  scramble takes 3 columns of a pool of 4, and the measure hides all 4.
+- **Block:** a block picks its lines when each power lands, seeded with the encounter's id,
+  so the numbers come from the real `Battle` (`rateBlock` in `puzzles/fightRatings.ts`):
+  built as a fight builds it, carried to 1 HP on a blank block so every phase starts and
+  picks its lines, then solved from the clues a player could trust (`hintClues`) with
+  packages/block's `solve`. Its `passes` are that solver's sweeps (each one works the lines
+  the last one touched, and the final sweep that proves nothing counts too), and
+  `firstPass` is the share of cubes the first sweep settles. So compare a fight with others
+  on the same board, not across boards.
+
+| Boss                | Chapter | Flat  | Passes | First pass | Block   | Passes | First pass |
+| ------------------- | ------- | ----- | ------ | ---------- | ------- | ------ | ---------- |
+| Generator Gremlin   | 1       | 15×15 | 5      | 33%        | 5×6×3   | 4      | 81%        |
+| Museum Rex          | 2       | 20×20 | 5      | 32%        | 5×7×7   | 2      | 100%       |
+| Old Tess            | 3       | 20×20 | 5      | 44%        | 7×7×7   | 5      | 80%        |
+| Mother Bramble      | 4       | 20×20 | 6      | 21%        | 8×8×8   | 4      | 96%        |
+| The Ringmaster      | 5       | 20×20 | 8      | 25%        | 7×8×6   | 2      | 100%       |
+| The Yeti            | 6       | 20×20 | 9      | 14%        | 8×8×5   | 3      | 97%        |
+| The 11:59           | 7       | 20×20 | 9      | 20%        | 8×10×10 | 3      | 99%        |
+| The Old Wyrm        | 8       | 20×20 | 10     | 31%        | 10×10×9 | 3      | 91%        |
+| Professor Ostrander | 9       | 20×20 | 11     | 14%        | 10×9×10 | 3      | 100%       |
+| The Curator         | 10      | 20×20 | 12     | 12%        | 9×10×4  | 3      | 99%        |
+
+The flat numbers are the ones the bosses were tuned to by hand. The block ones aren't
+tuned yet, and they read very differently: an enemy that hides clues on a block starts
+from every clue of the block (`Battle.base`), where a plain fight keeps the half its
+puzzle hides, so most bosses settle nearly the whole block in the first sweep, and the
+Curator isn't the hardest block fight. A block also hides more than the flat board: its
+story loader (`story/data.ts`) adds a phase's whole pool to its `fogCount` or
+`scrambleCount`, where the flat board takes only that many from the pool (the Curator asks
+for 6 fog and 7 scrambles on a block, 4 and 3 flat; compare `asked` on each board).
 
 The solver can't see ink, charge, swaps, or armor, so bosses leaning on those play harder
-than their numbers (Old Tess and the Old Wyrm especially). To tune a charge, expect about 1 to 3 zaps a
+than their numbers (Old Tess and the Old Wyrm especially). On blocks, golden traces cover
+them instead: `packages/block/src/game/battleTraces.test.ts` plays every fight with a 3D
+puzzle through the real `Battle` in a fixed line order (emptiest lines first, a call-out
+of every suspect, a mistake every 10th step) and snapshots the HP, phase, hidden lines,
+meters and events of every step, so a change to how a block fight plays shows up as a
+diff. The flat board's rules live in the fight's screen hooks (`ui/screens/run/fight/`),
+so it has no headless trace yet. To tune a charge, expect about 1 to 3 zaps a
 fight from a player ignoring the live line, at 5 or 6 lines to fill the meter. The picture matters more than the powers: dense
 drawings stay easy under any number of powers, and thin outlines get hard quickly, so
 give a thin drawing some solid areas to start from.

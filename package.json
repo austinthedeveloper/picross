@@ -23,6 +23,7 @@
     "script-review:notes": "npm -w apps/picross run script-review:notes --",
     "script-review:export": "npm -w apps/picross run script-review:export --",
     "rate:puzzles": "npm -w apps/picross run rate:puzzles --",
+    "rate:fights": "npm -w apps/picross run rate:fights --",
     "e2e": "npm -w apps/picross run e2e --",
     "e2e:cubed": "npm -w apps/picross run e2e -- --project=cubed",
     "test:flat": "npm -w apps/picross test --",

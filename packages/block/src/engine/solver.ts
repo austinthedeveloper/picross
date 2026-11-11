@@ -78,6 +78,8 @@ export interface SolveResult {
   contradiction: boolean;
   /** How many sweeps over the lines it took: a rough measure of difficulty. */
   passes: number;
+  /** Share of the cubes (0 to 1) known after the first sweep, counting any `start` (#168). */
+  firstPass: number;
 }
 
 /**
@@ -95,21 +97,31 @@ export function solve(
   for (const line of lines) for (const cell of line.cells) linesOf[cell].push(line.id);
   const dirty = new Set(lines.filter((l) => clues[l.id] !== null || start).map((l) => l.id));
   let passes = 0;
+  // Share of the cubes known, once the first sweep is done.
+  let firstPass: number | undefined;
+  const share = () => firstPass ?? known.filter((k) => k !== UNKNOWN).length / known.length;
   while (dirty.size) {
     passes++;
     const batch = [...dirty];
     dirty.clear();
     for (const id of batch) {
       const step = solveLine(lines[id], clues[id], known);
-      if (!step) return { known, solved: false, contradiction: true, passes };
+      if (!step) return { known, solved: false, contradiction: true, passes, firstPass: share() };
       for (const cell of step.filled) known[cell] = FILLED;
       for (const cell of step.empty) known[cell] = EMPTY;
       for (const cell of [...step.filled, ...step.empty]) {
         for (const other of linesOf[cell]) if (other !== id) dirty.add(other);
       }
     }
+    if (passes === 1) firstPass = share();
   }
-  return { known, solved: !known.includes(UNKNOWN), contradiction: false, passes };
+  return {
+    known,
+    solved: !known.includes(UNKNOWN),
+    contradiction: false,
+    passes,
+    firstPass: share(),
+  };
 }
 
 /** The first line that proves something new from `known`, for hints. */
