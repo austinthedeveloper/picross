@@ -17,27 +17,20 @@ import './styles/badges.css';
 import '@picross/play-block/styles/story.css';
 import './styles/switch.css';
 import { syncBadges } from './game/badges';
-import { getPuzzle } from '@picross/grid/puzzles/index';
-import { getMural } from '@picross/grid/puzzles/murals';
-import { getScene } from '@picross/story/puzzles/scenes';
-import { renderBadgesScreen } from './ui/screens/badges';
-import { renderDailyScreen } from './ui/screens/daily';
-import { renderEditorScreen } from './ui/screens/editorScreen';
-import { renderHowToPlay } from './ui/screens/howToPlay';
-import { renderMuralScreen, renderMuralTile } from './ui/screens/mural';
-import { renderGameScreen } from '@picross/play-grid/ui/screens/gameScreen';
-import { freePlaySession } from './ui/screens/freePlaySession';
-import { renderRunEncounter, renderRunScreen } from './ui/screens/run';
-import { renderSceneScreen } from '@picross/story/ui/screens/sceneScreen';
 import { gameHref, lastGame } from '@picross/shared/ui/components/gameSwitch';
-import { renderSelectScreen } from './ui/screens/selectScreen';
 import { applyTheme } from '@picross/shared/ui/theme';
 import { providePrefs } from '@picross/shared/game/prefs';
 import { getSettings, updateSettings } from './game/settings';
+import { ROUTES, type Cleanup, type Game, type Lazy } from './routes';
+import { onHide, saveNow } from './ui/lifecycle';
 
-// Shared code (sound, haptics, the theme, the mute button) reads this game's settings.
-providePrefs({ get: getSettings, update: updateSettings });
-applyTheme();
+// Shared code (sound, haptics, the theme, the mute button) reads this game's settings
+// (Cubed's routes hand over Cubed's own while they're up: cubed/routes.ts).
+function useFlatSettings(): void {
+  providePrefs({ get: getSettings, update: updateSettings });
+  applyTheme();
+}
+useFlatSettings();
 // Older saves have already earned some badges, so nobody starts from zero (#108).
 syncBadges();
 
@@ -47,46 +40,62 @@ if (import.meta.env.VITE_DEBUG === '1') {
 }
 
 const app = document.querySelector<HTMLDivElement>('#app')!;
-let cleanup: (() => void) | undefined;
+let cleanup: Cleanup;
+let game: Game = 'flat';
+let routed = 0;
 
-// The site opens on whichever game you played last (the Flat | Cubed switch remembers).
-const leaving = (!location.hash || location.hash === '#/') && lastGame() === 'cubed';
-if (leaving) location.replace(gameHref('cubed', 'flat'));
+/** The screen is about to be `next`'s: its board's styles, and its settings. */
+function enter(next: Game) {
+  // Each game's screen styles apply only on its board (scripts/scopeByBoard.ts). A boss
+  // that switches to a block sets this itself within the 2D game's run (blockFight.ts).
+  if (next === 'cubed') document.documentElement.dataset.board = 'block';
+  else delete document.documentElement.dataset.board;
+  if (next === game) return;
+  // The other game's screen would lose its styles while the next one loads.
+  app.replaceChildren();
+  if (next === 'flat') useFlatSettings();
+  game = next;
+}
 
 function route() {
   cleanup?.();
   cleanup = undefined;
-  const match = location.hash.match(/^#\/play\/([\w-]+)$/);
-  const puzzle = match && getPuzzle(match[1]);
-  const scene = location.hash.match(/^#\/scene\/([\w-]+)$/);
-  const muralMatch = location.hash.match(/^#\/mural\/([\w-]+)(?:\/(\d+))?$/);
-  const mural = muralMatch && getMural(muralMatch[1]);
-  const tile = mural && muralMatch[2] ? Number(muralMatch[2]) - 1 : null;
-  if (puzzle) {
-    cleanup = renderGameScreen(app, puzzle, freePlaySession(puzzle));
-  } else if (scene && getScene(scene[1])) {
-    cleanup = renderSceneScreen(app, getScene(scene[1])!);
-  } else if (mural && tile !== null && mural.tiles[tile]) {
-    cleanup = renderMuralTile(app, mural, tile);
-  } else if (mural && tile === null) {
-    renderMuralScreen(app, mural);
-  } else if (location.hash === '#/daily') {
-    cleanup = renderDailyScreen(app);
-  } else if (location.hash === '#/run') {
-    cleanup = renderRunScreen(app);
-  } else if (location.hash === '#/run/play') {
-    cleanup = renderRunEncounter(app);
-  } else if (location.hash === '#/badges') {
-    renderBadgesScreen(app);
-  } else if (location.hash === '#/how-to-play') {
-    renderHowToPlay(app);
-  } else if (location.hash === '#/editor') {
-    renderEditorScreen(app);
-  } else {
-    renderSelectScreen(app);
-  }
+  onHide(null);
+  const visit = ++routed;
+  const hash = location.hash;
+  let found: unknown;
+  const next = ROUTES.find((r) => (found = r.match(hash)))!;
+  enter(next.game ?? 'flat');
+  const lazy: Lazy = (load, draw) => load.then((m) => (visit === routed ? draw(m) : undefined));
+  const screen = next.render(app, found, lazy);
+  if (screen instanceof Promise) {
+    void screen.then((done) => {
+      if (visit === routed) cleanup = done;
+      else done?.();
+    });
+  } else cleanup = screen;
   window.scrollTo(0, 0);
 }
 
+// The site opens on whichever game you played last (the Flat | Cubed switch remembers).
+if ((!location.hash || location.hash === '#/') && lastGame() === 'cubed') {
+  history.replaceState(null, '', gameHref('cubed'));
+}
+
 window.addEventListener('hashchange', route);
-if (!leaving) route();
+// Cubed's screens save the board in progress when the tab closes, or goes into the
+// background (a phone may close it from there without warning): ui/lifecycle.ts.
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) saveNow();
+});
+window.addEventListener('pagehide', () => {
+  if (game !== 'cubed') return;
+  cleanup?.();
+  cleanup = undefined;
+});
+// Back from the browser's page cache: Cubed's screen was torn down on the way out, so draw
+// it again.
+window.addEventListener('pageshow', (e) => {
+  if (e.persisted && game === 'cubed') route();
+});
+route();

@@ -1,107 +1,101 @@
-import '@picross/shared/styles/tokens.css';
-import '@picross/play-block/styles/voxels.css';
-import '@picross/shared/styles/base.css';
-import '@picross/play-block/styles/game.css';
+/**
+ * Picross Cubed, the 3D game, under `#/cubed/…`. The app's router (../routes.ts) loads this
+ * module with one `import()` the first time a Cubed route opens, so the 3D game's list, pack
+ * and styles stay out of the first download; the screens with a block (three.js) load on
+ * demand from here.
+ */
 import './styles/select.css';
 import '@picross/play-block/styles/editor.css';
-import '@picross/shared/styles/art.css';
-import '@picross/shared/styles/dialogue.css';
-import '@picross/shared/styles/run.css';
-import '@picross/shared/styles/fight.css';
-import '@picross/shared/styles/dig.css';
-import '@picross/play-block/styles/story.css';
 import { getPuzzle } from '@picross/block/puzzles/index';
+import { providePrefs } from '@picross/shared/game/prefs';
+import { applyTheme } from '@picross/shared/ui/theme';
+import { providePlayPrefs } from '@picross/play-block/ui/prefs';
+import { getSettings, updateSettings } from './game/settings';
+import { cubedHref } from './href';
+import type { Lazy, Screen } from '../routes';
 import { renderHowToPlay } from './ui/screens/howToPlay';
-import { getScene } from '@picross/story/puzzles/scenes';
-import { renderSceneScreen } from '@picross/story/ui/screens/sceneScreen';
 import { addListCard, renderSelectScreen } from './ui/screens/selectScreen';
 import { renderStoryScreen, storyCard } from './ui/screens/story/index';
 import { dailyCard } from './ui/screens/dailyCard';
 import { renderBadgesScreen } from './ui/screens/badgesScreen';
-import { onHide, saveNow } from './ui/lifecycle';
-import { applyTheme } from '@picross/shared/ui/theme';
-import { providePrefs } from '@picross/shared/game/prefs';
-import { providePlayPrefs } from '@picross/play-block/ui/prefs';
-import { getSettings, updateSettings } from './game/settings';
 
-// Shared code (sound, haptics, the theme, the mute button) reads this game's settings.
-providePrefs({ get: getSettings, update: updateSettings });
-// So does the play screen (packages/play-block), for fading finished clues.
-providePlayPrefs(getSettings);
-applyTheme();
 addListCard(dailyCard);
 addListCard(storyCard);
 
-const app = document.querySelector<HTMLDivElement>('#app')!;
-let cleanup: (() => void) | undefined;
-let routed = 0;
-
-function route() {
-  cleanup?.();
-  cleanup = undefined;
-  onHide(null);
-  const visit = ++routed;
-  const play = location.hash.match(/^#\/play\/([\w-]+)$/);
-  const puzzle = play && getPuzzle(play[1]);
-  const sceneMatch = location.hash.match(/^#\/scene\/([\w-]+)$/);
-  const scene = sceneMatch && getScene(sceneMatch[1]);
-  const diorama = location.hash.match(/^#\/diorama\/([\w-]+)(?:\/(\d+))?$/);
-  const shared = location.hash.match(/^#\/p\/([\w-]+)(\/test)?$/);
-  // Screens with a block bring in three.js, so the list doesn't wait for it.
-  const lazy = <M>(load: Promise<M>, render: (m: M) => (() => void) | void) =>
-    void load.then((m) => {
-      if (visit === routed) cleanup = render(m) ?? undefined;
-    });
-  if (puzzle) {
-    lazy(import('./ui/screens/gameScreen'), (m) => m.renderGameScreen(app, puzzle));
-  } else if (location.hash === '#/tutorial') {
-    lazy(import('./ui/screens/tutorial'), (m) => m.renderTutorial(app));
-  } else if (location.hash === '#/daily') {
-    lazy(import('./ui/screens/dailyScreen'), (m) => m.renderDailyScreen(app));
-  } else if (location.hash === '#/badges') {
-    renderBadgesScreen(app);
-  } else if (diorama) {
-    lazy(import('./ui/screens/dioramaScreen'), (m) =>
-      diorama[2]
-        ? m.renderDioramaTile(app, diorama[1], Number(diorama[2]))
-        : m.renderDioramaScreen(app, diorama[1]),
-    );
-  } else if (location.hash === '#/story') {
-    cleanup = renderStoryScreen(app);
-  } else if (location.hash === '#/story/play') {
-    lazy(import('./ui/screens/story/encounter'), (m) => m.renderEncounter(app));
-  } else if (scene) {
-    cleanup = renderSceneScreen(app, scene);
-  } else if (location.hash === '#/editor') {
-    lazy(import('@picross/play-block/ui/screens/editor/editorScreen'), (m) =>
-      m.renderEditorScreen(app),
-    );
-  } else if (shared) {
-    lazy(import('./ui/screens/sharedScreen'), (m) =>
-      m.renderSharedScreen(app, shared[1], Boolean(shared[2])),
-    );
-  } else if (location.hash === '#/how-to-play') renderHowToPlay(app);
-  else renderSelectScreen(app);
-  window.scrollTo(0, 0);
+/** One of Cubed's screens: `match` reads the path after `#/cubed`. */
+interface CubedRoute {
+  match: RegExp;
+  render(app: HTMLElement, found: RegExpExecArray, lazy: Lazy): Screen;
 }
 
-// Offline play and installing (public/sw.js), in production builds only.
-if (import.meta.env.PROD && 'serviceWorker' in navigator) {
-  void navigator.serviceWorker.register('./sw.js').catch(() => {});
+const ROUTES: CubedRoute[] = [
+  {
+    match: /^\/play\/([\w-]+)$/,
+    render: (app, [, id], lazy) => {
+      const puzzle = getPuzzle(id);
+      if (!puzzle) return renderSelectScreen(app);
+      return lazy(import('./ui/screens/gameScreen'), (m) => m.renderGameScreen(app, puzzle));
+    },
+  },
+  {
+    match: /^\/tutorial$/,
+    render: (app, _, lazy) => lazy(import('./ui/screens/tutorial'), (m) => m.renderTutorial(app)),
+  },
+  {
+    match: /^\/daily$/,
+    render: (app, _, lazy) =>
+      lazy(import('./ui/screens/dailyScreen'), (m) => m.renderDailyScreen(app)),
+  },
+  { match: /^\/badges$/, render: (app) => renderBadgesScreen(app) },
+  {
+    match: /^\/diorama\/([\w-]+)(?:\/(\d+))?$/,
+    render: (app, [, id, n], lazy) =>
+      lazy(import('./ui/screens/dioramaScreen'), (m) =>
+        n ? m.renderDioramaTile(app, id, Number(n)) : m.renderDioramaScreen(app, id),
+      ),
+  },
+  { match: /^\/story$/, render: (app) => renderStoryScreen(app) },
+  {
+    match: /^\/story\/play$/,
+    render: (app, _, lazy) =>
+      lazy(import('./ui/screens/story/encounter'), (m) => m.renderEncounter(app)),
+  },
+  {
+    match: /^\/editor$/,
+    render: (app, _, lazy) =>
+      lazy(import('@picross/play-block/ui/screens/editor/editorScreen'), (m) =>
+        m.renderEditorScreen(app, {
+          home: cubedHref(),
+          sharedHref: (code) => cubedHref(`/p/${code}`),
+        }),
+      ),
+  },
+  {
+    match: /^\/p\/([\w-]+)(\/test)?$/,
+    render: (app, [, code, test], lazy) =>
+      lazy(import('./ui/screens/sharedScreen'), (m) =>
+        m.renderSharedScreen(app, code, Boolean(test)),
+      ),
+  },
+  { match: /^\/how-to-play$/, render: (app) => renderHowToPlay(app) },
+];
+
+/**
+ * Cubed's settings are its own (picross3d:settings) until the settings merge, so shared code
+ * (sound, haptics, the theme, the mute button) and the play screen read them on its routes.
+ */
+function useCubedSettings(): void {
+  providePrefs({ get: getSettings, update: updateSettings });
+  providePlayPrefs(getSettings);
+  applyTheme();
 }
 
-window.addEventListener('hashchange', route);
-// Save the board in progress when the tab closes, or goes into the background (a phone may
-// close it from there without warning).
-window.addEventListener('pagehide', () => {
-  cleanup?.();
-  cleanup = undefined;
-});
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden) saveNow();
-});
-// Back from the browser's page cache: the screen was torn down on the way out, so draw it again.
-window.addEventListener('pageshow', (e) => {
-  if (e.persisted) route();
-});
-route();
+/** Draws the Cubed screen at `path` (the hash after `#/cubed`); its list for anything else. */
+export function renderCubed(app: HTMLElement, path: string, lazy: Lazy): Screen {
+  useCubedSettings();
+  for (const route of ROUTES) {
+    const found = route.match.exec(path);
+    if (found) return route.render(app, found, lazy);
+  }
+  return renderSelectScreen(app);
+}

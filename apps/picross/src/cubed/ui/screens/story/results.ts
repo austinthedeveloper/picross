@@ -7,6 +7,7 @@ import { portraitArt, withArt } from '@picross/shared/ui/art';
 import { homeLink } from '@picross/shared/ui/components/homeLink';
 import { el } from '@picross/shared/ui/dom';
 import { modePicker, newRunButton, type Hub } from './shared';
+import { cubedHref } from '../../../href';
 
 /** The job's sign-off for a win or a loss: the lines its outro plays for that flag. */
 function signOff(job: Job, won: boolean): HTMLElement[] {
@@ -43,7 +44,10 @@ export function results(hub: Hub, finished: RunState, job: Job): Node[] {
   const won = state.status === 'won';
   const cleared = Math.min(state.node, job.encounters.length);
   return [
-    el('header', { className: 'topbar' }, [homeLink(), el('h1', { textContent: job.name })]),
+    el('header', { className: 'topbar' }, [
+      homeLink(cubedHref()),
+      el('h1', { textContent: job.name }),
+    ]),
     el('section', { className: `run-card results ${won ? 'won' : 'lost'}` }, [
       el('h2', { textContent: won ? 'Job done!' : 'Run over' }),
       el('p', {

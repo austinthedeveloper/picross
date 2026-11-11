@@ -9,7 +9,9 @@
   },
   "scripts": {
     "test": "tsc --noEmit && vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "puzzles": "vite-node scripts/puzzles.ts",
+    "bench": "vite-node scripts/bench.ts"
   },
   "dependencies": {
     "@picross/shared": "*",

@@ -13,6 +13,7 @@ import { hapticsSupported } from '@picross/shared/ui/haptics';
 import { applyTheme } from '@picross/shared/ui/theme';
 import { badgesLink } from './badgesScreen';
 import { dioramaSection } from './dioramaList';
+import { cubedHref } from '../../href';
 
 /** The list's sections, by the longest side of the block. */
 const SECTIONS = [
@@ -45,7 +46,7 @@ function card(puzzle: Puzzle, index: number): HTMLElement {
       : dimsLabel(puzzle.dims);
   return el(
     'a',
-    { className: `puzzle-card${stats ? ' solved' : ''}`, href: `#/play/${puzzle.id}` },
+    { className: `puzzle-card${stats ? ' solved' : ''}`, href: cubedHref(`/play/${puzzle.id}`) },
     [
       el('div', { className: 'thumb' }, [picture]),
       el('span', {
@@ -110,12 +111,12 @@ function tutorialCard(): HTMLElement | null {
           (e.target as HTMLElement).closest('.tutorial-card')?.remove();
         },
       }),
-      el('a', { className: 'button primary', href: '#/tutorial', textContent: 'Start' }),
+      el('a', { className: 'button primary', href: cubedHref('/tutorial'), textContent: 'Start' }),
     ]),
   ]);
 }
 
-/** The puzzle list, settings and stats (#/). */
+/** The puzzle list, settings and stats (#/cubed). */
 export function renderSelectScreen(root: HTMLElement): void {
   const rerender = () => renderSelectScreen(root);
   const stats = getOverallStats();
@@ -166,13 +167,16 @@ export function renderSelectScreen(root: HTMLElement): void {
 
   root.replaceChildren(
     el('div', { className: 'screen select' }, [
-      // On the combined site (built by the repo root), the switch back to Flat.
-      ...(import.meta.env.VITE_COMBINED === '1' ? [gameSwitch('cubed')] : []),
+      gameSwitch('cubed'),
       el('header', { className: 'topbar' }, [
         el('h1', { textContent: 'Picross Cubed' }),
         badgesLink(),
-        el('a', { className: 'button ghost', href: '#/editor', textContent: 'Editor' }),
-        el('a', { className: 'button ghost', href: '#/how-to-play', textContent: 'How to play' }),
+        el('a', { className: 'button ghost', href: cubedHref('/editor'), textContent: 'Editor' }),
+        el('a', {
+          className: 'button ghost',
+          href: cubedHref('/how-to-play'),
+          textContent: 'How to play',
+        }),
       ]),
       el('p', {
         className: 'lede',

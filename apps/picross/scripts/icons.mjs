@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
- * Renders the app icons (public/icons/*.png) from public/favicon.svg in your installed
- * Chrome. Run after changing the icon: node scripts/icons.mjs
+ * Renders the app icons (public/icons/*.png) from public/icons/cubed.svg (Picross Cubed's icon,
+ * which was its favicon) in your installed Chrome. Run after changing the icon:
+ * npm -w apps/picross run icons
  */
 import { chromium } from '@playwright/test';
 import { readFileSync, mkdirSync } from 'node:fs';
@@ -9,7 +10,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const svg = readFileSync(join(ROOT, 'public/favicon.svg'), 'utf8');
+const svg = readFileSync(join(ROOT, 'public/icons/cubed.svg'), 'utf8');
 mkdirSync(join(ROOT, 'public/icons'), { recursive: true });
 
 // Maskable icons keep their art inside the middle 80%, on the page color.

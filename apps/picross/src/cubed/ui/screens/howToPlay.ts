@@ -1,6 +1,7 @@
 import { PUZZLES } from '@picross/block/puzzles/index';
 import { homeLink } from '@picross/shared/ui/components/homeLink';
 import { el } from '@picross/shared/ui/dom';
+import { cubedHref } from '../../href';
 
 const RULES: [string, string][] = [
   [
@@ -38,12 +39,15 @@ const RULES: [string, string][] = [
   ],
 ];
 
-/** The rules, with a small first puzzle to try (#/how-to-play). */
+/** The rules, with a small first puzzle to try (#/cubed/how-to-play). */
 export function renderHowToPlay(root: HTMLElement): void {
   const first = PUZZLES[0];
   root.replaceChildren(
     el('div', { className: 'screen how-to' }, [
-      el('header', { className: 'topbar' }, [homeLink(), el('h1', { textContent: 'How to play' })]),
+      el('header', { className: 'topbar' }, [
+        homeLink(cubedHref()),
+        el('h1', { textContent: 'How to play' }),
+      ]),
       el(
         'dl',
         { className: 'rules' },
@@ -53,10 +57,14 @@ export function renderHowToPlay(root: HTMLElement): void {
         ]),
       ),
       el('div', { className: 'end-actions' }, [
-        el('a', { className: 'button ghost', href: '#/tutorial', textContent: 'Guided tutorial' }),
+        el('a', {
+          className: 'button ghost',
+          href: cubedHref('/tutorial'),
+          textContent: 'Guided tutorial',
+        }),
         el('a', {
           className: 'button primary',
-          href: `#/play/${first.id}`,
+          href: cubedHref(`/play/${first.id}`),
           textContent: 'Try the first puzzle',
         }),
       ]),

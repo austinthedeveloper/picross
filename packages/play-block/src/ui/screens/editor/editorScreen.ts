@@ -52,8 +52,17 @@ function save(draft: Draft, ratio: number): void {
   writeStore(KEY, { id: draft.id, name: draft.name, dims: draft.dims, cells, ratio });
 }
 
+/** Where the editor's links lead, in the game it's part of. */
+export interface EditorOptions {
+  /** Home. Default: `#/`. */
+  home?: string;
+  /** A shared puzzle's link (its play-test adds `/test`). Default: `#/p/<code>`. */
+  sharedHref?(code: string): string;
+}
+
 /** The puzzle editor (#/editor): draw a shape layer by layer, check it, share it. */
-export function renderEditorScreen(root: HTMLElement): () => void {
+export function renderEditorScreen(root: HTMLElement, opts: EditorOptions = {}): () => void {
+  const sharedHref = opts.sharedHref ?? ((code: string) => `#/p/${code}`);
   let { draft, ratio } = load();
   let layer = 0;
   let color = COLORS.indexOf('coral') + 1;
@@ -162,7 +171,10 @@ export function renderEditorScreen(root: HTMLElement): () => void {
 
   root.replaceChildren(
     el('div', { className: 'screen editor' }, [
-      el('header', { className: 'topbar' }, [homeLink(), el('h1', { textContent: 'Editor' })]),
+      el('header', { className: 'topbar' }, [
+        homeLink(opts.home),
+        el('h1', { textContent: 'Editor' }),
+      ]),
       el('div', { className: 'editor-meta' }, [
         el('label', {}, ['Name ', name]),
         el('span', { className: 'size-inputs' }, [
@@ -421,11 +433,11 @@ export function renderEditorScreen(root: HTMLElement): () => void {
 
   playTest.onclick = async () => {
     if (!lastCheck) return;
-    location.hash = `#/p/${await encodeShare(lastCheck.file)}/test`;
+    location.hash = `${sharedHref(await encodeShare(lastCheck.file))}/test`;
   };
   share.onclick = async () => {
     if (!lastCheck) return;
-    const url = `${location.href.split('#')[0]}#/p/${await encodeShare(lastCheck.file)}`;
+    const url = `${location.href.split('#')[0]}${sharedHref(await encodeShare(lastCheck.file))}`;
     try {
       await navigator.clipboard.writeText(url);
       verdict.textContent = 'Share link copied.';

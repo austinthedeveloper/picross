@@ -1,6 +1,6 @@
-import { parsePuzzle } from '@picross/block/puzzles/format';
-import { chooseHidden } from '@picross/block/puzzles/hide';
-import { solve } from '@picross/block/engine/solver';
+import { parsePuzzle } from '../src/puzzles/format';
+import { chooseHidden } from '../src/puzzles/hide';
+import { solve } from '../src/engine/solver';
 // A rough 10x10x10 sphere-ish blob with a hole.
 const N = 10;
 const layers: string[][] = [];

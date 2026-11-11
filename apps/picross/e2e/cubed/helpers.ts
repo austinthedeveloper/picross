@@ -7,7 +7,7 @@ import { skipScene } from '@picross/play-block/e2e/helpers';
 export * from '@picross/play-block/e2e/helpers';
 
 /** The story's data (encounters, jobs), in the story package. */
-const STORY = path.join(import.meta.dirname, '../../../packages/story/src/puzzles');
+const STORY = path.join(import.meta.dirname, '../../../../packages/story/src/puzzles');
 
 /**
  * Starts straight at one encounter of a job: seeds the run save, then opens the
@@ -30,7 +30,7 @@ export async function runAt(
     mode: opts.mode ?? 'relaxed',
     tally: { mistakes: 0, hintsUsed: 0, gadgetsUsed: 0 },
   };
-  await page.goto('/');
+  await page.goto('/#/cubed');
   await page.evaluate((save) => localStorage.setItem('picross3d:run', JSON.stringify(save)), {
     current: run,
     seenScenes: [],
@@ -39,7 +39,7 @@ export async function runAt(
   });
   // Saves are read once when the app loads, so load it again with the run in place. A new
   // query makes it a real page load (a bare hash change could redirect first).
-  await page.goto('/?seeded#/story/play');
+  await page.goto('/?seeded#/cubed/story/play');
   await skipScene(page);
   await page.locator('canvas.block-canvas').waitFor();
 }

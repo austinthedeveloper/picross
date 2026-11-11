@@ -6,9 +6,10 @@ import { homeLink } from '@picross/shared/ui/components/homeLink';
 import { el } from '@picross/shared/ui/dom';
 import { formatTime } from '@picross/play-block/ui/format';
 import { createPlay } from '@picross/play-block/ui/screens/play';
+import { cubedHref } from '../../href';
 
 /**
- * A shared puzzle (#/p/<code>), or a play-test from the editor (#/p/<code>/test). Nothing
+ * A shared puzzle (#/cubed/p/<code>), or a play-test from the editor (#/cubed/p/<code>/test). Nothing
  * is saved: it's someone's puzzle passing through.
  */
 export function renderSharedScreen(root: HTMLElement, code: string, test: boolean): () => void {
@@ -20,14 +21,15 @@ export function renderSharedScreen(root: HTMLElement, code: string, test: boolea
       if (gone) return;
       const toEditor = el('a', {
         className: 'button ghost',
-        href: '#/editor',
+        href: cubedHref('/editor'),
         textContent: '← Editor',
       });
       const play = createPlay(root, {
+        home: cubedHref(),
         puzzle,
         title: test ? `Testing: ${puzzle.name}` : 'A shared puzzle',
         mode: getSettings().mode,
-        back: test ? toEditor : homeLink(),
+        back: test ? toEditor : homeLink(cubedHref()),
         hooks: {
           solved: (time) => {
             if (test) recordPlaytest();
@@ -40,15 +42,19 @@ export function renderSharedScreen(root: HTMLElement, code: string, test: boolea
                 test
                   ? el('a', {
                       className: 'button primary',
-                      href: '#/editor',
+                      href: cubedHref('/editor'),
                       textContent: 'Back to the editor',
                     })
                   : el('a', {
                       className: 'button primary',
-                      href: '#/editor',
+                      href: cubedHref('/editor'),
                       textContent: 'Make your own',
                     }),
-                el('a', { className: 'button ghost', href: '#/', textContent: 'All puzzles' }),
+                el('a', {
+                  className: 'button ghost',
+                  href: cubedHref(),
+                  textContent: 'All puzzles',
+                }),
               ]),
             ];
           },
@@ -61,7 +67,7 @@ export function renderSharedScreen(root: HTMLElement, code: string, test: boolea
       root.replaceChildren(
         el('div', { className: 'screen' }, [
           el('header', { className: 'topbar' }, [
-            homeLink(),
+            homeLink(cubedHref()),
             el('h1', { textContent: 'Can’t open that puzzle' }),
           ]),
           el('p', { textContent: 'The link looks broken or incomplete. Ask for it again?' }),

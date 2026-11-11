@@ -22,7 +22,7 @@ async function hit(page: Page, cell: number, key: 'x' | ' ') {
 }
 
 test('the list offers the tutorial until it is done', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/#/cubed');
   await expect(page.locator('.tutorial-card')).toBeVisible();
   await page.getByRole('button', { name: 'Not now' }).click();
   await expect(page.locator('.tutorial-card')).toHaveCount(0);
@@ -31,7 +31,7 @@ test('the list offers the tutorial until it is done', async ({ page }) => {
 });
 
 test('the tutorial goes step by step to solved, and nudges wrong moves', async ({ page }) => {
-  await page.goto('/#/tutorial');
+  await page.goto('/#/cubed/tutorial');
   const coach = page.locator('.coach');
   await expect(coach).toContainText('Step 1 of 6');
   await page.getByRole('button', { name: 'Front', exact: true }).click();

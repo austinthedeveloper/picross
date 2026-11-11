@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import { breakCubes, extras, focusBlock, puzzle, shapeCubes } from './helpers';
 
 test('the list shows puzzles smallest first, nameless until solved', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/#/cubed');
   await expect(page.getByRole('heading', { name: 'Picross Cubed' })).toBeVisible();
   const first = page.locator('.puzzle-card').first();
   await expect(first).toContainText('No. 1');
@@ -13,7 +13,7 @@ test('the list shows puzzles smallest first, nameless until solved', async ({ pa
 
 test('solving a puzzle reveals its name and records it', async ({ page }) => {
   const steps = puzzle('steps');
-  await page.goto('/#/play/steps');
+  await page.goto('/#/cubed/play/steps');
   await focusBlock(page);
   const cubes = extras(steps);
   await breakCubes(page, steps, cubes.slice(0, -1));
@@ -33,7 +33,7 @@ test('solving a puzzle reveals its name and records it', async ({ page }) => {
 test('undo puts a broken cube back, and progress survives a reload', async ({ page }) => {
   const steps = puzzle('steps');
   const [a, b] = extras(steps);
-  await page.goto('/#/play/steps');
+  await page.goto('/#/cubed/play/steps');
   await focusBlock(page);
   await breakCubes(page, steps, [a, b]);
   await page.keyboard.press('z');
@@ -47,9 +47,9 @@ test('undo puts a broken cube back, and progress survives a reload', async ({ pa
 
 test('hearts mode costs a heart for breaking the shape, and three end it', async ({ page }) => {
   const steps = puzzle('steps');
-  await page.goto('/');
+  await page.goto('/#/cubed');
   await page.getByRole('button', { name: 'Hearts' }).click();
-  await page.goto('/#/play/steps');
+  await page.goto('/#/cubed/play/steps');
   await expect(page.getByLabel('Hearts')).toHaveText('♥♥♥');
   await focusBlock(page);
   const shape = shapeCubes(steps);
@@ -63,7 +63,7 @@ test('hearts mode costs a heart for breaking the shape, and three end it', async
 
 test('a hint works out a line, and a check puts back a mistake', async ({ page }) => {
   const mug = puzzle('mug');
-  await page.goto('/#/play/mug');
+  await page.goto('/#/cubed/play/mug');
   await page.getByText('💡 Hint 3').click();
   await page.getByRole('button', { name: 'Work out a line' }).click();
   await expect(page.getByText('💡 Hint 2')).toBeVisible();
@@ -79,7 +79,7 @@ test('a hint works out a line, and a check puts back a mistake', async ({ page }
 });
 
 test('the list filters by status and difficulty', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/#/cubed');
   await page.getByRole('button', { name: 'Done', exact: true }).click();
   await expect(page.getByText('No puzzles match')).toBeVisible();
   await page.getByRole('button', { name: 'All', exact: true }).click();
@@ -90,7 +90,7 @@ test('the list filters by status and difficulty', async ({ page }) => {
 });
 
 test('the view snaps and peels from either end', async ({ page }) => {
-  await page.goto('/#/play/castle');
+  await page.goto('/#/cubed/play/castle');
   await page.getByRole('button', { name: 'Top', exact: true }).click();
   await page.getByRole('button', { name: 'Peel along Y' }).click();
   await page.getByLabel('Layers peeled').fill('2');
@@ -100,15 +100,15 @@ test('the view snaps and peels from either end', async ({ page }) => {
 });
 
 test('how to play links to the first puzzle', async ({ page }) => {
-  await page.goto('/#/how-to-play');
+  await page.goto('/#/cubed/how-to-play');
   await expect(page.getByText('Circles and squares')).toBeVisible();
   await expect(page.getByRole('link', { name: 'Guided tutorial' })).toBeVisible();
   await page.getByRole('link', { name: 'Try the first puzzle' }).click();
-  await expect(page).toHaveURL(/#\/play\/steps$/);
+  await expect(page).toHaveURL(/#\/cubed\/play\/steps$/);
 });
 
 test('peel steppers step a layer at a time, and the slider stays put', async ({ page }) => {
-  await page.goto('/#/play/castle');
+  await page.goto('/#/cubed/play/castle');
   const slider = page.getByLabel('Layers peeled');
   const before = await slider.boundingBox();
   await page.getByRole('button', { name: 'Peel one layer more' }).click();
@@ -123,9 +123,9 @@ test('peel steppers step a layer at a time, and the slider stays put', async ({ 
 });
 
 test('a whole line in one go: Shift+X, and Hearts still stops at the shape', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/#/cubed');
   await page.getByRole('button', { name: 'Hearts' }).click();
-  await page.goto('/#/play/steps');
+  await page.goto('/#/cubed/play/steps');
   await focusBlock(page);
   // The cursor starts on the top front left cube; its vertical line is two empty cubes
   // over one of the shape.
@@ -135,7 +135,7 @@ test('a whole line in one go: Shift+X, and Hearts still stops at the shape', asy
 });
 
 test('holding on a cube carries the stroke through its line', async ({ page }) => {
-  await page.goto('/#/play/castle');
+  await page.goto('/#/cubed/play/castle');
   const box = (await page.locator('canvas.block-canvas').boundingBox())!;
   await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
   await page.mouse.down();

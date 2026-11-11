@@ -13,16 +13,18 @@ import { nextPuzzle, PUZZLES } from '@picross/block/puzzles/index';
 import { shapePicture } from '@picross/play-block/ui/board/thumbnail';
 import { el } from '@picross/shared/ui/dom';
 import { formatTime, plural, puzzleNumber } from '@picross/play-block/ui/format';
-import { onHide } from '../lifecycle';
+import { onHide } from '../../../ui/lifecycle';
 import { createPlay } from '@picross/play-block/ui/screens/play';
+import { cubedHref } from '../../href';
 
-/** Free play (#/play/<id>): saves as you go, records times, and offers the next puzzle. */
+/** Free play (#/cubed/play/<id>): saves as you go, records times, and offers the next puzzle. */
 export function renderGameScreen(root: HTMLElement, puzzle: Puzzle): () => void {
   const saved = getSavedBoard(puzzle.id);
   const solvedBefore = Boolean(getPuzzleStats(puzzle.id));
   let changed = false;
 
   const play = createPlay(root, {
+    home: cubedHref(),
     puzzle,
     title: solvedBefore ? puzzle.name : puzzleNumber(PUZZLES.indexOf(puzzle)),
     mode: getSettings().mode,
@@ -49,12 +51,12 @@ export function renderGameScreen(root: HTMLElement, puzzle: Puzzle): () => void 
           }),
           el('p', { className: 'end-note', textContent: difficultyOf(puzzle).label }),
           el('div', { className: 'end-actions' }, [
-            el('a', { className: 'button ghost', href: '#/', textContent: 'All puzzles' }),
+            el('a', { className: 'button ghost', href: cubedHref(), textContent: 'All puzzles' }),
             ...(next
               ? [
                   el('a', {
                     className: 'button primary',
-                    href: `#/play/${next.id}`,
+                    href: cubedHref(`/play/${next.id}`),
                     textContent: 'Next',
                   }),
                 ]

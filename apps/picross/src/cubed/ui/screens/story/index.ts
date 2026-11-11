@@ -7,11 +7,12 @@ import { chapterOpen, jobsBoard } from './jobsBoard';
 import { pathMap } from './pathMap';
 import { results } from './results';
 import { loadRun, unlocked, type Hub } from './shared';
+import { cubedHref } from '../../../href';
 
 let stopScene: (() => void) | undefined;
 
 /**
- * The story at #/story: the jobs board with no run, the path map during one, and results
+ * The story at #/cubed/story: the jobs board with no run, the path map during one, and results
  * once it's won or lost. Returns a cleanup for the router.
  */
 export function renderStoryScreen(app: HTMLElement): () => void {
@@ -54,7 +55,7 @@ export function storyCard(): HTMLElement {
   const active = run?.state.status === 'active';
   const storyJobs = jobs.filter((j) => !j.overtimeOf && !j.bossOf);
   const open = storyJobs.filter(unlocked).length;
-  return el('a', { className: 'feature-card story-card', href: '#/story' }, [
+  return el('a', { className: 'feature-card story-card', href: cubedHref('/story') }, [
     el('div', {}, [
       el('p', { className: 'kicker', textContent: 'Story' }),
       el('p', {

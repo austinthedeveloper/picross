@@ -6,6 +6,7 @@ import { gadgetArt } from '@picross/shared/ui/art';
 import { homeLink } from '@picross/shared/ui/components/homeLink';
 import { el } from '@picross/shared/ui/dom';
 import { nodeIcon, nodeLabel, nodeSize, type Hub } from './shared';
+import { cubedHref } from '../../../href';
 
 export function hpBar(state: RunState): HTMLElement {
   const bar = el('div', { className: 'hp', role: 'meter', ariaLabel: 'HP' }, [
@@ -70,7 +71,11 @@ export function pathMap(hub: Hub, state: RunState, job: Job): Node[] {
     const label = `${encounter.name}, ${nodeLabel(encounter)}, ${status}`;
     const node =
       status === 'current'
-        ? el('a', { className: 'node-body', href: '#/story/play', ariaLabel: label }, content)
+        ? el(
+            'a',
+            { className: 'node-body', href: cubedHref('/story/play'), ariaLabel: label },
+            content,
+          )
         : el('div', { className: 'node-body', ariaLabel: label }, content);
     return el('li', { className: `node ${status}${encounter.boss ? ' boss' : ''}` }, [node]);
   });
@@ -95,7 +100,10 @@ export function pathMap(hub: Hub, state: RunState, job: Job): Node[] {
   });
 
   return [
-    el('header', { className: 'topbar' }, [homeLink(), el('h1', { textContent: job.name })]),
+    el('header', { className: 'topbar' }, [
+      homeLink(cubedHref()),
+      el('h1', { textContent: job.name }),
+    ]),
     el('div', { className: 'run-status' }, [
       hpBar(state),
       el('span', {

@@ -25,7 +25,7 @@ test('the daily puzzle: one block a day, and a streak across days', async ({ pag
     [firstDay + 1, '2 days in a row'],
   ] as const) {
     await page.clock.setFixedTime(new Date(2026, 10, day, 12));
-    await page.goto(`/?day=${day}`);
+    await page.goto(`/?day=${day}#/cubed`);
     await expect(page.locator('.daily-card')).toContainText(`Daily · Nov ${day}`);
     await page.locator('.daily-card').click();
     const { puzzle } = novemberDaily(day);
@@ -38,7 +38,7 @@ test('the daily puzzle: one block a day, and a streak across days', async ({ pag
 });
 
 test('badges list every badge with its next step, and count new ones', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/#/cubed');
   await expect(page.getByRole('link', { name: 'Badges', exact: true })).toBeVisible();
   // A solve earns progress toward Block Breaker; five earn bronze.
   await page.evaluate(() => {
@@ -65,7 +65,7 @@ test('a diorama fills in piece by piece, then turns in 3D', async ({ page }) => 
   test.setTimeout(120_000);
   const file = JSON.parse(
     fs.readFileSync(
-      path.join(import.meta.dirname, '../../../packages/block/src/puzzles/dioramas/park.json'),
+      path.join(import.meta.dirname, '../../../../packages/block/src/puzzles/dioramas/park.json'),
       'utf8',
     ),
   ) as DioramaFile;
@@ -75,7 +75,7 @@ test('a diorama fills in piece by piece, then turns in 3D', async ({ page }) => 
   const [first, last, ...placed] = [...park.tiles].sort(
     (a, b) => extras(a.puzzle).length - extras(b.puzzle).length,
   );
-  await page.goto('/');
+  await page.goto('/#/cubed');
   await page.evaluate(
     (ids) => {
       const solved = Object.fromEntries(
@@ -91,7 +91,7 @@ test('a diorama fills in piece by piece, then turns in 3D', async ({ page }) => 
     `${placed.length} of ${park.tiles.length} pieces`,
   );
   for (const tile of [first, last]) {
-    await page.goto(`/#/diorama/park/${tile.index + 1}`);
+    await page.goto(`/#/cubed/diorama/park/${tile.index + 1}`);
     await focusBlock(page);
     await breakCubes(page, tile.puzzle, extras(tile.puzzle));
     await expect(page.locator('.end-panel h2')).toHaveText(tile === last ? 'Finished!' : 'Placed!');

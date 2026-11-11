@@ -5,7 +5,7 @@ import { PUZZLES_BY_SIZE } from './helpers';
 // frame. Budget: 4 ms on a desktop, which leaves room for slower phones.
 test('the biggest blocks rebuild quickly after a stroke', async ({ page }) => {
   for (const id of PUZZLES_BY_SIZE.slice(0, 2)) {
-    await page.goto(`/#/play/${id}`);
+    await page.goto(`/#/cubed/play/${id}`);
     const block = page.locator('canvas.block-canvas');
     await expect(block).toHaveAttribute('data-build-ms', /\d/);
     await block.focus();

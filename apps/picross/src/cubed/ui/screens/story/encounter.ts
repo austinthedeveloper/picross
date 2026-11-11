@@ -15,7 +15,7 @@ import { getScene } from '@picross/story/puzzles/scenes';
 import { restHeal, type Encounter } from '@picross/block/story/data';
 import { shapePicture } from '@picross/play-block/ui/board/thumbnail';
 import { el } from '@picross/shared/ui/dom';
-import { onHide } from '../../lifecycle';
+import { onHide } from '../../../../ui/lifecycle';
 import { createPlay, type Play } from '@picross/play-block/ui/screens/play';
 import { renderSceneScreen } from '@picross/story/ui/screens/sceneScreen';
 import { digKind } from './dig';
@@ -23,6 +23,7 @@ import { fightKind, type FightRun } from '@picross/play-block/ui/screens/story/f
 import type { Kind } from '@picross/play-block/ui/screens/story/kind';
 import { restKind } from './rest';
 import { loadRun } from './shared';
+import { cubedHref } from '../../../href';
 
 /** Cubed's own story run, as a fight needs it. */
 export const storyRun: FightRun = {
@@ -45,11 +46,11 @@ export const storyRun: FightRun = {
   markTip: markTipSeen,
 };
 
-/** The current encounter at #/story/play. Returns a cleanup. */
+/** The current encounter at #/cubed/story/play. Returns a cleanup. */
 export function renderEncounter(app: HTMLElement): (() => void) | undefined {
   const run = loadRun();
   if (!run || run.state.status !== 'active') {
-    location.replace('#/story');
+    location.replace(cubedHref('/story'));
     return undefined;
   }
   const { job, state } = run;
@@ -58,12 +59,17 @@ export function renderEncounter(app: HTMLElement): (() => void) | undefined {
   const play = (): (() => void) => {
     const kind: Kind =
       encounter.kind === 'fight'
-        ? fightKind(encounter, state, { run: storyRun })
+        ? fightKind(encounter, state, { run: storyRun, home: cubedHref('/story') })
         : encounter.kind === 'rest'
           ? restKind(encounter.rest!)
           : digKind(encounter);
-    const back = el('a', { className: 'button ghost', href: '#/story', textContent: '← Map' });
+    const back = el('a', {
+      className: 'button ghost',
+      href: cubedHref('/story'),
+      textContent: '← Map',
+    });
     const p: Play = createPlay(app, {
+      home: cubedHref(),
       puzzle: encounter.puzzle,
       title: encounter.name,
       mode: kind.mode,
@@ -106,7 +112,7 @@ export function renderEncounter(app: HTMLElement): (() => void) | undefined {
         el('div', { className: 'end-actions' }, [
           el('a', {
             className: 'button primary',
-            href: '#/story',
+            href: cubedHref('/story'),
             textContent: next.status === 'won' ? 'See results →' : 'Back to map →',
           }),
         ]),

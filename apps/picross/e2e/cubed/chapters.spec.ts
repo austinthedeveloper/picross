@@ -10,7 +10,7 @@ import { encounterPuzzle, extras, moveTo, focusBlock } from './helpers';
  * phases, so the last break always solves it.
  */
 // The story's chapters and jobs, in the story package.
-const ROOT = path.join(import.meta.dirname, '../../../packages/story/src/puzzles');
+const ROOT = path.join(import.meta.dirname, '../../../../packages/story/src/puzzles');
 const read = (dir: string, id: string) =>
   JSON.parse(fs.readFileSync(path.join(ROOT, dir, `${id}.json`), 'utf8'));
 const chapters = fs
@@ -70,7 +70,7 @@ for (const chapter of chapters) {
     const earlier = before.flatMap((c) => c.jobs);
     // Their openings were seen back then.
     const seen = before.flatMap((c) => (c.opening ? [c.opening] : []));
-    await page.goto('/');
+    await page.goto('/#/cubed');
     await page.evaluate(
       ({ jobs, seen }) =>
         localStorage.setItem(
@@ -84,7 +84,7 @@ for (const chapter of chapters) {
         ),
       { jobs: earlier, seen },
     );
-    await page.goto('/#/story');
+    await page.goto('/#/cubed/story');
     await page.reload();
     // The chapter's opening (if it has one) plays on the way in.
     await skip(page);

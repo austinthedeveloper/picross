@@ -5,17 +5,19 @@ import { dailyPuzzle, dateKey } from '@picross/block/puzzles/daily';
 import { shapePicture } from '@picross/play-block/ui/board/thumbnail';
 import { el } from '@picross/shared/ui/dom';
 import { formatTime, plural } from '@picross/play-block/ui/format';
-import { onHide } from '../lifecycle';
+import { onHide } from '../../../ui/lifecycle';
 import { createPlay } from '@picross/play-block/ui/screens/play';
 import { prettyDate } from './dailyCard';
+import { cubedHref } from '../../href';
 
-/** Today's puzzle (#/daily): one per day, with a streak. */
+/** Today's puzzle (#/cubed/daily): one per day, with a streak. */
 export function renderDailyScreen(root: HTMLElement): () => void {
   const today = dateKey();
   const { puzzle } = dailyPuzzle(today);
   const saved = getDailyBoard(today);
   let changed = false;
   const play = createPlay(root, {
+    home: cubedHref(),
     puzzle,
     title: `Daily · ${prettyDate(today)}`,
     mode: getSettings().mode,
@@ -33,7 +35,7 @@ export function renderDailyScreen(root: HTMLElement): () => void {
             textContent: `${formatTime(time)} · ${plural(streak, 'day')} in a row`,
           }),
           el('div', { className: 'end-actions' }, [
-            el('a', { className: 'button primary', href: '#/', textContent: 'All puzzles' }),
+            el('a', { className: 'button primary', href: cubedHref(), textContent: 'All puzzles' }),
           ]),
         ];
       },

@@ -10,6 +10,7 @@ import {
 import { homeLink } from '@picross/shared/ui/components/homeLink';
 import { el } from '@picross/shared/ui/dom';
 import { cleared, modePicker, newRunButton, nodeIcon, unlocked, type Hub } from './shared';
+import { cubedHref } from '../../../href';
 
 /** A chapter is open once its first job is. */
 export const chapterOpen = (chapter: Chapter) => unlocked(chapter.jobs[0]);
@@ -140,7 +141,10 @@ function chapterSection(hub: Hub, chapter: Chapter): HTMLElement {
 /** The jobs board, grouped into chapters: every job, its length and boss, your best, Start. */
 export function jobsBoard(hub: Hub): Node[] {
   return [
-    el('header', { className: 'topbar' }, [homeLink(), el('h1', { textContent: 'Jobs' })]),
+    el('header', { className: 'topbar' }, [
+      homeLink(cubedHref()),
+      el('h1', { textContent: 'Jobs' }),
+    ]),
     modePicker(hub),
     el(
       'div',

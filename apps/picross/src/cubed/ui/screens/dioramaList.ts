@@ -2,6 +2,7 @@ import { solvedIds } from '../../game/progress';
 import { dioramas, tileOf, type Diorama } from '@picross/block/puzzles/dioramas';
 import { blockOutline, shapePicture } from '@picross/play-block/ui/board/thumbnail';
 import { el } from '@picross/shared/ui/dom';
+import { cubedHref } from '../../href';
 
 export const placed = (d: Diorama) => {
   const solved = new Set(solvedIds());
@@ -26,7 +27,7 @@ export function dioramaSection(): HTMLElement | null {
       { className: 'puzzle-grid' },
       all.map((d) => {
         const n = placed(d).length;
-        return el('a', { className: 'puzzle-card', href: `#/diorama/${d.id}` }, [
+        return el('a', { className: 'puzzle-card', href: cubedHref(`/diorama/${d.id}`) }, [
           el('div', { className: 'thumb' }, [picture(d, 88)]),
           el('span', { className: 'card-name', textContent: d.name }),
           el('span', {

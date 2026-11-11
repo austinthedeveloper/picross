@@ -5,12 +5,13 @@ import { el } from '@picross/shared/ui/dom';
 
 /**
  * Plays a scene full screen. With no `onEnd`, this is the #/scene/<id>
- * preview: it shows a short end card with Replay. Returns a cleanup function.
+ * preview: it shows a short end card with Replay, and a link to `home` (default `#/`).
+ * Returns a cleanup function.
  */
 export function renderSceneScreen(
   app: HTMLElement,
   scene: Scene,
-  options: { flags?: Flags; onEnd?: (flags: Flags) => void } = {},
+  options: { flags?: Flags; onEnd?: (flags: Flags) => void; home?: string } = {},
 ): () => void {
   let view = play();
 
@@ -23,7 +24,11 @@ export function renderSceneScreen(
           el('section', { className: 'run-card results' }, [
             el('h2', { textContent: 'Scene over' }),
             el('div', { className: 'end-actions' }, [
-              el('a', { className: 'button ghost', href: '#/', textContent: 'Puzzles' }),
+              el('a', {
+                className: 'button ghost',
+                href: options.home ?? '#/',
+                textContent: 'Puzzles',
+              }),
               el('button', {
                 className: 'button primary',
                 textContent: 'Replay',

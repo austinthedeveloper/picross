@@ -1,14 +1,18 @@
 import { BADGES, markBadgesSeen, newBadges, nextStep, tierOf, TIERS } from '../../game/badges';
 import { homeLink } from '@picross/shared/ui/components/homeLink';
 import { el } from '@picross/shared/ui/dom';
+import { cubedHref } from '../../href';
 
-/** Every badge, its tier and what's next (#/badges). Opening it clears the "new" marks. */
+/** Every badge, its tier and what's next (#/cubed/badges). Opening it clears the "new" marks. */
 export function renderBadgesScreen(root: HTMLElement): void {
   const fresh = new Set(newBadges().map((b) => b.id));
   markBadgesSeen();
   root.replaceChildren(
     el('div', { className: 'screen badges' }, [
-      el('header', { className: 'topbar' }, [homeLink(), el('h1', { textContent: 'Badges' })]),
+      el('header', { className: 'topbar' }, [
+        homeLink(cubedHref()),
+        el('h1', { textContent: 'Badges' }),
+      ]),
       el(
         'ul',
         { className: 'badge-list' },
@@ -42,7 +46,7 @@ export function badgesLink(): HTMLElement {
   const n = newBadges().length;
   return el('a', {
     className: 'button ghost',
-    href: '#/badges',
+    href: cubedHref('/badges'),
     textContent: n ? `Badges (${n} new)` : 'Badges',
   });
 }

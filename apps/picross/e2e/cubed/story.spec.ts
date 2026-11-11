@@ -17,7 +17,7 @@ async function clearEncounter(page: Page, encounter: string) {
 }
 
 test('the story card leads to the jobs board, chapters and all', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/#/cubed');
   await page.locator('.story-card').click();
   // The first chapter's opening scene plays on the first visit.
   const skip = page.getByRole('button', { name: 'Skip ⏭' });
@@ -30,7 +30,7 @@ test('the story card leads to the jobs board, chapters and all', async ({ page }
 
 test('the First Job, from the intro to the results', async ({ page }) => {
   test.setTimeout(240_000);
-  await page.goto('/#/story');
+  await page.goto('/#/cubed/story');
   const skip = page.getByRole('button', { name: 'Skip ⏭' });
   if (await skip.isVisible({ timeout: 3000 }).catch(() => false)) await skip.click();
   await page
@@ -68,9 +68,9 @@ test('the First Job, from the intro to the results', async ({ page }) => {
 test('with Hits on, breaking the shape costs HP, and a reload resumes the encounter', async ({
   page,
 }) => {
-  await page.goto('/');
+  await page.goto('/#/cubed');
   await page.getByRole('button', { name: 'Hearts' }).click();
-  await page.goto('/#/story');
+  await page.goto('/#/cubed/story');
   const skip = page.getByRole('button', { name: 'Skip ⏭' });
   if (await skip.isVisible({ timeout: 3000 }).catch(() => false)) await skip.click();
   await page

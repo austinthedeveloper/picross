@@ -16,14 +16,15 @@ import { el } from '@picross/shared/ui/dom';
 import { formatTime } from '@picross/play-block/ui/format';
 import { picture, placed } from './dioramaList';
 import { playSound } from '@picross/shared/ui/sound';
-import { onHide } from '../lifecycle';
+import { onHide } from '../../../ui/lifecycle';
 import { createPlay } from '@picross/play-block/ui/screens/play';
+import { cubedHref } from '../../href';
 
-/** A diorama (#/diorama/<id>): the scene so far, its pieces, and the finished scene to turn. */
+/** A diorama (#/cubed/diorama/<id>): the scene so far, its pieces, and the finished scene to turn. */
 export function renderDioramaScreen(root: HTMLElement, id: string): () => void {
   const d = getDiorama(id);
   if (!d) {
-    location.replace('#/');
+    location.replace(cubedHref());
     return () => {};
   }
   const done = new Set(placed(d));
@@ -53,7 +54,10 @@ export function renderDioramaScreen(root: HTMLElement, id: string): () => void {
   }
   root.replaceChildren(
     el('div', { className: 'screen diorama' }, [
-      el('header', { className: 'topbar' }, [homeLink(), el('h1', { textContent: d.name })]),
+      el('header', { className: 'topbar' }, [
+        homeLink(cubedHref()),
+        el('h1', { textContent: d.name }),
+      ]),
       ...(d.blurb ? [el('p', { className: 'lede', textContent: d.blurb })] : []),
       stage,
       el('p', {
@@ -72,7 +76,7 @@ export function renderDioramaScreen(root: HTMLElement, id: string): () => void {
             'a',
             {
               className: `puzzle-card${solved ? ' solved' : ''}`,
-              href: `#/diorama/${d.id}/${t.index + 1}`,
+              href: cubedHref(`/diorama/${d.id}/${t.index + 1}`),
             },
             [
               el('div', { className: 'thumb' }, [
@@ -92,22 +96,23 @@ export function renderDioramaScreen(root: HTMLElement, id: string): () => void {
   return cleanup;
 }
 
-/** One piece of a diorama (#/diorama/<id>/<n>). */
+/** One piece of a diorama (#/cubed/diorama/<id>/<n>). */
 export function renderDioramaTile(root: HTMLElement, id: string, n: number): () => void {
   const d = getDiorama(id);
   const tile = d?.tiles[n - 1];
   if (!d || !tile) {
-    location.replace('#/');
+    location.replace(cubedHref());
     return () => {};
   }
   const back = el('a', {
     className: 'button ghost',
-    href: `#/diorama/${d.id}`,
+    href: cubedHref(`/diorama/${d.id}`),
     textContent: `← ${d.name}`,
   });
   const saved = getSavedBoard(tile.puzzle.id);
   let changed = false;
   const play = createPlay(root, {
+    home: cubedHref(),
     puzzle: tile.puzzle,
     title: `Piece ${n}`,
     mode: getSettings().mode,
@@ -131,7 +136,7 @@ export function renderDioramaTile(root: HTMLElement, id: string, n: number): () 
           el('div', { className: 'end-actions' }, [
             el('a', {
               className: 'button primary',
-              href: `#/diorama/${d.id}`,
+              href: cubedHref(`/diorama/${d.id}`),
               textContent: left ? 'Back to the scene' : 'See it',
             }),
           ]),

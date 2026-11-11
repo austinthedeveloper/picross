@@ -5,6 +5,7 @@ import { PUZZLES } from '@picross/block/puzzles/index';
 import { el } from '@picross/shared/ui/dom';
 import { playSound } from '@picross/shared/ui/sound';
 import { createPlay } from '@picross/play-block/ui/screens/play';
+import { cubedHref } from '../../href';
 
 /**
  * The tutorial's block, 3 wide, 2 tall, 2 deep. Rows along x (cube = x + 3 * (z + 2y)):
@@ -71,7 +72,7 @@ export const STEPS: Step[] = [
   },
 ];
 
-/** The guided tutorial (#/tutorial): a real block, one step at a time. Records nothing. */
+/** The guided tutorial (#/cubed/tutorial): a real block, one step at a time. Records nothing. */
 export function renderTutorial(root: HTMLElement): () => void {
   let step = 0;
   /** The board as each step began, for going back. */
@@ -81,10 +82,11 @@ export function renderTutorial(root: HTMLElement): () => void {
   const nudge = el('p', { className: 'coach-nudge', role: 'alert' });
   const count = el('span', { className: 'kicker' });
   const back = el('button', { className: 'button ghost', textContent: 'Back a step' });
-  const skip = el('a', { className: 'button ghost', href: '#/', textContent: 'Skip' });
+  const skip = el('a', { className: 'button ghost', href: cubedHref(), textContent: 'Skip' });
   skip.onclick = () => updateSettings({ tutorialDone: true });
 
   const play = createPlay(root, {
+    home: cubedHref(),
     puzzle: TUTORIAL,
     title: 'Tutorial',
     mode: 'relaxed',
@@ -121,10 +123,10 @@ export function renderTutorial(root: HTMLElement): () => void {
             textContent: 'That’s all the rules. Hidden clues and Hearts mode are in How to play.',
           }),
           el('div', { className: 'end-actions' }, [
-            el('a', { className: 'button ghost', href: '#/', textContent: 'All puzzles' }),
+            el('a', { className: 'button ghost', href: cubedHref(), textContent: 'All puzzles' }),
             el('a', {
               className: 'button primary',
-              href: `#/play/${first.id}`,
+              href: cubedHref(`/play/${first.id}`),
               textContent: 'First puzzle',
             }),
           ]),

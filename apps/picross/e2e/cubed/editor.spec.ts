@@ -11,7 +11,7 @@ const PLUS = parsePuzzle({
 });
 
 async function drawPlus(page: import('@playwright/test').Page) {
-  await page.goto('/#/editor');
+  await page.goto('/#/cubed/editor');
   await page.getByLabel('Name').fill('Plus');
   for (const [label, value] of [
     ['Width', '3'],
@@ -40,7 +40,7 @@ test('drawing a shape checks it, and play-testing it solves', async ({ page }) =
 });
 
 test('an ambiguous shape is flagged with the cubes it cannot work out', async ({ page }) => {
-  await page.goto('/#/editor');
+  await page.goto('/#/cubed/editor');
   for (const [label, value] of [
     ['Width', '2'],
     ['Height', '2'],
@@ -74,12 +74,12 @@ test('export, import and share links', async ({ page, context }) => {
   await page.getByRole('button', { name: 'Copy share link' }).click();
   await expect(page.locator('.verdict')).toHaveText('Share link copied.');
   const link = await page.evaluate(() => navigator.clipboard.readText());
-  expect(link).toMatch(/#\/p\/[zj][\w-]+$/);
+  expect(link).toMatch(/#\/cubed\/p\/[zj][\w-]+$/);
   await page.goto(link);
   await expect(page.getByRole('heading', { name: 'A shared puzzle' })).toBeVisible();
 
   // Import puts a pasted puzzle into the editor.
-  await page.goto('/#/editor');
+  await page.goto('/#/cubed/editor');
   await page.getByRole('button', { name: 'Import JSON' }).click();
   await page
     .getByLabel('Puzzle JSON')
@@ -90,12 +90,12 @@ test('export, import and share links', async ({ page, context }) => {
 });
 
 test('a broken share link says so', async ({ page }) => {
-  await page.goto('/#/p/jnotapuzzle');
+  await page.goto('/#/cubed/p/jnotapuzzle');
   await expect(page.getByRole('heading', { name: 'Can’t open that puzzle' })).toBeVisible();
 });
 
 test('the layer grid works from the keyboard', async ({ page }) => {
-  await page.goto('/#/editor');
+  await page.goto('/#/cubed/editor');
   const cells = page.locator('.ecell');
   await cells.first().focus();
   await page.keyboard.press('Space');

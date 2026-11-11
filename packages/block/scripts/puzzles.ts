@@ -1,11 +1,11 @@
 /**
  * Checks every puzzle in the block package's pack (packages/block/src/puzzles/pack) and
- * picks which clues each one hides. From apps/cubed:
+ * picks which clues each one hides. From the repo root, `npm -w packages/block run puzzles`; from here:
  *
  *   npm run puzzles            hide clues for puzzles that have no `hide` yet, check the rest
  *   npm run puzzles -- --all   pick again for every puzzle (after changing a shape or ratio)
  *   npm run puzzles -- mug     pick again for just these ids
- *   npm run puzzles -- --sheet ../../packages/block/src/puzzles/sheets/kitchen.txt
+ *   npm run puzzles -- --sheet src/puzzles/sheets/kitchen.txt
  *                              export a sheet's puzzles to the pack first (new or changed
  *                              shapes get new hidden clues), then check everything. Sheets
  *                              in sheets/story/ export to the story puzzles (puzzles/story/).
@@ -14,13 +14,13 @@
  */
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { solve } from '@picross/block/engine/solver';
-import { dimsLabel } from '@picross/block/engine/volume';
-import { encodeHidden, parsePuzzle, type PuzzleFile } from '@picross/block/puzzles/format';
-import { chooseHidden } from '@picross/block/puzzles/hide';
-import { parseSheet } from '@picross/block/puzzles/sheet';
+import { solve } from '../src/engine/solver';
+import { dimsLabel } from '../src/engine/volume';
+import { encodeHidden, parsePuzzle, type PuzzleFile } from '../src/puzzles/format';
+import { chooseHidden } from '../src/puzzles/hide';
+import { parseSheet } from '../src/puzzles/sheet';
 
-const PUZZLES = join(import.meta.dirname, '../../../packages/block/src/puzzles');
+const PUZZLES = join(import.meta.dirname, '../src/puzzles');
 /** Free-play puzzles, and story puzzles (named after the 2D puzzle their encounter uses). */
 const DIRS = ['pack', 'story'].map((d) => join(PUZZLES, d)).filter((d) => existsSync(d));
 const args = process.argv.slice(2);
