@@ -1,5 +1,5 @@
+import { boardAt } from '@picross/story/fight/switch';
 import {
-  boardAt,
   currentForm,
   startBattle,
   turnedPuzzle,

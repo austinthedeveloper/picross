@@ -2,6 +2,7 @@ import { random, shuffled } from '@picross/shared/engine/random';
 import type { GadgetEffect } from '../puzzles/gadgets';
 import type { BoardKind, BoardTurn, FightBoard, Hidden } from './board';
 import type { FightRules } from './rules';
+import { hpShare } from './switch';
 
 /**
  * A story fight on any board (#166): HP, phases, armor, the charge, turns, shields and
@@ -140,6 +141,15 @@ export interface FightState<C> {
   seed: number;
   counts: FightCounts;
 }
+
+/**
+ * What one board's battle hands the other's when a boss switches board (#170): the fight's
+ * own part, as against the board's (`enterBoard`).
+ */
+export type HandOver = Pick<
+  FightState<unknown>,
+  'enemyHp' | 'maxHp' | 'phase' | 'shield' | 'counts'
+>;
 
 export type HitCause = 'mistake' | 'armor' | 'zap' | 'accusation';
 
@@ -530,6 +540,23 @@ export class StoryBattle<C, M, E extends FightEnemy = FightEnemy> {
 
     events.push(...this.phases(marks));
     return events;
+  }
+
+  /**
+   * Takes the fight over from the other board's battle (a boss that switches board, #170,
+   * `switch.ts`): the same share of the enemy's HP (`hpShare`: this board has its own
+   * max), the patch kit and the counts, so the fight keeps one of each. Then the phases the
+   * fight has reached start here, picking their powers on this board in its order (on a
+   * grid, a phase's swap and ink come back `due`). Lines already struck here stay struck.
+   * A block needs its `marks`.
+   */
+  enterBoard(from: HandOver, marks?: M): GridEvent<PhaseOf<E>>[] {
+    const { state } = this;
+    const phases: PhaseOf<E>[] = this.enemy.phases ?? [];
+    state.enemyHp = hpShare(from.enemyHp / from.maxHp, state.maxHp, phases, from.phase + 1);
+    state.shield = from.shield;
+    state.counts = { ...from.counts };
+    return this.rules.order === 'grid' ? this.startPhases(marks) : this.phases(marks as M);
   }
 
   /**

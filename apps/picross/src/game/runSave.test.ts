@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { FIGHT_SAVE } from '@picross/story/fight/save';
 import { startRun, withBattle, withBlock, withBoard } from './run';
 
 async function load() {
@@ -32,7 +33,7 @@ describe('a fight in the run (#169)', () => {
       block,
     );
     save.saveCurrentRun(run);
-    expect(saved().fight).toEqual({ v: 2, boards: { flat: { board, battle }, block } });
+    expect(saved().fight).toEqual({ v: FIGHT_SAVE, boards: { flat: { board, battle }, block } });
     expect(saved()).not.toHaveProperty('battle');
     expect((await load()).getCurrentRun()).toEqual(run);
   });

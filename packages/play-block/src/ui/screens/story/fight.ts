@@ -10,6 +10,7 @@ import { hashString } from '@picross/block/puzzles/hide';
 import { lineIdAt, pointOf } from '@picross/block/engine/volume';
 import type { Encounter } from '@picross/block/story/data';
 import { POWERS } from '@picross/block/story/powers';
+import type { HandOver } from '@picross/story/fight/battle';
 import type { BoardKind } from '@picross/story/fight/board';
 import { tipToShow, type TipCard } from '@picross/story/fight/tips';
 import { enemyArt, gadgetArt, withArt } from '@picross/shared/ui/art';
@@ -75,8 +76,11 @@ export interface FightOptions {
   run: FightRun;
   /** A battle already set up, instead of a new one. */
   battle?: Battle;
-  /** Enemy HP carried over from the other board: phases it has fallen into start here. */
-  carry?: number;
+  /**
+   * The fight as the other board hands it over (a boss that switches board, #170): the
+   * battle takes it over once the block is up (`enterBoard`), and its phases start here.
+   */
+  enter?: HandOver;
   /** Where the knocked-out panel leads: the game's story map. */
   home: string;
   /** After each update that started a phase: a boss can change board here. */
@@ -489,9 +493,12 @@ export function fightKind(
       play = p;
       play.view.clueFor = (line) => battle.clueFor(line);
       play.view.styler = styler;
-      // Phases carried over from the other board start first; then lines already finished
-      // when the fight starts (or resumes) count from here.
-      const carried = opts.carry === undefined ? [] : battle.carry(opts.carry, play.game.blocks);
+      // A fight taken over from the other board starts its phases first; then lines already
+      // finished when the fight starts (or resumes) count from here.
+      // (In the block's order, only a block's events.)
+      const carried = opts.enter
+        ? (battle.enterBoard(opts.enter, play.game.blocks) as BattleEvent[])
+        : [];
       handle([...carried, ...battle.update(play.game.blocks)]);
       play.view.rebuild();
       nextTip();

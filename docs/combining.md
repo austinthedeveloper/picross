@@ -130,7 +130,13 @@ ready · Reload". Details are in [architecture.md](architecture.md#offline-and-u
 **#169: run saves remember the board.** A fight saves as one `fight` on the run, an
 entry per board it has used (`flat`, `block`), each board's marks and battle as that board
 writes them, in both games' runs. A reload mid-fight resumes on whichever board the fight
-is on, and saves from before load as they are. One battle across the boards is #170.
+is on, and saves from before load as they are.
+
+**#170: one fight across the boards.** The Curator's fight is one fight on two boards: one
+HP bar (as a share), one set of phases, one patch kit, one set of counts. When it moves, the
+battle on the new board takes the fight over from the one it leaves (`StoryBattle.enterBoard`,
+the story's `fight/switch.ts`), so the 2D game no longer carries HP across or adds counts
+up at the end. Each board keeps a battle for its own lines and progress.
 
 **Step 7 has a first boss, ahead of steps 4 to 6.** The Curator unfolds into a block at 60%
 and folds back flat at 30%, in the 2D story. Rather than wait for `FightBoard`, the 2D
@@ -155,8 +161,8 @@ saves) → ui (the only layer that touches the page). The packages follow those 
 step 4 is a merge of two apps, not a rewrite.
 
 What's left in the way: two home screens (step 4, #152). The saves and settings are one
-(#155). The battle engine is one (step 5), though a boss that switches board still keeps a
-battle per board (#170), saved as one fight (#169). Puzzle ids clash too (both packs have a
+(#155). The battle engine is one (step 5), and a boss that switches board is one fight (#170):
+the battle on the board it's on takes it over, and each board keeps its own progress (#169). Puzzle ids clash too (both packs have a
 `mug`), which #224's qualified ids are for.
 
 ## Where it lives

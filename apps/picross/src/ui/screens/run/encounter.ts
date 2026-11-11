@@ -1,14 +1,7 @@
 import { badgeNote } from '../../../game/badges';
-import { boardAt, switchesBoard, withBlockCounts } from '../../../game/battle';
+import { boardAt, switchesBoard } from '@picross/story/fight/switch';
 import { earnFromFight } from '../../../game/fightBadges';
-import {
-  addGadget,
-  addToTally,
-  completeEncounter,
-  heal,
-  withBattle,
-  withBoard,
-} from '../../../game/run';
+import { addGadget, addToTally, completeEncounter, heal, withBoard } from '../../../game/run';
 import { getCurrentRun, saveCurrentRun } from '../../../game/runSave';
 import { ENDLESS_HEAL } from '../../../puzzles/endless';
 import { restHeal } from '../../../puzzles/runs';
@@ -40,11 +33,9 @@ export function renderRunEncounter(app: HTMLElement): (() => void) | undefined {
 
   /** Clears the encounter: rewards, badges, healing and the note for the solved panel. */
   function clear(game: { hintsUsed: number; elapsed: number }, fightNote?: string) {
-    let current = getCurrentRun() ?? state;
-    // What happened on the block counts toward the fight too.
-    if (current.battle && current.block?.battle) {
-      current = withBattle(current, withBlockCounts(current.battle, current.block.battle));
-    }
+    // The fight's counts travel with it from board to board (#170), so the flat battle has
+    // them all, wherever the fight ended.
+    const current = getCurrentRun() ?? state;
     // Fight badges read the battle, which clearing the encounter throws away (#110).
     const badges = encounter.enemy ? earnFromFight(current, encounter.id, encounter.enemy) : [];
     let next = addToTally(

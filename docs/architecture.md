@@ -106,7 +106,7 @@ apps/
         badges.ts          The badge catalog (#108)
         ids.test.ts        Every id in both games, qualified (grid:mug, block:mug), and the clashes
       game/                Game state and saves, no DOM (Game itself is in packages/grid)
-        battle.ts          Enemy and BattleState (the 2D save), boardAt, carryHp; the rules' helpers, over the story battle
+        battle.ts          Enemy and BattleState (the 2D save), the switch's handOver and enterFlat; the rules' helpers, over the story battle
         battleCodec.ts     The 2D save ↔ the story battle's FightState, sparse and in place (#166)
         fight.ts           gridStep: one step of a 2D fight on the story battle, with the screen's events (#163)
         fightTrace.ts      A fight played headless through gridStep, for the tests only (#163)
@@ -1343,7 +1343,13 @@ A phase with `"board": "block"` moves the fight onto a block: the encounter's 3D
 A later phase with `"board": "flat"` brings it back. The plan and the story ideas behind it
 are in [story-combined.md](story-combined.md).
 
-- **Which board:** `boardAt(enemy, phase)` in `game/battle.ts` reads the latest phase that
+It's one fight on two boards (#170): one HP bar, one set of phases, one patch kit and one
+set of counts. The rules for it are the story's (`packages/story/src/fight/switch.ts`), so
+they're the same whichever way the fight moves. Each board has its own battle, since a
+battle is over one board's lines; when the fight moves, the battle on the new board takes it
+over from the one it leaves, `StoryBattle.enterBoard(from)`.
+
+- **Which board:** `boardAt(enemy, phase)` (`switch.ts`) reads the latest phase that
   names one; the encounter (`ui/screens/run/encounter.ts`) opens that board, and switches
   when a phase changes it. The block screen (`ui/screens/run/blockFight.ts`) loads on
   demand with three.js, so the first download doesn't grow.
@@ -1353,17 +1359,25 @@ are in [story-combined.md](story-combined.md).
   gadgets, tips), where the knocked-out panel leads (`home: '#/run'`), and the play
   screen's one setting (`providePlayPrefs`: fading finished clues, which this game doesn't
   have, so it reads Cubed's as before).
-- **What carries:** the enemy's HP as a share (a block has more lines, so more HP;
-  `carryHp` rounds so exactly the phases already started have started on the new board),
-  the phases, with their fog and scrambles picked again on the new board, and the patch
-  kit. Your HP and gadgets are the run's, so they're shared anyway.
+- **What carries (`enterBoard`):** the enemy's HP as a share (a block has more lines, so
+  more HP; `hpShare` rounds so exactly the phases already started have started on the new
+  board), then those phases, with their fog and scrambles picked again on the new board,
+  the patch kit, and the counts (mistakes, zaps, wrong accusations, gadgets), so they keep
+  counting from where the other board left off. Onto the block, the block screen hands it
+  the flat battle (`handOver` in `game/battle.ts`); back flat, `enterFlat` hands the flat
+  battle the block's. A fight that ends on its block gives the flat battle its counts
+  (`takeCounts`), which the run's tally and badges read. Your HP and gadgets are the run's,
+  so they're shared anyway.
 - **What doesn't:** each board keeps its own progress. The flat board and its battle are
   in `RunState.board` and `battle`; the block's are in `RunState.block`, in the 3D game's
   format. The run saves them as the fight's two entries, `fight.boards.flat` and
   `fight.boards.block` (#169), so a reload mid-fight opens the board its phase says, and
-  going back finds a board as you left it. When the fight's won, the block's counts
-  (mistakes, zaps, wrong accusations, gadgets) are added to the battle's
-  (`withBlockCounts`), so badges and the tally see the whole fight.
+  going back finds a board as you left it. The battle on the board the fight isn't on is
+  as it was left, HP and all: the one on the board it's on is the fight.
+- **Older saves:** before #170 a block counted only what happened on it, and the two were
+  added up when the fight was won. The fight save is version 3 since (`FIGHT_SAVE`); a
+  version 2 save, or one in the run's own fields, adds the two boards' counts up once as it
+  loads (`oneCount` in `game/fightSave.ts`).
 - **Rules:** a switching phase can't swap or splash ink (they'd land on the board that's
   going). Solving either board finishes the fight. Endless runs stay flat. A test checks
   every switching boss has a block whose phases match.

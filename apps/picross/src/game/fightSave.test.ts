@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { Battle } from '@picross/block/game/battle';
+import { Battle, type BattleState as BlockState } from '@picross/block/game/battle';
 import { hashString } from '@picross/block/puzzles/hide';
 import { getEncounter as getBlockEncounter } from '@picross/block/story/data';
 import { FIGHT_SAVE } from '@picross/story/fight/save';
 import { getEncounter } from '../puzzles/runs';
-import { advancePhase, boardAt, startBattle, type Enemy } from './battle';
+import { boardAt } from '@picross/story/fight/switch';
+import { advancePhase, startBattle, type Enemy } from './battle';
 import { loadFight, saveFight, type SavedRun } from './fightSave';
 import { startRun, withBattle, withBlock, withBoard, type RunState } from './run';
 
@@ -38,6 +39,50 @@ function blockBattle() {
 
 const flatBoard = { cells: '0120'.repeat(100), elapsed: 61_000, mode: 'battle' as const };
 const blockBoard = { blocks: '2010'.repeat(20), elapsed: 30_000 };
+
+describe('one count for a switching fight (#170)', () => {
+  /** The Curator some way into its block, its flat battle having counted some. */
+  function switching() {
+    const flat = { ...flatAt(curator, 0.59), counts: { wrongFills: 1, gadgetsUsed: 1 } };
+    let run = withBattle(withBoard(startRun('closing-time', 18), flatBoard), flat);
+    run = withBlock(run, { board: blockBoard, battle: blockBattle() });
+    return run;
+  }
+  const blockCounts = (run: RunState) => (run.block!.battle as BlockState).counts;
+
+  it("a save from this version is read as it is: the block's counts are the fight's", () => {
+    const run = switching();
+    expect(reloaded(run)).toEqual(run);
+  });
+
+  it('an older save (version 2) adds the two boards up, on both', () => {
+    const run = switching();
+    const v2 = { ...stored(run), fight: { ...stored(run).fight!, v: 2 } };
+    const back = loadFight(v2);
+    expect(back.battle!.counts).toEqual({ wrongFills: 3, gadgetsUsed: 1 });
+    expect(blockCounts(back)).toMatchObject({ mistakes: 3, gadgetsUsed: 1, zaps: 0 });
+    // Everything else as it was.
+    expect({ ...back.battle, counts: undefined }).toEqual({ ...run.battle, counts: undefined });
+    expect(back.board).toEqual(run.board);
+    expect(back.block!.board).toEqual(run.block!.board);
+    // Saved again, it's this version's, and reads back the same: added up once.
+    expect(reloaded(back)).toEqual(back);
+  });
+
+  it("an older save in the run's own fields adds them up too", () => {
+    const run = switching();
+    const back = loadFight(JSON.parse(JSON.stringify(run)));
+    expect(back.battle!.counts).toEqual({ wrongFills: 3, gadgetsUsed: 1 });
+    expect(blockCounts(back).mistakes).toBe(3);
+  });
+
+  it('a fight with no block, or a block with no flat battle, is left alone', () => {
+    const flat = withBattle(startRun('closing-time', 18), flatAt(curator, 0.7));
+    expect(loadFight(flat)).toBe(flat);
+    const block = withBlock(startRun('closing-time', 18), { battle: blockBattle() });
+    expect(loadFight(block)).toBe(block);
+  });
+});
 
 describe('a fight as the run saves it (#169)', () => {
   it('a grid fight: its board and battle are the flat entry, as they were', () => {
@@ -112,7 +157,8 @@ describe('a fight as the run saves it (#169)', () => {
     run = withBlock(run, { board: blockBoard, battle: blockBattle() });
     const once = stored(run);
     expect(stored(loadFight(once))).toEqual(once);
-    expect(loadFight(loadFight(once))).toEqual(loadFight(once));
+    // (Only a save goes through `loadFight`: the run as the game holds it isn't one.)
+    expect(loadFight(stored(loadFight(once)))).toEqual(loadFight(once));
   });
 });
 
@@ -138,10 +184,12 @@ describe('older saves load as they are', () => {
       block: { board: blockBoard, battle: blockBattle() },
     };
     const run = loadFight(JSON.parse(JSON.stringify(old)));
-    expect(run).toEqual(old);
+    // One count since #170: the flat battle counted nothing, so both have the block's.
+    expect(run.battle!.counts).toEqual({ wrongFills: 2 });
+    expect(run).toEqual({ ...old, battle: { ...old.battle, counts: { wrongFills: 2 } } });
     expect(boardOf(curator, run)).toBe('block');
     expect(stored(run).fight?.boards).toEqual({
-      flat: { board: old.board, battle: old.battle },
+      flat: { board: old.board, battle: run.battle },
       block: old.block,
     });
   });
@@ -161,7 +209,7 @@ describe('older saves load as they are', () => {
   });
 
   it("leaves a later version's fight save where it is", () => {
-    const later = { ...startRun('first-job', 12), fight: { v: 3, anything: true } };
+    const later = { ...startRun('first-job', 12), fight: { v: FIGHT_SAVE + 1, anything: true } };
     const run = loadFight(later as unknown as SavedRun);
     expect(run).toBe(later);
     expect(saveFight(run)).toBe(run);
