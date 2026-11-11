@@ -1,17 +1,20 @@
+import type { Hidden } from '@picross/story/fight/board';
 import type { Clue } from '../engine/clues';
 import { random, shuffled } from '@picross/shared/engine/random';
-import { EMPTY, FILLED, solve } from '../engine/solver';
-import { indexOf, inside, pointOf, type Line } from '../engine/volume';
 import type { Puzzle } from '../puzzles/format';
 import type { Enemy, Phase } from '../story/data';
-import { BROKEN, PAINTED, SOLID } from './game';
+import { blockFightBoard, type BlockFightBoard } from './fightBoard';
+
+export { finishedLines, WARM_UP_SHARE } from './fightBoard';
 
 /**
  * A story fight on a block: the 2D game's battle rules (src/game/battle.ts there), with
  * lines along three axes. Finishing a line (every cube that isn't the shape broken, none
  * that is) chips the enemy; the solved shape is the finishing blow. Enemies fight back
  * with powers, all measured in lines finished, never in time. Each power picks its lines
- * when it lands, checking the block can still be solved from what's on it.
+ * when it lands, checking the block can still be solved from what's on it. What depends on
+ * the cubes (the solver check, the live line, ink, the wipe, the bomb's line, forgeries) is
+ * the block's `FightBoard` (`fightBoard.ts`, #165); the battle decides when to ask.
  */
 
 export const CHIP_DAMAGE = 1;
@@ -22,8 +25,6 @@ export const CALL_OUT_DAMAGE = 5;
 export const FALSE_ACCUSATION_HEAL = 3;
 export const ZAP_DAMAGE = 2;
 export const BOMB_DAMAGE = 2;
-/** Share of a block's lines finished before a charge first goes live. */
-export const WARM_UP_SHARE = 0.15;
 
 export interface FightCounts {
   mistakes: number;
@@ -76,35 +77,6 @@ export type BattleEvent =
   | { kind: 'caught'; line: number; amount: number }
   | { kind: 'honest'; line: number }
   | { kind: 'healed'; amount: number };
-
-/**
- * Lines of a block that are finished: every cube that isn't the shape broken, none that
- * is. A line that's all shape has nothing to break, so it's finished once it's all painted.
- */
-export function finishedLines(puzzle: Puzzle, blocks: Uint8Array): number[] {
-  return puzzle.lines
-    .filter((line) => {
-      const full = line.cells.every((c) => puzzle.solution[c]);
-      return line.cells.every((c) =>
-        puzzle.solution[c]
-          ? full
-            ? blocks[c] === PAINTED
-            : blocks[c] !== BROKEN
-          : blocks[c] === BROKEN,
-      );
-    })
-    .map((l) => l.id);
-}
-
-/** What the player has right on the board, as solver knowledge. */
-function knownFrom(puzzle: Puzzle, blocks: Uint8Array): Uint8Array {
-  const known = new Uint8Array(blocks.length);
-  blocks.forEach((b, i) => {
-    if (b === BROKEN && !puzzle.solution[i]) known[i] = EMPTY;
-    else if (b === PAINTED && puzzle.solution[i]) known[i] = FILLED;
-  });
-  return known;
-}
 
 export class Battle {
   readonly state: BattleState;
@@ -189,28 +161,32 @@ export class Battle {
     return truth;
   }
 
-  /** Clues as the solver should treat them now: suspects can't be trusted. */
   /** The clues a player can trust right now (for hints): no fog, no suspects. */
   hintClues(): (Clue | null)[] {
     const finished = new Set(this.state.struck);
-    return this.trustedClues().map((c, i) => (finished.has(i) ? this.base[i] : c));
+    return this.board()
+      .readableClues(this.hidden())
+      .map((c, i) => (finished.has(i) ? this.base[i] : c));
   }
 
-  private trustedClues(extra: { fog?: number[]; scramble?: number[]; suspects?: number[] } = {}) {
-    const fog = new Set([...this.state.fog, ...(extra.fog ?? [])]);
-    const scramble = new Set([...this.state.scramble, ...(extra.scramble ?? [])]);
-    const suspects = new Set([...this.state.suspects, ...(extra.suspects ?? [])]);
-    return this.base.map((clue, i) => {
-      if (!clue || suspects.has(i) || fog.has(i)) return null;
-      if (scramble.has(i)) return { count: clue.count, pieces: null };
-      return clue;
-    });
+  /** The block with `blocks` on it (a blank one without), as the fight sees it (#165). */
+  private board(blocks?: Uint8Array): BlockFightBoard {
+    return blockFightBoard(this.puzzle, blocks && { blocks }, this.base);
   }
 
-  private solvable(blocks: Uint8Array, extra: Parameters<Battle['trustedClues']>[0]): boolean {
-    const { puzzle } = this;
-    return solve(puzzle.dims, this.trustedClues(extra), knownFrom(puzzle, blocks), puzzle.lines)
-      .solved;
+  /** The clues hidden now, and `extra` (a pick being tried). */
+  private hidden(extra: Hidden = {}): Hidden {
+    const { state } = this;
+    return {
+      fog: [...state.fog, ...(extra.fog ?? [])],
+      scramble: [...state.scramble, ...(extra.scramble ?? [])],
+      suspects: [...state.suspects, ...(extra.suspects ?? [])],
+    };
+  }
+
+  /** Whether the block still solves from what's right on `blocks`, with `extra` hidden too. */
+  private solvable(blocks: Uint8Array, extra: Hidden): boolean {
+    return this.board(blocks).solvable(this.hidden(extra), 'marks');
   }
 
   // --- Picking lines ------------------------------------------------------------------
@@ -233,16 +209,10 @@ export class Battle {
   /** Up to `count` lines to fog or scramble that keep the block solvable. */
   private pickLines(count: number, blocks: Uint8Array, kind: 'fog' | 'scramble'): number[] {
     const picked: number[] = [];
+    const board = this.board(blocks);
     for (const id of this.candidates()) {
       if (picked.length >= count) break;
-      const clue = this.base[id]!;
-      // A count of 0 or 1, or a full line, has only one possible frame: nothing to scramble.
-      if (
-        kind === 'scramble' &&
-        (clue.count < 2 || clue.count === this.puzzle.lines[id].cells.length)
-      ) {
-        continue;
-      }
+      if (kind === 'scramble' && !board.canScramble(id)) continue;
       if (this.solvable(blocks, { [kind]: [...picked, id] })) picked.push(id);
     }
     return picked;
@@ -250,8 +220,9 @@ export class Battle {
 
   private pickTargets(count: number): number[] {
     // Targets are lines with cubes of the shape in them, so finishing one takes work.
+    const board = this.board();
     return this.candidates()
-      .filter((id) => this.base[id]!.count > 0)
+      .filter((id) => board.hasShape(id))
       .slice(0, Math.max(1, count));
   }
 
@@ -269,36 +240,17 @@ export class Battle {
 
   /** A convincing wrong clue: one more or one fewer, with a frame that could be true. */
   private fakeClue(line: number): Clue {
-    const truth = this.base[line]!;
-    const n = this.puzzle.lines[line].cells.length;
-    const options: Clue[] = [];
-    for (const count of [truth.count + 1, truth.count - 1]) {
-      if (count < 0 || count > n) continue;
-      // The most pieces `count` cubes can make in a line of n.
-      const most = Math.min(3, count, n - count + 1);
-      const pieces = count === 0 ? 0 : Math.max(1, Math.min(truth.pieces ?? 1, most));
-      options.push({ count, pieces: pieces as Clue['pieces'] });
-    }
-    return options[Math.floor(this.rng() * options.length)];
+    return this.board().fakeClue(line, this.rng);
   }
 
   private setCharge(every: number): void {
-    const warmUp =
-      this.state.charge?.warmUp ??
-      Math.max(1, Math.round(this.puzzle.lines.length * WARM_UP_SHARE));
+    const warmUp = this.state.charge?.warmUp ?? this.board().warmUpLines();
     this.state.charge = { every, meter: 0, live: this.state.charge?.live ?? null, warmUp };
   }
 
-  /** A new live line for the charge: one with work left in it. */
+  /** A new live line for the charge: one with work left in it, not one already struck. */
   private pickLive(blocks: Uint8Array): number | null {
-    // Not a line that's already struck: finishing it again wouldn't count, so it could
-    // never ground the charge.
-    const finished = new Set([...finishedLines(this.puzzle, blocks), ...this.state.struck]);
-    const open = this.puzzle.lines.filter(
-      (l) => !finished.has(l.id) && l.cells.some((c) => blocks[c] === SOLID),
-    );
-    if (!open.length) return null;
-    return open[Math.floor(this.rng() * open.length)].id;
+    return this.board(blocks).pickLive(new Set(this.state.struck), this.rng);
   }
 
   // --- Turns of the fight -------------------------------------------------------------
@@ -329,7 +281,7 @@ export class Battle {
   update(blocks: Uint8Array): BattleEvent[] {
     const { state } = this;
     const events: BattleEvent[] = [];
-    const finished = finishedLines(this.puzzle, blocks);
+    const finished = this.board(blocks).finishedLines();
     const fresh = finished.filter((id) => !state.struck.includes(id));
     state.swapped = [];
     if (!fresh.length) return events;
@@ -466,49 +418,18 @@ export class Battle {
 
   /** Ink over a size×size patch of a layer, where you've done the most, outside finished lines. */
   private splash(size: number, blocks: Uint8Array): number[] {
-    const { dims } = this.puzzle;
-    const finished = new Set(this.state.struck.flatMap((id) => this.puzzle.lines[id].cells));
-    const marked = [...blocks.keys()].filter(
-      (i) => blocks[i] !== BROKEN && !finished.has(i) && !this.state.ink.includes(i),
-    );
-    if (!marked.length) return [];
-    // Around a cube you've painted if there is one, else any cube still standing.
-    const painted = marked.filter((i) => blocks[i] === PAINTED);
-    const pool = painted.length ? painted : marked;
-    const center = pointOf(dims, pool[Math.floor(this.rng() * pool.length)]);
-    const half = Math.floor(size / 2);
-    const cells: number[] = [];
-    for (let dz = -half; dz < size - half; dz++) {
-      for (let dx = -half; dx < size - half; dx++) {
-        const p = { x: center.x + dx, y: center.y, z: center.z + dz };
-        if (!inside(dims, p)) continue;
-        const i = indexOf(dims, p);
-        if (blocks[i] !== BROKEN && !finished.has(i) && !this.state.ink.includes(i)) cells.push(i);
-      }
-    }
-    return cells;
+    const { state } = this;
+    return this.board(blocks).pickInk(size, new Set(state.ink), new Set(state.struck), this.rng);
   }
 
   /** The Mimic: two lines with the most of your work in them, wiped back to solid cubes. */
   private swap(blocks: Uint8Array): BattleEvent | null {
-    const finished = new Set(this.state.struck);
-    const work = (l: Line) => l.cells.filter((c) => blocks[c] !== SOLID).length;
-    const lines = this.puzzle.lines
-      .filter((l) => !finished.has(l.id) && work(l) > 0)
-      .sort((a, b) => work(b) - work(a) || a.id - b.id)
-      .slice(0, 2);
-    if (!lines.length) return null;
-    const wiped: number[] = [];
-    for (const l of lines) {
-      for (const c of l.cells) {
-        if (blocks[c] !== SOLID) {
-          blocks[c] = SOLID;
-          wiped.push(c);
-        }
-      }
-    }
-    this.state.swapped = lines.map((l) => l.id);
-    return { kind: 'swap', lines: this.state.swapped, wiped };
+    const board = this.board(blocks);
+    const swap = board.pickSwap(new Set(this.state.struck));
+    if (!swap) return null;
+    board.wipe(swap.cells);
+    this.state.swapped = swap.lines;
+    return { kind: 'swap', lines: this.state.swapped, wiped: swap.cells };
   }
 
   /** Accuse a suspect line of being forged. */
@@ -547,21 +468,10 @@ export class Battle {
     this.state.counts.gadgetsUsed++;
     const before = this.state.enemyHp;
     this.state.enemyHp = Math.max(1, this.state.enemyHp - BOMB_DAMAGE);
-    const finished = new Set(this.state.struck);
-    const open = this.puzzle.lines.filter(
-      (l) => !finished.has(l.id) && l.cells.some((c) => blocks[c] === SOLID),
-    );
-    const line = open.length ? open[Math.floor(this.rng() * open.length)] : null;
-    const cells: number[] = [];
-    if (line) {
-      for (const c of line.cells) {
-        const to = this.puzzle.solution[c] ? PAINTED : BROKEN;
-        if (blocks[c] !== to) {
-          blocks[c] = to;
-          cells.push(c);
-        }
-      }
-    }
+    // One open line, worked out for you.
+    const board = this.board(blocks);
+    const cells = board.blast(new Set(this.state.struck), this.rng);
+    board.reveal(cells);
     const events: BattleEvent[] = [
       { kind: 'chip', amount: before - this.state.enemyHp, lines: [] },
     ];

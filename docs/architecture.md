@@ -972,8 +972,10 @@ lines finished now, whether it's solvable with some clues hidden, and those pick
 method that may draw takes the battle's generator, so a block's draws stay in order.
 `gridFightBoard(puzzle, game)` (`packages/grid/src/game/fightBoard.ts`) wraps the 2D
 helpers in `engine/`, all deterministic; `lineId` and `lineAt` turn a row or column into an
-id and back. `fightBoardContract` (in the story) is the tests any board must pass, and the
-grid's test runs it on four puzzles. The next step (#166) runs both boards' fights on one
+id and back. The block's is `blockFightBoard` (`packages/block/src/game/fightBoard.ts`,
+#165): the block `Battle`'s own picks, lifted out with their draws in the same order, so the
+block traces and fight ratings didn't move. `fightBoardContract` (in the story) is the tests
+any board must pass; the grid's test runs it on four puzzles and the block's on five. The next step (#166) runs both boards' fights on one
 `Battle` over this interface.
 
 Two tests hold it:

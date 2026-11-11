@@ -18,6 +18,7 @@ The paths under `src/` are the ones these files had in Cubed, so
 | Puzzles | `src/puzzles/format.ts` (the file format), `hide.ts`, `check.ts`, `draft.ts`, `share.ts`, `transform.ts`, `sheet.ts`, `difficulty.ts`, `daily.ts`                   |
 | Data    | `src/puzzles/pack/*.json`, `dioramas/*.json` (with `diorama.ts`, `dioramas.ts`), `story/*.json` (the story's 3D puzzles), `sheets/*.txt`; `index.ts` loads the pack |
 | Play    | `src/game/game.ts` (a puzzle in play, `Mode`, `SavedBoard`), `battle.ts` (a story fight's rules; `battleTraces.test.ts` snapshots every fight), `clock.ts`          |
+| Fights  | `src/game/fightBoard.ts`: `blockFightBoard`, the block's `FightBoard` (#165), which `Battle` picks through                                                          |
 | Story   | `src/story/data.ts` (the story, from `@picross/story`, fitted to blocks; what it can't play yet), `powers.ts` (how each power is shown)                             |
 
 Cubed's saves, settings, runs, daily streak and badges stay in the app, in

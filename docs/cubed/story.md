@@ -36,7 +36,11 @@ throw on broken data. It passes in what's this game's own:
 ## Fights
 
 `packages/block/src/game/battle.ts` (pure, tested) and
-`packages/play-block/src/ui/screens/story/fight.ts` (the bar).
+`packages/play-block/src/ui/screens/story/fight.ts` (the bar). What depends on the cubes
+(the solver check behind every pick of fog, scrambles and suspects, the live line, ink, the
+Mimic's wipe, the bomb's line and forgeries) is `blockFightBoard` in `game/fightBoard.ts`,
+the block's `FightBoard` (#165): `Battle` asks it, with its own generator, in the order it
+always drew.
 
 - **Finished lines** are judged by the truth: every cube that isn't the shape broken, none
   that is (an all-shape line is finished once painted). Each chips the enemy 1 HP, never
