@@ -1,6 +1,6 @@
-import type { FightCounts } from '@picross/story/fight/battle';
+import type { FightCounts as StoryCounts } from '@picross/story/fight/battle';
 import { packFight, readFight, type FightSave } from '@picross/story/fight/save';
-import { handOver, takeCounts, type BattleState } from './battle';
+import type { BattleState, FightCounts } from './battle';
 import type { SavedBoard } from './progress';
 import type { BlockProgress, RunState } from './run';
 
@@ -46,20 +46,30 @@ export function loadFight(saved: SavedRun): RunState {
 /**
  * A switching fight from before #170 with one count: what the flat battle and the block's
  * each counted, added up, on both (the board the fight is on reads its own, and the next
- * switch carries it on).
+ * switch carries it on). On the saves as they are (the 2D game calls a mistake a wrong
+ * fill), since this runs in the first download and the battle doesn't.
  */
 function oneCount(run: RunState): RunState {
-  const block = run.block?.battle as { counts?: Partial<FightCounts> } | undefined;
+  const block = run.block?.battle as { counts?: Partial<StoryCounts> } | undefined;
   if (!run.battle || !block?.counts) return run;
-  const flat = handOver({ hp: run.battle.enemyHp }, run.battle).counts;
-  const counts = { ...block.counts } as FightCounts;
+  const flat: Partial<FightCounts> = run.battle.counts ?? {};
+  const onFlat = { ...flat };
+  const onBlock = { ...block.counts };
+  for (const [key, n] of Object.entries(block.counts) as [keyof StoryCounts, number][]) {
+    const there = key === 'mistakes' ? 'wrongFills' : key;
+    if (n) onFlat[there] = (flat[there] ?? 0) + n;
+  }
   for (const [key, n] of Object.entries(flat) as [keyof FightCounts, number][]) {
-    if (n) counts[key] = (counts[key] ?? 0) + n;
+    const there = key === 'wrongFills' ? 'mistakes' : key;
+    if (n) onBlock[there] = (block.counts[there] ?? 0) + n;
   }
   return {
     ...run,
-    battle: takeCounts(run.battle, { counts }),
-    block: { ...run.block, battle: { ...block, counts } },
+    battle:
+      run.battle.counts || Object.keys(onFlat).length
+        ? { ...run.battle, counts: onFlat }
+        : run.battle,
+    block: { ...run.block, battle: { ...block, counts: onBlock } },
   };
 }
 
