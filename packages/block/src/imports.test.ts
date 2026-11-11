@@ -41,7 +41,7 @@ describe('the package imports', () => {
   it('finds the sources', () => {
     expect(Object.keys(sources)).toContain('./engine/solver.ts');
     expect(specifiers(sources['./engine/solver.ts'])).toContain('./volume');
-    expect(specifiers(sources['./game/battle.ts'])).toContain('@picross/shared/engine/random');
+    expect(specifiers(sources['./game/battle.ts'])).toContain('@picross/story/fight/battle');
   });
 
   it('only its own files and the shared and story rules', () => {

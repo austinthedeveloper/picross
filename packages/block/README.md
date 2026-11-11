@@ -12,14 +12,14 @@ It's plain TypeScript with no build step: each app's Vite compiles it.
 The paths under `src/` are the ones these files had in Cubed, so
 `apps/cubed/src/engine/solver.ts` is now `src/engine/solver.ts` here.
 
-| What    | Files                                                                                                                                                               |
-| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Engine  | `src/engine/volume.ts` (the block and its lines), `clues.ts`, `solver.ts` (the line solver)                                                                         |
-| Puzzles | `src/puzzles/format.ts` (the file format), `hide.ts`, `check.ts`, `draft.ts`, `share.ts`, `transform.ts`, `sheet.ts`, `difficulty.ts`, `daily.ts`                   |
-| Data    | `src/puzzles/pack/*.json`, `dioramas/*.json` (with `diorama.ts`, `dioramas.ts`), `story/*.json` (the story's 3D puzzles), `sheets/*.txt`; `index.ts` loads the pack |
-| Play    | `src/game/game.ts` (a puzzle in play, `Mode`, `SavedBoard`), `battle.ts` (a story fight's rules; `battleTraces.test.ts` snapshots every fight), `clock.ts`          |
-| Fights  | `src/game/fightBoard.ts`: `blockFightBoard`, the block's `FightBoard` (#165), which `Battle` picks through                                                          |
-| Story   | `src/story/data.ts` (the story, from `@picross/story`, fitted to blocks; what it can't play yet), `powers.ts` (how each power is shown)                             |
+| What    | Files                                                                                                                                                                                     |
+| ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Engine  | `src/engine/volume.ts` (the block and its lines), `clues.ts`, `solver.ts` (the line solver)                                                                                               |
+| Puzzles | `src/puzzles/format.ts` (the file format), `hide.ts`, `check.ts`, `draft.ts`, `share.ts`, `transform.ts`, `sheet.ts`, `difficulty.ts`, `daily.ts`                                         |
+| Data    | `src/puzzles/pack/*.json`, `dioramas/*.json` (with `diorama.ts`, `dioramas.ts`), `story/*.json` (the story's 3D puzzles), `sheets/*.txt`; `index.ts` loads the pack                       |
+| Play    | `src/game/game.ts` (a puzzle in play, `Mode`, `SavedBoard`), `battle.ts` (`Battle`: the story's `StoryBattle` on a block, #166; `battleTraces.test.ts` snapshots every fight), `clock.ts` |
+| Fights  | `src/game/fightBoard.ts`: `blockFightBoard`, the block's `FightBoard` (#165), which `Battle` plays on with `BLOCK_RULES`                                                                  |
+| Story   | `src/story/data.ts` (the story, from `@picross/story`, fitted to blocks; what it can't play yet), `powers.ts` (how each power is shown)                                                   |
 
 Cubed's saves, settings, runs, daily streak and badges stay in the app, in
 `apps/picross/src/cubed/game/`, under their `picross3d:` storage keys.

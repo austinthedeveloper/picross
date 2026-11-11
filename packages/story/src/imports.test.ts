@@ -51,6 +51,7 @@ describe('the package imports', () => {
     expect(Object.keys(sources)).toContain('./puzzles/scenes.ts');
     expect(specifiers(sources['./puzzles/scenes.ts'])).toContain('./backdrops');
     expect(specifiers(sources['./ui/components/dialogue.ts'])).toContain('@picross/shared/ui/dom');
+    expect(specifiers(sources['./fight/battle.ts'])).toContain('@picross/shared/engine/random');
     expect(specifiers(sources[SHARED_ART.file])).toContain(SHARED_ART.spec);
   });
 
