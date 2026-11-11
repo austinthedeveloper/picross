@@ -10,7 +10,7 @@ import { ranks } from '../../src/puzzles/ranks';
 import { overtimeRuns, type Encounter, type RunDef } from '../../src/puzzles/runs';
 import { getScene, scenes, type Scene } from '@picross/story/puzzles/scenes';
 import { tutorialSteps } from '../../src/puzzles/tutorial';
-import { POWERS } from '../../src/ui/powers';
+import { POWER_TIPS } from '@picross/story/fight/tips';
 
 /** The shared package (the art and tokens), from this app's folder. */
 export const SHARED = '../../packages/shared';
@@ -312,7 +312,26 @@ export function buildPages(): Page[] {
       listSection(
         'power-tips',
         'Power tips',
-        Object.entries(POWERS).map(([id, power]) => card(`power/${id}`, power.name, power.tip)),
+        // Each power's tip on each board, and the note for a board it works differently
+        // on (`@picross/story/fight/tips`). The flat tip keeps the key it always had.
+        Object.entries(POWER_TIPS).flatMap(([id, { name, tip, note }]) => [
+          card(`power/${id}`, `${name}: flat board`, tip.flat),
+          card(`power/${id}/block`, `${name}: block`, tip.block),
+          ...(note
+            ? [
+                card(
+                  `power/${id}/note/flat`,
+                  `${name}: on a flat board, met on a block`,
+                  note.flat,
+                ),
+                card(
+                  `power/${id}/note/block`,
+                  `${name}: on a block, met on a flat board`,
+                  note.block,
+                ),
+              ]
+            : []),
+        ]),
       ),
       listSection(
         'gadgets',
@@ -394,7 +413,7 @@ export function sourceFile(key: string): string {
   if (kind === 'encounter') return `${story}/encounters/${id}.json`;
   if (kind === 'job') return `${story}/runs/${id}.json`;
   if (kind === 'chapter') return `${story}/chapters/${id}.json`;
-  if (kind === 'power') return 'src/ui/powers.ts';
+  if (kind === 'power') return `${STORY}/src/fight/tips.ts`;
   if (kind === 'gadget') return `${story}/gadgets.ts`;
   if (kind === 'rank') return `${puzzles}/ranks.ts`;
   if (kind === 'badge') return `${puzzles}/badges.ts`;

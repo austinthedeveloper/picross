@@ -10,6 +10,8 @@ import { hashString } from '@picross/block/puzzles/hide';
 import { lineIdAt, pointOf } from '@picross/block/engine/volume';
 import type { Encounter } from '@picross/block/story/data';
 import { POWERS } from '@picross/block/story/powers';
+import type { BoardKind } from '@picross/story/fight/board';
+import { tipToShow, type TipCard } from '@picross/story/fight/tips';
 import { enemyArt, gadgetArt, withArt } from '@picross/shared/ui/art';
 import { el } from '@picross/shared/ui/dom';
 import { haptic } from '@picross/shared/ui/haptics';
@@ -58,8 +60,14 @@ export interface FightRun {
   hurt(amount: number): boolean;
   /** Uses up the gadget at `index` in `get().gadgets`. */
   spendGadget(index: number, id: string): void;
-  tipSeen(power: string): boolean;
-  markTip(power: string): void;
+  /** Whether the run's save has seen this tip (a power's name, or `<power>:<board>`). */
+  tipSeen(key: string): boolean;
+  markTip(key: string): void;
+  /**
+   * The board this run's save is from, where its tips from before they knew their board
+   * were seen (`tipToShow`): Cubed's (`block`) by default, the 2D game's `flat`.
+   */
+  home?: BoardKind;
 }
 
 export interface FightOptions {
@@ -208,24 +216,30 @@ export function fightKind(
   }
 
   // --- Tips ----------------------------------------------------------------------------
-  function tipCard(power: string, onDone: () => void) {
-    const p = POWERS[power];
+  // The story's tips for both boards (#167): a power met on a flat board isn't explained
+  // again here, unless it works differently on a block, and then its short note shows.
+  function tipCard(tip: TipCard, onDone: () => void) {
     return el('div', { className: 'tip-card' }, [
-      el('span', { className: 'tip-icon', ariaHidden: 'true' }, withArt(p.icon)),
-      el('span', { className: 'tip-text' }, [el('strong', { textContent: p.name }), ` ${p.tip}`]),
+      el('span', { className: 'tip-icon', ariaHidden: 'true' }, withArt(tip.icon)),
+      el('span', { className: 'tip-text' }, [
+        el('strong', { textContent: tip.name }),
+        ` ${tip.text}`,
+      ]),
       el('button', { className: 'button tip-ok', textContent: 'Got it', onclick: onDone }),
     ]);
   }
   function nextTip() {
-    const power = battle.powers.find((p) => POWERS[p] && !link.tipSeen(p));
-    if (!power) {
+    const tip = battle.powers
+      .map((p) => tipToShow(p, 'block', (key) => link.tipSeen(key), link.home ?? 'block'))
+      .find((t) => t !== null);
+    if (!tip) {
       tipSlot.hidden = true;
       return;
     }
     tipSlot.hidden = false;
     tipSlot.replaceChildren(
-      tipCard(power, () => {
-        link.markTip(power);
+      tipCard(tip, () => {
+        for (const key of tip.keys) link.markTip(key);
         nextTip();
       }),
     );
