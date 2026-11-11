@@ -10,7 +10,7 @@
     {
       "name": "cubed",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["-w", "cubed", "run", "dev", "--", "--port", "5174", "--strictPort"],
+      "runtimeArgs": ["-w", "apps/cubed", "run", "dev", "--", "--port", "5174", "--strictPort"],
       "port": 5174
     },
     {

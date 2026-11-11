@@ -1,4 +1,7 @@
 import { defineConfig } from '@playwright/test';
+import path from 'node:path';
+
+const root = path.resolve(import.meta.dirname, '../..');
 
 /**
  * Browser tests on a phone-sized touch screen (the game is phone-first): every
@@ -28,15 +31,19 @@ export default defineConfig({
     { name: 'prod', testIgnore: 'debug.spec.ts' },
     { name: 'dev', testMatch: 'debug.spec.ts', use: { baseURL: 'http://localhost:4174/' } },
   ],
+  // The servers run from the repo root, whose build puts Cubed in dist/3d beside Flat.
   webServer: [
     {
-      command: 'npm run build && npx vite preview --port 4173 --strictPort',
+      command: 'npm run build && npm run preview -- --port 4173 --strictPort',
+      cwd: root,
       url: 'http://localhost:4173/',
       reuseExistingServer: !process.env.CI,
       timeout: 120_000,
     },
     {
-      command: 'npm run build:dev && npx vite preview --outDir dist-dev --port 4174 --strictPort',
+      command:
+        'npm run build:dev && npm run preview -- --outDir ../../dist-dev --port 4174 --strictPort',
+      cwd: root,
       url: 'http://localhost:4174/',
       reuseExistingServer: !process.env.CI,
       timeout: 120_000,

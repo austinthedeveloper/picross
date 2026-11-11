@@ -1,8 +1,9 @@
 # Files the 3D game shares
 
-Picross Cubed, the 3D game in `cubed/`, copies these files from this repo's `src/` and
-`public/` verbatim (`npm -w cubed run sync:web`). This repo's root owns them: after changing
-one, sync and commit the copies; CI (`npm run check:cubed`) fails if they differ.
+Picross Cubed, the 3D game in `apps/cubed/`, copies these files from the 2D game's `src/`
+and `public/` (in `apps/picross/`) verbatim (`npm -w apps/cubed run sync:web`). The 2D game
+owns them: after changing one, sync and commit the copies; CI (`npm run check:cubed`) fails
+if they differ. The paths below are the same in both apps.
 
 | What       | Files                                                                                                                                                                                                                           |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -20,4 +21,9 @@ check lives in `runs.test.ts`.
 
 **The story gate:** the 3D game reads the jobs and encounters for blocks and fails its tests
 when the story uses a field, power or kind it can't play yet, or an encounter without a 3D
-puzzle (`cubed/src/story/story.test.ts`). Run `npm test` after a story change.
+puzzle (`apps/cubed/src/story/story.test.ts`). Run `npm test` after a story change.
+
+**Outside this repo:** the SNES demake (`../snes/picross-snes`) imports the pack, art and
+story with `make import`, reading `src/puzzles/` and `public/art/` from its `WEB` path. Those
+are now in `apps/picross/`, so its `WEB` is `../../picross/apps/picross` (it was
+`../../picross` before the 2D game moved, #142).

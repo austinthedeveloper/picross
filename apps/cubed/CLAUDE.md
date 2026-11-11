@@ -1,6 +1,6 @@
 # Picross Cubed
 
-3D picross in Vite + TypeScript + three.js. The 2D game (the repo root, `..`) is its sibling and the reference for look and feel.
+3D picross in Vite + TypeScript + three.js. The 2D game (`../picross`, in the same repo) is its sibling and the reference for look and feel.
 
 - Read `docs/architecture.md` first; puzzles are in `docs/how-to.md`.
 - Before committing: `npm run lint`, `npm test`, `npm run build`, and `npm run e2e` for UI changes.
@@ -12,5 +12,5 @@
   names or look.
 - The 2D repo's `docs/shared-files.md` and `CLAUDE.md` say the same from its side: keep
   shared files importing only other shared files.
-- Combining the two games is planned in `../docs/combining.md` (at the repo root); keep both working on their own
+- Combining the two games is planned in `../../docs/combining.md` (at the repo root); keep both working on their own
   until then.

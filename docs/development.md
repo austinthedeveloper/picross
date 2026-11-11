@@ -11,6 +11,12 @@ npm run dev        # http://localhost:5173, hot reload
 
 `.claude/launch.json` starts the same dev server from Claude Code's preview pane.
 
+The repo root is an npm workspace: the 2D game is `apps/picross/` (workspace `picross`) and
+Picross Cubed is `apps/cubed/`. One `npm install` at the root sets up both, and the root
+scripts below run the 2D game's with `npm -w apps/picross run …`. Paths like `src/` and
+`e2e/` on this page are in `apps/picross/`; `scripts/` and `dist/` are at the root unless
+the page says otherwise.
+
 ## Scripts
 
 | Command                        | What it does                                                              |
@@ -59,13 +65,13 @@ with reduced motion, so animations don't slow them down:
 
 ```bash
 npm run e2e                                  # all of them
-npx playwright test e2e/fights.spec.ts       # one file
-npx playwright test --ui                     # watch them run
+npm run e2e -- e2e/fights.spec.ts            # one file
+npm run e2e -- --ui                          # watch them run
 ```
 
 Locally they use your installed Chrome. CI installs Playwright's Chromium and uploads an
-HTML report (`playwright-report`) when something fails. To debug a failure, run
-`npx playwright show-trace test-results/<test>/trace.zip`.
+HTML report (`apps/picross/playwright-report`) when something fails. To debug a failure, run
+`npx playwright show-trace apps/picross/test-results/<test>/trace.zip`.
 
 | File                     | Covers                                                                                                                                                |
 | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -98,16 +104,16 @@ on a real phone.
 To start from a clean slate, clear the site's local storage in devtools (Application →
 Local Storage).
 
-## The 3D game (`cubed/`)
+## The 3D game (`apps/cubed/`)
 
-Picross Cubed is an npm workspace in `cubed/` with its own docs (`cubed/docs/`). From the
+Picross Cubed is an npm workspace in `apps/cubed/` with its own docs (`apps/cubed/docs/`). From the
 root: `npm run dev:cubed` (http://localhost:5174), `npm run test:cubed`,
 `npm run e2e:cubed`. `npm test` and `npm run build` cover both games; the build puts Cubed
 in `dist/3d` (and `dist-dev/3d`), where the Flat | Cubed switch links to it. In dev, the
 switch links between the two dev servers.
 
 Cubed copies some of this repo's files (`docs/shared-files.md`). After changing one, run
-`npm -w cubed run sync:web` and commit the copies; CI runs `npm run check:cubed`.
+`npm -w apps/cubed run sync:web` and commit the copies; CI runs `npm run check:cubed`.
 
 ## CI and deploys
 
@@ -142,7 +148,7 @@ Dev builds have a **🐞 DEV** button in the bottom corner and "DEV" in the page
 - **Scenes:** play any scene.
 - **Saves:** unlock everything, or reset everything.
 
-**How it stays out of production.** `.env.development` sets `VITE_DEBUG=1`, so
+**How it stays out of production.** `apps/picross/.env.development` sets `VITE_DEBUG=1`, so
 `npm run dev` and `npm run build:dev` get the tools, and `npm run build` doesn't. Everything
 lives in `src/debug/`. The panel is a dynamic import behind that flag in `main.ts`, and the
 few places the game exposes something for it (`src/debug/hooks.ts`) sit behind

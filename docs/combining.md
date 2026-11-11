@@ -6,28 +6,29 @@ through. Nothing here is built yet. The 3D game gets tightened up first; this st
 
 ## Progress
 
-**Step 1 is done, in a lighter form than planned.** Picross Cubed came into this repo with
-its history (a subtree merge) as `cubed/`, an npm workspace, rather than both games moving
-into `apps/` and `packages/`. The 2D game stays at the root, so nothing that reads it
-(the SNES demake's `make import`, its docs, its deploys) has to change yet.
+**Step 1 is done.** Picross Cubed came into this repo with its history (a subtree merge)
+as `cubed/`, an npm workspace. Then both games moved into `apps/` (#142): the 2D game into
+`apps/picross/` and Cubed into `apps/cubed/`, with the root as the workspace root.
+`packages/` comes with the next stories (#141). The SNES demake's `make import` now reads
+the 2D game from `apps/picross/` ([shared-files.md](shared-files.md)).
 
 - One install (`npm ci`), one CI, one site: `npm run build` builds Flat at the root of
   `dist/` and Cubed into `dist/3d/` (`scripts/build-cubed.mjs`); GitHub Pages and the Azure
   site serve both.
 - **Flat | Cubed:** a switch at the top of both home screens moves between the games and
   remembers the last one, so the site opens on it.
-- `cubed/` still keeps its own copies of the shared files, now synced from this repo's root
+- `apps/cubed/` still keeps its own copies of the shared files, now synced from `apps/picross/`
   and checked in CI (`npm run check:cubed`). Removing the copies is step 2.
 - The story ideas for the combined game are in [story-combined.md](story-combined.md).
 
 **Step 7 has a first boss, ahead of steps 2–6.** The Curator unfolds into a block at 60%
 and folds back flat at 30%, in the 2D story. Rather than wait for `FightBoard`, the 2D
-story opens the 3D game's own fight screen (from `cubed/`, loaded on demand) for the
+story opens the 3D game's own fight screen (from `apps/cubed/`, loaded on demand) for the
 block phases, and carries HP and phases between the two battles. Each game's screen
 styles apply only on its board. Details are in [architecture.md](architecture.md)
 ("Switching board").
 
-The steps below still apply, with `cubed/` standing in for `packages/block` and
+The steps below still apply, with `apps/cubed/` standing in for `packages/block` and
 `packages/play-block` until the code is split into packages.
 
 ## Where things stand
@@ -54,7 +55,7 @@ have a `mug`).
 
 **The 2D repo is the home**, as a monorepo. It has the history, the story, the issues,
 the Azure production site and the SNES demake's import pipeline (`make import` reads
-`../../picross`). The 3D code moved in as `cubed/` (step 1); the picross-3d repo is to be
+`../../picross`). The 3D code moved in as `cubed/`, now `apps/cubed/` (step 1); the picross-3d repo is to be
 archived with a pointer.
 
 npm workspaces, no new build tool:

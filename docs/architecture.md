@@ -16,125 +16,131 @@ browser. The UI should only translate events into `Game` calls and redraw.
 
 ## Directory map
 
+The repo root is an npm workspace with both games in `apps/`. This game is `apps/picross/`,
+and the `src/`, `public/`, `e2e/` and `vite.config.ts` paths in this doc are inside it.
+
 ```
-index.html                 Page shell; loads src/main.ts
-public/favicon.svg
-src/
-  main.ts                  Entry point: imports styles, applies theme, hash router
-  debug/                   Dev-only tools (#65): panel and hooks; never in production builds
-  engine/                  Pure puzzle logic, no DOM
-    board.ts               Cell states (Empty/Filled/Marked), Grid/Board/Solution, isSolved
-    clues.ts               Clue derivation and per-clue "satisfied" check (clue dimming)
-    history.ts             Change/Move types and the undo/redo History
-    lines.ts               LineSet: sets of rows/columns (fog, scrambles, weak points)
-    solver.ts              Line solver: uniqueness/no-guess check; fog and scramble aware
-    swap.ts                Which two lines the Mimic swaps and wipes (#48)
-    fakes.ts               The Forger's forged clues: a convincing wrong clue per line (#64)
-    ink.ts                 Where ink lands and how completed lines wash it off (#67)
-    random.ts              Seeded random numbers and shuffles (endless, daily)
-    transform.ts           The eight turns and flips of a grid (daily, #69); turning cells and lines (#83)
-  puzzles/                 Content and its validation
-    format.ts              Puzzle file format, parse/validate, export helpers
-    index.ts               Loads pack/*.json and run/*.json; the list sorts by size, then ORDER
-    pack/*.json            Free-play puzzles (5×5 to 20×20): the starter set plus themed batches
-    sheets/*.txt           The themed batches as drawings; scripts/puzzle-sheet.ts exports them
-    run/*.json             Run-only puzzles (the sword, wrench, owl, pocket watch, ...)
-    pack.test.ts           Uniqueness check over every puzzle
-    runs.ts                Loads encounters/*.json and runs/*.json (jobs)
-    chapters.ts            Loads chapters/*.json: jobs grouped into story chapters (#23)
-    endless.ts             Endless mode: seeded encounter order, scaling, the run as a RunDef (#68)
-    daily.ts               The daily puzzle: date keys and the day's puzzle and turn (#69)
-    tutorial.ts            How to play: its picture and steps, and what counts as a wrong move
-    murals.ts              Loads murals/*.json and splits each picture into tile puzzles (#24)
-    enemies.ts             Validates an enemy; lists its powers (startingPowers, phasePowers, enemyPowers)
-    gadgets.ts             Gadget catalog: name, icon, description, effect
-    scenes.ts              Loads and validates scenes/*.json (dialogue, #22)
-    backdrops.ts           Loads and validates backdrops/*.json (where a scene happens)
-    encounters/*.json      Encounters: name, kind (fight/dig), puzzle, enemy, boss, scene
-    runs/*.json            Jobs: HP, encounters, gadgets, intro/outro, order, requires
-    chapters/*.json        Chapters: title, order, blurb, jobs, opening scene
-    scenes/*.json          Scenes: backdrop, cast, nodes of lines, choices, and conditions
-    backdrops/*.json       Backdrops: rows of # and ., drawn behind a scene's portraits
-  game/                    Game state and saves, no DOM
-    game.ts                Game: board, history, mode/hearts, hints, clock, wipes
-    battle.ts              Enemy and BattleState: chip, finisher, gadgets, phases, armor, call-outs
-    run.ts                 RunState and its pure transitions
-    dialogue.ts            Scene runner: current line or choices, advance, choose, flags
-    progress.ts            Free-play saves, solve stats, totals (localStorage)
-    runSave.ts             Current run, seen scenes, job stats (localStorage)
-    settings.ts            Mode, list filter/order, closed sections, mute, high contrast, haptics (localStorage)
-    daily.ts               Daily streak, best, and today's board (localStorage, #69)
-    storage.ts             Safe localStorage JSON read/write
-  ui/
-    dom.ts                 el(): create an element with props and children
-    format.ts              formatTime(), plural(), lineName()
-    motion.ts              reducedMotion(), wait(), pause(), playOnce() for animations
-    sound.ts               WebAudio-synthesized sound effects
-    haptics.ts             Vibration on taps, lines, hits, and zaps (and the iOS switch fallback)
-    theme.ts               Applies the high-contrast theme
-    screens/
-      selectScreen.ts      Puzzle list, mode, settings, stats       (#/)
-      gameScreen.ts        Play screen; PlaySession and its hooks  (#/play/<id>)
-      freePlaySession.ts   Free-play PlaySession: saves, best times, "Next"
-      daily.ts             The daily puzzle: its card on the list and its PlaySession (#/daily)
-      mural.ts             Murals: the list section, a mural's tiles, playing a tile (#/mural/…)
-      sceneScreen.ts       Plays a scene full screen               (#/scene/<id>)
-      howToPlay.ts         Guided solve on a real board, then rules (#/how-to-play)
-      editorScreen.ts      Puzzle authoring tool                   (#/editor)
-      run/                 Runs                                    (#/run, #/run/play)
-        index.ts           Run hub router and the puzzle-list banner
-        shared.ts          Hub type, loadRun, mode picker, start buttons
-        jobsBoard.ts       Jobs board (#47), grouped into chapters (#23)
-        pathMap.ts         Path map, HP, gadget inventory
-        results.ts         Results and sign-off
-        encounter.ts       Plays the current encounter (a PlaySession)
-        fight/             Fight hooks, one module per mechanic:
-          index.ts         Wires them into the session hooks (fightHooks)
-          context.ts       Shared state: enemy, battle bar, battle, form, saving
-          lines.ts         Completed lines: fog, scramble, armor, chip damage
-          phases.ts        Phase changes: form, banner, more fog/scramble, swaps
-          swaps.ts         The Mimic's swaps (wait for strokes to end)
-          callOut.ts       Forged clues: the 🔍 Call out button and accusations
-          ink.ts           Ink splashes from phases (#67)
-          charge.ts        The ⚡ charge meter and its zaps (#67)
-          turns.ts         The 🔃 turn meter: the board turns a quarter clockwise (#83)
-          tips.ts          Power tips: a card the first time you meet a power, and the ⓘ list (#79)
-          gadgets.ts       The gadget tray
-          hits.ts          Mistakes, shields, knockouts
-          finisher.ts      The solved picture flying at the enemy
-        dig.ts             Dig hooks: dirt board, header, the reveal
-    board/
-      boardView.ts         Clues + cells (ARIA grid), dimming, fog/scramble/weak points
-      input.ts             Pointer input: click, right-click, drag strokes, touch
-      keyboard.ts          Keyboard cursor and actions on a board
-      zoom.ts              Pinch/wheel zoom and two-finger pan
-      picture.ts           Pixel-art canvas of a solution
-    components/
-      battleBar.ts         Enemy/player HP, gadgets, armor, 🎭 forgeries, phase banner, hit effects
-      dialogue.ts          Scene player: stage of portraits, typed text box, choices, Skip
-      backdrop.ts          Draws a backdrop as an SVG in the theme's color
-      endPanels.ts         Solved, out-of-hearts, and generic end panels
-      hintMenu.ts          "Hint n/3" dropdown
-      homeLink.ts          The Home button at the top of every screen
-      listSection.ts       Collapsible puzzle list section
-      muteButton.ts        Sound toggle
-      zoomBar.ts           − / level / + zoom buttons
-  styles/
-    tokens.css             Color tokens for light, dark, and high-contrast themes
-    base.css               Page layout, buttons, toggles, segmented controls
-    board.css              Board, clues, cells, cursor, fog/scramble/weak-point clues
-    game.css               Play screen: toolbar, hint menu, tools and zoom row, end states
-    select.css             Puzzle list
-    editor.css             Editor
-    run.css                Run banner, jobs board, path map, results
-    fight.css              Battle bar, gadgets, phase banner, armor, call-out
-    dig.css                The dig's dirt board and reveal
-    dialogue.css           Scene player
-e2e/                       Playwright browser tests (see docs/development.md)
+apps/picross/              The 2D game (npm workspace `picross`)
+  index.html               Page shell; loads src/main.ts
+  public/favicon.svg
+  src/
+    main.ts                Entry point: imports styles, applies theme, hash router
+    debug/                 Dev-only tools (#65): panel and hooks; never in production builds
+    engine/                Pure puzzle logic, no DOM
+      board.ts             Cell states (Empty/Filled/Marked), Grid/Board/Solution, isSolved
+      clues.ts             Clue derivation and per-clue "satisfied" check (clue dimming)
+      history.ts           Change/Move types and the undo/redo History
+      lines.ts             LineSet: sets of rows/columns (fog, scrambles, weak points)
+      solver.ts            Line solver: uniqueness/no-guess check; fog and scramble aware
+      swap.ts              Which two lines the Mimic swaps and wipes (#48)
+      fakes.ts             The Forger's forged clues: a convincing wrong clue per line (#64)
+      ink.ts               Where ink lands and how completed lines wash it off (#67)
+      random.ts            Seeded random numbers and shuffles (endless, daily)
+      transform.ts         The eight turns and flips of a grid (daily, #69); turning cells and lines (#83)
+    puzzles/               Content and its validation
+      format.ts            Puzzle file format, parse/validate, export helpers
+      index.ts             Loads pack/*.json and run/*.json; the list sorts by size, then ORDER
+      pack/*.json          Free-play puzzles (5×5 to 20×20): the starter set plus themed batches
+      sheets/*.txt         The themed batches as drawings; scripts/puzzle-sheet.ts exports them
+      run/*.json           Run-only puzzles (the sword, wrench, owl, pocket watch, ...)
+      pack.test.ts         Uniqueness check over every puzzle
+      runs.ts              Loads encounters/*.json and runs/*.json (jobs)
+      chapters.ts          Loads chapters/*.json: jobs grouped into story chapters (#23)
+      endless.ts           Endless mode: seeded encounter order, scaling, the run as a RunDef (#68)
+      daily.ts             The daily puzzle: date keys and the day's puzzle and turn (#69)
+      tutorial.ts          How to play: its picture and steps, and what counts as a wrong move
+      murals.ts            Loads murals/*.json and splits each picture into tile puzzles (#24)
+      enemies.ts           Validates an enemy; lists its powers (startingPowers, phasePowers, enemyPowers)
+      gadgets.ts           Gadget catalog: name, icon, description, effect
+      scenes.ts            Loads and validates scenes/*.json (dialogue, #22)
+      backdrops.ts         Loads and validates backdrops/*.json (where a scene happens)
+      encounters/*.json    Encounters: name, kind (fight/dig), puzzle, enemy, boss, scene
+      runs/*.json          Jobs: HP, encounters, gadgets, intro/outro, order, requires
+      chapters/*.json      Chapters: title, order, blurb, jobs, opening scene
+      scenes/*.json        Scenes: backdrop, cast, nodes of lines, choices, and conditions
+      backdrops/*.json     Backdrops: rows of # and ., drawn behind a scene's portraits
+    game/                  Game state and saves, no DOM
+      game.ts              Game: board, history, mode/hearts, hints, clock, wipes
+      battle.ts            Enemy and BattleState: chip, finisher, gadgets, phases, armor, call-outs
+      run.ts               RunState and its pure transitions
+      dialogue.ts          Scene runner: current line or choices, advance, choose, flags
+      progress.ts          Free-play saves, solve stats, totals (localStorage)
+      runSave.ts           Current run, seen scenes, job stats (localStorage)
+      settings.ts          Mode, list filter/order, closed sections, mute, high contrast, haptics (localStorage)
+      daily.ts             Daily streak, best, and today's board (localStorage, #69)
+      storage.ts           Safe localStorage JSON read/write
+    ui/
+      dom.ts               el(): create an element with props and children
+      format.ts            formatTime(), plural(), lineName()
+      motion.ts            reducedMotion(), wait(), pause(), playOnce() for animations
+      sound.ts             WebAudio-synthesized sound effects
+      haptics.ts           Vibration on taps, lines, hits, and zaps (and the iOS switch fallback)
+      theme.ts             Applies the high-contrast theme
+      screens/
+        selectScreen.ts    Puzzle list, mode, settings, stats       (#/)
+        gameScreen.ts      Play screen; PlaySession and its hooks  (#/play/<id>)
+        freePlaySession.ts Free-play PlaySession: saves, best times, "Next"
+        daily.ts           The daily puzzle: its card on the list and its PlaySession (#/daily)
+        mural.ts           Murals: the list section, a mural's tiles, playing a tile (#/mural/…)
+        sceneScreen.ts     Plays a scene full screen               (#/scene/<id>)
+        howToPlay.ts       Guided solve on a real board, then rules (#/how-to-play)
+        editorScreen.ts    Puzzle authoring tool                   (#/editor)
+        run/               Runs                                    (#/run, #/run/play)
+          index.ts         Run hub router and the puzzle-list banner
+          shared.ts        Hub type, loadRun, mode picker, start buttons
+          jobsBoard.ts     Jobs board (#47), grouped into chapters (#23)
+          pathMap.ts       Path map, HP, gadget inventory
+          results.ts       Results and sign-off
+          encounter.ts     Plays the current encounter (a PlaySession)
+          fight/           Fight hooks, one module per mechanic:
+            index.ts       Wires them into the session hooks (fightHooks)
+            context.ts     Shared state: enemy, battle bar, battle, form, saving
+            lines.ts       Completed lines: fog, scramble, armor, chip damage
+            phases.ts      Phase changes: form, banner, more fog/scramble, swaps
+            swaps.ts       The Mimic's swaps (wait for strokes to end)
+            callOut.ts     Forged clues: the 🔍 Call out button and accusations
+            ink.ts         Ink splashes from phases (#67)
+            charge.ts      The ⚡ charge meter and its zaps (#67)
+            turns.ts       The 🔃 turn meter: the board turns a quarter clockwise (#83)
+            tips.ts        Power tips: a card the first time you meet a power, and the ⓘ list (#79)
+            gadgets.ts     The gadget tray
+            hits.ts        Mistakes, shields, knockouts
+            finisher.ts    The solved picture flying at the enemy
+          dig.ts           Dig hooks: dirt board, header, the reveal
+      board/
+        boardView.ts       Clues + cells (ARIA grid), dimming, fog/scramble/weak points
+        input.ts           Pointer input: click, right-click, drag strokes, touch
+        keyboard.ts        Keyboard cursor and actions on a board
+        zoom.ts            Pinch/wheel zoom and two-finger pan
+        picture.ts         Pixel-art canvas of a solution
+      components/
+        battleBar.ts       Enemy/player HP, gadgets, armor, 🎭 forgeries, phase banner, hit effects
+        dialogue.ts        Scene player: stage of portraits, typed text box, choices, Skip
+        backdrop.ts        Draws a backdrop as an SVG in the theme's color
+        endPanels.ts       Solved, out-of-hearts, and generic end panels
+        hintMenu.ts        "Hint n/3" dropdown
+        homeLink.ts        The Home button at the top of every screen
+        listSection.ts     Collapsible puzzle list section
+        muteButton.ts      Sound toggle
+        zoomBar.ts         − / level / + zoom buttons
+    styles/
+      tokens.css           Color tokens for light, dark, and high-contrast themes
+      base.css             Page layout, buttons, toggles, segmented controls
+      board.css            Board, clues, cells, cursor, fog/scramble/weak-point clues
+      game.css             Play screen: toolbar, hint menu, tools and zoom row, end states
+      select.css           Puzzle list
+      editor.css           Editor
+      run.css              Run banner, jobs board, path map, results
+      fight.css            Battle bar, gadgets, phase banner, armor, call-out
+      dig.css              The dig's dirt board and reveal
+      dialogue.css         Scene player
+  e2e/                     Playwright browser tests (see docs/development.md)
+  scripts/
+    puzzle-sheet.ts        Check, repair and export puzzle sheets (batches of drawings; see docs/how-to.md)
+    script-review.ts       Build the script review site, serve it, and report notes (see docs/how-to.md)
+    script-review/         Its page model, renderer, notes store, server, and browser assets
+apps/cubed/                Picross Cubed, the 3D game (npm workspace `picross-3d`; its own docs)
 scripts/
-  puzzle-sheet.ts          Check, repair and export puzzle sheets (batches of drawings; see docs/how-to.md)
-  script-review.ts         Build the script review site, serve it, and report notes (see docs/how-to.md)
-  script-review/           Its page model, renderer, notes store, server, and browser assets
   deploy-azure.sh          Upload a build to the Azure static website
   setup-azure-deploy.sh    One-time Azure + GitHub OIDC setup for the release pipeline
 .github/workflows/
@@ -671,7 +677,7 @@ fight.
 ### Switching board (the Curator)
 
 A phase with `"board": "block"` moves the fight onto a block: the encounter's 3D puzzle
-from Picross Cubed (`cubed/src/puzzles/story/`), played with the 3D game's own fight screen.
+from Picross Cubed (`apps/cubed/src/puzzles/story/`), played with the 3D game's own fight screen.
 A later phase with `"board": "flat"` brings it back. The plan and the story ideas behind it
 are in [story-combined.md](story-combined.md).
 

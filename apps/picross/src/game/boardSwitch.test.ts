@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getEncounter as getBlockEncounter } from '../../cubed/src/story/data';
+import { getEncounter as getBlockEncounter } from '../../../cubed/src/story/data';
 import { runs } from '../puzzles/runs';
 import {
   advancePhase,

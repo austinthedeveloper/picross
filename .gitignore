@@ -9,4 +9,4 @@ dist-script-review
 playwright-report
 test-results
 # Picross Cubed's own build output (copied into dist/3d by the build)
-cubed/dist
+apps/cubed/dist

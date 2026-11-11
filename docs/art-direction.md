@@ -1,7 +1,7 @@
 # Art direction
 
 The look of the game (#25): what it should feel like, the palette, the type, and how to
-keep new work consistent. The tokens live in `src/styles/tokens.css`; this page says what
+keep new work consistent. The tokens live in `apps/picross/src/styles/tokens.css`; this page says what
 they're for.
 
 ## The feel: an after-hours field notebook
@@ -59,7 +59,7 @@ Three words: **cozy, mischievous, after-hours.**
 - One accent per screen does the shouting. Mechanic colors only appear on the mechanic
   they belong to.
 - Every color has a dark value and a high-contrast value. A new token needs all three.
-- No raw hex outside `tokens.css`. `grep -n "#[0-9a-f]\{6\}" src/styles/*.css` should
+- No raw hex outside `tokens.css`. `grep -n "#[0-9a-f]\{6\}" apps/picross/src/styles/*.css` should
   only find tokens.
 
 ## Type
@@ -76,7 +76,7 @@ Three words: **cozy, mischievous, after-hours.**
 
 - Enemies, cast portraits, gadgets and map icons are pixel-art stickers in the palette
   (graphite outlines, one accent color each, two at most), so they match the puzzle
-  pictures. They live in `public/art/` and are referenced by id. Power glyphs are masks
+  pictures. They live in `apps/picross/public/art/` and are referenced by id. Power glyphs are masks
   that take the theme's text color.
 - The prompts for every piece and the review checklist are in
   [art/prompts/](art/prompts/README.md). The approved candidates are cleaned by

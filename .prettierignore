@@ -5,6 +5,7 @@ node_modules
 package-lock.json
 docs/art/incoming/*.json
 docs/art/incoming/*.html
-cubed/dist
-cubed/playwright-report
-cubed/test-results
+apps/*/dist
+apps/*/dist-script-review
+apps/*/playwright-report
+apps/*/test-results

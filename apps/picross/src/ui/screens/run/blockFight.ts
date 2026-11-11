@@ -7,12 +7,12 @@
  * HP and phases carry between the boards as a share of the enemy's HP (the boards scale HP
  * differently); each board keeps its own progress, so going back finds it as you left it.
  */
-import { Battle, type BattleState as BlockBattle } from '../../../../cubed/src/game/battle';
-import { hashString } from '../../../../cubed/src/puzzles/hide';
-import { getEncounter } from '../../../../cubed/src/story/data';
-import { shapePicture } from '../../../../cubed/src/ui/board/thumbnail';
-import { createPlay, type Play } from '../../../../cubed/src/ui/screens/play';
-import { fightKind, type FightRun } from '../../../../cubed/src/ui/screens/story/fight';
+import { Battle, type BattleState as BlockBattle } from '../../../../../cubed/src/game/battle';
+import { hashString } from '../../../../../cubed/src/puzzles/hide';
+import { getEncounter } from '../../../../../cubed/src/story/data';
+import { shapePicture } from '../../../../../cubed/src/ui/board/thumbnail';
+import { createPlay, type Play } from '../../../../../cubed/src/ui/screens/play';
+import { fightKind, type FightRun } from '../../../../../cubed/src/ui/screens/story/fight';
 import { advancePhase, boardAt, carryHp, startBattle, type Enemy } from '../../../game/battle';
 import { damage, removeGadget, withBattle, withBlock } from '../../../game/run';
 import { getCurrentRun, hasSeenTip, markTipSeen, saveCurrentRun } from '../../../game/runSave';
