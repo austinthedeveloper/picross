@@ -68,7 +68,11 @@ shape: it paints it instead and costs a heart. Solved means every cube outside t
 broken; painting is only a help. Undo works in whole strokes. Cubed's saves are the 2D game's
 since the save merge (#155): `game/progress.ts`, `runSave.ts` and `settings.ts` here are views
 of `picross:v2` (the `block:` ids), `picross:run` (Cubed's run is its `block`) and
-`picross:settings` (`dimDone`, `cubedTutorialDone`), so the screens didn't change. Since
+`picross:settings` (`dimDone`, `cubedTutorialDone`), so the screens didn't change. Its
+settings are on the one settings screen (`#/settings`, #154): sound, haptics, contrast and the
+mode with the 2D game's, and fading finished clues and the tutorial in a Cubed group; the
+list keeps the mode and links there. The play screen sets `data-faded` on its canvas (how
+many clues show faded) for the browser tests. Since
 #156 `game/daily.ts` is a view of the one daily (`picross:daily2`): one daily for both
 games, on Cubed's board every other day, with one streak. Since #157 its badges are on the
 one shelf (`#/badges`, `picross:badges`): earned and saved like the 2D game's, as
@@ -105,7 +109,7 @@ first download or Cubed's list. Every link between them goes through `cubedHref(
 
 | Route                                 | File                                           | What                                                           |
 | ------------------------------------- | ---------------------------------------------- | -------------------------------------------------------------- |
-| `#/cubed`                             | `selectScreen.ts`                              | The list, filters, settings; other screens add cards           |
+| `#/cubed`                             | `selectScreen.ts`                              | The list, filters, mode; other screens add cards               |
 | `#/cubed/play/<id>`                   | `gameScreen.ts`                                | Free play: saves, times, Next                                  |
 | `#/cubed/tutorial`                    | `tutorial.ts`                                  | The guided tutorial on a 3×2×2 block                           |
 | `#/cubed/how-to-play`                 | `howToPlay.ts`                                 | The rules                                                      |
@@ -113,6 +117,7 @@ first download or Cubed's list. Every link between them goes through `cubedHref(
 | `#/cubed/p/<code>`                    | `sharedScreen.ts`                              | A shared puzzle; `/test` for the editor's play-test            |
 | `#/daily` (on a Cubed day)            | `dailyScreen.ts` (`dailyCard.ts` for the list) | Today's puzzle and streak; `#/cubed/daily` moves here (#156)   |
 | `#/badges`                            | the app's `ui/screens/badges.ts`               | The one badge shelf; `#/cubed/badges` moves here (#157)        |
+| `#/settings`                          | the app's `ui/screens/settings.ts`             | Both games' settings, with Cubed's in their own group (#154)   |
 | `#/cubed/diorama/<id>[/<n>]`          | `dioramaScreen.ts` (`dioramaList.ts`)          | A diorama and its pieces                                       |
 | `#/cubed/story`, `#/cubed/story/play` | `story/*`                                      | Story mode (see [story.md](story.md))                          |
 

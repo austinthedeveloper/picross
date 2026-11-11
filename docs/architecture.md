@@ -121,13 +121,14 @@ apps/
       ui/
         powers.ts          A one-line tip per enemy power (#79)
         screens/
-          selectScreen.ts    Puzzle list, mode, settings, stats       (#/)
+          selectScreen.ts    Puzzle list, mode, stats, Settings link  (#/)
           freePlaySession.ts Free-play PlaySession: saves, best times, "Next" (#/play/<id>)
           daily.ts           The daily: its card on the list, and a Flat day's PlaySession (#/daily)
           mural.ts           Murals: the list section, a mural's tiles, playing a tile (#/mural/…)
           howToPlay.ts       Guided solve on a real board, then rules (#/how-to-play)
           editorScreen.ts    Puzzle authoring tool                   (#/editor)
           badges.ts          The badge shelf                         (#/badges)
+          settings.ts        Both games' settings (#154)             (#/settings)
           run/               Runs                                    (#/run, #/run/play)
             index.ts         Run hub router and the puzzle-list banner
             shared.ts        Hub type, loadRun, mode picker, start buttons
@@ -424,6 +425,24 @@ from `cubedTutorialDone`), so Cubed's screens didn't change. A job is the same j
 board, so the job stats and the scenes seen are both games', while each game keeps its own
 run in progress, and either can be continued while the other waits.
 
+**The settings screen** (#154) at `#/settings` (`ui/screens/settings.ts`), linked from both
+games' lists (`ui/components/settingsLink.ts`), shows the one `picross:settings`:
+
+- **General:** Sound (`muted`), Haptics (on a touch screen that can buzz), High contrast and
+  the mode (Relaxed or Hearts, which the lists can change too). Light or dark, and reduced
+  motion, follow the device; a line on the screen says so.
+- **Cubed:** Fade finished clues (`dimDone`), and a link to replay the block tutorial.
+- **No Flat group:** the 2D game has no settings of its own beyond its list's order, filters
+  and closed sections, which stay on its list.
+
+The switches are native checkboxes with `role="switch"`, and the mode is a pair of radio
+buttons, so the keyboard works as usual. Since there's one save, a change is the same change
+everywhere: the boards read sound, contrast and haptics through `providePrefs` and
+`dimDone` through `providePlayPrefs` as they draw, so a board you go back to (a fight on its
+block phase too) has the new value. The lists' old sound, contrast, haptics and fading
+buttons moved here; each board keeps its speaker button. `picross3d:settings` is read only by
+the migration (a test in `migrate.test.ts` checks).
+
 A `block:` id in `picross:v2` always means Cubed's pack or a diorama tile. Four 3D story
 puzzles share ids with the pack (`block:bat`), but story boards are saved in the run, never
 here (only Cubed's free-play and diorama screens record solves).
@@ -589,6 +608,7 @@ draws. A new screen is one entry. Hash routing works on GitHub Pages without ser
 | `#/how-to-play`    | `renderHowToPlay`: the interactive tutorial and the rules                                         |
 | `#/editor`         | `renderEditorScreen`                                                                              |
 | `#/badges`         | `renderBadgesScreen`: the badge shelf (#109)                                                      |
+| `#/settings`       | `renderSettingsScreen`: both games' settings (#154), loaded with `lazy`                           |
 | `#/run`            | `renderRunScreen`: start panel, path map, or results                                              |
 | `#/scene/<id>`     | `renderSceneScreen`: preview a scene (Replay at the end)                                          |
 | `#/run/play`       | `renderRunEncounter`: the current encounter's puzzle                                              |
@@ -700,7 +720,8 @@ Both games' styles are in the app, and some class names mean different things in
 (`.puzzle-card`, `.stage`, `.topbar`). So each game's own screen styles apply only on its
 board (`scripts/scopeByBoard.ts`): Cubed's under `<html data-board="block">`, which the
 router sets on `#/cubed/…`, and this game's without it. The shared ones (tokens, base, run,
-fight, dig, dialogue, art) apply everywhere. See [Switching board](#switching-board-the-curator).
+fight, dig, dialogue, art) apply everywhere, and so does the settings screen's
+(`styles/settings.css`), which is both games'. See [Switching board](#switching-board-the-curator).
 A screen both games show is unscoped too: free play's tabs, filters and pickers
 (`styles/freePlay.css`) look the same on the Flat tab and on the Cubed tab, where
 `data-board="block"` is up.
