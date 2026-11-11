@@ -116,7 +116,11 @@ first download or Cubed's list. Every link between them goes through `cubedHref(
 | `#/cubed/diorama/<id>[/<n>]`          | `dioramaScreen.ts` (`dioramaList.ts`)          | A diorama and its pieces                                       |
 | `#/cubed/story`, `#/cubed/story/play` | `story/*`                                      | Story mode (see [story.md](story.md))                          |
 
-Scenes (`#/scene/<id>`) are both games'. On its routes the router sets
+Scenes (`#/scene/<id>`) are both games', and so is free play (#153): its Cubed tab,
+`#/free/cubed`, is a route of the app's that loads this chunk and draws the list's sections
+and dioramas (`puzzleList(size)` in `selectScreen.ts`, through `freePlayList` in `routes.ts`),
+with the shared filters and free play's size filter; `freePlayPicks` gives its Next unsolved
+and Surprise me their puzzles. The list's thumbnails draw as they near the screen. On its routes the router sets
 `<html data-board="block">`, where Cubed's styles apply, and hands shared code Cubed's view
 of the settings (see [the 2D game's routing](../architecture.md#routing-and-screens)).
 
