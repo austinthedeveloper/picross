@@ -17,7 +17,8 @@
  * some are how a board's game saves a fight: `FightState` numbers phases and names its
  * counts the block's way (`phase` is the last phase's index, -1 for none, and wrong fills
  * are `mistakes`), where the 2D game's save counts the phases started and says
- * `wrongFills`; the 2D game's codec turns one into the other (#166's second half).
+ * `wrongFills`; the 2D game's codec (`apps/picross/src/game/battleCodec.ts`) turns one into
+ * the other.
  */
 export interface FightRules {
   /**
@@ -79,19 +80,24 @@ export interface FightRules {
   wipeMarks: 'next-update' | 'until-refilled';
 
   /**
-   * The order a stroke's finished lines take effect.
-   * - Block: `'block'`. Ink washes, then chip damage or the armor takes it (and hits
-   *   back), then the charge, then the turn, then any phases the HP fell into, each phase's
-   *   swap first so its fog and scrambles are checked against the board it leaves. Phases
-   *   start only from finished lines (and `carry`); call-outs and bombs wait for the next.
-   * - Grid: lift what the lines clear (fog, ink, wipe marks, suspects, scrambles), chip,
-   *   start phases, then the armor's, the turn's and the charge's meters; a call-out, a
-   *   gadget or damage starts phases too. Swaps and turns wait for the stroke to end; ink,
-   *   zaps, the armor's hits and a bomb's blast for the redraw (`gridStep`'s `Later`).
-   *   Not played here yet: the 2D game moves onto this battle in #166's second half, which
-   *   adds `'grid'`.
+   * The order a stroke's finished lines take effect, and what waits.
+   * - Block: `'block'`. `update` polls the board for finished lines. Ink washes, then chip
+   *   damage or the armor takes it (and hits back), then the charge (a zap lands at once),
+   *   then the turn, then any phases the HP fell into, each phase's swap first so its fog
+   *   and scrambles are checked against the board it leaves. Phases start only from
+   *   finished lines (and `carry`); call-outs and bombs wait for the next.
+   * - Grid: `'grid'`. The board reports the lines that just finished (`finished`), so a line
+   *   a swap re-opened and you refilled comes again. They lift what they clear (fog, ink,
+   *   wipe marks, suspects, scrambles), chip, start phases, then move the armor's, the
+   *   turn's and the charge's meters, and the charge aims (`aim`). A call-out, a gadget
+   *   (`use`, its damage the gadget's own) or damage starts phases too. What would change
+   *   the board under a stroke waits, as `due` events the caller lands at its moment: a
+   *   phase's swap (`landSwap`) and a turn (`landTurn`) once the stroke ends; a phase's ink
+   *   (`landInk`), a zap (`landZap`), the armor's hit back (`landHitBack`) and a bomb's
+   *   blast (`landBlast`) once the redraw is over. The caller wipes and reveals the board
+   *   itself, after it saves (the 2D game's `gridStep` does all this).
    */
-  order: 'block';
+  order: 'block' | 'grid';
 }
 
 /** Cubed's fight, exactly as it plays: every block fight runs on these. */
@@ -107,12 +113,10 @@ export const BLOCK_RULES: Readonly<FightRules> = Object.freeze({
 });
 
 /**
- * The 2D game's rules, for when its fights move onto `StoryBattle` (#166's second half).
- * Every field but `order` is the 2D game's already; `order` waits for `'grid'`. Until then
- * the 2D game plays on `gridStep` (`apps/picross/src/game/fight.ts`), and nothing builds a
- * battle with these.
+ * The 2D game's fight, exactly as it plays: every flat fight runs on these, through
+ * `gridStep` (`apps/picross/src/game/fight.ts`).
  */
-export const GRID_RULES: Readonly<Omit<FightRules, 'order'>> = Object.freeze({
+export const GRID_RULES: Readonly<FightRules> = Object.freeze({
   fakesCount: false,
   armorHitBack: 'fixed',
   armoredAttack: 'armor',
@@ -120,4 +124,5 @@ export const GRID_RULES: Readonly<Omit<FightRules, 'order'>> = Object.freeze({
   countRelaxed: false,
   gadgetKinds: true,
   wipeMarks: 'until-refilled',
+  order: 'grid',
 });

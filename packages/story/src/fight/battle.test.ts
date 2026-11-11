@@ -10,8 +10,8 @@ import {
   StoryBattle,
   type BattleBoard,
   type FightEnemy,
-  type FightEvent,
   type FightState,
+  type GridEvent,
 } from './battle';
 import { BLOCK_RULES, GRID_RULES, type FightRules } from './rules';
 
@@ -41,7 +41,7 @@ function finish(blocks: Uint8Array, line: number) {
 const empty = puzzle.lines
   .filter((l) => l.cells.every((c) => !puzzle.solution[c]))
   .map((l) => l.id);
-const kinds = (events: FightEvent[]) => events.map((e) => e.kind);
+const kinds = (events: GridEvent[]) => events.map((e) => e.kind);
 
 const enemy = (extra: Partial<FightEnemy> = {}): FightEnemy => ({
   name: 'Test',
@@ -179,6 +179,72 @@ describe('the rules', () => {
     expect(finishedLines(puzzle, blocks)).toContain(wiped[0]);
     b.update(blocks);
     expect(b.state.swapped).toEqual(wiped.slice(1));
+  });
+});
+
+describe("order: 'grid'", () => {
+  const grid = (e: FightEnemy, hitsOn = true) =>
+    new StoryBattle(e, GRID_RULES, board, hitsOn, undefined, { seed: 3 });
+
+  it('takes the lines the board reports: lifts, chips, then starts phases', () => {
+    const e = enemy({
+      hp: 10,
+      fog: { pool: [empty[0]] },
+      phases: [{ at: 0.9, fog: { pool: [empty[1], empty[2]] }, swap: true, ink: 2 }],
+    });
+    const b = grid(e);
+    expect(() => b.update(blank())).toThrow();
+    const events = b.finished([empty[0]], blank());
+    expect(kinds(events)).toEqual(['cleared', 'chip', 'phase', 'due', 'due']);
+    expect(events[0]).toEqual({ kind: 'cleared', power: 'fog', lines: [empty[0]] });
+    expect(events[2]).toMatchObject({ index: 0, fogged: [empty[1], empty[2]] });
+    // The swap and the ink wait for the caller.
+    expect(events.slice(3)).toEqual([
+      { kind: 'due', power: 'swap' },
+      { kind: 'due', power: 'ink', size: 2, count: undefined },
+    ]);
+    expect(b.state.fog).toEqual([empty[1], empty[2]]);
+    expect(b.state.swapped).toEqual([]);
+    // A refilled line comes again: it lifts, but it's struck already.
+    expect(b.finished([empty[0]], blank())).toEqual([
+      { kind: 'chip', amount: 0, lines: [empty[0]] },
+    ]);
+  });
+
+  it('a call-out, a gadget or damage can start phases', () => {
+    const e = enemy({
+      hp: 10,
+      fakes: { fakes: { pool: [empty[0]] }, suspects: { pool: empty.slice(0, 2) } },
+      phases: [{ at: 0.5, name: 'Half' }, { at: 0.3 }, { at: 0.1 }],
+    });
+    const b = grid(e);
+    expect(kinds(b.accuse(empty[0]))).toEqual(['caught', 'phase']);
+    expect(b.current.name).toBe('Half');
+    // The bomb deals the gadget's damage, and its blast waits.
+    expect(b.use({ kind: 'blast', damage: 2 })).toEqual([
+      { kind: 'chip', amount: 2, lines: [] },
+      { kind: 'phase', phase: e.phases![1], index: 1, fogged: [], scrambled: [] },
+      { kind: 'due', power: 'blast' },
+    ]);
+    expect(b.state.counts).toMatchObject({ gadgetsUsed: 1, bombsUsed: 1 });
+    expect(kinds(b.damage(2))).toEqual(['chip', 'phase']);
+  });
+
+  it('the charge shows when it first aims, and a zap waits', () => {
+    const b = grid(enemy({ charge: 2 }));
+    expect(b.state.charge).toEqual({ every: 2, meter: 0, live: null });
+    expect(b.aim()).toMatchObject([{ kind: 'charge', every: null }]);
+    const [aimed] = b.aim(blank());
+    expect(aimed).toMatchObject({ kind: 'charge', every: 2, warmUp: board.at().warmUpLines() });
+    b.state.charge!.warmUp = 0;
+    const [live] = b.aim(blank());
+    expect(live).toMatchObject({ kind: 'charge', warmUp: 0, picked: true });
+    const others = empty.filter((id) => id !== b.state.charge!.live).slice(0, 2);
+    expect(b.finished(others, blank()).filter((e) => e.kind === 'due')).toEqual([
+      { kind: 'due', power: 'zap' },
+    ]);
+    expect(b.landZap()).toEqual([{ kind: 'hit', amount: 2, cause: 'zap' }]);
+    expect(b.state.counts.zaps).toBe(1);
   });
 });
 
