@@ -20,6 +20,7 @@ The paths under `src/` are the ones these files had in the 2D game, so
 | Pack    | `src/puzzles/index.ts` (loads `pack/*.json` and the story's run puzzles from `@picross/story`; `ORDER`), `pack/`, `sheets/`, `ratings.json` and `difficulty.ts` |
 | Murals  | `src/puzzles/murals.ts`, `murals/*.json`                                                                                                                        |
 | Play    | `src/game/game.ts`: `Game` (board, history, hearts, hints, clock) and its save format, `SavedBoard`                                                             |
+| Fights  | `src/game/fightBoard.ts`: `gridFightBoard`, the story's `FightBoard` over a 2D puzzle and its board (#164); its test runs the story's contract                  |
 | Debug   | `src/debug/hooks.ts`: how the debug panel (in the app) reaches into a board in play                                                                             |
 
 `pack.test.ts` checks every pack and run puzzle is uniquely solvable without guessing
