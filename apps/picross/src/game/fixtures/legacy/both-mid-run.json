@@ -1,0 +1,181 @@
+{
+  "description": "Both games played, each with First Job won and a second First Job run in progress, partway into its second encounter.",
+  "origin": "Played in Chrome by a Playwright script against the build before the merge (50d4082), then every localStorage key dumped as it was. Nothing hand-edited.",
+  "keys": {
+    "picross3d:badges": {
+      "tiers": {
+        "solver": -1,
+        "clean": 0,
+        "big": 0,
+        "daily": -1,
+        "story": 0,
+        "hits-on": -1,
+        "overtime": -1,
+        "builder": -1,
+        "diorama": -1
+      }
+    },
+    "picross3d:daily": {
+      "streak": 1,
+      "best": 1,
+      "times": {
+        "2026-11-11": 662.3000000715256
+      },
+      "last": "2026-11-11"
+    },
+    "picross3d:run": {
+      "current": {
+        "runId": "first-job",
+        "node": 1,
+        "hp": 12,
+        "maxHp": 12,
+        "gadgets": ["patch-kit"],
+        "status": "active",
+        "mode": "relaxed",
+        "tally": {
+          "mistakes": 0,
+          "hintsUsed": 0,
+          "gadgetsUsed": 0
+        },
+        "board": {
+          "blocks": "22000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "elapsed": 584.7999999523163,
+          "mode": "relaxed"
+        }
+      },
+      "seenScenes": ["first-job-intro", "after-hours-opening"],
+      "seenTips": [],
+      "jobs": {
+        "first-job": {
+          "plays": 1,
+          "wins": 1
+        }
+      }
+    },
+    "picross3d:settings": {
+      "mode": "relaxed",
+      "listFilter": "done",
+      "listDifficulty": "any",
+      "dimDone": false,
+      "tutorialDone": true,
+      "muted": true,
+      "highContrast": false,
+      "haptics": true
+    },
+    "picross3d:v1": {
+      "solved": {
+        "steps": {
+          "solves": 1,
+          "bestTime": 282.2000000476837,
+          "clean": 1
+        },
+        "jack": {
+          "solves": 1,
+          "bestTime": 287.39999997615814,
+          "clean": 1
+        },
+        "heart": {
+          "solves": 1,
+          "bestTime": 630.1999999284744,
+          "clean": 1
+        }
+      },
+      "boards": {
+        "mug": {
+          "blocks": "000220002000000000000000000000000000000000000000000000000000",
+          "elapsed": 602.2999999523163,
+          "mode": "relaxed"
+        }
+      },
+      "totalTime": 1199.7999999523163
+    },
+    "picross:badges": {
+      "earned": {
+        "invoiced-a-bat": {
+          "tier": "gold",
+          "at": 1794391529720
+        },
+        "toolbox-shut": {
+          "at": 1794391529720
+        }
+      }
+    },
+    "picross:daily": {
+      "streak": 1,
+      "best": 1,
+      "solves": 1,
+      "lastSolved": "2026-11-11"
+    },
+    "picross:game": "cubed",
+    "picross:run": {
+      "current": {
+        "runId": "first-job",
+        "node": 1,
+        "hp": 12,
+        "maxHp": 12,
+        "gadgets": ["patch-kit"],
+        "status": "active",
+        "mode": "hearts",
+        "tally": {
+          "wrongFills": 0,
+          "zaps": 0,
+          "wrongAccusations": 0,
+          "gadgetsUsed": 0,
+          "bombsUsed": 0,
+          "spongesUsed": 0,
+          "hintsUsed": 0
+        },
+        "board": {
+          "cells": "1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "elapsed": 1862,
+          "mode": "relaxed"
+        }
+      },
+      "seenScenes": ["first-job-intro", "after-hours-opening"],
+      "jobs": {
+        "first-job": {
+          "plays": 1,
+          "wins": 1,
+          "bestHp": 12,
+          "hitsOnWins": 1
+        }
+      },
+      "currentUpdatedAt": 1794391537150
+    },
+    "picross:settings": {
+      "mode": "hearts",
+      "listFilter": "all",
+      "listOrder": "asc",
+      "listDifficulty": "any",
+      "collapsedSections": [],
+      "muted": false,
+      "highContrast": false,
+      "haptics": true
+    },
+    "picross:v1": {
+      "solved": {
+        "arrow": {
+          "solves": 1,
+          "bestTime": 696.8999999761581
+        },
+        "bell": {
+          "solves": 1,
+          "bestTime": 609.6999999284744
+        },
+        "heart": {
+          "solves": 1,
+          "bestTime": 759.5999999046326
+        }
+      },
+      "boards": {
+        "flag": {
+          "cells": "1100000000000000000000000",
+          "elapsed": 411,
+          "mode": "hearts",
+          "hearts": 3
+        }
+      },
+      "totalTime": 2066.199999809265
+    }
+  }
+}

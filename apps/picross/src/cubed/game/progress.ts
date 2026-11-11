@@ -1,79 +1,27 @@
 import type { SavedBoard } from '@picross/block/game/game';
-import { readStore, writeStore } from '@picross/shared/game/storage';
+import { progressFor, type PuzzleStats as Stats } from '../../game/progress';
 
-const KEY = 'picross3d:v1';
+/**
+ * Cubed's free play: a view of the one save (`game/progress.ts`, `picross:v2`) on the
+ * `block` dimension, with bare ids. Before #155 it had its own key, `picross3d:v1`.
+ */
 
-// An unfinished block's save is the block package's (`Game.save()`); this file stores them.
+// An unfinished block's save is the block package's (`Game.save()`).
 export type { SavedBoard };
 
-export interface PuzzleStats {
-  solves: number;
-  bestTime: number;
-  /** Solves without a hint. */
-  clean?: number;
-}
+export type PuzzleStats = Stats;
 
-export interface SaveData {
-  solved: Record<string, PuzzleStats>;
-  boards: Record<string, SavedBoard>;
-  totalTime: number;
-  /** Editor play-tests solved. */
-  playtests?: number;
-}
+const block = progressFor('block');
 
-const data: SaveData = readStore<SaveData>(KEY, { solved: {}, boards: {}, totalTime: 0 });
-const persist = () => writeStore(KEY, data);
+export const { getPuzzleStats, getOverallStats, getSavedBoard, saveBoard, clearSavedBoard } = block;
 
-export function getPuzzleStats(id: string): PuzzleStats | undefined {
-  return data.solved[id];
-}
-
-/** Records a solve. Returns true when it beats the previous best time. */
-export function recordSolve(id: string, time: number, hintsUsed = 0): boolean {
-  const prev = data.solved[id];
-  // v0.1.0 recorded 0:00 for solves in one sitting; that's no best at all.
-  const prevBest = prev && prev.bestTime > 0 ? prev.bestTime : Infinity;
-  data.solved[id] = {
-    solves: (prev?.solves ?? 0) + 1,
-    bestTime: Math.min(prevBest, time),
-    clean: (prev?.clean ?? 0) + (hintsUsed ? 0 : 1),
-  };
-  data.totalTime += time;
-  delete data.boards[id];
-  persist();
-  return prevBest !== Infinity && time < prevBest;
-}
+/** Records a solve, counting it clean without a hint. Returns true when it beats the best. */
+export const recordSolve = (id: string, time: number, hintsUsed = 0): boolean =>
+  block.recordSolve(id, time, hintsUsed);
 
 /** Every puzzle id solved at least once. */
-export const solvedIds = () => Object.keys(data.solved);
+export const solvedIds = () => block.solvedIds();
 
-export const cleanSolves = () =>
-  Object.values(data.solved).filter((s) => (s.clean ?? 0) > 0).length;
+export const cleanSolves = () => block.cleanSolves();
 
-export function recordPlaytest(): void {
-  data.playtests = (data.playtests ?? 0) + 1;
-  persist();
-}
-
-export const playtests = () => data.playtests ?? 0;
-
-export function getOverallStats() {
-  const all = Object.values(data.solved);
-  return {
-    solved: all.length,
-    solves: all.reduce((n, s) => n + s.solves, 0),
-    totalTime: data.totalTime,
-  };
-}
-
-export const getSavedBoard = (id: string): SavedBoard | undefined => data.boards[id];
-
-export function saveBoard(id: string, board: SavedBoard): void {
-  data.boards[id] = board;
-  persist();
-}
-
-export function clearSavedBoard(id: string): void {
-  delete data.boards[id];
-  persist();
-}
+export { playtests, recordPlaytest } from '../../game/progress';

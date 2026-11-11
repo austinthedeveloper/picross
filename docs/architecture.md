@@ -107,13 +107,16 @@ apps/
       game/                Game state and saves, no DOM (Game itself is in packages/grid)
         battle.ts          Enemy and BattleState: chip, finisher, gadgets, phases, armor, call-outs, boardAt
         run.ts             RunState and its pure transitions
-        progress.ts        Free-play saves, solve stats, totals (localStorage)
-        runSave.ts         Current run, seen scenes, job stats (localStorage)
-        settings.ts        Mode, list filter/order, closed sections, mute, high contrast, haptics (localStorage)
+        progress.ts        Both games' free play: solve stats, boards, time (localStorage; progressFor(dim))
+        runSave.ts         Both games' runs, seen scenes, job stats (localStorage)
+        settings.ts        Both games' settings: mode, list filter/order, mute, haptics, dimDone… (localStorage)
         daily.ts           Daily streak, best, and today's board (localStorage, #69)
         badges.ts          Badge rules and the earned badges (#108)
         rank.ts            Rank, worked out from solves (#106)
         saveMerge.ts       Merges two copies of a save (#97)
+        migrate.ts         Save migrations, first thing at startup; step 1 merges the two games' saves (#155)
+        legacyMerge.ts     That merge's rules, pure (tested on fixtures/legacy/, saves from real play)
+        merging.ts         The pieces both merges are built from
         pickPuzzle.ts      The next unsolved puzzle (#114)
       ui/
         powers.ts          A one-line tip per enemy power (#79)
@@ -163,7 +166,7 @@ apps/
       cubed/               Picross Cubed, the 3D game (#/cubed/…; docs/cubed/), loaded on demand
         routes.ts          Its routes, from #/cubed on; hands over its settings while they're up
         href.ts            cubedHref(): every link between its screens
-        game/              Saves under picross3d: keys: progress, settings, run, runSave, daily, badges
+        game/              Views of the one save (progress, settings, runSave), its daily and badges
         ui/screens/        The list, free play, tutorial, how to play, shared puzzles, daily, dioramas, badges
           story/           Story screens: jobs board, path map, encounters, digs, rests, results
         styles/select.css  The list
@@ -394,23 +397,61 @@ rules stay identical across input methods.
 
 ## State and persistence
 
-All saved data lives in `localStorage`, read once at startup and written on change:
+All saved data lives in `localStorage`, read once at startup and written on change. Since
+the save merge (#155) the 2D game and Picross Cubed share one save:
 
-| Key                | Module                       | Contents                                                                                                                            |
-| ------------------ | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `picross:v1`       | `game/progress.ts`           | In-progress boards, per-puzzle stats, total solving time                                                                            |
-| `picross:run`      | `game/runSave.ts`            | The current run (with the current encounter's board) and seen scenes                                                                |
-| `picross:badges`   | `game/badges.ts`             | Earned badges: each one's best tier and the date you first earned it                                                                |
-| `picross:settings` | `game/settings.ts`           | `mode` (default for new runs), `listFilter`, `listOrder`, `listDifficulty`, `collapsedSections`, `muted`, `highContrast`, `haptics` |
-| `picross:daily`    | `game/daily.ts`              | Daily streak, best streak, solve count, and today's board                                                                           |
-| `picross:editor`   | `ui/screens/editorScreen.ts` | The editor's current drawing                                                                                                        |
+| Key                | Module                       | Contents                                                                                                                                                                                                            |
+| ------------------ | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `picross:v2`       | `game/progress.ts`           | Both games' free play, by qualified id (`grid:mug`, `block:mug`): per-puzzle stats (`clean` solves for Cubed), in-progress boards, time played per dimension (`time.grid`, `time.block`), Cubed's editor play-tests |
+| `picross:run`      | `game/runSave.ts`            | The 2D run in progress (`current`, with the current encounter's board), Cubed's (`block.current`, its own RunState), the scenes and tips seen, and job stats from both (`wonOn`: the boards a job's been won on)    |
+| `picross:settings` | `game/settings.ts`           | `mode` (default for new runs), `listFilter`, `listOrder`, `listDifficulty`, `collapsedSections`, `muted`, `highContrast`, `haptics`, and Cubed's `dimDone` and `cubedTutorialDone`, and `freePlayTab` (#153)        |
+| `picross:badges`   | `game/badges.ts`             | Earned badges: each one's best tier and the date you first earned it                                                                                                                                                |
+| `picross:daily`    | `game/daily.ts`              | Daily streak, best streak, solve count, and today's board                                                                                                                                                           |
+| `picross:editor`   | `ui/screens/editorScreen.ts` | The editor's current drawing                                                                                                                                                                                        |
+| `picross:game`     | `gameSwitch.ts` (shared)     | The Flat \| Cubed switch's last pick                                                                                                                                                                                |
+| `picross:save`     | `game/migrate.ts`            | `{ version, mergedAt }`: the migrations run so far                                                                                                                                                                  |
+| `picross:premerge` | `game/migrate.ts`            | The text of `picross:run` and `picross:settings` from before the merge rewrote them                                                                                                                                 |
+| `picross3d:daily`  | `cubed/game/daily.ts`        | Cubed's daily streak and times, apart until #156                                                                                                                                                                    |
+| `picross3d:badges` | `cubed/game/badges.ts`       | The Cubed badge tiers already seen, apart until #157                                                                                                                                                                |
+
+Cubed's `cubed/game/progress.ts`, `runSave.ts` and `settings.ts` are views of the first three
+on the `block` side (`progressFor('block')`, `block` in the run save, `tutorialDone` read
+from `cubedTutorialDone`), so Cubed's screens didn't change. A job is the same job on either
+board, so the job stats and the scenes seen are both games', while each game keeps its own
+run in progress, and either can be continued while the other waits.
+
+A `block:` id in `picross:v2` always means Cubed's pack or a diorama tile. Four 3D story
+puzzles share ids with the pack (`block:bat`), but story boards are saved in the run, never
+here (only Cubed's free-play and diorama screens record solves).
+
+**The first-launch merge** (#155). `game/migrate.ts` runs versioned steps, each safe to run
+again, and writes `picross:save` after each. `main.ts` imports it first, and it imports no
+store module, because the stores read `localStorage` as soon as they're imported. Step 1
+merges the two old games' saves with `game/legacyMerge.ts` (pure, tested on fixtures from
+real play in `game/fixtures/legacy/`):
+
+- **Free play:** `picross:v1` and `picross3d:v1` into `picross:v2`, ids qualified.
+- **Story:** Cubed's `picross3d:run` into `picross:run`: its run under `block` as it was,
+  scenes and tips as one set, and job stats added up (plays, wins, Hits-on wins), with the
+  better best HP and `wonOn` for where each was won.
+- **Settings:** `picross3d:settings` into `picross:settings`. A setting both games have takes
+  the 2D game's value where its key had one, and Cubed's otherwise. `picross:game` becomes
+  `freePlayTab`.
+- **Not yet:** the two dailies stay on their own keys until #156, and badges are recounted
+  across both in #157.
+
+Nothing deletes a key. `picross:v1` and every `picross3d:` key stay as they were, for a
+rollback, and only the migration reads them. The two keys it rewrites keep their old text in
+`picross:premerge`, which is also what a step reads if it runs again after being cut short,
+so Cubed's jobs never count twice.
 
 `game/saveMerge.ts` combines two copies of a save (#97), so cross-device sync never has to
 ask which one to keep. It's a pure function with one rule per kind of data: bests and
 unlocks are never lost, the run is taken whole from whichever side changed it last
 (`currentUpdatedAt`), and fields it doesn't recognize pass through, so an older client
-can't delete newer data. Counts take the higher side rather than adding up, because adding
-would double-count on every sync, so playing on two devices between syncs can undercount
+can't delete newer data. Counts take the higher side rather than adding up (unlike the
+first-launch merge, which adds up two different games), because adding would double-count
+on every sync, so playing on two devices between syncs can undercount
 `solves`, `plays` and `totalTime`. Settings and the editor's drawing aren't merged, since
 they belong to one device.
 
@@ -510,8 +551,8 @@ screen with a block (`npm run check:budget` checks both, and a lint rule keeps t
 - sets `<html data-board="block">`, so Cubed's screen styles apply and this game's don't (see
   [Switching board](#switching-board-the-curator)), and clears the screen when you cross
   between the games, so one game's screen is never drawn with the other's styles;
-- hands shared code Cubed's settings (`picross3d:settings`; the merge is #154 and #155)
-  while Cubed's routes are up, and this game's again after;
+- hands shared code Cubed's view of the settings (`cubed/game/settings.ts`, the same save
+  since #155) while Cubed's routes are up, and this game's again after;
 - runs Cubed's page lifecycle: its screens save on `visibilitychange` through
   `ui/lifecycle.ts`, tear down on `pagehide`, and draw again when the page comes back from
   the browser's cache.

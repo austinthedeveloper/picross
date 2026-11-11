@@ -16,7 +16,12 @@ import { el } from '@picross/shared/ui/dom';
 import { debug } from '@picross/grid/debug/hooks';
 import './panel.css';
 
-const SAVE_KEYS = ['picross:v1', 'picross:run', 'picross:daily'];
+/**
+ * What "Reset everything" clears: both games' progress and runs (one save since #155) and
+ * both dailies (apart until #156). The migration's marker stays, so the old games' keys
+ * (`picross:v1`, `picross3d:*`), which are never deleted, don't come back.
+ */
+const SAVE_KEYS = ['picross:v2', 'picross:run', 'picross:daily', 'picross3d:daily'];
 
 /**
  * Leaves the game screen before changing the run: it saves its board on the way

@@ -31,8 +31,10 @@ export async function runAt(
     tally: { mistakes: 0, hintsUsed: 0, gadgetsUsed: 0 },
   };
   await page.goto('/#/cubed');
-  await page.evaluate((save) => localStorage.setItem('picross3d:run', JSON.stringify(save)), {
-    current: run,
+  // Cubed's run is `block` in the one run save (#155).
+  await page.evaluate((save) => localStorage.setItem('picross:run', JSON.stringify(save)), {
+    current: null,
+    block: { current: run },
     seenScenes: [],
     seenTips: [],
     jobs: {},

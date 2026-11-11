@@ -1,0 +1,72 @@
+{
+  "description": "Only the 2D game played: free play, a half-done board, the daily, First Job won in Hearts mode, sound on.",
+  "origin": "Played in Chrome by a Playwright script against the build before the merge (50d4082), then every localStorage key dumped as it was. Nothing hand-edited.",
+  "keys": {
+    "picross:badges": {
+      "earned": {
+        "invoiced-a-bat": {
+          "tier": "gold",
+          "at": 1794391447722
+        },
+        "toolbox-shut": {
+          "at": 1794391447722
+        }
+      }
+    },
+    "picross:daily": {
+      "streak": 1,
+      "best": 1,
+      "solves": 1,
+      "lastSolved": "2026-11-11"
+    },
+    "picross:game": "flat",
+    "picross:run": {
+      "current": null,
+      "seenScenes": ["first-job-intro", "after-hours-opening"],
+      "jobs": {
+        "first-job": {
+          "plays": 1,
+          "wins": 1,
+          "bestHp": 12,
+          "hitsOnWins": 1
+        }
+      },
+      "currentUpdatedAt": 1794391447855
+    },
+    "picross:settings": {
+      "mode": "hearts",
+      "listFilter": "all",
+      "listOrder": "asc",
+      "listDifficulty": "any",
+      "collapsedSections": [],
+      "muted": false,
+      "highContrast": false,
+      "haptics": true
+    },
+    "picross:v1": {
+      "solved": {
+        "arrow": {
+          "solves": 1,
+          "bestTime": 1250.2999999523163
+        },
+        "bell": {
+          "solves": 1,
+          "bestTime": 679.7000000476837
+        },
+        "heart": {
+          "solves": 1,
+          "bestTime": 769.3999999761581
+        }
+      },
+      "boards": {
+        "flag": {
+          "cells": "1100000000000000000000000",
+          "elapsed": 411,
+          "mode": "hearts",
+          "hearts": 3
+        }
+      },
+      "totalTime": 2699.399999976158
+    }
+  }
+}

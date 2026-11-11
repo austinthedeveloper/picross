@@ -4,7 +4,8 @@
  * puzzle, `block:mug` the 3D one.
  *
  * Content files keep their bare ids (`"id": "mug"`); the prefix is added where a pack's
- * puzzles meet the other's. Saves keep bare ids too, until the save merge (#155).
+ * puzzles meet the other's. The one free-play save (`picross:v2`) has used them since the
+ * save merge (#155).
  */
 
 /** Which game a puzzle is from: `grid` is the 2D game's, `block` Picross Cubed's. */

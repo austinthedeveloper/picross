@@ -8,8 +8,10 @@ async function seedSolved(page: Page, ids: string[]) {
   await page.context().addInitScript((list) => {
     if (sessionStorage.getItem('solved')) return;
     sessionStorage.setItem('solved', '1');
-    const solved = Object.fromEntries(list.map((id) => [id, { solves: 1, bestTime: 1000 }]));
-    localStorage.setItem('picross:v1', JSON.stringify({ solved, boards: {}, totalTime: 0 }));
+    const solved = Object.fromEntries(
+      list.map((id) => [`grid:${id}`, { solves: 1, bestTime: 1000 }]),
+    );
+    localStorage.setItem('picross:v2', JSON.stringify({ solved, boards: {}, time: {} }));
   }, ids);
 }
 

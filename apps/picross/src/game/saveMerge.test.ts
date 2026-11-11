@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { random } from '@picross/shared/engine/random';
 import { startRun } from './run';
+import type { SavedBoard, SaveData } from './progress';
 import { mergeSaves, SAVE_VERSION, type SaveBundle } from './saveMerge';
 
 const bundle = (rest: Partial<SaveBundle>): SaveBundle => ({ version: SAVE_VERSION, ...rest });
-const progress = (rest = {}) => ({ solved: {}, boards: {}, totalTime: 0, ...rest });
+const progress = (rest = {}) => ({ solved: {}, boards: {}, time: {}, ...rest });
 const run = (rest = {}) => ({ current: null, seenScenes: [], jobs: {}, ...rest });
 const daily = (rest = {}) => ({ streak: 0, best: 0, solves: 0, ...rest });
 
@@ -16,8 +17,10 @@ function merged(a: SaveBundle, b: SaveBundle) {
 }
 
 describe('free-play progress', () => {
-  const merge = (a = {}, b = {}) =>
-    merged(bundle({ progress: progress(a) }), bundle({ progress: progress(b) })).progress!;
+  const merge = (a = {}, b = {}) => {
+    const out = merged(bundle({ progress: progress(a) }), bundle({ progress: progress(b) }));
+    return out.progress! as SaveData & { boards: Record<string, SavedBoard> };
+  };
 
   it('keeps the lower best time and the higher solve count', () => {
     const out = merge(
@@ -35,8 +38,28 @@ describe('free-play progress', () => {
     expect(Object.keys(out.solved).sort()).toEqual(['p', 'q']);
   });
 
-  it('takes the higher total time rather than adding up', () => {
-    expect(merge({ totalTime: 100 }, { totalTime: 70 }).totalTime).toBe(100);
+  it('takes the higher time in each dimension rather than adding up', () => {
+    const out = merge({ time: { grid: 100, block: 5 } }, { time: { grid: 70, block: 9 } });
+    expect(out.time).toEqual({ grid: 100, block: 9 });
+    expect(merge({ time: { grid: 1 } }).time).toEqual({ grid: 1 });
+  });
+
+  it('keeps the higher clean count and play-tests (Cubed, #155)', () => {
+    const out = merge(
+      { solved: { 'block:mug': { solves: 3, bestTime: 9, clean: 1 } }, playtests: 2 },
+      { solved: { 'block:mug': { solves: 2, bestTime: 8, clean: 2 } } },
+    );
+    expect(out.solved['block:mug']).toEqual({ solves: 3, bestTime: 8, clean: 2 });
+    expect(out.playtests).toBe(2);
+    expect(merge()).not.toHaveProperty('playtests');
+  });
+
+  it('keeps the two dimensions apart', () => {
+    const out = merge(
+      { solved: { 'grid:mug': { solves: 1, bestTime: 5 } } },
+      { solved: { 'block:mug': { solves: 2, bestTime: 6 } } },
+    );
+    expect(Object.keys(out.solved).sort()).toEqual(['block:mug', 'grid:mug']);
   });
 
   it('keeps the board with the most time on it', () => {
@@ -144,6 +167,28 @@ describe('runs and jobs', () => {
       { jobs: { j: { plays: 1, wins: 1, hitsOnWins: 1, bestHp: 5 } } },
     );
     expect(out.jobs.j.bestHp).toBe(5);
+  });
+
+  it('merges the boards a job was won on as a set', () => {
+    const out = merge(
+      { jobs: { j: { plays: 1, wins: 1, wonOn: ['grid'] } } },
+      { jobs: { j: { plays: 2, wins: 2, wonOn: ['block', 'grid'] } } },
+    );
+    expect(out.jobs.j.wonOn).toEqual(['block', 'grid']);
+  });
+
+  it("takes Cubed's run whole by its own date, apart from the 2D run", () => {
+    const flat = { ...startRun('a', 10), node: 2 };
+    const older = { runId: 'b', node: 1 };
+    const newer = { runId: 'c', node: 4 };
+    const out = merge(
+      { current: flat, currentUpdatedAt: 300, block: { current: older, currentUpdatedAt: 100 } },
+      { current: null, currentUpdatedAt: 200, block: { current: newer, currentUpdatedAt: 200 } },
+    );
+    expect(out.current).toEqual(flat);
+    expect(out.block).toEqual({ current: newer, currentUpdatedAt: 200 });
+    expect(merge({}, { block: { current: older } }).block).toEqual({ current: older });
+    expect(merge()).not.toHaveProperty('block');
   });
 });
 
@@ -269,7 +314,7 @@ describe('the save as a whole', () => {
 
   it('merges saves from before tips, stamps, and badges', () => {
     const old = bundle({
-      progress: progress({ solved: { p: { solves: 1, bestTime: 9 } }, totalTime: 9 }),
+      progress: progress({ solved: { p: { solves: 1, bestTime: 9 } }, time: { grid: 9 } }),
       run: run({ seenScenes: ['s'], jobs: { j: { plays: 1, wins: 1, bestHp: 3 } } }),
       daily: daily({ best: 1, solves: 1, streak: 1, lastSolved: '2026-01-01' }),
     });
@@ -297,7 +342,13 @@ describe('order and repeats never matter', () => {
     }
     const jobs: Record<
       string,
-      { plays: number; wins: number; hitsOnWins?: number; bestHp?: number }
+      {
+        plays: number;
+        wins: number;
+        hitsOnWins?: number;
+        bestHp?: number;
+        wonOn?: ('grid' | 'block')[];
+      }
     > = {};
     for (const id of ids) {
       if (!chance()) continue;
@@ -305,6 +356,7 @@ describe('order and repeats never matter', () => {
       jobs[id] = { plays: wins + n(3), wins };
       if (chance()) jobs[id].bestHp = n(9);
       if (chance()) jobs[id].hitsOnWins = n(3);
+      if (wins && chance()) jobs[id].wonOn = chance() ? ['grid'] : ['block', 'grid'];
     }
     const days = ['2026-11-03', '2026-11-04', '2026-11-05'];
     const lastSolved = chance() ? days[n(3)] : undefined;
@@ -318,13 +370,21 @@ describe('order and repeats never matter', () => {
       if (chance()) earned[id].at = 1 + n(5);
     }
     return bundle({
-      progress: { solved, boards, totalTime: n(50) },
+      progress: { solved, boards, time: { grid: n(50), ...(chance() ? { block: n(50) } : {}) } },
       run: {
         current: chance() ? { ...startRun('j', 10), node: n(4) } : null,
         ...(chance() ? { currentUpdatedAt: n(4) } : {}),
         seenScenes: ids.filter(chance),
         ...(chance() ? { seenTips: ids.filter(chance) } : {}),
         jobs,
+        ...(chance()
+          ? {
+              block: {
+                current: chance() ? { runId: 'k', node: n(4) } : null,
+                ...(chance() ? { currentUpdatedAt: n(4) } : {}),
+              },
+            }
+          : {}),
       },
       daily: {
         streak: n(4),

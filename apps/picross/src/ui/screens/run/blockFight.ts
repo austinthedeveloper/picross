@@ -13,11 +13,11 @@ import { getEncounter } from '@picross/block/story/data';
 import { shapePicture } from '@picross/play-block/ui/board/thumbnail';
 import { createPlay, type Play } from '@picross/play-block/ui/screens/play';
 import { fightKind, type FightRun } from '@picross/play-block/ui/screens/story/fight';
-import { providePlayPrefs, type PlayPrefs } from '@picross/play-block/ui/prefs';
+import { providePlayPrefs } from '@picross/play-block/ui/prefs';
 import { advancePhase, boardAt, carryHp, startBattle, type Enemy } from '../../../game/battle';
 import { damage, removeGadget, withBattle, withBlock } from '../../../game/run';
 import { getCurrentRun, hasSeenTip, markTipSeen, saveCurrentRun } from '../../../game/runSave';
-import { readStore } from '@picross/shared/game/storage';
+import { getSettings } from '../../../game/settings';
 import { el } from '@picross/shared/ui/dom';
 
 export interface BlockFightOptions {
@@ -36,10 +36,9 @@ export interface BlockFightOptions {
   ): { note: string; last: boolean };
 }
 
-// This game has no "fade finished clues" setting, so the block follows Cubed's, as it
-// always has (read from Cubed's settings on the same site).
-const cubedPrefs = readStore<PlayPrefs>('picross3d:settings', { dimDone: true });
-providePlayPrefs(() => cubedPrefs);
+// The block fades finished clues as Cubed does: `dimDone`, Cubed's setting, which is in the
+// one settings save since #155.
+providePlayPrefs(getSettings);
 
 /** How long a phase banner shows before the fight changes board. */
 const SWITCH_DELAY = 1200;

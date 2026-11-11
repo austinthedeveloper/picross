@@ -44,11 +44,14 @@ test('badges list every badge with its next step, and count new ones', async ({ 
   await page.evaluate(() => {
     const solved = Object.fromEntries(
       ['steps', 'jack', 'table', 'mug', 'cactus'].map((id) => [
-        id,
+        `block:${id}`,
         { solves: 1, bestTime: 60000, clean: 1 },
       ]),
     );
-    localStorage.setItem('picross3d:v1', JSON.stringify({ solved, boards: {}, totalTime: 300000 }));
+    localStorage.setItem(
+      'picross:v2',
+      JSON.stringify({ solved, boards: {}, time: { block: 300000 } }),
+    );
   });
   await page.reload();
   await expect(page.getByRole('link', { name: /Badges \(\d+ new\)/ })).toBeVisible();
@@ -79,9 +82,9 @@ test('a diorama fills in piece by piece, then turns in 3D', async ({ page }) => 
   await page.evaluate(
     (ids) => {
       const solved = Object.fromEntries(
-        ids.map((id) => [id, { solves: 1, bestTime: 60000, clean: 1 }]),
+        ids.map((id) => [`block:${id}`, { solves: 1, bestTime: 60000, clean: 1 }]),
       );
-      localStorage.setItem('picross3d:v1', JSON.stringify({ solved, boards: {}, totalTime: 0 }));
+      localStorage.setItem('picross:v2', JSON.stringify({ solved, boards: {}, time: {} }));
     },
     placed.map((tile) => `park-${tile.index + 1}`),
   );

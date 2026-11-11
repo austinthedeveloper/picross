@@ -81,8 +81,8 @@ const ROUTES: CubedRoute[] = [
 ];
 
 /**
- * Cubed's settings are its own (picross3d:settings) until the settings merge, so shared code
- * (sound, haptics, the theme, the mute button) and the play screen read them on its routes.
+ * Cubed's settings are a view of the one set (`game/settings.ts`, #155), which shared code
+ * (sound, haptics, the theme, the mute button) and the play screen read on its routes.
  */
 function useCubedSettings(): void {
   providePrefs({ get: getSettings, update: updateSettings });

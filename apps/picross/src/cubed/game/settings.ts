@@ -1,11 +1,19 @@
 import type { Mode } from '@picross/block/game/game';
-import { readStore, writeStore } from '@picross/shared/game/storage';
+import {
+  getSettings as getAll,
+  updateSettings as updateAll,
+  type ListFilter,
+} from '../../game/settings';
+
+/**
+ * Cubed's settings: a view of the one set (`game/settings.ts`, `picross:settings`, #154).
+ * Sound, high contrast, haptics, the mode and the list's filters are both games'; the
+ * fields only Cubed has are `dimDone` and `cubedTutorialDone` there. Before #155 they had
+ * their own key, `picross3d:settings`, which only the migration reads now.
+ */
 
 // The block package defines the mode (a Game is played in one); the settings keep the choice.
-export type { Mode };
-
-/** Which puzzles the list shows. A puzzle in progress counts as not done. */
-export type ListFilter = 'all' | 'todo' | 'done';
+export type { Mode, ListFilter };
 
 export interface Settings {
   mode: Mode;
@@ -22,26 +30,28 @@ export interface Settings {
   haptics: boolean;
 }
 
-// Its own key, so it never mixes with the 2D game's settings on the same site.
-const KEY = 'picross3d:settings';
-const settings: Settings = readStore<Settings>(KEY, {
-  mode: 'relaxed',
-  listFilter: 'all',
-  listDifficulty: 'any',
-  dimDone: true,
-  tutorialDone: false,
-  // Sound starts off; the speaker button turns it on.
-  muted: true,
-  highContrast: false,
-  // Unlike sound, haptics start on: they're silent, so they never surprise anyone nearby.
-  haptics: true,
-});
-
 export function getSettings(): Readonly<Settings> {
-  return settings;
+  const all = getAll();
+  return {
+    mode: all.mode,
+    listFilter: all.listFilter,
+    // The 2D game has a band past Cubed's hardest; Cubed's list shows its hardest for it.
+    listDifficulty: all.listDifficulty === 'insane' ? 'expert' : all.listDifficulty,
+    dimDone: all.dimDone,
+    tutorialDone: all.cubedTutorialDone,
+    muted: all.muted,
+    highContrast: all.highContrast,
+    haptics: all.haptics,
+  };
 }
 
 export function updateSettings(patch: Partial<Settings>): void {
-  Object.assign(settings, patch);
-  writeStore(KEY, settings);
+  const { tutorialDone, listDifficulty, ...rest } = patch;
+  updateAll({
+    ...rest,
+    ...(tutorialDone === undefined ? {} : { cubedTutorialDone: tutorialDone }),
+    ...(listDifficulty === undefined
+      ? {}
+      : { listDifficulty: listDifficulty as ReturnType<typeof getAll>['listDifficulty'] }),
+  });
 }
