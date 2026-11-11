@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
-import { checkPuzzle } from '../../../puzzles/check';
-import type { PuzzleFile } from '../../../puzzles/format';
+import { checkPuzzle } from '@picross/block/puzzles/check';
+import type { PuzzleFile } from '@picross/block/puzzles/format';
 
 /** Checks a shape off the main thread, so a big one never freezes the editor. */
 self.onmessage = (e: MessageEvent<{ id: number; file: PuzzleFile; ratio: number }>) => {

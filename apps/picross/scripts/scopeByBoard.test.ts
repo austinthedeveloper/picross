@@ -22,7 +22,7 @@ describe('scopeSelector', () => {
 
 describe('scopeByBoard', () => {
   it("scopes the 3D game's screen styles to the block", () => {
-    expect(run('.stage, .topbar { gap: 0 }', '/repo/apps/cubed/src/styles/game.css')).toBe(
+    expect(run('.stage, .topbar { gap: 0 }', '/repo/packages/play-block/src/styles/game.css')).toBe(
       ':where(:root[data-board="block"]) .stage, :where(:root[data-board="block"]) .topbar { gap: 0 }',
     );
   });
@@ -32,6 +32,9 @@ describe('scopeByBoard', () => {
       '.stage { gap: 0 }',
     );
     expect(run('.stage { gap: 0 }', '/repo/apps/cubed/src/styles/select.css')).toBe(
+      '.stage { gap: 0 }',
+    );
+    expect(run('.stage { gap: 0 }', '/repo/packages/play-block/src/styles/voxels.css')).toBe(
       '.stage { gap: 0 }',
     );
   });

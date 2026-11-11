@@ -3,7 +3,7 @@ import { MAX_LINE } from '../engine/solver';
 import { allLines, type Dims, type Line, volume } from '../engine/volume';
 
 /**
- * The colors a shape can be painted when it's revealed. Each is a token in
+ * The colors a shape can be painted when it's revealed. Each is a token in play-block's
  * `src/styles/voxels.css` (`--vox-<name>`), with light, dark and high-contrast values.
  */
 export const COLORS = [

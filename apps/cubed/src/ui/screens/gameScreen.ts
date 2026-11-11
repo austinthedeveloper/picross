@@ -1,4 +1,4 @@
-import { SOLID } from '../../game/game';
+import { SOLID } from '@picross/block/game/game';
 import {
   clearSavedBoard,
   getPuzzleStats,
@@ -7,14 +7,14 @@ import {
   saveBoard,
 } from '../../game/progress';
 import { getSettings } from '../../game/settings';
-import { difficultyOf } from '../../puzzles/difficulty';
-import type { Puzzle } from '../../puzzles/format';
-import { nextPuzzle, PUZZLES } from '../../puzzles/index';
-import { shapePicture } from '../board/thumbnail';
+import { difficultyOf } from '@picross/block/puzzles/difficulty';
+import type { Puzzle } from '@picross/block/puzzles/format';
+import { nextPuzzle, PUZZLES } from '@picross/block/puzzles/index';
+import { shapePicture } from '@picross/play-block/ui/board/thumbnail';
 import { el } from '@picross/shared/ui/dom';
-import { formatTime, plural, puzzleNumber } from '../format';
+import { formatTime, plural, puzzleNumber } from '@picross/play-block/ui/format';
 import { onHide } from '../lifecycle';
-import { createPlay } from './play';
+import { createPlay } from '@picross/play-block/ui/screens/play';
 
 /** Free play (#/play/<id>): saves as you go, records times, and offers the next puzzle. */
 export function renderGameScreen(root: HTMLElement, puzzle: Puzzle): () => void {

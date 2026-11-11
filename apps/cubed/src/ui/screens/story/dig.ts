@@ -1,10 +1,10 @@
-import { PAINTED } from '../../../game/game';
+import { PAINTED } from '@picross/block/game/game';
 import { getGadget } from '@picross/shared/puzzles/gadgets';
-import type { Encounter } from '../../../story/data';
+import type { Encounter } from '@picross/block/story/data';
 import { gadgetArt, iconArt } from '@picross/shared/ui/art';
 import { el } from '@picross/shared/ui/dom';
-import type { Kind } from './encounter';
-import { took } from './encounter';
+import type { Kind } from '@picross/play-block/ui/screens/story/kind';
+import { took } from '@picross/play-block/ui/screens/story/kind';
 
 /**
  * A dig: no enemy and no HP pressure. The block is earth; finishing it reveals the find,

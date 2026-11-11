@@ -1,4 +1,4 @@
-import { SOLID } from '../../game/game';
+import { SOLID } from '@picross/block/game/game';
 import {
   clearSavedBoard,
   getPuzzleStats,
@@ -7,17 +7,17 @@ import {
   saveBoard,
 } from '../../game/progress';
 import { getSettings } from '../../game/settings';
-import { getDiorama } from '../../puzzles/dioramas';
-import { BlockView } from '../board/blockView';
-import { attachInput } from '../board/input';
-import { blockOutline, shapePicture } from '../board/thumbnail';
+import { getDiorama } from '@picross/block/puzzles/dioramas';
+import { BlockView } from '@picross/play-block/ui/board/blockView';
+import { attachInput } from '@picross/play-block/ui/board/input';
+import { blockOutline, shapePicture } from '@picross/play-block/ui/board/thumbnail';
 import { homeLink } from '@picross/shared/ui/components/homeLink';
 import { el } from '@picross/shared/ui/dom';
-import { formatTime } from '../format';
+import { formatTime } from '@picross/play-block/ui/format';
 import { picture, placed } from './dioramaList';
 import { playSound } from '@picross/shared/ui/sound';
 import { onHide } from '../lifecycle';
-import { createPlay } from './play';
+import { createPlay } from '@picross/play-block/ui/screens/play';
 
 /** A diorama (#/diorama/<id>): the scene so far, its pieces, and the finished scene to turn. */
 export function renderDioramaScreen(root: HTMLElement, id: string): () => void {

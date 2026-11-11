@@ -27,7 +27,7 @@ export interface RunState {
   mode: Mode;
   /** The current encounter's board, so a reload resumes it. */
   board?: SavedBoard;
-  /** The current fight's state (src/game/battle.ts), so a reload resumes it. */
+  /** The current fight's state (packages/block's game/battle.ts), so a reload resumes it. */
   battle?: unknown;
   /** Set once the finished run's result is in the job stats. */
   recorded?: boolean;

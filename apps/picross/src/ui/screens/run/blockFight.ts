@@ -1,21 +1,23 @@
 /**
  * A story fight on a block, for a boss that switches board (docs/story-combined.md). The
- * block is the 3D game's: its play screen, battle and fight screen (from cubed/), run here
- * against this game's run. This module loads on demand, so three.js stays out of the first
- * download.
+ * block is the 3D game's: its battle (packages/block) and its play and fight screens
+ * (packages/play-block), run here against this game's run. This module loads on demand,
+ * so three.js stays out of the first download.
  *
  * HP and phases carry between the boards as a share of the enemy's HP (the boards scale HP
  * differently); each board keeps its own progress, so going back finds it as you left it.
  */
-import { Battle, type BattleState as BlockBattle } from '../../../../../cubed/src/game/battle';
-import { hashString } from '../../../../../cubed/src/puzzles/hide';
-import { getEncounter } from '../../../../../cubed/src/story/data';
-import { shapePicture } from '../../../../../cubed/src/ui/board/thumbnail';
-import { createPlay, type Play } from '../../../../../cubed/src/ui/screens/play';
-import { fightKind, type FightRun } from '../../../../../cubed/src/ui/screens/story/fight';
+import { Battle, type BattleState as BlockBattle } from '@picross/block/game/battle';
+import { hashString } from '@picross/block/puzzles/hide';
+import { getEncounter } from '@picross/block/story/data';
+import { shapePicture } from '@picross/play-block/ui/board/thumbnail';
+import { createPlay, type Play } from '@picross/play-block/ui/screens/play';
+import { fightKind, type FightRun } from '@picross/play-block/ui/screens/story/fight';
+import { providePlayPrefs, type PlayPrefs } from '@picross/play-block/ui/prefs';
 import { advancePhase, boardAt, carryHp, startBattle, type Enemy } from '../../../game/battle';
 import { damage, removeGadget, withBattle, withBlock } from '../../../game/run';
 import { getCurrentRun, hasSeenTip, markTipSeen, saveCurrentRun } from '../../../game/runSave';
+import { readStore } from '@picross/shared/game/storage';
 import { el } from '@picross/shared/ui/dom';
 
 export interface BlockFightOptions {
@@ -33,6 +35,11 @@ export interface BlockFightOptions {
     fightNote: string,
   ): { note: string; last: boolean };
 }
+
+// This game has no "fade finished clues" setting, so the block follows Cubed's, as it
+// always has (read from Cubed's settings on the same site).
+const cubedPrefs = readStore<PlayPrefs>('picross3d:settings', { dimDone: true });
+providePlayPrefs(() => cubedPrefs);
 
 /** How long a phase banner shows before the fight changes board. */
 const SWITCH_DELAY = 1200;

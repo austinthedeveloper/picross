@@ -1,7 +1,7 @@
-import { indexOf, type Axis, type Dims } from '../../../engine/volume';
+import { indexOf, type Axis, type Dims } from '@picross/block/engine/volume';
 import { readStore, writeStore } from '@picross/shared/game/storage';
-import type { CheckResult } from '../../../puzzles/check';
-import { difficultyOf } from '../../../puzzles/difficulty';
+import type { CheckResult } from '@picross/block/puzzles/check';
+import { difficultyOf } from '@picross/block/puzzles/difficulty';
 import {
   clampSide,
   draftToFile,
@@ -9,9 +9,9 @@ import {
   newDraft,
   resizeDraft,
   type Draft,
-} from '../../../puzzles/draft';
-import { COLORS, parsePuzzle, type PuzzleFile } from '../../../puzzles/format';
-import { encodeShare } from '../../../puzzles/share';
+} from '@picross/block/puzzles/draft';
+import { COLORS, parsePuzzle, type PuzzleFile } from '@picross/block/puzzles/format';
+import { encodeShare } from '@picross/block/puzzles/share';
 import { BlockView } from '../../board/blockView';
 import { attachInput } from '../../board/input';
 import { homeLink } from '@picross/shared/ui/components/homeLink';

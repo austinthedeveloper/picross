@@ -18,10 +18,17 @@ import {
   WebGLRenderer,
   type CanvasTexture,
 } from 'three';
-import type { Clue } from '../../engine/clues';
-import { indexOf, inside, lineIdAt, pointOf, type Axis, type Point } from '../../engine/volume';
-import { BROKEN, PAINTED } from '../../game/game';
-import type { Puzzle } from '../../puzzles/format';
+import type { Clue } from '@picross/block/engine/clues';
+import {
+  indexOf,
+  inside,
+  lineIdAt,
+  pointOf,
+  type Axis,
+  type Point,
+} from '@picross/block/engine/volume';
+import { BROKEN, PAINTED } from '@picross/block/game/game';
+import type { Puzzle } from '@picross/block/puzzles/format';
 import { reducedMotion } from '@picross/shared/ui/motion';
 import { token } from '../tokens';
 import { drawAtlas, faceUV, STATES, type FaceState } from './atlas';

@@ -1,0 +1,17 @@
+{
+  "name": "@picross/block",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "The 3D puzzle: the block, its clues and line solver, the puzzle format, the pack, Game and Battle, the 3D story's loader. Pure TypeScript, no three.js.",
+  "exports": {
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "test": "tsc --noEmit && vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@picross/shared": "*"
+  }
+}

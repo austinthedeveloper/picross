@@ -6,7 +6,7 @@ import {
   overtimeFor,
   type Chapter,
   type Job,
-} from '../../../story/data';
+} from '@picross/block/story/data';
 import { homeLink } from '@picross/shared/ui/components/homeLink';
 import { el } from '@picross/shared/ui/dom';
 import { cleared, modePicker, newRunButton, nodeIcon, unlocked, type Hub } from './shared';

@@ -1,0 +1,54 @@
+# @picross/block
+
+The 3D puzzle's rules and data, with no screen and no three.js: Picross Cubed
+(`apps/cubed`) is built on it, and the 2D game (`apps/picross`) imports it for the
+Curator's block phases. `@picross/play-block` draws it. It came out of `apps/cubed/src`
+(#145).
+
+It's plain TypeScript with no build step: each app's Vite compiles it.
+
+## What's in it
+
+The paths under `src/` are the ones these files had in Cubed, so
+`apps/cubed/src/engine/solver.ts` is now `src/engine/solver.ts` here.
+
+| What    | Files                                                                                                                                                               |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Engine  | `src/engine/volume.ts` (the block and its lines), `clues.ts`, `solver.ts` (the line solver)                                                                         |
+| Puzzles | `src/puzzles/format.ts` (the file format), `hide.ts`, `check.ts`, `draft.ts`, `share.ts`, `transform.ts`, `sheet.ts`, `difficulty.ts`, `daily.ts`                   |
+| Data    | `src/puzzles/pack/*.json`, `dioramas/*.json` (with `diorama.ts`, `dioramas.ts`), `story/*.json` (the story's 3D puzzles), `sheets/*.txt`; `index.ts` loads the pack |
+| Play    | `src/game/game.ts` (a puzzle in play, `Mode`, `SavedBoard`), `battle.ts` (a story fight's rules), `clock.ts`                                                        |
+| Story   | `src/story/data.ts` (the shared story fitted to blocks, and its gate), `powers.ts` (how each power is shown)                                                        |
+
+Cubed's saves, settings, runs, daily streak and badges stay in `apps/cubed/src/game/`:
+they're that app's, under its `picross3d:` storage keys.
+
+## Importing it
+
+Each app lists `"@picross/block": "*"` in its `package.json`. Import by path, without the
+extension (the `exports` map is `./*` → `./src/*.ts`):
+
+```ts
+import { solve } from '@picross/block/engine/solver';
+import { Battle } from '@picross/block/game/battle';
+```
+
+## The rule: rules and data only
+
+Both games import this package, and the 2D game loads it only for a block fight, so it
+stays small and screenless. It imports only its own files (with relative paths) and
+`@picross/shared`'s modules outside `ui/` and `styles/`, and never three.js, an app or
+`@picross/play-block`. `src/imports.test.ts` fails on anything else (and has its own check
+for three.js), and `eslint.config.js` says the same with `no-restricted-imports`.
+
+## Puzzles
+
+Cubed's `npm run puzzles` (`apps/cubed/scripts/puzzles.ts`) writes `hide` and `passes`
+into `src/puzzles/pack/` and `story/` here, and exports sheets: from `apps/cubed`,
+`npm run puzzles -- --sheet ../../packages/block/src/puzzles/sheets/<name>.txt`. See
+Cubed's [how-to](../../apps/cubed/docs/how-to.md).
+
+## Tests
+
+`npm test` at the root runs this package's tests (`tsc --noEmit && vitest run`), with the
+pack check and the story gate; `npm run test:block` runs just these.

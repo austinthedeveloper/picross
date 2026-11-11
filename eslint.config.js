@@ -90,4 +90,97 @@ export default tseslint.config(
       ],
     },
   },
+  {
+    // packages/block is a block's rules and data, for both games: no app, no screen (so no
+    // play-block or shared ui/) and no three.js (packages/block/src/imports.test.ts too).
+    files: ['packages/block/**'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: [
+                '**/apps/**',
+                'picross',
+                'picross-3d',
+                '@picross/play-block',
+                '@picross/play-block/**',
+                '@picross/shared/ui/**',
+                '@picross/shared/styles/**',
+                'three',
+                'three/**',
+              ],
+              message: 'packages/block imports only its own files and @picross/shared rules.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    // packages/play-block draws a block for both games, so it never imports from either
+    // (packages/play-block/src/imports.test.ts checks the same).
+    files: ['packages/play-block/**'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['**/apps/**', 'picross', 'picross-3d'],
+              message: 'packages/play-block imports only block, shared and three.js.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    // Neither game imports the other: what both use lives in packages/.
+    files: ['apps/picross/**'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['**/cubed/**', 'picross-3d', 'picross-3d/**'],
+              message: 'The 2D game never imports from apps/cubed: use a package.',
+            },
+          ],
+        },
+      ],
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'ImportExpression > Literal[value=/(^|\\/)cubed\\//]',
+          message: 'The 2D game never imports from apps/cubed: use a package.',
+        },
+      ],
+    },
+  },
+  {
+    files: ['apps/cubed/**'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['**/picross/**', 'picross', 'picross/**'],
+              message: 'Cubed never imports from apps/picross: use a package.',
+            },
+          ],
+        },
+      ],
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'ImportExpression > Literal[value=/(^|\\/)picross\\//]',
+          message: 'Cubed never imports from apps/picross: use a package.',
+        },
+      ],
+    },
+  },
 );

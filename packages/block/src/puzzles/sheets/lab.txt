@@ -1,5 +1,5 @@
 # The evil science lab: glassware, coils and one escaped rat. Export with:
-#   npm run puzzles -- --sheet src/puzzles/sheets/lab.txt
+#   npm run puzzles -- --sheet ../../packages/block/src/puzzles/sheets/lab.txt
 
 == flask "Flask" hide=0.55
 b=leaf g=sky l=green

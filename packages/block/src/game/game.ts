@@ -2,8 +2,21 @@ import type { Clue } from '../engine/clues';
 import { EMPTY, FILLED, nextStep, solve, UNKNOWN } from '../engine/solver';
 import { lineIdAt, pointOf, type Axis, type Line } from '../engine/volume';
 import { isFilled, type Puzzle } from '../puzzles/format';
-import type { SavedBoard } from './progress';
-import type { Mode } from './settings';
+
+/** Relaxed never checks what you break; hearts mode costs a heart for breaking a cube of the shape. */
+export type Mode = 'relaxed' | 'hearts';
+
+/** An unfinished block. `blocks` holds one digit per cube (see `Block` below). */
+export interface SavedBoard {
+  blocks: string;
+  /** Milliseconds played so far. */
+  elapsed?: number;
+  mode?: Mode;
+  hearts?: number;
+  hintsUsed?: number;
+  /** Breaks into the shape refused so far (hearts and fights). */
+  strikes?: number;
+}
 
 /**
  * How mistakes work. Relaxed never checks; hearts refuses a break into the shape, paints

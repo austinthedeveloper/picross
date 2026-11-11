@@ -1,5 +1,5 @@
-import { pointOf, type Dims } from '../../engine/volume';
-import type { Puzzle } from '../../puzzles/format';
+import { pointOf, type Dims } from '@picross/block/engine/volume';
+import type { Puzzle } from '@picross/block/puzzles/format';
 import { token } from '../tokens';
 
 const COS = Math.cos(Math.PI / 6);

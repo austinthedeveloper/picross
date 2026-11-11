@@ -1,0 +1,24 @@
+{
+  "name": "@picross/play-block",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Playing a block: the three.js view, input, the play screen, the fight and editor screens and their styles. Plain TypeScript; each app's Vite compiles it.",
+  "exports": {
+    "./styles/*": "./src/styles/*",
+    "./e2e/*": "./e2e/*.ts",
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "test": "tsc --noEmit && vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@picross/block": "*",
+    "@picross/shared": "*",
+    "three": "0.187.0"
+  },
+  "devDependencies": {
+    "@types/three": "0.187.0"
+  }
+}

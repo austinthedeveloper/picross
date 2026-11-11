@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';
-import { parseDiorama, type DioramaFile } from '../src/puzzles/diorama';
+import { parseDiorama, type DioramaFile } from '@picross/block/puzzles/diorama';
 import { breakCubes, dailyFor, extras, focusBlock } from './helpers';
 
 /** November's daily puzzle for a day, and how many cubes it takes to break. */
@@ -64,7 +64,10 @@ test('badges list every badge with its next step, and count new ones', async ({ 
 test('a diorama fills in piece by piece, then turns in 3D', async ({ page }) => {
   test.setTimeout(120_000);
   const file = JSON.parse(
-    fs.readFileSync(path.join(import.meta.dirname, '../src/puzzles/dioramas/park.json'), 'utf8'),
+    fs.readFileSync(
+      path.join(import.meta.dirname, '../../../packages/block/src/puzzles/dioramas/park.json'),
+      'utf8',
+    ),
   ) as DioramaFile;
   const park = parseDiorama(file);
   // Breaking every piece by keyboard is slow on CI's software rendering, so the pieces with

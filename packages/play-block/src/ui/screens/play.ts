@@ -1,6 +1,13 @@
-import { clueText, type Clue } from '../../engine/clues';
-import { dimsLabel, indexOf, inside, lineIdAt, pointOf, type Axis } from '../../engine/volume';
-import { Clock } from '../../game/clock';
+import { clueText, type Clue } from '@picross/block/engine/clues';
+import {
+  dimsLabel,
+  indexOf,
+  inside,
+  lineIdAt,
+  pointOf,
+  type Axis,
+} from '@picross/block/engine/volume';
+import { Clock } from '@picross/block/game/clock';
 import {
   BROKEN,
   Game,
@@ -10,10 +17,9 @@ import {
   type Outcome,
   type Tool,
   type GameMode,
-} from '../../game/game';
-import type { SavedBoard } from '../../game/progress';
-import { getSettings } from '../../game/settings';
-import type { Puzzle } from '../../puzzles/format';
+  type SavedBoard,
+} from '@picross/block/game/game';
+import type { Puzzle } from '@picross/block/puzzles/format';
 import { BlockView, type Peel, type Pick } from '../board/blockView';
 import { attachInput } from '../board/input';
 import { createHintMenu } from '../components/hintMenu';
@@ -21,6 +27,7 @@ import { homeLink } from '@picross/shared/ui/components/homeLink';
 import { createMuteButton } from '@picross/shared/ui/components/muteButton';
 import { el } from '@picross/shared/ui/dom';
 import { formatTime, plural } from '../format';
+import { getPlayPrefs } from '../prefs';
 import { haptic } from '@picross/shared/ui/haptics';
 import { reducedMotion } from '@picross/shared/ui/motion';
 import { playSound } from '@picross/shared/ui/sound';
@@ -315,7 +322,7 @@ export function createPlay(root: HTMLElement, opts: PlayOptions): Play {
   };
   let done = doneLines();
   const showDone = () => {
-    view.done = getSettings().dimDone ? done : new Set();
+    view.done = getPlayPrefs().dimDone ? done : new Set();
   };
   showDone();
 

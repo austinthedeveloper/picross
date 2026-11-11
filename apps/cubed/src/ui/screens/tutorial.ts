@@ -1,10 +1,10 @@
-import { BROKEN, PAINTED, type Block, type Tool } from '../../game/game';
+import { BROKEN, PAINTED, type Block, type Tool } from '@picross/block/game/game';
 import { updateSettings } from '../../game/settings';
-import { isFilled, parsePuzzle } from '../../puzzles/format';
-import { PUZZLES } from '../../puzzles/index';
+import { isFilled, parsePuzzle } from '@picross/block/puzzles/format';
+import { PUZZLES } from '@picross/block/puzzles/index';
 import { el } from '@picross/shared/ui/dom';
 import { playSound } from '@picross/shared/ui/sound';
-import { createPlay } from './play';
+import { createPlay } from '@picross/play-block/ui/screens/play';
 
 /**
  * The tutorial's block, 3 wide, 2 tall, 2 deep. Rows along x (cube = x + 3 * (z + 2y)):

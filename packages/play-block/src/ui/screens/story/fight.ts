@@ -1,20 +1,23 @@
-import { Battle, ARMOR_HIT_LINES, type BattleEvent, type BattleState } from '../../../game/battle';
-import { PAINTED } from '../../../game/game';
-import { damage, removeGadget, type RunState } from '../../../game/run';
-import { getCurrentRun, hasSeenTip, markTipSeen, saveCurrentRun } from '../../../game/runSave';
+import {
+  Battle,
+  ARMOR_HIT_LINES,
+  type BattleEvent,
+  type BattleState,
+} from '@picross/block/game/battle';
+import { PAINTED, type Mode } from '@picross/block/game/game';
 import { getGadget } from '@picross/shared/puzzles/gadgets';
-import { hashString } from '../../../puzzles/hide';
-import { lineIdAt, pointOf } from '../../../engine/volume';
-import type { Encounter } from '../../../story/data';
-import { POWERS } from '../../../story/powers';
+import { hashString } from '@picross/block/puzzles/hide';
+import { lineIdAt, pointOf } from '@picross/block/engine/volume';
+import type { Encounter } from '@picross/block/story/data';
+import { POWERS } from '@picross/block/story/powers';
 import { enemyArt, gadgetArt, withArt } from '@picross/shared/ui/art';
 import { el } from '@picross/shared/ui/dom';
 import { haptic } from '@picross/shared/ui/haptics';
 import { pause } from '@picross/shared/ui/motion';
 import { playSound } from '@picross/shared/ui/sound';
 import type { Play } from '../play';
-import type { Kind } from './encounter';
-import { took } from './encounter';
+import type { Kind } from './kind';
+import { took } from './kind';
 
 function meter(label: string, className: string) {
   const text = el('span', { className: 'meter-text' });
@@ -45,8 +48,8 @@ function floatNumber(host: HTMLElement, text: string, className: string) {
 }
 
 /**
- * What a fight needs from the run it's in: your HP, gadgets and seen tips. This game's
- * story run by default; the 2D story passes its own when a boss turns into a block there.
+ * What a fight needs from the run it's in: your HP, gadgets and seen tips. Cubed passes its
+ * story run; the 2D story passes its own when a boss turns into a block there.
  */
 export interface FightRun {
   /** Your HP and gadgets, or null once the run isn't active. */
@@ -59,34 +62,14 @@ export interface FightRun {
   markTip(power: string): void;
 }
 
-/** This game's own story run. */
-export const storyRun: FightRun = {
-  get() {
-    const run = getCurrentRun();
-    return run?.status === 'active' ? run : null;
-  },
-  hurt(amount) {
-    const run = getCurrentRun();
-    if (run?.status !== 'active') return false;
-    const next = damage(run, amount);
-    saveCurrentRun(next);
-    return next.status === 'lost';
-  },
-  spendGadget(index, id) {
-    const run = getCurrentRun();
-    if (run) saveCurrentRun(removeGadget(run, run.gadgets[index] ?? id));
-  },
-  tipSeen: hasSeenTip,
-  markTip: markTipSeen,
-};
-
 export interface FightOptions {
-  run?: FightRun;
+  /** The run the fight is in. */
+  run: FightRun;
   /** A battle already set up, instead of a new one. */
   battle?: Battle;
   /** Enemy HP carried over from the other board: phases it has fallen into start here. */
   carry?: number;
-  /** Where the knocked-out panel leads. Default: this game's story map. */
+  /** Where the knocked-out panel leads. Default: Cubed's story map. */
   home?: string;
   /** After each update that started a phase: a boss can change board here. */
   phased?(battle: Battle): void;
@@ -99,12 +82,13 @@ export interface FightOptions {
  */
 export function fightKind(
   encounter: Encounter,
-  state: Pick<RunState, 'mode' | 'battle'>,
-  opts: FightOptions = {},
+  /** The run's mode, and the fight's saved state (so a reload resumes it). */
+  state: { mode: Mode; battle?: unknown },
+  opts: FightOptions,
 ): Kind {
   const enemy = encounter.enemy!;
   const hitsOn = state.mode === 'hearts';
-  const link = opts.run ?? storyRun;
+  const link = opts.run;
   const battle =
     opts.battle ??
     new Battle(enemy, encounter.puzzle, hitsOn, state.battle as BattleState | undefined, {

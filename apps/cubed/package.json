@@ -19,13 +19,13 @@
     "screenshot": "node scripts/screenshot.mjs"
   },
   "dependencies": {
-    "@picross/shared": "*",
-    "three": "0.187.0"
+    "@picross/block": "*",
+    "@picross/play-block": "*",
+    "@picross/shared": "*"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",
     "@playwright/test": "1.49",
-    "@types/three": "0.187.0",
     "eslint": "^9.39.5",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^17.14.0",

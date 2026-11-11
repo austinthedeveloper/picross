@@ -59,8 +59,9 @@ providePrefs({ get: getSettings, update: updateSettings });
 provides them (and in this package's tests), they're the games' defaults in memory: muted,
 haptics on, normal contrast.
 
-The 2D game also runs Cubed's fight screen for the Curator's block phases. There's one copy
-of this package in the page, so that screen plays sounds with the 2D game's settings.
+The 2D game also runs the 3D fight screen (from `packages/play-block`) for the Curator's
+block phases. There's one copy of this package in the page, so that screen plays sounds
+with the 2D game's settings.
 
 ## Art: `sharedPublic()`
 

@@ -1,5 +1,5 @@
 # The museum after hours: exhibits, plinths and the clock that runs it. Export with:
-#   npm run puzzles -- --sheet src/puzzles/sheets/museum.txt
+#   npm run puzzles -- --sheet ../../packages/block/src/puzzles/sheets/museum.txt
 
 == amphora "Amphora" hide=0.6
 b=brown k=graphite o=orange

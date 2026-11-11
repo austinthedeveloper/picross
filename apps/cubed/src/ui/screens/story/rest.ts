@@ -1,9 +1,9 @@
-import { REST_LATE_HEAL, restHeal, type Rest } from '../../../story/data';
+import { REST_LATE_HEAL, restHeal, type Rest } from '@picross/block/story/data';
 import { iconArt } from '@picross/shared/ui/art';
 import { el } from '@picross/shared/ui/dom';
-import { formatTime } from '../../format';
-import type { Kind } from './encounter';
-import { took } from './encounter';
+import { formatTime } from '@picross/play-block/ui/format';
+import type { Kind } from '@picross/play-block/ui/screens/story/kind';
+import { took } from '@picross/play-block/ui/screens/story/kind';
 
 /**
  * A rest stop: a small block against the clock. Solve it in time for the full heal; finish

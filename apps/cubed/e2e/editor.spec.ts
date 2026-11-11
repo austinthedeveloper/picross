@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { parsePuzzle } from '../src/puzzles/format';
+import { parsePuzzle } from '@picross/block/puzzles/format';
 import { breakCubes, extras, focusBlock } from './helpers';
 
 // A plus sign on one 3×3 layer.

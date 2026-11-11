@@ -1,14 +1,20 @@
+/**
+ * Browser-test helpers for a block on screen, for both games' tests (Cubed's, and the 2D
+ * game's block fights): puzzles read from their files, and keyboard play on the block.
+ */
 import { expect, type Page } from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';
-import { pointOf } from '../src/engine/volume';
-import { parsePuzzle, type Puzzle } from '../src/puzzles/format';
-import { hashString } from '../src/puzzles/hide';
-import { turnPuzzle } from '../src/puzzles/transform';
+import { pointOf } from '@picross/block/engine/volume';
+import { parsePuzzle, type Puzzle } from '@picross/block/puzzles/format';
+import { hashString } from '@picross/block/puzzles/hide';
+import { turnPuzzle } from '@picross/block/puzzles/transform';
 
-const PACK = path.join(import.meta.dirname, '../src/puzzles/pack');
+/** The block package's puzzles (the pack, the story's 3D puzzles). */
+const PUZZLES = path.join(import.meta.dirname, '../../block/src/puzzles');
+const PACK = path.join(PUZZLES, 'pack');
 /** The story's data (encounters, jobs), in the shared package. */
-const STORY = path.join(import.meta.dirname, '../../../packages/shared/src/puzzles');
+const STORY = path.join(import.meta.dirname, '../../shared/src/puzzles');
 
 /** Pack puzzle ids, biggest block first. */
 export const PUZZLES_BY_SIZE = fs
@@ -22,43 +28,8 @@ export function encounterPuzzle(encounterId: string): Puzzle {
   const enc = JSON.parse(
     fs.readFileSync(path.join(STORY, 'encounters', `${encounterId}.json`), 'utf8'),
   );
-  const file = path.join(import.meta.dirname, '../src/puzzles/story', `${enc.puzzle}.json`);
+  const file = path.join(PUZZLES, 'story', `${enc.puzzle}.json`);
   return parsePuzzle(JSON.parse(fs.readFileSync(file, 'utf8')));
-}
-
-/**
- * Starts straight at one encounter of a job: seeds the run save, then opens the
- * encounter (skipping its entrance scene if it has one).
- */
-export async function runAt(
-  page: Page,
-  jobId: string,
-  node: number,
-  opts: { mode?: 'relaxed' | 'hearts'; hp?: number; gadgets?: string[] } = {},
-): Promise<void> {
-  const job = JSON.parse(fs.readFileSync(path.join(STORY, 'runs', `${jobId}.json`), 'utf8'));
-  const run = {
-    runId: jobId,
-    node,
-    hp: opts.hp ?? job.hp,
-    maxHp: job.hp,
-    gadgets: opts.gadgets ?? job.gadgets ?? [],
-    status: 'active',
-    mode: opts.mode ?? 'relaxed',
-    tally: { mistakes: 0, hintsUsed: 0, gadgetsUsed: 0 },
-  };
-  await page.goto('/');
-  await page.evaluate((save) => localStorage.setItem('picross3d:run', JSON.stringify(save)), {
-    current: run,
-    seenScenes: [],
-    seenTips: [],
-    jobs: {},
-  });
-  // Saves are read once when the app loads, so load it again with the run in place. A new
-  // query makes it a real page load (a bare hash change could redirect first).
-  await page.goto('/?seeded#/story/play');
-  await skipScene(page);
-  await page.locator('canvas.block-canvas').waitFor();
 }
 
 /** Lines of a puzzle with no cubes of the shape: breaking one finishes it. */
@@ -75,7 +46,7 @@ export async function skipScene(page: Page): Promise<void> {
   if (await skip.isVisible()) await skip.click();
 }
 
-/** The daily puzzle for a date, built the way src/puzzles/daily.ts builds it. */
+/** The daily puzzle for a date, built the way packages/block/src/puzzles/daily.ts builds it. */
 export function dailyFor(key: string): Puzzle {
   const files = fs
     .readdirSync(PACK)
@@ -100,7 +71,7 @@ export function dailyFor(key: string): Puzzle {
 
 /** A pack puzzle, read from its file. */
 export function puzzle(id: string): Puzzle {
-  const file = path.join(import.meta.dirname, '../src/puzzles/pack', `${id}.json`);
+  const file = path.join(PACK, `${id}.json`);
   return parsePuzzle(JSON.parse(fs.readFileSync(file, 'utf8')));
 }
 

@@ -4,13 +4,22 @@
 
 - Read `docs/architecture.md` first; puzzles are in `docs/how-to.md`.
 - Before committing: `npm run lint`, `npm test`, `npm run build`, and `npm run e2e` for UI changes.
-- After adding or changing a puzzle: `npm run puzzles` (writes `hide` and `passes`).
+  This app's `npm test` covers only `src/`; the packages' tests run from the repo root
+  (`npm test` there, or `npm run test:block` and `npm run test:play-block`).
+- After adding or changing a puzzle (in `packages/block/src/puzzles/`): `npm run puzzles`
+  (writes `hide` and `passes`).
 - Code, styles, story and art shared with the 2D game live in `packages/shared` (at the
   repo root; see its `README.md`), imported as `@picross/shared/<path>`. A change there is
   in both games: run both games' tests.
-- No raw hex colors outside `packages/shared/src/styles/tokens.css` and `src/styles/voxels.css`.
+- The block's rules and data (engine, puzzles, pack, Game, Battle, the story loader) are in
+  `packages/block`, and the three.js view, play, fight and editor screens and their styles
+  in `packages/play-block` (see their `README.md`s). The 2D game imports them too, for the
+  Curator's block phases: run both games' tests after changing them.
+- No raw hex colors outside `packages/shared/src/styles/tokens.css` and
+  `packages/play-block/src/styles/voxels.css`.
 - Puzzles and art are original. Genre mechanics are fine; don't copy another game's puzzles,
   names or look.
-- Nothing in `packages/shared` imports from an app (a test and a lint rule check).
+- Nothing in `packages/` imports from an app, `packages/block` never imports three.js, and
+  neither app imports the other (tests and lint rules check).
 - Combining the two games is planned in `../../docs/combining.md` (at the repo root); keep both working on their own
   until then.

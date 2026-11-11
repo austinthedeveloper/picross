@@ -1,11 +1,11 @@
 import { recordPlaytest } from '../../game/progress';
 import { getSettings } from '../../game/settings';
-import { decodeShare } from '../../puzzles/share';
-import { shapePicture } from '../board/thumbnail';
+import { decodeShare } from '@picross/block/puzzles/share';
+import { shapePicture } from '@picross/play-block/ui/board/thumbnail';
 import { homeLink } from '@picross/shared/ui/components/homeLink';
 import { el } from '@picross/shared/ui/dom';
-import { formatTime } from '../format';
-import { createPlay } from './play';
+import { formatTime } from '@picross/play-block/ui/format';
+import { createPlay } from '@picross/play-block/ui/screens/play';
 
 /**
  * A shared puzzle (#/p/<code>), or a play-test from the editor (#/p/<code>/test). Nothing
