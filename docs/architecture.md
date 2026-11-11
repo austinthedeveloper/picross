@@ -1,36 +1,35 @@
 # Architecture
 
-This repo holds two games and the packages they share. This page starts with where every
-file lives and what it may import, then describes the 2D game. The 3D game, Picross Cubed,
-has its own pages in [docs/cubed/](cubed/architecture.md) (below).
+This repo holds two games in one app, and the packages they share. This page starts with
+where every file lives and what it may import, then describes the 2D game. The 3D game,
+Picross Cubed, has its own pages in [docs/cubed/](cubed/architecture.md) (below).
 
 ## Package map
 
-The root is an npm workspace (`"workspaces": ["apps/*", "packages/*"]`): two apps, six
+The root is an npm workspace (`"workspaces": ["apps/*", "packages/*"]`): one app, six
 packages, and the docs, CI, lint config and build scripts at the root. A package is plain
 TypeScript with no build step. Its export map turns `@picross/<name>/<path>` into
 `src/<path>.ts` (and `@picross/<name>/styles/<file>` into `src/styles/<file>`), so a file
 keeps the path under `src/` that it had in the app it came from.
 
-| Workspace             | Name                  | Owns                                                                                                                                                                                                                                                                | May import                                                                                                      |
-| --------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `packages/shared`     | `@picross/shared`     | What both games use that isn't the story: tokens and base styles, the run, fight, dig, dialogue and art styles, sound, haptics, theme, `dom`, `motion`, `storage`, `random`, `prefs`, puzzle ids, the Home, mute and Flat \| Cubed buttons, the art and `ui/art.ts` | Only its own files                                                                                              |
-| `packages/story`      | `@picross/story`      | The story both games play: its JSON, loaders and checks, gadgets, the dialogue runner, and the scene player (`ui/`)                                                                                                                                                 | shared, outside its `ui/` and `styles/`. Its `ui/` may use all of shared. Its tests may also use block          |
-| `packages/grid`       | `@picross/grid`       | The 2D rules and data: the engine, the puzzle format, the pack, sheets, ratings, murals, `Game` and the debug hooks. No DOM                                                                                                                                         | shared and story, outside their `ui/` and `styles/`                                                             |
-| `packages/play-grid`  | `@picross/play-grid`  | Playing a 2D board: the board view, input, zoom, the play screen and its `PlaySession`, `board.css` and `game.css`                                                                                                                                                  | grid and shared                                                                                                 |
-| `packages/block`      | `@picross/block`      | The 3D rules and data: the engine, the puzzle format, the pack, dioramas, the 3D story puzzles, `Game`, `Battle` and the story on blocks. No three.js                                                                                                               | shared and story, outside their `ui/` and `styles/`. Never three.js or play-block                               |
-| `packages/play-block` | `@picross/play-block` | Playing a block: the three.js view, input, the play, fight and editor screens, their styles, and the block e2e helpers                                                                                                                                              | block, shared, story and three.js                                                                               |
-| `apps/picross`        | `picross`             | The 2D game: routes, saves and settings, runs and fights, the daily, murals, badges, the editor, the debug panel and its scripts                                                                                                                                    | Every package. Never `apps/cubed`. Anything that pulls in three.js only with `import()`                         |
-| `apps/cubed`          | `picross-3d`          | The 3D game: routes, saves and settings, the list, the daily, dioramas, badges, the tutorial and the story screens                                                                                                                                                  | shared, story, block and play-block. Never `apps/picross`. Anything that pulls in three.js only with `import()` |
+| Workspace             | Name                  | Owns                                                                                                                                                                                                                                                                | May import                                                                                                                      |
+| --------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `packages/shared`     | `@picross/shared`     | What both games use that isn't the story: tokens and base styles, the run, fight, dig, dialogue and art styles, sound, haptics, theme, `dom`, `motion`, `storage`, `random`, `prefs`, puzzle ids, the Home, mute and Flat \| Cubed buttons, the art and `ui/art.ts` | Only its own files                                                                                                              |
+| `packages/story`      | `@picross/story`      | The story both games play: its JSON, loaders and checks, gadgets, the dialogue runner, and the scene player (`ui/`)                                                                                                                                                 | shared, outside its `ui/` and `styles/`. Its `ui/` may use all of shared. Its tests may also use block                          |
+| `packages/grid`       | `@picross/grid`       | The 2D rules and data: the engine, the puzzle format, the pack, sheets, ratings, murals, `Game` and the debug hooks. No DOM                                                                                                                                         | shared and story, outside their `ui/` and `styles/`                                                                             |
+| `packages/play-grid`  | `@picross/play-grid`  | Playing a 2D board: the board view, input, zoom, the play screen and its `PlaySession`, `board.css` and `game.css`                                                                                                                                                  | grid and shared                                                                                                                 |
+| `packages/block`      | `@picross/block`      | The 3D rules and data: the engine, the puzzle format, the pack, dioramas, the 3D story puzzles, `Game`, `Battle` and the story on blocks. No three.js                                                                                                               | shared and story, outside their `ui/` and `styles/`. Never three.js or play-block                                               |
+| `packages/play-block` | `@picross/play-block` | Playing a block: the three.js view, input, the play, fight and editor screens, their styles, and the block e2e helpers                                                                                                                                              | block, shared, story and three.js                                                                                               |
+| `apps/picross`        | `picross`             | The app, both games: routes, saves and settings, runs and fights, the daily, murals, badges, the editor, the debug panel and its scripts; Picross Cubed's screens, saves and settings in `src/cubed/` (under `#/cubed`)                                             | Every package. Only `src/routes.ts` reaches `src/cubed/`, with `import()`. Anything that pulls in three.js only with `import()` |
 
 No package imports an app, and a relative import never leaves its package (the one
 exception: story's art test reads shared's `public/art/`). Each package's rule is checked
 twice: by `src/imports.test.ts` in the package (part of `npm test`), which reads every
 import, `import()` and glob, and by its block in `eslint.config.js`
-(`no-restricted-imports`, part of `npm run lint`). The apps' rule is lint only, with
+(`no-restricted-imports`, part of `npm run lint`). The app's rule is lint only, with
 `no-restricted-syntax` catching `import()`. `npm run check:budget` checks that three.js
-stays out of each game's first download: the play-block modules that use it (the view,
-input and the screens built on them) load with `import()`.
+stays out of the first download and out of Cubed's routes: the play-block modules that use
+it (the view, input and the screens built on them) load with `import()`.
 
 Arrows point at what a workspace imports:
 
@@ -42,10 +41,6 @@ graph TD
   picross --> block
   picross --> story
   picross --> shared
-  cubed[apps/cubed] --> playblock
-  cubed --> block
-  cubed --> story
-  cubed --> shared
   playgrid --> grid
   playgrid --> shared
   playblock --> block
@@ -67,6 +62,7 @@ Each package has a README with its files and rules: [shared](../packages/shared/
 
 The 3D game's docs:
 
+- [cubed/README.md](cubed/README.md): what it is, and the commands that are only its
 - [cubed/architecture.md](cubed/architecture.md): its layers, the block, the view, its screens
 - [cubed/how-to.md](cubed/how-to.md): add a puzzle, a color, a sound
 - [cubed/story.md](cubed/story.md): the story on blocks, and the gate
@@ -80,12 +76,17 @@ came from. Tests sit next to the code they cover as `*.test.ts`.
 
 ```
 apps/
-  picross/                 The 2D game (workspace `picross`)
+  picross/                 The app: both games (workspace `picross`)
     index.html             Page shell; loads src/main.ts
     .env.development       VITE_DEBUG=1 for dev builds (the debug panel)
-    public/favicon.svg
+    public/
+      favicon.svg
+      icons/               Cubed's app icons (cubed.svg and the PNGs made from it), for #160
+      3d/                  Cubed's old address: index.html sends /3d/#/… to #/cubed/…, sw.js retires its old worker
     src/
-      main.ts              Entry point: imports styles, applies theme, provides prefs, hash router
+      main.ts              Entry point: imports styles, applies theme, provides prefs, the hash router
+      routes.ts            The route table: which screen each hash opens (#/cubed/… is one entry)
+      ui/lifecycle.ts      onHide: Cubed's screens save when the page is hidden
       debug/panel.ts       Dev-only tools (#65), and panel.css; never in production builds (hooks are in grid)
       puzzles/             Content and its validation (the pack is in packages/grid)
         runs.ts            The story's encounters and jobs on a flat board: 2D puzzles and enemies
@@ -153,28 +154,23 @@ apps/
         editor.css         Editor
         badges.css         Badges and the shelf
         switch.css         A boss switching board: the new board unfolds in
+      cubed/               Picross Cubed, the 3D game (#/cubed/…; docs/cubed/), loaded on demand
+        routes.ts          Its routes, from #/cubed on; hands over its settings while they're up
+        href.ts            cubedHref(): every link between its screens
+        game/              Saves under picross3d: keys: progress, settings, run, runSave, daily, badges
+        ui/screens/        The list, free play, tutorial, how to play, shared puzzles, daily, dioramas, badges
+          story/           Story screens: jobs board, path map, encounters, digs, rests, results
+        styles/select.css  The list
     e2e/                   Playwright browser tests (see docs/development.md)
+      cubed/               Cubed's (helpers re-export play-block's), and its old /3d/ links
     scripts/
       puzzle-sheet.ts      Check, repair and export puzzle sheets (batches of drawings; see docs/how-to.md)
       rate-puzzles.ts      Writes packages/grid/src/puzzles/ratings.json (npm run rate:puzzles)
       scopeByBoard.ts      PostCSS step: each game's screen styles apply only on its board
       script-review.ts     Build the script review site, serve it, and report notes (see docs/how-to.md)
       script-review/       Its page model, renderer, notes store, server, and browser assets
-  cubed/                   Picross Cubed, the 3D game (workspace `picross-3d`; docs/cubed/)
-    index.html, public/    Page shell, service worker (sw.js), manifest and icons
-    src/
-      main.ts              Entry point and hash router; provides prefs and play prefs
-      game/                Saves under picross3d: keys: progress, settings, run, runSave, daily, badges
-      ui/lifecycle.ts      onHide: saves when the page is hidden
-      ui/screens/          The list, free play, tutorial, how to play, shared puzzles, daily, dioramas, badges
-        story/             Story screens: jobs board, path map, encounters, digs, rests, results
-      styles/select.css    The list
-    e2e/                   Playwright browser tests (helpers re-export play-block's)
-    scripts/
-      puzzles.ts           Checks the pack and writes hide and passes (npm -w apps/cubed run puzzles)
       screenshot.mjs       Screenshots a page of the running dev server
       icons.mjs            Makes public/icons/
-      bench.ts             Times hiding and solving a 10×10×10 block
 packages/
   shared/                  What both games use (@picross/shared; its README)
     vite.js                sharedPublic(): serves public/ in dev, copies it into each build
@@ -277,6 +273,9 @@ packages/
         board.css          Board, clues, cells, cursor, fog/scramble/weak-point clues
         game.css           Play screen: toolbar, hint menu, tools and zoom row, end states
   block/                   The 3D rules and data, no three.js (@picross/block; its README)
+    scripts/
+      puzzles.ts           Checks the pack and writes hide and passes (npm -w packages/block run puzzles)
+      bench.ts             Times hiding and solving a 10×10×10 block
     src/
       imports.test.ts      Only shared and story outside ui/; never three.js, play-block or an app
       engine/              volume.ts (the block and its lines), clues.ts, solver.ts
@@ -309,16 +308,15 @@ packages/
       styles/              voxels.css (shape colors), game.css, story.css, editor.css
 docs/                      These docs; docs/cubed/ for the 3D game
 scripts/
-  build-cubed.mjs          Builds Cubed into dist/3d (or dist-dev/3d)
   check-prod-bundle.sh     npm run check:bundle: no debug code in dist/
-  check-bundle-budget.mjs  npm run check:budget: the first download's size, and no three.js in it
+  check-bundle-budget.mjs  npm run check:budget: the first download's size, and no three.js in it or Cubed's routes
   bundle-budget.json       The budgets
   deploy-azure.sh          Upload a build to the Azure static website
   setup-azure-deploy.sh    One-time Azure + GitHub OIDC setup for the release pipeline
   art-clean.py             Cleans approved art from docs/art/incoming
 eslint.config.js           Lint for every workspace, with the import rules
 .github/workflows/
-  ci.yml                   Lint, test, build, check:bundle, check:budget, both games' e2e; deploy main to Pages
+  ci.yml                   Lint, test, build, check:bundle, check:budget, e2e; deploy main to Pages
   deploy-azure.yml         Deploy a published release to Azure
 .claude/launch.json        Dev server config for Claude Code's preview
 ```
@@ -471,25 +469,52 @@ the rules. Tiers only go up, and a badge keeps the date it was first earned.
 
 ## Routing and screens
 
-`main.ts` routes on the URL hash. Hash routing works on GitHub Pages without server config.
+`main.ts` routes on the URL hash, with the table in `routes.ts`: each entry has a `match`
+(what the screen needs from the hash, or nothing) and a `render`, and the first that matches
+draws. A new screen is one entry. Hash routing works on GitHub Pages without server config.
 
-| Hash               | Screen                                                              |
-| ------------------ | ------------------------------------------------------------------- |
-| `#/`               | `renderSelectScreen` (also the fallback for unknown hashes)         |
-| `#/play/<id>`      | `renderGameScreen` for a pack puzzle                                |
-| `#/how-to-play`    | `renderHowToPlay`: the interactive tutorial and the rules           |
-| `#/editor`         | `renderEditorScreen`                                                |
-| `#/badges`         | `renderBadgesScreen`: the badge shelf (#109)                        |
-| `#/run`            | `renderRunScreen`: start panel, path map, or results                |
-| `#/scene/<id>`     | `renderSceneScreen`: preview a scene (Replay at the end)            |
-| `#/run/play`       | `renderRunEncounter`: the current encounter's puzzle                |
-| `#/daily`          | `renderDailyScreen`: today's daily puzzle (#69)                     |
-| `#/mural/<id>`     | `renderMuralScreen`: a mural's tiles, or the finished picture (#24) |
-| `#/mural/<id>/<n>` | `renderMuralTile`: tile n of a mural                                |
+| Hash               | Screen                                                                                            |
+| ------------------ | ------------------------------------------------------------------------------------------------- |
+| `#/`               | `renderSelectScreen` (also the fallback for unknown hashes)                                       |
+| `#/play/<id>`      | `renderGameScreen` for a pack puzzle                                                              |
+| `#/how-to-play`    | `renderHowToPlay`: the interactive tutorial and the rules                                         |
+| `#/editor`         | `renderEditorScreen`                                                                              |
+| `#/badges`         | `renderBadgesScreen`: the badge shelf (#109)                                                      |
+| `#/run`            | `renderRunScreen`: start panel, path map, or results                                              |
+| `#/scene/<id>`     | `renderSceneScreen`: preview a scene (Replay at the end)                                          |
+| `#/run/play`       | `renderRunEncounter`: the current encounter's puzzle                                              |
+| `#/daily`          | `renderDailyScreen`: today's daily puzzle (#69)                                                   |
+| `#/mural/<id>`     | `renderMuralScreen`: a mural's tiles, or the finished picture (#24)                               |
+| `#/mural/<id>/<n>` | `renderMuralTile`: tile n of a mural                                                              |
+| `#/cubed/…`        | Picross Cubed (`cubed/routes.ts`; its routes are in [docs/cubed/](cubed/architecture.md#screens)) |
 
 Each screen replaces `#app`'s children. A screen that adds global listeners or timers
 returns a cleanup function, which the router calls before rendering the next screen. The
-game screen does this for its clock and its Ctrl+Z handler.
+game screen does this for its clock and its Ctrl+Z handler. A screen that loads its module
+first (anything with a block) goes through `lazy`, which draws it only if no other route
+has opened meanwhile.
+
+**Picross Cubed** is one entry, `#/cubed/…`, which loads `cubed/routes.ts` with `import()`:
+Cubed's list, its pack and its styles aren't in the first download, and three.js waits for a
+screen with a block (`npm run check:budget` checks both, and a lint rule keeps the rest of
+`src/` from importing `cubed/`). Its routes are marked `game: 'cubed'`, and the router then:
+
+- sets `<html data-board="block">`, so Cubed's screen styles apply and this game's don't (see
+  [Switching board](#switching-board-the-curator)), and clears the screen when you cross
+  between the games, so one game's screen is never drawn with the other's styles;
+- hands shared code Cubed's settings (`picross3d:settings`; the merge is #154 and #155)
+  while Cubed's routes are up, and this game's again after;
+- runs Cubed's page lifecycle: its screens save on `visibilitychange` through
+  `ui/lifecycle.ts`, tear down on `pagehide`, and draw again when the page comes back from
+  the browser's cache.
+
+Cubed's screens link to each other with `cubedHref('/play/mug')` (`cubed/href.ts`), and the
+package screens it uses take their links as options (`home` on play-block's play and fight
+screens and `homeLink()`, `sharedHref` on its editor). `#/` or no hash opens Cubed's list
+when it was the game played last (the Flat | Cubed switch remembers). Cubed used to be its
+own app at `/3d/`: `public/3d/index.html` sends each old link to the same screen here
+(`/3d/#/play/mug` to `#/cubed/play/mug`; scenes to `#/scene/<id>`), and `public/3d/sw.js`
+replaces its old service worker with one that deletes the old cache and unregisters.
 
 ## Board rendering
 
@@ -512,6 +537,12 @@ dark mode (`prefers-color-scheme`) and for high contrast (`:root[data-contrast='
 set by `ui/theme.ts`). Use tokens rather than hard-coded colors so all three themes keep
 working. Shared button styles live in `base.css`: `.button`, `.ghost`, `.primary`, a
 `.toggle` that shows `aria-pressed`, and `.segmented` button groups.
+
+Both games' styles are in the app, and some class names mean different things in each
+(`.puzzle-card`, `.stage`, `.topbar`). So each game's own screen styles apply only on its
+board (`scripts/scopeByBoard.ts`): Cubed's under `<html data-board="block">`, which the
+router sets on `#/cubed/…`, and this game's without it. The shared ones (tokens, base, run,
+fight, dig, dialogue, art) apply everywhere. See [Switching board](#switching-board-the-curator).
 
 ## Play sessions: free play vs. runs
 
@@ -886,11 +917,12 @@ are in [story-combined.md](story-combined.md).
   names one; the encounter (`ui/screens/run/encounter.ts`) opens that board, and switches
   when a phase changes it. The block screen (`ui/screens/run/blockFight.ts`) loads on
   demand with three.js, so the first download doesn't grow.
-- **What it imports:** packages, never `apps/cubed` (a lint rule checks): the 3D battle,
+- **What it imports:** packages, never `cubed/` (a lint rule checks): the 3D battle,
   clue hiding and story loader from `@picross/block`, and the play screen, fight screen and
   thumbnail from `@picross/play-block`. It passes in this game's run (`FightRun`: HP,
-  gadgets, tips) and the play screen's one setting (`providePlayPrefs`: fading finished
-  clues, which this game doesn't have, so it reads Cubed's as before).
+  gadgets, tips), where the knocked-out panel leads (`home: '#/run'`), and the play
+  screen's one setting (`providePlayPrefs`: fading finished clues, which this game doesn't
+  have, so it reads Cubed's as before).
 - **What carries:** the enemy's HP as a share (a block has more lines, so more HP;
   `carryHp` rounds so exactly the phases already started have started on the new board),
   the phases, with their fog and scrambles picked again on the new board, and the patch
@@ -905,11 +937,12 @@ are in [story-combined.md](story-combined.md).
   every switching boss has a block whose phases match.
 - **Styles:** both games use some of the same class names for different screens, so each
   game's own screen styles apply only on its board: `scripts/scopeByBoard.ts` (a PostCSS
-  step in `vite.config.ts`) scopes them (the 3D game's are play-block's `game.css` and
-  `story.css`) under `<html data-board="block">` or its absence,
-  wrapped in `:where()` so nothing's specificity changes. The block screen sets the
-  attribute while it's up.
-- **Other games:** Cubed alone plays every fight on a block and ignores `board`; the SNES
+  step in `vite.config.ts`) scopes them (the 3D game's are play-block's `game.css`,
+  `story.css` and `editor.css`, and Cubed's own in `src/cubed/styles/`) under
+  `<html data-board="block">` or its absence, wrapped in `:where()` so nothing's
+  specificity changes. The block screen sets the attribute while it's up, and the router
+  on Cubed's routes.
+- **Other games:** Cubed's story plays every fight on a block and ignores `board`; the SNES
   import ignores it too and plays the whole fight flat.
 
 ### The Deep End (Chapter 3)

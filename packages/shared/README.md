@@ -1,7 +1,7 @@
 # @picross/shared
 
-The code, styles and art both games use: the 2D game (`apps/picross`) and Picross Cubed
-(`apps/cubed`) import it, so a change here (a token, a sound, a portrait) is in both games
+The code, styles and art both games use: the 2D game and Picross Cubed (both in
+`apps/picross`) import it, so a change here (a token, a sound, a portrait) is in both games
 at once. It replaced the copies `sync-web.mjs` used to make (#143). The story is in its own
 package, `@picross/story` (`packages/story`, #146), which imports this one.
 
@@ -51,8 +51,9 @@ own files, with relative imports.
 
 Sound, haptics, the theme and the mute button need three settings (`muted`, `haptics`,
 `highContrast`), but each game keeps its own settings, under its own storage key. So shared
-code reads them from `src/game/prefs.ts`, and each game hands its settings over first thing
-in its `main.ts`:
+code reads them from `src/game/prefs.ts`, and each game hands its settings over before it
+draws: the 2D game in `main.ts`, Cubed in its `routes.ts` whenever one of its routes opens
+(and `main.ts` hands the 2D game's back after):
 
 ```ts
 providePrefs({ get: getSettings, update: updateSettings });

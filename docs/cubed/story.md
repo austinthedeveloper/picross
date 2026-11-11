@@ -27,7 +27,7 @@ throw on broken data. It passes in what's this game's own:
 - **Puzzles.** Each encounter names a 2D puzzle; its 3D version is
   `packages/block/src/puzzles/story/<that id>.json`, same id and name. Draw them in
   `packages/block/src/puzzles/sheets/story/<chapter>.txt` and export with
-  `npm run puzzles -- --sheet …`. A dig's reward is the 2D puzzle's `gadget`.
+  `npm -w packages/block run puzzles -- --sheet …`. A dig's reward is the 2D puzzle's `gadget`.
 - **Enemies.** The 2D game's powers name exact rows and columns. A block has other lines,
   so here a power keeps its size ("fog over 5 lines", "armor with 2 targets") and the fight
   picks lines on the block when it starts, keeping the block solvable.
@@ -73,9 +73,9 @@ throw on broken data. It passes in what's this game's own:
 - `packages/block/src/story/story.test.ts`: every chapter, and every job it can play, loads
   with a 3D puzzle for each encounter
 - `packages/block/src/game/battle.test.ts`: the fight rules
-- `apps/cubed/e2e/story.spec.ts`: the whole First Job by hand, and a Hits-on hit and resume
-- `apps/cubed/e2e/fights.spec.ts`: one test per power or system
-- `apps/cubed/e2e/chapters.spec.ts`: every chapter from its opening through each job to its boss,
+- `apps/picross/e2e/cubed/story.spec.ts`: the whole First Job by hand, and a Hits-on hit and resume
+- `apps/picross/e2e/cubed/fights.spec.ts`: one test per power or system
+- `apps/picross/e2e/cubed/chapters.spec.ts`: every chapter from its opening through each job to its boss,
   with each encounter seeded one cube short of solved (so it checks the flow quickly),
   and that cleared jobs offer their Overtime and boss fights
 

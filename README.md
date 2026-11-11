@@ -14,13 +14,15 @@ Fill cells so each row and column matches its clue numbers, and a pixel picture 
 - Clue feedback, animations and sound, a high-contrast theme, and screen-reader support
 - A puzzle editor for making new puzzles
 
-## Two games, one site
+## Two games, one app
 
-This repo holds both games, with a **Flat | Cubed** switch at the top of each home screen:
+This repo holds both games in one app (`apps/picross/`), with a **Flat | Cubed** switch at
+the top of each home screen:
 
-- **Flat** is the 2D game, at the site's root (`apps/picross/`).
-- **Cubed** ([Picross Cubed](apps/cubed/README.md)) is the 3D game, under `/3d/` (the `apps/cubed/`
-  workspace; its docs are in [docs/cubed/](docs/cubed/architecture.md)).
+- **Flat** is the 2D game, at the app's root (`#/`).
+- **Cubed** ([Picross Cubed](docs/cubed/README.md)) is the 3D game, under `#/cubed`
+  (`apps/picross/src/cubed/`; its docs are in [docs/cubed/](docs/cubed/architecture.md)). Its
+  old address, `/3d/`, sends links and bookmarks on.
 
 The code both use is in six packages under `packages/`. The
 [package map](docs/architecture.md#package-map) says what each one owns and may import.
@@ -37,31 +39,30 @@ npm install
 npm run dev
 ```
 
-Then open http://localhost:5173.
+Then open http://localhost:5173 (Cubed is at http://localhost:5173/#/cubed).
 
-| Command                        | What it does                                                          |
-| ------------------------------ | --------------------------------------------------------------------- |
-| `npm run dev`                  | Dev server with hot reload and the debug tools                        |
-| `npm run dev:prod`             | Dev server without the debug tools                                    |
-| `npm run dev:cubed`            | The 3D game's dev server, at http://localhost:5174                    |
-| `npm test`                     | Unit tests (Vitest) for every package and both games                  |
-| `npm run test:watch`           | Tests in watch mode                                                   |
-| `npm run check:puzzles`        | Only the puzzle pack uniqueness check                                 |
-| `npm run rate:puzzles`         | Re-rate puzzle difficulty after adding or changing puzzles            |
-| `npm run script-review`        | Generate the script review site and serve it at http://localhost:4177 |
-| `npm run script-review:notes`  | Print your open script review notes                                   |
-| `npm run script-review:export` | Export the whole script and open notes as JSON for rewriting          |
-| `npm run lint`                 | ESLint plus a Prettier format check                                   |
-| `npm run format`               | Format everything with Prettier                                       |
-| `npm run build`                | Type-check and build to `dist/`                                       |
-| `npm run build:dev`            | The same, with the debug tools, to `dist-dev/`                        |
-| `npm run check:bundle`         | Fails if debug code reached `dist/`                                   |
-| `npm run check:budget`         | Fails if three.js reached either first download, or it grew too big   |
-| `npm run preview`              | Serve the production build locally                                    |
-| `npm run e2e`                  | Browser tests (Playwright, phone-sized) against the build             |
-| `npm run e2e:cubed`            | The 3D game's browser tests                                           |
+| Command                        | What it does                                                                     |
+| ------------------------------ | -------------------------------------------------------------------------------- |
+| `npm run dev`                  | Dev server with hot reload and the debug tools                                   |
+| `npm run dev:prod`             | Dev server without the debug tools                                               |
+| `npm test`                     | Unit tests (Vitest) for every package and the app (both games)                   |
+| `npm run test:watch`           | Tests in watch mode                                                              |
+| `npm run check:puzzles`        | Only the puzzle pack uniqueness check                                            |
+| `npm run rate:puzzles`         | Re-rate puzzle difficulty after adding or changing puzzles                       |
+| `npm run script-review`        | Generate the script review site and serve it at http://localhost:4177            |
+| `npm run script-review:notes`  | Print your open script review notes                                              |
+| `npm run script-review:export` | Export the whole script and open notes as JSON for rewriting                     |
+| `npm run lint`                 | ESLint plus a Prettier format check                                              |
+| `npm run format`               | Format everything with Prettier                                                  |
+| `npm run build`                | Type-check and build to `dist/`                                                  |
+| `npm run build:dev`            | The same, with the debug tools, to `dist-dev/`                                   |
+| `npm run check:bundle`         | Fails if debug code reached `dist/`                                              |
+| `npm run check:budget`         | Fails if three.js reached the first download or Cubed's list, or it grew too big |
+| `npm run preview`              | Serve the production build locally                                               |
+| `npm run e2e`                  | Browser tests (Playwright, phone-sized) against the build, both games            |
+| `npm run e2e:cubed`            | Only the 3D game's browser tests                                                 |
 
-Each package's and game's tests also run alone (`npm run test:grid`, `test:cubed` and so
+Each package's and the app's tests also run alone (`npm run test:grid`, `test:flat` and so
 on); [development.md](docs/development.md#scripts) lists every script.
 
 ## Docs

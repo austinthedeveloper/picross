@@ -2,7 +2,7 @@
 
 The story both games play: Rook and Dee's chapters, jobs (runs), encounters, scenes,
 dialogue, gadgets and backdrops, with the code that reads and checks them and the scene
-player. The 2D game (`apps/picross`) and Picross Cubed (`apps/cubed`) import it, and so do
+player. The 2D game and Picross Cubed (both in `apps/picross`) import it, and so do
 the board packages (`@picross/grid`, `@picross/block`, `@picross/play-block`). It came out
 of `packages/shared` and the 2D game's `src/puzzles/` in #146.
 
