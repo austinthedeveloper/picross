@@ -316,10 +316,12 @@ function finishLines(
       if (find(story, 'armor-meter')?.others && b.state.targets.length) touch.push('armorLines');
       if (find(story, 'grounded') || zapDue(story)) touch.push('charged', 'live');
       if (find(story, 'charge')?.picked) touch.push('live');
-      return then(phaseKeys(enemy, story), {
-        order: ['armorLines', 'turning', 'warmUp', 'charged', 'live'],
-        touch,
-      });
+      // A save from before warm-ups grounds the charge, then warms it up.
+      const charge: Key[] =
+        state.live && state.warmUp === undefined
+          ? ['charged', 'live', 'warmUp']
+          : ['warmUp', 'charged', 'live'];
+      return then(phaseKeys(enemy, story), { order: ['armorLines', 'turning', ...charge], touch });
     },
   );
   const lines = (power: Of<'cleared'>['power']) =>
