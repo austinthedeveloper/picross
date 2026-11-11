@@ -375,8 +375,10 @@ Hints (`Game.hint` and `ui/components/hintMenu.ts`) are a good model for a featu
 its own menu, cost, and announcement.
 
 If it's a new enemy power, add it to `Power` and the power lists in `puzzles/enemies.ts`,
-then give it an icon, name and one-line tip in `ui/powers.ts`. The suite fails until every
-power has a tip.
+then give it an icon, name and a one-line tip for each board in `POWER_TIPS`
+(`packages/story/src/fight/tips.ts`), with a `note` for each board if it works differently on
+a block. Add it to the parity test (`src/game/powers.test.ts`) on both boards. The suite
+fails until every power has a tip for each board and a parity test.
 
 ## Add a color or change the theme
 

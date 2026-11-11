@@ -42,8 +42,9 @@ the screens using them) on demand, so three.js stays out of an app's first downl
 ## What the apps pass in
 
 - **The run, for a fight:** `fightKind(encounter, state, { run, home })` takes a
-  `FightRun` (your HP, gadgets and seen tips), and where the knocked-out panel leads (the
-  game's story map). Cubed passes its story run; the 2D game passes its own.
+  `FightRun` (your HP, gadgets and seen tips, and with `home` the board its save's older
+  tips were seen on, `block` by default), and where the knocked-out panel leads (the game's
+  story map). Cubed passes its story run; the 2D game passes its own.
 - **Links:** nothing here hardcodes a route. `createPlay`'s `home` (default `#/`) is where
   Home and "All puzzles" lead, and `renderEditorScreen(root, { home, sharedHref })` builds
   its share and play-test links with `sharedHref(code)` (default `#/p/<code>`). Cubed

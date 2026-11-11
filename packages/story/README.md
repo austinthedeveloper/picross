@@ -14,14 +14,14 @@ The paths under `src/` are the ones these files had before, so
 `packages/shared/src/puzzles/scenes.ts` is now `src/puzzles/scenes.ts` here, and the 2D
 game's `src/puzzles/runs.ts` (its common part) is `src/puzzles/runs.ts`.
 
-| What         | Files                                                                                                                                                                                                                                                                           |
-| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Data         | `src/puzzles/{chapters,runs,encounters,run,scenes,backdrops}/*.json`; `files/` globs the first four for the loaders                                                                                                                                                             |
-| Loaders      | `src/puzzles/runs.ts` (encounters and jobs), `chapters.ts`, `scenes.ts`, `backdrops.ts`, `gadgets.ts` (the gadget catalog)                                                                                                                                                      |
-| Dialogue     | `src/game/dialogue.ts`: the scene runner (current line or choices, advance, choose, flags)                                                                                                                                                                                      |
-| Fights       | `src/fight/board.ts`: `FightBoard`, what a fight needs of a board (#164); `fightBoardContract.ts`, its tests; `battle.ts`: `StoryBattle`, the one battle (#166), played by a `FightRules` profile (`rules.ts`); `save.ts`: a fight as a run saves it, an entry per board (#169) |
-| Scene player | `src/ui/components/dialogue.ts`, `backdrop.ts`, `src/ui/screens/sceneScreen.ts`                                                                                                                                                                                                 |
-| Tests        | `src/story.test.ts` (the whole story reads), `boards.test.ts` (the gate), `ui/art.test.ts` (every sprite has its art)                                                                                                                                                           |
+| What         | Files                                                                                                                                                                                                                                                                                                                                              |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Data         | `src/puzzles/{chapters,runs,encounters,run,scenes,backdrops}/*.json`; `files/` globs the first four for the loaders                                                                                                                                                                                                                                |
+| Loaders      | `src/puzzles/runs.ts` (encounters and jobs), `chapters.ts`, `scenes.ts`, `backdrops.ts`, `gadgets.ts` (the gadget catalog)                                                                                                                                                                                                                         |
+| Dialogue     | `src/game/dialogue.ts`: the scene runner (current line or choices, advance, choose, flags)                                                                                                                                                                                                                                                         |
+| Fights       | `src/fight/board.ts`: `FightBoard`, what a fight needs of a board (#164); `fightBoardContract.ts`, its tests; `battle.ts`: `StoryBattle`, the one battle (#166), played by a `FightRules` profile (`rules.ts`); `save.ts`: a fight as a run saves it, an entry per board (#169); `tips.ts`: each power's tip on each board, and `tipToShow` (#167) |
+| Scene player | `src/ui/components/dialogue.ts`, `backdrop.ts`, `src/ui/screens/sceneScreen.ts`                                                                                                                                                                                                                                                                    |
+| Tests        | `src/story.test.ts` (the whole story reads), `boards.test.ts` (the gate), `ui/art.test.ts` (every sprite has its art)                                                                                                                                                                                                                              |
 
 The art (`public/art/`) and the story's styles (`run.css`, `fight.css`, `dig.css`,
 `dialogue.css`, `art.css`) and `ui/art.ts` stay in `@picross/shared`: they don't read the
@@ -76,11 +76,13 @@ Powers:
 Cubed plays all of it.
 ```
 
-What Cubed can't play yet is reported there (its `storyIssues`), and Cubed leaves it out;
-it doesn't fail the build. Broken data does fail: the story's loaders throw on it
-(`story.test.ts` reads the whole story with no board), and so does a boss that switches to
-a block with no block to switch to, or whose block's phases don't match. #167 turns the
-rest back into a hard check once every power runs on both boards.
+Every power runs on both boards (#167; the parity test is
+`apps/picross/src/game/powers.test.ts`), so it's a hard check: it fails if an encounter or a
+power can't be played on either board, if Cubed's loader has anything in `storyIssues`, or
+if a power has no tip for each board (`fight/tips.ts`). Broken data fails too: the story's
+loaders throw on it (`story.test.ts` reads the whole story with no board), and so does a
+boss that switches to a block with no block to switch to, or whose block's phases don't
+match.
 
 ## The rules
 

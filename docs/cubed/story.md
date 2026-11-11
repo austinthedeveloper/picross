@@ -69,7 +69,11 @@ always drew.
 - **Undo** can't go back past a wipe or a bomb (they're outside the history).
 - **Hits** (Hits on only): breaking a cube of the shape (the enemy's attack), armor, zaps,
   and accusing an honest clue. In Relaxed, an honest accusation heals the enemy instead.
-- **Tips:** a card the first time each power shows (`packages/block/src/story/powers.ts`), and ⓘ lists them.
+- **Tips:** a card the first time each power shows (`packages/block/src/story/powers.ts`, the
+  block's side of the story's `fight/tips.ts`), and ⓘ lists them. A power met on the flat board
+  isn't explained again, unless it works differently on a block (scrambles, ink, swaps, turns):
+  then a short "On a block" note shows once. See "Power tips" in
+  [the architecture](../architecture.md#power-tips).
 
 ## Tests
 
@@ -89,8 +93,9 @@ Anything the story uses that this game can't play yet goes into `storyIssues` an
 out, instead of breaking the app: an encounter with no 3D puzzle (and the jobs that need
 it), or a field `parseEnemy` doesn't read (`KNOWN`). The gate is a test in the story
 package, `packages/story/src/boards.test.ts`: for every encounter and power it reports the
-boards that can play it, and prints `storyIssues`, with every `npm test`. It doesn't fail
-on those (#167 makes it a hard check once every power runs on both boards).
+boards that can play it, and prints `storyIssues`, with every `npm test`. Since every power
+runs on both boards (#167; the parity test is `apps/picross/src/game/powers.test.ts`), it's a
+hard check: anything in `storyIssues`, or an encounter or power a board can't play, fails it.
 
 It does fail on broken data: the story's loaders throw on an unknown kind, scene, gadget,
 encounter or job, and the gate fails if a boss that switches to a block has no block here

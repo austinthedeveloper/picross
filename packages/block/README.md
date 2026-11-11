@@ -22,7 +22,10 @@ The paths under `src/` are the ones these files had in Cubed, so
 | Story   | `src/story/data.ts` (the story, from `@picross/story`, fitted to blocks; what it can't play yet), `powers.ts` (how each power is shown)                                                   |
 
 Cubed's saves, settings, runs, daily streak and badges stay in the app, in
-`apps/picross/src/cubed/game/`, under their `picross3d:` storage keys.
+`apps/picross/src/cubed/game/`. Since #229 they're in the one save with the 2D game's:
+`picross:v2` (free play), `picross:run` (Cubed's run as its `block`), `picross:settings`,
+`picross:daily2` and `picross:badges`. Only the first-launch migration reads the old
+`picross3d:` keys.
 
 ## Importing it
 
@@ -53,5 +56,5 @@ root) writes `hide` and `passes` into `src/puzzles/pack/` and `story/`, and expo
 ## Tests
 
 `npm test` at the root runs this package's tests (`tsc --noEmit && vitest run`), with the
-pack check; `npm run test:block` runs just these. The story's gate, which reports what
-`src/story/data.ts` can't play yet, is `packages/story/src/boards.test.ts`.
+pack check; `npm run test:block` runs just these. The story's gate, which fails if
+`src/story/data.ts` can't play an encounter or power, is `packages/story/src/boards.test.ts`.

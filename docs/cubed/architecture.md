@@ -84,6 +84,18 @@ rollback, read only by the migration
 (see
 [State and persistence](../architecture.md#state-and-persistence)).
 
+A story fight is the story's one battle (`StoryBattle`) with `BLOCK_RULES`, as `Battle` in
+`game/battle.ts`, and every power the 2D game has plays on a block too (#167): the parity
+test (`apps/picross/src/game/powers.test.ts`) runs each one on a small grid and a small
+block. What each does on a block is under each power in the
+[main architecture](../architecture.md#every-power-on-both-boards): fog and scrambles on any
+axis (a scramble drops a clue's pieces), targets on any axis that hit back for the armor's
+attack, swaps of two lines on any axes, forgeries one cube off, a warm-up of 15% of the
+lines, ink on a patch of one layer, and turns of the camera only. The tips are the story's
+(`packages/story/src/fight/tips.ts`), with a version for each board; `runSave.ts` keeps the
+ones seen in the one run save's `seenTips` (`picross:run`, both games' since #155), with the
+same keys the 2D game uses.
+
 ## The view
 
 | File                    | Job                                                                           |
