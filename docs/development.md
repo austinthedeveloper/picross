@@ -203,8 +203,8 @@ The budgets, measured when the check went in (gzipped, each file on its own):
 Picross Cubed had its own entry (87.0 kB JS, 7.2 kB CSS) until it moved into the app. Now
 opening `#/cubed` adds about 40 kB JS and 1.5 kB CSS (its list and pack, lazy), and three.js
 is its own chunk (`input`, 136.7 kB), shared by both games' block screens. Opening `#/run`
-adds about 22 kB JS: the run's screens (17 kB) and the story's battle (`rules`, 5 kB, which
-Cubed's fights share), both precached for offline.
+adds about 23 kB JS: the run's screens (16 kB) and the story's battle with its power tips
+(6 kB, a chunk Cubed's fights share), both precached for offline.
 
 There are two sites, one per environment:
 
