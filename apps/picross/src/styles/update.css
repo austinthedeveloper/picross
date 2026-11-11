@@ -1,0 +1,23 @@
+/* "A new version is ready · Reload" (src/offline/updates.ts), along the bottom of any screen. */
+.update-bar {
+  position: fixed;
+  left: 50%;
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: calc(100vw - 24px);
+  padding: 8px 8px 8px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 6px 20px var(--shadow);
+  font-size: 0.9rem;
+}
+
+.update-bar .button {
+  white-space: nowrap;
+}

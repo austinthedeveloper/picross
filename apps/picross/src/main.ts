@@ -23,6 +23,7 @@ import { providePrefs } from '@picross/shared/game/prefs';
 import { getSettings, updateSettings } from './game/settings';
 import { ROUTES, type Cleanup, type Game, type Lazy } from './routes';
 import { onHide, saveNow } from './ui/lifecycle';
+import './offline/register';
 
 // Shared code (sound, haptics, the theme, the mute button) reads this game's settings
 // (Cubed's routes hand over Cubed's own while they're up: cubed/routes.ts).

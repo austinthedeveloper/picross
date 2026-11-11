@@ -27,6 +27,9 @@ export default defineConfig({
     reducedMotion: 'reduce',
     channel: process.env.CI ? undefined : 'chrome',
     trace: 'retain-on-failure',
+    // No service workers (the game's offline one, src/offline/): each test starts from the
+    // network, and a worker can't hold pages between tests. e2e/offline.spec.ts turns them on.
+    serviceWorkers: 'block',
   },
   projects: [
     { name: 'prod', testIgnore: [/debug\.spec\.ts$/, /\/cubed\//] },
@@ -34,9 +37,6 @@ export default defineConfig({
       name: 'cubed',
       testMatch: /\/cubed\/.*\.spec\.ts$/,
       testIgnore: /perf\.spec\.ts$/,
-      // No service workers: the old one at /3d/ would hold pages between tests (its test,
-      // cubed/offline.spec.ts, turns them on).
-      use: { serviceWorkers: 'block' },
     },
     // Cubed's timing test runs alone after the rest, so other tests don't share the CPU it
     // times (to run just it: npm run e2e -- --project cubed-perf --no-deps).
@@ -44,7 +44,6 @@ export default defineConfig({
       name: 'cubed-perf',
       testMatch: /\/cubed\/perf\.spec\.ts$/,
       dependencies: ['prod', 'cubed'],
-      use: { serviceWorkers: 'block' },
     },
     { name: 'dev', testMatch: /debug\.spec\.ts$/, use: { baseURL: 'http://localhost:4174/' } },
   ],
