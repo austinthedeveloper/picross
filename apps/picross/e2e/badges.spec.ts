@@ -155,7 +155,7 @@ test.describe('badge shelf', () => {
   test('a new player sees no job or enemy names past First Job', async ({ page }) => {
     await page.goto('/#/badges');
     await expect(page.locator('h1')).toHaveText('Badges');
-    await expect(page.locator('.run-meta').first()).toContainText('0 of 23 earned');
+    await expect(page.locator('.run-meta').first()).toContainText('0 of 38 earned');
     const text = await page.locator('main').innerText();
     expect(text).toContain('Invoiced a Bat');
     expect(text).toContain('Toolbox Shut');
@@ -186,9 +186,9 @@ test.describe('badge shelf', () => {
     expect(text).toContain('Going Down');
     expect(text).toContain('Expert Witness');
     expect(text).not.toContain('Octopus Diplomacy');
-    await expect(page.locator('.run-meta').first()).toContainText('1 of 23 earned');
-    const earned = page.locator('.badge-card.earned');
-    await expect(earned).toContainText('Invoiced a Bat');
+    // Its badge, and Odd Jobber for the chapter it clears (#157).
+    await expect(page.locator('.run-meta').first()).toContainText('2 of 38 earned');
+    const earned = page.locator('.badge-card.earned').filter({ hasText: 'Invoiced a Bat' });
     await expect(earned).toContainText('Bronze');
     await expect(earned).toContainText('Silver: clear it with Hits on.');
   });
@@ -205,6 +205,77 @@ test.describe('badge shelf', () => {
     await skipScene(page);
     await page.locator('.jobs-badges').tap();
     await expect(page).toHaveURL(/#\/badges$/);
+  });
+});
+
+test.describe('one shelf for both boards (#157)', () => {
+  test("groups both games' badges, and fits a phone", async ({ page }) => {
+    await page.goto('/#/badges');
+    for (const shelf of [
+      'The story',
+      'Free play · Flat',
+      'Free play · Cubed',
+      'Daily',
+      'Endless',
+      'Know-how',
+      'Bad days',
+      'Both boards',
+    ]) {
+      await expect(page.getByRole('region', { name: shelf })).toBeVisible();
+    }
+    const cubed = page.getByRole('region', { name: 'Free play · Cubed' });
+    await expect(cubed).toContainText('Block Breaker');
+    await expect(cubed).toContainText('Bronze at 5 (0 so far)');
+    await expect(page.getByRole('region', { name: 'Free play · Flat' })).toContainText(
+      'Square Deal',
+    );
+    const both = page.getByRole('region', { name: 'Both boards' });
+    for (const name of ['Fifty-Fifty', 'Second Opinion', 'Flat-Packed']) {
+      await expect(both).toContainText(name);
+    }
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+    );
+    expect(overflow).toBe(false);
+  });
+
+  test('awards a Both badge from a save, marked new until the shelf is seen', async ({ page }) => {
+    // First Job won on both boards, and Heart solved flat and as a block.
+    await seed(page.context(), {
+      run: { jobs: { 'first-job': { plays: 2, wins: 2, wonOn: ['block', 'grid'] } } },
+    });
+    await seedSolved(page, ['heart']);
+    await page.context().addInitScript(() => {
+      const save = JSON.parse(localStorage.getItem('picross:v2')!);
+      save.solved['block:heart'] = { solves: 1, bestTime: 1000 };
+      localStorage.setItem('picross:v2', JSON.stringify(save));
+    });
+    await page.goto('/#/');
+    await expect(page.locator('.rank-badges')).toContainText(/new/);
+    await page.goto('/#/badges');
+    const both = page.getByRole('region', { name: 'Both boards' });
+    const opinion = both.locator('.badge-card').filter({ hasText: 'Second Opinion' });
+    await expect(opinion).toHaveClass(/earned/);
+    await expect(opinion).toContainText('Bronze');
+    await expect(opinion).toContainText('New!');
+    await expect(opinion).toContainText('Silver at 5 (1 so far)');
+    const packed = both.locator('.badge-card').filter({ hasText: 'Flat-Packed' });
+    await expect(packed).toContainText('Bronze');
+    await expect(both.locator('.badge-card').filter({ hasText: 'Fifty-Fifty' })).toContainText(
+      'Not earned yet',
+    );
+
+    // Seen once, it's no longer new.
+    await page.reload();
+    await expect(opinion).toContainText('Bronze');
+    await expect(opinion).not.toContainText('New!');
+  });
+
+  test("Cubed's old link to its badges opens the one shelf", async ({ page }) => {
+    await page.goto('/#/cubed/badges');
+    await expect(page).toHaveURL(/#\/badges$/);
+    await expect(page.getByRole('heading', { name: 'Badges', exact: true })).toBeVisible();
+    await expect(page.getByRole('region', { name: 'Free play · Cubed' })).toBeVisible();
   });
 });
 
