@@ -117,6 +117,7 @@ apps/
         settings.ts        Both games' settings: mode, list filter/order, mute, haptics, dimDone… (localStorage)
         daily.ts           The one daily (#156): days solved, streak, best, today's board (localStorage)
         badges.ts          Badge rules and the earned badges (#108)
+        fightBadges.ts     What a fight earns (fightAwards, earnFromFight): it reads the battle, so it's the run's
         rank.ts            Rank, worked out from solves (#106)
         saveMerge.ts       Merges two copies of a save (#97)
         migrate.ts         Save migrations, first thing at startup: the two games' saves (#155), their dailies (#156)
@@ -134,8 +135,9 @@ apps/
           editorScreen.ts    Puzzle authoring tool                   (#/editor)
           badges.ts          The badge shelf                         (#/badges)
           settings.ts        Both games' settings (#154)             (#/settings)
-          run/               Runs                                    (#/run, #/run/play)
-            index.ts         Run hub router and the puzzle-list banner
+          run/               Runs, loaded on demand with the fight engine (#/run, #/run/play)
+            index.ts         Run hub router
+            banner.ts        The puzzle list's run banner (in the first download: reads only the save)
             shared.ts        Hub type, loadRun, mode picker, start buttons
             jobsBoard.ts     Jobs board (#47), grouped into chapters (#23)
             pathMap.ts       Path map, HP, gadget inventory
@@ -598,7 +600,9 @@ an award at or below what's saved, so nobody ever loses a badge or a tier.
 - **When they're earned:** `syncBadges` at startup and when the shelf opens (no date, for
   older saves and anything a screen didn't award); `earnFromStats` after a solve on either
   board, a daily, a Cubed run and a play-test (dated, and said on the end panel), and
-  `earnFromRun` / `earnFromFight` in the 2D game's story.
+  `earnFromRun` / `earnFromFight` in the 2D game's story. `earnFromFight` is in
+  `game/fightBadges.ts`, apart from the rest, because it reads the fight's battle: only the
+  run screens use it, and they load with the fight engine (`import()`, `routes.ts`).
 
 - **How a run went** (#107): a fight keeps its counts in `BattleState.counts`, which roll
   into `RunState.tally` when the fight is won. Count each thing at its cause rather than

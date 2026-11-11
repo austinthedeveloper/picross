@@ -184,7 +184,10 @@ CSS is more than 10% over `scripts/bundle-budget.json`. It also checks Picross C
 (`src/cubed/routes.ts`) is a lazy chunk of its own, and that neither it nor its static
 imports have three.js, so Cubed's list opens without it too; it prints what opening Cubed
 adds. Only the block screens use three.js, and they're loaded with `import()`: the 2D
-game's `blockFight` and Cubed's play screens. A static import of `@picross/play-block` anywhere on
+game's `blockFight` and Cubed's play screens. The 2D game's run (`#/run`, `#/run/play`)
+loads with `import()` too, and the fight engine with it (the story's battle, the 2D codec,
+`gridStep`, the fight hooks): fights happen only in a run, and the list's run banner
+(`ui/screens/run/banner.ts`) reads only the save. A static import of `@picross/play-block` anywhere on
 the way to the home screen puts about 140 kB (gzipped) of three.js in front of every player,
 and the check names the chunk and the import path. To raise a budget, change its number in
 `scripts/bundle-budget.json` and say why in the commit. It runs in CI and before each Azure
@@ -198,7 +201,9 @@ The budgets, measured when the check went in (gzipped, each file on its own):
 
 Picross Cubed had its own entry (87.0 kB JS, 7.2 kB CSS) until it moved into the app. Now
 opening `#/cubed` adds about 40 kB JS and 1.5 kB CSS (its list and pack, lazy), and three.js
-is its own chunk (`input`, 136.7 kB), shared by both games' block screens.
+is its own chunk (`input`, 136.7 kB), shared by both games' block screens. Opening `#/run`
+adds about 22 kB JS: the run's screens (17 kB) and the story's battle (`rules`, 5 kB, which
+Cubed's fights share), both precached for offline.
 
 There are two sites, one per environment:
 

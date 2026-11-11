@@ -1,4 +1,3 @@
-import { lineCount } from '@picross/grid/engine/lines';
 import { puzzles } from '@picross/grid/puzzles/index';
 import { murals } from '@picross/grid/puzzles/murals';
 import { blockCatalog } from '@picross/block/puzzles/catalog';
@@ -7,7 +6,6 @@ import { badges, getBadge, hasTiers, type Badge, type Count, type Tier } from '.
 import { chapters } from '../puzzles/chapters';
 import { ENDLESS_ID } from '../puzzles/endless';
 import { bossFights, overtimeRuns, runs } from '../puzzles/runs';
-import { currentForm, type Enemy } from './battle';
 import { bestDailyStreak } from './daily';
 import { badgeLevel } from './legacyMerge';
 import { playtests, progressFor } from './progress';
@@ -70,32 +68,6 @@ export function runAwards(run: RunState): Award[] {
     if (rule.kind === 'job' && rule.job === run.runId) return [{ id, tier }];
     const noGadgets = run.mode === 'hearts' && run.tally && !run.tally.gadgetsUsed;
     return rule.kind === 'no-gadgets' && noGadgets ? [{ id }] : [];
-  });
-}
-
-/**
- * What beating this fight earns (#110). Call it before the encounter is cleared,
- * while the battle is still on the run. Hits-on only, and never for a run that
- * started before the counts existed, since its earlier mistakes went uncounted.
- */
-export function fightAwards(run: RunState, encounterId: string, enemy: Enemy): Award[] {
-  const { battle } = run;
-  if (!battle || !run.tally || run.mode !== 'hearts') return [];
-  const counts = battle.counts ?? {};
-  return badges.flatMap(({ id, rule }): Award[] => {
-    switch (rule.kind) {
-      case 'no-zaps':
-        // A charge that never started is nothing to be proud of beating.
-        return currentForm(enemy, battle).charge && !counts.zaps ? [{ id }] : [];
-      case 'no-false-accusations': {
-        const allCaught = enemy.fakes && !lineCount(battle.fakes ?? { rows: [], cols: [] });
-        return allCaught && !counts.wrongAccusations ? [{ id }] : [];
-      }
-      case 'no-sponge':
-        return rule.encounter === encounterId && !counts.spongesUsed ? [{ id }] : [];
-      default:
-        return [];
-    }
   });
 }
 
@@ -262,10 +234,6 @@ export function earnFromRun(run: RunState): NewBadge[] {
   const now = Date.now();
   return [...earn(runAwards(run), now), ...earn(fromStats(), now)];
 }
-
-/** Badges for a fight just won. */
-export const earnFromFight = (run: RunState, encounterId: string, enemy: Enemy): NewBadge[] =>
-  earn(fightAwards(run, encounterId, enemy), Date.now());
 
 export const getEarned = (id: string): Earned | undefined => data.earned[id];
 

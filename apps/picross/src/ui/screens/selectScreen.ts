@@ -18,7 +18,7 @@ import { el } from '@picross/shared/ui/dom';
 import { formatTime } from '@picross/play-grid/ui/format';
 import { dailyCard } from './daily';
 import { puzzleList } from './puzzleList';
-import { runBanner } from './run';
+import { runBanner } from './run/banner';
 
 const FILTERS: [ListFilter, string][] = [
   ['all', 'All'],
