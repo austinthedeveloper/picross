@@ -13,14 +13,14 @@ It's plain TypeScript with no build step: each app's Vite compiles it.
 The paths under `src/` are the ones these files had in the 2D game, so
 `apps/picross/src/engine/solver.ts` is now `src/engine/solver.ts` here.
 
-| What    | Files                                                                                                                                     |
-| ------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| Engine  | `src/engine/`: `board`, `clues`, `history`, `lines`, `solver`, `transform`, `blast`, `charge`, `fakes`, `ink`, `swap`                     |
-| Puzzles | `src/puzzles/format.ts` (the file format, parse and validate, export helpers)                                                             |
-| Pack    | `src/puzzles/index.ts` (loads `pack/*.json` and the story's run puzzles; `ORDER`), `pack/`, `sheets/`, `ratings.json` and `difficulty.ts` |
-| Murals  | `src/puzzles/murals.ts`, `murals/*.json`                                                                                                  |
-| Play    | `src/game/game.ts`: `Game` (board, history, hearts, hints, clock) and its save format, `SavedBoard`                                       |
-| Debug   | `src/debug/hooks.ts`: how the debug panel (in the app) reaches into a board in play                                                       |
+| What    | Files                                                                                                                                                           |
+| ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Engine  | `src/engine/`: `board`, `clues`, `history`, `lines`, `solver`, `transform`, `blast`, `charge`, `fakes`, `ink`, `swap`                                           |
+| Puzzles | `src/puzzles/format.ts` (the file format, parse and validate, export helpers)                                                                                   |
+| Pack    | `src/puzzles/index.ts` (loads `pack/*.json` and the story's run puzzles from `@picross/story`; `ORDER`), `pack/`, `sheets/`, `ratings.json` and `difficulty.ts` |
+| Murals  | `src/puzzles/murals.ts`, `murals/*.json`                                                                                                                        |
+| Play    | `src/game/game.ts`: `Game` (board, history, hearts, hints, clock) and its save format, `SavedBoard`                                                             |
+| Debug   | `src/debug/hooks.ts`: how the debug panel (in the app) reaches into a board in play                                                                             |
 
 `pack.test.ts` checks every pack and run puzzle is uniquely solvable without guessing
 (`npm run check:puzzles` runs only that), and `difficulty.test.ts` keeps `ratings.json` in
@@ -46,8 +46,9 @@ The `exports` map is `./*` → `./src/*.ts`.
 ## The rule: nothing from the page
 
 It can be loaded, tested and run anywhere: Node, a worker, a build script. So it uses only
-its own files (with relative imports) and `@picross/shared`'s pure modules (never
-`@picross/shared/ui` or its styles), and never an app or `@picross/play-grid`. Three checks:
+its own files (with relative imports) and the pure modules of `@picross/shared` and
+`@picross/story` (the gadget catalog and the run puzzles; never their `ui/` or styles), and
+never an app or `@picross/play-grid`. Three checks:
 
 - `tsconfig.json` leaves out the DOM types, so `document` or `HTMLElement` don't compile.
   (`debug/hooks.ts` names the two `localStorage` methods it uses; only debug builds call

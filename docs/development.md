@@ -116,16 +116,22 @@ Both games import `packages/shared` (`@picross/shared`; see its
 [README](../packages/shared/README.md)), so a change there is in both at once. `npm test`
 runs its tests first (`npm run test:shared` runs just them).
 
+The story is `packages/story` (`@picross/story`; see its
+[README](../packages/story/README.md)): the chapters, jobs, encounters, scenes, gadgets and
+the scene player, read by both games. `npm test` runs its tests after shared's
+(`npm run test:story`), and its gate (`boards.test.ts`) prints which boards can play each
+encounter and power.
+
 The 2D game's engine, pack and play screen are packages too: `packages/grid`
 (`@picross/grid`: the engine, the puzzle format, the pack and `Game`, no DOM) and
 `packages/play-grid` (`@picross/play-grid`: the board view, input and play screen; see
-their READMEs). `npm test` runs them after shared and before the games;
+their READMEs). `npm test` runs them after shared and story and before the games;
 `npm run test:grid` and `npm run test:play-grid` run each alone.
 
 The 3D game's code is in two packages: `packages/block` (`@picross/block`: the rules and
 data, no three.js) and `packages/play-block` (`@picross/play-block`: the three.js view and
 the screens with a block). Cubed imports both, and the 2D game imports them for the
-Curator's block phases. `npm test` runs their tests after shared's (`npm run test:block`,
+Curator's block phases. `npm test` runs their tests after grid's (`npm run test:block`,
 `npm run test:play-block`). Neither app imports the other; a lint rule checks.
 
 ## CI and deploys

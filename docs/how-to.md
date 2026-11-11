@@ -6,7 +6,9 @@ Paths here are in the 2D game's folder, `apps/picross/`, and the `npx` commands 
 there (`cd apps/picross`). The `npm run` scripts work from the repo root. The pack, the
 engine and `Game` are in `packages/grid/src/`, and the board view, the play screen
 (`ui/screens/gameScreen.ts`) and `board.css` and `game.css` in `packages/play-grid/src/`, at
-the paths they had in the app.
+the paths they had in the app. The story (`src/puzzles/` encounters, runs, chapters, run
+puzzles, scenes, backdrops and `gadgets.ts`, and the scene player) is in
+`packages/story/src/`, and the art in `packages/shared/public/art/`.
 
 ## Add a puzzle
 
@@ -129,9 +131,10 @@ row or column counts from 1, as players do; the code counts from 0.
    phase. Only square puzzles can turn, and a lopsided picture shows it best. Write every
    line index as drawn: phase pools turn with the board.
    To switch board (the Curator), give a phase `"board": "block"` to move the fight onto
-   the encounter's 3D puzzle in `apps/cubed/src/puzzles/story/`, and a later one
+   the encounter's 3D puzzle in `packages/block/src/puzzles/story/`, and a later one
    `"board": "flat"` to bring it back. Keep the boss's other powers light, and don't put a
-   swap or ink on a switching phase. Run `npm test` after: Cubed's story gate checks it.
+   swap or ink on a switching phase. Run `npm test` after: the story's gate
+   (`packages/story/src/boards.test.ts`) fails if the boss has no block to switch to.
    Phases trigger in order at decreasing `at` values. A phase's `fog` is a pool, and it fogs
    up to `fogCount` unsolved lines from it. Line damage is 1 per line and columns mostly
    finish late, so set `at` high (0.8–0.9) for a phase to land mid-solve. To find a fog

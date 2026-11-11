@@ -1,6 +1,9 @@
-import { runs, type RunDef } from './runs';
-import { getScene } from '@picross/shared/puzzles/scenes';
-import { chapterFiles } from '@picross/shared/puzzles/files/chapters';
+import { getScene } from './scenes';
+
+/**
+ * Reading chapters (`chapters/*.json`) for any board. Each game finds the jobs with its own
+ * `findJob`, so a chapter holds that game's runs.
+ */
 
 /** A chapter (#23): a named group of jobs, in order, on the jobs board. */
 export interface ChapterFile {
@@ -16,16 +19,22 @@ export interface ChapterFile {
   opening?: string;
 }
 
-export interface Chapter extends Omit<ChapterFile, 'jobs'> {
+/** A chapter holding a game's jobs (`J`). */
+export interface StoryChapter<J> extends Omit<ChapterFile, 'jobs'> {
   /** 1-based, from the board order. */
   number: number;
-  jobs: RunDef[];
+  jobs: J[];
 }
 
-export function parseChapter(
+/**
+ * Reads and checks a chapter's file. `findJob` gives a job by id: `undefined` for a job the
+ * story doesn't have (that's an error), or `null` for one this game can't play yet, which
+ * is left out of the chapter.
+ */
+export function parseChapter<J>(
   data: unknown,
-  findJob: (id: string) => RunDef | undefined,
-): Omit<Chapter, 'number'> {
+  findJob: (id: string) => J | undefined | null,
+): Omit<StoryChapter<J>, 'number'> {
   const file = data as Partial<ChapterFile>;
   const fail = (msg: string): never => {
     throw new Error(`Invalid chapter${file?.id ? ` "${file.id}"` : ''}: ${msg}`);
@@ -34,7 +43,10 @@ export function parseChapter(
   if (typeof file.title !== 'string' || !file.title) fail('missing title');
   if (!Number.isFinite(file.order)) fail('order must be a number');
   if (!Array.isArray(file.jobs) || !file.jobs.length) fail('needs jobs');
-  const jobs = file.jobs!.map((id) => findJob(id) ?? fail(`unknown job "${id}"`));
+  const jobs = file.jobs!.flatMap((id) => {
+    const job = findJob(id);
+    return job === null ? [] : [job ?? fail(`unknown job "${id}"`)];
+  });
   if (file.opening !== undefined && !getScene(file.opening)) {
     fail(`unknown opening scene "${file.opening}"`);
   }
@@ -49,7 +61,10 @@ export function parseChapter(
 }
 
 /** Puts chapters in board order and numbers them; every job must be in exactly one. */
-export function assembleChapters(parsed: Omit<Chapter, 'number'>[], allJobs: RunDef[]): Chapter[] {
+export function assembleChapters<J extends { id: string }>(
+  parsed: Omit<StoryChapter<J>, 'number'>[],
+  allJobs: J[],
+): StoryChapter<J>[] {
   const chapters = [...parsed]
     .sort((a, b) => a.order - b.order)
     .map((c, i) => ({ ...c, number: i + 1 }));
@@ -61,11 +76,3 @@ export function assembleChapters(parsed: Omit<Chapter, 'number'>[], allJobs: Run
   }
   return chapters;
 }
-
-/** Every chapter, in board order. */
-export const chapters: Chapter[] = assembleChapters(
-  Object.values(chapterFiles).map((mod) =>
-    parseChapter(mod.default, (id) => runs.find((r) => r.id === id)),
-  ),
-  runs,
-);

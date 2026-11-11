@@ -1,9 +1,9 @@
 import { hasSeenScene, markSceneSeen } from '../../../game/runSave';
 import { chapters } from '../../../puzzles/chapters';
 import { runs } from '../../../puzzles/runs';
-import { getScene } from '@picross/shared/puzzles/scenes';
+import { getScene } from '@picross/story/puzzles/scenes';
 import { el } from '@picross/shared/ui/dom';
-import { renderSceneScreen } from '@picross/shared/ui/screens/sceneScreen';
+import { renderSceneScreen } from '@picross/story/ui/screens/sceneScreen';
 import { chapterOpen, jobsBoard, unlocked } from './jobsBoard';
 import { pathMap } from './pathMap';
 import { results } from './results';

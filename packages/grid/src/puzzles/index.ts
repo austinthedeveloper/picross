@@ -1,4 +1,4 @@
-import { runPuzzleFiles } from '@picross/shared/puzzles/files/runPuzzles';
+import { runPuzzleFiles } from '@picross/story/puzzles/files/runPuzzles';
 import { parsePuzzle, type Puzzle } from './format';
 
 type JsonModules = Record<string, { default: unknown }>;

@@ -1,9 +1,9 @@
 import { earnFromRun, type NewBadge } from '../../../game/badges';
-import { advance, currentStep, startDialogue } from '@picross/shared/game/dialogue';
+import { advance, currentStep, startDialogue } from '@picross/story/game/dialogue';
 import type { RunState } from '../../../game/run';
 import { getJobStats, recordRunResult, saveCurrentRun } from '../../../game/runSave';
 import type { RunDef } from '../../../puzzles/runs';
-import { getScene } from '@picross/shared/puzzles/scenes';
+import { getScene } from '@picross/story/puzzles/scenes';
 import { portraitArt, withArt } from '@picross/shared/ui/art';
 import { earnedBadges } from '../../components/badge';
 import { homeLink } from '@picross/shared/ui/components/homeLink';

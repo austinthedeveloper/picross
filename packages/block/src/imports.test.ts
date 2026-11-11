@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 /**
  * This package is the rules and data of a block, with no screen: both games import it (the
  * 2D game for its block fights), and play-block draws it. So it imports only its own files
- * and @picross/shared's modules outside `ui/`, and never three.js, which keeps three.js
+ * and the modules of @picross/shared and @picross/story outside `ui/`, and never three.js, which keeps three.js
  * out of any screen that only needs the rules. (eslint.config.js says the same with
  * `no-restricted-imports`.)
  */
@@ -16,7 +16,8 @@ const sources = import.meta.glob<string>(['./**/*.ts', '!./imports.test.ts'], {
 /** Bare imports allowed besides the package's own files. */
 const allowed = (spec: string) =>
   spec === 'vitest' ||
-  (spec.startsWith('@picross/shared/') && !/^@picross\/shared\/(ui|styles)\//.test(spec));
+  (/^@picross\/(shared|story)\//.test(spec) &&
+    !/^@picross\/(shared|story)\/(ui|styles)\//.test(spec));
 
 const SPECIFIERS = [
   /\b(?:import|export)\s[^;]*?\bfrom\s*['"]([^'"]+)['"]/g,
@@ -43,7 +44,7 @@ describe('the package imports', () => {
     expect(specifiers(sources['./game/battle.ts'])).toContain('@picross/shared/engine/random');
   });
 
-  it('only its own files and the shared rules', () => {
+  it('only its own files and the shared and story rules', () => {
     const outside: string[] = [];
     for (const [file, code] of Object.entries(sources)) {
       for (const spec of specifiers(code)) {

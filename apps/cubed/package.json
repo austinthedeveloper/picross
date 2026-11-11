@@ -21,7 +21,8 @@
   "dependencies": {
     "@picross/block": "*",
     "@picross/play-block": "*",
-    "@picross/shared": "*"
+    "@picross/shared": "*",
+    "@picross/story": "*"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",

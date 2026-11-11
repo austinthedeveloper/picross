@@ -1,5 +1,5 @@
 import type { Puzzle } from '@picross/grid/puzzles/format';
-import { getGadget } from '@picross/shared/puzzles/gadgets';
+import { getGadget } from '@picross/story/puzzles/gadgets';
 import { gadgetArt, iconArt } from '@picross/shared/ui/art';
 import { el } from '@picross/shared/ui/dom';
 import { pause } from '@picross/shared/ui/motion';

@@ -10,14 +10,14 @@ import {
   type RunState,
 } from '../../../game/run';
 import { getCurrentRun, hasSeenTip, markTipSeen, saveCurrentRun } from '../../../game/runSave';
-import { getGadget } from '@picross/shared/puzzles/gadgets';
-import { getScene } from '@picross/shared/puzzles/scenes';
+import { getGadget } from '@picross/story/puzzles/gadgets';
+import { getScene } from '@picross/story/puzzles/scenes';
 import { restHeal, type Encounter } from '@picross/block/story/data';
 import { shapePicture } from '@picross/play-block/ui/board/thumbnail';
 import { el } from '@picross/shared/ui/dom';
 import { onHide } from '../../lifecycle';
 import { createPlay, type Play } from '@picross/play-block/ui/screens/play';
-import { renderSceneScreen } from '@picross/shared/ui/screens/sceneScreen';
+import { renderSceneScreen } from '@picross/story/ui/screens/sceneScreen';
 import { digKind } from './dig';
 import { fightKind, type FightRun } from '@picross/play-block/ui/screens/story/fight';
 import type { Kind } from '@picross/play-block/ui/screens/story/kind';

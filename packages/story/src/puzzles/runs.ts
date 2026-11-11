@@ -1,11 +1,15 @@
-import { getPuzzle } from '@picross/grid/puzzles/index';
-import type { Enemy } from '../game/battle';
-import { parseEnemy } from './enemies';
-import type { Puzzle } from '@picross/grid/puzzles/format';
-import { getGadget } from '@picross/shared/puzzles/gadgets';
-import { getScene } from '@picross/shared/puzzles/scenes';
-import { encounterFiles } from '@picross/shared/puzzles/files/encounters';
-import { runFiles } from '@picross/shared/puzzles/files/runs';
+import { getGadget } from './gadgets';
+import { getScene } from './scenes';
+
+/**
+ * Reading encounters (`encounters/*.json`) and runs, or jobs (`runs/*.json`), for any board.
+ *
+ * What's the same on every board is checked here: an encounter's id, name, kind, rest and
+ * scene, and a run's HP, encounters, gadgets and scenes. What isn't is the game's: each
+ * passes an `EncounterFit` with its own puzzle for the encounter (the 2D game a grid from
+ * `run/`, Cubed a block) and its own reading of the enemy. The files themselves are globbed
+ * in `files/`.
+ */
 
 /** What kind of node an encounter is: fights (#27), digs (#29), and rest stops (#77). */
 export type EncounterKind = 'fight' | 'dig' | 'rest';
@@ -23,7 +27,8 @@ export const REST_LATE_HEAL = 1;
 export const restHeal = (rest: Rest, elapsed: number) =>
   elapsed <= rest.seconds * 1000 ? rest.heal : REST_LATE_HEAL;
 
-export interface EncounterFile {
+/** An encounter's file. `E` is the enemy as a game reads it. */
+export interface EncounterFile<E = unknown> {
   id: string;
   name: string;
   kind: EncounterKind;
@@ -32,7 +37,7 @@ export interface EncounterFile {
   /** One line of flavor shown on the run map. */
   blurb?: string;
   /** Required for fights. */
-  enemy?: Enemy;
+  enemy?: E;
   /** A boss node: stands out on the map (#42). */
   boss?: boolean;
   /** Scene played the first time you open this node (#42). */
@@ -41,9 +46,20 @@ export interface EncounterFile {
   rest?: Rest;
 }
 
-export interface Encounter extends Omit<EncounterFile, 'puzzle'> {
-  puzzle: Puzzle;
+/** An encounter with its puzzle (`P`) and enemy (`E`) on one board. */
+export interface StoryEncounter<P, E> extends Omit<EncounterFile<E>, 'puzzle'> {
+  puzzle: P;
 }
+
+/** How a game plays encounters: its puzzle for one, and its enemy for a fight. */
+export interface EncounterFit<P, E> {
+  /** The puzzle an encounter names, on this board (undefined: there isn't one). */
+  puzzle: (id: string) => P | undefined;
+  /** A fight's enemy (an object, as written), read and checked against its puzzle. */
+  enemy: (data: unknown, puzzle: P, fail: (msg: string) => never) => E;
+}
+
+export const KINDS: EncounterKind[] = ['fight', 'dig', 'rest'];
 
 function parseRest(data: unknown, fail: (msg: string) => never): Rest {
   const rest = data as Partial<Rest> | undefined;
@@ -59,6 +75,34 @@ function parseRest(data: unknown, fail: (msg: string) => never): Rest {
 function checkScene(id: unknown, fail: (msg: string) => never): string {
   if (typeof id !== 'string' || !getScene(id)) return fail(`unknown scene "${String(id)}"`);
   return id;
+}
+
+/** Reads and checks an encounter's file, with the game's puzzle and enemy. Throws if it's bad. */
+export function parseEncounter<P, E>(data: unknown, fit: EncounterFit<P, E>): StoryEncounter<P, E> {
+  const file = data as Partial<EncounterFile>;
+  const fail = (msg: string): never => {
+    throw new Error(`Invalid encounter${file?.id ? ` "${file.id}"` : ''}: ${msg}`);
+  };
+  if (typeof file?.id !== 'string' || !file.id) fail('missing id');
+  if (typeof file.name !== 'string' || !file.name) fail('missing name');
+  if (!KINDS.includes(file.kind as EncounterKind)) fail(`kind must be one of ${KINDS.join(', ')}`);
+  const puzzle = typeof file.puzzle === 'string' ? fit.puzzle(file.puzzle) : undefined;
+  if (!puzzle) fail(`unknown puzzle "${file.puzzle}"`);
+  const enemy = () => {
+    if (!file.enemy || typeof file.enemy !== 'object') fail('fights need an enemy');
+    return fit.enemy(file.enemy, puzzle!, fail);
+  };
+  return {
+    id: file.id!,
+    name: file.name!,
+    kind: file.kind!,
+    puzzle: puzzle!,
+    ...(file.blurb ? { blurb: file.blurb } : {}),
+    ...(file.kind === 'fight' ? { enemy: enemy() } : {}),
+    ...(file.kind === 'rest' ? { rest: parseRest(file.rest, fail) } : {}),
+    ...(file.boss ? { boss: true } : {}),
+    ...(file.scene !== undefined ? { scene: checkScene(file.scene, fail) } : {}),
+  };
 }
 
 /** A run: an ordered path of encounters. */
@@ -92,45 +136,17 @@ export interface RunFile {
   bossOf?: string;
 }
 
-export interface RunDef extends Omit<RunFile, 'encounters' | 'gadgets'> {
-  encounters: Encounter[];
+/** A run with its encounters (`Enc`, a game's) in order. */
+export interface StoryRun<Enc> extends Omit<RunFile, 'encounters' | 'gadgets'> {
+  encounters: Enc[];
   gadgets: string[];
-  /** Endless mode (#68): never won; `encounters` is only the stretch around you. */
-  endless?: boolean;
 }
 
-const KINDS: EncounterKind[] = ['fight', 'dig', 'rest'];
-
-export function parseEncounter(
+/** Reads and checks a run's file, finding its encounters with `findEncounter`. Throws if it's bad. */
+export function parseRun<Enc>(
   data: unknown,
-  findPuzzle: (id: string) => Puzzle | undefined = getPuzzle,
-): Encounter {
-  const file = data as Partial<EncounterFile>;
-  const fail = (msg: string): never => {
-    throw new Error(`Invalid encounter${file?.id ? ` "${file.id}"` : ''}: ${msg}`);
-  };
-  if (typeof file?.id !== 'string' || !file.id) fail('missing id');
-  if (typeof file.name !== 'string' || !file.name) fail('missing name');
-  if (!KINDS.includes(file.kind as EncounterKind)) fail(`kind must be one of ${KINDS.join(', ')}`);
-  const puzzle = typeof file.puzzle === 'string' ? findPuzzle(file.puzzle) : undefined;
-  if (!puzzle) fail(`unknown puzzle "${file.puzzle}"`);
-  return {
-    id: file.id!,
-    name: file.name!,
-    kind: file.kind!,
-    puzzle: puzzle!,
-    ...(file.blurb ? { blurb: file.blurb } : {}),
-    ...(file.kind === 'fight' ? { enemy: parseEnemy(file.enemy, puzzle!, fail) } : {}),
-    ...(file.kind === 'rest' ? { rest: parseRest(file.rest, fail) } : {}),
-    ...(file.boss ? { boss: true } : {}),
-    ...(file.scene !== undefined ? { scene: checkScene(file.scene, fail) } : {}),
-  };
-}
-
-export function parseRun(
-  data: unknown,
-  findEncounter: (id: string) => Encounter | undefined,
-): RunDef {
+  findEncounter: (id: string) => Enc | undefined,
+): StoryRun<Enc> {
   const file = data as Partial<RunFile>;
   const fail = (msg: string): never => {
     throw new Error(`Invalid run${file?.id ? ` "${file.id}"` : ''}: ${msg}`);
@@ -165,54 +181,19 @@ export function parseRun(
   };
 }
 
-const encountersById = new Map<string, Encounter>();
-for (const mod of Object.values(encounterFiles)) {
-  const encounter = parseEncounter(mod.default);
-  encountersById.set(encounter.id, encounter);
-}
-
-const runsById = new Map<string, RunDef>();
-for (const mod of Object.values(runFiles)) {
-  const run = parseRun(mod.default, (id) => encountersById.get(id));
-  runsById.set(run.id, run);
-}
-
-export function getEncounter(id: string): Encounter | undefined {
-  return encountersById.get(id);
-}
-
-/** Every encounter, including ones no job uses yet (the debug panel can still start them). */
-export const encounters: Encounter[] = [...encountersById.values()];
-
-export function getRun(id: string): RunDef | undefined {
-  return runsById.get(id);
-}
-
-for (const run of runsById.values()) {
-  if (run.requires && !runsById.has(run.requires)) {
-    throw new Error(`Invalid run "${run.id}": requires unknown job "${run.requires}"`);
-  }
-  if (run.overtimeOf && !runsById.has(run.overtimeOf)) {
-    throw new Error(`Invalid run "${run.id}": overtime of unknown job "${run.overtimeOf}"`);
-  }
-  if (run.bossOf && !runsById.has(run.bossOf)) {
-    throw new Error(`Invalid run "${run.id}": boss fight of unknown job "${run.bossOf}"`);
+/** Checks the jobs a run names (`requires`, `overtimeOf`, `bossOf`) are runs too. */
+export function checkRunLinks(
+  runsById: ReadonlyMap<string, Pick<RunFile, 'id' | 'requires' | 'overtimeOf' | 'bossOf'>>,
+): void {
+  for (const run of runsById.values()) {
+    if (run.requires && !runsById.has(run.requires)) {
+      throw new Error(`Invalid run "${run.id}": requires unknown job "${run.requires}"`);
+    }
+    if (run.overtimeOf && !runsById.has(run.overtimeOf)) {
+      throw new Error(`Invalid run "${run.id}": overtime of unknown job "${run.overtimeOf}"`);
+    }
+    if (run.bossOf && !runsById.has(run.bossOf)) {
+      throw new Error(`Invalid run "${run.id}": boss fight of unknown job "${run.bossOf}"`);
+    }
   }
 }
-
-/** Every job, in jobs-board order. */
-export const runs: RunDef[] = [...runsById.values()]
-  .filter((run) => !run.overtimeOf && !run.bossOf)
-  .sort((a, b) => (a.order ?? 99) - (b.order ?? 99) || a.name.localeCompare(b.name));
-
-/** Harder replays of cleared jobs (#113). */
-export const overtimeRuns: RunDef[] = [...runsById.values()].filter((run) => run.overtimeOf);
-
-/** A job's Overtime, if it has one. */
-export const overtimeFor = (job: string) => overtimeRuns.find((run) => run.overtimeOf === job);
-
-/** Standalone boss fights, each unlocked by clearing a job. */
-export const bossFights: RunDef[] = [...runsById.values()].filter((run) => run.bossOf);
-
-/** The boss fights a cleared job unlocks. */
-export const bossFightsFor = (job: string) => bossFights.filter((run) => run.bossOf === job);

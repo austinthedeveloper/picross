@@ -13,6 +13,7 @@
     "check:puzzles": "vitest run src/puzzles/pack.test.ts"
   },
   "dependencies": {
-    "@picross/shared": "*"
+    "@picross/shared": "*",
+    "@picross/story": "*"
   }
 }

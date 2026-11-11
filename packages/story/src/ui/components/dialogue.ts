@@ -10,11 +10,11 @@ import {
 } from '../../game/dialogue';
 import { getBackdrop } from '../../puzzles/backdrops';
 import type { Scene } from '../../puzzles/scenes';
-import { portraitArt, preloadArt, withArt } from '../art';
-import { el } from '../dom';
+import { portraitArt, preloadArt, withArt } from '@picross/shared/ui/art';
+import { el } from '@picross/shared/ui/dom';
 import { createBackdrop } from './backdrop';
-import { reducedMotion } from '../motion';
-import { playSound } from '../sound';
+import { reducedMotion } from '@picross/shared/ui/motion';
+import { playSound } from '@picross/shared/ui/sound';
 
 const CHARS_PER_SECOND = 45;
 

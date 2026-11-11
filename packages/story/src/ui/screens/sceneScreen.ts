@@ -1,7 +1,7 @@
 import type { Flags } from '../../game/dialogue';
 import type { Scene } from '../../puzzles/scenes';
 import { createDialogue } from '../components/dialogue';
-import { el } from '../dom';
+import { el } from '@picross/shared/ui/dom';
 
 /**
  * Plays a scene full screen. With no `onEnd`, this is the #/scene/<id>

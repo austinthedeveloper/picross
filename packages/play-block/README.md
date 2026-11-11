@@ -56,7 +56,7 @@ their path in this package) to `<html data-board="block">`.
 ## The rule: nothing here imports from an app
 
 `src/imports.test.ts` fails on any import that isn't the package's own, `@picross/block`,
-`@picross/shared` or `three`, and `eslint.config.js` says the same with
+`@picross/shared`, `@picross/story` or `three`, and `eslint.config.js` says the same with
 `no-restricted-imports`.
 
 ## Tests

@@ -9,9 +9,9 @@ import {
 import { getSettings } from '../game/settings';
 import { chapters } from '../puzzles/chapters';
 import { ENDLESS_GADGETS, ENDLESS_HP, ENDLESS_ID } from '../puzzles/endless';
-import { catalog } from '@picross/shared/puzzles/gadgets';
+import { catalog } from '@picross/story/puzzles/gadgets';
 import { encounters, getRun, runs } from '../puzzles/runs';
-import { scenes } from '@picross/shared/puzzles/scenes';
+import { scenes } from '@picross/story/puzzles/scenes';
 import { el } from '@picross/shared/ui/dom';
 import { debug } from '@picross/grid/debug/hooks';
 import './panel.css';

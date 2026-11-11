@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 /**
  * Both games import this package (Cubed for every screen with a block, the 2D game for its
  * block fights), so it never imports from an app: only its own files, the block package,
- * @picross/shared and three.js. (eslint.config.js says the same with
+ * @picross/shared, @picross/story and three.js. (eslint.config.js says the same with
  * `no-restricted-imports`.)
  */
 const sources = import.meta.glob<string>(['./**/*.ts', '!./imports.test.ts'], {
@@ -17,7 +17,8 @@ const allowed = (spec: string) =>
   spec === 'vitest' ||
   spec === 'three' ||
   spec.startsWith('@picross/block/') ||
-  spec.startsWith('@picross/shared/');
+  spec.startsWith('@picross/shared/') ||
+  spec.startsWith('@picross/story/');
 
 const SPECIFIERS = [
   /\b(?:import|export)\s[^;]*?\bfrom\s*['"]([^'"]+)['"]/g,
@@ -49,7 +50,7 @@ describe('the package imports', () => {
     );
   });
 
-  it('only its own files, the block package, shared and three.js', () => {
+  it('only its own files, the block package, shared, story and three.js', () => {
     const outside: string[] = [];
     for (const [file, code] of Object.entries(sources)) {
       for (const spec of specifiers(code)) {

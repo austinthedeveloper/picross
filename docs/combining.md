@@ -19,9 +19,8 @@ The SNES demake's `make import` reads the pack from `apps/picross/`.
 - **Step 2 is done** (#143): the files Cubed used to copy are one package,
   `packages/shared` (`@picross/shared`, [README](../packages/shared/README.md)), which both
   games import. The sync script, `shared.lock.json` and `check:cubed` are gone. Every
-  shared file went in, story data included; the story and its loaders move out to their
-  own `packages/story` in #146. The SNES demake reads the story and art from
-  `packages/shared/`.
+  shared file went in, story data included; the story then moved out to its own package
+  (#146, below). The SNES demake reads the art from `packages/shared/public/art/`.
 - **The 2D packages are done** (#144), alongside step 3's 3D ones: `packages/grid`
   (`@picross/grid`: the engine, the puzzle format, the pack, murals and `Game`, with no
   DOM; [README](../packages/grid/README.md)) and `packages/play-grid`
@@ -33,6 +32,14 @@ The SNES demake's `make import` reads the pack from `apps/picross/`.
   no three.js) and `packages/play-block` (`@picross/play-block`: the three.js view, input,
   the play, fight and editor screens and their styles). Cubed and the Curator's block
   phases both import them; neither app imports the other.
+- **The story is one package** (#146): `packages/story` (`@picross/story`,
+  [README](../packages/story/README.md)) holds the chapters, jobs, encounters, run
+  puzzles, scenes, backdrops, gadgets, dialogue and the scene player, and reads and checks
+  them once for both games; each game passes in its own puzzle and enemy per encounter.
+  The story gate is now a test there (`boards.test.ts`) that reports, for every encounter
+  and power, the boards that can play it, and fails only on broken data. The SNES demake
+  reads the story from `packages/story/src/puzzles/`. **M4's packaging (steps 1–3) is
+  complete.**
 - The story ideas for the combined game are in [story-combined.md](story-combined.md).
 
 **Step 7 has a first boss, ahead of steps 2–6.** The Curator unfolds into a block at 60%
@@ -51,7 +58,7 @@ The steps below still apply; `packages/block` and `packages/play-block` now exis
 | Puzzle core          | Grid, run clues, line solver (`src/engine/`)                  | Block, count-and-pieces clues, line solver (`src/engine/`)              |
 | Play screen          | DOM grid (`ui/board/boardView.ts`), `PlaySession` hooks       | three.js (`ui/board/blockView.ts`), `PlayHooks` in `ui/screens/play.ts` |
 | Fights               | `game/battle.ts` over rows and columns                        | `game/battle.ts` over lines on three axes, same rules                   |
-| Story data           | Owns it: scenes, chapters, jobs, encounters, art              | Shared verbatim from 2D, plus a 3D puzzle per encounter                 |
+| Story data           | `packages/story`: scenes, chapters, jobs, encounters          | The same package, plus a 3D puzzle per encounter (`packages/block`)     |
 | Saves                | `picross:*` keys                                              | `picross3d:*` keys                                                      |
 | Look, sound, haptics | Owns them                                                     | Shared verbatim                                                         |
 
@@ -181,7 +188,7 @@ Each step ships, with both games playable throughout.
    unchanged, and its unit tests, browser tests, CI, Pages and Azure deploys pass as before.
    The SNES `make import` paths update.
 2. **Shared package.** Today's shared files become `packages/shared`, imported by both
-   apps; the sync script goes. (Done, #143; the story splits out into `packages/story` in
+   apps; the sync script goes. (Done, #143; the story split out into `packages/story` in
    #146.)
 3. **3D packages.** `packages/block` and `packages/play-block` from this repo; the 3D game
    runs as a second app (`apps/picross-3d`) in the monorepo with its tests and site.

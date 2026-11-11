@@ -18,7 +18,7 @@ The paths under `src/` are the ones these files had in Cubed, so
 | Puzzles | `src/puzzles/format.ts` (the file format), `hide.ts`, `check.ts`, `draft.ts`, `share.ts`, `transform.ts`, `sheet.ts`, `difficulty.ts`, `daily.ts`                   |
 | Data    | `src/puzzles/pack/*.json`, `dioramas/*.json` (with `diorama.ts`, `dioramas.ts`), `story/*.json` (the story's 3D puzzles), `sheets/*.txt`; `index.ts` loads the pack |
 | Play    | `src/game/game.ts` (a puzzle in play, `Mode`, `SavedBoard`), `battle.ts` (a story fight's rules), `clock.ts`                                                        |
-| Story   | `src/story/data.ts` (the shared story fitted to blocks, and its gate), `powers.ts` (how each power is shown)                                                        |
+| Story   | `src/story/data.ts` (the story, from `@picross/story`, fitted to blocks; what it can't play yet), `powers.ts` (how each power is shown)                             |
 
 Cubed's saves, settings, runs, daily streak and badges stay in `apps/cubed/src/game/`:
 they're that app's, under its `picross3d:` storage keys.
@@ -36,9 +36,9 @@ import { Battle } from '@picross/block/game/battle';
 ## The rule: rules and data only
 
 Both games import this package, and the 2D game loads it only for a block fight, so it
-stays small and screenless. It imports only its own files (with relative paths) and
-`@picross/shared`'s modules outside `ui/` and `styles/`, and never three.js, an app or
-`@picross/play-block`. `src/imports.test.ts` fails on anything else (and has its own check
+stays small and screenless. It imports only its own files (with relative paths) and the
+modules of `@picross/shared` and `@picross/story` outside `ui/` and `styles/`, and never
+three.js, an app or `@picross/play-block`. `src/imports.test.ts` fails on anything else (and has its own check
 for three.js), and `eslint.config.js` says the same with `no-restricted-imports`.
 
 ## Puzzles
@@ -51,4 +51,5 @@ Cubed's [how-to](../../apps/cubed/docs/how-to.md).
 ## Tests
 
 `npm test` at the root runs this package's tests (`tsc --noEmit && vitest run`), with the
-pack check and the story gate; `npm run test:block` runs just these.
+pack check; `npm run test:block` runs just these. The story's gate, which reports what
+`src/story/data.ts` can't play yet, is `packages/story/src/boards.test.ts`.

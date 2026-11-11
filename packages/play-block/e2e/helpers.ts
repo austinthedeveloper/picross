@@ -13,8 +13,8 @@ import { turnPuzzle } from '@picross/block/puzzles/transform';
 /** The block package's puzzles (the pack, the story's 3D puzzles). */
 const PUZZLES = path.join(import.meta.dirname, '../../block/src/puzzles');
 const PACK = path.join(PUZZLES, 'pack');
-/** The story's data (encounters, jobs), in the shared package. */
-const STORY = path.join(import.meta.dirname, '../../shared/src/puzzles');
+/** The story's data (encounters, jobs), in the story package. */
+const STORY = path.join(import.meta.dirname, '../../story/src/puzzles');
 
 /** Pack puzzle ids, biggest block first. */
 export const PUZZLES_BY_SIZE = fs

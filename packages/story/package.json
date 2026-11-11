@@ -1,0 +1,20 @@
+{
+  "name": "@picross/story",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "The story both games play: chapters, jobs, encounters, scenes, dialogue, gadgets and backdrops, with their loaders and the scene player. Plain TypeScript; each app's Vite compiles it.",
+  "exports": {
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "test": "tsc --noEmit && vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@picross/shared": "*"
+  },
+  "devDependencies": {
+    "@picross/block": "*"
+  }
+}
