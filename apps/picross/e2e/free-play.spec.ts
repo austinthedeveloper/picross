@@ -137,15 +137,16 @@ test.describe('free play', () => {
     await expect(page.locator('.murals')).toBeVisible();
 
     await page.getByLabel('Difficulty').selectOption('insane');
-    await expect(cards).toHaveCount(6);
-    await expect(page.locator('.difficulty')).toHaveText(Array(6).fill('Insane'));
+    // Six from before, and the eight Flat halves of the insane pairs.
+    await expect(cards).toHaveCount(14);
+    await expect(page.locator('.difficulty')).toHaveText(Array(14).fill('Insane'));
     await expect(page.locator('.murals')).toHaveCount(0);
     // Rating a puzzle mustn't give it away.
     await expect(cards.first().locator('.card-name')).toHaveText(/^No\. \d+$/);
 
     await page.reload();
     await expect(page.getByLabel('Difficulty')).toHaveValue('insane');
-    await expect(cards).toHaveCount(6);
+    await expect(cards).toHaveCount(14);
 
     await page.getByRole('button', { name: 'Solved', exact: true }).tap();
     await expect(page.locator('.empty-list')).toHaveText('No puzzles match those filters.');

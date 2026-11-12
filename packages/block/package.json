@@ -11,7 +11,8 @@
     "test": "tsc --noEmit && vitest run",
     "test:watch": "vitest",
     "puzzles": "vite-node scripts/puzzles.ts",
-    "bench": "vite-node scripts/bench.ts"
+    "bench": "vite-node scripts/bench.ts",
+    "hardest-hide": "vite-node scripts/hardest-hide.ts"
   },
   "dependencies": {
     "@picross/shared": "*",

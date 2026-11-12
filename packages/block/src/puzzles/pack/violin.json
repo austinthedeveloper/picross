@@ -1,0 +1,30 @@
+{
+  "id": "violin",
+  "name": "Violin",
+  "colors": {
+    "b": "brown",
+    "c": "cream",
+    "k": "graphite",
+    "w": "wood"
+  },
+  "layers": [
+    [".bbbbb.", ".bbbbb.", ".wwwww."],
+    ["bbbbbbb", "b.....b", "wwwwwww"],
+    ["bbbbbbb", "b.....b", "wwwcwww"],
+    [".bbbbb.", ".b...b.", ".wwwww."],
+    ["..bbb..", "..b.b..", "...w..."],
+    [".bbbbb.", ".b...b.", ".w.w.w."],
+    [".bbbbb.", ".b...b.", ".wwkww."],
+    [".bbbbb.", ".b...b.", ".wwkww."],
+    [".bbbbb.", ".bbbbb.", ".wwkww."],
+    [".......", "...k...", "......."],
+    [".......", "...k...", "......."],
+    [".......", "...k...", "......."],
+    [".......", "..ckc..", "......."],
+    [".......", "..bb...", "......."],
+    [".......", "...b...", "......."]
+  ],
+  "hideRatio": 0.8,
+  "hide": "100042300820288cd3fffffe8ffdc7a9fe7fbfb9895",
+  "passes": 17
+}

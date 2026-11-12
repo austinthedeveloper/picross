@@ -84,17 +84,17 @@ test.describe('free play', () => {
     await expect(page.locator('.free-list h2')).toHaveText(['Small 0/3']);
     await expect(cubedCards(page)).toHaveCount(3);
 
-    // Flat's hardest band is past Cubed's: the Cubed tab shows its hardest for it.
+    // Both boards have the same five bands, Insane too.
     await openTab(page, 'Flat');
     await page.getByLabel('Size').selectOption('any');
     await page.getByLabel('Difficulty').selectOption('insane');
     await expect(flatCards(page).first()).toContainText('Insane');
     await openTab(page, 'Cubed');
-    await expect(page.getByLabel('Difficulty')).toHaveValue('expert');
-    await expect(cubedCards(page).first()).toContainText('Expert');
+    await expect(page.getByLabel('Difficulty')).toHaveValue('insane');
+    await expect(cubedCards(page).first()).toContainText('Insane');
 
     await page.reload();
-    await expect(page.getByLabel('Difficulty')).toHaveValue('expert');
+    await expect(page.getByLabel('Difficulty')).toHaveValue('insane');
     await expect(page.getByRole('button', { name: 'Unsolved', exact: true })).toHaveAttribute(
       'aria-pressed',
       'true',

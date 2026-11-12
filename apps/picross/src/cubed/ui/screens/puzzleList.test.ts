@@ -18,11 +18,11 @@ describe("Cubed's list", () => {
     expect(counts.reduce((a, b) => a + b)).toBe(PUZZLES.length);
   });
 
-  it("shows Flat's insane as its hardest band", () => {
+  it('has an Insane band of its own, the same fifth band as Flat', () => {
     updateSettings({ listDifficulty: 'insane' });
     const picks = unsolvedPuzzles('any');
     updateSettings({ listDifficulty: 'any' });
     expect(picks.length).toBeGreaterThan(0);
-    expect(picks.every((c) => c.band === 3)).toBe(true);
+    expect(picks.every((c) => c.band === 4)).toBe(true);
   });
 });
