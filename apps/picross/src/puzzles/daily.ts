@@ -4,6 +4,7 @@ import { TRANSFORMS, transformGrid } from '@picross/grid/engine/transform';
 import type { Puzzle } from '@picross/grid/puzzles/format';
 import { packInOrder } from '@picross/grid/puzzles/index';
 import { dayNumber } from '@picross/shared/puzzles/days';
+import { isInsanePair } from '@picross/shared/puzzles/pairs';
 
 /** Daily puzzles (#69) are 15×15 or bigger. */
 const MIN_SIZE = 15;
@@ -78,7 +79,8 @@ export function dailyFor(key: string, pool: readonly Puzzle[] = BIG): Daily {
 }
 
 export const bigPuzzles = () =>
-  packInOrder.filter((p) => p.width >= MIN_SIZE && p.height >= MIN_SIZE);
+  // The insane pairs are free play's: a new puzzle in the pool would reshuffle every day.
+  packInOrder.filter((p) => p.width >= MIN_SIZE && p.height >= MIN_SIZE && !isInsanePair(p.id));
 
 /** The pool, worked out once. */
 const BIG = bigPuzzles();

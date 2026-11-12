@@ -2,6 +2,7 @@
  * Browser-test helpers for a block on screen, for both games' tests (Cubed's, and the 2D
  * game's block fights): puzzles read from their files, and keyboard play on the block.
  */
+import { isInsanePair } from '@picross/shared/puzzles/pairs';
 import { expect, type Page } from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -66,7 +67,7 @@ export function dailyFor(key: string): Puzzle {
         a.p.passes - b.p.passes ||
         a.p.name.localeCompare(b.p.name),
     )
-    .filter(({ p }) => longest(p) >= 4);
+    .filter(({ p }) => longest(p) >= 4 && !isInsanePair(p.id));
   const { source, turn } = dailyPick(Math.floor(dayNumber(key) / 2), pool.length);
   const { f, p } = pool[source];
   return parsePuzzle(turnPuzzle(f, p, turn));

@@ -35,8 +35,7 @@ export function getSettings(): Readonly<Settings> {
   return {
     mode: all.mode,
     listFilter: all.listFilter,
-    // The 2D game has a band past Cubed's hardest; Cubed's list shows its hardest for it.
-    listDifficulty: all.listDifficulty === 'insane' ? 'expert' : all.listDifficulty,
+    listDifficulty: all.listDifficulty,
     dimDone: all.dimDone,
     tutorialDone: all.cubedTutorialDone,
     muted: all.muted,

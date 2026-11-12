@@ -1,6 +1,7 @@
 import { dayNumber, previousDay } from '@picross/shared/puzzles/days';
 import { dailyPick } from './dailyCycle';
 import { parsePuzzle, type Puzzle, type PuzzleFile } from './format';
+import { isInsanePair } from '@picross/shared/puzzles/pairs';
 import { PUZZLES } from './index';
 import { turnPuzzle, type Turn } from './transform';
 
@@ -13,8 +14,14 @@ export { dateKey } from '@picross/shared/puzzles/days';
 /** The day before a date key. */
 export const dayBefore = previousDay;
 
-/** Pack puzzles big enough to be a daily (4 or more on the longest side). */
-export const POOL = PUZZLES.filter((p) => Math.max(p.dims.x, p.dims.y, p.dims.z) >= 4);
+/**
+ * Pack puzzles big enough to be a daily (4 or more on the longest side), but not the insane
+ * pairs, which are free play's (`@picross/shared/puzzles/pairs`). Every puzzle that joins the
+ * pool reshuffles every Cubed day from then on.
+ */
+export const POOL = PUZZLES.filter(
+  (p) => Math.max(p.dims.x, p.dims.y, p.dims.z) >= 4 && !isInsanePair(p.id),
+);
 
 /**
  * The daily puzzle for a date: a pack puzzle turned or mirrored so it isn't the one you

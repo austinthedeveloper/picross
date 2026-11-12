@@ -4,9 +4,13 @@
  *
  *   npx vite-node scripts/puzzle-sheet.ts check <sheet.txt>...   report each puzzle
  *   npx vite-node scripts/puzzle-sheet.ts fix <sheet.txt>        repair ambiguous ones in place
+ *   npx vite-node scripts/puzzle-sheet.ts harden <sheet.txt> [passes] [flips]
+ *                                         make each one harder in place, for an insane set
  *   npx vite-node scripts/puzzle-sheet.ts export <outdir> <sheet.txt>...
  *   npx vite-node scripts/puzzle-sheet.ts mural <mural.json>     report each tile of a mural
  *   npx vite-node scripts/puzzle-sheet.ts mural-fix <mural.json> repair ambiguous tiles in place
+ *
+ * `check` also says how hard each one will rate (its passes and band).
  *
  * A sheet is puzzles separated by blank lines. The first line of each is the
  * name, optionally followed by " | id=<id>"; the rest are solution rows made
@@ -19,7 +23,14 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { deriveClues } from '@picross/grid/engine/clues';
-import { solve, Unknown, type Knowledge } from '@picross/grid/engine/solver';
+import {
+  fightPasses,
+  linePasses,
+  solve,
+  Unknown,
+  type Knowledge,
+} from '@picross/grid/engine/solver';
+import { difficultyOf } from '@picross/grid/puzzles/difficulty';
 import { slugify, stringifyPuzzle, type PuzzleFile } from '@picross/grid/puzzles/format';
 import { parseMural } from '@picross/grid/puzzles/murals';
 
@@ -140,6 +151,64 @@ export function repair(e: PuzzleFile, maxFlips = 8): { cells: boolean[]; flips: 
   return { cells, flips };
 }
 
+/**
+ * Makes a picture harder for the line solver (an insane set's, #152's pairs): flips one cell
+ * at a time, keeping a flip only when the puzzle stays uniquely solvable and needs more passes
+ * (or as many, with less settled in the first one). It never adds a lone pixel or a pinhole,
+ * so the picture keeps its shape, and stops at `target` passes or `maxFlips` flips. An
+ * ambiguous picture is repaired first. Look at what it gives back: the solver can't judge
+ * whether it's still a picture of anything.
+ */
+export function harden(
+  e: PuzzleFile,
+  target = 11,
+  maxFlips = 24,
+): { cells: boolean[]; flips: number; passes: number } {
+  const { width, height } = e;
+  let cells = cellsOf(e);
+  if (solveEntry(e, cells).status !== 'unique') cells = repair(e).cells;
+  const rated = (grid: boolean[]) => {
+    if (solveEntry(e, grid).status !== 'unique') return null;
+    const { passes, firstPass } = fightPasses(
+      width,
+      height,
+      deriveClues({ width, height, cells: grid }),
+    );
+    return { passes, score: passes - firstPass };
+  };
+  const around = (i: number, grid: boolean[]) => {
+    const r = Math.floor(i / width);
+    const c = i % width;
+    let n = 0;
+    if (r > 0 && grid[i - width]) n++;
+    if (r < height - 1 && grid[i + width]) n++;
+    if (c > 0 && grid[i - 1]) n++;
+    if (c < width - 1 && grid[i + 1]) n++;
+    return n;
+  };
+  let now = rated(cells);
+  if (!now) return { cells, flips: 0, passes: 0 };
+  let flips = 0;
+  while (flips < maxFlips && now.passes < target) {
+    let best: { i: number; passes: number; score: number } | null = null;
+    for (let i = 0; i < cells.length; i++) {
+      const trial = [...cells];
+      trial[i] = !trial[i];
+      // No lone pixels (a filled cell needs a filled neighbour) and no pinholes.
+      const n = around(i, trial);
+      if (trial[i] ? n === 0 : n === 4) continue;
+      const r = rated(trial);
+      if (r && r.score > (best?.score ?? now.score)) best = { i, ...r };
+    }
+    if (!best) break;
+    cells = [...cells];
+    cells[best.i] = !cells[best.i];
+    now = { passes: best.passes, score: best.score };
+    flips++;
+  }
+  return { cells, flips, passes: now.passes };
+}
+
 function toRows(e: PuzzleFile, cells: boolean[]): string[] {
   return Array.from({ length: e.height }, (_, r) =>
     cells
@@ -205,7 +274,18 @@ function check(files: string[], { quiet = false } = {}): boolean {
       } else if (result.status === 'contradiction') {
         problems.push('CONTRADICTION (this should be impossible)');
       }
-      const tag = `${e.name} [${e.id}] ${e.width}×${e.height} ${pct}%`;
+      // How hard it'll rate (`npm run rate:puzzles`, from the same line solver).
+      const passes =
+        result.status === 'unique'
+          ? linePasses(
+              e.width,
+              e.height,
+              deriveClues({ width: e.width, height: e.height, cells: cellsOf(e) }),
+            )
+          : undefined;
+      const rated =
+        passes === undefined ? '' : `, ${passes} passes (${difficultyOf(passes).label})`;
+      const tag = `${e.name} [${e.id}] ${e.width}×${e.height} ${pct}%${rated}`;
       if (problems.length) {
         ok = false;
         console.log(`✗ ${tag} (${file})`);
@@ -241,6 +321,20 @@ function fix(file: string): void {
     const after = toRows(e, cells).join('\n');
     if (!out.includes(before)) throw new Error(`couldn't find "${e.name}" in ${file} to rewrite`);
     out = out.replace(before, after);
+    console.log(picture({ ...e, solution: toRows(e, cells) }));
+  }
+  fs.writeFileSync(file, out);
+}
+
+function hardenSheet(file: string, target: number, maxFlips: number): void {
+  const text = fs.readFileSync(file, 'utf8');
+  let out = text;
+  for (const e of parseSheet(text, file)) {
+    const { cells, flips, passes } = harden(e, target, maxFlips);
+    console.log(`${e.name}: ${flips} flip(s) → ${passes} passes (${difficultyOf(passes).label})`);
+    const before = e.solution.join('\n');
+    if (!out.includes(before)) throw new Error(`couldn't find "${e.name}" in ${file} to rewrite`);
+    out = out.replace(before, toRows(e, cells).join('\n'));
     console.log(picture({ ...e, solution: toRows(e, cells) }));
   }
   fs.writeFileSync(file, out);
@@ -327,6 +421,9 @@ function fixMural(file: string): void {
 
 const [command, ...args] = process.argv.slice(2);
 switch (command) {
+  case 'harden':
+    hardenSheet(args[0], Number(args[1] ?? 11), Number(args[2] ?? 24));
+    break;
   case 'check':
     process.exit(check(args) ? 0 : 1);
   // eslint-disable-next-line no-fallthrough -- process.exit never returns

@@ -185,10 +185,9 @@ function drawFreePlay(
       },
     });
 
-  // Cubed has no band past expert: its list shows Flat's insane as expert.
-  const bands = tab === 'flat' ? DIFFICULTIES : DIFFICULTIES.filter((d) => d.id !== 'insane');
-  const difficulty =
-    tab === 'cubed' && settings.listDifficulty === 'insane' ? 'expert' : settings.listDifficulty;
+  // Both boards have the same five bands (Cubed's Insane came with the insane pairs).
+  const bands = DIFFICULTIES;
+  const difficulty = settings.listDifficulty;
   const bothToggle = el('button', {
     className: 'toggle',
     textContent: 'Both boards',

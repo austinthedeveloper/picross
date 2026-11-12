@@ -582,6 +582,24 @@ aren't counted. Fights are rated separately, with their powers, in the app's
 `puzzles/fight-ratings.json` (see [Difficulty](#difficulty)). Murals aren't rated, and a
 difficulty filter leaves them out.
 
+Both boards have the same five bands, Easy to Insane. Flat's Insane is 11 passes and up;
+Cubed's (`packages/block/src/puzzles/difficulty.ts`, from its own solver and the clues it
+hides) is 13 and up, at any size. A big block moves up a band, but only as far as Expert.
+
+**The insane pairs** (`@picross/shared/puzzles/pairs`): subjects made on both boards with one
+id, a Flat puzzle and a Cubed one, both Insane, so solving both counts toward the
+both-boards badge. The first set is pets and instruments (goldfish bowl, tortoise, hamster,
+kitten, violin, drum kit, trumpet, harp: the sheets `pets-and-instruments.txt` in
+`packages/grid` and `pets.txt` and `instruments.txt` in `packages/block`). They're free
+play's: both dailies leave them out, since a daily should be fair game and every puzzle
+that joins a daily's pool reshuffles that daily's whole cycle. Two tools make a picture
+insane without making it a guess. `puzzle-sheet.ts harden` flips one cell at a time on a Flat
+picture, keeping a flip only while it stays uniquely solvable and needs more passes (never a
+lone pixel or a pinhole). `npm -w packages/block run hardest-hide` (in
+`packages/block/scripts/hardest-hide.ts`) tries many shuffles of which clues a block hides,
+and keeps the one that needs the most passes. Both still need looking at: the solver can't
+tell whether a picture still looks like anything.
+
 ### Rank and badges
 
 **Rank** (#106) measures how much you've solved. `game/rank.ts` works it out from existing
@@ -861,7 +879,7 @@ so its cards keep Cubed's styles. Free play is the way to the puzzles from the h
 
 - **Shared filters:** All / Unsolved / Solved (`listFilter`), size (`listSize`: small, medium, large,
   huge: Flat's 5×5 to 20×20, Cubed's sections by the block's longest side) and difficulty
-  (`listDifficulty`; Flat's insane shows as Cubed's expert on the Cubed tab). Flat's list also
+  (`listDifficulty`; both boards' five bands). Flat's list also
   sorts (`listOrder`). Neither pack has themes as data yet, so there's no theme filter. A size
   filter leaves the murals and dioramas out, and a difficulty filter the murals (as on the
   home lists, which keep every size).

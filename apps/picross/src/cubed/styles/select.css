@@ -120,8 +120,13 @@
 }
 
 .band-hard,
-.band-expert {
+.band-expert,
+.band-insane {
   color: var(--accent);
+}
+
+.band-insane {
+  font-weight: 800;
 }
 
 /* Cards at the top of the list: the tutorial offer, the story, the daily puzzle. */

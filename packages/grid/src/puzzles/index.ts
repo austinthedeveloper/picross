@@ -1,3 +1,4 @@
+import { INSANE_PAIRS } from '@picross/shared/puzzles/pairs';
 import { runPuzzleFiles } from '@picross/story/puzzles/files/runPuzzles';
 import { parsePuzzle, type Puzzle } from './format';
 
@@ -548,6 +549,8 @@ const ORDER = [
   'toy-car',
   'toy-box',
   'dollhouse',
+  // Pets and instruments (20×20), insane: each the Flat twin of a Cubed puzzle of the same id.
+  ...INSANE_PAIRS,
 ];
 
 const byId = new Map<string, Puzzle>();

@@ -54,7 +54,7 @@ function card(puzzle: Puzzle, index: number, fill: ReturnType<typeof lazyThumbs>
 /** Each puzzle's place in the pack, which an unsolved card shows as its number. */
 const INDEX = new Map(PUZZLES.map((p, i) => [p.id, i]));
 const solved = (p: Puzzle) => Boolean(getPuzzleStats(p.id));
-/** Past the list's difficulty filter (Cubed's view of it shows Flat's insane as expert). */
+/** Past the list's difficulty filter (both boards' five bands). */
 const rated = (p: Puzzle) => {
   const d = getSettings().listDifficulty;
   return d === 'any' || difficultyOf(p).id === d;

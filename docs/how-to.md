@@ -53,12 +53,21 @@ npx vite-node scripts/puzzle-sheet.ts check ../../packages/grid/src/puzzles/shee
 ```
 
 prints ✓ per puzzle, or the picture with `?` on the cells the solver can't decide, and
-flags ids that already exist and pictures outside 25–70% fill. `fix` flips a few cells to
+flags ids that already exist and pictures outside 25–70% fill, and says how hard each one
+will rate (its passes and band). `fix` flips a few cells to
 make an ambiguous puzzle unique (look at the result; redraw by hand if it spoils the
 picture), and `export <outdir> <sheets...>` writes the JSON files. Then add the new ids to
 `ORDER` in `packages/grid/src/puzzles/index.ts`. Draw the silhouette first, fill 35–60% of the grid, and
 avoid checkerboards, lone pixels and sparse symmetric detail, which are what make a
 picture ambiguous.
+
+For an insane set, `harden <sheet> [passes] [flips]` makes each picture harder in place, a
+cell at a time, keeping it uniquely solvable (look at the result; see "The insane pairs" in
+architecture.md):
+
+```bash
+npx vite-node scripts/puzzle-sheet.ts harden ../../packages/grid/src/puzzles/sheets/pets-and-instruments.txt 11 30
+```
 
 ## Add a mural
 

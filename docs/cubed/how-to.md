@@ -50,7 +50,14 @@ For a batch, draw them in one sheet (`packages/block/src/puzzles/sheets/*.txt`, 
 npm run puzzles -- --sheet src/puzzles/sheets/batch-1.txt
 ```
 
-Unchanged shapes keep their hidden clues. Sheets under `sheets/story/` export to
+Unchanged shapes keep their hidden clues. For an Insane block, pick the hardest hidden clues
+of many tries (it writes `hide` and `passes`, which the export then keeps):
+
+```bash
+npm run hardest-hide -- 60 goldfish-bowl harp
+```
+
+Sheets under `sheets/story/` export to
 `packages/block/src/puzzles/story/` (story puzzles, named after the 2D puzzle their encounter uses).
 
 ### In the browser: the editor

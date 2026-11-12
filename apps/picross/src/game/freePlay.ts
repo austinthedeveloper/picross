@@ -36,7 +36,7 @@ export function flatSizeBand(width: number): Exclude<SizeBand, 'any'> {
 
 /**
  * A puzzle Next unsolved or Surprise me could open: its link, and its difficulty band as a
- * number (0 for easy; both boards' bands line up, and only Flat has a fifth, insane).
+ * number (0 for easy; both boards' five bands line up).
  */
 export interface Candidate {
   href: string;
