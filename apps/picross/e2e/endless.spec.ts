@@ -1,47 +1,45 @@
 import { expect, test } from '@playwright/test';
-import { encounterSolution, runAt, seed, solve, press, updateSave } from './helpers';
+import { seed, skipScene } from './helpers';
 
-const setup = { seed: 5, fights: ['goblin'], digs: ['dig-site'] };
-
-test('endless opens after First Job and starts a run', async ({ page }) => {
-  await page.goto('/#/run');
-  await expect(page.locator('.chapter.endless')).toContainText('Clear First Job to open Endless.');
-  await updateSave(page, {
-    seenScenes: ['after-hours-opening'],
-    jobs: { 'first-job': { plays: 1, wins: 1, bestHp: 12 } },
+/** Endless on either board (#158): open once First Job is won. */
+test.beforeEach(async ({ context }) => {
+  await seed(context, {
+    run: { jobs: { 'first-job': { plays: 1, wins: 1 } }, seenScenes: [] },
   });
-  await page.locator('.job.endless').getByRole('button', { name: 'Start' }).tap();
-  await expect(page.locator('h1')).toHaveText('Endless');
-  await expect(page.locator('.run-depth')).toHaveText('Depth 1');
-  await expect(page.locator('.node')).toHaveCount(4); // the current one and three ahead
 });
 
-test('a fight heals you, the map moves on, and a loss records your best depth', async ({
-  page,
-  context,
-}) => {
-  await seed(context, {
-    run: {
-      current: runAt('endless', 0, { hp: 10, endless: setup }),
-      seenScenes: ['after-hours-opening'],
-      jobs: { 'first-job': { plays: 1, wins: 1, bestHp: 12 } },
-    },
-  });
-  await page.goto('/#/run/play');
-  await solve(page, encounterSolution('goblin'));
-  await expect(page.locator('.end-panel:not([hidden])')).toContainText('+2 HP');
-  await press(page, 'Back to map');
-  await expect(page.locator('.run-depth')).toHaveText('Depth 2');
-  await expect(page.locator('.hp-label')).toHaveText('HP 12/14');
+const saved = (page: import('@playwright/test').Page) =>
+  page.evaluate(() => JSON.parse(localStorage.getItem('picross:run')!).current);
 
-  // Knocked out at depth 6: the results show it, and the board keeps it.
-  await updateSave(page, {
-    current: runAt('endless', 6, { hp: 0, status: 'lost', endless: setup }),
-  });
-  await page.goto('/#/run');
-  await expect(page.locator('.results .run-meta').first()).toHaveText(
-    'Depth 6 · best 6 · new best!',
-  );
-  await press(page, 'Jobs board');
-  await expect(page.locator('.job.endless .job-best')).toHaveText('Best depth: 6');
+test('Endless picks a board: on Cubed its first fight is on a block', async ({ page }) => {
+  await page.goto('/#/endless');
+  await skipScene(page);
+  const boards = page.getByRole('group', { name: 'Board' });
+  await expect(boards.locator('.endless-board')).toHaveCount(3);
+  await expect(boards.locator('.endless-board.cubed')).toContainText('Not played yet');
+  await boards.locator('.endless-board.cubed').getByRole('button', { name: 'Start' }).click();
+  const run = await saved(page);
+  expect(run.runId).toBe('endless-cubed');
+  expect(run.endless.board).toBe('cubed');
+  await expect(page.locator('h1')).toHaveText('Endless · Cubed');
+  await page.locator('.node.current .node-body').click();
+  await expect(page.locator('canvas.block-canvas')).toBeVisible();
+  await expect(page.locator('html')).toHaveAttribute('data-board', 'block');
+  await expect(page.locator('.battle-name').first()).not.toBeEmpty();
+});
+
+test('Mixed starts flat, and a reload keeps its board', async ({ page }) => {
+  await page.goto('/#/endless');
+  await skipScene(page);
+  await page
+    .getByRole('group', { name: 'Board' })
+    .locator('.endless-board.mixed')
+    .getByRole('button', { name: 'Start' })
+    .click();
+  await page.locator('.node.current .node-body').click();
+  await expect(page.locator('.board')).toBeVisible();
+  await expect(page.locator('canvas')).toHaveCount(0);
+  await page.reload();
+  expect((await saved(page)).endless.board).toBe('mixed');
+  await expect(page.locator('.board')).toBeVisible();
 });

@@ -47,7 +47,14 @@ export interface RunState {
   /** Set once the finished run's result is saved to the job stats (#47). */
   recorded?: boolean;
   /** An endless run's seed and pools (#68); its encounters are generated from them. */
-  endless?: { seed: number; fights: string[]; digs: string[]; rests?: string[] };
+  endless?: {
+    seed: number;
+    fights: string[];
+    digs: string[];
+    rests?: string[];
+    /** Its board (#158): flat when missing. */
+    board?: 'flat' | 'cubed' | 'mixed';
+  };
   /** Missing on runs started before #107, which can't prove they were clean. */
   tally?: Tally;
 }

@@ -354,3 +354,26 @@
   border: 1px solid var(--accent);
   border-radius: 10px;
 }
+
+/* Endless's board choice (#158): a row per board, its best and Start. */
+.endless-boards {
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.endless-board {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+}
+
+.endless-board-name {
+  min-width: 56px;
+  font-weight: 700;
+}
+
+.endless-board .button {
+  margin-left: auto;
+}

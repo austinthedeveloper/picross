@@ -2,7 +2,11 @@ import { fightPasses } from '@picross/grid/engine/solver';
 import { Battle } from '@picross/block/game/battle';
 import { solve } from '@picross/block/engine/solver';
 import { hashString } from '@picross/block/puzzles/hide';
-import { getEncounter as getBlockEncounter } from '@picross/block/story/data';
+import {
+  getEncounter as getBlockEncounter,
+  type Enemy as BlockEnemy,
+} from '@picross/block/story/data';
+import type { Puzzle as BlockPuzzle } from '@picross/block/puzzles/format';
 import { advancePhase, startBattle } from '../game/battle';
 import { allFog, allScramble } from './enemies';
 import { bossFights, overtimeRuns, runs, type Encounter } from './runs';
@@ -94,7 +98,11 @@ export function rateFlat(e: Encounter): BoardRating {
 export function rateBlock(id: string): BoardRating | undefined {
   const e = getBlockEncounter(id);
   if (!e?.enemy) return undefined;
-  const { enemy, puzzle } = e;
+  return rateBlockFight(id, e.enemy, e.puzzle);
+}
+
+/** `rateBlock` for any enemy on any block: an Endless fight's, say (#158). */
+export function rateBlockFight(id: string, enemy: BlockEnemy, puzzle: BlockPuzzle): BoardRating {
   const battle = new Battle(enemy, puzzle, true, undefined, { seed: hashString(id) });
   battle.carry(1, new Uint8Array(puzzle.solution.length));
   const phases = enemy.phases ?? [];

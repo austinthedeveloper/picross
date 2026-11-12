@@ -4,7 +4,7 @@ import { blockCatalog } from '@picross/block/puzzles/catalog';
 import type { Dimension } from '@picross/shared/puzzles/ids';
 import { badges, getBadge, hasTiers, type Badge, type Count, type Tier } from '../puzzles/badges';
 import { chapters } from '../puzzles/chapters';
-import { ENDLESS_ID } from '../puzzles/endless';
+import { deepestEndless, isEndlessId } from '../puzzles/endless';
 import { bossFights, overtimeRuns, runs } from '../puzzles/runs';
 import { bestDailyStreak } from './daily';
 import { badgeLevel } from './legacyMerge';
@@ -85,7 +85,8 @@ export function statsAwards(job: (id: string) => JobStats | undefined, dailyBest
         return stats && stats.plays > stats.wins ? [{ id }] : [];
       }
       case 'depth':
-        return (job(ENDLESS_ID)?.bestDepth ?? 0) >= rule.depth ? [{ id }] : [];
+        // On any board (#158).
+        return deepestEndless((j) => job(j)?.bestDepth) >= rule.depth ? [{ id }] : [];
       case 'streak':
         return dailyBest >= rule.days ? [{ id }] : [];
       default:
@@ -152,7 +153,7 @@ export function countOf(count: Count, facts: Facts): number {
     case 'jobs-on-both':
       return facts.jobIds.filter((id) => {
         const on = facts.job(id)?.wonOn ?? [];
-        return id !== ENDLESS_ID && on.includes('grid') && on.includes('block');
+        return !isEndlessId(id) && on.includes('grid') && on.includes('block');
       }).length;
     case 'pictures-on-both': {
       const solved = new Set(block);

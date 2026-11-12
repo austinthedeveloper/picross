@@ -135,6 +135,7 @@ export function renderRunEncounter(app: HTMLElement): (() => void) | undefined {
           size: encounter.puzzle.width,
           onFlat: switchBoard,
           bar,
+          onBlock: encounter.onBlock,
           clear,
         }) ?? playFlat(false);
     });
@@ -146,6 +147,8 @@ export function renderRunEncounter(app: HTMLElement): (() => void) | undefined {
 
   const play = (): (() => void) => {
     const phase = (getCurrentRun() ?? state).battle?.phase;
+    // An Endless fight on a block (#158) is on it the whole way.
+    if (encounter.onBlock) return playBlock();
     return switching && boardAt(encounter.enemy!, phase) === 'block' ? playBlock() : playFlat();
   };
 

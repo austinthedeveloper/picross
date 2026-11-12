@@ -1,5 +1,4 @@
 import { shuffled } from '@picross/shared/engine/random';
-import type { Enemy } from '../game/battle';
 import type { RunState } from '../game/run';
 import { getEncounter, type Encounter, type RunDef } from './runs';
 
@@ -14,6 +13,38 @@ const BREAK_EVERY = 4;
 /** How far ahead the map shows. */
 const LOOKAHEAD = 3;
 
+/**
+ * The board an Endless run fights on (#158), picked when it starts: Flat, Cubed (every fight
+ * on a block), or Mixed (flat and block by turns, flat first). Digs and rest stops are flat.
+ */
+export type EndlessBoard = 'flat' | 'cubed' | 'mixed';
+export const ENDLESS_BOARDS: readonly EndlessBoard[] = ['flat', 'cubed', 'mixed'];
+
+/**
+ * Each board choice's run id, so each keeps its own best depth: Flat's is Endless's old id,
+ * so bests from before carry on there.
+ */
+export const endlessId = (board: EndlessBoard): string =>
+  board === 'flat' ? ENDLESS_ID : `${ENDLESS_ID}-${board}`;
+
+/** The board an Endless job id plays on (flat for anything that isn't one). */
+export const endlessBoardOf = (id: string): EndlessBoard =>
+  ENDLESS_BOARDS.find((board) => endlessId(board) === id) ?? 'flat';
+
+/** The deepest any Endless run has gone, on any board (Endless badges count them all). */
+export const deepestEndless = (best: (id: string) => number | undefined): number =>
+  Math.max(0, ...ENDLESS_BOARDS.map((board) => best(endlessId(board)) ?? 0));
+
+/** Whether a job id is one of Endless's. */
+export const isEndlessId = (id: string): boolean =>
+  ENDLESS_BOARDS.some((board) => endlessId(board) === id);
+
+const BOARD_NAMES: Record<EndlessBoard, string> = {
+  flat: 'Endless',
+  cubed: 'Endless · Cubed',
+  mixed: 'Endless · Mixed',
+};
+
 /** What an endless run draws from: chosen when it starts, so a reload plays the same order. */
 export interface EndlessSetup {
   seed: number;
@@ -21,7 +52,17 @@ export interface EndlessSetup {
   digs: string[];
   /** Rest stops (#77). Missing in runs started before they existed. */
   rests?: string[];
+  /** Its board (#158). Missing in runs started before there was a choice: flat. */
+  board?: EndlessBoard;
 }
+
+/** Whether the `fight`th fight (from 0) is on a block: all of them on Cubed, every other on Mixed. */
+export const fightOnBlock = (setup: Pick<EndlessSetup, 'board'>, fight: number): boolean =>
+  setup.board === 'cubed' || (setup.board === 'mixed' && fight % 2 === 1);
+
+/** How many block fights come before the `fight`th fight. */
+export const blockFightsBefore = (setup: Pick<EndlessSetup, 'board'>, fight: number): number =>
+  setup.board === 'cubed' ? fight : setup.board === 'mixed' ? Math.floor(fight / 2) : 0;
 
 /** Every fourth node is a break: digs keep gadgets coming, rest stops heal (#77). */
 export const isBreak = (node: number) => node % BREAK_EVERY === BREAK_EVERY - 1;
@@ -29,8 +70,16 @@ export const isBreak = (node: number) => node % BREAK_EVERY === BREAK_EVERY - 1;
 /** How many fights come before `node`. */
 export const fightsBefore = (node: number) => node - Math.floor((node + 1) / BREAK_EVERY);
 
+/** What depth scales on an enemy: either board's (a block's counts its lines differently). */
+interface Scalable {
+  hp: number;
+  attack: number;
+  phases?: readonly { attack?: number }[];
+  armor?: { attack: number };
+}
+
 /** An enemy at depth: +15% HP every 3 fights, +1 attack every 4 (phases scale with HP). */
-export function scaleEnemy(enemy: Enemy, fights: number): Enemy {
+export function scaleEnemy<E extends Scalable>(enemy: E, fights: number): E {
   const hp = Math.round(enemy.hp * (1 + 0.15 * Math.floor(fights / 3)));
   const boost = Math.floor(fights / 4);
   return {
@@ -75,26 +124,37 @@ export function endlessEncounter(setup: EndlessSetup, node: number): Encounter {
     ...base,
     id: `${base.id}@${node}`,
     ...(base.enemy && { enemy: scaleEnemy(base.enemy, fight) }),
+    // A fight on a block keeps its enemy; the block is picked when it opens (#158).
+    ...(base.enemy &&
+      !isBreak(node) &&
+      fightOnBlock(setup, fight) && {
+        onBlock: { of: base.id, fight, nth: blockFightsBefore(setup, fight), seed: setup.seed },
+      }),
   };
   delete encounter.scene;
   return encounter;
 }
 
 /** The pools for a new endless run: every fight, dig and rest stop from the jobs you've played. */
-export function endlessSetup(jobs: readonly RunDef[], seed: number): EndlessSetup {
+export function endlessSetup(
+  jobs: readonly RunDef[],
+  seed: number,
+  board: EndlessBoard = 'flat',
+): EndlessSetup {
   const all = jobs.flatMap((j) => j.encounters);
   const ids = (kind: Encounter['kind']) => [
     ...new Set(all.filter((e) => e.kind === kind).map((e) => e.id)),
   ];
-  return { seed, fights: ids('fight'), digs: ids('dig'), rests: ids('rest') };
+  const setup: EndlessSetup = { seed, fights: ids('fight'), digs: ids('dig'), rests: ids('rest') };
+  return board === 'flat' ? setup : { ...setup, board };
 }
 
 /** The endless run as a run definition: the encounters up to a few past the current one. */
 export function endlessRun(state: RunState): RunDef | undefined {
   if (!state.endless) return undefined;
   return {
-    id: ENDLESS_ID,
-    name: 'Endless',
+    id: state.runId,
+    name: BOARD_NAMES[state.endless.board ?? 'flat'],
     hp: ENDLESS_HP,
     gadgets: ENDLESS_GADGETS,
     endless: true,

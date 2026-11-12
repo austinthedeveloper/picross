@@ -18,6 +18,8 @@ import { fightKind, type FightRun } from '@picross/play-block/ui/screens/story/f
 import { providePlayPrefs } from '@picross/play-block/ui/prefs';
 import { boardAt } from '@picross/story/fight/switch';
 import type { BattleBar } from '@picross/story/ui/components/battleBar';
+import { endlessBlock } from '../../../puzzles/endlessBlocks';
+import type { Encounter } from '../../../puzzles/runs';
 import { enterFlat, handOver, startBattle, takeCounts, type Enemy } from '../../../game/battle';
 import { damage, removeGadget, withBattle, withBlock } from '../../../game/run';
 import { getCurrentRun, hasSeenTip, markTipSeen, saveCurrentRun } from '../../../game/runSave';
@@ -35,6 +37,11 @@ export interface BlockFightOptions {
   onFlat(): void;
   /** The fight's one battle bar, kept on screen from board to board (#171). */
   bar?: BattleBar;
+  /**
+   * An Endless fight on a block (#158): its block and enemy are picked for it
+   * (`puzzles/endlessBlocks.ts`), and it stays on the block from start to finish.
+   */
+  onBlock?: Encounter['onBlock'];
   /** Clears the encounter once the block is solved; `fightNote` is the defeat line. */
   clear(
     game: { hintsUsed: number; elapsed: number },
@@ -74,7 +81,12 @@ const run: FightRun = {
 
 /** Renders the block fight, or returns null if the encounter has no block. */
 export function renderBlockFight(app: HTMLElement, opts: BlockFightOptions): (() => void) | null {
-  const encounter = getEncounter(opts.encounterId);
+  const { onBlock } = opts;
+  const picked = onBlock && endlessBlock(onBlock.of, onBlock.fight, onBlock.nth, onBlock.seed);
+  // An Endless one is its story encounter, on the block picked for it.
+  const encounter = picked
+    ? { ...getEncounter(onBlock.of)!, id: opts.encounterId, ...picked }
+    : getEncounter(opts.encounterId);
   const state = getCurrentRun();
   if (!encounter?.enemy || state?.status !== 'active') return null;
 
@@ -86,12 +98,14 @@ export function renderBlockFight(app: HTMLElement, opts: BlockFightOptions): (()
   });
   // Coming over from the flat board (rather than reloading mid-block), the block takes the
   // fight over once it's on screen.
-  const enter = !saved || saved.phase + 1 < started ? handOver(opts.enemy, flat) : undefined;
+  // An Endless block fight starts on the block, fresh: there's nothing to take over.
+  const enter =
+    !onBlock && (!saved || saved.phase + 1 < started) ? handOver(opts.enemy, flat) : undefined;
 
   let leaving = false;
   /** Once a phase says the fight is flat again: carries it back and leaves the block. */
   function foldBack(b: Battle) {
-    if (leaving || boardAt(opts.enemy, b.state.phase + 1) !== 'flat') return;
+    if (onBlock || leaving || boardAt(opts.enemy, b.state.phase + 1) !== 'flat') return;
     leaving = true;
     play.lock();
     const current = getCurrentRun();

@@ -28,7 +28,14 @@ export {
 
 export type EncounterFile = StoryEncounterFile<Enemy>;
 
-export type Encounter = StoryEncounter<Puzzle, Enemy>;
+export type Encounter = StoryEncounter<Puzzle, Enemy> & {
+  /**
+   * An Endless fight played on a block (#158): the story encounter whose enemy fights there
+   * (`of`), how many fights came before (`fight`, which scales it) and how many on a block
+   * (`nth`, which picks the block's band, `puzzles/endlessBlocks.ts`).
+   */
+  onBlock?: { of: string; fight: number; nth: number; seed: number };
+};
 
 export interface RunDef extends StoryRun<Encounter> {
   /** Endless mode (#68): never won; `encounters` is only the stretch around you. */

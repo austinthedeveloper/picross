@@ -1,7 +1,7 @@
 import { startRun, type RunState } from '../../../game/run';
 import { getCurrentRun, getJobStats, hasSeenScene, saveCurrentRun } from '../../../game/runSave';
 import { getSettings, updateSettings, type Mode } from '../../../game/settings';
-import { endlessRun, endlessSetup } from '../../../puzzles/endless';
+import { endlessBoardOf, endlessRun, endlessSetup } from '../../../puzzles/endless';
 import { getRun, runs, type Encounter, type RunDef } from '../../../puzzles/runs';
 import { iconArt } from '@picross/shared/ui/art';
 import { el } from '@picross/shared/ui/dom';
@@ -40,7 +40,11 @@ export function newRunButton(hub: Hub, def: RunDef, label: string): HTMLButtonEl
       if (def.endless) {
         // Endless draws from every job you've played, in an order set by a fresh seed.
         const played = runs.filter((j) => (getJobStats(j.id)?.plays ?? 0) > 0);
-        run.endless = endlessSetup(played, Math.floor(Math.random() * 2 ** 31));
+        run.endless = endlessSetup(
+          played,
+          Math.floor(Math.random() * 2 ** 31),
+          endlessBoardOf(def.id),
+        );
       }
       saveCurrentRun(run);
       // The intro plays automatically once; after that it's on the jobs board.
