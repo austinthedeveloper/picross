@@ -35,8 +35,9 @@ test('the dev build shows it, and unlock and reset work', async ({ page }) => {
   await expect(page.locator('.dialogue')).toBeHidden(); // openings are marked seen
 
   await openPanel(page);
+  // Reset goes home: the menu says one job is open again.
   await press(page, 'Reset everything');
-  await page.goto('/#/');
+  await expect(page).toHaveURL(/#\/$/);
   await expect(
     page.getByRole('navigation', { name: 'Menu' }).getByRole('link', { name: /Story/ }),
   ).toContainText('1 of 10 jobs open');
