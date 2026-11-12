@@ -12,12 +12,12 @@ It's plain TypeScript and CSS with no build step: each app's Vite compiles it.
 The paths under `src/` are the ones these files had in the 2D game, so
 `apps/picross/src/ui/board/boardView.ts` is now `src/ui/board/boardView.ts` here.
 
-| What        | Files                                                                                                                      |
-| ----------- | -------------------------------------------------------------------------------------------------------------------------- |
-| Board       | `src/ui/board/`: `boardView` (clues and cells, dimming, fog and the rest), `input`, `keyboard`, `zoom`, `picture`          |
-| Play screen | `src/ui/screens/gameScreen.ts`: `renderGameScreen` and the `PlaySession` hooks (`BoardControls`, `EndState`)               |
-| Its parts   | `src/ui/components/endPanels.ts`, `hintMenu.ts`, `zoomBar.ts`; `src/ui/format.ts` (`formatTime`, `plural`, `lineName`)     |
-| Styles      | `src/styles/board.css` (board, clues, cells, cursor, fog and scramble), `game.css` (toolbar, hint menu, tools, end panels) |
+| What        | Files                                                                                                                         |
+| ----------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| Board       | `src/ui/board/`: `boardView` (clues and cells, dimming, fog and the rest), `input`, `keyboard`, `zoom`, `picture`             |
+| Play screen | `src/ui/screens/gameScreen.ts`: `renderGameScreen` and the `PlaySession` hooks (`BoardControls`, `EndState`)                  |
+| Its parts   | `src/ui/components/endPanels.ts`, `hintMenu.ts`, `zoomBar.ts`; `src/ui/format.ts` (`lineName`; times and counts are shared's) |
+| Styles      | `src/styles/board.css` (board, clues, cells, cursor, fog and scramble), `game.css` (toolbar, hint menu, tools, end panels)    |
 
 ## Importing it
 

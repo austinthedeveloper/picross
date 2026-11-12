@@ -1,5 +1,5 @@
 import type { Game, GameMode } from '@picross/block/game/game';
-import { formatTime } from '../../format';
+import { formatTime } from '@picross/shared/ui/format';
 import type { Play, PlayHooks } from '../play';
 
 /** What an encounter's kind (fight, dig, rest) adds to the play screen. */

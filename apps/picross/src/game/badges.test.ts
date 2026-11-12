@@ -1,7 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { getEncounter } from '../puzzles/runs';
 import { ENDLESS_ID } from '../puzzles/endless';
-import { bump, startBattle, type Enemy } from './battle';
+import { startBattle, type Enemy } from './battle';
+import { bump } from './battleSteps';
 import {
   badgeCount,
   badgeNote,

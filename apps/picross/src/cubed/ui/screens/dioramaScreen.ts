@@ -13,7 +13,7 @@ import { attachInput } from '@picross/play-block/ui/board/input';
 import { blockOutline, shapePicture } from '@picross/play-block/ui/board/thumbnail';
 import { homeLink } from '@picross/shared/ui/components/homeLink';
 import { el } from '@picross/shared/ui/dom';
-import { formatTime } from '@picross/play-block/ui/format';
+import { formatTime } from '@picross/shared/ui/format';
 import { picture, placed } from './dioramaList';
 import { playSound } from '@picross/shared/ui/sound';
 import { onHide } from '../../../ui/lifecycle';

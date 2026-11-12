@@ -26,7 +26,7 @@ import { createHintMenu } from '../components/hintMenu';
 import { homeLink } from '@picross/shared/ui/components/homeLink';
 import { createMuteButton } from '@picross/shared/ui/components/muteButton';
 import { el } from '@picross/shared/ui/dom';
-import { formatTime, plural } from '../format';
+import { formatTime, plural } from '@picross/shared/ui/format';
 import { getPlayPrefs } from '../prefs';
 import { haptic } from '@picross/shared/ui/haptics';
 import { reducedMotion } from '@picross/shared/ui/motion';

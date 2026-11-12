@@ -1,7 +1,7 @@
 import { badgeCount, newBadgeCount } from '../../game/badges';
 import { currentPoints, rankProgress } from '../../game/rank';
 import { el } from '@picross/shared/ui/dom';
-import { plural } from '@picross/play-grid/ui/format';
+import { plural } from '@picross/shared/ui/format';
 
 /** Your free-play rank (#106) and the way to your badges (#109), for the puzzle list. */
 export function rankCard(): HTMLElement {

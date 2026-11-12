@@ -6,7 +6,7 @@ import { getSettings } from '../../game/settings';
 import { dailyPuzzle, dateKey } from '@picross/block/puzzles/daily';
 import { shapePicture } from '@picross/play-block/ui/board/thumbnail';
 import { el } from '@picross/shared/ui/dom';
-import { formatTime, plural } from '@picross/play-block/ui/format';
+import { formatTime, plural } from '@picross/shared/ui/format';
 import { onHide } from '../../../ui/lifecycle';
 import { createPlay } from '@picross/play-block/ui/screens/play';
 import { prettyDate } from './dailyCard';

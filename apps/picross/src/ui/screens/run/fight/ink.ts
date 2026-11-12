@@ -38,5 +38,3 @@ export function createInker(ctx: FightContext) {
     },
   };
 }
-
-export type Inker = ReturnType<typeof createInker>;

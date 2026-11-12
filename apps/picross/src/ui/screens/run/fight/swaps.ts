@@ -1,4 +1,4 @@
-import { plural } from '@picross/play-grid/ui/format';
+import { plural } from '@picross/shared/ui/format';
 import { playSound } from '@picross/shared/ui/sound';
 import type { FightContext } from './context';
 
@@ -51,5 +51,3 @@ export function createSwapper(ctx: FightContext) {
     },
   };
 }
-
-export type Swapper = ReturnType<typeof createSwapper>;

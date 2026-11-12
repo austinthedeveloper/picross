@@ -13,7 +13,7 @@ import { dailyDimension, dailyFor, dateKey, type Daily } from '../../puzzles/dai
 import { createPicture } from '@picross/play-grid/ui/board/picture';
 import { allPuzzlesLink } from '@picross/play-grid/ui/components/endPanels';
 import { el } from '@picross/shared/ui/dom';
-import { formatTime, plural } from '@picross/play-grid/ui/format';
+import { formatTime, plural } from '@picross/shared/ui/format';
 import { renderGameScreen, type PlaySession } from '@picross/play-grid/ui/screens/gameScreen';
 
 const today = () => dateKey(new Date());

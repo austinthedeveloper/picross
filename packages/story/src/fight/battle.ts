@@ -20,7 +20,8 @@ import { hpShare } from './switch';
  * keeps the 2D save's shape. The two boards take a stroke's effects in different orders
  * (`FightRules.order`): `update` and the rest of the block's API play the block's, and the
  * grid's order is the section at the end, one public step per rule, which `finished` runs
- * in order (the 2D game's `game/battle.ts` helpers are each one of them).
+ * in order (the 2D game's `game/battleSteps.ts` helpers, which its tests use, are each one
+ * of them).
  *
  * Lines and cells are numbers, as on the board: a line is its id, a cell its index. `C` is
  * the board's clue, `M` its marks (what the battle hands the board: a block's cubes), and

@@ -17,8 +17,6 @@ export interface LineSet {
 
 export const noLines = (): LineSet => ({ rows: [], cols: [] });
 
-export const copyLines = (set: LineSet): LineSet => ({ rows: [...set.rows], cols: [...set.cols] });
-
 export const lineCount = (set: LineSet) => set.rows.length + set.cols.length;
 
 export const hasLine = (set: LineSet, kind: LineKind, index: number) =>

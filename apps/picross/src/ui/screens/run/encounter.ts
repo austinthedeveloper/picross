@@ -8,7 +8,7 @@ import { restHeal } from '../../../puzzles/runs';
 import { getGadget } from '@picross/story/puzzles/gadgets';
 import { getScene } from '@picross/story/puzzles/scenes';
 import { el } from '@picross/shared/ui/dom';
-import { formatTime } from '@picross/play-grid/ui/format';
+import { formatTime } from '@picross/shared/ui/format';
 import { renderGameScreen, type PlaySession } from '@picross/play-grid/ui/screens/gameScreen';
 import { renderSceneScreen } from '@picross/story/ui/screens/sceneScreen';
 import { digHooks } from './dig';

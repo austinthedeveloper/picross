@@ -5,7 +5,7 @@ import { decodeShare } from '@picross/block/puzzles/share';
 import { shapePicture } from '@picross/play-block/ui/board/thumbnail';
 import { homeLink } from '@picross/shared/ui/components/homeLink';
 import { el } from '@picross/shared/ui/dom';
-import { formatTime } from '@picross/play-block/ui/format';
+import { formatTime } from '@picross/shared/ui/format';
 import { createPlay } from '@picross/play-block/ui/screens/play';
 import { cubedHref } from '../../href';
 
