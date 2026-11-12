@@ -180,8 +180,11 @@ test.describe('the settings screen', () => {
   });
 
   test('works with the keyboard alone', async ({ page }) => {
-    await page.goto('/#/free/flat');
-    await tabTo(page, page.getByRole('link', { name: 'Settings' }));
+    await page.goto('/#/');
+    await tabTo(
+      page,
+      page.getByRole('navigation', { name: 'Menu' }).getByRole('link', { name: /Settings/ }),
+    );
     await page.keyboard.press('Enter');
     await expect(page.getByRole('heading', { name: 'Settings', level: 1 })).toBeVisible();
     await tabTo(page, toggle(page, 'Sound'));
