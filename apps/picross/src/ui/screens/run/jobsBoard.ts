@@ -2,7 +2,20 @@ import { getEarned, nextTierHint } from '../../../game/badges';
 import { getJobStats, hasSeenScene } from '../../../game/runSave';
 import { jobBadgeFor } from '../../../puzzles/badges';
 import { chapters, type Chapter } from '../../../puzzles/chapters';
-import { ENDLESS_GADGETS, ENDLESS_HP, ENDLESS_ID, ENDLESS_HEAL } from '../../../puzzles/endless';
+import {
+  ENDLESS_BOARDS,
+  ENDLESS_GADGETS,
+  ENDLESS_HEAL,
+  ENDLESS_HP,
+  endlessId,
+  type EndlessBoard,
+} from '../../../puzzles/endless';
+
+const ENDLESS_BOARD_LABELS: Record<EndlessBoard, string> = {
+  flat: 'Flat',
+  cubed: 'Cubed',
+  mixed: 'Mixed',
+};
 import { bossFightsFor, getRun, overtimeFor, type RunDef } from '../../../puzzles/runs';
 import { withArt } from '@picross/shared/ui/art';
 import { badgeIcon, tierTag } from '../../components/badge';
@@ -177,15 +190,26 @@ const ENDLESS_AFTER = 'first-job';
 /** Endless mode's card (#68), below the chapters. */
 function endlessSection(hub: Hub): HTMLElement {
   const open = cleared({ id: ENDLESS_AFTER } as RunDef);
-  const def: RunDef = {
-    id: ENDLESS_ID,
-    name: 'Endless',
-    hp: ENDLESS_HP,
-    gadgets: ENDLESS_GADGETS,
-    encounters: [],
-    endless: true,
+  // A board for each run (#158): each keeps its own best.
+  const start = (board: EndlessBoard) => {
+    const def: RunDef = {
+      id: endlessId(board),
+      name: 'Endless',
+      hp: ENDLESS_HP,
+      gadgets: ENDLESS_GADGETS,
+      encounters: [],
+      endless: true,
+    };
+    const best = getJobStats(def.id)?.bestDepth;
+    return el('div', { className: `endless-board ${board}` }, [
+      el('span', { className: 'endless-board-name', textContent: ENDLESS_BOARD_LABELS[board] }),
+      el('span', {
+        className: `job-best${best ? '' : ' none'}`,
+        textContent: best ? `Best depth: ${best}` : 'Not played yet',
+      }),
+      newRunButton(hub, def, 'Start'),
+    ]);
   };
-  const best = getJobStats(ENDLESS_ID)?.bestDepth;
   return el('section', { className: `chapter endless${open ? '' : ' locked'}` }, [
     el('h2', { className: 'chapter-title' }, [
       el('span', { className: 'chapter-number', textContent: 'Endless' }),
@@ -206,10 +230,14 @@ function endlessSection(hub: Hub): HTMLElement {
               withArt(`${ENDLESS_HP} HP · starts with a 🩹 patch kit`),
             ),
             el('p', {
-              className: `job-best${best ? '' : ' none'}`,
-              textContent: best ? `Best depth: ${best}` : 'Not played yet',
+              className: 'run-meta',
+              textContent: 'Pick a board: Cubed fights every enemy on a block, Mixed takes turns.',
             }),
-            el('div', { className: 'end-actions' }, [newRunButton(hub, def, 'Start')]),
+            el(
+              'div',
+              { className: 'endless-boards', role: 'group', ariaLabel: 'Board' },
+              ENDLESS_BOARDS.map(start),
+            ),
           ]),
         ]
       : []),

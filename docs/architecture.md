@@ -97,7 +97,8 @@ apps/
       puzzles/             Content and its validation (the pack is in packages/grid)
         runs.ts            The story's encounters and jobs on a flat board: 2D puzzles and enemies
         chapters.ts        The story's chapters (#23), holding this game's jobs
-        endless.ts         Endless mode: seeded encounter order, scaling, the run as a RunDef (#68)
+        endless.ts         Endless mode: seeded encounter order, scaling, the run as a RunDef (#68), its board (#158)
+        endlessBlocks.ts   An Endless fight's block and block enemy (#158), for the block fight only
         daily.ts           The Flat daily: the day's puzzle and turn (#69); date keys from shared
         tutorial.ts        How to play: its picture and steps, and what counts as a wrong move
         enemies.ts         Validates an enemy; lists its powers (startingPowers, phasePowers, enemyPowers)
@@ -958,8 +959,25 @@ jobs you've played, fixed at the start, so a reload plays the same order.
     never won.
   - It heals `ENDLESS_HEAL` (2) after each fight.
   - The map shows the last two you cleared and what's ahead.
-- **Best depth:** `recordRunResult` keeps `bestDepth` (encounters cleared) for `endless`,
-  and the results screen says when it's a new best.
+- **Best depth:** `recordRunResult` keeps `bestDepth` (encounters cleared) for the run's
+  job, and the results screen says when it's a new best.
+- **A board for each run (#158):** the card has a row for each, Flat, Cubed and Mixed, with
+  its own best and Start. The run saves `endless.board` (missing: flat, as every run from
+  before), and its job is `endlessId(board)`: `endless` for Flat (so older bests are
+  Flat's), `endless-cubed` and `endless-mixed`. Endless badges take the deepest of the three
+  (`deepestEndless`).
+  - **Which fights:** on Cubed every fight is on a block; on Mixed every other one, flat
+    first (`fightOnBlock`). Digs and rest stops stay flat. A block fight's encounter carries
+    `onBlock` (its story encounter, and how many fights and block fights came before).
+  - **The block:** `puzzles/endlessBlocks.ts` picks it, when the fight opens, from Cubed's
+    pack by difficulty band: four easy, four medium, four hard, then expert, each four from
+    a fresh shuffle of its band set by the run's seed. The enemy is the story encounter's as
+    a block reads it, scaled by depth like a grid's (`scaleEnemy`). Only the block fight
+    (`run/blockFight.ts`, loaded on demand) imports it, so Cubed's pack stays out of the
+    first download. The fight stays on the block: it never folds back flat.
+  - **Fair:** `endlessBlocks.test.ts` plays 50 rounds of each board choice, on two seeds,
+    and checks every fight solves without guessing (flat ones with `rateFlat`, block ones
+    with `rateBlockFight`, every phase started).
 
 ## Fights
 
