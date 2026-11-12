@@ -27,6 +27,8 @@ export function renderGameScreen(root: HTMLElement, puzzle: Puzzle): () => void 
   let changed = false;
 
   const play = createPlay(root, {
+    // Home is the menu (#152); this goes back to the list, free play's Cubed tab.
+    back: el('a', { className: 'button ghost', href: cubedHref(), textContent: '← Free play' }),
     home: cubedHref(),
     puzzle,
     title: solvedBefore ? puzzle.name : puzzleNumber(PUZZLES.indexOf(puzzle)),

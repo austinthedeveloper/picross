@@ -1,3 +1,4 @@
+import { freePlayHref } from '../../game/freePlay';
 import {
   dailyStreak,
   getDailyBoard,
@@ -55,7 +56,7 @@ export function renderDailyScreen(app: HTMLElement): () => void {
       if (rankUp) note += ` ${rankUp}`;
       const badges = badgeNote(earnFromStats());
       if (badges) note += ` ${badges}`;
-      return { note, actions: [allPuzzlesLink()] };
+      return { note, actions: [allPuzzlesLink(freePlayHref('flat'))] };
     },
   };
   return renderGameScreen(app, daily.puzzle, session);

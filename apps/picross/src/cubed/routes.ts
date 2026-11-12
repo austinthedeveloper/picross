@@ -11,21 +11,13 @@ import { providePrefs } from '@picross/shared/game/prefs';
 import { applyTheme } from '@picross/shared/ui/theme';
 import { providePlayPrefs } from '@picross/play-block/ui/prefs';
 import { getSettings, updateSettings } from './game/settings';
-import { cubedHref } from './href';
+import { cubedHref, HOME } from './href';
+import { editorTabs } from '../ui/components/editorTabs';
 import type { Lazy, Screen } from '../routes';
 import { renderHowToPlay } from './ui/screens/howToPlay';
-import {
-  addListCard,
-  puzzleList,
-  renderSelectScreen,
-  unsolvedPuzzles,
-} from './ui/screens/selectScreen';
+import { cubedStats, puzzleList, tutorialCard, unsolvedPuzzles } from './ui/screens/puzzleList';
 import type { SizeBand } from '../game/freePlay';
-import { renderStoryScreen, storyCard } from './ui/screens/story/index';
-import { dailyCard } from './ui/screens/dailyCard';
-
-addListCard(dailyCard);
-addListCard(storyCard);
+import { renderStoryScreen } from './ui/screens/story/index';
 
 /** One of Cubed's screens: `match` reads the path after `#/cubed`. */
 interface CubedRoute {
@@ -38,7 +30,7 @@ const ROUTES: CubedRoute[] = [
     match: /^\/play\/([\w-]+)$/,
     render: (app, [, id], lazy) => {
       const puzzle = getPuzzle(id);
-      if (!puzzle) return renderSelectScreen(app);
+      if (!puzzle) return location.replace(cubedHref());
       return lazy(import('./ui/screens/gameScreen'), (m) => m.renderGameScreen(app, puzzle));
     },
   },
@@ -71,8 +63,9 @@ const ROUTES: CubedRoute[] = [
     render: (app, _, lazy) =>
       lazy(import('@picross/play-block/ui/screens/editor/editorScreen'), (m) =>
         m.renderEditorScreen(app, {
-          home: cubedHref(),
+          home: HOME,
           sharedHref: (code) => cubedHref(`/p/${code}`),
+          tabs: editorTabs('cubed'),
         }),
       ),
   },
@@ -96,20 +89,24 @@ function useCubedSettings(): void {
   applyTheme();
 }
 
-/** Draws the Cubed screen at `path` (the hash after `#/cubed`); its list for anything else. */
+/**
+ * Draws the Cubed screen at `path` (the hash after `#/cubed`). Anything else goes to its
+ * list, free play's Cubed tab (#152).
+ */
 export function renderCubed(app: HTMLElement, path: string, lazy: Lazy): Screen {
   useCubedSettings();
   for (const route of ROUTES) {
     const found = route.match.exec(path);
     if (found) return route.render(app, found, lazy);
   }
-  return renderSelectScreen(app);
+  location.replace(cubedHref());
 }
 
 /** Free play's Cubed tab (#153, ui/screens/freePlay.ts): Cubed's list, with its settings up. */
 export function freePlayList(size: SizeBand): HTMLElement[] {
   useCubedSettings();
-  return puzzleList(size);
+  const tutorial = tutorialCard();
+  return [...(tutorial ? [tutorial] : []), cubedStats(), ...puzzleList(size)];
 }
 
 /** The unsolved puzzles the Cubed tab shows, for Next unsolved and Surprise me. */

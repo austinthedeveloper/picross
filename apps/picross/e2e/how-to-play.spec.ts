@@ -7,7 +7,10 @@ const tap = (page: Page, r: number, c: number) => cell(page, r * SIZE + c).tap()
 
 test('the tutorial walks a new player through a solve', async ({ page }) => {
   await page.goto('/#/');
-  await page.locator('.how-to-link').tap();
+  await page
+    .getByRole('navigation', { name: 'Menu' })
+    .getByRole('link', { name: /How to play/ })
+    .tap();
   await expect(page.locator('h1')).toHaveText('How to play');
   const kicker = page.locator('.coach-kicker');
   await expect(kicker).toHaveText('Step 1 of 7');
@@ -68,6 +71,7 @@ test('the tutorial walks a new player through a solve', async ({ page }) => {
   // It's practice: nothing was recorded, and the first-timer link is still there.
   await press(page, 'Pick a puzzle →');
   await expect(page.locator('.stats')).toContainText('0Total solves');
+  await page.goto('/#/');
   await expect(page.locator('.how-to-link')).toBeVisible();
 });
 

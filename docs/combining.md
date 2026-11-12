@@ -53,7 +53,8 @@ app (the routes half of #152, and the in-repo half of #161):
   out of the first download and three.js waits for a screen with a block. `apps/cubed`,
   `scripts/build-cubed.mjs`, `dev:cubed` and `test:cubed` are gone; one build, one unit test
   run, one browser suite (Cubed's tests in `e2e/cubed/`).
-- **The Flat | Cubed switch** links `#/` and `#/cubed`, and still opens the last one played.
+- **The Flat | Cubed switch** linked `#/` and `#/cubed`, and opened the last one played (one
+  home screen replaced it, #152).
 - **`/3d/` sends old links on**: `/3d/#/play/mug` opens `#/cubed/play/mug`, and a kill-switch
   worker at `/3d/sw.js` retires Cubed's old offline one. Cubed is offline again with #160.
 - **Not yet:** the two dailies, badges and home screens stay apart (the dailies joined in
@@ -87,9 +88,15 @@ download. Details are in [architecture.md](architecture.md#rank-and-badges).
 
 Its sixth is **free play across both boards** (#153): `#/free/flat` and `#/free/cubed`, a
 tab per pack with one set of filters (unsolved, size, difficulty), and Next unsolved and
-Surprise me per tab or from both. `#/free` opens the last tab. `#/` and `#/cubed` stay as
-they are until the home menu (#152), and link to their tab. Details are in
+Surprise me per tab or from both. `#/free` opens the last tab. Details are in
 [architecture.md](architecture.md#the-puzzle-list).
+
+**#152: one home screen.** `#/` is a menu for both boards (Story, Free play, Endless, Badges,
+Editor, How to play, Settings), with a Continue card for a run in progress on either board
+and the daily's card. The two games' lists are free play's tabs, and the Flat | Cubed switch
+is gone: the board is picked in free play and the editor, with tabs. `#/cubed` moves to free
+play's Cubed tab. The home screen reads only saves, so it loads neither Cubed's chunk nor
+three.js.
 
 Its seventh is **one settings screen** (#154), at `#/settings`, linked from both lists:
 General (sound, haptics where the phone can buzz, high contrast, the mode) and Cubed (fade
@@ -160,7 +167,8 @@ Both are built in four layers: engine (pure logic) → puzzles (content) → gam
 saves) → ui (the only layer that touches the page). The packages follow those layers, so
 step 4 is a merge of two apps, not a rewrite.
 
-What's left in the way: two home screens (step 4, #152). The saves and settings are one
+What's left in the way: two editors (#159) and two story copies (#174). The home screen
+(#152), the saves and the settings are one
 (#155). The battle engine is one (step 5), and a boss that switches board is one fight (#170):
 the battle on the board it's on takes it over, and each board keeps its own progress (#169). Puzzle ids clash too (both packs have a
 `mug`), which #224's qualified ids are for.

@@ -100,10 +100,7 @@ export function pathMap(hub: Hub, state: RunState, job: Job): Node[] {
   });
 
   return [
-    el('header', { className: 'topbar' }, [
-      homeLink(cubedHref()),
-      el('h1', { textContent: job.name }),
-    ]),
+    el('header', { className: 'topbar' }, [homeLink(), el('h1', { textContent: job.name })]),
     el('div', { className: 'run-status' }, [
       hpBar(state),
       el('span', {

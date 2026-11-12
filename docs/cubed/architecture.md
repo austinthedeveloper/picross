@@ -119,23 +119,23 @@ rest of the hash. Screens with a block load on demand from there, so three.js is
 first download or Cubed's list. Every link between them goes through `cubedHref()`
 (`href.ts`): `cubedHref('/play/mug')` is `#/cubed/play/mug`, `cubedHref()` the list.
 
-| Route                                 | File                                           | What                                                           |
-| ------------------------------------- | ---------------------------------------------- | -------------------------------------------------------------- |
-| `#/cubed`                             | `selectScreen.ts`                              | The list, filters, mode; other screens add cards               |
-| `#/cubed/play/<id>`                   | `gameScreen.ts`                                | Free play: saves, times, Next                                  |
-| `#/cubed/tutorial`                    | `tutorial.ts`                                  | The guided tutorial on a 3×2×2 block                           |
-| `#/cubed/how-to-play`                 | `howToPlay.ts`                                 | The rules                                                      |
-| `#/cubed/editor`                      | `editor/editorScreen.ts`                       | Draw, check and share puzzles (checks run in `checkWorker.ts`) |
-| `#/cubed/p/<code>`                    | `sharedScreen.ts`                              | A shared puzzle; `/test` for the editor's play-test            |
-| `#/daily` (on a Cubed day)            | `dailyScreen.ts` (`dailyCard.ts` for the list) | Today's puzzle and streak; `#/cubed/daily` moves here (#156)   |
-| `#/badges`                            | the app's `ui/screens/badges.ts`               | The one badge shelf; `#/cubed/badges` moves here (#157)        |
-| `#/settings`                          | the app's `ui/screens/settings.ts`             | Both games' settings, with Cubed's in their own group (#154)   |
-| `#/cubed/diorama/<id>[/<n>]`          | `dioramaScreen.ts` (`dioramaList.ts`)          | A diorama and its pieces                                       |
-| `#/cubed/story`, `#/cubed/story/play` | `story/*`                                      | Story mode (see [story.md](story.md))                          |
+| Route                                 | File                                  | What                                                             |
+| ------------------------------------- | ------------------------------------- | ---------------------------------------------------------------- |
+| `#/cubed` → `#/free/cubed`            | `puzzleList.ts`                       | The list, in free play's Cubed tab (#152), and the tutorial card |
+| `#/cubed/play/<id>`                   | `gameScreen.ts`                       | Free play: saves, times, Next                                    |
+| `#/cubed/tutorial`                    | `tutorial.ts`                         | The guided tutorial on a 3×2×2 block                             |
+| `#/cubed/how-to-play`                 | `howToPlay.ts`                        | The rules                                                        |
+| `#/cubed/editor`                      | `editor/editorScreen.ts`              | Draw, check and share puzzles (checks run in `checkWorker.ts`)   |
+| `#/cubed/p/<code>`                    | `sharedScreen.ts`                     | A shared puzzle; `/test` for the editor's play-test              |
+| `#/daily` (on a Cubed day)            | `dailyScreen.ts`                      | Today's puzzle and streak; `#/cubed/daily` moves here (#156)     |
+| `#/badges`                            | the app's `ui/screens/badges.ts`      | The one badge shelf; `#/cubed/badges` moves here (#157)          |
+| `#/settings`                          | the app's `ui/screens/settings.ts`    | Both games' settings, with Cubed's in their own group (#154)     |
+| `#/cubed/diorama/<id>[/<n>]`          | `dioramaScreen.ts` (`dioramaList.ts`) | A diorama and its pieces                                         |
+| `#/cubed/story`, `#/cubed/story/play` | `story/*`                             | Story mode (see [story.md](story.md))                            |
 
 Scenes (`#/scene/<id>`) are both games', and so is free play (#153): its Cubed tab,
 `#/free/cubed`, is a route of the app's that loads this chunk and draws the list's sections
-and dioramas (`puzzleList(size)` in `selectScreen.ts`, through `freePlayList` in `routes.ts`),
+and dioramas (`puzzleList(size)` in `puzzleList.ts`, through `freePlayList` in `routes.ts`),
 with the shared filters and free play's size filter; `freePlayPicks` gives its Next unsolved
 and Surprise me their puzzles. The list's thumbnails draw as they near the screen. On its routes the router sets
 `<html data-board="block">`, where Cubed's styles apply, and hands shared code Cubed's view

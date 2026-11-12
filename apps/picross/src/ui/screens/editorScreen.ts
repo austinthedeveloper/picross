@@ -1,3 +1,4 @@
+import { editorTabs } from '../components/editorTabs';
 import { Cell, createBoard, type Solution } from '@picross/grid/engine/board';
 import { deriveClues } from '@picross/grid/engine/clues';
 import { checkSolution, Unknown } from '@picross/grid/engine/solver';
@@ -248,6 +249,7 @@ export function renderEditorScreen(app: HTMLElement): void {
         homeLink(),
         el('h1', { textContent: 'Puzzle editor' }),
       ]),
+      editorTabs('flat'),
       el('div', { className: 'editor-fields' }, [
         field('Name', nameInput),
         field('ID', idInput),

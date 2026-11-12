@@ -36,6 +36,7 @@ const flatDay = addDays(cubedDay, -1);
 test('a Flat day, then a Cubed day: one streak over both', async ({ page }) => {
   expect(dailyDimension(flatDay)).toBe('grid');
   await page.clock.setFixedTime(noon(flatDay));
+  // The daily's card is on the home screen (#152).
   await page.goto('/#/');
   const card = page.locator('.daily-card');
   await expect(card).toContainText(`Daily · ${label(flatDay)}`);
@@ -49,6 +50,8 @@ test('a Flat day, then a Cubed day: one streak over both', async ({ page }) => {
   await expect(note).toContainText('🔥 1 day in a row');
   await expect(note).toContainText('It was the ');
   await press(page, 'All puzzles');
+  await expect(page).toHaveURL(/#\/free\/flat$/);
+  await page.goto('/#/');
   await expect(card).toContainText('✓ Solved');
   await expect(card).toContainText('🔥 1 day in a row · best 1');
 
@@ -64,21 +67,15 @@ test('a Flat day, then a Cubed day: one streak over both', async ({ page }) => {
   await focusBlock(page);
   await breakCubes(page, puzzle, extras(puzzle));
   await expect(page.locator('.end-note')).toContainText('2 days in a row');
-  // Cubed's own list shows it too.
-  await page.getByRole('link', { name: 'All puzzles' }).click();
-  await expect(page.locator('.daily-card')).toContainText('Solved in');
-  await expect(page.locator('.daily-card')).toContainText('2-day streak!');
+  // Home shows it solved, on the one streak.
   await page.goto('/#/');
   await expect(card).toContainText('Today: Cubed · ✓ Solved in');
   await expect(card).toContainText('🔥 2 days in a row · best 2');
 
-  // A Flat day goes by unsolved: it's over, on both lists.
+  // A Flat day goes by unsolved: the streak's over.
   await page.clock.setFixedTime(noon(addDays(cubedDay, 2)));
   await page.reload();
   await expect(card).toContainText('Streak ended · best 2');
-  await page.goto('/#/cubed');
-  await expect(page.locator('.daily-card')).toContainText('A new block every other day.');
-  await expect(page.locator('.daily-card')).not.toContainText('streak');
 });
 
 test('the old link to Cubed’s daily opens the one daily, on either board', async ({ page }) => {
@@ -90,8 +87,8 @@ test('the old link to Cubed’s daily opens the one daily, on either board', asy
       page.locator(dailyDimension(day) === 'block' ? 'canvas.block-canvas' : '.board'),
     ).toBeVisible();
   }
-  // On a Flat day, Cubed's list sends you to the Flat board.
-  await page.goto('/#/cubed');
+  // On a Flat day, the home screen's card sends you to the Flat board.
+  await page.goto('/#/');
   const card = page.locator('.daily-card');
   await expect(card).toContainText(`Today: Flat`);
   await expect(card).toHaveAttribute('href', '#/daily');

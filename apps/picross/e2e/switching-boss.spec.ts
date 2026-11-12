@@ -112,7 +112,10 @@ test.describe('a boss that switches board', () => {
     await expect(page.locator('.board')).toBeVisible();
     await expect(page.locator('.gadget-tray .gadget')).toContainText('Patch kit');
     // Tag the bar: the one on the block must be this same element, not a new one.
-    await page.locator('.battle').evaluate((bar) => (bar.dataset.kept = 'yes'));
+    await expect(page.locator('.battle')).toHaveCount(1);
+    await page.evaluate(
+      () => (document.querySelector<HTMLElement>('.battle')!.dataset.kept = 'yes'),
+    );
     await fillRow(page, encounterSolution('curator'), 0);
 
     await expect(page.locator('html')).toHaveAttribute('data-board', 'block');

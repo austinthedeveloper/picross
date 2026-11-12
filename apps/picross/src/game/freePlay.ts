@@ -3,7 +3,7 @@
  * their filters. A 15×15 and a 5×5×5 aren't comparable by size, so each board keeps its
  * own list, and the filters say the same thing on both.
  */
-import type { GameKind } from '@picross/shared/ui/components/gameSwitch';
+import type { GameKind } from '@picross/shared/game/boards';
 
 /** The free-play tabs: the 2D pack and Cubed's. */
 export type FreePlayTab = GameKind;

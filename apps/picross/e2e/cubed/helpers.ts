@@ -30,7 +30,7 @@ export async function runAt(
     mode: opts.mode ?? 'relaxed',
     tally: { mistakes: 0, hintsUsed: 0, gadgetsUsed: 0 },
   };
-  await page.goto('/#/cubed');
+  await page.goto('/#/free/cubed');
   // Cubed's run is `block` in the one run save (#155).
   await page.evaluate((save) => localStorage.setItem('picross:run', JSON.stringify(save)), {
     current: null,

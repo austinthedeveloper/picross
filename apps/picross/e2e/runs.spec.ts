@@ -4,8 +4,11 @@ import { encounterSolution, meter, runAt, seed, skipScene, solve, press } from '
 test.describe('jobs board', () => {
   test('chapter 2 is locked until First Job is won', async ({ page }) => {
     await page.goto('/#/');
-    await expect(page.locator('.run-banner')).toContainText('1 of 10 jobs open');
-    await page.locator('.run-banner').tap();
+    const story = page
+      .getByRole('navigation', { name: 'Menu' })
+      .getByRole('link', { name: /Story/ });
+    await expect(story).toContainText('1 of 10 jobs open');
+    await story.tap();
     await expect(page.locator('.chapter-title').first()).toHaveText('Chapter 1Odd Jobs');
     await expect(page.locator('.job h3')).toHaveText(['First Job']);
     await expect(page.locator('.chapter.locked:not(.endless) .chapter-blurb')).toHaveText([

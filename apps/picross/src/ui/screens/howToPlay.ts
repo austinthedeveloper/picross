@@ -1,3 +1,5 @@
+import { gameHref } from '@picross/shared/game/boards';
+import { freePlayHref } from '../../game/freePlay';
 import { Cell } from '@picross/grid/engine/board';
 import type { Change } from '@picross/grid/engine/history';
 import { Game } from '@picross/grid/game/game';
@@ -73,7 +75,16 @@ export function renderHowToPlay(app: HTMLElement): void {
   const solvedPanel = el('div', { className: 'end-panel', hidden: true });
 
   const screen = el('main', { className: 'screen game how-to' }, [
-    el('header', { className: 'topbar' }, [homeLink(), el('h1', { textContent: 'How to play' })]),
+    el('header', { className: 'topbar' }, [
+      homeLink(),
+      el('h1', { textContent: 'How to play' }),
+      // The same on a block, with Cubed's tutorial (#152: the board is picked here).
+      el('a', {
+        className: 'button ghost',
+        href: `${gameHref('cubed')}/how-to-play`,
+        textContent: 'On blocks →',
+      }),
+    ]),
     coach,
     el('div', { className: 'toolbar' }, [
       el('button', {
@@ -129,7 +140,11 @@ export function renderHowToPlay(app: HTMLElement): void {
           textContent: 'Start over',
           onclick: () => renderHowToPlay(app),
         }),
-        el('a', { className: 'button primary', href: '#/', textContent: 'Pick a puzzle →' }),
+        el('a', {
+          className: 'button primary',
+          href: freePlayHref('flat'),
+          textContent: 'Pick a puzzle →',
+        }),
       ]),
     );
     solvedPanel.hidden = false;

@@ -3,8 +3,9 @@ import { createPicture } from '../board/picture';
 import { withArt } from '@picross/shared/ui/art';
 import { el } from '@picross/shared/ui/dom';
 
-export const allPuzzlesLink = () =>
-  el('a', { className: 'button ghost', href: '#/', textContent: 'All puzzles' });
+/** The way to the puzzle list: `href`, the app's list (default `#/`). */
+export const allPuzzlesLink = (href = '#/') =>
+  el('a', { className: 'button ghost', href, textContent: 'All puzzles' });
 
 /** Contents of the panel shown when a puzzle is solved. */
 export function solvedPanelContent(puzzle: Puzzle, note: string, actions: HTMLElement[]): Node[] {
@@ -27,12 +28,12 @@ export function createEndPanel(title: string, note: string, actions: HTMLElement
 }
 
 /** The panel shown when hearts mode runs out. */
-export function createFailedPanel(onRetry: () => void): HTMLElement {
+export function createFailedPanel(onRetry: () => void, list?: string): HTMLElement {
   return el('div', { className: 'end-panel failed', hidden: true }, [
     el('h2', { textContent: 'Out of hearts' }),
     el('p', { className: 'end-note', textContent: 'Three wrong fills. Try again?' }),
     el('div', { className: 'end-actions' }, [
-      allPuzzlesLink(),
+      allPuzzlesLink(list),
       el('button', { className: 'button primary', textContent: 'Retry', onclick: onRetry }),
     ]),
   ]);

@@ -22,7 +22,7 @@ async function hit(page: Page, cell: number, key: 'x' | ' ') {
 }
 
 test('the list offers the tutorial until it is done', async ({ page }) => {
-  await page.goto('/#/cubed');
+  await page.goto('/#/free/cubed');
   await expect(page.locator('.tutorial-card')).toBeVisible();
   await page.getByRole('button', { name: 'Not now' }).click();
   await expect(page.locator('.tutorial-card')).toHaveCount(0);

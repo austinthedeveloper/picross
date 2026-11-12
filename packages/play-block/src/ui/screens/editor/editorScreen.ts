@@ -58,6 +58,8 @@ export interface EditorOptions {
   home?: string;
   /** A shared puzzle's link (its play-test adds `/test`). Default: `#/p/<code>`. */
   sharedHref?(code: string): string;
+  /** Shown under the top bar: the app's Flat | Cubed tabs, say. */
+  tabs?: HTMLElement;
 }
 
 /** The puzzle editor (#/editor): draw a shape layer by layer, check it, share it. */
@@ -175,6 +177,7 @@ export function renderEditorScreen(root: HTMLElement, opts: EditorOptions = {}):
         homeLink(opts.home),
         el('h1', { textContent: 'Editor' }),
       ]),
+      ...(opts.tabs ? [opts.tabs] : []),
       el('div', { className: 'editor-meta' }, [
         el('label', {}, ['Name ', name]),
         el('span', { className: 'size-inputs' }, [

@@ -1,3 +1,4 @@
+import { freePlayHref } from '../../game/freePlay';
 import {
   clearSavedBoard,
   getPuzzleStats,
@@ -20,6 +21,9 @@ import type { PlaySession } from '@picross/play-grid/ui/screens/gameScreen';
 export function freePlaySession(puzzle: Puzzle): PlaySession {
   return {
     title: `${puzzle.width}×${puzzle.height}`,
+    // Home is the menu (#152); the list it came from is free play's Flat tab.
+    back: { href: freePlayHref('flat'), label: '← Free play' },
+    list: freePlayHref('flat'),
     mode: getSettings().mode,
     saved: getSavedBoard(puzzle.id),
     save: (board) => (board ? saveBoard(puzzle.id, board) : clearSavedBoard(puzzle.id)),
@@ -41,7 +45,7 @@ export function freePlaySession(puzzle: Puzzle): PlaySession {
       if (badges) note += ` · ${badges}`;
 
       const next = nextUnsolved(puzzles, puzzle.id, (id) => Boolean(getPuzzleStats(id)));
-      const actions = [allPuzzlesLink()];
+      const actions = [allPuzzlesLink(freePlayHref('flat'))];
       if (next) {
         actions.push(
           el('a', {

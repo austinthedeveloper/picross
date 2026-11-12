@@ -5,12 +5,6 @@ import { parseDiorama, type DioramaFile } from '@picross/block/puzzles/diorama';
 import { addDays, dailyDimension } from '@picross/shared/puzzles/days';
 import { breakCubes, dailyFor, extras, focusBlock } from './helpers';
 
-/** "Nov 13" for a day key, as the card puts it. */
-const prettyDate = (key: string) => {
-  const [y, m, d] = key.split('-').map(Number);
-  return new Date(y, m - 1, d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-};
-
 /** A day's Cubed daily, and how many cubes it takes to break. */
 const daily = (key: string) => {
   const puzzle = dailyFor(key);
@@ -40,10 +34,11 @@ test("the daily on a Cubed day: a block, on yesterday's Flat streak", async ({ p
     localStorage.setItem('picross:daily2', JSON.stringify(save));
   }, flatDay);
   await page.clock.setFixedTime(new Date(y, m - 1, d, 12));
-  await page.goto(`/?day=${d}#/cubed`);
+  // The one daily's card is on the home screen (#152).
+  await page.goto(`/?day=${d}#/`);
   const card = page.locator('.daily-card');
-  await expect(card).toContainText(`Daily · ${prettyDate(cubedDay)} · Today: Cubed`);
-  await expect(card).toContainText('Keep your 1 day streak going.');
+  await expect(card).toContainText('Today: Cubed · Not solved yet');
+  await expect(card).toContainText('🔥 1 day in a row');
   await card.click();
   await expect(page).toHaveURL(/#\/daily$/);
   const { puzzle } = daily(cubedDay);
@@ -51,16 +46,18 @@ test("the daily on a Cubed day: a block, on yesterday's Flat streak", async ({ p
   await breakCubes(page, puzzle, extras(puzzle));
   await expect(page.locator('.end-note')).toContainText('2 days in a row');
   await page.getByRole('link', { name: 'All puzzles' }).click();
-  await expect(card).toContainText('Solved in');
-  await expect(card).toContainText('2-day streak!');
-  await expect(card).toContainText('Replay');
+  await expect(page).toHaveURL(/#\/free\/cubed$/);
+  await page.goto('/#/');
+  await expect(card).toContainText('Today: Cubed · ✓ Solved in');
+  await expect(card).toContainText('🔥 2 days in a row');
 });
 
 test("Cubed's badges are on the one shelf, with their next step, and count new ones", async ({
   page,
 }) => {
-  await page.goto('/#/cubed');
-  await expect(page.getByRole('link', { name: 'Badges', exact: true })).toBeVisible();
+  await page.goto('/#/');
+  const menu = page.getByRole('navigation', { name: 'Menu' });
+  await expect(menu.getByRole('link', { name: /^Badges/ })).not.toContainText('new');
   // A solve earns progress toward Block Breaker; five earn bronze.
   await page.evaluate(() => {
     const solved = Object.fromEntries(
@@ -75,8 +72,8 @@ test("Cubed's badges are on the one shelf, with their next step, and count new o
     );
   });
   await page.reload();
-  await expect(page.getByRole('link', { name: /Badges \(\d+ new\)/ })).toBeVisible();
-  await page.getByRole('link', { name: /Badges/ }).click();
+  await expect(menu.getByRole('link', { name: /Badges \(\d+ new\)/ })).toBeVisible();
+  await menu.getByRole('link', { name: /Badges/ }).click();
   // The one shelf (#157), off Cubed's board.
   await expect(page).toHaveURL(/#\/badges$/);
   await expect(page.locator('html')).not.toHaveAttribute('data-board', 'block');
@@ -85,9 +82,10 @@ test("Cubed's badges are on the one shelf, with their next step, and count new o
   await expect(breaker).toContainText('Bronze');
   await expect(breaker).toContainText('New!');
   await expect(breaker).toContainText('Silver at 15 (5 so far)');
-  // Seen now: back on Cubed's list, nothing's new.
-  await page.goto('/#/cubed');
-  await expect(page.getByRole('link', { name: 'Badges', exact: true })).toBeVisible();
+  // Seen now: back home, nothing's new.
+  await page.goto('/#/');
+  await expect(menu.getByRole('link', { name: /^Badges/ })).toBeVisible();
+  await expect(menu.getByRole('link', { name: /^Badges/ })).not.toContainText('new');
 });
 
 test('a diorama fills in piece by piece, then turns in 3D', async ({ page }) => {
@@ -104,7 +102,7 @@ test('a diorama fills in piece by piece, then turns in 3D', async ({ page }) => 
   const [first, last, ...placed] = [...park.tiles].sort(
     (a, b) => extras(a.puzzle).length - extras(b.puzzle).length,
   );
-  await page.goto('/#/cubed');
+  await page.goto('/#/free/cubed');
   await page.evaluate(
     (ids) => {
       const solved = Object.fromEntries(

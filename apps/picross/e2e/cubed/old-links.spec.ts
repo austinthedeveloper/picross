@@ -15,8 +15,9 @@ const block = (page: Page) => expect(page.locator('canvas.block-canvas')).toBeVi
 
 /** Each kind of old link, where it lands, and what's on screen there. */
 const LINKS: [string, string, (page: Page) => Promise<void>][] = [
-  ['/3d/', '#/cubed', heading('Picross Cubed')],
-  ['/3d/#/', '#/cubed', heading('Picross Cubed')],
+  // Cubed's home is its list, free play's Cubed tab, since the one home screen (#152).
+  ['/3d/', '#/free/cubed', heading('Free play')],
+  ['/3d/#/', '#/free/cubed', heading('Free play')],
   // One badge shelf for both boards now (#157).
   ['/3d/index.html#/badges', '#/badges', heading('Badges')],
   ['/3d/?day=3#/play/steps', '#/cubed/play/steps', block],

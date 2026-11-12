@@ -9,8 +9,13 @@ import { el } from '@picross/shared/ui/dom';
 import { formatTime, plural } from '@picross/shared/ui/format';
 import { onHide } from '../../../ui/lifecycle';
 import { createPlay } from '@picross/play-block/ui/screens/play';
-import { prettyDate } from './dailyCard';
-import { cubedHref } from '../../href';
+import { cubedHref, HOME } from '../../href';
+
+/** A day's key ("2026-11-11") as the title shows it ("Nov 11"). */
+const prettyDate = (key: string) => {
+  const [y, m, d] = key.split('-').map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+};
 
 /**
  * Today's puzzle on a Cubed day (#/daily, #156): one a day, Flat and Cubed by turns, with
@@ -22,7 +27,7 @@ export function renderDailyScreen(root: HTMLElement): () => void {
   const saved = getDailyBoard(today);
   let changed = false;
   const play = createPlay(root, {
-    home: cubedHref(),
+    home: HOME,
     puzzle,
     title: `Daily · ${prettyDate(today)}`,
     mode: getSettings().mode,

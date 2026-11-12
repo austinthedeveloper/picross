@@ -156,12 +156,14 @@ test.describe('free play', () => {
     await expect(page).toHaveURL(/#\/cubed\/play\/[\w-]+$/);
   });
 
-  test('both home lists link to their tab', async ({ page }) => {
+  test("the home screen links to free play, and Cubed's old home is its tab", async ({ page }) => {
     await page.goto('/#/');
-    await page.getByRole('link', { name: /Free play/ }).tap();
+    await page
+      .getByRole('navigation', { name: 'Menu' })
+      .getByRole('link', { name: /Free play/ })
+      .tap();
     await expect(page).toHaveURL(/#\/free\/flat$/);
     await page.goto('/#/cubed');
-    await page.getByRole('link', { name: 'Free play' }).tap();
     await expect(page).toHaveURL(/#\/free\/cubed$/);
   });
 });

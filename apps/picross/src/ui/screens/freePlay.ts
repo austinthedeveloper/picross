@@ -23,13 +23,18 @@ import {
   type DifficultyFilter,
   type ListFilter,
   type ListOrder,
+  type Mode,
 } from '../../game/settings';
+import { boardTabs } from '../components/boardTabs';
+import { rankCard } from '../components/rankCard';
 import { DIFFICULTIES } from '@picross/grid/puzzles/difficulty';
-import { gameHref } from '@picross/shared/ui/components/gameSwitch';
 import { homeLink } from '@picross/shared/ui/components/homeLink';
 import { el } from '@picross/shared/ui/dom';
 import type { Lazy, Screen } from '../../routes';
 import { puzzleList, unsolvedPuzzles } from './puzzleList';
+import { getOverallStats, getPuzzleStats } from '../../game/progress';
+import { puzzles } from '@picross/grid/puzzles/index';
+import { formatTime } from '@picross/shared/ui/format';
 
 /** What free play needs from Cubed (cubed/routes.ts, loaded with Cubed's chunk). */
 export interface CubedFreePlay {
@@ -40,11 +45,6 @@ export interface CubedFreePlay {
 
 /** Cubed's half, once its chunk has loaded. */
 let cubed: CubedFreePlay | undefined;
-
-const TABS: { id: FreePlayTab; label: string; hint: string }[] = [
-  { id: 'flat', label: 'Flat', hint: '2D grids' },
-  { id: 'cubed', label: 'Cubed', hint: '3D blocks' },
-];
 
 const SHOW: [ListFilter, string][] = [
   ['all', 'All'],
@@ -75,20 +75,55 @@ function dropdown(
   return el('label', { className: 'free-select' }, [label, select]);
 }
 
-function tabBar(current: FreePlayTab): HTMLElement {
-  // The Flat | Cubed switch's look (base.css), as links: each tab is its own route.
-  return el(
-    'nav',
-    { className: 'game-switch free-tabs', ariaLabel: 'Board' },
-    TABS.map(({ id, label, hint }) => {
-      const link = el('a', { className: 'game-option', href: freePlayHref(id) }, [
-        el('span', { className: 'game-label', textContent: label }),
-        el('span', { className: 'game-hint', textContent: hint }),
-      ]);
-      if (id === current) link.setAttribute('aria-current', 'page');
-      return link;
+const MODES: { id: Mode; label: string; title: string; hint: string }[] = [
+  {
+    id: 'relaxed',
+    label: 'Relaxed',
+    title: 'No checking',
+    hint: 'No checking. Solve at your own pace.',
+  },
+  {
+    id: 'hearts',
+    label: '♥ Hearts',
+    title: 'Wrong moves cost a heart',
+    hint: 'Wrong moves cost a heart. Three and you start over.',
+  },
+];
+
+/** Relaxed or Hearts, for the puzzles you start here: both boards' (one setting, #155). */
+function modeRow(current: Mode, pick: (mode: Mode) => void): HTMLElement {
+  const buttons = MODES.map(({ id, label, title }) => {
+    const button = el('button', { className: 'toggle', textContent: label, title });
+    button.setAttribute('aria-pressed', String(id === current));
+    button.onclick = () => pick(id);
+    return button;
+  });
+  return el('div', { className: 'mode-row' }, [
+    el('div', { className: 'segmented', role: 'group', ariaLabel: 'Mode' }, buttons),
+    el('span', {
+      className: 'mode-hint',
+      textContent: MODES.find((m) => m.id === current)?.hint ?? '',
     }),
-  );
+  ]);
+}
+
+/** The Flat tab's stats: pack puzzles solved, solves and time (from the old 2D home, #152). */
+function flatStats(): HTMLElement {
+  const stat = (value: string, label: string) =>
+    el('div', { className: 'stat' }, [
+      el('strong', { textContent: value }),
+      el('span', { textContent: label }),
+    ]);
+  const overall = getOverallStats();
+  return el('section', { className: 'stats', ariaLabel: 'Stats' }, [
+    // Mural tiles share the save, so count pack puzzles only.
+    stat(
+      `${puzzles.filter((p) => getPuzzleStats(p.id)).length}/${puzzles.length}`,
+      'Puzzles solved',
+    ),
+    stat(String(overall.solves), 'Total solves'),
+    stat(formatTime(overall.totalTime), 'Time solving'),
+  ]);
 }
 
 /**
@@ -165,11 +200,10 @@ function drawFreePlay(
   const screen = el('main', { className: 'screen free-play' });
   app.replaceChildren(screen);
   screen.append(
-    el('header', { className: 'topbar' }, [
-      homeLink(gameHref(tab)),
-      el('h1', { textContent: 'Free play' }),
-    ]),
-    tabBar(tab),
+    el('header', { className: 'topbar' }, [homeLink(), el('h1', { textContent: 'Free play' })]),
+    boardTabs(tab, freePlayHref, 'free-tabs'),
+    modeRow(settings.mode, (mode) => set({ mode })),
+    rankCard(),
     el('div', { className: 'free-filters' }, [
       el(
         'div',
@@ -223,7 +257,7 @@ function drawFreePlay(
     el(
       'div',
       { className: 'free-list' },
-      tab === 'flat' ? puzzleList(view) : cubed!.freePlayList(size),
+      tab === 'flat' ? [flatStats(), ...puzzleList(view)] : cubed!.freePlayList(size),
     ),
   );
 }

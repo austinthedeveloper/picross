@@ -31,14 +31,23 @@ async function arriveWith(context: BrowserContext, name: string) {
 test('both games keep their solves and runs in progress', async ({ page, context }) => {
   await arriveWith(context, 'both-mid-run');
   await page.goto('/#/');
-  // Cubed was played last, so the app opens on it, as before the merge.
-  await expect(page).toHaveURL(/#\/cubed$/);
+  // One home for both now (#152): it opens there, whichever game was played last.
+  await expect(page.getByRole('navigation', { name: 'Menu' })).toBeVisible();
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('picross:save')!))).toEqual({
     version: 3,
     mergedAt: expect.any(Number),
   });
 
-  // Picross Cubed: its solves (heart is in both packs), its half-done block, its run.
+  // Both runs in progress, a Continue card each.
+  const cont = page.getByRole('region', { name: 'Continue' });
+  await expect(cont.locator('.run-banner')).toHaveCount(2);
+  await expect(cont.locator('.run-banner').first()).toContainText('Continue run');
+  await expect(cont.locator('.run-banner').first()).toContainText('First Job · encounter 2 of 5');
+  await expect(cont.locator('.run-banner').last()).toContainText('Continue on blocks');
+  await expect(cont.locator('.run-banner').last()).toContainText('First Job · encounter 2 of 5');
+
+  // Picross Cubed: its solves (heart is in both packs), its half-done block.
+  await page.goto('/#/free/cubed');
   await expect(page.locator('.puzzle-card.solved[href="#/cubed/play/steps"]')).toContainText(
     'Steps',
   );
@@ -48,17 +57,15 @@ test('both games keep their solves and runs in progress', async ({ page, context
   await expect(page.locator('.puzzle-card[href="#/cubed/play/mug"] .card-meta')).toContainText(
     'in progress',
   );
-  await expect(page.locator('.story-card')).toContainText('Continue First Job · encounter 2 of 5');
 
   // The 2D game: the same, from its own old save.
-  await page.getByRole('link', { name: /Flat/ }).click();
+  await page.goto('/#/free/flat');
   await expect(page.locator('a.card.solved[href="#/play/heart"]')).toContainText('Heart');
   await expect(page.locator('a.card[href="#/play/flag"] .status')).toHaveText('In progress');
-  await expect(page.locator('.run-banner')).toContainText('Continue run');
-  await expect(page.locator('.run-banner')).toContainText('First Job · encounter 2 of 5');
 
   // The 2D run resumes on its board as it was left, with its first cell filled.
-  await page.locator('.run-banner').tap();
+  await page.goto('/#/');
+  await cont.getByRole('link', { name: /Continue run/ }).tap();
   await page.locator('.node.current .node-body').tap();
   await skipScene(page);
   await expect(cell(page, 0)).toHaveClass(/filled/);
@@ -78,23 +85,21 @@ test('both dailies become one, with one streak (#156)', async ({ page, context }
   // Both games solved the daily on 2026-11-11, a Cubed day of the one daily.
   await arriveWith(context, 'both');
   await page.clock.setFixedTime(new Date(2026, 10, 11, 12));
+  // The one daily's card is on the home screen (#152).
   await page.goto('/#/');
-  await page.getByRole('link', { name: /Flat/ }).click();
   const card = page.locator('.daily-card');
   await expect(card).toContainText('Today: Cubed · ✓ Solved in');
   await expect(card).toContainText('🔥 1 day in a row · best 1');
-  // The next day, a Flat one: the streak is still alive, on both lists.
+  // The next day, a Flat one: the streak is still alive.
   await page.clock.setFixedTime(new Date(2026, 10, 12, 12));
   await page.reload();
   await expect(card).toContainText(/Today: Flat · \d+×\d+ · Not solved yet/);
   await expect(card).toContainText('🔥 1 day in a row');
-  await page.goto('/#/cubed');
-  await expect(page.locator('.daily-card')).toContainText('Keep your 1 day streak going.');
 });
 
 test("a later launch doesn't merge the old saves again", async ({ page, context }) => {
   await arriveWith(context, 'cubed-only');
-  await page.goto('/#/cubed');
+  await page.goto('/#/free/cubed');
   await expect(page.locator('.puzzle-card.solved')).toHaveCount(2);
   // An old key changing now (an old tab, say) changes nothing.
   await page.evaluate(() => {
@@ -110,14 +115,13 @@ test("a later launch doesn't merge the old saves again", async ({ page, context 
 
 test("Cubed's settings come with it when the 2D game had none", async ({ page, context }) => {
   await arriveWith(context, 'cubed-only');
-  await page.goto('/#/cubed');
-  // Cubed-only: sound on, the list on Done, fading off, the tutorial skipped.
-  await expect(page.getByRole('button', { name: 'Done', exact: true })).toHaveAttribute(
+  await page.goto('/#/free/cubed');
+  // Cubed-only: sound on, the list on Done (free play's Solved), fading off.
+  await expect(page.getByRole('button', { name: 'Solved', exact: true })).toHaveAttribute(
     'aria-pressed',
     'true',
   );
-  await expect(page.locator('.tutorial-card')).toHaveCount(0);
-  await page.getByRole('link', { name: 'Settings' }).click();
+  await page.goto('/#/settings');
   await expect(page.getByRole('switch', { name: 'Sound', exact: true })).toBeChecked();
   await expect(page.getByRole('switch', { name: 'Fade finished clues' })).not.toBeChecked();
   // One settings save: the 2D game's board has sound on too.

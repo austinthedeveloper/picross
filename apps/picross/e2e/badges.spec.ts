@@ -48,7 +48,7 @@ const CLEAN = {
 
 test.describe('rank', () => {
   test('a new player starts at the bottom of the ladder', async ({ page }) => {
-    await page.goto('/#/');
+    await page.goto('/#/free/flat');
     const card = page.locator('.rank-card');
     await expect(card.locator('.rank-name')).toHaveText('Hobbyist');
     await expect(card.locator('.rank-progress')).toHaveText('0 points · 10 to Tinkerer');
@@ -59,7 +59,7 @@ test.describe('rank', () => {
   }) => {
     // Three 15×15s make 9 points, so the next puzzle of any size crosses 10.
     await seedSolved(page, ['abacus', 'acorn', 'alarm-clock']);
-    await page.goto('/#/');
+    await page.goto('/#/free/flat');
     await expect(page.locator('.rank-name')).toHaveText('Hobbyist');
     await expect(page.locator('.rank-progress')).toHaveText('9 points · 1 to Tinkerer');
 
@@ -68,7 +68,7 @@ test.describe('rank', () => {
     await expect(page.locator('.end-panel:not([hidden]) .end-note')).toContainText(
       'New rank: Tinkerer!',
     );
-    await page.goto('/#/');
+    await page.goto('/#/free/flat');
     await expect(page.locator('.rank-name')).toHaveText('Tinkerer');
 
     // The same puzzle again earns nothing.
@@ -76,7 +76,7 @@ test.describe('rank', () => {
     await page.getByRole('button', { name: 'Reset' }).tap();
     await solve(page, solution('heart'));
     await expect(page.locator('.end-panel:not([hidden]) .end-note')).not.toContainText('New rank');
-    await page.goto('/#/');
+    await page.goto('/#/free/flat');
     await expect(page.locator('.rank-progress')).toHaveText('10 points · 20 to Odd-Jobber');
   });
 });
@@ -197,7 +197,7 @@ test.describe('badge shelf', () => {
   });
 
   test('stays within a phone screen, and the links reach it', async ({ page }) => {
-    await page.goto('/#/');
+    await page.goto('/#/free/flat');
     await page.locator('.rank-badges').tap();
     await expect(page).toHaveURL(/#\/badges$/);
     const overflow = await page.evaluate(
@@ -255,7 +255,7 @@ test.describe('one shelf for both boards (#157)', () => {
       save.solved['block:heart'] = { solves: 1, bestTime: 1000 };
       localStorage.setItem('picross:v2', JSON.stringify(save));
     });
-    await page.goto('/#/');
+    await page.goto('/#/free/flat');
     await expect(page.locator('.rank-badges')).toContainText(/new/);
     await page.goto('/#/badges');
     const both = page.getByRole('region', { name: 'Both boards' });

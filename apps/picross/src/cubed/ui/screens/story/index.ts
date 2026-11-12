@@ -1,13 +1,12 @@
 import { hasSeenScene, markSceneSeen } from '../../../game/runSave';
 import { getScene } from '@picross/story/puzzles/scenes';
-import { chapters, jobs } from '@picross/block/story/data';
+import { chapters } from '@picross/block/story/data';
 import { el } from '@picross/shared/ui/dom';
 import { renderSceneScreen } from '@picross/story/ui/screens/sceneScreen';
 import { chapterOpen, jobsBoard } from './jobsBoard';
 import { pathMap } from './pathMap';
 import { results } from './results';
-import { loadRun, unlocked, type Hub } from './shared';
-import { cubedHref } from '../../../href';
+import { loadRun, type Hub } from './shared';
 
 let stopScene: (() => void) | undefined;
 
@@ -47,23 +46,4 @@ export function renderStoryScreen(app: HTMLElement): () => void {
       : results(hub, run.state, run.job);
   app.replaceChildren(el('main', { className: 'screen run' }, body));
   return () => stopScene?.();
-}
-
-/** The story's card on the puzzle list: start or continue. */
-export function storyCard(): HTMLElement {
-  const run = loadRun();
-  const active = run?.state.status === 'active';
-  const storyJobs = jobs.filter((j) => !j.overtimeOf && !j.bossOf);
-  const open = storyJobs.filter(unlocked).length;
-  return el('a', { className: 'feature-card story-card', href: cubedHref('/story') }, [
-    el('div', {}, [
-      el('p', { className: 'kicker', textContent: 'Story' }),
-      el('p', {
-        textContent: active
-          ? `Continue ${run!.job.name} · encounter ${run!.state.node + 1} of ${run!.job.encounters.length} · HP ${run!.state.hp}/${run!.state.maxHp}`
-          : `Rook and Dee’s odd jobs, in 3D. ${open} of ${storyJobs.length} jobs open.`,
-      }),
-    ]),
-    el('span', { className: 'button primary', textContent: active ? 'Continue' : 'Pick a job' }),
-  ]);
 }

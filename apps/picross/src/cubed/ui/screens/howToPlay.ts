@@ -44,10 +44,7 @@ export function renderHowToPlay(root: HTMLElement): void {
   const first = PUZZLES[0];
   root.replaceChildren(
     el('div', { className: 'screen how-to' }, [
-      el('header', { className: 'topbar' }, [
-        homeLink(cubedHref()),
-        el('h1', { textContent: 'How to play' }),
-      ]),
+      el('header', { className: 'topbar' }, [homeLink(), el('h1', { textContent: 'How to play' })]),
       el(
         'dl',
         { className: 'rules' },

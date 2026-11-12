@@ -30,7 +30,7 @@ export function renderSharedScreen(root: HTMLElement, code: string, test: boolea
         puzzle,
         title: test ? `Testing: ${puzzle.name}` : 'A shared puzzle',
         mode: getSettings().mode,
-        back: test ? toEditor : homeLink(cubedHref()),
+        back: test ? toEditor : homeLink(),
         hooks: {
           solved: (time) => {
             if (test) recordPlaytest();
@@ -69,7 +69,7 @@ export function renderSharedScreen(root: HTMLElement, code: string, test: boolea
       root.replaceChildren(
         el('div', { className: 'screen' }, [
           el('header', { className: 'topbar' }, [
-            homeLink(cubedHref()),
+            homeLink(),
             el('h1', { textContent: 'Can’t open that puzzle' }),
           ]),
           el('p', { textContent: 'The link looks broken or incomplete. Ask for it again?' }),
