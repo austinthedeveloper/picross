@@ -11,7 +11,7 @@ import { withBattle, type RunState } from '../../../../game/run';
 import { getCurrentRun, saveCurrentRun } from '../../../../game/runSave';
 import type { Puzzle } from '@picross/grid/puzzles/format';
 import type { BoardView } from '@picross/play-grid/ui/board/boardView';
-import { createBattleBar, type BattleBar } from '../../../components/battleBar';
+import { createBattleBar, type BattleBar } from '@picross/story/ui/components/battleBar';
 import type { BoardControls } from '@picross/play-grid/ui/screens/gameScreen';
 
 /**
@@ -50,6 +50,8 @@ export function createFightContext(
   puzzle: Puzzle,
   /** Called once a phase moves the fight onto a block (a boss that switches board). */
   onBlock: () => void = () => {},
+  /** A bar the fight is handed (a boss that switches board keeps one, #171), or a new one. */
+  given?: BattleBar,
 ): FightContext {
   let leaving = false;
   const run = (): RunState => getCurrentRun()!;
@@ -58,7 +60,7 @@ export function createFightContext(
     enemy,
     puzzle: turnedPuzzle(puzzle, battle().turns),
     drawn: puzzle,
-    bar: createBattleBar(enemy, battle().enemyHp),
+    bar: given ?? createBattleBar(enemy, battle().enemyHp),
     hitsOn: run().mode === 'hearts',
     run,
     battle,
@@ -82,6 +84,8 @@ export function createFightContext(
     controls: null,
     finished: false,
   };
+  // A bar from the block has the block's HP: this board's is out of the enemy's own.
+  if (given) ctx.bar.setEnemyHp(battle().enemyHp, enemy.hp);
   ctx.bar.setForm(ctx.form().name, ctx.form().sprite);
   ctx.bar.setPlayerHp(run().hp, run().maxHp);
   ctx.bar.setShield(battle().shield ?? 0);

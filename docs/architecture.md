@@ -15,7 +15,7 @@ keeps the path under `src/` that it had in the app it came from.
 | Workspace             | Name                  | Owns                                                                                                                                                                                                                                                                | May import                                                                                                                      |
 | --------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | `packages/shared`     | `@picross/shared`     | What both games use that isn't the story: tokens and base styles, the run, fight, dig, dialogue and art styles, sound, haptics, theme, `dom`, `motion`, `storage`, `random`, `prefs`, puzzle ids, the Home, mute and Flat \| Cubed buttons, the art and `ui/art.ts` | Only its own files                                                                                                              |
-| `packages/story`      | `@picross/story`      | The story both games play: its JSON, loaders and checks, gadgets, the dialogue runner, fights over any board (`fight/`: `FightBoard`, `StoryBattle`, `FightRules`), and the scene player (`ui/`)                                                                    | shared, outside its `ui/` and `styles/`. Its `ui/` may use all of shared. Its tests may also use block                          |
+| `packages/story`      | `@picross/story`      | The story both games play: its JSON, loaders and checks, gadgets, the dialogue runner, fights over any board (`fight/`: `FightBoard`, `StoryBattle`, `FightRules`), and the scene player and the fights' battle bar (`ui/`)                                         | shared, outside its `ui/` and `styles/`. Its `ui/` may use all of shared. Its tests may also use block                          |
 | `packages/grid`       | `@picross/grid`       | The 2D rules and data: the engine, the puzzle format, the pack, sheets, ratings, murals, `Game` and the debug hooks. No DOM                                                                                                                                         | shared and story, outside their `ui/` and `styles/`                                                                             |
 | `packages/play-grid`  | `@picross/play-grid`  | Playing a 2D board: the board view, input, zoom, the play screen and its `PlaySession`, `board.css` and `game.css`                                                                                                                                                  | grid and shared                                                                                                                 |
 | `packages/block`      | `@picross/block`      | The 3D rules and data: the engine, the puzzle format, the pack, dioramas, the 3D story puzzles, `Game`, `Battle` and the story on blocks. No three.js                                                                                                               | shared and story, outside their `ui/` and `styles/`. Never three.js or play-block                                               |
@@ -165,7 +165,6 @@ apps/
               finisher.ts    The solved picture flying at the enemy
               fightHooks.test.ts The hooks in jsdom: every call they make, step by step (#163)
         components/
-          battleBar.ts     Enemy/player HP, gadgets, armor, 🎭 forgeries, phase banner, hit effects
           listSection.ts   Collapsible puzzle list section
           rankCard.ts      Your rank and the way to your badges, on the list
           badge.ts         A badge's picture and tier rim
@@ -259,6 +258,7 @@ packages/
         components/
           dialogue.ts      Scene player: stage of portraits, typed text box, choices, Skip
           backdrop.ts      Draws a backdrop as an SVG in the theme's color
+          battleBar.ts     The fights' one bar, both boards (#171): HP, meters, tips, gadgets, phase banner, hits
   grid/                    The 2D rules and data, no DOM (@picross/grid; its README)
     src/
       imports.test.ts      Nothing here imports the page or an app
@@ -1390,11 +1390,26 @@ over from the one it leaves, `StoryBattle.enterBoard(from)`.
   `story.css` and `editor.css`, and Cubed's own in `src/cubed/styles/`) under
   `<html data-board="block">` or its absence, wrapped in `:where()` so nothing's
   specificity changes. The block screen sets the attribute while it's up, and the router
-  on Cubed's routes.
+  on Cubed's routes. The fight's own pieces are no longer in it: the bar is one, styled
+  unscoped in `fight.css`. What still needs it is the screens around the board, which
+  each game still has its own of: the play screen (`.stage`, `.topbar`, the coach slot,
+  in play-block's `game.css` and this game's), the lists (`.puzzle-card`), and the editors.
+  It goes once those are one: the home screen (#152) and the editor (#159), then the play
+  screens.
 - **Other games:** Cubed's story plays every fight on a block and ignores `board`; the SNES
   import ignores it too and plays the whole fight flat.
 - **Both ways:** the parity test switches a boss from a grid to a block and back, and from
   a block to a grid and back, at the same share of HP with the same phases started.
+- **One bar (#171):** both boards' fights drive the story's battle bar
+  (`packages/story/src/ui/components/battleBar.ts`: HP, the powers' meters, the tip slot,
+  the gadget tray, the phase banner, hit effects), styled by shared's `fight.css`. The 2D
+  fight drives it through its mechanics' modules (`run/fight/`); Cubed's fight screen
+  (`play-block`'s `story/fight.ts`) from the battle's state and events, with its call-out
+  button in the tray as on a grid. For a boss that switches board, the encounter makes the
+  one bar and hands it to each board's fight (`fightHooks(…, bar)`, `renderBlockFight({ bar
+})`), so the same bar and tray stay on screen through the switch, and hold the screen
+  while the block loads. Each board sets the bar afresh as it opens: its HP out of that
+  board's max, its tips, its ⓘ button and its tray.
 
 ### The Deep End (Chapter 3)
 

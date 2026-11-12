@@ -5,17 +5,17 @@ import {
   encounterPuzzle,
   focusBlock,
 } from '@picross/play-block/e2e/helpers';
-import { seed } from './helpers';
+import { encounterSolution, fillRow, seed } from './helpers';
 
 /** The Curator's fight (the last of Closing Time), already some way in. */
-const curator = (battle: Record<string, unknown>) => ({
+const curator = (battle: Record<string, unknown>, gadgets: string[] = []) => ({
   run: {
     current: {
       runId: 'closing-time',
       node: 3,
       hp: 18,
       maxHp: 18,
-      gadgets: [],
+      gadgets,
       status: 'active',
       mode: 'relaxed',
       battle: { struck: [], ...battle },
@@ -100,6 +100,29 @@ test.describe('a boss that switches board', () => {
     expect(saved.fight.boards.block.battle.enemyHp).toBe(Number(hp));
     const blocks: string = saved.fight.boards.block.board.blocks;
     expect(line.map((cell) => blocks[cell])).toEqual(line.map(() => '2'));
+  });
+
+  test('the bar and its gadget tray stay on screen through the switch (#171)', async ({
+    page,
+    context,
+  }) => {
+    // Three phases in, one HP above the unfolding: finishing a line unfolds it.
+    await seed(context, curator({ enemyHp: 37, phase: 3 }, ['patch-kit']));
+    await page.goto('/#/run/play');
+    await expect(page.locator('.board')).toBeVisible();
+    await expect(page.locator('.gadget-tray .gadget')).toContainText('Patch kit');
+    // Tag the bar: the one on the block must be this same element, not a new one.
+    await page.locator('.battle').evaluate((bar) => (bar.dataset.kept = 'yes'));
+    await fillRow(page, encounterSolution('curator'), 0);
+
+    await expect(page.locator('html')).toHaveAttribute('data-board', 'block');
+    await expect(page.locator('canvas')).toBeVisible();
+    await expect(page.locator('.battle')).toHaveCount(1);
+    await expect(page.locator('.battle[data-kept="yes"]')).toBeVisible();
+    await expect(page.locator('.battle-name').first()).toHaveText('Unfolded Curator');
+    await expect(page.locator('.gadget-tray .gadget')).toContainText('Patch kit');
+    // Its HP is the block's now: more lines, more HP.
+    expect(Number(await enemyHp(page).getAttribute('aria-valuemax'))).toBeGreaterThan(60);
   });
 
   test('a reload once it has folded back finds the flat board', async ({ page, context }) => {

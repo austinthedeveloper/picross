@@ -17,6 +17,7 @@ import { createPlay, type Play } from '@picross/play-block/ui/screens/play';
 import { fightKind, type FightRun } from '@picross/play-block/ui/screens/story/fight';
 import { providePlayPrefs } from '@picross/play-block/ui/prefs';
 import { boardAt } from '@picross/story/fight/switch';
+import type { BattleBar } from '@picross/story/ui/components/battleBar';
 import { enterFlat, handOver, startBattle, takeCounts, type Enemy } from '../../../game/battle';
 import { damage, removeGadget, withBattle, withBlock } from '../../../game/run';
 import { getCurrentRun, hasSeenTip, markTipSeen, saveCurrentRun } from '../../../game/runSave';
@@ -32,6 +33,8 @@ export interface BlockFightOptions {
   size: number;
   /** Once a phase folds the fight back to the flat board. */
   onFlat(): void;
+  /** The fight's one battle bar, kept on screen from board to board (#171). */
+  bar?: BattleBar;
   /** Clears the encounter once the block is solved; `fightNote` is the defeat line. */
   clear(
     game: { hintsUsed: number; elapsed: number },
@@ -114,6 +117,7 @@ export function renderBlockFight(app: HTMLElement, opts: BlockFightOptions): (()
       run,
       battle,
       enter,
+      bar: opts.bar,
       home: '#/run',
       phased: foldBack,
     },

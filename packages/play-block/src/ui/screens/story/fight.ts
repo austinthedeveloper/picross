@@ -13,7 +13,8 @@ import { POWERS } from '@picross/block/story/powers';
 import type { HandOver } from '@picross/story/fight/battle';
 import type { BoardKind } from '@picross/story/fight/board';
 import { tipToShow, type TipCard } from '@picross/story/fight/tips';
-import { enemyArt, gadgetArt, withArt } from '@picross/shared/ui/art';
+import { createBattleBar, type BattleBar } from '@picross/story/ui/components/battleBar';
+import { gadgetArt, withArt } from '@picross/shared/ui/art';
 import { el } from '@picross/shared/ui/dom';
 import { haptic } from '@picross/shared/ui/haptics';
 import { pause } from '@picross/shared/ui/motion';
@@ -21,34 +22,6 @@ import { playSound } from '@picross/shared/ui/sound';
 import type { Play } from '../play';
 import type { Kind } from './kind';
 import { took } from './kind';
-
-function meter(label: string, className: string) {
-  const text = el('span', { className: 'meter-text' });
-  const root = el('div', { className: `meter ${className}`, role: 'meter', ariaLabel: label }, [
-    text,
-    el('span', { className: 'meter-track' }, [el('span', { className: 'meter-fill' })]),
-  ]);
-  root.setAttribute('aria-valuemin', '0');
-  return {
-    root,
-    set(value: number, max: number) {
-      text.textContent = `${value}/${max}`;
-      root.style.setProperty('--value', String(max ? value / max : 0));
-      root.setAttribute('aria-valuemax', String(max));
-      root.setAttribute('aria-valuenow', String(value));
-    },
-  };
-}
-
-function floatNumber(host: HTMLElement, text: string, className: string) {
-  const n = el('span', {
-    className: `float-number ${className}`,
-    textContent: text,
-    ariaHidden: 'true',
-  });
-  host.append(n);
-  window.setTimeout(() => n.remove(), 900);
-}
 
 /**
  * What a fight needs from the run it's in: your HP, gadgets and seen tips. Cubed passes its
@@ -85,6 +58,11 @@ export interface FightOptions {
   home: string;
   /** After each update that started a phase: a boss can change board here. */
   phased?(battle: Battle): void;
+  /**
+   * The battle bar to drive, instead of a new one: a boss that switches board keeps one
+   * bar on screen from board to board (#171).
+   */
+  bar?: BattleBar;
 }
 
 /**
@@ -112,111 +90,60 @@ export function fightKind(
   let lastSwapped: number[] = [];
   let finisherDealt = 0;
 
-  // --- The bar -------------------------------------------------------------------------
-  const sprite = el('span', { className: 'enemy-sprite', ariaHidden: 'true' }, [
-    enemyArt(enemy.sprite),
-  ]);
-  const enemyHp = meter(`${enemy.name} HP`, 'enemy-hp');
-  const playerHp = meter('Your HP', 'player-hp');
-  const name = el('span', { className: 'battle-name' });
-  const armor = el('span', { className: 'armor', hidden: true });
-  const fakes = el('span', { className: 'fakes', hidden: true });
+  // --- The bar: the story's, the same on both boards (#171) ----------------------------
+  const bar = opts.bar ?? createBattleBar(enemy, battle.state.enemyHp);
   const info = el('button', { className: 'powers-info', textContent: 'ⓘ', title: 'Powers' });
   info.ariaLabel = 'Enemy powers';
-  const chargeLabel = el('span', { className: 'charge-label' });
-  const charge = el('span', { className: 'charge', hidden: true }, [
-    el('span', { className: 'charge-icon' }, withArt('⚡')),
-    el('span', { className: 'charge-track' }, [el('span', { className: 'charge-fill' })]),
-    chargeLabel,
-  ]);
-  const turnLabel = el('span', { className: 'charge-label' });
-  const turn = el('span', { className: 'turn-meter', hidden: true }, [
-    el('span', { className: 'charge-icon' }, withArt('🔃')),
-    el('span', { className: 'charge-track' }, [el('span', { className: 'charge-fill' })]),
-    turnLabel,
-  ]);
-  const shield = el('span', { className: 'shield', hidden: true, textContent: '🩹' });
-  const tray = el('div', { className: 'gadget-tray', role: 'group', ariaLabel: 'Gadgets' });
+  bar.setInfo(info);
   const callOut = el(
     'button',
     { className: 'button call-out', hidden: true },
     withArt('🔍 Call out'),
   );
-  const tipSlot = el('div', { className: 'tip-slot', hidden: true });
-  const banner = el('div', { className: 'phase-banner', hidden: true, ariaHidden: 'true' });
-  const live = el('div', { className: 'sr-only', ariaLive: 'polite' });
-  const enemySide = el('div', { className: 'battle-side enemy' }, [
-    sprite,
-    el('div', { className: 'battle-info' }, [
-      el('span', { className: 'battle-name-row' }, [name, armor, fakes, info]),
-      enemyHp.root,
-      charge,
-      turn,
-    ]),
-  ]);
-  const header = el('section', { className: 'battle', ariaLabel: 'Fight' }, [
-    el('div', { className: 'battle-row' }, [
-      enemySide,
-      el('div', { className: 'battle-side player' }, [
-        el('div', { className: 'battle-info' }, [
-          el('span', { className: 'battle-name' }, [shield, 'You']),
-          playerHp.root,
-        ]),
-      ]),
-    ]),
-    tipSlot,
-    el('div', { className: 'fight-actions' }, [tray, callOut]),
-    banner,
-    live,
-  ]);
-
-  const say = (text: string) => (live.textContent = text);
+  let tipShown = false;
+  const showTip = (content: HTMLElement | null) => {
+    tipShown = content !== null;
+    bar.setTip(content);
+  };
+  const say = (text: string) => bar.say(text);
 
   function render() {
     const s = battle.state;
     const now = battle.current;
-    name.textContent = now.name;
-    sprite.replaceChildren(enemyArt(now.sprite));
-    enemyHp.set(s.enemyHp, s.maxHp);
+    bar.setForm(now.name, now.sprite);
+    bar.setEnemyHp(s.enemyHp, s.maxHp);
     const run = link.get();
-    if (run) playerHp.set(run.hp, run.maxHp);
-    armor.hidden = !s.targets.length;
-    armor.replaceChildren(...withArt(`🛡 ${s.targets.length}🎯 ${s.armorLines}/${ARMOR_HIT_LINES}`));
-    armor.title = `Armored: ${s.targets.length} target lines left`;
-    fakes.hidden = !s.fakes.length;
-    fakes.replaceChildren(...withArt(`🎭 ${s.fakes.length}`));
-    callOut.hidden = !s.suspects.length || play?.game.over;
+    if (run) bar.setPlayerHp(run.hp, run.maxHp);
+    bar.setArmor(s.targets.length);
+    bar.setArmorLines(s.armorLines, ARMOR_HIT_LINES);
+    bar.setFakes(s.fakes.length);
+    callOut.hidden = !s.suspects.length || Boolean(play?.game.over);
     callOut.setAttribute('aria-pressed', String(callingOut));
     const c = s.charge;
-    charge.hidden = !c;
-    if (c) {
-      charge.style.setProperty('--level', String(c.warmUp ? 0 : c.meter / c.every));
-      chargeLabel.textContent = c.warmUp ? `warming up · ${c.warmUp}` : `${c.meter}/${c.every}`;
-    }
+    bar.setCharge(
+      c ? (c.warmUp ? 0 : c.meter / c.every) : null,
+      c ? (c.warmUp ? `warming up · ${c.warmUp}` : `${c.meter}/${c.every}`) : '',
+    );
     const t = s.turn;
-    turn.hidden = !t;
-    if (t) {
-      turn.style.setProperty('--level', String(t.meter / t.every));
-      turnLabel.textContent = `${t.meter}/${t.every}`;
-    }
-    shield.hidden = !s.shield;
+    bar.setTurn(t ? t.meter / t.every : null, t ? `${t.meter}/${t.every}` : '');
+    bar.setShield(s.shield);
     renderTray();
   }
 
+  /** The gadgets, after the call-out button while there are suspects (as on a grid). */
   function renderTray() {
-    tray.replaceChildren(
-      ...(link.get()?.gadgets ?? []).flatMap((id, i) => {
-        const g = getGadget(id);
-        if (!g) return [];
-        const b = el('button', { className: 'gadget', title: `${g.name}: ${g.description}` }, [
-          el('span', { className: 'gadget-icon', ariaHidden: 'true' }, [gadgetArt(g.id)]),
-          g.name,
-        ]);
-        b.disabled = play?.game.over || knockedOut;
-        b.onclick = () => useGadget(id, i);
-        return [b];
-      }),
-    );
+    const gadgets = (link.get()?.gadgets ?? []).flatMap((id, i) => {
+      const g = getGadget(id);
+      if (!g) return [];
+      const b = el('button', { className: 'gadget', title: `${g.name}: ${g.description}` }, [
+        el('span', { className: 'gadget-icon', ariaHidden: 'true' }, [gadgetArt(g.id)]),
+        g.name,
+      ]);
+      b.disabled = Boolean(play?.game.over) || knockedOut;
+      b.onclick = () => useGadget(id, i);
+      return [b];
+    });
+    bar.setGadgets([...(callOut.hidden ? [] : [callOut]), ...gadgets]);
   }
 
   // --- Tips ----------------------------------------------------------------------------
@@ -236,12 +163,8 @@ export function fightKind(
     const tip = battle.powers
       .map((p) => tipToShow(p, 'block', (key) => link.tipSeen(key), link.home ?? 'block'))
       .find((t) => t !== null);
-    if (!tip) {
-      tipSlot.hidden = true;
-      return;
-    }
-    tipSlot.hidden = false;
-    tipSlot.replaceChildren(
+    if (!tip) return showTip(null);
+    showTip(
       tipCard(tip, () => {
         for (const key of tip.keys) link.markTip(key);
         nextTip();
@@ -249,10 +172,9 @@ export function fightKind(
     );
   }
   info.onclick = () => {
-    if (!tipSlot.hidden) return void (tipSlot.hidden = true);
+    if (tipShown) return showTip(null);
     const list = battle.powers.filter((p) => POWERS[p]);
-    tipSlot.hidden = false;
-    tipSlot.replaceChildren(
+    showTip(
       el('div', { className: 'power-list' }, [
         ...(list.length
           ? list.map((p) =>
@@ -271,7 +193,7 @@ export function fightKind(
         el('button', {
           className: 'button tip-ok',
           textContent: 'Close',
-          onclick: () => (tipSlot.hidden = true),
+          onclick: () => showTip(null),
         }),
       ]),
     );
@@ -281,7 +203,7 @@ export function fightKind(
   function hurt(amount: number) {
     if (!link.get()) return;
     const out = link.hurt(amount);
-    floatNumber(header, `−${amount}`, 'player');
+    bar.hitPlayer(amount);
     playSound('hit', 0.05);
     haptic('hit');
     if (out) knockOut();
@@ -314,19 +236,22 @@ export function fightKind(
     for (const e of events) {
       switch (e.kind) {
         case 'chip':
-          if (e.amount) floatNumber(enemySide, `−${e.amount}`, 'enemy');
+          if (e.amount) bar.hitEnemy(e.amount);
           break;
         case 'armor-broken':
           playSound('block');
+          bar.armorBreaks();
           say('The armor breaks!');
           break;
         case 'hit':
           hurt(e.amount);
+          if (e.cause === 'zap') bar.zap();
           if (e.cause === 'zap') say(`Zapped for ${e.amount}.`);
           if (e.cause === 'armor') say(`The armor hits back for ${e.amount}.`);
           break;
         case 'blocked':
           playSound('block');
+          bar.block();
           say('Your patch kit takes the hit.');
           break;
         case 'grounded':
@@ -347,12 +272,7 @@ export function fightKind(
           break;
         case 'phase':
           playSound('phase');
-          banner.hidden = false;
-          banner.replaceChildren(
-            el('strong', { textContent: e.phase.name ?? battle.current.name }),
-            ...(e.phase.taunt ? [el('span', { textContent: e.phase.taunt })] : []),
-          );
-          window.setTimeout(() => (banner.hidden = true), 2600);
+          bar.phaseBanner(e.phase.name ?? battle.current.name, e.phase.taunt ?? '');
           say(`${e.phase.name ?? battle.current.name}${e.phase.taunt ? `: ${e.phase.taunt}` : ''}`);
           nextTip();
           rebuild = true;
@@ -369,7 +289,7 @@ export function fightKind(
           break;
         case 'caught':
           playSound('finisher');
-          floatNumber(enemySide, `−${e.amount}`, 'enemy');
+          bar.hitEnemy(e.amount);
           say(`Caught a forgery! −${e.amount}.`);
           rebuild = true;
           break;
@@ -379,7 +299,7 @@ export function fightKind(
           rebuild = true;
           break;
         case 'healed':
-          floatNumber(enemySide, `+${e.amount}`, 'heal');
+          bar.healEnemy(e.amount);
           break;
       }
     }
@@ -438,7 +358,7 @@ export function fightKind(
 
   return {
     mode: hitsOn ? 'battle' : 'relaxed',
-    header,
+    header: bar.root,
     hooks: {
       hintClues: () => battle.hintClues(),
       keyPick(cell) {
@@ -508,7 +428,7 @@ export function fightKind(
       const dealt = battle.finish();
       render();
       playSound('finisher');
-      void pause(300).then(() => floatNumber(enemySide, `−${dealt}`, 'enemy'));
+      void pause(300).then(() => bar.hitEnemy(dealt));
       finisherDealt = dealt;
     },
     note: (game) => `${battle.current.name} defeated! Finisher −${finisherDealt} · ${took(game)}`,

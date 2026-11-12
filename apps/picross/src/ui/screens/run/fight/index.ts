@@ -3,6 +3,7 @@ import { finish, type Enemy } from '../../../../game/battle';
 import type { Later } from '../../../../game/fight';
 import type { Puzzle } from '@picross/grid/puzzles/format';
 import type { PlaySession } from '@picross/play-grid/ui/screens/gameScreen';
+import type { BattleBar } from '@picross/story/ui/components/battleBar';
 import { createArmorBack } from './armorBack';
 import { createCallOut } from './callOut';
 import { createCharge } from './charge';
@@ -25,8 +26,8 @@ import { createTurner } from './turns';
  * armor, ink), phases, swaps, forged clues, the charge meter, turns, gadgets, hits, and
  * the finisher. This wires them into the play session's hooks.
  */
-export function fightHooks(enemy: Enemy, puzzle: Puzzle, onBlock?: () => void) {
-  const ctx = createFightContext(enemy, puzzle, onBlock);
+export function fightHooks(enemy: Enemy, puzzle: Puzzle, onBlock?: () => void, bar?: BattleBar) {
+  const ctx = createFightContext(enemy, puzzle, onBlock, bar);
   const swapper = createSwapper(ctx);
   const inker = createInker(ctx);
   const tips = createTips(ctx);

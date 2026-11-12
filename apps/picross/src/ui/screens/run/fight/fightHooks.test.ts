@@ -80,8 +80,8 @@ vi.mock('@picross/shared/ui/haptics', async (actual) => ({
   haptic: (kind: string) => log.push(`haptic ${kind}`),
 }));
 
-vi.mock('../../../components/battleBar', async (actual) => {
-  const real = await actual<typeof import('../../../components/battleBar')>();
+vi.mock('@picross/story/ui/components/battleBar', async (actual) => {
+  const real = await actual<typeof import('@picross/story/ui/components/battleBar')>();
   return {
     ...real,
     createBattleBar: (...args: Parameters<typeof real.createBattleBar>) => {
