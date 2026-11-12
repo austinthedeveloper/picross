@@ -325,8 +325,8 @@ in one step. `versions` lists what's saved, and `delete-version <version>` remov
    `src/game/settings.ts`. Players' existing saved settings are merged over the defaults,
    so a new field just takes its default.
 2. Read it with `getSettings().<field>` and change it with `updateSettings({ <field> })`.
-3. Add a control. The select screen's `toggle()` helper in `ui/screens/selectScreen.ts`
-   makes an `aria-pressed` toggle button that re-renders the screen.
+3. Add a control on the settings screen (`ui/screens/settings.ts`, both games'), or for a
+   list setting in free play (`ui/screens/freePlay.ts`, whose filters re-render the screen).
 4. If the setting affects styling, set a `data-*` attribute on `<html>` the way
    `ui/theme.ts` does for high contrast, and style it in CSS.
 

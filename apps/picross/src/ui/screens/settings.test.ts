@@ -114,13 +114,14 @@ describe('the settings screen', () => {
     expect(getSettings().mode).toBe('relaxed');
   });
 
-  it("links to Cubed's tutorial, and Home goes back to the game played last", () => {
+  it("links to Cubed's tutorial, and Home is the one menu (#152)", () => {
     draw();
     const tutorial = [...app.querySelectorAll('a')].find((a) => /tutorial/i.test(a.textContent!));
     expect(tutorial?.getAttribute('href')).toBe('#/cubed/tutorial');
     expect(app.querySelector('.home-link')?.getAttribute('href')).toBe('#/');
+    // The game played last doesn't matter any more: there's one home.
     localStorage.setItem('picross:game', 'cubed');
     draw();
-    expect(app.querySelector('.home-link')?.getAttribute('href')).toBe('#/cubed');
+    expect(app.querySelector('.home-link')?.getAttribute('href')).toBe('#/');
   });
 });

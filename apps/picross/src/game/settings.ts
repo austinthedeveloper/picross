@@ -1,6 +1,6 @@
 import type { Mode } from '@picross/grid/game/game';
 import type { Difficulty } from '@picross/grid/puzzles/difficulty';
-import type { GameKind } from '@picross/shared/ui/components/gameSwitch';
+import type { GameKind } from '@picross/shared/game/boards';
 import type { SizeBand } from './freePlay';
 import { readStore, writeStore } from '@picross/shared/game/storage';
 

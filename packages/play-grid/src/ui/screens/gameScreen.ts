@@ -33,6 +33,8 @@ import { playSound } from '@picross/shared/ui/sound';
 export interface PlaySession {
   /** A screen between this one and home (e.g. the run's map), linked next to Home. */
   back?: { href: string; label: string };
+  /** Where "All puzzles" leads, when hearts run out. Default: `#/`. */
+  list?: string;
   /** Heading before the puzzle is solved (after, it shows the puzzle's name). */
   title: string;
   mode: GameMode;
@@ -153,7 +155,7 @@ export function renderGameScreen(
   ]);
   const boardControls = el('div', { className: 'board-controls' }, [tools, createZoomBar(zoom)]);
   const solvedPanel = el('div', { className: 'end-panel', hidden: true });
-  const failedPanel = createFailedPanel(() => (game.retry(), refresh()));
+  const failedPanel = createFailedPanel(() => (game.retry(), refresh()), session.list);
   const endedPanel = el('div', { className: 'end-panel failed', hidden: true });
   /** Play is over: solved, out of hearts, or ended by the session. */
   const over = () => game.over || Boolean(session.ended?.());

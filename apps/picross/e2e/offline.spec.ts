@@ -159,6 +159,8 @@ test('installable, and it plays offline: both boards and a story fight on each',
     await context.setOffline(true);
     await page.goto(`${base}/#/`);
     await page.reload();
+    await expect(page.getByRole('navigation', { name: 'Menu' })).toBeVisible();
+    await page.goto(`${base}/#/free/flat`);
     await expect(page.locator('.card').first()).toBeVisible();
 
     // Free play, flat.

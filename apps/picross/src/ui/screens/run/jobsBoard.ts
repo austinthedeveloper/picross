@@ -6,6 +6,7 @@ import { ENDLESS_GADGETS, ENDLESS_HP, ENDLESS_ID, ENDLESS_HEAL } from '../../../
 import { bossFightsFor, getRun, overtimeFor, type RunDef } from '../../../puzzles/runs';
 import { withArt } from '@picross/shared/ui/art';
 import { badgeIcon, tierTag } from '../../components/badge';
+import { gameHref } from '@picross/shared/game/boards';
 import { homeLink } from '@picross/shared/ui/components/homeLink';
 import { el } from '@picross/shared/ui/dom';
 import { modePicker, newRunButton, nodeIcon, type Hub } from './shared';
@@ -230,6 +231,15 @@ export function jobsBoard(hub: Hub): Node[] {
     el('div', { className: 'chapters' }, [
       ...chapters.map((c) => chapterSection(hub, c)),
       endlessSection(hub),
+    ]),
+    // Until there's one story for both boards (#174), Cubed plays its own copy, on blocks.
+    el('a', { className: 'run-banner cubed-story', href: `${gameHref('cubed')}/story` }, [
+      el('span', { className: 'run-banner-title', textContent: 'The story on blocks' }),
+      el('span', {
+        className: 'run-banner-meta',
+        textContent: 'The same jobs in Picross Cubed, every fight on a block',
+      }),
+      el('span', { className: 'run-banner-go', ariaHidden: 'true', textContent: '→' }),
     ]),
   ];
 }

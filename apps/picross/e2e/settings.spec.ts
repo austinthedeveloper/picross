@@ -7,10 +7,13 @@ import { cell, seed } from './helpers';
 const toggle = (page: Page, name: string) => page.getByRole('switch', { name, exact: true });
 const html = (page: Page) => page.locator('html');
 
-/** Opens the settings from a game's list with its Settings link. */
-async function openFrom(page: Page, list: '/#/' | '/#/cubed') {
-  await page.goto(list);
-  await page.getByRole('link', { name: 'Settings' }).click();
+/** Opens the settings from the home screen's menu (#152), the one way in for both games. */
+async function openSettings(page: Page) {
+  await page.goto('/#/');
+  await page
+    .getByRole('navigation', { name: 'Menu' })
+    .getByRole('link', { name: /Settings/ })
+    .click();
   await expect(page.getByRole('heading', { name: 'Settings', level: 1 })).toBeVisible();
 }
 
@@ -27,8 +30,8 @@ async function tabTo(page: Page, target: Locator) {
 }
 
 test.describe('the settings screen', () => {
-  test('opens from both lists, and Home goes back to each', async ({ page }) => {
-    await openFrom(page, '/#/');
+  test('opens from the home menu, and Home goes back to it', async ({ page }) => {
+    await openSettings(page);
     await expect(page.getByRole('heading', { name: 'General' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Cubed' })).toBeVisible();
     // The 2D game has no settings of its own (its list keeps its filters), so no Flat group.
@@ -36,16 +39,14 @@ test.describe('the settings screen', () => {
     await expect(page.getByText(/reduced motion, follow your device/)).toBeVisible();
     await page.getByRole('link', { name: 'Home' }).click();
     await expect(page.getByRole('heading', { name: 'Picross', exact: true })).toBeVisible();
-
-    await openFrom(page, '/#/cubed');
-    await page.getByRole('link', { name: 'Home' }).click();
-    await expect(page.getByRole('heading', { name: 'Picross Cubed' })).toBeVisible();
-    // The lists' own sound and contrast buttons moved here.
-    await expect(page.locator('.select .mute')).toHaveCount(0);
+    await expect(page.getByRole('navigation', { name: 'Menu' })).toBeVisible();
+    // The lists' own sound and contrast buttons moved here: free play has none.
+    await page.goto('/#/free/cubed');
+    await expect(page.locator('.free-play .mute')).toHaveCount(0);
   });
 
   test('high contrast applies at once to both games, and a reload keeps it', async ({ page }) => {
-    await openFrom(page, '/#/');
+    await openSettings(page);
     await toggle(page, 'High contrast').check();
     await expect(html(page)).toHaveAttribute('data-contrast', 'high');
     await page.reload();
@@ -88,7 +89,7 @@ test.describe('the settings screen', () => {
       Navigator.prototype.vibrate = () => (w.buzzes++, true);
     });
     const buzzes = () => page.evaluate(() => (window as unknown as { buzzes: number }).buzzes);
-    await openFrom(page, '/#/');
+    await openSettings(page);
     await expect(toggle(page, 'Haptics')).toBeChecked();
     await toggle(page, 'Haptics').uncheck();
     await page.reload();
@@ -106,16 +107,16 @@ test.describe('the settings screen', () => {
   });
 
   test('the mode is the lists’ mode', async ({ page }) => {
-    await openFrom(page, '/#/');
+    await openSettings(page);
     await page.getByRole('radio', { name: /Hearts/ }).check();
     await page.reload();
     await expect(page.getByRole('radio', { name: /Hearts/ })).toBeChecked();
-    await page.goto('/#/');
+    await page.goto('/#/free/flat');
     await expect(page.getByRole('button', { name: '♥ Hearts' })).toHaveAttribute(
       'aria-pressed',
       'true',
     );
-    await page.goto('/#/cubed');
+    await page.goto('/#/free/cubed');
     await expect(page.getByRole('button', { name: 'Hearts' })).toHaveAttribute(
       'aria-pressed',
       'true',
@@ -131,7 +132,7 @@ test.describe('the settings screen', () => {
     await focusBlock(page);
     await breakCubes(page, steps, line);
     await expect(block).not.toHaveAttribute('data-faded', '0');
-    await openFrom(page, '/#/cubed');
+    await openSettings(page);
     await expect(toggle(page, 'Fade finished clues')).toBeChecked();
     await toggle(page, 'Fade finished clues').uncheck();
     // Back on the same board, its finished line no longer fades.
@@ -142,7 +143,7 @@ test.describe('the settings screen', () => {
   });
 
   test("replays Cubed's tutorial", async ({ page }) => {
-    await openFrom(page, '/#/cubed');
+    await openSettings(page);
     await page.getByRole('link', { name: 'Play the tutorial' }).click();
     await expect(page).toHaveURL(/#\/cubed\/tutorial$/);
     await expect(page.locator('canvas.block-canvas')).toBeVisible();
@@ -180,7 +181,10 @@ test.describe('the settings screen', () => {
 
   test('works with the keyboard alone', async ({ page }) => {
     await page.goto('/#/');
-    await tabTo(page, page.getByRole('link', { name: 'Settings' }));
+    await tabTo(
+      page,
+      page.getByRole('navigation', { name: 'Menu' }).getByRole('link', { name: /Settings/ }),
+    );
     await page.keyboard.press('Enter');
     await expect(page.getByRole('heading', { name: 'Settings', level: 1 })).toBeVisible();
     await tabTo(page, toggle(page, 'Sound'));
@@ -217,7 +221,7 @@ test.describe('the settings screen', () => {
       }
       await toggle(page, 'High contrast').check();
       expect(await fits()).toBe(true);
-      await page.goto('/#/cubed');
+      await page.goto('/#/free/cubed');
       expect(await fits()).toBe(true);
     });
   }

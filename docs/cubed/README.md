@@ -1,8 +1,8 @@
 # Picross Cubed
 
 A 3D picross puzzle game for the browser, built with Vite, TypeScript and three.js: the 3D
-half of [Picross](../../README.md), in the same app under `#/cubed` (the Flat | Cubed switch
-on the home screen). It used to be its own repo, austinthedeveloper/picross-3d, then the
+half of [Picross](../../README.md), in the same app under `#/cubed`, opened from the one home
+screen's menu. It used to be its own repo, austinthedeveloper/picross-3d, then the
 `apps/cubed` workspace; its old address, `/3d/`, sends links and bookmarks on.
 
 Every puzzle is a block of cubes with a shape hidden inside. The number on a face counts the

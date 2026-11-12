@@ -2,8 +2,8 @@ import { expect, test } from '@playwright/test';
 import { breakCubes, extras, focusBlock, puzzle, shapeCubes } from './helpers';
 
 test('the list shows puzzles smallest first, nameless until solved', async ({ page }) => {
-  await page.goto('/#/cubed');
-  await expect(page.getByRole('heading', { name: 'Picross Cubed' })).toBeVisible();
+  await page.goto('/#/free/cubed');
+  await expect(page.getByRole('heading', { name: 'Free play' })).toBeVisible();
   const first = page.locator('.puzzle-card').first();
   await expect(first).toContainText('No. 1');
   await expect(first).toContainText('3×3×3');
@@ -47,7 +47,7 @@ test('undo puts a broken cube back, and progress survives a reload', async ({ pa
 
 test('hearts mode costs a heart for breaking the shape, and three end it', async ({ page }) => {
   const steps = puzzle('steps');
-  await page.goto('/#/cubed');
+  await page.goto('/#/free/cubed');
   await page.getByRole('button', { name: 'Hearts' }).click();
   await page.goto('/#/cubed/play/steps');
   await expect(page.getByLabel('Hearts')).toHaveText('♥♥♥');
@@ -79,8 +79,8 @@ test('a hint works out a line, and a check puts back a mistake', async ({ page }
 });
 
 test('the list filters by status and difficulty', async ({ page }) => {
-  await page.goto('/#/cubed');
-  await page.getByRole('button', { name: 'Done', exact: true }).click();
+  await page.goto('/#/free/cubed');
+  await page.getByRole('button', { name: 'Solved', exact: true }).click();
   await expect(page.getByText('No puzzles match')).toBeVisible();
   await page.getByRole('button', { name: 'All', exact: true }).click();
   await page.getByLabel('Difficulty').selectOption('easy');
@@ -123,7 +123,7 @@ test('peel steppers step a layer at a time, and the slider stays put', async ({ 
 });
 
 test('a whole line in one go: Shift+X, and Hearts still stops at the shape', async ({ page }) => {
-  await page.goto('/#/cubed');
+  await page.goto('/#/free/cubed');
   await page.getByRole('button', { name: 'Hearts' }).click();
   await page.goto('/#/cubed/play/steps');
   await focusBlock(page);

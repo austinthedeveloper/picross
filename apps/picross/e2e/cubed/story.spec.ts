@@ -16,9 +16,14 @@ async function clearEncounter(page: Page, encounter: string) {
   await expect(page.locator('.end-panel h2')).toHaveText(/Cleared|Boss down/);
 }
 
-test('the story card leads to the jobs board, chapters and all', async ({ page }) => {
-  await page.goto('/#/cubed');
-  await page.locator('.story-card').click();
+test("the jobs board's link to the story on blocks leads to Cubed's, chapters and all", async ({
+  page,
+}) => {
+  await page.goto('/#/run');
+  const skip0 = page.getByRole('button', { name: 'Skip ⏭' });
+  if (await skip0.isVisible({ timeout: 3000 }).catch(() => false)) await skip0.click();
+  await page.getByRole('link', { name: /The story on blocks/ }).click();
+  await expect(page).toHaveURL(/#\/cubed\/story$/);
   // The first chapter's opening scene plays on the first visit.
   const skip = page.getByRole('button', { name: 'Skip ⏭' });
   if (await skip.isVisible({ timeout: 3000 }).catch(() => false)) await skip.click();
@@ -68,7 +73,7 @@ test('the First Job, from the intro to the results', async ({ page }) => {
 test('with Hits on, breaking the shape costs HP, and a reload resumes the encounter', async ({
   page,
 }) => {
-  await page.goto('/#/cubed');
+  await page.goto('/#/free/cubed');
   await page.getByRole('button', { name: 'Hearts' }).click();
   await page.goto('/#/cubed/story');
   const skip = page.getByRole('button', { name: 'Skip ⏭' });

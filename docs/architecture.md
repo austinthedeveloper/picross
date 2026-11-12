@@ -129,7 +129,7 @@ apps/
       ui/
         powers.ts          Each enemy power's tip on the flat board (#79; the text is the story's fight/tips.ts)
         screens/
-          selectScreen.ts    Puzzle list, mode, stats, Settings link  (#/)
+          home.ts            The home screen (#/): one menu for both boards, Continue cards (#152)
           freePlaySession.ts Free-play PlaySession: saves, best times, "Next" (#/play/<id>)
           daily.ts           The daily: its card on the list, and a Flat day's PlaySession (#/daily)
           mural.ts           Murals: the list section, a mural's tiles, playing a tile (#/mural/…)
@@ -165,8 +165,10 @@ apps/
               finisher.ts    The solved picture flying at the enemy
               fightHooks.test.ts The hooks in jsdom: every call they make, step by step (#163)
         components/
+          boardTabs.ts     Flat | Cubed tabs, where the board matters: free play, the editor (#152)
+          editorTabs.ts    The editor's tabs: #/editor and #/cubed/editor
           listSection.ts   Collapsible puzzle list section
-          rankCard.ts      Your rank and the way to your badges, on the list
+          rankCard.ts      Your rank and the way to your badges, in free play
           badge.ts         A badge's picture and tier rim
       styles/
         select.css         Puzzle list
@@ -216,7 +218,6 @@ packages/
         components/
           homeLink.ts      The Home button at the top of every screen
           muteButton.ts    Sound toggle
-          gameSwitch.ts    The Flat | Cubed switch
       styles/
         tokens.css         Color tokens for light, dark, and high-contrast themes
         base.css           Page layout, buttons, toggles, segmented controls
@@ -432,7 +433,6 @@ the save merge (#155) the 2D game and Picross Cubed share one save:
 | `picross:badges`   | `game/badges.ts`             | Both games' earned badges (Cubed's as `block-<id>`, #157): each one's best tier and the date first earned, and `seen`, how far each had got when the shelf was last open                                                                                         |
 | `picross:daily2`   | `game/daily.ts`              | The one daily (#156): every day solved (`days`: its board, and best time if kept), the streak as of `lastSolved`, the best streak, the solve count, and today's board (with its board, `dimension`)                                                              |
 | `picross:editor`   | `ui/screens/editorScreen.ts` | The editor's current drawing                                                                                                                                                                                                                                     |
-| `picross:game`     | `gameSwitch.ts` (shared)     | The Flat \| Cubed switch's last pick                                                                                                                                                                                                                             |
 | `picross:save`     | `game/migrate.ts`            | `{ version, mergedAt }`: the migrations run so far                                                                                                                                                                                                               |
 | `picross:premerge` | `game/migrate.ts`            | The text of `picross:run` and `picross:settings` from before the merge rewrote them                                                                                                                                                                              |
 | `picross:daily`    | (old)                        | The 2D game's daily before #156; read only by the migration                                                                                                                                                                                                      |
@@ -446,8 +446,8 @@ from `cubedTutorialDone`), so Cubed's screens didn't change. A job is the same j
 board, so the job stats and the scenes seen are both games', while each game keeps its own
 run in progress, and either can be continued while the other waits.
 
-**The settings screen** (#154) at `#/settings` (`ui/screens/settings.ts`), linked from both
-games' lists (`ui/components/settingsLink.ts`), shows the one `picross:settings`:
+**The settings screen** (#154) at `#/settings` (`ui/screens/settings.ts`), on the home
+screen's menu (#152), shows the one `picross:settings`:
 
 - **General:** Sound (`muted`), Haptics (on a touch screen that can buzz), High contrast and
   the mode (Relaxed or Hearts, which the lists can change too). Light or dark, and reduced
@@ -678,8 +678,13 @@ screen with a block (`npm run check:budget` checks both, and a lint rule keeps t
 
 Cubed's screens link to each other with `cubedHref('/play/mug')` (`cubed/href.ts`), and the
 package screens it uses take their links as options (`home` on play-block's play and fight
-screens and `homeLink()`, `sharedHref` on its editor). `#/` or no hash opens Cubed's list
-when it was the game played last (the Flat | Cubed switch remembers). Cubed used to be its
+screens and `homeLink()`, `sharedHref` and `tabs` on its editor). `#/` is the one home screen
+for both (#152): `ui/screens/home.ts`, a menu (Story, Free play, Endless, Badges, Editor, How
+to play, Settings) under a Continue card for a run in progress on either board and the
+daily's card. It reads only saves, so it loads neither Cubed's chunk nor three.js. The board
+is picked where it matters, with Flat | Cubed tabs (`ui/components/boardTabs.ts`): free play
+and the editor. `#/cubed`, Cubed's old home, moves to its list, free play's Cubed tab, and
+`cubedHref()` is that list; Home on every screen is `#/`. Cubed used to be its
 own app at `/3d/`: `public/3d/index.html` sends each old link to the same screen here
 (`/3d/#/play/mug` to `#/cubed/play/mug`; scenes to `#/scene/<id>`), and `public/3d/sw.js`
 replaces its old service worker with one that deletes the old cache and unregisters.
@@ -826,28 +831,28 @@ streak, on the two boards by turns.
 
 ## The puzzle list
 
-`selectScreen.ts` groups the pack by size, smallest first. `puzzles` is sorted the same way, so
+`puzzleList.ts` groups the pack by size, smallest first. `puzzles` is sorted the same way, so
 card numbers run in display order and "Next" walks from simple to hard. Murals sit above the
 sizes in one row that scrolls sideways, so they stay easy to find without pushing the first
 puzzles down the page.
 
-The All / Not completed / Completed filter is `listFilter` in the settings, so it survives
+The All / Unsolved / Solved filter is `listFilter` in the settings, so it survives
 a visit to a puzzle. A puzzle in progress counts as not completed, and so does a mural until
 its last tile is solved. A size with nothing to show disappears; its heading's count always
 covers the whole size.
 
-`puzzleList.ts` draws the list (murals, then the sizes) for both the home list and free play's
-Flat tab. Thumbnails of solved puzzles draw when their card nears the screen
+`puzzleList.ts` draws the list (murals, then the sizes) for free play's Flat tab, under the
+tab's stats and your rank (`components/rankCard.ts`), which were the old 2D home's. Thumbnails of solved puzzles draw when their card nears the screen
 (`components/lazyThumb.ts`, an `IntersectionObserver`; cards have a fixed-height `.thumb`, so
 nothing moves when one draws). Cubed's list does the same, outlines and all.
 
 **Free play** (#153, `ui/screens/freePlay.ts`) is both packs in one screen, a tab each:
 `#/free/flat` is the 2D pack with its murals, `#/free/cubed` Cubed's list with its dioramas
-(`cubed/ui/screens/selectScreen.ts`, through `freePlayList` and `freePlayPicks` in
+(`cubed/ui/screens/puzzleList.ts`, through `freePlayList` and `freePlayPicks` in
 `cubed/routes.ts`, so it loads with Cubed's chunk, without three.js). `#/free` opens the tab
 used last (`freePlayTab`). Only one tab draws at a time, and the Cubed tab is a Cubed route,
-so its cards keep Cubed's styles. Both home lists link to their tab; the home menu (#152) is
-to make free play the way in.
+so its cards keep Cubed's styles. Free play is the way to the puzzles from the home menu
+(#152), and it has the mode (Relaxed or Hearts, one setting for both boards).
 
 - **Shared filters:** All / Unsolved / Solved (`listFilter`), size (`listSize`: small, medium, large,
   huge: Flat's 5×5 to 20×20, Cubed's sections by the block's longest side) and difficulty

@@ -19,8 +19,8 @@ import './styles/badges.css';
 import '@picross/play-block/styles/story.css';
 import './styles/switch.css';
 import './styles/freePlay.css';
+import './styles/home.css';
 import { syncBadges } from './game/badges';
-import { gameHref, lastGame } from '@picross/shared/ui/components/gameSwitch';
 import { applyTheme } from '@picross/shared/ui/theme';
 import { providePrefs } from '@picross/shared/game/prefs';
 import { getSettings, updateSettings } from './game/settings';
@@ -80,11 +80,6 @@ function route() {
     });
   } else cleanup = screen;
   window.scrollTo(0, 0);
-}
-
-// The site opens on whichever game you played last (the Flat | Cubed switch remembers).
-if ((!location.hash || location.hash === '#/') && lastGame() === 'cubed') {
-  history.replaceState(null, '', gameHref('cubed'));
 }
 
 window.addEventListener('hashchange', route);

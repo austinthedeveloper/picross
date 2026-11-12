@@ -1,0 +1,76 @@
+/* The home screen (#152): the one menu, for both boards (not scoped: scopeByBoard.ts). */
+
+.home .topbar h1 {
+  flex: 1;
+}
+
+.home-continue {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.home-continue .run-banner {
+  margin: 0;
+  border-color: var(--accent);
+}
+
+.home .daily-card {
+  margin-bottom: 12px;
+}
+
+.home-menu {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.menu-entry {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.menu-entry:hover,
+.menu-entry:focus-visible {
+  border-color: var(--accent);
+}
+
+.menu-icon {
+  flex: none;
+  width: 36px;
+  font-size: 1.6rem;
+  text-align: center;
+}
+
+.menu-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.menu-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.menu-hint {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* On a phone the menu is one column. */
+@media (max-width: 480px) {
+  .home-menu {
+    grid-template-columns: 1fr;
+  }
+}

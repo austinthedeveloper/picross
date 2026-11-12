@@ -56,10 +56,7 @@ export function renderDioramaScreen(root: HTMLElement, id: string): () => void {
   }
   root.replaceChildren(
     el('div', { className: 'screen diorama' }, [
-      el('header', { className: 'topbar' }, [
-        homeLink(cubedHref()),
-        el('h1', { textContent: d.name }),
-      ]),
+      el('header', { className: 'topbar' }, [homeLink(), el('h1', { textContent: d.name })]),
       ...(d.blurb ? [el('p', { className: 'lede', textContent: d.blurb })] : []),
       stage,
       el('p', {

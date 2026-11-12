@@ -21,11 +21,11 @@ test('a tile keeps Home one tap away, next to the way back to its mural', async 
   await expect(page).toHaveURL(/#\/mural\/whale$/);
   await page.goto('/#/mural/whale/1');
   await page.getByRole('link', { name: 'Home' }).tap();
-  await expect(page.locator('.select')).toBeVisible();
+  await expect(page.getByRole('navigation', { name: 'Menu' })).toBeVisible();
 });
 
 test('a mural fills in tile by tile, then shows the whole picture', async ({ page }) => {
-  await page.goto('/#/');
+  await page.goto('/#/free/flat');
   const card = page.locator('.mural-card').first();
   await expect(card).toContainText('Mural No. 1');
   await expect(card).toContainText('0/4');
@@ -39,7 +39,7 @@ test('a mural fills in tile by tile, then shows the whole picture', async ({ pag
 
   // With tiles 2 and 3 solved too, tile 4 is the last one. (Leave the game screen
   // first: it would save its copy of progress over this.)
-  await page.goto('/#/');
+  await page.goto('/#/free/flat');
   await page.evaluate(() => {
     const save = JSON.parse(localStorage.getItem('picross:v2')!);
     for (const id of ['whale-2', 'whale-3'])
@@ -55,7 +55,7 @@ test('a mural fills in tile by tile, then shows the whole picture', async ({ pag
   await press(page, 'See the mural');
   await expect(page.locator('h1')).toHaveText('Blue Whale');
   await expect(page.locator('.mural-done canvas')).toBeVisible();
-  await page.goto('/#/');
+  await page.goto('/#/free/flat');
   await expect(card).toContainText('Blue Whale');
   // Tiles aren't pack puzzles, so none of them count here.
   const pack = fs.readdirSync(

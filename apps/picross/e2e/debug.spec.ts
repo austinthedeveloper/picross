@@ -15,7 +15,7 @@ async function jump(page: Page, job: string, node: number) {
 }
 
 test('the dev build shows it, and unlock and reset work', async ({ page }) => {
-  await page.goto('/#/');
+  await page.goto('/#/free/flat');
   await expect(page).toHaveTitle(/^DEV /);
   await openPanel(page);
   await press(page, 'Unlock everything');
@@ -35,12 +35,16 @@ test('the dev build shows it, and unlock and reset work', async ({ page }) => {
   await expect(page.locator('.dialogue')).toBeHidden(); // openings are marked seen
 
   await openPanel(page);
+  // Reset goes home: the menu says one job is open again.
   await press(page, 'Reset everything');
-  await expect(page.locator('.run-banner')).toContainText('1 of 10 jobs open');
+  await expect(page).toHaveURL(/#\/$/);
+  await expect(
+    page.getByRole('navigation', { name: 'Menu' }).getByRole('link', { name: /Story/ }),
+  ).toContainText('1 of 10 jobs open');
 });
 
 test('jump to a boss, force a phase, deal damage, and solve the board', async ({ page }) => {
-  await page.goto('/#/');
+  await page.goto('/#/free/flat');
   await openPanel(page);
   await jump(page, 'night-shift', 6);
   await expect(page.locator('h1')).toHaveText('Museum Rex');
@@ -73,7 +77,7 @@ test('forged clues survive every phase of a fight that also scrambles', async ({
   page.on('pageerror', (e) => errors.push(e.message));
   const forged = forgedRows('ringmaster', [0, 7]);
 
-  await page.goto('/#/');
+  await page.goto('/#/free/flat');
   await openPanel(page);
   await jump(page, 'midway', 5);
   await expect(page.locator('h1')).toHaveText('The Ringmaster');
@@ -108,7 +112,7 @@ test('a fight with forged clues can start its phase and unscramble a clue', asyn
   page.on('pageerror', (e) => errors.push(e.message));
   const forged = forgedRows('falling-star', [0, 12]);
 
-  await page.goto('/#/');
+  await page.goto('/#/free/flat');
   await openPanel(page);
   await jump(page, 'summit-station', 1);
   await expect(page.locator('h1')).toHaveText('Falling Star');
@@ -136,7 +140,7 @@ test('a fight with forged clues can start its phase and unscramble a clue', asyn
 
 test('infinite health keeps your HP when the enemy hits', async ({ page, context }) => {
   await seed(context, { settings: { mode: 'hearts' } });
-  await page.goto('/#/');
+  await page.goto('/#/free/flat');
   await openPanel(page);
   await jump(page, 'first-job', 0);
   const goblin = encounterSolution('goblin');
@@ -153,7 +157,7 @@ test('infinite health keeps your HP when the enemy hits', async ({ page, context
 });
 
 test('win or lose the current run from anywhere', async ({ page }) => {
-  await page.goto('/#/');
+  await page.goto('/#/free/flat');
   await openPanel(page);
   await jump(page, 'first-job', 1);
   await openPanel(page);

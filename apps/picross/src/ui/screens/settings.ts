@@ -1,5 +1,5 @@
 import '../../styles/settings.css';
-import { gameHref, lastGame } from '@picross/shared/ui/components/gameSwitch';
+import { gameHref } from '@picross/shared/game/boards';
 import { homeLink } from '@picross/shared/ui/components/homeLink';
 import { el } from '@picross/shared/ui/dom';
 import { haptic, hapticsSupported } from '@picross/shared/ui/haptics';
@@ -163,7 +163,7 @@ export function renderSettingsScreen(app: HTMLElement): void {
     el('main', { className: 'screen settings-screen' }, [
       el('header', { className: 'topbar' }, [
         // Back to whichever game's list you came from.
-        homeLink(gameHref(lastGame() ?? 'flat')),
+        homeLink(),
         el('h1', { textContent: 'Settings' }),
       ]),
       group('General', general),

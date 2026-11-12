@@ -9,7 +9,8 @@
  * (`npm run check:budget` checks). `#/scene/<id>` is both games', and so is `#/daily`, which
  * opens Cubed's daily screen the same way on a Cubed day (#156). `#/badges` is both games' shelf
  * (#157). Free play (#153) is both games' too: `#/free/flat` and `#/free/cubed`, a tab each,
- * and `#/free` the last tab used. `#/settings` is both games' settings (#154). The 2D game's
+ * and `#/free` the last tab used. `#/settings` is both games' settings (#154). `#/` is the home
+ * screen, one menu for both (#152), and `#/endless` the jobs board at Endless. The 2D game's
  * run and its fights (`#/run…`) load with `import()` too, and the fight engine with them.
  */
 import { getPuzzle } from '@picross/grid/puzzles/index';
@@ -27,7 +28,7 @@ import { renderHowToPlay } from './ui/screens/howToPlay';
 import { renderMuralScreen, renderMuralTile } from './ui/screens/mural';
 import { renderFreePlay } from './ui/screens/freePlay';
 import { freePlaySession } from './ui/screens/freePlaySession';
-import { renderSelectScreen } from './ui/screens/selectScreen';
+import { renderHome } from './ui/screens/home';
 
 /** What a screen leaves for the router: a cleanup to run before the next screen, if any. */
 export type Cleanup = (() => void) | void | undefined;
@@ -59,6 +60,8 @@ const MOVED: Record<string, string> = {
   // Cubed's daily (#156) and badges (#157): one of each for both boards now.
   '#/cubed/daily': '#/daily',
   '#/cubed/badges': '#/badges',
+  // Cubed's list is free play's Cubed tab since the one home screen (#152).
+  '#/cubed': '#/free/cubed',
 };
 
 /** Where `hash` goes now: itself, unless it's an old link, or `#/free` (its last tab, #153). */
@@ -116,6 +119,16 @@ export const ROUTES: Route[] = [
     match: is('#/run/play'),
     render: (app, _, lazy) => lazy(loadRun(), (m) => m.renderRunEncounter(app)),
   }),
+  // Endless (#68): the jobs board, at its Endless section.
+  route({
+    match: is('#/endless'),
+    render: (app, _, lazy) =>
+      lazy(loadRun(), (m) => {
+        const cleanup = m.renderRunScreen(app);
+        app.querySelector('.chapter.endless')?.scrollIntoView({ block: 'start' });
+        return cleanup;
+      }),
+  }),
   route({ match: is('#/badges'), render: (app) => renderBadgesScreen(app) }),
   route({
     match: is('#/settings'),
@@ -140,6 +153,6 @@ export const ROUTES: Route[] = [
     match: (h) => /^#\/cubed(\/.*)?$/.exec(h),
     render: (app, [, path = '/'], lazy) => lazy(loadCubed(), (m) => m.renderCubed(app, path, lazy)),
   }),
-  // Anything else: the puzzle list.
-  route({ match: () => true, render: (app) => renderSelectScreen(app) }),
+  // Anything else: the home screen, one menu for both boards (#152).
+  route({ match: () => true, render: (app) => renderHome(app) }),
 ];

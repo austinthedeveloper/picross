@@ -72,7 +72,7 @@ for (const chapter of chapters) {
     const earlier = before.flatMap((c) => c.jobs);
     // Their openings were seen back then.
     const seen = before.flatMap((c) => (c.opening ? [c.opening] : []));
-    await page.goto('/#/cubed');
+    await page.goto('/#/free/cubed');
     await page.evaluate(
       ({ jobs, seen }) =>
         localStorage.setItem(

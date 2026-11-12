@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { PUZZLES } from '@picross/block/puzzles/index';
 import { SIZE_BANDS } from '../../../game/freePlay';
 import { updateSettings } from '../../../game/settings';
-import { unsolvedPuzzles } from './selectScreen';
+import { unsolvedPuzzles } from './puzzleList';
 
 // Free play's Cubed tab (#153): every block is reachable, and the size bands split the pack.
 describe("Cubed's list", () => {

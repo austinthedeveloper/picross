@@ -20,7 +20,7 @@ const packIds = () => fs.readdirSync(PACK).map((file) => file.replace(/\.json$/,
 
 test.describe('free play', () => {
   test('a fresh visit: sound off, small puzzles first, fish is 10×10', async ({ page }) => {
-    await page.goto('/#/');
+    await page.goto('/#/free/flat');
     await expect(page.locator('.size-section:not(.murals) .size-heading').first()).toHaveText(
       /5×5/,
     );
@@ -49,13 +49,13 @@ test.describe('free play', () => {
     const cards = page.locator('.size-section:not(.murals) .card');
     await expect(cards.first()).toBeVisible(); // count() doesn't wait for the list
     const total = await cards.count();
-    await page.getByRole('button', { name: 'Completed', exact: true }).tap();
+    await page.getByRole('button', { name: 'Solved', exact: true }).tap();
     await expect(cards).toHaveCount(1);
     await expect(cards.first()).toContainText('Heart');
     await expect(page.locator('.mural-card')).toHaveCount(0);
     await page.reload();
     await expect(cards).toHaveCount(1);
-    await page.getByRole('button', { name: 'Not completed' }).tap();
+    await page.getByRole('button', { name: 'Unsolved', exact: true }).tap();
     await expect(cards).toHaveCount(total - 1);
     await expect(page.locator('.mural-card').first()).toBeVisible();
     await expect(page.locator('.size-section:not(.murals) .size-heading').first()).toContainText(
@@ -64,20 +64,17 @@ test.describe('free play', () => {
   });
 
   test('the list can run largest first, and remembers it', async ({ page }) => {
-    await page.goto('/#/');
+    await page.goto('/#/free/flat');
     const headings = page.locator('.size-section:not(.murals) .size-heading');
     const firstCard = page.locator('.size-section:not(.murals) .card-name').first();
-    await expect(page.getByRole('button', { name: 'Smallest first' })).toHaveAttribute(
-      'aria-pressed',
-      'true',
-    );
+    await expect(page.getByLabel('Sort')).toHaveValue('asc');
     await expect(firstCard).toHaveText('No. 1');
     const lastNumber = await page
       .locator('.size-section:not(.murals) .card-name')
       .last()
       .textContent();
 
-    await page.getByRole('button', { name: 'Largest first' }).tap();
+    await page.getByLabel('Sort').selectOption('desc');
     await expect(headings.first()).toContainText('20×20');
     await expect(headings.last()).toContainText('5×5');
     await expect(firstCard).toHaveText(lastNumber!);
@@ -87,7 +84,7 @@ test.describe('free play', () => {
   });
 
   test('sections collapse independently, and stay that way', async ({ page }) => {
-    await page.goto('/#/');
+    await page.goto('/#/free/flat');
     const section = (name: string) => page.getByRole('region', { name });
     const small = section('5×5 puzzles');
     const medium = section('10×10 puzzles');
@@ -98,7 +95,7 @@ test.describe('free play', () => {
     await expect(medium.locator('.card').first()).toBeVisible();
 
     // Other list controls redraw the page, and shouldn't reopen anything.
-    await page.getByRole('button', { name: 'Not completed' }).tap();
+    await page.getByRole('button', { name: 'Unsolved', exact: true }).tap();
     await expect(small.locator('.card').first()).toBeHidden();
     await page.reload();
     await expect(small.locator('.card').first()).toBeHidden();
@@ -121,8 +118,8 @@ test.describe('free play', () => {
   });
 
   test('the completed filter says so when nothing is', async ({ page }) => {
-    await page.goto('/#/');
-    await page.getByRole('button', { name: 'Completed', exact: true }).tap();
+    await page.goto('/#/free/flat');
+    await page.getByRole('button', { name: 'Solved', exact: true }).tap();
     await expect(page.locator('.empty-list')).toContainText('Nothing completed yet');
   });
 
@@ -134,7 +131,7 @@ test.describe('free play', () => {
   });
 
   test('cards show a difficulty, which can filter and sort the list', async ({ page }) => {
-    await page.goto('/#/');
+    await page.goto('/#/free/flat');
     const cards = page.locator('.size-section:not(.murals) .card');
     await expect(page.locator('.difficulty').first()).toHaveText(/Easy|Medium/);
     await expect(page.locator('.murals')).toBeVisible();
@@ -150,17 +147,17 @@ test.describe('free play', () => {
     await expect(page.getByLabel('Difficulty')).toHaveValue('insane');
     await expect(cards).toHaveCount(6);
 
-    await page.getByRole('button', { name: 'Completed', exact: true }).tap();
+    await page.getByRole('button', { name: 'Solved', exact: true }).tap();
     await expect(page.locator('.empty-list')).toHaveText('No puzzles match those filters.');
     await page.getByRole('button', { name: 'All', exact: true }).tap();
     await page.getByLabel('Difficulty').selectOption('any');
 
-    await page.getByRole('button', { name: 'Hardest first' }).tap();
+    await page.getByLabel('Sort').selectOption('hardest');
     await expect(page.locator('.size-section:not(.murals) .size-heading').first()).toHaveText(
       /20×20/,
     );
     await expect(page.locator('.difficulty').first()).toHaveText('Insane');
-    await page.getByRole('button', { name: 'Easiest first' }).tap();
+    await page.getByLabel('Sort').selectOption('easiest');
     await expect(page.locator('.size-section:not(.murals) .size-heading').first()).toHaveText(
       /5×5/,
     );
@@ -192,17 +189,17 @@ test.describe('free play', () => {
     const ids = packIds();
     const [left] = ids.slice(-1);
     await seedSolved(page, ids.slice(0, -1));
-    await page.goto('/#/');
+    await page.goto('/#/free/flat');
     await page.getByRole('button', { name: 'Surprise me' }).tap();
     await expect(page).toHaveURL(new RegExp(`#/play/${left}$`));
     await expect(page.locator('.cell').first()).toBeVisible();
   });
 
-  test('"Surprise me" is hidden when everything is solved', async ({ page }) => {
+  test('"Surprise me" is off when everything is solved', async ({ page }) => {
     await seedSolved(page, packIds());
-    await page.goto('/#/');
+    await page.goto('/#/free/flat');
     await expect(page.locator('.rank-card')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Surprise me' })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: 'Surprise me' })).toBeDisabled();
   });
 
   test('a drag paints a line and undo/redo/reset work', async ({ page }) => {

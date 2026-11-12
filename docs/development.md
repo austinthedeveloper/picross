@@ -158,7 +158,7 @@ are in `packages/play-block/e2e/helpers.ts`.
 ## Both games
 
 Both games are one app: the 2D game's routes are `#/…`, Cubed's `#/cubed/…`, and the
-Flat | Cubed switch links between them (`#/` and `#/cubed`). `npm run build` builds it into
+home screen (`#/`, #152) is both games' menu. `npm run build` builds it into
 `dist/`; `dist/3d/` is only Cubed's old address (`public/3d/`), which sends old links on
 and retires its old service worker (see
 [the routing](architecture.md#routing-and-screens)). A change in a package is in both games

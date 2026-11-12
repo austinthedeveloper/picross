@@ -27,6 +27,16 @@ export function renderGameScreen(root: HTMLElement, puzzle: Puzzle): () => void 
   let changed = false;
 
   const play = createPlay(root, {
+    // Home is the menu (#152); this goes back to the list, free play's Cubed tab.
+    // Shaped like the Home link it stands in for, so the top bar keeps its size.
+    back: el(
+      'a',
+      { className: 'button ghost home-link', href: cubedHref(), ariaLabel: 'Free play' },
+      [
+        el('span', { textContent: '←', ariaHidden: 'true' }),
+        el('span', { className: 'home-label', textContent: 'Free play', ariaHidden: 'true' }),
+      ],
+    ),
     home: cubedHref(),
     puzzle,
     title: solvedBefore ? puzzle.name : puzzleNumber(PUZZLES.indexOf(puzzle)),
