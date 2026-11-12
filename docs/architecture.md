@@ -134,7 +134,9 @@ apps/
           daily.ts           The daily: its card on the list, and a Flat day's PlaySession (#/daily)
           mural.ts           Murals: the list section, a mural's tiles, playing a tile (#/mural/…)
           howToPlay.ts       Guided solve on a real board, then rules (#/how-to-play)
-          editorScreen.ts    Puzzle authoring tool                   (#/editor)
+          editorHub.ts       The one editor's start (#/editor): new puzzles and both boards' drafts (#159)
+          editorScreen.ts    The Flat editor: draw, check, share (#/editor/flat)
+          sharedPuzzle.ts    A shared Flat puzzle, or its play-test (#/p/flat/<code>[/test], #159)
           badges.ts          The badge shelf                         (#/badges)
           settings.ts        Both games' settings (#154)             (#/settings)
           run/               Runs, loaded on demand with the fight engine (#/run, #/run/play)
@@ -166,7 +168,7 @@ apps/
               fightHooks.test.ts The hooks in jsdom: every call they make, step by step (#163)
         components/
           boardTabs.ts     Flat | Cubed tabs, where the board matters: free play, the editor (#152)
-          editorTabs.ts    The editor's tabs: #/editor and #/cubed/editor
+          editorTabs.ts    The editors' tabs (#/editor/flat, #/cubed/editor) and the way back to #/editor
           listSection.ts   Collapsible puzzle list section
           rankCard.ts      Your rank and the way to your badges, in free play
           badge.ts         A badge's picture and tier rim
@@ -432,7 +434,7 @@ the save merge (#155) the 2D game and Picross Cubed share one save:
 | `picross:settings` | `game/settings.ts`           | `mode` (default for new runs), `listFilter`, `listOrder`, `listDifficulty`, `collapsedSections`, `muted`, `highContrast`, `haptics`, and Cubed's `dimDone` and `cubedTutorialDone`, and `freePlayTab` (#153)                                                     |
 | `picross:badges`   | `game/badges.ts`             | Both games' earned badges (Cubed's as `block-<id>`, #157): each one's best tier and the date first earned, and `seen`, how far each had got when the shelf was last open                                                                                         |
 | `picross:daily2`   | `game/daily.ts`              | The one daily (#156): every day solved (`days`: its board, and best time if kept), the streak as of `lastSolved`, the best streak, the solve count, and today's board (with its board, `dimension`)                                                              |
-| `picross:editor`   | `ui/screens/editorScreen.ts` | The editor's current drawing                                                                                                                                                                                                                                     |
+| `picross:editor`   | `ui/screens/editorScreen.ts` | The Flat editor's draft (listed at `#/editor`)                                                                                                                                                                                                                   |
 | `picross:save`     | `game/migrate.ts`            | `{ version, mergedAt }`: the migrations run so far                                                                                                                                                                                                               |
 | `picross:premerge` | `game/migrate.ts`            | The text of `picross:run` and `picross:settings` from before the merge rewrote them                                                                                                                                                                              |
 | `picross:daily`    | (old)                        | The 2D game's daily before #156; read only by the migration                                                                                                                                                                                                      |
@@ -639,10 +641,12 @@ draws. A new screen is one entry. Hash routing works on GitHub Pages without ser
 
 | Hash               | Screen                                                                                            |
 | ------------------ | ------------------------------------------------------------------------------------------------- |
-| `#/`               | `renderSelectScreen` (also the fallback for unknown hashes)                                       |
+| `#/`               | `renderHome`: the one menu (#152, also the fallback for unknown hashes)                           |
 | `#/play/<id>`      | `renderGameScreen` for a pack puzzle                                                              |
 | `#/how-to-play`    | `renderHowToPlay`: the interactive tutorial and the rules                                         |
-| `#/editor`         | `renderEditorScreen`                                                                              |
+| `#/editor`         | `renderEditorHub`: new puzzles on either board, and both boards' drafts (#159)                    |
+| `#/editor/flat`    | `renderEditorScreen`: the Flat editor (Cubed's is `#/cubed/editor`)                               |
+| `#/p/<board>/<c>`  | A shared puzzle on `flat` or `cubed` (#159), `/test` for the editor's play-test                   |
 | `#/badges`         | `renderBadgesScreen`: the badge shelf (#109)                                                      |
 | `#/settings`       | `renderSettingsScreen`: both games' settings (#154), loaded with `lazy`                           |
 | `#/run`            | `renderRunScreen`: start panel, path map, or results                                              |

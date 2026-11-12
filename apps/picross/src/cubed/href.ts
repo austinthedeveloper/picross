@@ -9,6 +9,9 @@ export const CUBED = '#/cubed';
 /** The app's home: the one menu for both boards (#152). */
 export const HOME = '#/';
 
+/** A shared block's link (#159): the app's share links say their board. */
+export const shareHref = (code: string) => `#/p/cubed/${code}`;
+
 /** Cubed's list: free play's Cubed tab (`freePlayHref('cubed')` in game/freePlay.ts). */
 const LIST = '#/free/cubed';
 

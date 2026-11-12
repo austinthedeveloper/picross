@@ -7,7 +7,7 @@ const ENTRIES: { name: RegExp; hash: RegExp; heading: string | RegExp }[] = [
   { name: /^Free play/, hash: /#\/free\/flat$/, heading: 'Free play' },
   { name: /^Endless/, hash: /#\/endless$/, heading: 'Jobs' },
   { name: /^Badges/, hash: /#\/badges$/, heading: 'Badges' },
-  { name: /^Editor/, hash: /#\/editor$/, heading: 'Puzzle editor' },
+  { name: /^Editor/, hash: /#\/editor$/, heading: 'Editor' },
   { name: /^How to play/, hash: /#\/how-to-play$/, heading: 'How to play' },
   { name: /^Settings/, hash: /#\/settings$/, heading: 'Settings' },
 ];
@@ -88,12 +88,12 @@ test("Cubed's old home goes to its list, free play's Cubed tab", async ({ page }
 });
 
 test('the editor picks its board with Flat | Cubed tabs', async ({ page }) => {
-  await page.goto('/#/editor');
+  await page.goto('/#/editor/flat');
   const tabs = page.getByRole('navigation', { name: 'Board' });
   await expect(tabs.getByRole('link', { name: /Flat/ })).toHaveAttribute('aria-current', 'page');
   await tabs.getByRole('link', { name: /Cubed/ }).click();
   await expect(page).toHaveURL(/#\/cubed\/editor$/);
   await expect(page.getByRole('heading', { level: 1, name: 'Editor' })).toBeVisible();
   await page.getByRole('navigation', { name: 'Board' }).getByRole('link', { name: /Flat/ }).click();
-  await expect(page).toHaveURL(/#\/editor$/);
+  await expect(page).toHaveURL(/#\/editor\/flat$/);
 });

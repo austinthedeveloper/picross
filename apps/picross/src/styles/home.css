@@ -74,3 +74,87 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* The one editor's start (#159): a new puzzle on either board, and the drafts. */
+.editor-hub .lede {
+  color: var(--muted);
+}
+
+.editor-starts,
+.editor-drafts {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.editor-new {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.editor-new h3 {
+  margin: 0;
+  min-width: 60px;
+}
+
+.editor-new-size {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.editor-new input {
+  width: 4.5em;
+}
+
+.draft-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.draft-card:hover,
+.draft-card:focus-visible {
+  border-color: var(--accent);
+}
+
+.draft-board {
+  grid-row: span 2;
+  align-self: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.draft-name {
+  font-weight: 700;
+}
+
+.draft-meta {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.editor-switch {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}

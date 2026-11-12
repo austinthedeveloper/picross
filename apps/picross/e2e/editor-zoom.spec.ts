@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import { cell, press } from './helpers';
 
 test('editor: flags an ambiguous drawing and exports a unique one', async ({ page }) => {
-  await page.goto('/#/editor');
+  await page.goto('/#/editor/flat');
   await page.fill('label:has-text("Width") input', '5');
   await page.press('label:has-text("Width") input', 'Tab');
   await page.fill('label:has-text("Height") input', '5');
