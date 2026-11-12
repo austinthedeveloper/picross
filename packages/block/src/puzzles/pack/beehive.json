@@ -1,0 +1,125 @@
+{
+  "id": "beehive",
+  "name": "Beehive",
+  "colors": {
+    "b": "brown",
+    "k": "graphite",
+    "w": "wood",
+    "y": "yellow"
+  },
+  "layers": [
+    [
+      "wwwwwwwww",
+      "wwwwwwwww",
+      "wwwwwwwww",
+      "wwwwwwwww",
+      "wwwwwwwww",
+      "wwwwwwwww",
+      "wwwwwwwww",
+      "wwwwwwwww",
+      "wwwwwwwww"
+    ],
+    [
+      "....y....",
+      "..yyyyy..",
+      ".yyyyyyy.",
+      ".yyyyyyy.",
+      "yyyyyyyyy",
+      ".yyyyyyy.",
+      ".yyyyyyy.",
+      "..yyyyy..",
+      "....k...."
+    ],
+    [
+      "....b....",
+      "..bbbbb..",
+      ".bbbbbbb.",
+      ".bbbbbbb.",
+      "bbbbbbbbb",
+      ".bbbbbbb.",
+      ".bbbbbbb.",
+      "..bbbbb..",
+      "....k...."
+    ],
+    [
+      "....y....",
+      "..yyyyy..",
+      ".yyyyyyy.",
+      ".yyyyyyy.",
+      "yyyyyyyyy",
+      ".yyyyyyy.",
+      ".yyyyyyy.",
+      "..yyyyy..",
+      "....y...."
+    ],
+    [
+      "....b....",
+      "..bbbbb..",
+      ".bbbbbbb.",
+      ".bbbbbbb.",
+      "bbbbbbbbb",
+      ".bbbbbbb.",
+      ".bbbbbbb.",
+      "..bbbbb..",
+      "....b...."
+    ],
+    [
+      ".........",
+      "...yyy...",
+      "..yyyyy..",
+      ".yyyyyyy.",
+      ".yyyyyyy.",
+      ".yyyyyyy.",
+      "..yyyyy..",
+      "...yyy...",
+      "........."
+    ],
+    [
+      ".........",
+      ".........",
+      "..bbbbb..",
+      "..bbbbb..",
+      "..bbbbb..",
+      "..bbbbb..",
+      "..bbbbb..",
+      ".........",
+      "........."
+    ],
+    [
+      ".........",
+      ".........",
+      "...yyy...",
+      "..yyyyy..",
+      "..yyyyy..",
+      "..yyyyy..",
+      "...yyy...",
+      ".........",
+      "........."
+    ],
+    [
+      ".........",
+      ".........",
+      ".........",
+      "...bbb...",
+      "...bbb...",
+      "...bbb...",
+      ".........",
+      ".........",
+      "........."
+    ],
+    [
+      ".........",
+      ".........",
+      ".........",
+      ".........",
+      "....b....",
+      ".........",
+      ".........",
+      ".........",
+      "........."
+    ]
+  ],
+  "hideRatio": 0.55,
+  "hide": "02c4afc99e2d2734006154e6111e0f3aa2017f47b28760908014061404def824d1",
+  "passes": 5
+}

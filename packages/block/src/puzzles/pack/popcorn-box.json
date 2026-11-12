@@ -1,0 +1,25 @@
+{
+  "id": "popcorn-box",
+  "name": "Box of Popcorn",
+  "colors": {
+    "c": "cream",
+    "r": "red",
+    "t": "white",
+    "y": "yellow"
+  },
+  "layers": [
+    [".......", "..trr..", ".trrtr.", ".rrtrr.", ".rtrrt.", "..rrt..", "......."],
+    [".......", "..trr..", ".trrtr.", ".rrtrr.", ".rtrrt.", "..rrt..", "......."],
+    [".......", "..trr..", ".trrtr.", ".rrtrr.", ".rtrrt.", "..rrt..", "......."],
+    [".......", ".rtrrt.", ".trrtr.", ".rrtrr.", ".rtrrt.", ".trrtr.", "......."],
+    [".......", ".rtrrt.", ".trrtr.", ".rrtrr.", ".rtrrt.", ".trrtr.", "......."],
+    ["...t...", ".rtrrt.", ".trctr.", "trcccrt", ".rtcrt.", ".trrtr.", "...t..."],
+    ["..rtr..", ".rccct.", "rcccccr", "tccccct", "rcccccr", ".tcccr.", "..rtr.."],
+    ["...c...", ".ccccc.", ".ccccc.", "ccccccc", ".ycccc.", ".ccccc.", "...c..."],
+    [".......", ".ccccc.", ".cyccc.", ".ccccc.", ".ccccc.", ".ccccy.", "......."],
+    [".......", "...c...", "..ccc..", ".cccyc.", "..cyc..", "...c...", "......."]
+  ],
+  "hideRatio": 0.55,
+  "hide": "ae42abbddea3abeba04c50005486030e379e438332e40891",
+  "passes": 5
+}
