@@ -12,8 +12,9 @@ puzzles, scenes, backdrops and `gadgets.ts`, and the scene player) is in
 
 ## Add a puzzle
 
-1. Open the editor: run `npm run dev` and go to http://localhost:5173/#/editor, or use
-   "Make your own puzzle" on the puzzle list.
+1. Open the editor: run `npm run dev` and go to http://localhost:5173/#/editor, or pick
+   Editor on the home screen, and start a new Flat puzzle (or open your Flat draft). Copy
+   share link makes a link to it (`#/p/flat/<code>`) once it checks out.
 2. Set the size, name it, and draw. The status line should say **"Unique and solvable without
    guessing."** If cells are striped, the clues can't pin them down, so change the picture
    near them. Common fixes are breaking up symmetric shapes or 2×2 checkerboards, or adding

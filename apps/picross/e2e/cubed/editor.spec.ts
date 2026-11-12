@@ -74,7 +74,8 @@ test('export, import and share links', async ({ page, context }) => {
   await page.getByRole('button', { name: 'Copy share link' }).click();
   await expect(page.locator('.verdict')).toHaveText('Share link copied.');
   const link = await page.evaluate(() => navigator.clipboard.readText());
-  expect(link).toMatch(/#\/cubed\/p\/[zj][\w-]+$/);
+  // Share links say their board (#159).
+  expect(link).toMatch(/#\/p\/cubed\/[zj][\w-]+$/);
   await page.goto(link);
   await expect(page.getByRole('heading', { name: 'A shared puzzle' })).toBeVisible();
 
@@ -89,9 +90,11 @@ test('export, import and share links', async ({ page, context }) => {
   await expect(page.locator('.ecell')).toHaveCount(1);
 });
 
-test('a broken share link says so', async ({ page }) => {
-  await page.goto('/#/cubed/p/jnotapuzzle');
-  await expect(page.getByRole('heading', { name: 'Can’t open that puzzle' })).toBeVisible();
+test('a broken share link says so, old or new', async ({ page }) => {
+  for (const link of ['/#/cubed/p/jnotapuzzle', '/#/p/cubed/jnotapuzzle']) {
+    await page.goto(link);
+    await expect(page.getByRole('heading', { name: 'Can’t open that puzzle' })).toBeVisible();
+  }
 });
 
 test('the layer grid works from the keyboard', async ({ page }) => {

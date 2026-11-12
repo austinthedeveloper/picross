@@ -16,7 +16,7 @@ The paths under `src/` are the ones these files had in the 2D game, so
 | What    | Files                                                                                                                                                           |
 | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Engine  | `src/engine/`: `board`, `clues`, `history`, `lines`, `solver`, `transform`, `blast`, `charge`, `fakes`, `ink`, `swap`                                           |
-| Puzzles | `src/puzzles/format.ts` (the file format, parse and validate, export helpers)                                                                                   |
+| Puzzles | `src/puzzles/format.ts` (the file format, parse and validate, export helpers)                                                   |
 | Pack    | `src/puzzles/index.ts` (loads `pack/*.json` and the story's run puzzles from `@picross/story`; `ORDER`), `pack/`, `sheets/`, `ratings.json` and `difficulty.ts` |
 | Murals  | `src/puzzles/murals.ts`, `murals/*.json`                                                                                                                        |
 | Play    | `src/game/game.ts`: `Game` (board, history, hearts, hints, clock) and its save format, `SavedBoard`                                                             |

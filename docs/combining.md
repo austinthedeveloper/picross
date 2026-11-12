@@ -98,6 +98,14 @@ is gone: the board is picked in free play and the editor, with tabs. `#/cubed` m
 play's Cubed tab. The home screen reads only saves, so it loads neither Cubed's chunk nor
 three.js.
 
+**#159: one editor.** `#/editor` starts a new puzzle on either board (Flat, width × height;
+Cubed, width × height × depth) and lists both boards' drafts, marked by board, from the keys
+the old editors kept (`picross:editor`, `picross3d:editor`). Each opens its board's editor.
+Share links say their board (`#/p/flat/<code>`, `#/p/cubed/<code>`, one share code format in
+`@picross/shared/game/share`), Flat puzzles can be shared for the first time, and Cubed's old
+`#/cubed/p/<code>` links still open. On both boards, sharing and play-testing wait for a
+picture that solves without guessing.
+
 Its seventh is **one settings screen** (#154), at `#/settings`, linked from both lists:
 General (sound, haptics where the phone can buzz, high contrast, the mode) and Cubed (fade
 finished clues, replay the tutorial). The 2D game has no settings of its own, so there's no
@@ -167,7 +175,8 @@ Both are built in four layers: engine (pure logic) → puzzles (content) → gam
 saves) → ui (the only layer that touches the page). The packages follow those layers, so
 step 4 is a merge of two apps, not a rewrite.
 
-What's left in the way: two editors (#159) and two story copies (#174). The home screen
+What's left in the way: two story copies (#174), and each board's own editor and play
+screen behind the one editor's start (#159). The home screen
 (#152), the saves and the settings are one
 (#155). The battle engine is one (step 5), and a boss that switches board is one fight (#170):
 the battle on the board it's on takes it over, and each board keeps its own progress (#169). Puzzle ids clash too (both packs have a

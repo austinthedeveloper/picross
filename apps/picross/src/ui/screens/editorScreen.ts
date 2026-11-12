@@ -1,3 +1,4 @@
+import { encodeShare } from '../../puzzles/share';
 import { editorTabs } from '../components/editorTabs';
 import { Cell, createBoard, type Solution } from '@picross/grid/engine/board';
 import { deriveClues } from '@picross/grid/engine/clues';
@@ -126,13 +127,21 @@ export function renderEditorScreen(app: HTMLElement): void {
     updateJson();
   };
 
+  // Sharing and play-testing wait for a picture that solves without guessing, as on a block.
+  const shareBtn = el('button', { textContent: 'Copy share link', disabled: true });
+  const playTestBtn = el('button', { textContent: 'Play-test', disabled: true });
+  const shareCode = () =>
+    encodeShare(toPuzzleFile(draft.id, draft.name, draft.width, draft.height, draft.cells));
+
   const check = (cells: HTMLElement[]) => {
     status.className = 'editor-status';
+    shareBtn.disabled = playTestBtn.disabled = true;
     if (!draft.cells.includes(true)) {
       status.textContent = 'Draw a picture to check it.';
       return;
     }
     const result = checkSolution(draft.width, draft.height, draft.cells);
+    shareBtn.disabled = playTestBtn.disabled = result.status !== 'unique';
     if (result.status === 'unique') {
       status.textContent = '✓ Unique and solvable without guessing.';
       status.classList.add('ok');
@@ -216,6 +225,20 @@ export function renderEditorScreen(app: HTMLElement): void {
       URL.revokeObjectURL(url);
     },
   });
+  playTestBtn.onclick = async () => {
+    location.hash = `#/p/flat/${await shareCode()}/test`;
+  };
+  shareBtn.onclick = async () => {
+    const url = `${location.href.split('#')[0]}#/p/flat/${await shareCode()}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      flash('Share link copied.');
+    } catch {
+      output.value = url;
+      output.select();
+      flash('Select and copy the link below.');
+    }
+  };
   const importBtn = el('button', {
     textContent: 'Load JSON',
     title: 'Load the JSON in the box below',
@@ -264,6 +287,8 @@ export function renderEditorScreen(app: HTMLElement): void {
       status,
       el('div', { className: 'editor-actions' }, [
         clearBtn,
+        shareBtn,
+        playTestBtn,
         copyBtn,
         downloadBtn,
         importBtn,

@@ -13,13 +13,13 @@ the app's own `src/`.
 The paths under `src/` are the ones these files had in both games, so
 `apps/picross/src/ui/dom.ts` is now `src/ui/dom.ts` here.
 
-| What     | Files                                                                                                                                                  |
-| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Look     | `src/styles/tokens.css`, `base.css`; `run.css`, `fight.css`, `dig.css`, `dialogue.css`, `art.css`                                                      |
-| Feel     | `src/ui/sound.ts`, `haptics.ts`, `theme.ts`, `dom.ts`, `motion.ts`, `format.ts` (`formatTime`, `plural`); `src/game/prefs.ts` (below)                  |
-| Plumbing | `src/game/storage.ts`, `src/engine/random.ts`, `src/ui/components/homeLink.ts`, `muteButton.ts`; `src/game/boards.ts` (the two games' names and roots) |
-| Ids      | `src/puzzles/ids.ts`: `qualify` and `parseId`, puzzle ids with a dimension (below)                                                                     |
-| Art      | `src/ui/art.ts` (portraits, sprites, gadgets and power glyphs, with emoji stand-ins); `public/art/{cast,enemies,gadgets,icons}/`                       |
+| What     | Files                                                                                                                                                                                                                  |
+| -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Look     | `src/styles/tokens.css`, `base.css`; `run.css`, `fight.css`, `dig.css`, `dialogue.css`, `art.css`                                                                                                                      |
+| Feel     | `src/ui/sound.ts`, `haptics.ts`, `theme.ts`, `dom.ts`, `motion.ts`, `format.ts` (`formatTime`, `plural`); `src/game/prefs.ts` (below)                                                                                  |
+| Plumbing | `src/game/storage.ts`, `src/engine/random.ts`, `src/ui/components/homeLink.ts`, `muteButton.ts`; `src/game/boards.ts` (the two games' names and roots), `src/game/share.ts` (share codes for both boards' links, #159) |
+| Ids      | `src/puzzles/ids.ts`: `qualify` and `parseId`, puzzle ids with a dimension (below)                                                                                                                                     |
+| Art      | `src/ui/art.ts` (portraits, sprites, gadgets and power glyphs, with emoji stand-ins); `public/art/{cast,enemies,gadgets,icons}/`                                                                                       |
 
 The story's data, loaders, dialogue and scene player moved to `packages/story` (#146).
 The art and the story's styles stayed here: they don't read the story, and every screen

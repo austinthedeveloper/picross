@@ -23,7 +23,6 @@ import { renderGameScreen } from '@picross/play-grid/ui/screens/gameScreen';
 import { renderSceneScreen } from '@picross/story/ui/screens/sceneScreen';
 import { renderBadgesScreen } from './ui/screens/badges';
 import { renderDailyScreen } from './ui/screens/daily';
-import { renderEditorScreen } from './ui/screens/editorScreen';
 import { renderHowToPlay } from './ui/screens/howToPlay';
 import { renderMuralScreen, renderMuralTile } from './ui/screens/mural';
 import { renderFreePlay } from './ui/screens/freePlay';
@@ -62,6 +61,8 @@ const MOVED: Record<string, string> = {
   '#/cubed/badges': '#/badges',
   // Cubed's list is free play's Cubed tab since the one home screen (#152).
   '#/cubed': '#/free/cubed',
+  // The one editor (#159) opens each board's: Cubed's is still at its own route.
+  '#/editor/cubed': '#/cubed/editor',
 };
 
 /** Where `hash` goes now: itself, unless it's an old link, or `#/free` (its last tab, #153). */
@@ -136,7 +137,32 @@ export const ROUTES: Route[] = [
       lazy(import('./ui/screens/settings'), (m) => m.renderSettingsScreen(app)),
   }),
   route({ match: is('#/how-to-play'), render: (app) => renderHowToPlay(app) }),
-  route({ match: is('#/editor'), render: (app) => renderEditorScreen(app) }),
+  // The one editor (#159): new puzzles and drafts on either board, then each board's.
+  // Both load on demand: the share codes come with them.
+  route({
+    match: is('#/editor'),
+    render: (app, _, lazy) => lazy(import('./ui/screens/editorHub'), (m) => m.renderEditorHub(app)),
+  }),
+  route({
+    match: is('#/editor/flat'),
+    render: (app, _, lazy) =>
+      lazy(import('./ui/screens/editorScreen'), (m) => m.renderEditorScreen(app)),
+  }),
+  // Share links carry their board (#159): #/p/flat/<code> and #/p/cubed/<code>, each with
+  // /test for the editor's play-test. Cubed's old #/cubed/p/<code> still opens.
+  route({
+    match: (h) => /^#\/p\/flat\/([\w-]+)(\/test)?$/.exec(h),
+    render: (app, [, code, test], lazy) =>
+      lazy(import('./ui/screens/sharedPuzzle'), (m) =>
+        m.renderSharedPuzzle(app, code, Boolean(test)),
+      ),
+  }),
+  route({
+    game: 'cubed',
+    match: (h) => /^#\/p\/cubed\/([\w-]+(?:\/test)?)$/.exec(h),
+    render: (app, [, rest], lazy) =>
+      lazy(loadCubed(), (m) => m.renderCubed(app, `/p/${rest}`, lazy)),
+  }),
   // Free play (#153): a tab per board. The Cubed tab is Cubed's list, so it's Cubed's route.
   route({
     match: is('#/free/flat'),

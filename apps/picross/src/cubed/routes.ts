@@ -11,7 +11,7 @@ import { providePrefs } from '@picross/shared/game/prefs';
 import { applyTheme } from '@picross/shared/ui/theme';
 import { providePlayPrefs } from '@picross/play-block/ui/prefs';
 import { getSettings, updateSettings } from './game/settings';
-import { cubedHref, HOME } from './href';
+import { cubedHref, HOME, shareHref } from './href';
 import { editorTabs } from '../ui/components/editorTabs';
 import type { Lazy, Screen } from '../routes';
 import { renderHowToPlay } from './ui/screens/howToPlay';
@@ -64,7 +64,7 @@ const ROUTES: CubedRoute[] = [
       lazy(import('@picross/play-block/ui/screens/editor/editorScreen'), (m) =>
         m.renderEditorScreen(app, {
           home: HOME,
-          sharedHref: (code) => cubedHref(`/p/${code}`),
+          sharedHref: shareHref,
           tabs: editorTabs('cubed'),
         }),
       ),
