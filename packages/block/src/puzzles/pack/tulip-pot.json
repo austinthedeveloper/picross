@@ -1,0 +1,26 @@
+{
+  "id": "tulip-pot",
+  "name": "Tulips in a Pot",
+  "colors": {
+    "g": "green",
+    "o": "coral",
+    "p": "pink",
+    "r": "red",
+    "y": "yellow"
+  },
+  "layers": [
+    [".ooooooo.", ".ooooooo.", ".ooooooo.", ".ooooooo.", ".ooooooo."],
+    [".ooooooo.", ".ooooooo.", ".ooooooo.", ".ooooooo.", ".ooooooo."],
+    [".ooooooo.", ".ooooooo.", ".ooooooo.", ".ooooooo.", ".ooooooo."],
+    [".ooooooo.", ".ooooooo.", ".ooooooo.", ".ooooooo.", ".ooooooo."],
+    [".........", ".........", "..g.g.g..", ".........", "........."],
+    [".........", ".........", "..g.g.g..", ".........", "........."],
+    [".........", ".....yyy.", "..g.gyyy.", ".....yyy.", "........."],
+    [".........", ".rrr.yyy.", ".rrrgy.y.", ".rrr.yyy.", "........."],
+    [".........", ".rrppp...", ".r.ppp...", ".rrppp...", "........."],
+    [".........", "...ppp...", "...p.p...", "...ppp...", "........."]
+  ],
+  "hideRatio": 0.55,
+  "hide": "020a6f1980d00a0958a18ff3ef75f745000f3a9e1bb0b70",
+  "passes": 5
+}

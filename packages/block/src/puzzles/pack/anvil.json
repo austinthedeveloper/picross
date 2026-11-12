@@ -1,0 +1,86 @@
+{
+  "id": "anvil",
+  "name": "Anvil",
+  "colors": {
+    "k": "graphite",
+    "s": "stone",
+    "w": "wood"
+  },
+  "layers": [
+    [
+      "..wwwwwwwww..",
+      "..wwwwwwwww..",
+      "..wwwwwwwww..",
+      "..wwwwwwwww..",
+      "..wwwwwwwww..",
+      "..wwwwwwwww..",
+      "..wwwwwwwww.."
+    ],
+    [
+      "..wwwwwwwww..",
+      "..wwwwwwwww..",
+      "..wwwwwwwww..",
+      "..wwwwwwwww..",
+      "..wwwwwwwww..",
+      "..wwwwwwwww..",
+      "..wwwwwwwww.."
+    ],
+    [
+      ".............",
+      "....kkkkk....",
+      "....kkkkk....",
+      "....kkkkk....",
+      "....kkkkk....",
+      "....kkkkk....",
+      "............."
+    ],
+    [
+      ".............",
+      ".............",
+      ".....kkk.....",
+      ".....kkk.....",
+      ".....kkk.....",
+      ".............",
+      "............."
+    ],
+    [
+      ".............",
+      ".............",
+      ".....kkk.....",
+      ".....kkk.....",
+      ".....kkk.....",
+      ".............",
+      "............."
+    ],
+    [
+      ".............",
+      "..kkkkkkkkk..",
+      "..kkkkkkkkk..",
+      "k.kkkkkkkkk..",
+      "..kkkkkkkkk..",
+      "..kkkkkkkkk..",
+      "............."
+    ],
+    [
+      ".............",
+      "..kkkkkkkkk..",
+      "kkkkkkkkkkkkk",
+      "kkkkkkkkkkkkk",
+      "kkkkkkkkkkkkk",
+      "..kkkkkkkkk..",
+      "............."
+    ],
+    [
+      ".............",
+      "..sssssssss..",
+      "kkssssssssskk",
+      "ssssssssssskk",
+      "kkssssssssskk",
+      "..sssssssss..",
+      "............."
+    ]
+  ],
+  "hideRatio": 0.55,
+  "hide": "00428090ee209f7fdbfffd25a0079d1421408efbbebfb9eaff70a802edf2090",
+  "passes": 5
+}
