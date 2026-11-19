@@ -21,9 +21,19 @@ const visibleText = (page: Page) =>
     return out;
   });
 
-/** Builds the model on screen by taps: the tray's brick, then the plate, to the end. */
-async function buildByTaps(page: Page) {
+/**
+ * Puts the held brick in: Enter on the plate, which fills its first open ghost. A tap
+ * has to land on a ghost, which moves with the camera, so the tests place by key and
+ * `models.test.ts` checks the taps.
+ */
+async function putIn(page: Page) {
   const canvas = page.locator('canvas.build-canvas');
+  await canvas.focus();
+  await canvas.press('Enter');
+}
+
+/** Builds the model on screen: the tray's brick, then into the plate, to the end. */
+async function buildToTheEnd(page: Page) {
   await expect(screen(page)).toHaveAttribute('data-phase', 'build');
   for (let i = 0; i < 40; i++) {
     if ((await screen(page).getAttribute('data-phase')) !== 'build') break;
@@ -36,7 +46,7 @@ async function buildByTaps(page: Page) {
     // Keep the brick in hand, or pick up the last kind in the tray.
     const held = page.getByRole('group', { name: 'Bricks' }).locator('[aria-pressed="true"]');
     if ((await held.count()) === 0) await bricks.last().click();
-    await canvas.click();
+    await putIn(page);
   }
   await expect(screen(page)).toHaveAttribute('data-phase', 'shelf');
 }
@@ -62,7 +72,7 @@ test('the picker is big picture cards, with nothing to read', async ({ page }) =
   expect(overflow).toBe(false);
 });
 
-test('a build by taps goes on the shelf, and plays its moment again', async ({ page }) => {
+test('a whole build goes on the shelf, and plays its moment again', async ({ page }) => {
   await page.goto('/#/bricks');
   await page.getByRole('link', { name: 'Jack' }).click();
   await expect(page).toHaveURL(/#\/bricks\/jack$/);
@@ -73,7 +83,7 @@ test('a build by taps goes on the shelf, and plays its moment again', async ({ p
   await expect(page.getByRole('button', { name: /turn/i })).toHaveCount(0);
   expect(await visibleText(page)).toEqual([]);
 
-  await buildByTaps(page);
+  await buildToTheEnd(page);
   const shelf = page.getByRole('region', { name: 'Shelf' });
   await expect(shelf.getByRole('link', { name: 'Jack' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Build it again' })).toBeVisible();
@@ -121,13 +131,13 @@ test('the tray shows every kind the layer needs, wrapping at phone width', async
   const kind = (await brick.getAttribute('data-kind'))!;
   const before = Number(await brick.getAttribute('data-count'));
   await brick.click();
-  await page.locator('canvas.build-canvas').click();
+  await putIn(page);
   const after = page.locator(`.bk-brick-button[data-kind="${kind}"]`);
   if (before > 1) await expect(after.locator('.bk-pip')).toHaveCount(before - 1);
   else await expect(after).toHaveCount(0);
 });
 
-test('a tap anywhere on the plate snaps the brick into a ghost', async ({ page }) => {
+test('a tap away from every ghost bounces, and the brick stays in hand', async ({ page }) => {
   await page.goto('/#/bricks/car');
   await expect(screen(page)).toHaveAttribute('data-phase', 'build');
   // The car's wheels: one kind on its bottom layer.
@@ -139,10 +149,13 @@ test('a tap anywhere on the plate snaps the brick into a ghost', async ({ page }
   await expect(brick).toHaveAttribute('data-count', '4');
   await brick.click();
   await expect(brick).toHaveAttribute('aria-pressed', 'true');
-  // The stage's corner, far from any ghost.
+  // The stage's corner, far from any ghost: nothing goes in.
   await page.locator('canvas.build-canvas').click({ position: { x: 20, y: 20 } });
+  await expect(brick).toHaveAttribute('data-count', '4');
+  await expect(brick).toHaveAttribute('aria-pressed', 'true');
+  // In its ghost, it goes in, and the next one's still in hand.
+  await putIn(page);
   await expect(brick).toHaveAttribute('data-count', '3');
-  // Still in hand: the next tap places the next one.
   await expect(brick).toHaveAttribute('aria-pressed', 'true');
 });
 
@@ -150,7 +163,7 @@ test('a build left partway picks up on its layer', async ({ page }) => {
   await page.goto('/#/bricks/car');
   await expect(screen(page)).toHaveAttribute('data-layer', '1');
   await trayBricks(page).click();
-  for (let i = 0; i < 4; i++) await page.locator('canvas.build-canvas').click();
+  for (let i = 0; i < 4; i++) await putIn(page);
   await expect(screen(page)).toHaveAttribute('data-layer', '2');
   await page.reload();
   await expect(screen(page)).toHaveAttribute('data-phase', 'build');
@@ -169,7 +182,7 @@ test("the grown-ups' corner opens only when held for three seconds", async ({ pa
   await page.goto('/#/bricks/car');
   await expect(screen(page)).toHaveAttribute('data-phase', 'build');
   await trayBricks(page).click();
-  for (let i = 0; i < 4; i++) await page.locator('canvas.build-canvas').click();
+  for (let i = 0; i < 4; i++) await putIn(page);
   await expect(screen(page)).toHaveAttribute('data-layer', '2');
 
   const panel = page.getByRole('dialog', { name: 'Grown-ups' });

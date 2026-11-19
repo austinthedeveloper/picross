@@ -4,7 +4,7 @@
  * which split into 20 bricks or fewer, and the trio's dog. The pack's are its own puzzles,
  * not copies, so a change to one changes it here too (`models.test.ts` keeps them small).
  */
-import type { BuildRules } from '@picross/block/build/build';
+import { SNAP_REACH, type BuildRules } from '@picross/block/build/build';
 import { buildModel, type BrickModel } from '@picross/block/build/models';
 
 /** In the picker's order: fewest bricks first. */
@@ -79,12 +79,13 @@ export const BRICKS_MODELS = [
 ] as const;
 
 /**
- * How a build plays for 3- and 4-year-olds: a tap anywhere snaps the brick into the nearest
- * open ghost of its kind, and it turns itself to fit. The tray shows every kind the layer
- * needs, as the build stage's does (`oneKind` is there for a younger setting, if one's
- * wanted).
+ * How a build plays for 3- and 4-year-olds: a tap on or next to a ghost of the brick's kind
+ * (the build stage's reach, a cube) snaps it in, and it turns itself to fit. A tap anywhere
+ * else bounces, so the child finds the spot, not just the plate. The tray shows every kind
+ * the layer needs, as the build stage's does (`oneKind` is there for a younger setting, if
+ * one's wanted).
  */
-export const KIDS_RULES: BuildRules = { reach: Infinity, anyTurn: true };
+export const KIDS_RULES: BuildRules = { reach: SNAP_REACH, anyTurn: true };
 
 /** One of the route's models, or undefined for any other id. */
 export const bricksModel = (id: string): BrickModel | undefined =>
