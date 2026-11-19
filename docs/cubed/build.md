@@ -50,16 +50,18 @@ Drag the plate to look around (right-drag works too), scroll to zoom, or **Reset
 
 ## The code
 
-| What                  | Where                                                                            |
-| --------------------- | -------------------------------------------------------------------------------- |
-| Splitting into bricks | `packages/block/src/build/bricks.ts` (`splitIntoBricks`)                         |
-| A build in progress   | `packages/block/src/build/build.ts` (`BrickBuild`)                               |
-| The debug link        | `packages/block/src/build/entry.ts` (`parseBuildPath`, `startBuild`)             |
-| The trio's puzzles    | `packages/{grid,block}/src/puzzles/trio/` (with `trio.ts` to load them)          |
-| The view              | `packages/play-block/src/ui/board/brickView.ts` (three.js)                       |
-| The screen            | `packages/play-block/src/ui/screens/build.ts`, `src/styles/build.css`            |
-| The 2D and 3D stages  | `apps/picross/src/ui/screens/trioSession.ts`, `src/cubed/ui/screens/trio.ts`     |
-| Routes                | `#/trio/<id>` in `apps/picross/src/routes.ts`; the rest in `src/cubed/routes.ts` |
+| What                   | Where                                                                            |
+| ---------------------- | -------------------------------------------------------------------------------- |
+| Splitting into bricks  | `packages/block/src/build/bricks.ts` (`splitIntoBricks`)                         |
+| A build in progress    | `packages/block/src/build/build.ts` (`BrickBuild`)                               |
+| Where models come from | `packages/block/src/build/models.ts` (`buildModel`, `BrickModel`)                |
+| The debug link         | `packages/block/src/build/entry.ts` (`parseBuildPath`, `startBuild`)             |
+| The trio's puzzles     | `packages/{grid,block}/src/puzzles/trio/` (with `trio.ts` to load them)          |
+| The view               | `packages/play-block/src/ui/board/brickView.ts` (three.js)                       |
+| Carrying from the tray | `packages/play-block/src/ui/board/brickInput.ts` (`carryFromTray`, no three.js)  |
+| The screen             | `packages/play-block/src/ui/screens/build.ts`, `src/styles/build.css`            |
+| The 2D and 3D stages   | `apps/picross/src/ui/screens/trioSession.ts`, `src/cubed/ui/screens/trio.ts`     |
+| Routes                 | `#/trio/<id>` in `apps/picross/src/routes.ts`; the rest in `src/cubed/routes.ts` |
 
 **The split** works layer by layer from the bottom with the set 2×4, 2×2, 1×4, 1×2, 1×1.
 Each brick is one color and covers only cubes of that color. A layer fills greedily: the
@@ -74,6 +76,15 @@ cube is covered once, no brick spans two colors or leaves the shape, and the out
 reshuffles both dailies' whole cycle (`packages/shared/src/puzzles/pairs.ts`). The dog's 2D
 picture is its 3D block seen from the side. `npm -w packages/block run puzzles` covers
 `trio/` as well as the pack. Nothing in the trio is saved.
+
+**Models.** `buildModel(id)` finds any model to build: the trio's, Brick kids' own
+(`puzzles/bricks/`), free play's pack, then the story's. One id is one model: their ids
+never clash (`build/models.test.ts`), except a story puzzle named after the same 2D puzzle
+as a pack one, where the pack's wins. The build and its view take a `BrickModel` (id,
+name, dims, solution and palette), which every `Puzzle` is; they never need its clues.
+The trio's carve (`#/cubed/trio/<id>`) takes only nonograms: a trio puzzle or a pack
+puzzle. The build's ending shows the 2D picture only for a real pair (the trio's, or a pack
+puzzle with a 2D one of the same id), never for a Brick kids toy that shares a name.
 
 `BrickBuild` takes `BuildRules` (a longer snap reach, bricks that turn themselves, one kind
 in the tray at a time) and `BrickView` takes `BrickViewOptions` (a camera that sways, ghosts

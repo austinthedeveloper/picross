@@ -39,7 +39,7 @@ function frame(d: Dims, px: number) {
  * cubes (a diorama's placed pieces).
  */
 export function shapePicture(
-  puzzle: Puzzle,
+  puzzle: Pick<Puzzle, 'dims' | 'solution' | 'palette'>,
   px = 96,
   only?: (cell: number) => boolean,
 ): HTMLCanvasElement {

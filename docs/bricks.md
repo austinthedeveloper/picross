@@ -72,8 +72,10 @@ have no other link to.
   tractor) and things kids know (ice-pop, daisy-pot, rainbow, birthday-cake, cottage,
   apple-tree). Made for building, not nonograms: no hidden clues, and out of free play and
   the dailies. Each is at most 8 cubes a side, five colors and 8 layers, and 7 to 33 bricks.
-  Their ids are their own, never a pack, story or trio id (`bricks.test.ts`), and
-  `buildModel` finds them, so `#/cubed/build/<id>` opens them too. The build camera sees
+  Their ids are their own, never a pack, story or trio id (`build/models.test.ts`), and
+  `buildModel` finds them, so `#/cubed/build/<id>` opens them too. They're toys, not
+  puzzles: nothing offers them to carve (`#/cubed/trio/<id>` takes only trio and pack
+  puzzles), since their clues are never checked. The build camera sees
   the front and the left, so faces and details go there.
 - **The Cubed pack's ten** that split into 20 bricks or fewer (jack, steps, car, table,
   sailboat, cactus, heart, chair, mushroom, wheelbarrow), read through `buildModel`, not
@@ -95,7 +97,9 @@ have no other link to.
 | Sounds                   | `src/bricks/sounds.ts`, on shared's `playNotes`                             |
 | Styles                   | `src/bricks/styles/bricks.css`                                              |
 | The build's rules        | `BuildRules` in `packages/block/src/build/build.ts`                         |
+| Where models come from   | `buildModel` and `BrickModel` in `packages/block/src/build/models.ts`       |
 | The view's extras        | `BrickViewOptions` in `packages/play-block/src/ui/board/brickView.ts`       |
+| Carrying from the tray   | `carryFromTray` in `packages/play-block/src/ui/board/brickInput.ts`         |
 
 The kids' version is options on the build stage's code, not a fork of it. `BrickBuild`
 takes `BuildRules`: `reach` (how far a drop can be from a ghost; `Infinity` here), `anyTurn`

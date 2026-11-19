@@ -5,8 +5,7 @@
  * not copies, so a change to one changes it here too (`models.test.ts` keeps them small).
  */
 import type { BuildRules } from '@picross/block/build/build';
-import { buildModel } from '@picross/block/puzzles/trio';
-import type { Puzzle } from '@picross/block/puzzles/format';
+import { buildModel, type BrickModel } from '@picross/block/build/models';
 
 /** In the picker's order: fewest bricks first. */
 export const BRICKS_MODELS = [
@@ -58,5 +57,5 @@ export const BRICKS_MODELS = [
 export const KIDS_RULES: BuildRules = { reach: Infinity, anyTurn: true };
 
 /** One of the route's models, or undefined for any other id. */
-export const bricksModel = (id: string): Puzzle | undefined =>
+export const bricksModel = (id: string): BrickModel | undefined =>
   (BRICKS_MODELS as readonly string[]).includes(id) ? buildModel(id) : undefined;

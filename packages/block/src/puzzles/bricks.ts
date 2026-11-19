@@ -1,7 +1,7 @@
 /**
  * Brick kids' own models (docs/brick-kids.md): small, chunky toys made for building, not
  * nonograms, so they have no hidden clues and no place in free play or the daily. Their
- * ids are their own: none is a pack, story or trio id (`bricks.test.ts`).
+ * ids are their own: none is a pack, story or trio id (`build/models.test.ts`).
  */
 import { parsePuzzle, type Puzzle, type PuzzleFile } from './format';
 

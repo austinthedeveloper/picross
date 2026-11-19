@@ -1,12 +1,11 @@
 /**
- * Straight into a build, for testing it: `#/cubed/build/<id>` opens the build of a puzzle's
- * solved block, skipping the 2D and 3D puzzles, and `?layer=N` starts on layer N (1 is the
+ * Straight into a build, for testing it: `#/cubed/build/<id>` opens the build of any model
+ * (`buildModel`), skipping the 2D and 3D puzzles, and `?layer=N` starts on layer N (1 is the
  * bottom), with the layers under it built. The trio's 3D puzzle goes to the same screen
  * when it's solved.
  */
-import { buildModel } from '../puzzles/trio';
-import type { Puzzle } from '../puzzles/format';
 import { BrickBuild } from './build';
+import { buildModel, type BrickModel } from './models';
 
 export interface BuildEntry {
   id: string;
@@ -22,8 +21,8 @@ export function parseBuildPath(path: string): BuildEntry | null {
   return { id: m[1], layer: Number.isInteger(layer) && layer > 1 ? layer - 1 : 0 };
 }
 
-/** The puzzle and its build, ready to play, or null for an unknown puzzle. */
-export function startBuild(entry: BuildEntry): { puzzle: Puzzle; build: BrickBuild } | null {
-  const puzzle = buildModel(entry.id);
-  return puzzle ? { puzzle, build: BrickBuild.fromShape(puzzle, entry.layer) } : null;
+/** The model and its build, ready to play, or null for an unknown id. */
+export function startBuild(entry: BuildEntry): { model: BrickModel; build: BrickBuild } | null {
+  const model = buildModel(entry.id);
+  return model ? { model, build: BrickBuild.fromShape(model, entry.layer) } : null;
 }
