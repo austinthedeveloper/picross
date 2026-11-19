@@ -201,7 +201,7 @@ export function renderBuildScreen(root: HTMLElement, opts: BuildOptions): () => 
     if (!corner) return view.hideHeld();
     const slot = build.snapTarget(held.size, held.color, rotation, corner.x, corner.z);
     const at = slot === null ? corner : build.current[slot].position;
-    view.moveHeld(at.x, at.z, held.size, rotation, slot !== null);
+    view.moveHeld(at.x, at.z, held.size, rotation, slot);
   }
 
   function drop(x: number, y: number) {

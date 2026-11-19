@@ -66,6 +66,11 @@ export class BrickView {
   private pileGroup = new Group();
   private held: Group | null = null;
   private heldKey = '';
+  /**
+   * The ghost the held brick is snapped into, hidden meanwhile: two see-through boxes in
+   * the same place fight over which face is in front, and the sides flicker.
+   */
+  private coveredGhost: Group | null = null;
   private pieces = new Map<string, Piece>();
   private ghostMeshes = new Map<number, Group>();
   private pile: { key: string; mesh: Group }[] = [];
@@ -226,6 +231,7 @@ export class BrickView {
   showGhost(fade = true): void {
     this.ghosts.clear();
     this.ghostMeshes.clear();
+    this.coveredGhost = null;
     const layer = this.build.layer;
     const edge = new Color(token('--ink'));
     this.build.current.forEach((brick, slot) => {
@@ -287,6 +293,7 @@ export class BrickView {
   hold(kind: { size: BrickSize; color: number; rotation: Rotation } | null): void {
     if (this.held) this.turntable.remove(this.held);
     this.held = null;
+    this.cover(null);
     this.heldKey = kind ? `${kind.size}:${kind.color}` : '';
     if (kind) {
       const material = this.material(`held:${kind.color}`, () => {
@@ -305,18 +312,31 @@ export class BrickView {
     this.invalidate();
   }
 
-  /** Shows the held brick at a corner of the current layer: snug in a slot, or hovering. */
-  moveHeld(x: number, z: number, size: BrickSize, rotation: Rotation, snapped: boolean): void {
+  /**
+   * Shows the held brick at a corner of the current layer: snug in `slot` (whose ghost it
+   * covers), or hovering just above when it's in no slot.
+   */
+  moveHeld(x: number, z: number, size: BrickSize, rotation: Rotation, slot: number | null): void {
     if (!this.held) return;
     this.held.visible = true;
     this.held.position.copy(this.placeOf(x, this.layerY(), z, size, rotation));
-    if (!snapped) this.held.position.y += 0.35;
+    if (slot === null) this.held.position.y += 0.35;
+    this.cover(slot === null ? null : (this.ghostMeshes.get(slot) ?? null));
     this.invalidate();
   }
 
   hideHeld(): void {
     if (this.held) this.held.visible = false;
+    this.cover(null);
     this.invalidate();
+  }
+
+  /** Hides the ghost under the held brick, and shows the one it covered before. */
+  private cover(ghost: Group | null): void {
+    if (this.coveredGhost === ghost) return;
+    if (this.coveredGhost) this.coveredGhost.visible = true;
+    if (ghost) ghost.visible = false;
+    this.coveredGhost = ghost;
   }
 
   /**
