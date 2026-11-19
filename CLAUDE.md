@@ -10,7 +10,9 @@ are in `docs/cubed/`.
 
 - `apps/picross/`: the app (workspace `picross`). The 2D game's routes are `#/…`; Picross
   Cubed's are `#/cubed/…`, in `src/cubed/` (it used to be austinthedeveloper/picross-3d, then
-  `apps/cubed`), loaded with one `import('./cubed/routes')` from `src/routes.ts`. `/3d/`
+  `apps/cubed`), loaded with one `import('./cubed/routes')` from `src/routes.ts`. Brick kids,
+  a prototype building game for little kids, is `#/bricks/…` in `src/bricks/`, loaded the
+  same way (`docs/bricks.md`). `/3d/`
   (`public/3d/`) only sends Cubed's old links on and retires its old service worker.
 - `packages/shared/` (`@picross/shared`): tokens, base and story styles, sound, haptics,
   theme, `dom`, `motion`, `storage`, `random`, puzzle ids, the shared buttons, and the art

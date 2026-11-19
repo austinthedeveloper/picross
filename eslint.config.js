@@ -3,6 +3,51 @@ import tseslint from 'typescript-eslint';
 import prettier from 'eslint-config-prettier';
 import globals from 'globals';
 
+/** The app's lazy chunks: a folder of src/ that only src/routes.ts loads, with import(). */
+const CHUNKS = [
+  {
+    dir: 'cubed',
+    message: "Cubed's screens load with import('./cubed/routes') (src/routes.ts).",
+  },
+  {
+    dir: 'bricks',
+    message: "The bricks route loads with import('./bricks/routes') (src/routes.ts).",
+  },
+];
+
+/** The lint blocks for `CHUNKS`: the app outside them, then each one (it may use itself). */
+function appChunks() {
+  const rulesFor = (chunks) => ({
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: chunks.map(({ dir, message }) => ({
+          group: [`**/${dir}`, `**/${dir}/**`],
+          message,
+        })),
+      },
+    ],
+    'no-restricted-syntax': [
+      'error',
+      ...chunks.map(({ dir, message }) => ({
+        selector: `ImportExpression > Literal[value=/(^|\\/)${dir}(\\/(?!routes$)|$)/]`,
+        message,
+      })),
+    ],
+  });
+  return [
+    {
+      files: ['apps/picross/src/**'],
+      ignores: CHUNKS.map(({ dir }) => `apps/picross/src/${dir}/**`),
+      rules: rulesFor(CHUNKS),
+    },
+    ...CHUNKS.map((chunk) => ({
+      files: [`apps/picross/src/${chunk.dir}/**`],
+      rules: rulesFor(CHUNKS.filter((c) => c !== chunk)),
+    })),
+  ];
+}
+
 export default tseslint.config(
   {
     ignores: [
@@ -215,31 +260,9 @@ export default tseslint.config(
       ],
     },
   },
-  {
-    // Picross Cubed's screens (src/cubed/) load with one import('./cubed/routes') from
-    // src/routes.ts, so neither they nor three.js are in the first download (npm run
-    // check:budget checks the build too). Nothing else in the app reaches into src/cubed/.
-    files: ['apps/picross/src/**'],
-    ignores: ['apps/picross/src/cubed/**'],
-    rules: {
-      'no-restricted-imports': [
-        'error',
-        {
-          patterns: [
-            {
-              group: ['**/cubed', '**/cubed/**'],
-              message: "Cubed's screens load with import('./cubed/routes') (src/routes.ts).",
-            },
-          ],
-        },
-      ],
-      'no-restricted-syntax': [
-        'error',
-        {
-          selector: 'ImportExpression > Literal[value=/(^|\\/)cubed(\\/(?!routes$)|$)/]',
-          message: "Cubed's screens load with import('./cubed/routes') (src/routes.ts).",
-        },
-      ],
-    },
-  },
+  // Picross Cubed's screens (src/cubed/) and the bricks route's (src/bricks/) each load with
+  // one import() from src/routes.ts, so neither they nor three.js are in the first download
+  // (npm run check:budget checks the build too). Nothing else in the app reaches into them,
+  // and neither reaches into the other.
+  ...appChunks(),
 );

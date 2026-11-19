@@ -11,7 +11,8 @@
  *   Raising a budget is a one-line change there, with the reason in the commit.
  * - Picross Cubed (src/cubed/routes.ts, everything under #/cubed) isn't a lazy chunk of its
  *   own, or three.js is in it or its static imports: Cubed's list opens without three.js too,
- *   which loads only with the screens that draw a block.
+ *   which loads only with the screens that draw a block. The same for the bricks route
+ *   (src/bricks/routes.ts, #/bricks): its picker opens without three.js.
  *
  *   node scripts/check-bundle-budget.mjs [dist]
  */
@@ -24,7 +25,11 @@ const budgetFile = new URL('./bundle-budget.json', import.meta.url);
 const budgets = JSON.parse(readFileSync(budgetFile, 'utf8'));
 /** The app, and Cubed's routes in it (one lazy chunk, loaded by src/routes.ts). */
 const APP = { key: 'picross', name: 'Picross', dir: dist };
-const CUBED = 'src/cubed/routes.ts';
+/** The app's lazy routes: each one chunk of its own, without three.js. */
+const LAZY_ROUTES = [
+  { name: 'Picross Cubed', dir: 'src/cubed/' },
+  { name: 'Brick kids', dir: 'src/bricks/' },
+];
 /** How far over its budget an entry may grow before this fails. */
 const ALLOWANCE = 0.1;
 
@@ -138,36 +143,44 @@ function check({ key, name, dir }) {
   }
   console.log(`  ${js.length + css.length} files: ${[...js, ...css].join(', ')}`);
 
-  // Picross Cubed: one lazy chunk, without three.js. Its list is a screen like any other, so
-  // three.js waits for a screen with a block.
-  // Its key is its path, or (when Rollup put modules its screens share in with it) its
-  // file: then it's the lazy chunk named routes that loads Cubed's screens.
-  const cubedKey = Object.keys(manifest).find(
+  for (const routes of LAZY_ROUTES)
+    checkLazyRoutes(manifest, first, routes, { gz, filesOf, noThree });
+}
+
+/**
+ * One of the app's lazy routes (Picross Cubed, the bricks route): one lazy chunk, without
+ * three.js. Its first screen is like any other, so three.js waits for a screen with a block.
+ * Its key is its path, or (when Rollup put modules its screens share in with it) its file:
+ * then it's the lazy chunk named routes that loads its screens.
+ */
+function checkLazyRoutes(manifest, first, { name, dir }, { gz, filesOf, noThree }) {
+  const path = `${dir}routes.ts`;
+  const key = Object.keys(manifest).find(
     (k) =>
-      k === CUBED ||
+      k === path ||
       (manifest[k].isDynamicEntry &&
         manifest[k].name === 'routes' &&
-        (manifest[k].dynamicImports ?? []).some((d) => d.startsWith('src/cubed/'))),
+        (manifest[k].dynamicImports ?? []).some((d) => d.startsWith(dir))),
   );
-  const cubed = cubedKey && manifest[cubedKey];
-  if (!cubed?.isDynamicEntry) {
+  const chunk = key && manifest[key];
+  if (!chunk?.isDynamicEntry) {
     fail(
-      `Picross Cubed: ${CUBED} isn't a lazy chunk of its own. src/routes.ts loads it with ` +
-        "import('./cubed/routes'); nothing else imports it statically.",
+      `${name}: ${path} isn't a lazy chunk of its own. src/routes.ts loads it with ` +
+        `import('./${dir.slice(4)}routes'); nothing else imports it statically.`,
     );
     return;
   }
-  if (first.has(cubedKey)) fail(`Picross Cubed: ${CUBED} is in the first download.`);
-  const opening = closure(manifest, cubedKey);
+  if (first.has(key)) fail(`${name}: ${path} is in the first download.`);
+  const opening = closure(manifest, key);
   noThree(
     opening,
-    "Picross Cubed: three.js loads with Cubed's routes",
-    'Import its screens with a block with import() (as cubed/routes.ts does).',
+    `${name}: three.js loads with its routes`,
+    `Import its screens with a block with import() (as ${dir.slice(4)}routes.ts does).`,
   );
-  // What opening Cubed adds to the first download.
+  // What opening it adds to the first download.
   const added = filesOf([...opening.keys()].filter((k) => !first.has(k)));
   console.log(
-    `Picross Cubed (${CUBED}, lazy): ${kB(gz(added.js))} JS, ${kB(gz(added.css))} CSS gzipped, ` +
+    `${name} (${path}, lazy): ${kB(gz(added.js))} JS, ${kB(gz(added.css))} CSS gzipped, ` +
       `in ${added.js.length + added.css.length} files: ${[...added.js, ...added.css].join(', ')}`,
   );
 }
@@ -178,5 +191,5 @@ if (failures.length) {
   process.exit(1);
 }
 console.log(
-  "The first download is within budget, and neither it nor Cubed's routes have three.js.",
+  "The first download is within budget, and neither it nor the lazy routes (Cubed's, the bricks route's) have three.js.",
 );

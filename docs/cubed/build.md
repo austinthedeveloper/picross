@@ -75,5 +75,10 @@ reshuffles both dailies' whole cycle (`packages/shared/src/puzzles/pairs.ts`). T
 picture is its 3D block seen from the side. `npm -w packages/block run puzzles` covers
 `trio/` as well as the pack. Nothing in the trio is saved.
 
+`BrickBuild` takes `BuildRules` (a longer snap reach, bricks that turn themselves, one kind
+in the tray at a time) and `BrickView` takes `BrickViewOptions` (a camera that sways, ghosts
+that bob, a flight into the slot). The build stage here uses none of them; the bricks route
+for little kids ([../bricks.md](../bricks.md)) uses them all.
+
 Bricks here are generic toy bricks with this game's own stud: wide, slightly tapered, with
 a smaller step on top.
