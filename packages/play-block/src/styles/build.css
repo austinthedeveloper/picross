@@ -1,0 +1,158 @@
+/* The build: the tray of bricks, the tools beside it, and the end's three pictures. */
+
+.build-coach {
+  min-height: 1.5em;
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-weight: 600;
+  text-align: center;
+}
+
+.build-stage .build-canvas {
+  cursor: grab;
+}
+
+.build-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px 16px;
+  margin: 10px 0 6px;
+}
+
+.build-tray {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  min-height: 64px;
+}
+
+.build-tools {
+  display: flex;
+  gap: 8px;
+}
+
+.build-tools button {
+  min-height: 44px;
+}
+
+.brick-kind {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 56px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  touch-action: none;
+  cursor: grab;
+  transition: transform 120ms ease;
+}
+
+.brick-kind.held {
+  outline: 3px solid var(--accent);
+  outline-offset: 1px;
+  transform: translateY(-2px);
+}
+
+/* A brick from above: its footprint, with a stud per cube. */
+.brick-icon {
+  --cell: 11px;
+  display: inline-block;
+  width: calc(var(--sx) * var(--cell));
+  height: calc(var(--sz) * var(--cell));
+  border-radius: 3px;
+  background-color: var(--brick);
+  background-image: radial-gradient(
+    circle at center,
+    color-mix(in srgb, var(--brick), var(--surface) 40%) 0 34%,
+    transparent 38%
+  );
+  background-size: var(--cell) var(--cell);
+  box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--brick), var(--ink) 30%);
+}
+
+.brick-count {
+  font-weight: 700;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.build-end {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  width: min(460px, calc(100% - 24px));
+  padding: 8px 12px 10px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface), transparent 12%);
+  text-align: center;
+  animation: build-end-in 400ms ease-out;
+}
+
+.build-end h2 {
+  margin: 0;
+  color: var(--accent);
+  font-size: 1.25rem;
+}
+
+.build-end h2 .end-note {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.build-end .trio {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 14px;
+  margin: 6px 0 8px;
+}
+
+.build-end .end-actions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+@keyframes build-end-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 12px);
+  }
+}
+
+.trio-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+}
+
+.trio-card figcaption {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.trio-built {
+  max-height: 64px;
+  max-width: 80px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brick-kind {
+    transition: none;
+  }
+
+  .build-end {
+    animation: none;
+  }
+}

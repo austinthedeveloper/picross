@@ -27,8 +27,11 @@ import { chooseHidden } from '../src/puzzles/hide';
 import { parseSheet } from '../src/puzzles/sheet';
 
 const PUZZLES = join(import.meta.dirname, '../src/puzzles');
-/** Free-play puzzles, and story puzzles (named after the 2D puzzle their encounter uses). */
-const DIRS = ['pack', 'story'].map((d) => join(PUZZLES, d)).filter((d) => existsSync(d));
+/**
+ * Free-play puzzles, story puzzles (named after the 2D puzzle their encounter uses), and the
+ * trio's (draw, carve, build: src/puzzles/trio.ts).
+ */
+const DIRS = ['pack', 'story', 'trio'].map((d) => join(PUZZLES, d)).filter((d) => existsSync(d));
 const args = process.argv.slice(2);
 const all = args.includes('--all');
 const sheetAt = args.indexOf('--sheet');

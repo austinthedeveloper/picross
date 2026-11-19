@@ -7,6 +7,9 @@
 import './styles/select.css';
 import '@picross/play-block/styles/editor.css';
 import { getPuzzle } from '@picross/block/puzzles/index';
+import { buildModel } from '@picross/block/puzzles/trio';
+import { parseBuildPath, startBuild } from '@picross/block/build/entry';
+import { trioPicture } from '@picross/grid/puzzles/trio';
 import { providePrefs } from '@picross/shared/game/prefs';
 import { applyTheme } from '@picross/shared/ui/theme';
 import { providePlayPrefs } from '@picross/play-block/ui/prefs';
@@ -32,6 +35,43 @@ const ROUTES: CubedRoute[] = [
       const puzzle = getPuzzle(id);
       if (!puzzle) return location.replace(cubedHref());
       return lazy(import('./ui/screens/gameScreen'), (m) => m.renderGameScreen(app, puzzle));
+    },
+  },
+  {
+    // The trio's block (a prototype): carve it, then build it.
+    match: /^\/trio\/([\w-]+)$/,
+    render: (app, [, id], lazy) => {
+      const puzzle = buildModel(id);
+      if (!puzzle) return location.replace(cubedHref());
+      return lazy(import('./ui/screens/trio'), (m) => m.renderTrioCarve(app, puzzle));
+    },
+  },
+  {
+    // The build: any puzzle's solved block, as bricks. Straight in for testing, with
+    // ?layer=N to start partway (docs/cubed/how-to.md).
+    match: /^\/build\/[\w-]+(?:\?.*)?$/,
+    render: (app, [path], lazy) => {
+      const entry = parseBuildPath(path);
+      if (!entry || !buildModel(entry.id)) return location.replace(cubedHref());
+      const draw = (m: typeof import('@picross/play-block/ui/screens/build')) => {
+        const { puzzle, build } = startBuild(entry)!;
+        const flat = trioPicture(entry.id)?.solution;
+        return m.renderBuildScreen(app, {
+          puzzle,
+          build,
+          flat,
+          home: '#/',
+          again: () => {
+            cleanup?.();
+            cleanup = draw(m);
+          },
+        });
+      };
+      let cleanup: (() => void) | undefined;
+      return lazy(import('@picross/play-block/ui/screens/build'), (m) => {
+        cleanup = draw(m);
+        return () => cleanup?.();
+      });
     },
   },
   {

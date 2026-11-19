@@ -27,6 +27,8 @@ import { renderHowToPlay } from './ui/screens/howToPlay';
 import { renderMuralScreen, renderMuralTile } from './ui/screens/mural';
 import { renderFreePlay } from './ui/screens/freePlay';
 import { freePlaySession } from './ui/screens/freePlaySession';
+import { trioSession } from './ui/screens/trioSession';
+import { trioPicture } from '@picross/grid/puzzles/trio';
 import { renderHome } from './ui/screens/home';
 
 /** What a screen leaves for the router: a cleanup to run before the next screen, if any. */
@@ -87,6 +89,11 @@ export const ROUTES: Route[] = [
   route({
     match: (h) => getPuzzle(/^#\/play\/([\w-]+)$/.exec(h)?.[1] ?? ''),
     render: (app, puzzle) => renderGameScreen(app, puzzle, freePlaySession(puzzle)),
+  }),
+  route({
+    // The trio (a prototype): draw it here, carve it at #/cubed/trio/<id>, then build it.
+    match: (h) => trioPicture(/^#\/trio\/([\w-]+)$/.exec(h)?.[1] ?? ''),
+    render: (app, puzzle) => renderGameScreen(app, puzzle, trioSession(puzzle)),
   }),
   route({
     match: (h) => getScene(/^#\/scene\/([\w-]+)$/.exec(h)?.[1] ?? ''),
