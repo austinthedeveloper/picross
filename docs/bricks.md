@@ -38,12 +38,13 @@ Words are only in the grown-ups' corner and for screen readers.
    been built wears a star. Above them is the **shelf**: every toy built so far.
 2. **A build** opens with the pop: the toy shows whole, then flies apart into a pile around
    the plate. The bottom layer's ghost fades in.
-3. **The tray** holds one kind of brick at a time, biggest first, drawn turned the way its
-   ghost is. Tap it to pick it up: its ghosts glow and bob.
+3. **The tray** shows every kind of brick the layer still needs, as the build stage's
+   does, each drawn turned the way its ghost is, with a dot in its color for each one left
+   (a count to see, not read). The buttons wrap at phone width. Tap one to pick it up: its
+   ghosts glow and bob.
 4. **Tap anywhere on the plate**: the brick flies into the nearest open ghost of its kind,
    turning itself on the way if it has to. It stays in hand while there are more of that
-   kind; when there aren't, the next kind slides into the tray. Dragging works too, but is
-   never needed. There's no Turn button, no R key, and no way to miss.
+   kind; when there aren't, tap another. Dragging works too, but is never needed. There's no Turn button, no R key, and no way to miss.
 5. **A layer done** plays a little tune, and the camera rises to the next. The camera looks
    after itself: it sways a little on its own, with no orbit or zoom.
 6. **The toy done** turns on its plate, hops and bursts, with a longer tune. Then a picture
@@ -85,7 +86,8 @@ that each builds by taps.
 
 The kids' version is options on the build stage's code, not a fork of it. `BrickBuild`
 takes `BuildRules`: `reach` (how far a drop can be from a ghost; `Infinity` here), `anyTurn`
-(a brick fits either way round) and `oneKind` (the tray offers the biggest kind left).
+(a brick fits either way round) and `oneKind` (the tray offers only the biggest kind left;
+not used here, kept for a younger setting).
 `BrickView` takes `drift` (the camera sways) and `bob` (lit ghosts pulse and bob),
 `placed()` takes where the brick flew from, and `celebrate()` takes `middle` and `hops`.
 Left out, each behaves as it always has, so Cubed's build stage is unchanged; its tests
@@ -105,5 +107,5 @@ colors or packaging; no ads, accounts, links out or tracking.
 
 The concept's open questions, still open: free building on an empty plate, a voice, new
 models made for kids, chunky versions of big pack models, a toy that comes to life in its
-own way (a dog that wags, a car that drives), an older kids' setting (the whole tray, a
-shorter reach), a tablet-first layout, and an app of its own (`apps/bricks`).
+own way (a dog that wags, a car that drives), an older kids' setting (a shorter reach,
+turning by hand) or a younger one (one kind at a time, `oneKind`), a tablet-first layout, and an app of its own (`apps/bricks`).

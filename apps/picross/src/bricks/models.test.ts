@@ -1,12 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { BRICK_SIZES, splitIntoBricks } from '@picross/block/build/bricks';
+import { splitIntoBricks } from '@picross/block/build/bricks';
 import { BrickBuild } from '@picross/block/build/build';
 import { BRICKS_MODELS, bricksModel, KIDS_RULES } from './models';
-
-const area = (size: string) => {
-  const s = BRICK_SIZES.find((b) => b.size === size)!;
-  return s.w * s.d;
-};
 
 describe('the bricks route’s models', () => {
   it('are all there, and small: a short sitting each', () => {
@@ -31,7 +26,7 @@ describe('the bricks route’s models', () => {
     expect(bricksModel('no-such-model')).toBeUndefined();
   });
 
-  it('every one builds by taps: one kind at a time, biggest first, from any tap', () => {
+  it('every one builds by taps: any kind in the tray, from any tap', () => {
     for (const id of BRICKS_MODELS) {
       const model = bricksModel(id)!;
       const build = BrickBuild.fromShape(model, 0, KIDS_RULES);
@@ -44,18 +39,20 @@ describe('the bricks route’s models', () => {
       ];
       let placed = 0;
       for (;;) {
-        let last = Infinity;
         while (!build.layerComplete) {
+          // The whole layer's in the tray, every kind it still needs.
           const tray = build.tray();
-          expect(tray, id).toHaveLength(1);
-          const [kind] = tray;
-          expect(area(kind.size), id).toBeLessThanOrEqual(last);
-          last = area(kind.size);
+          expect(tray.reduce((n, k) => n + k.count, 0)).toBe(
+            build.current.filter((_, i) => !build.isFilled(build.layer, i)).length,
+          );
+          // A child picks any of them: here, each in turn.
+          const kind = tray[placed % tray.length];
           // Held the "wrong" way round on purpose: it turns itself.
           const tap = taps[placed % taps.length];
           const slot = build.snapTarget(kind.size, kind.color, 90, tap.x, tap.z);
           expect(slot, id).not.toBeNull();
           expect(build.current[slot!].size).toBe(kind.size);
+          expect(build.current[slot!].color).toBe(kind.color);
           build.place(slot!);
           placed++;
         }
@@ -64,5 +61,11 @@ describe('the bricks route’s models', () => {
       expect(build.complete, id).toBe(true);
       expect(placed).toBe(build.layers.flat().length);
     }
+  });
+
+  it('shows every kind in the tray, not one at a time', () => {
+    expect(KIDS_RULES.oneKind).toBeFalsy();
+    const dog = BrickBuild.fromShape(bricksModel('dog')!, 3, KIDS_RULES);
+    expect(dog.tray()).toHaveLength(4); // the dog's fourth layer: four kinds
   });
 });
