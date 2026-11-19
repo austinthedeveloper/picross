@@ -1,0 +1,18 @@
+{
+  "id": "apple-tree",
+  "name": "Apple tree",
+  "colors": {
+    "d": "wood",
+    "g": "green",
+    "r": "red"
+  },
+  "layers": [
+    ["......", "......", "..dd..", "..dd..", "......", "......"],
+    ["......", "......", "..dd..", "..dd..", "......", "......"],
+    ["......", "......", "..dd..", "..dd..", "......", "......"],
+    [".gggg.", "gggggg", "gggggg", "gggggg", "gggggg", ".rggg."],
+    [".gggg.", "gggggg", "rggggg", "gggggg", "gggggg", ".gggr."],
+    [".gggg.", "gggggg", "gggggg", "gggggg", "gggggg", ".grgg."],
+    ["......", ".gggg.", ".gggg.", ".gggg.", ".gggg.", "......"]
+  ]
+}

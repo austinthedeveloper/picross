@@ -1,7 +1,8 @@
 /**
- * The bricks route's models (docs/brick-kids.md): the Cubed pack's smallest, which split
- * into 20 bricks or fewer, and the trio's dog. They're the pack's own puzzles, not copies,
- * so a change to one changes it here too (`models.test.ts` keeps them small).
+ * The bricks route's models (docs/brick-kids.md): its own toys (`@picross/block`'s
+ * `puzzles/bricks/`: animals, things that go, things kids know), the Cubed pack's smallest,
+ * which split into 20 bricks or fewer, and the trio's dog. The pack's are its own puzzles,
+ * not copies, so a change to one changes it here too (`models.test.ts` keeps them small).
  */
 import type { BuildRules } from '@picross/block/build/build';
 import { buildModel } from '@picross/block/puzzles/trio';
@@ -10,6 +11,7 @@ import type { Puzzle } from '@picross/block/puzzles/format';
 /** In the picker's order: fewest bricks first. */
 export const BRICKS_MODELS = [
   'jack',
+  'ice-pop',
   'steps',
   'car',
   'table',
@@ -17,9 +19,34 @@ export const BRICKS_MODELS = [
   'cactus',
   'heart',
   'chair',
+  'duck',
+  'hen',
+  'airplane',
+  'garden-snail',
+  'sheep',
   'mushroom',
+  'bunny',
+  'crab',
+  'tugboat',
+  'daisy-pot',
   'wheelbarrow',
+  'fire-truck',
+  'rainbow',
+  'digger',
+  'piglet',
+  'birthday-cake',
+  'cottage',
+  'frog',
+  'honeybee',
   'dog',
+  'train',
+  'whale',
+  'elephant',
+  'teddy',
+  'bus',
+  'penguin',
+  'tractor',
+  'apple-tree',
 ] as const;
 
 /**

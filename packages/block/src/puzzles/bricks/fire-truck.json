@@ -1,0 +1,18 @@
+{
+  "id": "fire-truck",
+  "name": "Fire truck",
+  "colors": {
+    "b": "blue",
+    "h": "sky",
+    "k": "graphite",
+    "r": "red",
+    "w": "white"
+  },
+  "layers": [
+    [".kk..kk.", "........", "........", ".kk..kk."],
+    ["rrrrrrrr", "rrrrrrrr", "rrrrrrrr", "rrrrrrrr"],
+    ["rrr.....", "rrrwwwww", "rrrwwwww", "rrr....."],
+    ["rhh.....", "hrr.....", "hrr.....", "rhh....."],
+    ["........", ".b......", ".b......", "........"]
+  ]
+}

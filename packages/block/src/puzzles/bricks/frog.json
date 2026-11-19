@@ -1,0 +1,17 @@
+{
+  "id": "frog",
+  "name": "Frog",
+  "colors": {
+    "g": "green",
+    "k": "graphite",
+    "l": "leaf",
+    "r": "red",
+    "w": "white"
+  },
+  "layers": [
+    ["gggggg", "gggggg", "gggggg", "gggggg", "lggggl", "lggggl"],
+    ["gggggg", "gggggg", "gggggg", "gggggg", "gggggg", "grrrrg"],
+    ["gggggg", "gggggg", "gggggg", "gggggg", "gggggg", "......"],
+    ["......", "......", "......", "ww..ww", "wk..kw", "......"]
+  ]
+}

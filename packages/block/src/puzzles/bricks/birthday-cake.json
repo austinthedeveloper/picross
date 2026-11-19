@@ -1,0 +1,18 @@
+{
+  "id": "birthday-cake",
+  "name": "Cake",
+  "colors": {
+    "c": "cream",
+    "o": "orange",
+    "p": "pink",
+    "r": "red",
+    "y": "yellow"
+  },
+  "layers": [
+    ["cccccc", "cccccc", "cccccc", "cccccc", "cccccc", "cccccc"],
+    ["cccccc", "cccccc", "cccccc", "cccccc", "cccccc", "cccccc"],
+    ["pppppp", "pppppp", "pppppp", "pppppp", "pppppp", "pppppp"],
+    ["......", ".y..y.", "..rr..", "..rr..", ".y..y.", "......"],
+    ["......", ".o..o.", "......", "......", ".o..o.", "......"]
+  ]
+}

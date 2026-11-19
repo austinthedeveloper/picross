@@ -1,0 +1,13 @@
+{
+  "id": "crab",
+  "name": "Crab",
+  "colors": {
+    "k": "graphite",
+    "r": "red"
+  },
+  "layers": [
+    ["........", "rrrrrrrr", ".rrrrrr.", "rrrrrrrr", "........"],
+    ["........", ".rrrrrr.", ".rrrrrr.", ".rrrrrr.", "rr....rr"],
+    ["........", "........", "........", "..k..k..", "rr....rr"]
+  ]
+}

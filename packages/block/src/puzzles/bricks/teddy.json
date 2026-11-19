@@ -1,0 +1,19 @@
+{
+  "id": "teddy",
+  "name": "Teddy",
+  "colors": {
+    "c": "cream",
+    "k": "graphite",
+    "n": "brown"
+  },
+  "layers": [
+    ["......", "......", ".nnnn.", ".nnnn."],
+    [".nnnn.", ".nnnn.", ".nnnn.", ".nccn."],
+    [".nnnn.", "nnnnnn", "nnnnnn", ".nccn."],
+    [".nnnn.", "nnnnnn", "nnnnnn", ".nnnn."],
+    [".nnnn.", ".nnnn.", ".nnnn.", ".nccn."],
+    [".nnnn.", ".nnnn.", ".nnnn.", ".kkkk."],
+    [".nnnn.", ".nnnn.", ".nnnn.", ".nnnn."],
+    ["......", ".n..n.", ".n..n.", "......"]
+  ]
+}

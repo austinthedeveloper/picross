@@ -1,0 +1,17 @@
+{
+  "id": "rainbow",
+  "name": "Rainbow",
+  "colors": {
+    "o": "orange",
+    "r": "red",
+    "w": "white",
+    "y": "yellow"
+  },
+  "layers": [
+    ["wwy..yww", "wwy..yww"],
+    ["roy..yor", "roy..yor"],
+    ["royyyyor", "royyyyor"],
+    ["rroooorr", "rroooorr"],
+    [".rrrrrr.", ".rrrrrr."]
+  ]
+}

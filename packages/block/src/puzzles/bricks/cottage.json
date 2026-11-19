@@ -1,0 +1,19 @@
+{
+  "id": "cottage",
+  "name": "House",
+  "colors": {
+    "b": "blue",
+    "c": "cream",
+    "h": "sky",
+    "r": "red",
+    "s": "stone"
+  },
+  "layers": [
+    ["cccccc", "cccccc", "cccccc", "ccbbcc"],
+    ["cccccc", "hccccc", "hccccc", "chbbhc"],
+    ["cccccc", "cccccc", "cccccc", "cccccc"],
+    ["rrrrrr", "rrrrrr", "rrrrrr", "rrrrrr"],
+    ["....s.", "rrrrrr", "rrrrrr", "......"],
+    ["....s.", "......", "......", "......"]
+  ]
+}

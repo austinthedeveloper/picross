@@ -1,0 +1,18 @@
+{
+  "id": "hen",
+  "name": "Hen",
+  "colors": {
+    "k": "graphite",
+    "r": "red",
+    "w": "white",
+    "y": "yellow"
+  },
+  "layers": [
+    ["......", "..y.y.", "..y.y.", "......"],
+    ["..wwww", "..wwww", "..wwww", "..wwww"],
+    ["..wwww", "..wwww", "..wwww", "..wwww"],
+    ["..wwww", "ywwwww", "ywwwww", "..wwww"],
+    ["......", ".kw..w", ".kw..w", "......"],
+    ["......", ".rr...", ".rr...", "......"]
+  ]
+}
