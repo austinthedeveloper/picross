@@ -1,0 +1,16 @@
+{
+  "id": "goldfish",
+  "name": "Fish",
+  "colors": {
+    "k": "graphite",
+    "o": "orange",
+    "y": "yellow"
+  },
+  "layers": [
+    ["..y.y...", "..y.y..."],
+    [".ooooo.y", ".ooooo.y"],
+    ["okoooooy", "okoooooy"],
+    [".ooooo.y", ".ooooo.y"],
+    ["..yyy...", "..yyy..."]
+  ]
+}

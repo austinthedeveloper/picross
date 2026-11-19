@@ -1,0 +1,18 @@
+{
+  "id": "berry",
+  "name": "Strawberry",
+  "colors": {
+    "g": "green",
+    "n": "brown",
+    "r": "red",
+    "y": "yellow"
+  },
+  "layers": [
+    ["....", ".rr.", ".rr.", "...."],
+    [".rr.", "rrrr", "rrrr", ".yr."],
+    ["rryr", "yrrr", "rrrr", "rrrr"],
+    ["rrrr", "rrrr", "yrrr", "rryr"],
+    [".gg.", "gggg", "gggg", ".gg."],
+    ["....", "....", ".n..", "...."]
+  ]
+}

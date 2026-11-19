@@ -1,0 +1,16 @@
+{
+  "id": "toy-castle",
+  "name": "Castle",
+  "colors": {
+    "d": "wood",
+    "r": "red",
+    "s": "stone"
+  },
+  "layers": [
+    ["ssssssss", "ssssssss", "ssssssss", "ssssssss", "ssssssss", "sssddsss"],
+    ["ssssssss", "ssssssss", "ssssssss", "ssssssss", "ssssssss", "sssddsss"],
+    ["ss....ss", "ss....ss", "........", "........", "ss....ss", "ss....ss"],
+    ["ss....ss", "ss....ss", "........", "........", "ss....ss", "ss....ss"],
+    ["........", "........", "........", "........", "........", "r......r"]
+  ]
+}

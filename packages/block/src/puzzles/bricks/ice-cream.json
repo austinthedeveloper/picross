@@ -1,0 +1,20 @@
+{
+  "id": "ice-cream",
+  "name": "Ice cream",
+  "colors": {
+    "d": "wood",
+    "p": "pink",
+    "r": "red",
+    "w": "white"
+  },
+  "layers": [
+    ["....", ".dd.", ".dd.", "...."],
+    ["....", ".dd.", ".dd.", "...."],
+    [".dd.", "dddd", "dddd", ".dd."],
+    ["dddd", "dddd", "dddd", "dddd"],
+    ["pppp", "pppp", "pppp", "pppp"],
+    [".pp.", "pppp", "pppp", ".pp."],
+    ["....", ".ww.", ".ww.", "...."],
+    ["....", "....", ".r..", "...."]
+  ]
+}

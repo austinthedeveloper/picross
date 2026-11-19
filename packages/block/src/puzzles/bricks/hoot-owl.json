@@ -1,0 +1,19 @@
+{
+  "id": "hoot-owl",
+  "name": "Owl",
+  "colors": {
+    "c": "cream",
+    "k": "graphite",
+    "n": "brown",
+    "o": "orange",
+    "w": "white"
+  },
+  "layers": [
+    ["......", ".oooo.", ".oooo."],
+    ["nnnnnn", "nnnnnn", "nccccn"],
+    ["nnnnnn", "nnnnnn", "nnoonn"],
+    ["nnnnnn", "nnnnnn", "wwwwww"],
+    ["nnnnnn", "nnnnnn", "wkwwkw"],
+    ["......", "n....n", "n....n"]
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "id": "fairy-cake",
+  "name": "Cupcake",
+  "colors": {
+    "p": "pink",
+    "r": "red",
+    "u": "purple",
+    "y": "yellow"
+  },
+  "layers": [
+    [".uu.", "uuuu", "uuuu", ".uu."],
+    ["uuuu", "uuuu", "uuuu", "uuuu"],
+    ["pppp", "yppp", "pppp", "ppyp"],
+    [".pp.", "pppp", "yppp", ".yp."],
+    ["....", ".pp.", ".pp.", "...."],
+    ["....", "....", ".r..", "...."]
+  ]
+}

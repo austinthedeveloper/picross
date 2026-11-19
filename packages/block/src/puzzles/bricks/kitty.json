@@ -1,0 +1,18 @@
+{
+  "id": "kitty",
+  "name": "Kitty",
+  "colors": {
+    "k": "graphite",
+    "n": "brown",
+    "o": "orange",
+    "p": "pink"
+  },
+  "layers": [
+    [".o..o..", ".......", ".......", ".o..o.."],
+    [".oonoo.", ".oonoo.", ".oonoo.", ".oonoo."],
+    ["ooonoo.", "ooonooo", "ooonooo", "ooonoo."],
+    ["oo.....", "po....o", "po....o", "oo....."],
+    ["ko.....", "oo....o", "oo....o", "ko....."],
+    ["oo.....", ".......", ".......", "oo....."]
+  ]
+}

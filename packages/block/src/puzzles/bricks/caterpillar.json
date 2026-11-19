@@ -1,0 +1,16 @@
+{
+  "id": "caterpillar",
+  "name": "Caterpillar",
+  "colors": {
+    "g": "green",
+    "k": "graphite",
+    "l": "leaf",
+    "r": "red"
+  },
+  "layers": [
+    ["rrggllgg", "rrggllgg"],
+    ["rrggllgg", "rrggllgg"],
+    ["rr......", "kr......"],
+    ["kk......", "........"]
+  ]
+}
