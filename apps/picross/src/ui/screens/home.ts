@@ -40,6 +40,13 @@ const ENTRIES: Entry[] = [
     title: 'Draw, carve, build',
     hint: 'Prototype: one dog, three ways',
   },
+  // A prototype: the build on its own, for kids too young for real brick sets.
+  {
+    href: '#/bricks',
+    icon: '🧱',
+    title: 'Brick kids',
+    hint: 'Prototype: building for little ones',
+  },
   { href: '#/badges', icon: '🏅', title: 'Badges', hint: 'What you’ve earned on both boards' },
   { href: '#/editor', icon: '✏', title: 'Editor', hint: 'Make a puzzle and share it' },
   { href: '#/how-to-play', icon: '❓', title: 'How to play', hint: 'The clues, in a minute' },

@@ -12,6 +12,7 @@
  * and `#/free` the last tab used. `#/settings` is both games' settings (#154). `#/` is the home
  * screen, one menu for both (#152), and `#/endless` the jobs board at Endless. The 2D game's
  * run and its fights (`#/run…`) load with `import()` too, and the fight engine with them.
+ * So does `#/bricks/…`, a building game for little kids (a prototype, docs/brick-kids.md).
  */
 import { getPuzzle } from '@picross/grid/puzzles/index';
 import { getMural } from '@picross/grid/puzzles/murals';
@@ -79,6 +80,12 @@ const loadCubed = () => import('./cubed/routes');
  * first download; the list's run banner (ui/screens/run/banner.ts) reads only the save.
  */
 const loadRun = () => import('./ui/screens/run');
+
+/**
+ * The bricks route (a prototype for little kids, docs/brick-kids.md): its picker, builds
+ * and shelf. The build brings three.js, which it loads on its own.
+ */
+const loadBricks = () => import('./bricks/routes');
 
 /** A route, typed by what its `match` finds. */
 const route = <T>(r: Route<T>): Route => r as Route;
@@ -185,6 +192,12 @@ export const ROUTES: Route[] = [
     game: 'cubed',
     match: (h) => /^#\/cubed(\/.*)?$/.exec(h),
     render: (app, [, path = '/'], lazy) => lazy(loadCubed(), (m) => m.renderCubed(app, path, lazy)),
+  }),
+  // Brick kids (a prototype): #/bricks is its picker, #/bricks/<id> a build (bricks/routes.ts).
+  route({
+    match: (h) => /^#\/bricks(\/.*)?$/.exec(h),
+    render: (app, [, path = ''], lazy) =>
+      lazy(loadBricks(), (m) => m.renderBricks(app, path, lazy)),
   }),
   // Anything else: the home screen, one menu for both boards (#152).
   route({ match: () => true, render: (app) => renderHome(app) }),

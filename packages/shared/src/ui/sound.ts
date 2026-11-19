@@ -20,8 +20,11 @@ export type Sound =
   | 'block'
   | 'knockout';
 
-interface Note {
+/** One synthesized note. A screen can play its own with `playNotes`. */
+export interface Note {
   freq: number;
+  /** Glides to this frequency over the note (a boing), instead of holding `freq`. */
+  to?: number;
   /** Start offset in seconds. */
   at?: number;
   duration: number;
@@ -112,17 +115,23 @@ let ctx: AudioContext | null = null;
  * another sound from the same moment instead of landing on top of it.
  */
 export function playSound(sound: Sound, delay = 0): void {
+  playNotes(SOUNDS[sound], delay);
+}
+
+/** Plays notes of a screen's own unless muted, as `playSound` plays the shared ones. */
+export function playNotes(notes: readonly Note[], delay = 0): void {
   if (getPrefs().muted) return;
   try {
     ctx ??= new AudioContext();
     if (ctx.state === 'suspended') void ctx.resume();
     const now = ctx.currentTime + delay;
-    for (const note of SOUNDS[sound]) {
+    for (const note of notes) {
       const start = now + (note.at ?? 0);
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = note.type ?? 'sine';
-      osc.frequency.value = note.freq;
+      osc.frequency.setValueAtTime(note.freq, start);
+      if (note.to) osc.frequency.exponentialRampToValueAtTime(note.to, start + note.duration);
       gain.gain.setValueAtTime(note.gain ?? 0.15, start);
       gain.gain.exponentialRampToValueAtTime(0.0001, start + note.duration);
       osc.connect(gain).connect(ctx.destination);

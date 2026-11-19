@@ -46,6 +46,22 @@ interface Piece {
   home: Vector3;
 }
 
+/** Extras for the bricks route (little kids). All off in Cubed's build stage. */
+export interface BrickViewOptions {
+  /** Nobody turns the camera: it sways a little on its own. */
+  drift?: boolean;
+  /** The ghosts a held brick could go in glow and bob, more than a plain highlight. */
+  bob?: boolean;
+}
+
+/** How the finish looks. Default: Cubed's, the toy low in the stage above the end panel. */
+export interface CelebrateOptions {
+  /** Keep the toy in the middle of the stage (nothing lies over it). */
+  middle?: boolean;
+  /** How many happy hops the toy makes on its plate. */
+  hops?: number;
+}
+
 const easeOut = (t: number) => 1 - (1 - t) ** 3;
 const easeInOut = (t: number) => (t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2);
 
@@ -84,10 +100,14 @@ export class BrickView {
   zoom = 1;
   private targetY = 0.5;
   private palette: Color[];
+  /** The drift's sway, added to `yaw`, and the clock the drift and bob run on. */
+  private sway = 0;
+  private clock = 0;
 
   constructor(
     private puzzle: Puzzle,
     private build: BrickBuild,
+    private options: BrickViewOptions = {},
   ) {
     this.renderer = new WebGLRenderer({ antialias: true, alpha: true });
     this.renderer.outputColorSpace = SRGBColorSpace;
@@ -248,7 +268,7 @@ export class BrickView {
       lines.position.y = BODY / 2;
       group.add(body, lines);
       group.position.copy(this.homeOf(brick));
-      group.userData = { fill, lines: lines.material };
+      group.userData = { fill, lines: lines.material, y: group.position.y };
       this.ghosts.add(group);
       this.ghostMeshes.set(slot, group);
     });
@@ -262,13 +282,25 @@ export class BrickView {
 
   private setGhostLevel(level: number): void {
     this.ghostLevel = level;
+    // With `bob`, the ghosts a held brick could go in pulse and bob (`bobbing`).
+    const wave = this.bobbing() ? (Math.sin(this.clock * 0.006) + 1) / 2 : 0;
     for (const [slot, group] of this.ghostMeshes) {
       const lit = this.highlighted.has(slot);
-      const { fill, lines } = group.userData as { fill: MeshBasicMaterial; lines: Material };
-      fill.opacity = level * (lit ? 0.6 : 0.34);
+      const { fill, lines, y } = group.userData as {
+        fill: MeshBasicMaterial;
+        lines: Material;
+        y: number;
+      };
+      fill.opacity = level * (lit ? 0.6 + 0.25 * wave : 0.34);
       lines.opacity = level * (lit ? 1 : 0.5);
+      group.position.y = y + (lit ? wave * 0.22 : 0);
     }
     this.invalidate();
+  }
+
+  /** The held brick's ghosts are bobbing: `bob` is on and something's lit. */
+  private bobbing(): boolean {
+    return !!this.options.bob && this.highlighted.size > 0 && !reducedMotion();
   }
 
   /** Brightens the open slots a held brick could go in (any way round). */
@@ -346,8 +378,11 @@ export class BrickView {
     };
   }
 
-  /** The held brick drops into its slot with a little squash; one from the pile goes. */
-  placed(layer: number, slot: number): void {
+  /**
+   * The held brick drops into its slot with a little squash; one from the pile goes. With
+   * `from`, it flies there first from where it was dropped, turning on the way if `turned`.
+   */
+  placed(layer: number, slot: number, from?: { x: number; z: number; turned?: boolean }): void {
     const brick = this.build.layers[layer][slot];
     const piece = this.addPiece(layer, slot);
     const ghost = this.ghostMeshes.get(slot);
@@ -358,12 +393,35 @@ export class BrickView {
     this.takeFromPile(`${brick.size}:${brick.color}`);
     if (reducedMotion()) return this.invalidate();
     const { mesh, home } = piece;
-    this.tween(220, (t) => {
-      const e = easeOut(t);
-      mesh.position.set(home.x, home.y + 0.35 * (1 - e), home.z);
-      const squash = t < 0.7 ? 1 : 1 - Math.sin(((t - 0.7) / 0.3) * Math.PI) * 0.12;
-      mesh.scale.set(2 - squash, squash, 2 - squash);
-    });
+    const squash = () =>
+      this.tween(220, (t) => {
+        const e = easeOut(t);
+        mesh.position.set(home.x, home.y + 0.35 * (1 - e), home.z);
+        const s = t < 0.7 ? 1 : 1 - Math.sin(((t - 0.7) / 0.3) * Math.PI) * 0.12;
+        mesh.scale.set(2 - s, s, 2 - s);
+      });
+    if (!from) return squash();
+    // A short flight, an arc from the drop to just over the slot, then the squash.
+    const start = this.placeOf(from.x, home.y, from.z, brick.size, brick.rotation);
+    start.y += 0.6;
+    const over = home.clone().setY(home.y + 0.35);
+    const turn = from.turned ? Math.PI / 2 : 0;
+    const height = 0.6 + Math.min(2, start.distanceTo(over) * 0.25);
+    mesh.position.copy(start);
+    mesh.rotation.y = turn;
+    this.tween(
+      340,
+      (t) => {
+        const e = easeInOut(t);
+        mesh.position.lerpVectors(start, over, e);
+        mesh.position.y += Math.sin(t * Math.PI) * height;
+        mesh.rotation.y = turn * (1 - e);
+      },
+      () => {
+        mesh.rotation.y = 0;
+        squash();
+      },
+    );
   }
 
   /** A wrong drop: the held brick hops up and back a little, then is ready again. */
@@ -513,12 +571,14 @@ export class BrickView {
   // --- The end -------------------------------------------------------------------------
 
   /** The finished toy turns on its plate, with a burst of little bricks. */
-  celebrate(): void {
+  celebrate(how: CelebrateOptions = {}): void {
     this.ghosts.clear();
+    this.ghostMeshes.clear();
     this.hold(null);
     const from = this.targetY;
     // Aim below it, so the toy sits in the top of the stage, above the end's pictures.
-    const to = 0;
+    const to = how.middle ? this.puzzle.dims.y / 2 : 0;
+    const zoomTo = how.middle ? 1 : 0.8;
     if (reducedMotion()) {
       this.targetY = to;
       this.invalidate();
@@ -529,12 +589,27 @@ export class BrickView {
     this.tween(900, (t) => {
       const e = easeInOut(t);
       this.targetY = from + (to - from) * e;
-      this.zoom = zoomFrom + (0.8 - zoomFrom) * e;
+      this.zoom = zoomFrom + (zoomTo - zoomFrom) * e;
       this.pitch = pitchFrom + (0.38 - pitchFrom) * e;
     });
     this.spinning = true;
     this.confetti();
+    if (how.hops) this.hop(how.hops);
     this.invalidate();
+  }
+
+  /** The toy hops on its plate, `n` times, a little lower each time. */
+  private hop(n: number): void {
+    const ms = 380;
+    this.tween(n * ms, (t) => {
+      const k = t * n;
+      const i = Math.min(n - 1, Math.floor(k));
+      const up = Math.sin((k - i) * Math.PI) * 0.9 * (1 - i / n);
+      this.built.position.y = Math.max(0, up);
+      // A squash as it lands and a stretch in the air.
+      const s = 1 + up * 0.06;
+      this.built.scale.set(2 - s, s, 2 - s);
+    });
   }
 
   private confetti(): void {
@@ -562,8 +637,8 @@ export class BrickView {
     }
   }
 
-  /** A picture of the toy as it is now, cropped to it (for the end panel). */
-  snapshot(): string {
+  /** A picture of the toy as it is now, cropped to it, at most `max` px (for the end). */
+  snapshot(max = 240): string {
     this.placeCamera();
     this.renderer.render(this.scene, this.camera);
     // The model's box on screen, so the picture is the toy and not the empty stage.
@@ -590,7 +665,7 @@ export class BrickView {
     const w = Math.min(width - left, ((x1 - x0) / 2) * width);
     const h = Math.min(height - top, ((y1 - y0) / 2) * height);
     const out = document.createElement('canvas');
-    const scale = Math.min(1, 240 / Math.max(w, h));
+    const scale = Math.min(1, max / Math.max(w, h));
     out.width = Math.max(1, Math.round(w * scale));
     out.height = Math.max(1, Math.round(h * scale));
     out.getContext('2d')!.drawImage(this.canvas, left, top, w, h, 0, 0, out.width, out.height);
@@ -618,9 +693,9 @@ export class BrickView {
     const dist = ((radius / Math.sin(Math.min(vfov, hfov) / 2)) * 1.05) / this.zoom;
     const target = new Vector3(0, this.targetY, 0);
     this.camera.position.set(
-      dist * Math.cos(this.pitch) * Math.sin(this.yaw),
+      dist * Math.cos(this.pitch) * Math.sin(this.yaw + this.sway),
       this.targetY + dist * Math.sin(this.pitch),
-      dist * Math.cos(this.pitch) * Math.cos(this.yaw),
+      dist * Math.cos(this.pitch) * Math.cos(this.yaw + this.sway),
     );
     this.camera.lookAt(target);
     this.camera.updateMatrixWorld();
@@ -653,14 +728,18 @@ export class BrickView {
         if (t < 1) this.tweens.push(tw);
         else tw.done?.();
       }
-      if (this.spinning) {
-        const dt = this.lastFrame ? Math.min(64, now - this.lastFrame) : 16;
-        this.turntable.rotation.y += dt * 0.0007;
-      }
+      const dt = this.lastFrame ? Math.min(64, now - this.lastFrame) : 16;
+      if (this.spinning) this.turntable.rotation.y += dt * 0.0007;
+      const drifting = !!this.options.drift && !reducedMotion();
+      const bobbing = this.bobbing();
+      if (drifting || bobbing) this.clock += dt;
+      // A slow sway either side, about 12 seconds there and back.
+      if (drifting) this.sway = Math.sin(this.clock * 0.00052) * 0.26;
+      if (bobbing) this.setGhostLevel(this.ghostLevel);
       this.lastFrame = now;
       this.placeCamera();
       this.renderer.render(this.scene, this.camera);
-      if (this.tweens.length || this.spinning) this.invalidate();
+      if (this.tweens.length || this.spinning || drifting || bobbing) this.invalidate();
       else this.lastFrame = 0;
     });
   }

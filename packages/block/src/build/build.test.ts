@@ -93,6 +93,68 @@ describe('BrickBuild', () => {
   });
 });
 
+describe('BuildRules (the bricks route, for little kids)', () => {
+  const along: Brick = { size: '1x2', position: { x: 0, y: 0, z: 0 }, rotation: 0, color: 1 };
+  const across: Brick = { size: '1x2', position: { x: 4, y: 0, z: 4 }, rotation: 90, color: 1 };
+
+  it('leaves the build as it was with no rules', () => {
+    const build = new BrickBuild([[along, across]]);
+    expect(build.snapTarget('1x2', 1, 0, 4, 4)).toBeNull(); // too far, and turned
+    expect(build.tray()).toHaveLength(1);
+  });
+
+  it('a long reach snaps a drop anywhere into the nearest open slot of its kind', () => {
+    const build = new BrickBuild([[along, { ...along, position: { x: 6, y: 0, z: 0 } }]], 0, {
+      reach: Infinity,
+    });
+    expect(build.snapTarget('1x2', 1, 0, 2, 9)).toBe(0);
+    expect(build.snapTarget('1x2', 1, 0, 5, 9)).toBe(1);
+    expect(build.snapTarget('1x2', 2, 0, 2, 9)).toBeNull(); // still not another color
+    build.place(0);
+    expect(build.snapTarget('1x2', 1, 0, 0, 0)).toBe(1); // the one left, however far
+  });
+
+  it('with anyTurn a brick fits either way round', () => {
+    const build = new BrickBuild([[across]], 0, { anyTurn: true });
+    expect(build.snapTarget('1x2', 1, 0, 4, 4)).toBe(0);
+    expect(fits(across, '1x2', 1, 0, true)).toBe(true);
+    expect(fits(across, '1x2', 1, 0)).toBe(false);
+  });
+
+  it('the nearest slot wins a tie on steps', () => {
+    const a: Brick = { size: '1x1', position: { x: 1, y: 0, z: 1 }, rotation: 0, color: 1 };
+    const b: Brick = { ...a, position: { x: 1, y: 0, z: 0 } };
+    expect(new BrickBuild([[a, b]]).snapTarget('1x1', 1, 0, 0, 0)).toBe(1);
+  });
+
+  it('oneKind offers the biggest kind first, then the next', () => {
+    const build = BrickBuild.fromShape(dog, 1, { oneKind: true });
+    const sizes: string[] = [];
+    while (!build.layerComplete) {
+      const tray = build.tray();
+      expect(tray).toHaveLength(1);
+      sizes.push(tray[0].size);
+      const [slot] = build.openSlots(tray[0]);
+      build.place(slot);
+    }
+    const area = (s: string) =>
+      s
+        .split('x')
+        .map(Number)
+        .reduce((a, b) => a * b);
+    expect(sizes.map(area)).toEqual([...sizes.map(area)].sort((a, b) => b - a));
+    expect(build.tray()).toEqual([]);
+  });
+
+  it('openSlots lists the open slots of a kind', () => {
+    const build = BrickBuild.fromShape(dog);
+    const kind = build.tray()[0];
+    expect(build.openSlots(kind)).toHaveLength(kind.count);
+    build.place(build.openSlots(kind)[0]);
+    expect(build.openSlots(kind)).toHaveLength(kind.count - 1);
+  });
+});
+
 describe('the build entry (#/cubed/build/<id>)', () => {
   it('reads the puzzle and the layer to start on', () => {
     expect(parseBuildPath('/build/dog')).toEqual({ id: 'dog', layer: 0 });
