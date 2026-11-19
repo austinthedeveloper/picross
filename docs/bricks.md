@@ -42,9 +42,13 @@ Words are only in the grown-ups' corner and for screen readers.
    does, each drawn turned the way its ghost is, with a dot in its color for each one left
    (a count to see, not read). The buttons wrap at phone width. Tap one to pick it up: its
    ghosts glow and bob.
-4. **Tap anywhere on the plate**: the brick flies into the nearest open ghost of its kind,
-   turning itself on the way if it has to. It stays in hand while there are more of that
-   kind; when there aren't, tap another. Dragging works too, but is never needed. There's no Turn button, no R key, and no way to miss.
+4. **Tap its ghost**: the brick drops into a ghost of its kind that's under the tap or a
+   cube from it (the build stage's reach, `SNAP_REACH`), turning itself on the way if it
+   has to. Anywhere else, it hops and boings, and stays in hand: the child finds the spot,
+   not just the plate. A mouse carries the brick over the plate and shows it in a ghost
+   it's near before the click. It stays in hand while there are more of that kind; when
+   there aren't, tap another. Dragging works too, but is never needed. There's no Turn
+   button and no R key, and a miss costs nothing.
 5. **A layer done** plays a little tune, and the camera rises to the next. The camera looks
    after itself: it sways a little on its own, with no orbit or zoom.
 6. **The toy done** turns on its plate, hops and bursts, with a longer tune. Then a picture
@@ -111,7 +115,7 @@ have no other link to.
 | Carrying from the tray   | `carryFromTray` in `packages/play-block/src/ui/board/brickInput.ts`         |
 
 The kids' version is options on the build stage's code, not a fork of it. `BrickBuild`
-takes `BuildRules`: `reach` (how far a drop can be from a ghost; `Infinity` here), `anyTurn`
+takes `BuildRules`: `reach` (how far a drop can be from a ghost; the build stage's cube here), `anyTurn`
 (a brick fits either way round) and `oneKind` (the tray offers only the biggest kind left;
 not used here, kept for a younger setting).
 `BrickView` takes `drift` (the camera sways) and `bob` (lit ghosts pulse and bob),

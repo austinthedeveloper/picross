@@ -2,10 +2,11 @@
 
 > **Where it stands.** The first step below is built: Brick kids is a route in this app,
 > `#/bricks` ([bricks.md](bricks.md) has how it plays and the code). What was decided on
-> the way: it's one game aimed at the youngest end, with tap-anywhere snapping and bricks
-> that turn themselves, but the tray shows the whole layer, not one kind at a time (#254:
-> choosing is part of the fun, and with nothing to place wrong it stays easy). It has 26
-> models of its own (#255) besides the pack's ten smallest and the trio's dog, and a
+> the way: it's one game aimed at the youngest end, with bricks that turn themselves, and
+> the tray shows the whole layer, not one kind at a time (#254: choosing is part of the
+> fun). A brick snaps into a ghost tapped on or next to: snapping from a tap anywhere was
+> tried first, but then the spot didn't matter, and finding it is the game. It has 56
+> models of its own (#255, #257) besides the pack's ten smallest and the trio's dog, and a
 > route came first, as recommended. The rest of the open questions at the end are still
 > open. The page below is the concept as written, kept for its reasoning.
 
@@ -153,7 +154,8 @@ accounts, links out or tracking, saves only on the device, and it works offline.
 
 1. **How young, really?** 3 and 6 want different things: one kind at a time and snap from
    anywhere for 3, the full tray and some choosing for 6. One game with a setting, or pick
-   one end? _Answered for now: one game, snap from anywhere, the full tray (#254)._
+   one end? _Answered for now: one game and the full tray (#254), and a tap has to be on or near
+   its ghost (snap from anywhere was tried first, and made the spot not matter)._
 2. **Voice or no voice?** Recorded lines are warm but need a voice (yours? a kid's?) and
    don't translate; the browser's speech voice is free but varies by device and can sound
    flat. Or only sounds and music, no words at all?
@@ -161,7 +163,7 @@ accounts, links out or tracking, saves only on the device, and it works offline.
    longest, and the part with the least code to reuse.
 4. **Where do the first models come from?** The ten small pack models as they are, a new
    set of 10 to 15 kids' subjects, or try chunky versions of pack models first? _Answered:
-   both the pack's ten and 56 of its own (#255 and this batch); chunky versions are untried._
+   both the pack's ten and 56 of its own (#255, #257); chunky versions are untried._
 5. **Phone, tablet or both?** Little kids mostly use a parent's tablet. Landscape tablet
    first would change the layout, and the camera.
 6. **Route or app first?** Is a `#/bricks` route good enough to try with kids you know, or

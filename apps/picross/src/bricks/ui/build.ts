@@ -4,8 +4,9 @@
  * with `import()`.
  *
  * It plays like Cubed's build stage with `KIDS_RULES`, and without the words: tap a brick
- * in the tray (every kind the layer needs, with a dot for each one left), then tap anywhere on the plate and it
- * flies into the nearest open ghost of its kind, turning itself to fit. Dragging works too.
+ * in the tray (every kind the layer needs, with a dot for each one left), then tap its ghost
+ * (or next to it) and it drops in, turning itself to fit; anywhere else, it bounces. A mouse
+ * shows it in the ghost before the tap, and dragging works too.
  * The camera sways on its own; there's no turning or zoom. Sound and motion say how it's
  * going: a pop up the scale for each brick, a tune for a layer, a bigger one for the toy,
  * which then goes on the shelf. There's no way to lose.
@@ -173,29 +174,33 @@ export function renderKidsBuild(
         pickSound();
         haptic('tap');
       }
-      say(`Got a ${colorName(kind.color)} brick. Tap the plate.`);
+      say(`Got a ${colorName(kind.color)} brick. Tap where it goes.`);
     } else view.hold(null);
     renderTray();
   }
 
   // --- Placing ------------------------------------------------------------------------
 
-  /** Where a brick held over (x, y) would go: the nearest open ghost of its kind. */
+  /**
+   * Where the held brick is over (x, y): the corner on the plate it's at, and the open ghost
+   * of its kind it would go in, if one's within reach (`KIDS_RULES`). Null off the plate.
+   */
   function targetAt(x: number, y: number) {
     if (!held) return null;
     const corner = view.cornerAt(x, y, held.size, rotation);
-    const slot =
-      (corner && build.snapTarget(held.size, held.color, rotation, corner.x, corner.z)) ??
-      build.openSlots(held)[0] ??
-      null;
-    return slot === null ? null : { slot, corner };
+    if (!corner) return null;
+    return { corner, slot: build.snapTarget(held.size, held.color, rotation, corner.x, corner.z) };
   }
 
-  /** A mouse over the plate shows the brick in the ghost it would go in. */
+  /** A mouse over the plate carries the brick, and shows it in a ghost it's near. */
   function hover(x: number, y: number) {
     if (!held || !ready || !isOver(view.canvas, x, y)) return view.hideHeld();
     const target = targetAt(x, y);
     if (!target) return view.hideHeld();
+    if (target.slot === null) {
+      const { x: cx, z: cz } = target.corner;
+      return view.moveHeld(cx, cz, held.size, rotation, null);
+    }
     const slot = build.current[target.slot];
     // It turns itself to fit the ghost it's over.
     if (slot.rotation !== rotation) {
@@ -208,23 +213,21 @@ export function renderKidsBuild(
   function drop(x: number, y: number) {
     if (!held || !ready) return;
     const target = targetAt(x, y);
-    if (!target) {
+    if (target?.slot == null) {
+      // Not near a ghost of its kind: it hops where it was dropped, and stays in hand.
+      if (target) view.bounce(target.corner.x, target.corner.z, held.size, rotation);
       boingSound();
       return;
     }
     const brick = build.current[target.slot];
-    // It flies from where the tap was: the same middle, in the slot's footprint.
-    let from: { x: number; z: number; turned: boolean } | undefined;
-    if (target.corner) {
-      const a = footprint(held.size, rotation);
-      const b = footprint(brick.size, brick.rotation);
-      from = {
-        x: target.corner.x + (a.sx - b.sx) / 2,
-        z: target.corner.z + (a.sz - b.sz) / 2,
-        turned: !isSquare(brick.size) && brick.rotation !== rotation,
-      };
-    }
-    place(target.slot, from);
+    // It slides in from where the tap was: the same middle, in the slot's footprint.
+    const a = footprint(held.size, rotation);
+    const b = footprint(brick.size, brick.rotation);
+    place(target.slot, {
+      x: target.corner.x + (a.sx - b.sx) / 2,
+      z: target.corner.z + (a.sz - b.sz) / 2,
+      turned: !isSquare(brick.size) && brick.rotation !== rotation,
+    });
   }
 
   function place(slot: number, from?: { x: number; z: number; turned: boolean }) {
@@ -364,7 +367,7 @@ export function renderKidsBuild(
     ready = true;
     screen.dataset.phase = 'build';
     renderTray();
-    say(`Build the ${model.name}. Tap the brick, then tap the plate.`);
+    say(`Build the ${model.name}. Tap a brick, then tap its ghost.`);
   });
 
   return () => {
