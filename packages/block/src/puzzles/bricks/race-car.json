@@ -1,0 +1,16 @@
+{
+  "id": "race-car",
+  "name": "Race car",
+  "colors": {
+    "h": "sky",
+    "k": "graphite",
+    "r": "red",
+    "w": "white",
+    "y": "yellow"
+  },
+  "layers": [
+    [".kk..kk.", "rrrrrrrr", "rrrrrrrr", ".kk..kk."],
+    [".rrrrrr.", "wwwrrrrr", "wwwrrrrr", ".rrrrrr."],
+    [".......k", "...hy..k", "...hy..k", ".......k"]
+  ]
+}

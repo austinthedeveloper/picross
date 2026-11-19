@@ -1,0 +1,15 @@
+{
+  "id": "box-turtle",
+  "name": "Turtle",
+  "colors": {
+    "g": "green",
+    "k": "graphite",
+    "l": "leaf",
+    "n": "brown"
+  },
+  "layers": [
+    [".l...l.", ".lllll.", "lllllll", "llllll.", ".lllll.", ".l...l."],
+    [".ggggg.", ".ggggg.", "lggggg.", "kggggg.", ".ggggg.", ".ggggg."],
+    [".......", "..ngg..", "..gng..", "..ggg..", "..ggn..", "......."]
+  ]
+}

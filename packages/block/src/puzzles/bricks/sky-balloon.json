@@ -1,0 +1,20 @@
+{
+  "id": "sky-balloon",
+  "name": "Balloon",
+  "colors": {
+    "d": "wood",
+    "k": "graphite",
+    "r": "red",
+    "y": "yellow"
+  },
+  "layers": [
+    ["......", "......", "..dd..", "..dd..", "......", "......"],
+    ["......", "......", "..dd..", "..dd..", "......", "......"],
+    ["......", "......", "..k...", "...k..", "......", "......"],
+    ["......", ".ryyr.", ".ryyr.", ".ryyr.", ".ryyr.", "......"],
+    [".ryyr.", "rryyrr", "rryyrr", "rryyrr", "rryyrr", ".ryyr."],
+    ["rryyrr", "rryyrr", "rryyrr", "rryyrr", "rryyrr", "rryyrr"],
+    [".ryyr.", "rryyrr", "rryyrr", "rryyrr", "rryyrr", ".ryyr."],
+    ["......", ".ryyr.", ".ryyr.", ".ryyr.", ".ryyr.", "......"]
+  ]
+}

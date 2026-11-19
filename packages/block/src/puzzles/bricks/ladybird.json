@@ -1,0 +1,14 @@
+{
+  "id": "ladybird",
+  "name": "Ladybug",
+  "colors": {
+    "k": "graphite",
+    "r": "red",
+    "w": "white"
+  },
+  "layers": [
+    [".rrrr.", "krrrrk", ".rrrr.", "krrrrk", ".rrrr.", ".kkkk."],
+    [".rrrr.", "rrrrrr", "rrrrrr", "rrrrrr", ".rrrr.", ".wkkw."],
+    ["......", ".krrk.", ".rrrr.", ".krrk.", "......", "......"]
+  ]
+}

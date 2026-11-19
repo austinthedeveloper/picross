@@ -1,0 +1,16 @@
+{
+  "id": "fox-cub",
+  "name": "Fox",
+  "colors": {
+    "k": "graphite",
+    "o": "orange",
+    "w": "white"
+  },
+  "layers": [
+    ["..k..k..", "........", "........", "..k..k.."],
+    ["..woooo.", "..wooooo", "..wooooo", "..woooo."],
+    ["ooooooo.", "wooooooo", "wooooooo", "ooooooo."],
+    ["ko......", "oo.....w", "oo.....w", "ko......"],
+    [".o......", "........", "........", ".o......"]
+  ]
+}

@@ -161,7 +161,7 @@ accounts, links out or tracking, saves only on the device, and it works offline.
    longest, and the part with the least code to reuse.
 4. **Where do the first models come from?** The ten small pack models as they are, a new
    set of 10 to 15 kids' subjects, or try chunky versions of pack models first? _Answered:
-   both the pack's ten and 26 of its own (#255); chunky versions are untried._
+   both the pack's ten and 56 of its own (#255 and this batch); chunky versions are untried._
 5. **Phone, tablet or both?** Little kids mostly use a parent's tablet. Landscape tablet
    first would change the layout, and the camera.
 6. **Route or app first?** Is a `#/bricks` route good enough to try with kids you know, or

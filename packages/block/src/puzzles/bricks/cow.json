@@ -1,0 +1,16 @@
+{
+  "id": "cow",
+  "name": "Cow",
+  "colors": {
+    "k": "graphite",
+    "p": "pink",
+    "w": "white"
+  },
+  "layers": [
+    [".k...k..", "........", "........", ".k...k.."],
+    [".wwwwww.", ".wwwwww.", ".wwwwww.", ".wwwwkk."],
+    [".wwkkww.", "pwwwwww.", "pwwwwwwk", ".wwwwkk."],
+    [".wwkkww.", "wwkkwww.", "wwkkwwwk", ".wwwwww."],
+    ["w.......", "k.......", "k.......", "w......."]
+  ]
+}

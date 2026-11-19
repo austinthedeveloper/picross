@@ -1,0 +1,20 @@
+{
+  "id": "space-rocket",
+  "name": "Rocket",
+  "colors": {
+    "h": "sky",
+    "o": "orange",
+    "r": "red",
+    "w": "white"
+  },
+  "layers": [
+    ["r..r", ".oo.", ".oo.", "r..r"],
+    ["rwwr", "wwww", "wwww", "rwwr"],
+    ["wwww", "wwww", "wwww", "wwww"],
+    ["wwww", "hwww", "hwww", "whhw"],
+    ["wwww", "hwww", "hwww", "whhw"],
+    ["wwww", "wwww", "wwww", "wwww"],
+    [".rr.", "rrrr", "rrrr", ".rr."],
+    ["....", ".rr.", ".rr.", "...."]
+  ]
+}

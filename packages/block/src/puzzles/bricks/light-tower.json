@@ -1,0 +1,20 @@
+{
+  "id": "light-tower",
+  "name": "Lighthouse",
+  "colors": {
+    "k": "graphite",
+    "r": "red",
+    "w": "white",
+    "y": "yellow"
+  },
+  "layers": [
+    [".ww.", "wwww", "wwww", ".kk."],
+    [".rr.", "rrrr", "rrrr", ".rr."],
+    [".ww.", "wwww", "wwww", ".ww."],
+    [".rr.", "rrrr", "rrrr", ".rr."],
+    [".ww.", "wwww", "wwww", ".ww."],
+    ["kkkk", "kkkk", "kkkk", "kkkk"],
+    ["....", ".yy.", ".yy.", "...."],
+    ["....", ".rr.", ".rr.", "...."]
+  ]
+}

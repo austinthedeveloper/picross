@@ -1,0 +1,15 @@
+{
+  "id": "field-mouse",
+  "name": "Mouse",
+  "colors": {
+    "k": "graphite",
+    "p": "pink",
+    "s": "stone"
+  },
+  "layers": [
+    [".ssss.", "pssssp", "pssss.", ".ssss."],
+    [".ksss.", ".ssssp", ".ssss.", ".ksss."],
+    [".p....", "..ss..", "..ss..", ".p...."],
+    [".p....", "......", "......", ".p...."]
+  ]
+}

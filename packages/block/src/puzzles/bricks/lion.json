@@ -1,0 +1,17 @@
+{
+  "id": "lion",
+  "name": "Lion",
+  "colors": {
+    "k": "graphite",
+    "o": "orange",
+    "y": "yellow"
+  },
+  "layers": [
+    ["..y..y..", "........", "........", "..y..y.."],
+    ["oooyyyy.", "yooyyyy.", "yooyyyy.", "oooyyyy."],
+    ["oooyyyy.", "yooyyyyy", "yooyyyyy", "oooyyyy."],
+    ["ooo.....", "koo....o", "koo....o", "ooo....."],
+    ["ooo.....", "ooo.....", "ooo.....", "ooo....."],
+    ["........", "........", "........", "........"]
+  ]
+}

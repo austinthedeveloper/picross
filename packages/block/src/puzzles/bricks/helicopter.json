@@ -1,0 +1,17 @@
+{
+  "id": "helicopter",
+  "name": "Helicopter",
+  "colors": {
+    "b": "blue",
+    "h": "sky",
+    "k": "graphite",
+    "s": "stone"
+  },
+  "layers": [
+    [".kkkkk..", "........", "........", ".kkkkk.."],
+    ["bbbbb...", "bbbbb...", "bbbbb...", "bbbbb..."],
+    ["bhhbb...", "hbbbbbbb", "hbbbbbbb", "bhhbb..."],
+    ["........", "..k....b", "..k....b", "........"],
+    ["..ss....", "sssssss.", "sssssss.", "..ss...."]
+  ]
+}
