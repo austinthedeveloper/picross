@@ -64,19 +64,28 @@ have no other link to.
 
 ## The models
 
-37 in all, fewest bricks first in the picker:
+67 in all, fewest bricks first in the picker:
 
-- **Its own 26** (`packages/block/src/puzzles/bricks/`, loaded by `bricks.ts`): animals
-  (duck, hen, sheep, bunny, piglet, frog, honeybee, garden-snail, crab, whale, elephant,
-  penguin, teddy), things that go (airplane, tugboat, fire-truck, digger, train, bus,
-  tractor) and things kids know (ice-pop, daisy-pot, rainbow, birthday-cake, cottage,
-  apple-tree). Made for building, not nonograms: no hidden clues, and out of free play and
-  the dailies. Each is at most 8 cubes a side, five colors and 8 layers, and 7 to 33 bricks.
-  Their ids are their own, never a pack, story or trio id (`build/models.test.ts`), and
-  `buildModel` finds them, so `#/cubed/build/<id>` opens them too. They're toys, not
-  puzzles: nothing offers them to carve (`#/cubed/trio/<id>` takes only trio and pack
-  puzzles), since their clues are never checked. The build camera sees
-  the front and the left, so faces and details go there.
+- **Its own 56** (`packages/block/src/puzzles/bricks/`, loaded by `bricks.ts`):
+  - animals: duck, hen, sheep, bunny, piglet, frog, honeybee, garden-snail, crab, whale,
+    elephant, penguin, teddy, caterpillar, field-mouse, goldfish, box-turtle, dino, fox-cub,
+    pony, hoot-owl, lion, giraffe, ladybird, kitty and cow;
+  - things that go: airplane, tugboat, fire-truck, digger, train, bus, tractor, race-car,
+    helicopter, mini-sub, dump-truck, sky-balloon and space-rocket;
+  - things kids know: ice-pop, daisy-pot, rainbow, birthday-cake, cottage, apple-tree,
+    ice-cream, carrot, watermelon, fairy-cake, light-tower, pumpkin, snow-buddy, berry,
+    brolly, toy-robot and toy-castle.
+
+  Made for building, not nonograms: no hidden clues, and out of free play and the dailies.
+  Each is at most 8 cubes a side, five colors and 8 layers, and 7 to 34 bricks. Their ids
+  are their own, never a pack, story or trio id (`build/models.test.ts`), so some aren't
+  their names (the Owl is `hoot-owl`, the Castle `toy-castle`). `buildModel` finds them, so
+  `#/cubed/build/<id>` opens them too. They're toys, not puzzles: nothing offers them to
+  carve (`#/cubed/trio/<id>` takes only trio and pack puzzles), since their clues are never
+  checked. The build camera sees the front and the left, so faces and details go there;
+  the picker's card pictures show the front and the right, so a side-on animal's face is
+  out of sight there.
+
 - **The Cubed pack's ten** that split into 20 bricks or fewer (jack, steps, car, table,
   sailboat, cactus, heart, chair, mushroom, wheelbarrow), read through `buildModel`, not
   copies.

@@ -1,0 +1,16 @@
+{
+  "id": "watermelon",
+  "name": "Watermelon",
+  "colors": {
+    "g": "green",
+    "k": "graphite",
+    "r": "red"
+  },
+  "layers": [
+    ["..gggg..", "..gggg.."],
+    [".ggrrgg.", ".ggrrgg."],
+    [".grrrrg.", ".grrrrg."],
+    ["grkrrkrg", "grkrrkrg"],
+    ["grrrrrrg", "grrrrrrg"]
+  ]
+}

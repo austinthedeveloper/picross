@@ -1,0 +1,18 @@
+{
+  "id": "dump-truck",
+  "name": "Dump truck",
+  "colors": {
+    "h": "sky",
+    "k": "graphite",
+    "n": "brown",
+    "r": "red",
+    "y": "yellow"
+  },
+  "layers": [
+    [".kk..kk.", "........", "........", ".kk..kk."],
+    ["kkkkkkkk", "kkkkkkkk", "kkkkkkkk", "kkkkkkkk"],
+    ["rrryyyyy", "rrryyyyy", "rrryyyyy", "rrryyyyy"],
+    ["rhryyyyy", "hrrynnny", "hrrynnny", "rhryyyyy"],
+    ["........", "....nnn.", "....nnn.", "........"]
+  ]
+}

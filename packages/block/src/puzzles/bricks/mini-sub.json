@@ -1,0 +1,16 @@
+{
+  "id": "mini-sub",
+  "name": "Submarine",
+  "colors": {
+    "h": "sky",
+    "k": "graphite",
+    "o": "orange"
+  },
+  "layers": [
+    [".oooooo.", "ooooooo.", "ooooooo.", ".oooooo."],
+    ["oohohoo.", "hooooook", "hooooook", "oohohoo."],
+    [".oooooo.", "ooooooo.", "ooooooo.", ".oooooo."],
+    ["........", "..oo....", "..oo....", "........"],
+    ["........", "...k....", "........", "........"]
+  ]
+}

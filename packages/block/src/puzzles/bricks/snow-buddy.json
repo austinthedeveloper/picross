@@ -1,0 +1,20 @@
+{
+  "id": "snow-buddy",
+  "name": "Snowman",
+  "colors": {
+    "k": "graphite",
+    "o": "orange",
+    "r": "red",
+    "w": "white"
+  },
+  "layers": [
+    [".ww.", "wwww", "wwww", ".ww."],
+    ["wwww", "wwww", "wwww", "wkww"],
+    [".ww.", "wwww", "wwww", ".wk."],
+    [".rr.", "rrrr", "rrrr", ".rr."],
+    ["....", ".ww.", ".ww.", ".o.."],
+    ["....", ".ww.", ".kk.", "...."],
+    [".kk.", "kkkk", "kkkk", ".kk."],
+    ["....", ".kk.", ".kk.", "...."]
+  ]
+}

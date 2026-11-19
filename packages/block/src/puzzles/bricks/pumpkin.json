@@ -1,0 +1,17 @@
+{
+  "id": "pumpkin",
+  "name": "Pumpkin",
+  "colors": {
+    "g": "green",
+    "k": "graphite",
+    "n": "brown",
+    "o": "orange"
+  },
+  "layers": [
+    ["......", ".oooo.", ".oooo.", ".oooo.", ".oooo.", "......"],
+    [".oooo.", "oooooo", "oooooo", "oooooo", "oooooo", ".okko."],
+    [".oooo.", "oooooo", "oooooo", "oooooo", "oooooo", ".kook."],
+    ["......", ".oooo.", ".oooo.", ".oooo.", ".oooo.", "......"],
+    ["......", "......", "..ng..", "......", "......", "......"]
+  ]
+}
