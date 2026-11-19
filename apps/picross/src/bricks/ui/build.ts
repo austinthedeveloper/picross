@@ -204,7 +204,7 @@ export function renderKidsBuild(
       rotation = slot.rotation;
       view.hold({ size: held.size, color: held.color, rotation });
     }
-    view.moveHeld(slot.position.x, slot.position.z, slot.size, slot.rotation, true);
+    view.moveHeld(slot.position.x, slot.position.z, slot.size, slot.rotation, target.slot);
   }
 
   function drop(x: number, y: number) {
