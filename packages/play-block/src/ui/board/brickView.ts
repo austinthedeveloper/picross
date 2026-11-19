@@ -22,8 +22,8 @@ import {
   type Material,
 } from 'three';
 import { footprint, type Brick, type BrickSize, type Rotation } from '@picross/block/build/bricks';
-import type { BrickBuild } from '@picross/block/build/build';
-import type { Puzzle } from '@picross/block/puzzles/format';
+import { kindKey, type BrickBuild } from '@picross/block/build/build';
+import type { BrickModel } from '@picross/block/build/models';
 import { random } from '@picross/shared/engine/random';
 import { reducedMotion } from '@picross/shared/ui/motion';
 import { token } from '../tokens';
@@ -110,7 +110,7 @@ export class BrickView {
   private clock = 0;
 
   constructor(
-    private puzzle: Puzzle,
+    private model: BrickModel,
     private build: BrickBuild,
     private options: BrickViewOptions = {},
   ) {
@@ -119,7 +119,7 @@ export class BrickView {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.canvas = this.renderer.domElement;
     this.canvas.className = 'block-canvas build-canvas';
-    this.palette = puzzle.palette.map((name) => new Color(token(`--vox-${name}`)));
+    this.palette = model.palette.map((name) => new Color(token(`--vox-${name}`)));
 
     const sky = new HemisphereLight(0xffffff, new Color(token('--vox-stone')), 1.5);
     const sun = new DirectionalLight(0xffffff, 1.7);
@@ -183,7 +183,7 @@ export class BrickView {
   /** Where a brick at this corner sits, in the turntable's frame. */
   private placeOf(x: number, y: number, z: number, size: BrickSize, rotation: Rotation): Vector3 {
     const { sx, sz } = footprint(size, rotation);
-    const d = this.puzzle.dims;
+    const d = this.model.dims;
     return new Vector3(x + sx / 2 - d.x / 2, y, z + sz / 2 - d.z / 2);
   }
 
@@ -193,7 +193,7 @@ export class BrickView {
   }
 
   private plate(): Group {
-    const d = this.puzzle.dims;
+    const d = this.model.dims;
     const [w, l] = [d.x + 2, d.z + 2];
     const material = this.material('plate', () => {
       return new MeshStandardMaterial({ color: token('--vox-stone'), roughness: 0.6 });
@@ -313,7 +313,7 @@ export class BrickView {
   highlight(kind: string): void {
     this.highlighted.clear();
     this.build.current.forEach((b, slot) => {
-      if (kind && `${b.size}:${b.color}` === kind && !this.build.isFilled(this.build.layer, slot))
+      if (kind && kindKey(b) === kind && !this.build.isFilled(this.build.layer, slot))
         this.highlighted.add(slot);
     });
     this.setGhostLevel(this.ghostLevel);
@@ -326,7 +326,7 @@ export class BrickView {
     if (this.held) this.turntable.remove(this.held);
     this.held = null;
     this.cover(null);
-    this.heldKey = kind ? `${kind.size}:${kind.color}` : '';
+    this.heldKey = kind ? kindKey(kind) : '';
     if (kind) {
       const material = this.material(`held:${kind.color}`, () => {
         return new MeshStandardMaterial({
@@ -391,7 +391,7 @@ export class BrickView {
     );
     if (!hit) return null;
     const { sx, sz } = footprint(size, rotation);
-    const d = this.puzzle.dims;
+    const d = this.model.dims;
     return {
       x: Math.round(hit.x + d.x / 2 - sx / 2),
       z: Math.round(hit.z + d.z / 2 - sz / 2),
@@ -410,7 +410,7 @@ export class BrickView {
     this.ghostMeshes.delete(slot);
     this.highlighted.delete(slot);
     this.hideHeld();
-    this.takeFromPile(`${brick.size}:${brick.color}`);
+    this.takeFromPile(kindKey(brick));
     if (reducedMotion()) return this.invalidate();
     const { mesh, home } = piece;
     const squash = () =>
@@ -483,7 +483,7 @@ export class BrickView {
   /** Where each still-to-build brick lies around the plate, scattered but always the same. */
   private pileSpot(i: number, n: number): { at: Vector3; turn: number } {
     const rand = random(i * 7919 + 17);
-    const d = this.puzzle.dims;
+    const d = this.model.dims;
     const r0 = Math.hypot(d.x + 2, d.z + 2) / 2 + 0.8;
     const angle = (i / n) * Math.PI * 2 + rand() * 0.5;
     const r = r0 + rand() * 2.4;
@@ -510,11 +510,11 @@ export class BrickView {
       const from = this.homeOf(brick);
       mesh.position.copy(from);
       this.pileGroup.add(mesh);
-      const entry = { key: `${brick.size}:${brick.color}`, mesh };
+      const entry = { key: kindKey(brick), mesh };
       this.pile.push(entry);
       return { mesh, from, ...this.pileSpot(i, todo.length) };
     });
-    this.targetY = this.puzzle.dims.y / 2;
+    this.targetY = this.model.dims.y / 2;
     this.invalidate();
     const land = () => {
       for (const f of flying) {
@@ -530,7 +530,7 @@ export class BrickView {
     }
     return new Promise((resolve) => {
       // A beat to see it whole, then the top flies first, like it's bursting open.
-      const top = this.puzzle.dims.y;
+      const top = this.model.dims.y;
       let left = flying.length;
       if (!left) {
         land();
@@ -597,7 +597,7 @@ export class BrickView {
     this.hold(null);
     const from = this.targetY;
     // Aim below it, so the toy sits in the top of the stage, above the end's pictures.
-    const to = how.middle ? this.puzzle.dims.y / 2 : 0;
+    const to = how.middle ? this.model.dims.y / 2 : 0;
     const zoomTo = how.middle ? 1 : 0.8;
     if (reducedMotion()) {
       this.targetY = to;
@@ -634,7 +634,7 @@ export class BrickView {
 
   private confetti(): void {
     const rand = random(99);
-    const top = this.puzzle.dims.y;
+    const top = this.model.dims.y;
     for (let i = 0; i < 36; i++) {
       const color = 1 + Math.floor(rand() * this.palette.length);
       const bit = this.brickMesh('1x1', 0, this.plastic(color));
@@ -662,7 +662,7 @@ export class BrickView {
     this.placeCamera();
     this.renderer.render(this.scene, this.camera);
     // The model's box on screen, so the picture is the toy and not the empty stage.
-    const d = this.puzzle.dims;
+    const d = this.model.dims;
     let [x0, y0, x1, y1] = [1, 1, -1, -1];
     for (const cx of [-d.x / 2 - 1, d.x / 2 + 1]) {
       for (const cy of [-PLATE, d.y + 0.3]) {
@@ -706,7 +706,7 @@ export class BrickView {
   }
 
   private placeCamera(): void {
-    const d = this.puzzle.dims;
+    const d = this.model.dims;
     const radius = 0.5 * Math.hypot(d.x + 3, d.y, d.z + 3);
     const vfov = (this.camera.fov * Math.PI) / 180;
     const hfov = 2 * Math.atan(Math.tan(vfov / 2) * this.camera.aspect);

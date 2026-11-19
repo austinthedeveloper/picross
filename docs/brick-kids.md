@@ -1,5 +1,14 @@
 # Brick kids (a concept)
 
+> **Where it stands.** The first step below is built: Brick kids is a route in this app,
+> `#/bricks` ([bricks.md](bricks.md) has how it plays and the code). What was decided on
+> the way: it's one game aimed at the youngest end, with tap-anywhere snapping and bricks
+> that turn themselves, but the tray shows the whole layer, not one kind at a time (#254:
+> choosing is part of the fun, and with nothing to place wrong it stays easy). It has 26
+> models of its own (#255) besides the pack's ten smallest and the trio's dog, and a
+> route came first, as recommended. The rest of the open questions at the end are still
+> open. The page below is the concept as written, kept for its reasoning.
+
 A spin-off of the build stage ([cubed/build.md](cubed/build.md), PR #250) as a small game of
 its own: building toy bricks for kids who are a little too young for real brick sets. The
 prototype already plays like that. Bricks come turned to fit, snap from a stud away, and
@@ -144,18 +153,20 @@ accounts, links out or tracking, saves only on the device, and it works offline.
 
 1. **How young, really?** 3 and 6 want different things: one kind at a time and snap from
    anywhere for 3, the full tray and some choosing for 6. One game with a setting, or pick
-   one end?
+   one end? _Answered for now: one game, snap from anywhere, the full tray (#254)._
 2. **Voice or no voice?** Recorded lines are warm but need a voice (yours? a kid's?) and
    don't translate; the browser's speech voice is free but varies by device and can sound
    flat. Or only sounds and music, no words at all?
 3. **Free building: in the first version, or later?** It's the part kids might play
    longest, and the part with the least code to reuse.
 4. **Where do the first models come from?** The ten small pack models as they are, a new
-   set of 10 to 15 kids' subjects, or try chunky versions of pack models first?
+   set of 10 to 15 kids' subjects, or try chunky versions of pack models first? _Answered:
+   both the pack's ten and 26 of its own (#255); chunky versions are untried._
 5. **Phone, tablet or both?** Little kids mostly use a parent's tablet. Landscape tablet
    first would change the layout, and the camera.
 6. **Route or app first?** Is a `#/bricks` route good enough to try with kids you know, or
-   should it be its own site from the start so they never land in the puzzles?
+   should it be its own site from the start so they never land in the puzzles? _Answered:
+   a route first (#252)._
 7. **Should the build stage in Cubed pick any of this up?** Auto-turn and a bigger reach
    could be settings there too, or that stage stays as it is.
 8. **A name.** Something of its own to replace "Brick kids", after a trademark search.

@@ -1,13 +1,14 @@
 import '../../styles/build.css';
 import { footprint, type Rotation } from '@picross/block/build/bricks';
 import { kindKey, type BrickBuild, type TrayKind } from '@picross/block/build/build';
-import type { Puzzle } from '@picross/block/puzzles/format';
+import type { BrickModel } from '@picross/block/build/models';
 import { homeLink } from '@picross/shared/ui/components/homeLink';
 import { createMuteButton } from '@picross/shared/ui/components/muteButton';
 import { el } from '@picross/shared/ui/dom';
 import { haptic } from '@picross/shared/ui/haptics';
 import { pause, reducedMotion } from '@picross/shared/ui/motion';
 import { playSound } from '@picross/shared/ui/sound';
+import { carryFromTray, isOver } from '../board/brickInput';
 import { BrickView } from '../board/brickView';
 import { shapePicture } from '../board/thumbnail';
 import { token } from '../tokens';
@@ -20,7 +21,7 @@ export interface FlatPicture {
 }
 
 export interface BuildOptions {
-  puzzle: Puzzle;
+  model: BrickModel;
   build: BrickBuild;
   /** The same subject's 2D picture, for the end (drawn, carved, built). */
   flat?: FlatPicture;
@@ -44,8 +45,10 @@ const TURN_SPEED = 0.008;
  * Returns a cleanup for the router.
  */
 export function renderBuildScreen(root: HTMLElement, opts: BuildOptions): () => void {
-  const { puzzle, build } = opts;
-  const view = new BrickView(puzzle, build);
+  const { model, build } = opts;
+  const view = new BrickView(model, build);
+  /** Aborted when the screen goes: stops a carry, and anything still waiting on a pause. */
+  const life = new AbortController();
   if (import.meta.env.DEV) Object.assign(window, { __build: build, __brickView: view });
 
   let held: TrayKind | null = null;
@@ -53,7 +56,7 @@ export function renderBuildScreen(root: HTMLElement, opts: BuildOptions): () => 
   let ready = false;
   let finished = false;
 
-  const title = el('h1', { textContent: `Build the ${puzzle.name}` });
+  const title = el('h1', { textContent: `Build the ${model.name}` });
   const counter = el('span', { className: 'size build-counter', ariaLive: 'polite' });
   const coach = el('p', { className: 'build-coach', ariaLive: 'polite' });
   const tray = el('div', { className: 'build-tray', role: 'group', ariaLabel: 'Bricks' });
@@ -80,7 +83,7 @@ export function renderBuildScreen(root: HTMLElement, opts: BuildOptions): () => 
   const status = el('p', { className: 'sr-only', role: 'status' });
   const stage = el('div', { className: 'stage build-stage' }, [view.canvas, panel]);
   view.canvas.tabIndex = 0;
-  view.canvas.ariaLabel = `Build plate for the ${puzzle.name}`;
+  view.canvas.ariaLabel = `Build plate for the ${model.name}`;
 
   const screen = el('div', { className: 'screen game build' }, [
     el('header', { className: 'topbar' }, [
@@ -116,7 +119,7 @@ export function renderBuildScreen(root: HTMLElement, opts: BuildOptions): () => 
 
   // --- The tray ------------------------------------------------------------------------
 
-  const colorName = (color: number) => puzzle.palette[color - 1];
+  const colorName = (color: number) => model.palette[color - 1];
 
   /** A brick seen from above: its footprint, studs and color. */
   function brickIcon(kind: { size: TrayKind['size']; color: number }, rot: Rotation) {
@@ -188,15 +191,10 @@ export function renderBuildScreen(root: HTMLElement, opts: BuildOptions): () => 
 
   let lastPointer: { x: number; y: number } | null = null;
 
-  const overCanvas = (x: number, y: number) => {
-    const r = view.canvas.getBoundingClientRect();
-    return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
-  };
-
   /** Shows the held brick under the pointer: in a slot when one's near, else hovering. */
   function hover(x: number, y: number) {
     lastPointer = { x, y };
-    if (!held || !overCanvas(x, y)) return view.hideHeld();
+    if (!held || !isOver(view.canvas, x, y)) return view.hideHeld();
     const corner = view.cornerAt(x, y, held.size, rotation);
     if (!corner) return view.hideHeld();
     const slot = build.snapTarget(held.size, held.color, rotation, corner.x, corner.z);
@@ -250,6 +248,7 @@ export function renderBuildScreen(root: HTMLElement, opts: BuildOptions): () => 
     playSound('line');
     haptic('line');
     await pause(380);
+    if (life.signal.aborted) return;
     if (build.advance()) {
       view.rise();
       view.showGhost(true);
@@ -270,10 +269,11 @@ export function renderBuildScreen(root: HTMLElement, opts: BuildOptions): () => 
     view.celebrate();
     playSound('solve', 0.05);
     haptic('line');
-    say(`Built! The ${puzzle.name}, in bricks.`);
+    say(`Built! The ${model.name}, in bricks.`);
     // Once the camera's settled and the burst has fallen, for the picture of the toy.
     await pause(2200);
-    const built = el('img', { className: 'trio-built', alt: `The ${puzzle.name} in bricks` });
+    if (life.signal.aborted) return;
+    const built = el('img', { className: 'trio-built', alt: `The ${model.name} in bricks` });
     built.src = view.snapshot();
     const card = (picture: HTMLElement, label: string) =>
       el('figure', { className: 'trio-card' }, [picture, el('figcaption', { textContent: label })]);
@@ -282,12 +282,12 @@ export function renderBuildScreen(root: HTMLElement, opts: BuildOptions): () => 
         'Built! ',
         el('span', {
           className: 'end-note',
-          textContent: `One ${puzzle.name.toLowerCase()}, three ways.`,
+          textContent: `One ${model.name.toLowerCase()}, three ways.`,
         }),
       ]),
       el('div', { className: 'trio' }, [
         ...(opts.flat ? [card(flatPicture(opts.flat, 52), 'Drawn')] : []),
-        card(shapePicture(puzzle, 64), 'Carved'),
+        card(shapePicture(model, 64), 'Carved'),
         card(built, 'Built'),
       ]),
       el('div', { className: 'end-actions' }, [
@@ -314,24 +314,14 @@ export function renderBuildScreen(root: HTMLElement, opts: BuildOptions): () => 
     if (!ready || e.button > 0) return;
     e.preventDefault();
     if (held?.key !== kind.key) pick(kind);
-    const start = { x: e.clientX, y: e.clientY };
-    let dragging = false;
-    const move = (m: PointerEvent) => {
-      if (m.pointerId !== e.pointerId) return;
-      if (!dragging && Math.hypot(m.clientX - start.x, m.clientY - start.y) > SLOP) dragging = true;
-      if (dragging) hover(m.clientX, m.clientY);
-    };
-    const up = (u: PointerEvent) => {
-      if (u.pointerId !== e.pointerId) return;
-      window.removeEventListener('pointermove', move);
-      window.removeEventListener('pointerup', up);
-      window.removeEventListener('pointercancel', up);
-      if (dragging && overCanvas(u.clientX, u.clientY)) drop(u.clientX, u.clientY);
-      else view.hideHeld();
-    };
-    window.addEventListener('pointermove', move);
-    window.addEventListener('pointerup', up);
-    window.addEventListener('pointercancel', up);
+    carryFromTray(e, {
+      slop: SLOP,
+      target: view.canvas,
+      hover,
+      drop,
+      away: () => view.hideHeld(),
+      signal: life.signal,
+    });
   }
 
   // On the plate: a drag turns the view; a tap drops the held brick there.
@@ -415,7 +405,7 @@ export function renderBuildScreen(root: HTMLElement, opts: BuildOptions): () => 
   say('It comes apart…');
   view.showBuild(false);
   void view.pop().then(() => {
-    if (finished) return;
+    if (finished || life.signal.aborted) return;
     ready = true;
     screen.dataset.phase = 'build';
     renderTray();
@@ -427,6 +417,7 @@ export function renderBuildScreen(root: HTMLElement, opts: BuildOptions): () => 
   });
 
   return () => {
+    life.abort();
     window.removeEventListener('keydown', keydown);
     view.dispose();
   };
