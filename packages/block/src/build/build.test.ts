@@ -165,7 +165,7 @@ describe('the build entry (#/cubed/build/<id>)', () => {
 
   it('loads the solved model straight into the build, with every layer', () => {
     const started = startBuild({ id: 'dog', layer: 0 })!;
-    expect(started.puzzle.id).toBe('dog');
+    expect(started.model.id).toBe('dog');
     expect(started.build.layers).toHaveLength(splitIntoBricks(dog).length);
     expect(started.build.layers).toHaveLength(8);
     expect(started.build.layer).toBe(0);
@@ -175,6 +175,6 @@ describe('the build entry (#/cubed/build/<id>)', () => {
     expect(startBuild({ id: 'dog', layer: 5 })!.build.layer).toBe(5);
     expect(startBuild({ id: 'dog', layer: 99 })!.build.layer).toBe(7);
     expect(startBuild({ id: 'mug', layer: 0 })!.build.layers.length).toBeGreaterThan(0);
-    expect(startBuild({ id: 'no-such-puzzle', layer: 0 })).toBeNull();
+    expect(startBuild({ id: 'no-such-model', layer: 0 })).toBeNull();
   });
 });

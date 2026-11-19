@@ -7,7 +7,8 @@
 import './styles/select.css';
 import '@picross/play-block/styles/editor.css';
 import { getPuzzle } from '@picross/block/puzzles/index';
-import { buildModel } from '@picross/block/puzzles/trio';
+import { buildModel } from '@picross/block/build/models';
+import { getTrioPuzzle } from '@picross/block/puzzles/trio';
 import { parseBuildPath, startBuild } from '@picross/block/build/entry';
 import { trioPicture } from '@picross/grid/puzzles/trio';
 import { providePrefs } from '@picross/shared/game/prefs';
@@ -41,23 +42,28 @@ const ROUTES: CubedRoute[] = [
     // The trio's block (a prototype): carve it, then build it.
     match: /^\/trio\/([\w-]+)$/,
     render: (app, [, id], lazy) => {
-      const puzzle = buildModel(id);
+      // A nonogram to carve: the trio's own, or a pack puzzle with a 2D pair. Not
+      // buildModel: Brick kids' toys aren't puzzles, and may not solve.
+      const puzzle = getTrioPuzzle(id) ?? getPuzzle(id);
       if (!puzzle) return location.replace(cubedHref());
       return lazy(import('./ui/screens/trio'), (m) => m.renderTrioCarve(app, puzzle));
     },
   },
   {
-    // The build: any puzzle's solved block, as bricks. Straight in for testing, with
-    // ?layer=N to start partway (docs/cubed/how-to.md).
+    // The build: any model's solved block, as bricks. Straight in for testing, with
+    // ?layer=N to start partway (docs/cubed/build.md).
     match: /^\/build\/[\w-]+(?:\?.*)?$/,
     render: (app, [path], lazy) => {
       const entry = parseBuildPath(path);
       if (!entry || !buildModel(entry.id)) return location.replace(cubedHref());
       const draw = (m: typeof import('@picross/play-block/ui/screens/build')) => {
-        const { puzzle, build } = startBuild(entry)!;
-        const flat = trioPicture(entry.id)?.solution;
+        const { model, build } = startBuild(entry)!;
+        // The 2D picture for the end, when the model has a pair: the trio's, or a pack
+        // puzzle's. A Brick kids toy that shares a 2D picture's name isn't its pair.
+        const paired = getTrioPuzzle(entry.id) ?? getPuzzle(entry.id);
+        const flat = paired ? trioPicture(entry.id)?.solution : undefined;
         return m.renderBuildScreen(app, {
-          puzzle,
+          model,
           build,
           flat,
           home: '#/',

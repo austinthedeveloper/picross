@@ -188,7 +188,7 @@ apps/
       bricks/              Brick kids, a building game for little kids (#/bricks/…; docs/bricks.md), loaded on demand
         routes.ts          Its routes: the picker, a build, a toy's moment; the build (three.js) loads from here
         href.ts            bricksHref() and parseBricksPath()
-        models.ts          Its models (the pack's smallest and the trio's dog) and KIDS_RULES
+        models.ts          Its models (its own, the pack's smallest, the trio's dog) and KIDS_RULES
         shelf.ts           Its save (picross:bricks): the shelf of toys, and builds left partway
         sounds.ts          Its own sounds: pops up the scale, tunes, a soft boing
         ui/                The picker and shelf, the build and a toy's moment, the grown-ups' gate, icons

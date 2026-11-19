@@ -12,7 +12,8 @@
  */
 import { footprint, isSquare, type Rotation } from '@picross/block/build/bricks';
 import { BrickBuild, type TrayKind } from '@picross/block/build/build';
-import type { Puzzle } from '@picross/block/puzzles/format';
+import type { BrickModel } from '@picross/block/build/models';
+import { carryFromTray, isOver } from '@picross/play-block/ui/board/brickInput';
 import { BrickView } from '@picross/play-block/ui/board/brickView';
 import { el } from '@picross/shared/ui/dom';
 import { haptic } from '@picross/shared/ui/haptics';
@@ -59,11 +60,13 @@ export interface KidsBuildOptions {
 
 export function renderKidsBuild(
   app: HTMLElement,
-  model: Puzzle,
+  model: BrickModel,
   opts: KidsBuildOptions,
 ): () => void {
   const build = BrickBuild.fromShape(model, savedLayer(model.id), KIDS_RULES);
   const view = new BrickView(model, build, { drift: true, bob: true });
+  /** Aborted when the screen goes: stops a carry, and anything still waiting on a pause. */
+  const life = new AbortController();
   if (import.meta.env.DEV) Object.assign(window, { __build: build, __brickView: view });
 
   let held: TrayKind | null = null;
@@ -177,11 +180,6 @@ export function renderKidsBuild(
 
   // --- Placing ------------------------------------------------------------------------
 
-  const overCanvas = (x: number, y: number) => {
-    const r = view.canvas.getBoundingClientRect();
-    return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
-  };
-
   /** Where a brick held over (x, y) would go: the nearest open ghost of its kind. */
   function targetAt(x: number, y: number) {
     if (!held) return null;
@@ -195,7 +193,7 @@ export function renderKidsBuild(
 
   /** A mouse over the plate shows the brick in the ghost it would go in. */
   function hover(x: number, y: number) {
-    if (!held || !ready || !overCanvas(x, y)) return view.hideHeld();
+    if (!held || !ready || !isOver(view.canvas, x, y)) return view.hideHeld();
     const target = targetAt(x, y);
     if (!target) return view.hideHeld();
     const slot = build.current[target.slot];
@@ -250,7 +248,7 @@ export function renderKidsBuild(
     layerSound();
     haptic('line');
     await pause(reducedMotion() ? 0 : 520);
-    if (finished || disposed) return;
+    if (finished || life.signal.aborted) return;
     if (build.advance()) {
       saveLayer(model.id, build.layer);
       placedHere = 0;
@@ -272,7 +270,7 @@ export function renderKidsBuild(
     say(`You built the ${model.name}!`);
     // Once it's turned a little and the burst has fallen, a picture of it for the shelf.
     await pause(reducedMotion() ? 60 : 2400);
-    if (disposed) return;
+    if (life.signal.aborted) return;
     putOnShelf(model.id, view.snapshot(180));
     tray.replaceChildren(
       el('div', { className: 'bk-end' }, [
@@ -302,24 +300,14 @@ export function renderKidsBuild(
     if (!ready || e.button > 0) return;
     e.preventDefault();
     pick(kind);
-    const start = { x: e.clientX, y: e.clientY };
-    let dragging = false;
-    const move = (m: PointerEvent) => {
-      if (m.pointerId !== e.pointerId) return;
-      if (!dragging && Math.hypot(m.clientX - start.x, m.clientY - start.y) > SLOP) dragging = true;
-      if (dragging) hover(m.clientX, m.clientY);
-    };
-    const up = (u: PointerEvent) => {
-      if (u.pointerId !== e.pointerId) return;
-      window.removeEventListener('pointermove', move);
-      window.removeEventListener('pointerup', up);
-      window.removeEventListener('pointercancel', up);
-      if (dragging && overCanvas(u.clientX, u.clientY)) drop(u.clientX, u.clientY);
-      else view.hideHeld();
-    };
-    window.addEventListener('pointermove', move);
-    window.addEventListener('pointerup', up);
-    window.addEventListener('pointercancel', up);
+    carryFromTray(e, {
+      slop: SLOP,
+      target: view.canvas,
+      hover,
+      drop,
+      away: () => view.hideHeld(),
+      signal: life.signal,
+    });
   }
 
   // On the plate a tap puts the brick in; with nothing in hand, the tray's brick wiggles.
@@ -368,12 +356,11 @@ export function renderKidsBuild(
 
   // --- Start: the block comes apart ---------------------------------------------------
 
-  let disposed = false;
   screen.dataset.phase = 'pop';
   renderTray();
   view.showBuild(false);
   void view.pop().then(() => {
-    if (finished || disposed) return;
+    if (finished || life.signal.aborted) return;
     ready = true;
     screen.dataset.phase = 'build';
     renderTray();
@@ -381,7 +368,7 @@ export function renderKidsBuild(
   });
 
   return () => {
-    disposed = true;
+    life.abort();
     window.removeEventListener('keydown', keydown);
     gate.dispose();
     view.dispose();
@@ -389,7 +376,7 @@ export function renderKidsBuild(
 }
 
 /** A toy from the shelf, built: it turns, hops and bursts again. Tap it for more. */
-export function renderToyMoment(app: HTMLElement, model: Puzzle): () => void {
+export function renderToyMoment(app: HTMLElement, model: BrickModel): () => void {
   // On the top layer with every one under it built, then the top filled too.
   const build = BrickBuild.fromShape(model, Infinity);
   build.fillLayer();
