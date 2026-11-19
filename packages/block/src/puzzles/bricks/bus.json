@@ -1,0 +1,17 @@
+{
+  "id": "bus",
+  "name": "Bus",
+  "colors": {
+    "h": "sky",
+    "k": "graphite",
+    "w": "white",
+    "y": "yellow"
+  },
+  "layers": [
+    [".kk..kk.", "........", "........", ".kk..kk."],
+    ["wyyyyyyy", "yyyyyyyy", "yyyyyyyy", "wyyyyyyy"],
+    ["yyyyyyyy", "yyyyyyyy", "yyyyyyyy", "yyyyyyyy"],
+    ["yhhhhhhy", "hyyyyyyy", "hyyyyyyy", "yhhhhhhy"],
+    ["yyyyyyyy", "yyyyyyyy", "yyyyyyyy", "yyyyyyyy"]
+  ]
+}

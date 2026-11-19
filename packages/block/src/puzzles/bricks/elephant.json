@@ -1,0 +1,18 @@
+{
+  "id": "elephant",
+  "name": "Elephant",
+  "colors": {
+    "k": "graphite",
+    "p": "pink",
+    "s": "stone",
+    "w": "white"
+  },
+  "layers": [
+    ["..ss..ss", "s.......", "s.......", "..ss..ss"],
+    ["..ssssss", "swssssss", "swssssss", "..ssssss"],
+    ["ssssssss", "ssssssss", "ssssssss", "ssssssss"],
+    ["sspsssss", "ssssssss", "ssssssss", "sspsssss"],
+    ["ksp.....", "ss......", "ss......", "ksp....."],
+    ["..p.....", "........", "........", "..p....."]
+  ]
+}

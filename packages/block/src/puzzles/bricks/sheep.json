@@ -1,0 +1,15 @@
+{
+  "id": "sheep",
+  "name": "Sheep",
+  "colors": {
+    "k": "graphite",
+    "w": "white"
+  },
+  "layers": [
+    [".kk.kk.", ".......", ".......", ".kk.kk."],
+    [".wwwww.", ".wwwww.", ".wwwww.", ".wwwww."],
+    [".wwwww.", "kwwwww.", "kwwwww.", ".wwwww."],
+    [".wwwww.", "kwwwww.", "kwwwww.", ".wwwww."],
+    [".......", "..www..", "..www..", "......."]
+  ]
+}

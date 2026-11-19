@@ -1,0 +1,18 @@
+{
+  "id": "penguin",
+  "name": "Penguin",
+  "colors": {
+    "k": "graphite",
+    "o": "orange",
+    "w": "white"
+  },
+  "layers": [
+    ["....", "oooo", "oooo", "oooo", "oooo"],
+    ["kkkk", "kkkk", "kkkk", "kwwk", "...."],
+    ["kkkk", "kkkk", "kkkk", "kwwk", "...."],
+    ["kkkk", "kkkk", "kkkk", "kwwk", "...."],
+    ["kkkk", "kkkk", "kkkk", "kwwk", "...."],
+    ["kkkk", "kkkk", "kkkk", "kwwk", ".oo."],
+    [".kk.", "kkkk", "kkkk", ".kk.", "...."]
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "id": "piglet",
+  "name": "Pig",
+  "colors": {
+    "k": "graphite",
+    "p": "pink",
+    "q": "coral"
+  },
+  "layers": [
+    [".pp..pp.", "........", "........", ".pp..pp."],
+    [".pppppp.", "qpppppp.", "qpppppp.", ".pppppp."],
+    [".pppppp.", "qpppppp.", "qpppppp.", ".pppppp."],
+    [".kppppp.", ".ppppppq", ".ppppppq", ".kppppp."],
+    [".p......", "........", "........", ".p......"]
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "id": "digger",
+  "name": "Digger",
+  "colors": {
+    "h": "sky",
+    "k": "graphite",
+    "y": "yellow"
+  },
+  "layers": [
+    [".kkkkkk.", "k.......", "k.......", ".kkkkkk."],
+    [".yyyyyy.", "kyyyyyy.", "kyyyyyy.", ".yyyyyy."],
+    [".yyyyyy.", "kyyyyyy.", "kyyyyyy.", ".yyyyyy."],
+    ["....yyy.", "yyyyyyy.", "yyyyyyy.", "....yyy."],
+    ["....yyy.", "....hyy.", "....hyy.", "....yyy."]
+  ]
+}

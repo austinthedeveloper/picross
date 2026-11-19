@@ -1,0 +1,19 @@
+{
+  "id": "tugboat",
+  "name": "Boat",
+  "colors": {
+    "b": "blue",
+    "h": "sky",
+    "r": "red",
+    "w": "white",
+    "y": "yellow"
+  },
+  "layers": [
+    ["rrrrrrrr", "rrrrrrrr", "rrrrrrrr", "rrrrrrrr"],
+    ["bbbbbbbb", "bbbbbbbb", "bbbbbbbb", "bbbbbbbb"],
+    ["..wwww..", "..wwww..", "..wwww..", "..wwww.."],
+    ["..whhw..", "..hwww..", "..hwww..", "..whhw.."],
+    ["........", "....yy..", "....yy..", "........"],
+    ["........", "....yy..", "....yy..", "........"]
+  ]
+}

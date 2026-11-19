@@ -1,0 +1,16 @@
+{
+  "id": "honeybee",
+  "name": "Bee",
+  "colors": {
+    "k": "graphite",
+    "w": "white",
+    "y": "yellow"
+  },
+  "layers": [
+    ["yykyky", "yykyky", "yykyky", "yykyky"],
+    ["yykyky", "yykyky", "yykyky", "yykyky"],
+    ["yykyky", "kykyky", "kykyky", "yykyky"],
+    ["yykyky", "yykyky", "yykyky", "yykyky"],
+    ["..ww..", "......", "......", "..ww.."]
+  ]
+}

@@ -64,10 +64,23 @@ have no other link to.
 
 ## The models
 
-The Cubed pack's ten that split into 20 bricks or fewer (jack, steps, car, table, sailboat,
-cactus, heart, chair, mushroom, wheelbarrow), and the trio's dog (26). They're the pack's own
-puzzles, read through `buildModel`, not copies; `models.test.ts` checks they stay small and
-that each builds by taps.
+37 in all, fewest bricks first in the picker:
+
+- **Its own 26** (`packages/block/src/puzzles/bricks/`, loaded by `bricks.ts`): animals
+  (duck, hen, sheep, bunny, piglet, frog, honeybee, garden-snail, crab, whale, elephant,
+  penguin, teddy), things that go (airplane, tugboat, fire-truck, digger, train, bus,
+  tractor) and things kids know (ice-pop, daisy-pot, rainbow, birthday-cake, cottage,
+  apple-tree). Made for building, not nonograms: no hidden clues, and out of free play and
+  the dailies. Each is at most 8 cubes a side, five colors and 8 layers, and 7 to 33 bricks.
+  Their ids are their own, never a pack, story or trio id (`bricks.test.ts`), and
+  `buildModel` finds them, so `#/cubed/build/<id>` opens them too. The build camera sees
+  the front and the left, so faces and details go there.
+- **The Cubed pack's ten** that split into 20 bricks or fewer (jack, steps, car, table,
+  sailboat, cactus, heart, chair, mushroom, wheelbarrow), read through `buildModel`, not
+  copies.
+- **The trio's dog** (26).
+
+`models.test.ts` checks every one is there, stays small, is in order, and builds by taps.
 
 ## The code
 
@@ -105,7 +118,7 @@ colors or packaging; no ads, accounts, links out or tracking.
 
 ## Left for later
 
-The concept's open questions, still open: free building on an empty plate, a voice, new
+The concept's open questions, still open: free building on an empty plate, a voice, more
 models made for kids, chunky versions of big pack models, a toy that comes to life in its
 own way (a dog that wags, a car that drives), an older kids' setting (a shorter reach,
 turning by hand) or a younger one (one kind at a time, `oneKind`), a tablet-first layout, and an app of its own (`apps/bricks`).

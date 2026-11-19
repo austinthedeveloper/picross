@@ -1,0 +1,19 @@
+{
+  "id": "ice-pop",
+  "name": "Ice pop",
+  "colors": {
+    "d": "wood",
+    "h": "sky",
+    "p": "pink",
+    "y": "yellow"
+  },
+  "layers": [
+    ["..", "dd", "dd", ".."],
+    ["..", "dd", "dd", ".."],
+    ["pp", "pp", "pp", "pp"],
+    ["pp", "pp", "pp", "pp"],
+    ["yy", "yy", "yy", "yy"],
+    ["yy", "yy", "yy", "yy"],
+    ["hh", "hh", "hh", "hh"]
+  ]
+}

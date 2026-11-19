@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { splitIntoBricks } from '@picross/block/build/bricks';
 import { BrickBuild } from '@picross/block/build/build';
+import { BRICKS_PUZZLES, getBricksPuzzle } from '@picross/block/puzzles/bricks';
 import { BRICKS_MODELS, bricksModel, KIDS_RULES } from './models';
 
 describe('the bricks route’s models', () => {
@@ -9,10 +10,17 @@ describe('the bricks route’s models', () => {
       const model = bricksModel(id);
       expect(model, id).toBeDefined();
       const layers = splitIntoBricks(model!);
-      // The pack's ten are 20 bricks or fewer; the trio's dog is a little more.
-      expect(layers.flat().length, id).toBeLessThanOrEqual(id === 'dog' ? 26 : 20);
+      // The pack's ten are 20 bricks or fewer; Brick kids' own and the trio's dog are up to
+      // about 30, for a few minutes' building at most.
+      const own = Boolean(getBricksPuzzle(id)) || id === 'dog';
+      expect(layers.flat().length, id).toBeLessThanOrEqual(own ? 34 : 20);
       expect(layers.length, id).toBeLessThanOrEqual(8);
     }
+  });
+
+  it('include every one of its own', () => {
+    expect(BRICKS_PUZZLES.length).toBeGreaterThanOrEqual(20);
+    for (const p of BRICKS_PUZZLES) expect(BRICKS_MODELS, p.id).toContain(p.id);
   });
 
   it('are fewest bricks first', () => {

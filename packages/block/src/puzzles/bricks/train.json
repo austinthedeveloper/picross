@@ -1,0 +1,19 @@
+{
+  "id": "train",
+  "name": "Train",
+  "colors": {
+    "b": "blue",
+    "h": "sky",
+    "k": "graphite",
+    "r": "red",
+    "y": "yellow"
+  },
+  "layers": [
+    [".kk..kk.", "........", "........", ".kk..kk."],
+    ["rrrrrrrr", "rrrrrrrr", "rrrrrrrr", "rrrrrrrr"],
+    [".....bbb", "bbbbbbbb", "bbbbbbbb", ".....bbb"],
+    [".....bhb", "ybbbbbbb", "ybbbbbbb", ".....bhb"],
+    [".....bbb", ".k...bbb", ".k...bbb", ".....bbb"],
+    [".....rrr", ".k...rrr", ".k...rrr", ".....rrr"]
+  ]
+}

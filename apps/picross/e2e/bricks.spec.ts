@@ -50,7 +50,8 @@ test('the picker is big picture cards, with nothing to read', async ({ page }) =
   await page.goto('/#/bricks');
   await expect(page.getByRole('heading', { level: 1, name: 'Brick kids' })).toBeAttached();
   const cards = page.getByRole('navigation', { name: 'Models' }).getByRole('link');
-  await expect(cards).toHaveCount(11);
+  // Its own 26 toys, the 10 smallest Cubed models and the trio's dog (src/bricks/models.ts).
+  await expect(cards).toHaveCount(37);
   await expect(cards.first()).toHaveAccessibleName('Jack');
   await expectBig(cards.first());
   expect(await visibleText(page)).toEqual([]);

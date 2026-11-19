@@ -1,0 +1,16 @@
+{
+  "id": "duck",
+  "name": "Duck",
+  "colors": {
+    "k": "graphite",
+    "o": "orange",
+    "y": "yellow"
+  },
+  "layers": [
+    ["..yyyyyy", "..yyyyyy", "..yyyyyy", "..yyyyyy"],
+    ["..yyyyyy", "..yyyyyy", "..yyyyyy", "..yyyyyy"],
+    ["........", ".yyyyyyy", ".yyyyyyy", "........"],
+    ["........", "oyy.....", "oyy.....", "........"],
+    ["........", ".ky.....", ".ky.....", "........"]
+  ]
+}

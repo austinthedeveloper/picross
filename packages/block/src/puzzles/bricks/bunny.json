@@ -1,0 +1,18 @@
+{
+  "id": "bunny",
+  "name": "Bunny",
+  "colors": {
+    "k": "graphite",
+    "p": "pink",
+    "w": "white"
+  },
+  "layers": [
+    ["wwwww.", ".wwww.", ".wwww.", "wwwww."],
+    [".wwww.", ".wwwwp", ".wwwwp", ".wwww."],
+    [".wwww.", ".wwww.", ".wwww.", ".wwww."],
+    ["......", "pww...", "pww...", "......"],
+    ["......", "kww...", "kww...", "......"],
+    ["......", ".wp...", ".wp...", "......"],
+    ["......", ".wp...", ".wp...", "......"]
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "id": "tractor",
+  "name": "Tractor",
+  "colors": {
+    "g": "green",
+    "h": "sky",
+    "k": "graphite",
+    "y": "yellow"
+  },
+  "layers": [
+    ["kk..kkk", ".......", ".......", "kk..kkk"],
+    ["kk..kyk", "ggggggg", "ggggggg", "kk..kyk"],
+    ["....kkk", "ggggggg", "ggggggg", "....kkk"],
+    [".......", ".k..ggg", "....ggg", "......."],
+    [".......", "....hgg", "....hgg", "......."],
+    ["....yyy", "....yyy", "....yyy", "....yyy"]
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "garden-snail",
+  "name": "Snail",
+  "colors": {
+    "k": "graphite",
+    "n": "brown",
+    "o": "orange",
+    "y": "yellow"
+  },
+  "layers": [
+    ["yyyyyyy", "yyyyyyy"],
+    ["yyoooo.", "yyoooo."],
+    ["yyonno.", "yyonno."],
+    ["y.onno.", "y.onno."],
+    ["k.oooo.", "k.oooo."]
+  ]
+}

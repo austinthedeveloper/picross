@@ -1,0 +1,18 @@
+{
+  "id": "whale",
+  "name": "Whale",
+  "colors": {
+    "b": "blue",
+    "h": "sky",
+    "k": "graphite",
+    "w": "white"
+  },
+  "layers": [
+    ["bbbbbbb.", "bbbbbbb.", "bbbbbbb.", "wwwwwwb."],
+    ["bbbbbbb.", "bbbbbbbb", "bbbbbbbb", "bbbbbbb."],
+    ["bkbbbbb.", "bbbbbbbb", "bbbbbbbb", "bkbbbbb."],
+    [".......b", ".bbbbb.b", ".bbbbb.b", ".......b"],
+    ["........", "..h.....", "..h.....", "........"],
+    ["........", ".h.h....", ".h.h....", "........"]
+  ]
+}

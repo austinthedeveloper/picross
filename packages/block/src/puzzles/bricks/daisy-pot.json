@@ -1,0 +1,20 @@
+{
+  "id": "daisy-pot",
+  "name": "Flower",
+  "colors": {
+    "g": "green",
+    "n": "brown",
+    "o": "orange",
+    "p": "pink",
+    "y": "yellow"
+  },
+  "layers": [
+    ["oooo", "oooo", "oooo", "oooo"],
+    ["oooo", "oooo", "oooo", "oooo"],
+    ["oooo", "onno", "onno", "oooo"],
+    ["....", ".gg.", "ggg.", "...."],
+    ["....", ".ggg", ".gg.", "...."],
+    ["pppp", "pyyp", "pyyp", "pppp"],
+    ["....", ".yy.", ".yy.", "...."]
+  ]
+}
