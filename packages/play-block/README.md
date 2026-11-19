@@ -16,6 +16,7 @@ The paths under `src/` are the ones these files had in Cubed, so
 | ------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | View    | `src/ui/board/blockView.ts` (the three.js scene), `atlas.ts`, `input.ts`, `thumbnail.ts`; `src/ui/tokens.ts`                            |
 | Play    | `src/ui/screens/play.ts` (the play controller), `src/ui/components/hintMenu.ts`, `src/ui/format.ts` (`puzzleNumber`), `src/ui/prefs.ts` |
+| Build   | `src/ui/board/brickView.ts` (the bricks in three.js), `src/ui/screens/build.ts`, `src/styles/build.css` (see docs/cubed/build.md)       |
 | Screens | `src/ui/screens/story/fight.ts` (a fight on a block), `story/kind.ts`, `src/ui/screens/editor/` (with its check worker)                 |
 | Styles  | `src/styles/voxels.css` (shape colors), `game.css` (the play screen), `story.css`, `editor.css`                                         |
 | Tests   | `e2e/helpers.ts`: browser-test helpers for a block, for both games' Playwright tests                                                    |

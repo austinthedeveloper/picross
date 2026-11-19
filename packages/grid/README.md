@@ -18,6 +18,7 @@ The paths under `src/` are the ones these files had in the 2D game, so
 | Engine  | `src/engine/`: `board`, `clues`, `history`, `lines`, `solver`, `transform`, `blast`, `charge`, `fakes`, `ink`, `swap`                                           |
 | Puzzles | `src/puzzles/format.ts` (the file format, parse and validate, export helpers)                                                                                   |
 | Pack    | `src/puzzles/index.ts` (loads `pack/*.json` and the story's run puzzles from `@picross/story`; `ORDER`), `pack/`, `sheets/`, `ratings.json` and `difficulty.ts` |
+| Trio    | `src/puzzles/trio.ts`, `trio/*.json`: 2D pictures for the build prototype, out of free play and the daily (docs/cubed/build.md)                                 |
 | Murals  | `src/puzzles/murals.ts`, `murals/*.json`                                                                                                                        |
 | Play    | `src/game/game.ts`: `Game` (board, history, hearts, hints, clock) and its save format, `SavedBoard`                                                             |
 | Fights  | `src/game/fightBoard.ts`: `gridFightBoard`, the story's `FightBoard` over a 2D puzzle and its board (#164); its test runs the story's contract                  |

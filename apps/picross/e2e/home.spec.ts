@@ -6,6 +6,8 @@ const ENTRIES: { name: RegExp; hash: RegExp; heading: string | RegExp }[] = [
   { name: /^Story/, hash: /#\/run$/, heading: 'Jobs' },
   { name: /^Free play/, hash: /#\/free\/flat$/, heading: 'Free play' },
   { name: /^Endless/, hash: /#\/endless$/, heading: 'Jobs' },
+  // The build prototype: one dog drawn, carved and built (docs/cubed/build.md).
+  { name: /^Draw, carve, build/, hash: /#\/trio\/dog$/, heading: 'Draw the dog · 1 of 3' },
   { name: /^Badges/, hash: /#\/badges$/, heading: 'Badges' },
   { name: /^Editor/, hash: /#\/editor$/, heading: 'Editor' },
   { name: /^How to play/, hash: /#\/how-to-play$/, heading: 'How to play' },

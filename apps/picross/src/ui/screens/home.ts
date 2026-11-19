@@ -33,6 +33,13 @@ const ENTRIES: Entry[] = [
     title: 'Endless',
     hint: 'Fights back to back, as deep as you dare',
   },
+  // A prototype (the build phase): one dog drawn, carved, then built of bricks.
+  {
+    href: '#/trio/dog',
+    icon: '🐕',
+    title: 'Draw, carve, build',
+    hint: 'Prototype: one dog, three ways',
+  },
   { href: '#/badges', icon: '🏅', title: 'Badges', hint: 'What you’ve earned on both boards' },
   { href: '#/editor', icon: '✏', title: 'Editor', hint: 'Make a puzzle and share it' },
   { href: '#/how-to-play', icon: '❓', title: 'How to play', hint: 'The clues, in a minute' },

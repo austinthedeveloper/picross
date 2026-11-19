@@ -29,11 +29,12 @@ It's part of the app: `npm run dev` at the repo root, then open http://localhost
 The commands are the root's (see [development.md](../development.md#scripts)); the ones
 that are only Cubed's:
 
-| Command                              | What it does                                           |
-| ------------------------------------ | ------------------------------------------------------ |
-| `npm run e2e:cubed`                  | Only Cubed's browser tests (`apps/picross/e2e/cubed/`) |
-| `npm -w packages/block run puzzles`  | Check the pack and pick which clues new puzzles hide   |
-| `npm -w apps/picross run screenshot` | Screenshot a page of the running dev server            |
+| Command                                      | What it does                                             |
+| -------------------------------------------- | -------------------------------------------------------- |
+| `npm run e2e:cubed`                          | Only Cubed's browser tests (`apps/picross/e2e/cubed/`)   |
+| `npm -w packages/block run puzzles`          | Check the pack and pick which clues new puzzles hide     |
+| `npm -w apps/picross run screenshot`         | Screenshot a page of the running dev server              |
+| `npm run dev -- --open '/#/cubed/build/dog'` | Straight into the build prototype ([build.md](build.md)) |
 
 The timing test (`e2e/cubed/perf.spec.ts`) runs alone after the other browser tests, so they
 don't share its CPU. To run just it: `npm run e2e -- --project cubed-perf --no-deps`.
@@ -47,6 +48,7 @@ what it may import.
 - [How-to guides](how-to.md): add a puzzle, a color, a sound
 - [Shared package](../../packages/shared/README.md): the code, styles and art shared with the 2D game, and the [story package](../../packages/story/README.md)
 - [Block](../../packages/block/README.md) and [play-block](../../packages/play-block/README.md) packages: this game's puzzle rules and data, and its three.js view and screens
+- [The build](build.md): a prototype third stage, a solved block rebuilt from bricks, and how to open it
 - [Story mode](story.md): how the 2D story is shared, fitted to blocks, and gated
 - [Roadmap](roadmap.md): what's carried over from the 2D game so far, and what's next
 - [Real-device checklist](device-checklist.md) and [release notes](releases/)
