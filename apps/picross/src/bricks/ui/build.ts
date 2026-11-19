@@ -3,8 +3,8 @@
  * (`#/bricks/<id>/show`). This module brings three.js (the view), so the route loads it
  * with `import()`.
  *
- * It plays like Cubed's build stage with `KIDS_RULES`, and without the words: tap the brick
- * in the tray (one kind at a time, biggest first), then tap anywhere on the plate and it
+ * It plays like Cubed's build stage with `KIDS_RULES`, and without the words: tap a brick
+ * in the tray (every kind the layer needs, with a dot for each one left), then tap anywhere on the plate and it
  * flies into the nearest open ghost of its kind, turning itself to fit. Dragging works too.
  * The camera sways on its own; there's no turning or zoom. Sound and motion say how it's
  * going: a pop up the scale for each brick, a tune for a layer, a bigger one for the toy,
@@ -32,17 +32,24 @@ const SLOP = 10;
 const homeButton = () =>
   el('a', { className: 'bk-home', href: bricksHref(), ariaLabel: 'Home' }, [icon('home')]);
 
-/** A brick from above, turned `rotation`, `k` deep in its pile (0 on top). */
-function brickIcon(kind: TrayKind, color: string, rotation: Rotation, k = 0): HTMLElement {
+/** A brick from above, turned `rotation`. */
+function brickIcon(kind: TrayKind, color: string, rotation: Rotation): HTMLElement {
   const { sx, sz } = footprint(kind.size, rotation);
   const brick = el('span', { className: 'bk-brick', ariaHidden: 'true' });
   brick.style.setProperty('--brick', `var(--vox-${color})`);
   brick.style.setProperty('--sx', String(sx));
   brick.style.setProperty('--sz', String(sz));
-  brick.style.setProperty('--k', String(k));
-  // Little bricks drawn big: the long side about 90 px, a stud at most 40.
-  brick.style.setProperty('--cell', `${Math.min(40, Math.floor(90 / Math.max(sx, sz)))}px`);
+  // Little bricks drawn big: the long side about 60 px, a stud at most 30.
+  brick.style.setProperty('--cell', `${Math.min(30, Math.floor(60 / Math.max(sx, sz)))}px`);
   return brick;
+}
+
+/** How many are left, as dots in the brick's color: one each, no numbers to read. */
+function pips(count: number, color: string): HTMLElement {
+  const row = el('span', { className: 'bk-pips', ariaHidden: 'true' });
+  row.style.setProperty('--brick', `var(--vox-${color})`);
+  row.append(...Array.from({ length: count }, () => el('span', { className: 'bk-pip' })));
+  return row;
 }
 
 export interface KidsBuildOptions {
@@ -65,7 +72,8 @@ export function renderKidsBuild(
   let finished = false;
   /** Bricks placed on this layer so far: each pops a note higher. */
   let placedHere = 0;
-  let shownKind = '';
+  /** The layer the tray last showed: a new one's bricks slide in. */
+  let shownLayer = -1;
 
   const tray = el('div', { className: 'bk-tray', role: 'group', ariaLabel: 'Bricks' });
   const status = el('p', { className: 'sr-only', role: 'status' });
@@ -101,47 +109,49 @@ export function renderKidsBuild(
   const colorName = (color: number) => model.palette[color - 1];
   const say = (text: string) => (status.textContent = text);
 
-  // --- The tray: one kind at a time --------------------------------------------------
+  // --- The tray: every kind the layer still needs ------------------------------------
 
   function renderTray() {
     screen.dataset.layer = String(build.layer + 1);
     if (finished) return;
-    const [kind] = build.tray();
-    if (!kind) return tray.replaceChildren();
-    const on = held?.key === kind.key;
-    const pile = Math.min(kind.count, 3);
-    const button = el(
-      'button',
-      {
-        className: `bk-brick-button${on ? ' held' : ''}${kind.key !== shownKind ? ' arrive' : ''}`,
-        type: 'button',
-        ariaLabel: `${kind.size} ${colorName(kind.color)} brick`,
-        ariaPressed: String(on),
-        disabled: !ready,
-      },
-      // Drawn turned the way its next ghost is, as it comes when picked up.
-      Array.from({ length: pile }, (_, k) =>
-        brickIcon(kind, colorName(kind.color), fitRotation(kind), pile - 1 - k),
-      ),
+    const arrive = build.layer !== shownLayer;
+    shownLayer = build.layer;
+    tray.replaceChildren(
+      ...build.tray().map((kind, i) => {
+        const on = held?.key === kind.key;
+        const color = colorName(kind.color);
+        const button = el(
+          'button',
+          {
+            className: `bk-brick-button${on ? ' held' : ''}${arrive ? ' arrive' : ''}`,
+            type: 'button',
+            ariaLabel: `${kind.size} ${color} brick, ${kind.count} left`,
+            ariaPressed: String(on),
+            disabled: !ready,
+          },
+          // Drawn turned the way its next ghost is, as it comes when picked up.
+          [brickIcon(kind, color, fitRotation(kind)), pips(kind.count, color)],
+        );
+        button.style.setProperty('--i', String(i));
+        button.dataset.kind = kind.key;
+        button.dataset.count = String(kind.count);
+        button.addEventListener('pointerdown', (e) => trayDown(e, kind));
+        // A keyboard press (no pointer) picks it up too.
+        button.addEventListener('click', (e) => {
+          if (e.detail === 0 && ready) pick(kind);
+        });
+        return button;
+      }),
     );
-    button.dataset.kind = kind.key;
-    button.dataset.count = String(kind.count);
-    button.addEventListener('pointerdown', (e) => trayDown(e, kind));
-    // A keyboard press (no pointer) picks it up too.
-    button.addEventListener('click', (e) => {
-      if (e.detail === 0 && ready) pick(kind);
-    });
-    shownKind = kind.key;
-    tray.replaceChildren(button);
   }
 
-  /** The tray's brick wiggles: look, here. */
+  /** The tray's bricks wiggle: look, here. */
   function nudge() {
-    const b = tray.querySelector('.bk-brick-button');
-    if (!b) return;
-    b.classList.remove('nudge');
-    void (b as HTMLElement).offsetWidth;
-    b.classList.add('nudge');
+    for (const b of tray.querySelectorAll<HTMLElement>('.bk-brick-button')) {
+      b.classList.remove('nudge');
+      void b.offsetWidth;
+      b.classList.add('nudge');
+    }
   }
 
   /** The rotation of the next open ghost of this kind: the brick comes turned to fit it. */
@@ -226,9 +236,9 @@ export function renderKidsBuild(
     view.placed(layer, slot, from);
     popSound(placedHere++);
     haptic('tap');
-    const [next] = build.tray();
+    const next = build.tray().find((k) => k.key === held!.key);
     // Keep holding the same kind while there are more of it.
-    if (next && next.key === held.key) pick(next);
+    if (next) pick(next);
     else pick(null);
     if (done) void layerDone(layer);
   }
