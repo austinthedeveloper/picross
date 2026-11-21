@@ -68,8 +68,13 @@ Each brick is one color and covers only cubes of that color. A layer fills greed
 first cube not yet covered, then the best brick that can start there. Bigger scores more,
 and so does resting on two or more bricks below (crossing their seams); a brick exactly on
 one like it counts for about half when its color carries on beside it, so a smaller brick
-can start a stagger. Odd layers scan from the opposite corner. The same block always gives
-the same bricks. Its tests (`bricks.test.ts`, over the trio and the whole pack) check every
+can start a stagger. Odd layers scan from the opposite corner. It also builds for real
+bricks ([bricks-real.md](../bricks-real.md)): first, each cube with nothing standing under
+it takes the best brick that reaches back over something that does (the cube with the
+fewest such bricks first); a brick on air costs more than any size difference, and joining
+two pieces scores. Each layer is tried from all four corners, and the best four splits so
+far go on to the next layer, ranked by their bricks' scores less what their loose pieces
+cost. The same block always gives the same bricks. Its tests (`bricks.test.ts`, over the trio and the whole pack) check every
 cube is covered once, no brick spans two colors or leaves the shape, and the output repeats.
 
 **The trio's puzzles** live in `trio/` on both boards, not the packs: a new pack puzzle

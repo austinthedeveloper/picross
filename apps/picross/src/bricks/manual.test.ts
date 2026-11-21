@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { splitIntoBricks } from '@picross/block/build/bricks';
+import { getBricksPuzzle } from '@picross/block/puzzles/bricks';
 import { BRICKS_MODELS, bricksModel } from './models';
 import { manualFor } from './manual';
 
@@ -20,10 +21,21 @@ describe('the steps for real bricks', () => {
     if (manual.fit === 'stands') expect(manual.steps.every((s) => !s.hangs.length)).toBe(true);
   });
 
-  it('the duck’s beak is loose, and the fire truck stands', () => {
+  it('the duck holds together, beak and all, and the caterpillar needs a plate', () => {
     const duck = manualFor(bricksModel('duck')!);
-    expect(duck.fit).toBe('loose');
-    expect(duck.steps[3].loose).toHaveLength(1);
-    expect(manualFor(bricksModel('fire-truck')!).fit).toBe('stands');
+    expect(duck.fit).toBe('stands');
+    expect(duck.plate).toBeNull();
+    const caterpillar = manualFor(bricksModel('caterpillar')!);
+    expect(caterpillar.fit).toBe('plate');
+    expect(caterpillar.plate).toEqual({ x: 8, z: 2 });
+  });
+
+  // Brick kids' own models are made for real bricks: each holds, if only on a plate. The
+  // others are Cubed's puzzles too, so they stay as they are (docs/bricks-real.md).
+  const SHARED_LOOSE = ['jack', 'cactus', 'mushroom', 'wheelbarrow', 'dog'];
+  it.each(BRICKS_MODELS.map((id) => [id]))('%s holds together in real bricks', (id) => {
+    const { fit } = manualFor(bricksModel(id)!);
+    if (SHARED_LOOSE.includes(id)) expect(fit).toBe('loose');
+    else expect(fit, getBricksPuzzle(id) ? 'one of its own' : 'a shared one').not.toBe('loose');
   });
 });

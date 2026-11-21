@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import type { Brick } from './bricks';
+import { volume } from '../engine/volume';
+import { BRICKS_PUZZLES } from '../puzzles/bricks';
+import { splitIntoBricks, type Brick } from './bricks';
 import { checkReal, partsOf, realFit } from './real';
 
 const brick = (
@@ -71,4 +73,33 @@ describe('checkReal', () => {
     expect(check.loose).toEqual([[{ layer: 1, slot: 1 }]]);
     expect(realFit(check)).toBe('loose');
   });
+});
+
+describe('the split, in real bricks', () => {
+  it('reaches back over what stands, rather than leave a brick on air', () => {
+    // A cap 4 wide on a stalk 1 wide, at its right: one 1x4 sits on the stalk.
+    const dims = { x: 4, y: 2, z: 1 };
+    const solution = new Uint8Array(volume(dims));
+    solution[3] = 1;
+    solution.fill(1, 4, 8);
+    const layers = splitIntoBricks({ dims, solution });
+    expect(layers[1]).toEqual([brick('1x4', 0, 1, 0, 90)]);
+    expect(realFit(checkReal(layers))).toBe('stands');
+  });
+
+  it('joins two columns where a brick can cross them', () => {
+    // Two legs and a seat across them: the seat holds both.
+    const dims = { x: 4, y: 2, z: 1 };
+    const solution = new Uint8Array(volume(dims));
+    solution[0] = solution[3] = 1;
+    solution.fill(1, 4, 8);
+    expect(checkReal(splitIntoBricks({ dims, solution })).pieces).toBe(1);
+  });
+
+  it.each(BRICKS_PUZZLES.map((p) => [p.id, p] as const))(
+    "%s, one of Brick kids' own, holds together (on a plate at worst)",
+    (_, p) => {
+      expect(realFit(checkReal(splitIntoBricks(p)))).not.toBe('loose');
+    },
+  );
 });

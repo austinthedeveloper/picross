@@ -8,7 +8,7 @@
     "y": "yellow"
   },
   "layers": [
-    ["kk..kkk", ".......", ".......", "kk..kkk"],
+    ["kk..kkk", "kk..kkk", "kk..kkk", "kk..kkk"],
     ["kk..kyk", "ggggggg", "ggggggg", "kk..kyk"],
     ["....kkk", "ggggggg", "ggggggg", "....kkk"],
     [".......", ".k..ggg", "....ggg", "......."],

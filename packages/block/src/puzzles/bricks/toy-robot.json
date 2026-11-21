@@ -13,7 +13,7 @@
     [".bbbb.", "sbbbbs", "sbbbbs", ".bbbb."],
     [".bbbb.", "sbbbbs", "sbbbbs", ".bryb."],
     [".bbbb.", "sbbbbs", "sbbbbs", ".bbbb."],
-    [".bbbb.", ".bbbb.", ".bbbb.", ".bssb."],
+    [".bbbb.", "ssssss", "ssssss", ".bssb."],
     [".bbbb.", ".bbbb.", ".bbbb.", ".yyyy."],
     ["......", "......", "..r...", "......"]
   ]

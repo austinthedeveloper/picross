@@ -48,6 +48,14 @@ function partsPage(model: BrickModel, manual: Manual): HTMLElement {
     }),
     el('p', { className: `bk-fit ${manual.fit}`, textContent: FIT_NOTE[manual.fit] }),
     partsList(model, manual.parts, 84),
+    ...(manual.plate
+      ? [
+          el('p', {
+            className: 'bk-manual-plate',
+            textContent: `And a base plate, at least ${manual.plate.x} × ${manual.plate.z} studs.`,
+          }),
+        ]
+      : []),
     el('p', {
       className: 'bk-manual-small',
       textContent:

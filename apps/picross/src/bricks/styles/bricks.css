@@ -474,6 +474,10 @@
   margin: 0;
 }
 
+.bk-manual-plate {
+  font-weight: 600;
+}
+
 .bk-plan-figure figcaption,
 .bk-manual-small {
   color: var(--muted);

@@ -8,9 +8,9 @@
   },
   "layers": [
     ["..y.y...", "..y.y..."],
-    [".ooooo.y", ".ooooo.y"],
-    ["okoooooy", "okoooooy"],
-    [".ooooo.y", ".ooooo.y"],
+    [".oooooyy", ".oooooyy"],
+    [".koooooy", ".koooooy"],
+    [".oooooyy", ".oooooyy"],
     ["..yyy...", "..yyy..."]
   ]
 }

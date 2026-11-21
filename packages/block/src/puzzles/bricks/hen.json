@@ -10,7 +10,7 @@
   "layers": [
     ["......", "..y.y.", "..y.y.", "......"],
     ["..wwww", "..wwww", "..wwww", "..wwww"],
-    ["..wwww", "..wwww", "..wwww", "..wwww"],
+    ["..wwww", "wwwwww", "wwwwww", "..wwww"],
     ["..wwww", "ywwwww", "ywwwww", "..wwww"],
     ["......", ".kw..w", ".kw..w", "......"],
     ["......", ".rr...", ".rr...", "......"]

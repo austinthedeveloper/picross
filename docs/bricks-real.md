@@ -8,7 +8,8 @@ corner of a build or a toy's moment (**Build it in real bricks**).
 ## The steps page
 
 - **What you need** first: the toy built, how many bricks and layers, whether it holds
-  together (below), and the parts list, each size and color drawn with a count.
+  together (below), and the parts list, each size and color drawn with a count. A toy that
+  needs a base plate says how big (what its bottom layer covers).
 - **Then a page a layer**: the toy so far from the front left (where the build camera looks
   from), with earlier layers faded so the new bricks stand out, a plan of the layer from
   above (front at the bottom, the layer under it outlined), and the bricks it adds.
@@ -36,40 +37,61 @@ won't hold is dashed and crossed, with a note.
 
 As of this page:
 
-- **stands:** ice-pop, sailboat, chair, tugboat, fire-truck, rainbow, digger, fairy-cake,
-  birthday-cake, cottage, frog, light-tower, train, dump-truck.
-- **hangs:** heart, ice-cream, carrot, hoot-owl, bus, space-rocket.
-- **plate:** steps, car, table, caterpillar, garden-snail, field-mouse, race-car, box-turtle,
-  honeybee, ladybird, elephant, toy-castle.
-- **loose:** the other 35, mostly animals: jack, cactus, duck, hen, airplane, goldfish,
-  sheep, mushroom, bunny, watermelon, crab, daisy-pot, wheelbarrow, piglet, dino, fox-cub,
-  helicopter, pony, lion, pumpkin, snow-buddy, dog, berry, giraffe, whale, brolly, kitty,
-  mini-sub, toy-robot, teddy, cow, penguin, tractor, sky-balloon, apple-tree.
+- **stands:** ice-pop, steps, car, sailboat, duck, chair, garden-snail, hen, watermelon,
+  tugboat, sheep, fire-truck, rainbow, helicopter, daisy-pot, digger, fairy-cake, piglet,
+  light-tower, birthday-cake, cottage, frog, whale, train, tractor, dump-truck, penguin.
+- **hangs:** heart, ice-cream, goldfish, carrot, brolly, dino, hoot-owl, fox-cub, pony,
+  berry, sky-balloon, pumpkin, giraffe, teddy, toy-robot, elephant, bus, cow, apple-tree,
+  space-rocket.
+- **plate:** table, caterpillar, airplane, field-mouse, race-car, crab, bunny, box-turtle,
+  snow-buddy, honeybee, kitty, ladybird, mini-sub, lion, toy-castle. Most are parts in
+  their own colors side by side (the caterpillar's segments, the bee's stripes, wheels),
+  which nothing can join.
+- **loose:** jack, cactus, mushroom, wheelbarrow and the dog. They're Cubed's puzzles too
+  (the pack's and the trio's), so they stay as they are: changing one changes a 3D puzzle.
+  Each has a part only one cube holds up (the jack's arms, the cactus's arms, the
+  mushroom's cap, the barrow's handles and wheel, the dog's nose).
 
-## Why so many come apart
+`manual.test.ts` keeps every other model at `plate` or better, and `real.test.ts` (in
+`@picross/block`) keeps all of Brick kids' own there.
 
-Three things, roughly in order:
+## How it got there
+
+At first 35 came apart. Three things did it:
 
 1. **Features in another color, on the side.** A beak, an eye, a nose, a tail: the split
    makes every brick one color, so a feature's bricks never cross into the head's, and if
-   nothing's under it, it only touches from the side. Duck, hen, penguin, snow-buddy's
-   eyes.
-2. **Overhangs.** A body over two legs, a cap over a stalk, the arms of a robot or a teddy:
-   the first layer of the overhang sits on air. Where the color carries on, a brick could
-   reach back over the stalk and hold it, but the split doesn't look for that; it only
-   prefers crossing seams.
-3. **Columns.** Stripes (the bee), wheels, or legs built as stacks of the same brick are
-   pieces of their own, held only by a plate.
+   nothing's under it, it only touches from the side.
+2. **Overhangs.** A body over two legs, a cap over a stalk, the arms of a teddy: the first
+   layer of the overhang sits on air unless a brick reaches back over what's under it.
+3. **Columns.** Stripes, wheels, or legs built as stacks of the same brick are pieces of
+   their own, held only by a plate.
 
-## What would fix it
+**The split** (`splitIntoBricks`, `packages/block/src/build/bricks.ts`) now builds for real
+bricks. In each layer, the cubes with nothing standing under them go first: each takes the
+best brick that reaches back over something that stands, the cube with the fewest such
+bricks first. A brick on air costs more than any size difference, and one that joins two
+pieces scores more. Each layer is tried from all four corners, and the best four splits so
+far go on to the next layer, so a choice that only pays off a layer up still wins. That
+fixed the overhangs and most columns (7 of the 35 on its own), and it changes the screen's
+builds too, so the screen and the steps stay one build.
 
-- **A real-bricks rule in the split** (worth trying first): don't leave a brick with nothing
-  under it if a bigger brick of the same color can reach back over something that is, and
-  prefer a brick that joins two pieces. That's the same scoring idea as crossing seams, and
-  it would change the screen's builds too, keeping one set of steps. It can't fix a
-  feature in another color.
-- **Model changes**, for the features: put something under each beak and eye (a cube of the
-  head's color inside, or move the feature down a layer), or make a feature the head's
-  color plus a top cube in its own. A test can keep every model at `plate` or better, once
-  they get there.
-- **A base plate in the parts list**, so `plate` toys hold. Most kids' sets have one.
+**The models** were changed for the rest, keeping their look: each feature now sits on a
+cube of the body's color that reaches into the body (the duck's and the hen's chests come
+forward under the beak, the sheep's face is a layer higher, the piglet's snout and tail sit
+on its back), a tail sits on the body (the giraffe's and the pony's hang under it, the
+goldfish's is a fan), and a few were rebuilt where the shape couldn't hold:
+
+- **airplane:** a tail wheel, a white nose, and a shorter tailplane.
+- **helicopter:** a 2×2 mast under one long rotor, without the cross.
+- **brolly:** a purple canopy under a pink top, rather than panels (panels side by side
+  never hold each other).
+- **sky-balloon:** bands of red and yellow, a layer each, rather than stripes up the side.
+- **daisy-pot:** leaves under the petals. **snow-buddy:** a square hat brim. **toy-robot:**
+  stone shoulders the arms hang from. **tractor:** axles under the body. **whale:** a wider
+  spout. **cow:** horns on the head's sides, the tail on its back. **kitty:** a narrower
+  belly and its stripe a cube over, so the tail holds. **dino:** the tail a layer up, and
+  its eye on top. **mini-sub:** the propeller on the hull. **penguin:** a belly under the
+  beak. **bunny:** its tail and nose on the body. **watermelon:** the rind under its tips.
+
+A base plate in the parts list holds the `plate` toys.

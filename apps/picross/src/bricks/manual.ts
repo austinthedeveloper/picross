@@ -2,7 +2,7 @@
  * A model's build as steps for real toy bricks (`#/bricks/<id>/steps`, docs/bricks-real.md):
  * the parts list, then one step per layer, the same layers the screen builds. No DOM.
  */
-import { splitIntoBricks, type Brick } from '@picross/block/build/bricks';
+import { footprint, splitIntoBricks, type Brick } from '@picross/block/build/bricks';
 import type { BrickModel } from '@picross/block/build/models';
 import { checkReal, partsOf, realFit, type Part, type RealFit } from '@picross/block/build/real';
 
@@ -26,6 +26,15 @@ export interface Manual {
   fit: RealFit;
   /** How many pieces it comes off a base plate in (1: a toy to pick up). */
   pieces: number;
+  /** The base plate it needs, in studs (when `fit` is `plate`): what its bottom layer covers. */
+  plate: { x: number; z: number } | null;
+}
+
+/** The studs a layer covers, side to side (x) and front to back (z). */
+function spanOf(bricks: readonly Brick[]): { x: number; z: number } {
+  const xs = bricks.flatMap((b) => [b.position.x, b.position.x + footprint(b.size, b.rotation).sx]);
+  const zs = bricks.flatMap((b) => [b.position.z, b.position.z + footprint(b.size, b.rotation).sz]);
+  return { x: Math.max(...xs) - Math.min(...xs), z: Math.max(...zs) - Math.min(...zs) };
 }
 
 export function manualFor(model: BrickModel): Manual {
@@ -34,6 +43,7 @@ export function manualFor(model: BrickModel): Manual {
   const slots = (list: { layer: number; slot: number }[], layer: number) =>
     list.filter((a) => a.layer === layer).map((a) => a.slot);
   const loose = check.loose.flat();
+  const fit = realFit(check);
   return {
     layers,
     parts: partsOf(layers.flat()),
@@ -45,8 +55,9 @@ export function manualFor(model: BrickModel): Manual {
       hangs: slots(check.hangs, layer).filter((s) => !slots(loose, layer).includes(s)),
       loose: slots(loose, layer),
     })),
-    fit: realFit(check),
+    fit,
     pieces: check.pieces,
+    plate: fit === 'plate' ? spanOf(layers[0]) : null,
   };
 }
 

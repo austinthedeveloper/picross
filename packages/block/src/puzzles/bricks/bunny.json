@@ -7,9 +7,9 @@
     "w": "white"
   },
   "layers": [
-    ["wwwww.", ".wwww.", ".wwww.", "wwwww."],
+    ["wwwww.", ".wwwww", ".wwwww", "wwwww."],
     [".wwww.", ".wwwwp", ".wwwwp", ".wwww."],
-    [".wwww.", ".wwww.", ".wwww.", ".wwww."],
+    [".wwww.", "wwwww.", "wwwww.", ".wwww."],
     ["......", "pww...", "pww...", "......"],
     ["......", "kww...", "kww...", "......"],
     ["......", ".wp...", ".wp...", "......"],
