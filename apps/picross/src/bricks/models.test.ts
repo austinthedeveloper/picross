@@ -1,8 +1,19 @@
 import { describe, expect, it } from 'vitest';
-import { splitIntoBricks } from '@picross/block/build/bricks';
-import { BrickBuild } from '@picross/block/build/build';
+import { footprint, splitIntoBricks, type Rotation } from '@picross/block/build/bricks';
+import { BrickBuild, SNAP_REACH, type TrayKind } from '@picross/block/build/build';
 import { BRICKS_PUZZLES, getBricksPuzzle } from '@picross/block/puzzles/bricks';
 import { BRICKS_MODELS, bricksModel, KIDS_RULES } from './models';
+
+/** The corner a brick held `rotation` lands at, tapped on the middle of a ghost of its kind. */
+function tapOn(build: BrickBuild, kind: TrayKind, rotation: Rotation): [number, number] {
+  const ghost = build.current[build.openSlots(kind)[0]];
+  const a = footprint(ghost.size, ghost.rotation);
+  const b = footprint(kind.size, rotation);
+  return [
+    Math.round(ghost.position.x + a.sx / 2 - b.sx / 2),
+    Math.round(ghost.position.z + a.sz / 2 - b.sz / 2),
+  ];
+}
 
 describe('the bricks route’s models', () => {
   it('are all there, and small: a short sitting each', () => {
@@ -34,17 +45,10 @@ describe('the bricks route’s models', () => {
     expect(bricksModel('no-such-model')).toBeUndefined();
   });
 
-  it('every one builds by taps: any kind in the tray, from any tap', () => {
+  it('every one builds by taps on its ghosts, any kind in the tray', () => {
     for (const id of BRICKS_MODELS) {
       const model = bricksModel(id)!;
       const build = BrickBuild.fromShape(model, 0, KIDS_RULES);
-      // Taps at the plate's corners and middle, and one far off it.
-      const taps = [
-        { x: 0, z: 0 },
-        { x: model.dims.x - 1, z: model.dims.z - 1 },
-        { x: Math.floor(model.dims.x / 2), z: Math.floor(model.dims.z / 2) },
-        { x: -9, z: 40 },
-      ];
       let placed = 0;
       for (;;) {
         while (!build.layerComplete) {
@@ -55,9 +59,9 @@ describe('the bricks route’s models', () => {
           );
           // A child picks any of them: here, each in turn.
           const kind = tray[placed % tray.length];
-          // Held the "wrong" way round on purpose: it turns itself.
-          const tap = taps[placed % taps.length];
-          const slot = build.snapTarget(kind.size, kind.color, 90, tap.x, tap.z);
+          // A tap on the middle of one of its ghosts, held the "wrong" way round on
+          // purpose: it turns itself. (The screen puts the brick's middle under the tap.)
+          const slot = build.snapTarget(kind.size, kind.color, 90, ...tapOn(build, kind, 90));
           expect(slot, id).not.toBeNull();
           expect(build.current[slot!].size).toBe(kind.size);
           expect(build.current[slot!].color).toBe(kind.color);
@@ -69,6 +73,19 @@ describe('the bricks route’s models', () => {
       expect(build.complete, id).toBe(true);
       expect(placed).toBe(build.layers.flat().length);
     }
+  });
+
+  it('snaps only near a ghost of its kind: a tap anywhere else misses', () => {
+    expect(KIDS_RULES.reach).toBe(SNAP_REACH);
+    // The car's bottom layer: its wheels.
+    const build = BrickBuild.fromShape(bricksModel('car')!, 0, KIDS_RULES);
+    const [kind] = build.tray();
+    const ghost = build.current[build.openSlots(kind)[0]].position;
+    // On it, or a cube off: in.
+    expect(build.snapTarget(kind.size, kind.color, 0, ghost.x, ghost.z)).not.toBeNull();
+    expect(build.snapTarget(kind.size, kind.color, 0, ghost.x + 1, ghost.z)).not.toBeNull();
+    // Off the plate: no.
+    expect(build.snapTarget(kind.size, kind.color, 0, -9, 40)).toBeNull();
   });
 
   it('shows every kind in the tray, not one at a time', () => {
