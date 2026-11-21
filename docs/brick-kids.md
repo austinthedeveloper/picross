@@ -7,8 +7,9 @@
 > fun). A brick snaps into a ghost tapped on or next to: snapping from a tap anywhere was
 > tried first, but then the spot didn't matter, and finding it is the game. It has 56
 > models of its own (#255, #257) besides the pack's ten smallest and the trio's dog, and a
-> route came first, as recommended. The rest of the open questions at the end are still
-> open. The page below is the concept as written, kept for its reasoning.
+> route came first, as recommended. Each toy also has steps for building it in real bricks
+> ([bricks-real.md](bricks-real.md)), which found that about half the models need changes to
+> hold together off the screen. The rest of the open questions at the end are still open. The page below is the concept as written, kept for its reasoning.
 
 A spin-off of the build stage ([cubed/build.md](cubed/build.md), PR #250) as a small game of
 its own: building toy bricks for kids who are a little too young for real brick sets. The

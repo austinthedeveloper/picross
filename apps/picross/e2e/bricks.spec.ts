@@ -206,6 +206,46 @@ test("the grown-ups' corner opens only when held for three seconds", async ({ pa
   await expect(page).toHaveURL(/#\/$/);
 });
 
+test("the grown-ups' corner leads to the steps for real bricks, a page a layer", async ({
+  page,
+}) => {
+  await page.goto('/#/bricks/duck');
+  await expect(screen(page)).toHaveAttribute('data-phase', 'build');
+  await hold(page, 3300);
+  const panel = page.getByRole('dialog', { name: 'Grown-ups' });
+  await panel.getByRole('button', { name: 'Build it in real bricks' }).click();
+
+  const manual = page.locator('main.bk-manual');
+  await expect(page).toHaveURL(/#\/bricks\/duck\/steps$/);
+  await expect(manual).toHaveAttribute('data-step', '0');
+  await expect(page.getByRole('heading', { name: 'What you need' })).toBeVisible();
+  // The duck's beak only touches its head from the side: the manual says so.
+  await expect(manual).toHaveAttribute('data-fit', 'loose');
+  const steps = page.getByRole('navigation', { name: 'Steps' }).getByRole('link');
+  await expect(steps).toHaveCount(6);
+
+  await page.getByRole('button', { name: 'Start' }).click();
+  await expect(manual).toHaveAttribute('data-step', '1');
+  await expect(page.getByRole('heading', { name: 'Step 1 of 5' })).toBeVisible();
+  await page.keyboard.press('ArrowRight');
+  await expect(manual).toHaveAttribute('data-step', '2');
+  await steps.last().click();
+  await expect(page.getByRole('heading', { name: 'Step 5 of 5' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Done' })).toBeDisabled();
+
+  // It opens again on the step it was on.
+  await page.goto('/#/bricks/duck/steps');
+  await expect(manual).toHaveAttribute('data-step', '5');
+  await page.getByRole('link', { name: 'Back to the build' }).click();
+  await expect(screen(page)).toHaveAttribute('data-phase', 'build');
+});
+
+test('a toy that holds together says so', async ({ page }) => {
+  await page.goto('/#/bricks/fire-truck/steps/0');
+  await expect(page.locator('main.bk-manual')).toHaveAttribute('data-fit', 'stands');
+  await expect(page.getByText('one toy you can pick up')).toBeVisible();
+});
+
 test('an unknown model goes back to the picker', async ({ page }) => {
   await page.goto('/#/bricks/mug');
   await expect(page).toHaveURL(/#\/bricks$/);

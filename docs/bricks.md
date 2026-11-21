@@ -10,11 +10,12 @@ kids" is a working title.
 
 Start the dev server (`npm run dev`), then Home → **Brick kids**, or:
 
-| What                  | Open                |
-| --------------------- | ------------------- |
-| The picker and shelf  | `#/bricks`          |
-| One build             | `#/bricks/car`      |
-| A toy's moment, again | `#/bricks/car/show` |
+| What                     | Open                 |
+| ------------------------ | -------------------- |
+| The picker and shelf     | `#/bricks`           |
+| One build                | `#/bricks/car`       |
+| A toy's moment, again    | `#/bricks/car/show`  |
+| Its steps in real bricks | `#/bricks/car/steps` |
 
 ```bash
 npm run dev -- --open '/#/bricks'
@@ -63,8 +64,9 @@ wiggles the tray's brick with a soft boing, never a buzz.
 **The grown-ups' corner** is the small lock at the top right. It opens only when held for
 three seconds (a ring fills as you hold), so a tapping child doesn't land in it. Inside:
 sound on or off (the app's own setting), **Start over** in a build or **Clear the shelf** on
-the picker (each asks once more), and the way out to the main menu, which the kids' screens
-have no other link to.
+the picker (each asks once more), **Build it in real bricks** in a build or a toy's moment
+(the toy's steps for real toy bricks: [bricks-real.md](bricks-real.md)), and the way out to
+the main menu, which the kids' screens have no other link to.
 
 ## The models
 
@@ -105,6 +107,8 @@ have no other link to.
 | The picker and the shelf | `src/bricks/ui/picker.ts` (no three.js)                                     |
 | A build, a toy's moment  | `src/bricks/ui/build.ts` (three.js, loaded with `import()`)                 |
 | The grown-ups' corner    | `src/bricks/ui/gate.ts`                                                     |
+| Steps for real bricks    | `src/bricks/manual.ts`, `ui/manual.ts` and `ui/manualArt.ts` (no three.js)  |
+| Does it hold together    | `checkReal` and `partsOf` in `packages/block/src/build/real.ts`             |
 | Models and rules         | `src/bricks/models.ts` (`BRICKS_MODELS`, `KIDS_RULES`)                      |
 | The save                 | `src/bricks/shelf.ts` (`picross:bricks`, on this device only)               |
 | Sounds                   | `src/bricks/sounds.ts`, on shared's `playNotes`                             |

@@ -1,6 +1,7 @@
 /**
  * The bricks route's save, on this device only (`picross:bricks`): the shelf of toys built
- * so far, each with its picture, and the layer each build in progress is on. No DOM.
+ * so far, each with its picture, the layer each build in progress is on, and the step each
+ * real-bricks manual is open on. No DOM.
  */
 import { readStore } from '@picross/shared/game/storage';
 
@@ -20,6 +21,8 @@ export interface BricksSave {
   shelf: ShelfToy[];
   /** A build left partway: the layer it's on (0 at the bottom), by model. */
   progress: Record<string, number>;
+  /** The real-bricks manual's step for each model it's been opened on (0 is the parts). */
+  steps?: Record<string, number>;
 }
 
 const empty = (): BricksSave => ({ shelf: [], progress: {} });
@@ -73,6 +76,16 @@ export function saveLayer(id: string, layer: number): void {
   const data = loadBricks();
   if (layer > 0) data.progress[id] = layer;
   else delete data.progress[id];
+  save(data);
+}
+
+/** The step a model's real-bricks manual was last on, or 0 (the parts list). */
+export const savedStep = (id: string): number => loadBricks().steps?.[id] ?? 0;
+
+export function saveStep(id: string, step: number): void {
+  const data = loadBricks();
+  data.steps = { ...data.steps, [id]: step };
+  if (!step) delete data.steps[id];
   save(data);
 }
 

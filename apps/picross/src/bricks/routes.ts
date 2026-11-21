@@ -7,11 +7,13 @@
  * - `#/bricks`: the shelf and the picker (ui/picker.ts)
  * - `#/bricks/<id>`: one build (ui/build.ts)
  * - `#/bricks/<id>/show`: a toy from the shelf, its moment again
+ * - `#/bricks/<id>/steps`: its steps for real bricks, for grown-ups (ui/manual.ts, no three.js)
  */
 import './styles/bricks.css';
 import type { Lazy, Screen } from '../routes';
 import { bricksHref, parseBricksPath } from './href';
 import { bricksModel } from './models';
+import { renderManual } from './ui/manual';
 import { renderPicker } from './ui/picker';
 
 const loadBuild = () => import('./ui/build');
@@ -22,6 +24,7 @@ export function renderBricks(app: HTMLElement, path: string, lazy: Lazy): Screen
   if (page?.page === 'picker') return renderPicker(app);
   const model = page && bricksModel(page.id);
   if (!page || !model) return location.replace(bricksHref());
+  if (page.page === 'steps') return renderManual(app, model, page.step);
   if (page.page === 'show') return lazy(loadBuild(), (m) => m.renderToyMoment(app, model));
   return lazy(loadBuild(), (m) => {
     let cleanup: (() => void) | undefined;
