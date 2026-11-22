@@ -11,10 +11,10 @@
     ["......", "......", "..dd..", "..dd..", "......", "......"],
     ["......", "......", "..dd..", "..dd..", "......", "......"],
     ["......", "......", "..k...", "...k..", "......", "......"],
-    ["......", ".ryyr.", ".ryyr.", ".ryyr.", ".ryyr.", "......"],
-    [".ryyr.", "rryyrr", "rryyrr", "rryyrr", "rryyrr", ".ryyr."],
-    ["rryyrr", "rryyrr", "rryyrr", "rryyrr", "rryyrr", "rryyrr"],
-    [".ryyr.", "rryyrr", "rryyrr", "rryyrr", "rryyrr", ".ryyr."],
-    ["......", ".ryyr.", ".ryyr.", ".ryyr.", ".ryyr.", "......"]
+    ["......", ".yyyy.", ".yyyy.", ".yyyy.", ".yyyy.", "......"],
+    [".rrrr.", "rrrrrr", "rrrrrr", "rrrrrr", "rrrrrr", ".rrrr."],
+    ["yyyyyy", "yyyyyy", "yyyyyy", "yyyyyy", "yyyyyy", "yyyyyy"],
+    [".rrrr.", "rrrrrr", "rrrrrr", "rrrrrr", "rrrrrr", ".rrrr."],
+    ["......", ".yyyy.", ".yyyy.", ".yyyy.", ".yyyy.", "......"]
   ]
 }

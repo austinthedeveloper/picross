@@ -377,3 +377,223 @@
     transform: rotate(-4deg);
   }
 }
+
+/* --- The steps for real bricks (a grown-ups' page, with words) -------------------- */
+
+.bk-manual {
+  box-sizing: border-box;
+  max-width: 720px;
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: 12px 16px calc(20px + env(safe-area-inset-bottom));
+  color: var(--ink);
+}
+
+.bk-manual h1 {
+  margin: 8px 0 12px;
+  font-size: 1.5rem;
+}
+
+.bk-manual h2 {
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+}
+
+.bk-manual h3 {
+  margin: 0 0 6px;
+  font-size: 1rem;
+}
+
+.bk-manual-top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.bk-manual-pages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.bk-manual-dot {
+  display: grid;
+  place-items: center;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.bk-manual-dot.here {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--surface);
+}
+
+.bk-manual-page {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--surface);
+  touch-action: pan-y;
+}
+
+.bk-manual-picture {
+  display: grid;
+  place-items: center;
+  margin: 4px 0 12px;
+}
+
+.bk-manual-picture canvas {
+  max-width: 100%;
+  height: auto !important;
+}
+
+.bk-manual-layer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+@media (max-width: 520px) {
+  .bk-manual-layer {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bk-plan-figure {
+  margin: 0;
+}
+
+.bk-manual-plate {
+  font-weight: 600;
+}
+
+.bk-plan-figure figcaption,
+.bk-manual-small {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.bk-plan {
+  display: block;
+  width: 100%;
+  max-height: 260px;
+}
+
+.bk-plan-dot {
+  fill: var(--line);
+}
+
+.bk-plan-under {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 0.06;
+}
+
+.bk-plan-brick rect {
+  fill: var(--fill);
+  stroke: var(--ink);
+  stroke-width: 0.06;
+}
+
+.bk-plan-brick .stud {
+  fill: var(--fill);
+  stroke: var(--ink);
+  stroke-width: 0.03;
+  opacity: 0.85;
+}
+
+.bk-plan-brick.hangs rect,
+.bk-plan-brick.loose rect {
+  stroke-dasharray: 0.18 0.12;
+  stroke-width: 0.09;
+}
+
+.bk-plan-brick .cross {
+  stroke: var(--ink);
+  stroke-width: 0.1;
+  stroke-linecap: round;
+}
+
+.bk-parts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bk-part {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  padding: 8px 4px;
+  border-radius: 14px;
+  background: var(--bg);
+  text-align: center;
+}
+
+.bk-part-count {
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.bk-part-name {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.bk-fit,
+.bk-note {
+  padding: 10px 12px;
+  border-left: 4px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+}
+
+.bk-fit.loose,
+.bk-note.loose {
+  border-left-color: var(--ink);
+}
+
+.bk-manual-flip {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.bk-manual-flip .button {
+  min-width: 120px;
+  min-height: 48px;
+}
+
+.bk-manual-print {
+  display: none;
+}
+
+@media print {
+  .bk-manual > :not(.bk-manual-print, h1) {
+    display: none !important;
+  }
+
+  .bk-manual-print {
+    display: block;
+  }
+
+  .bk-manual-print .bk-manual-page {
+    border: 0;
+    break-after: page;
+  }
+}

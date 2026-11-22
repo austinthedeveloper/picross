@@ -24,7 +24,7 @@ describe('the bricks route’s models', () => {
       // The pack's ten are 20 bricks or fewer; Brick kids' own and the trio's dog are up to
       // about 30, for a few minutes' building at most.
       const own = Boolean(getBricksPuzzle(id)) || id === 'dog';
-      expect(layers.flat().length, id).toBeLessThanOrEqual(own ? 34 : 20);
+      expect(layers.flat().length, id).toBeLessThanOrEqual(own ? 36 : 20);
       expect(layers.length, id).toBeLessThanOrEqual(8);
     }
   });

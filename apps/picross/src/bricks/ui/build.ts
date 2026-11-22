@@ -23,7 +23,7 @@ import { bricksHref } from '../href';
 import { KIDS_RULES } from '../models';
 import { clearProgress, getShelf, putOnShelf, savedLayer, saveLayer } from '../shelf';
 import { boingSound, builtSound, layerSound, pickSound, popSound } from '../sounds';
-import { parentGate } from './gate';
+import { parentGate, type GateAction } from './gate';
 import { icon } from './icons';
 import { shelf } from './picker';
 
@@ -93,6 +93,7 @@ export function renderKidsBuild(
         opts.restart();
       },
     },
+    realBricks(model),
   ]);
 
   const screen = el('main', { className: 'bk bk-build' }, [
@@ -379,7 +380,14 @@ export function renderKidsBuild(
 }
 
 /** A toy from the shelf, built: it turns, hops and bursts again. Tap it for more. */
+/** The grown-ups' way to the toy's steps for real bricks. */
+const realBricks = (model: BrickModel): GateAction => ({
+  label: 'Build it in real bricks',
+  run: () => location.assign(bricksHref(`/${model.id}/steps`)),
+});
+
 export function renderToyMoment(app: HTMLElement, model: BrickModel): () => void {
+  const gate = parentGate([realBricks(model)]);
   // On the top layer with every one under it built, then the top filled too.
   const build = BrickBuild.fromShape(model, Infinity);
   build.fillLayer();
@@ -395,6 +403,7 @@ export function renderToyMoment(app: HTMLElement, model: BrickModel): () => void
     el('header', { className: 'bk-top' }, [
       homeButton(),
       el('h1', { className: 'sr-only', textContent: `The ${model.name}` }),
+      gate.button,
     ]),
     stage,
     el('div', { className: 'bk-tray' }, [
@@ -413,6 +422,7 @@ export function renderToyMoment(app: HTMLElement, model: BrickModel): () => void
         ),
       ]),
     ]),
+    gate.panel,
   ]);
   screen.dataset.phase = 'show';
   screen.dataset.model = model.id;
@@ -422,6 +432,7 @@ export function renderToyMoment(app: HTMLElement, model: BrickModel): () => void
   const start = window.setTimeout(party, reducedMotion() ? 0 : 250);
   return () => {
     clearTimeout(start);
+    gate.dispose();
     view.dispose();
   };
 }

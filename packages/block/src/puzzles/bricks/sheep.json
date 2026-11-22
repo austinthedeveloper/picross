@@ -8,8 +8,8 @@
   "layers": [
     [".kk.kk.", ".......", ".......", ".kk.kk."],
     [".wwwww.", ".wwwww.", ".wwwww.", ".wwwww."],
+    [".wwwww.", "wwwwww.", "wwwwww.", ".wwwww."],
     [".wwwww.", "kwwwww.", "kwwwww.", ".wwwww."],
-    [".wwwww.", "kwwwww.", "kwwwww.", ".wwwww."],
-    [".......", "..www..", "..www..", "......."]
+    [".......", "k.www..", "k.www..", "......."]
   ]
 }

@@ -9,8 +9,8 @@
   },
   "layers": [
     [".o..o..", ".......", ".......", ".o..o.."],
-    [".oonoo.", ".oonoo.", ".oonoo.", ".oonoo."],
-    ["ooonoo.", "ooonooo", "ooonooo", "ooonoo."],
+    [".oooo..", ".oooo..", ".oooo..", ".oooo.."],
+    ["oonooo.", "oonoooo", "oonoooo", "oonooo."],
     ["oo.....", "po....o", "po....o", "oo....."],
     ["ko.....", "oo....o", "oo....o", "ko....."],
     ["oo.....", ".......", ".......", "oo....."]

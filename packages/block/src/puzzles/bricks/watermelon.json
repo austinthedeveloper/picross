@@ -9,7 +9,7 @@
   "layers": [
     ["..gggg..", "..gggg.."],
     [".ggrrgg.", ".ggrrgg."],
-    [".grrrrg.", ".grrrrg."],
+    ["ggrrrrgg", "ggrrrrgg"],
     ["grkrrkrg", "grkrrkrg"],
     ["grrrrrrg", "grrrrrrg"]
   ]

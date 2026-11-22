@@ -12,8 +12,8 @@
     ["oooo", "oooo", "oooo", "oooo"],
     ["oooo", "oooo", "oooo", "oooo"],
     ["oooo", "onno", "onno", "oooo"],
-    ["....", ".gg.", "ggg.", "...."],
-    ["....", ".ggg", ".gg.", "...."],
+    ["....", ".ggg", "ggg.", "...."],
+    [".gg.", "gggg", "gggg", ".gg."],
     ["pppp", "pyyp", "pyyp", "pppp"],
     ["....", ".yy.", ".yy.", "...."]
   ]

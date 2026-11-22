@@ -8,9 +8,9 @@
   },
   "layers": [
     [".pp..pp.", "........", "........", ".pp..pp."],
-    [".pppppp.", "qpppppp.", "qpppppp.", ".pppppp."],
-    [".pppppp.", "qpppppp.", "qpppppp.", ".pppppp."],
-    [".kppppp.", ".ppppppq", ".ppppppq", ".kppppp."],
+    [".pppppp.", ".pppppp.", ".pppppp.", ".pppppp."],
+    [".pppppp.", "pppppppp", "pppppppp", ".pppppp."],
+    [".kppppp.", "qppppppq", "qppppppq", ".kppppp."],
     [".p......", "........", "........", ".p......"]
   ]
 }
