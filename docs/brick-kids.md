@@ -90,7 +90,7 @@ Most of these are options on what's there, not new code. Where an option goes in
   doesn't cover this: it needs a small "free" model (a set of placed bricks and the heights
   under them), but the view and the brick meshes serve as they are.
 - **No words in the way.** The top bar is a big Home button and nothing else. Settings,
-  mute, and "start over" sit behind a parent gate: hold a button for three seconds, not a
+  mute, and "start over" sit behind a parent gate: hold a button for two seconds, not a
   question to read.
 
 ## Where models come from

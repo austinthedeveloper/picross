@@ -104,6 +104,7 @@ function stepPage(model: BrickModel, manual: Manual, n: number): HTMLElement {
 export function renderManual(app: HTMLElement, model: BrickModel, at: number | null): () => void {
   const manual = manualFor(model);
   const last = manual.steps.length;
+  const toyHref = bricksHref(`/${model.id}`);
   const step = Math.min(Math.max(0, at ?? savedStep(model.id)), last);
   saveStep(model.id, step);
   const go = (n: number) => {
@@ -151,7 +152,7 @@ export function renderManual(app: HTMLElement, model: BrickModel, at: number | n
     el('header', { className: 'bk-manual-top' }, [
       el('a', {
         className: 'button ghost',
-        href: bricksHref(`/${model.id}`),
+        href: toyHref,
         textContent: 'Back to the build',
       }),
       el('button', {
@@ -169,7 +170,10 @@ export function renderManual(app: HTMLElement, model: BrickModel, at: number | n
     page,
     el('footer', { className: 'bk-manual-flip' }, [
       flip('Back', step - 1),
-      flip(step ? (step === last ? 'Done' : 'Next') : 'Start', step === last ? -1 : step + 1, true),
+      // The last step's Done goes back to the toy on the screen.
+      step === last
+        ? el('a', { className: 'button primary', href: toyHref, textContent: 'Done' })
+        : flip(step ? 'Next' : 'Start', step + 1, true),
     ]),
     print,
   ]);
