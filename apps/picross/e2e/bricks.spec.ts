@@ -178,7 +178,7 @@ async function hold(page: Page, ms: number) {
   await page.mouse.up();
 }
 
-test("the grown-ups' corner opens only when held for three seconds", async ({ page }) => {
+test("the grown-ups' corner opens only when held for two seconds", async ({ page }) => {
   await page.goto('/#/bricks/car');
   await expect(screen(page)).toHaveAttribute('data-phase', 'build');
   await trayBricks(page).click();
@@ -189,7 +189,7 @@ test("the grown-ups' corner opens only when held for three seconds", async ({ pa
   await page.locator('.bk-gate').click();
   await hold(page, 1000);
   await expect(panel).toBeHidden();
-  await hold(page, 3300);
+  await hold(page, 2300);
   await expect(panel).toBeVisible();
   await expect(panel.getByRole('button', { name: /Sound/ })).toBeVisible();
 
@@ -201,7 +201,7 @@ test("the grown-ups' corner opens only when held for three seconds", async ({ pa
 
   // On the picker it clears the shelf, and leads out to the main menu.
   await page.goto('/#/bricks');
-  await hold(page, 3300);
+  await hold(page, 2300);
   await panel.getByRole('link', { name: 'Leave for the main menu' }).click();
   await expect(page).toHaveURL(/#\/$/);
 });
@@ -211,7 +211,7 @@ test("the grown-ups' corner leads to the steps for real bricks, a page a layer",
 }) => {
   await page.goto('/#/bricks/duck');
   await expect(screen(page)).toHaveAttribute('data-phase', 'build');
-  await hold(page, 3300);
+  await hold(page, 2300);
   const panel = page.getByRole('dialog', { name: 'Grown-ups' });
   await panel.getByRole('button', { name: 'Build it in real bricks' }).click();
 
@@ -231,12 +231,14 @@ test("the grown-ups' corner leads to the steps for real bricks, a page a layer",
   await expect(manual).toHaveAttribute('data-step', '2');
   await steps.last().click();
   await expect(page.getByRole('heading', { name: 'Step 5 of 5' })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Done' })).toBeDisabled();
+  await expect(page.getByRole('link', { name: 'Done' })).toBeEnabled();
 
   // It opens again on the step it was on.
   await page.goto('/#/bricks/duck/steps');
   await expect(manual).toHaveAttribute('data-step', '5');
-  await page.getByRole('link', { name: 'Back to the build' }).click();
+  // Done, on the last step, goes back to the toy.
+  await page.getByRole('link', { name: 'Done' }).click();
+  await expect(page).toHaveURL(/#\/bricks\/duck$/);
   await expect(screen(page)).toHaveAttribute('data-phase', 'build');
 });
 

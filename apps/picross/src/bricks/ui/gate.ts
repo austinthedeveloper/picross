@@ -1,5 +1,5 @@
 /**
- * The grown-ups' corner: a small lock that opens only when held for three seconds, so a
+ * The grown-ups' corner: a small lock that opens only when held for two seconds, so a
  * little one tapping about never lands in it. Behind it, in words (they're for grown-ups):
  * sound on or off, whatever the screen offers (start over, clear the shelf), and the way
  * out to the rest of the app.
@@ -9,7 +9,7 @@ import { el } from '@picross/shared/ui/dom';
 import { icon } from './icons';
 
 /** How long the lock is held to open, in ms. */
-export const HOLD_MS = 3000;
+export const HOLD_MS = 2000;
 
 export interface GateAction {
   label: string;
@@ -34,7 +34,7 @@ export function parentGate(actions: GateAction[], leave = '#/'): Gate {
     {
       className: 'bk-gate',
       type: 'button',
-      ariaLabel: 'Grown-ups: press and hold for three seconds',
+      ariaLabel: 'Grown-ups: press and hold for two seconds',
       title: 'Grown-ups: press and hold',
     },
     [ring, icon('lock')],

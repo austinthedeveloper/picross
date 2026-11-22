@@ -62,7 +62,7 @@ a layer (a major pentatonic, so any run of them sounds happy); a tap with nothin
 wiggles the tray's brick with a soft boing, never a buzz.
 
 **The grown-ups' corner** is the small lock at the top right. It opens only when held for
-three seconds (a ring fills as you hold), so a tapping child doesn't land in it. Inside:
+two seconds (a ring fills as you hold), so a tapping child doesn't land in it. Inside:
 sound on or off (the app's own setting), **Start over** in a build or **Clear the shelf** on
 the picker (each asks once more), **Build it in real bricks** in a build or a toy's moment
 (the toy's steps for real toy bricks: [bricks-real.md](bricks-real.md)), and the way out to

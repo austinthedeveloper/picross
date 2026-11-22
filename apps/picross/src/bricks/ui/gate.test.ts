@@ -16,7 +16,7 @@ beforeEach(() => {
 afterEach(() => vi.useRealTimers());
 
 describe('the grown-ups’ gate', () => {
-  it('opens only after a hold of three seconds', () => {
+  it('opens only after a hold of two seconds', () => {
     const run = vi.fn();
     const gate = parentGate([{ label: 'Start over', run }]);
     document.body.append(gate.button, gate.panel);

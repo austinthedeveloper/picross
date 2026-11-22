@@ -14,7 +14,8 @@ corner of a build or a toy's moment (**Build it in real bricks**).
   from), with earlier layers faded so the new bricks stand out, a plan of the layer from
   above (front at the bottom, the layer under it outlined), and the bricks it adds.
 - Numbered steps along the top, **Back** and **Next**, a swipe, or the arrow keys. It opens
-  again on the step it was last on (in `picross:bricks`).
+  again on the step it was last on (in `picross:bricks`). **Done**, on the last step, goes
+  back to the toy.
 - **Print** prints every page, one to a sheet.
 - The pictures are drawn flat, with seams and studs, and a little taller than the screen's
   cubes, as real bricks are (9.6 tall to 8 wide). No three.js, so it opens fast.
